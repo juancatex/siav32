@@ -248,22 +248,22 @@
                                         </td>
                                     
                                     <td colspan="2">
-                                        <button  :disabled = "errors.any ()" type="submit" v-if="tipoAccion==1 || check('plan_agregar')" class="btn btn-primary" @click="registrarcuenta(valorcuenta,nomcuenta)">
+                                        <button  :disabled = "errors.any ()" type="submit" v-if="tipoAccion==1 && check('plan_agregar')" class="btn btn-primary" @click="registrarcuenta(valorcuenta,nomcuenta)">
                                             <i class="icon-plus"></i>&nbsp;Nueva {{ nomcuenta }}
                                         </button>
 
-                                        <button :disabled = "errors.any ()" type="submit" v-if="tipoAccion==2 || check('plan_agregar')" class="btn btn-primary" @click="actualizarcuenta(valorcuenta,nomcuenta)">
+                                        <button :disabled = "errors.any ()" type="submit" v-if="tipoAccion==2 " class="btn btn-primary" @click="actualizarcuenta(valorcuenta,nomcuenta)">
                                             <i class="icon-plus"></i>&nbsp;Actualizar {{ nomcuenta }}
                                         </button>
                                     </td>
                                     </template>
                                     <template v-else>
                                     <td >
-                                        <button :disabled = "errors.any ()" type="submit" v-if="tipoAccion==1 || check('plan_agregar')" class="btn btn-primary" @click="registrarcuenta(valorcuenta,nomcuenta)">
+                                        <button :disabled = "errors.any ()" type="submit" v-if="tipoAccion==1 && check('plan_agregar')" class="btn btn-primary" @click="registrarcuenta(valorcuenta,nomcuenta)">
                                             <i class="icon-plus"></i>&nbsp;Nueva {{ nomcuenta }}
                                         </button>
 
-                                        <button  :disabled = "errors.any ()" type="submit" v-if="tipoAccion==2 || check('plan_agregar')" class="btn btn-primary" @click="actualizarcuenta(valorcuenta,nomcuenta)">
+                                        <button  :disabled = "errors.any ()" type="submit" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarcuenta(valorcuenta,nomcuenta)">
                                             <i class="icon-plus"></i>&nbsp;Actualizar {{ nomcuenta }}
                                         </button>
                                     </td>
