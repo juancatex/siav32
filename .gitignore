@@ -1,6 +1,5 @@
 /node_modules
-/public/hot
-/public/img
+/public/hot 
 /public/storage
 /storage/*.key
 /storage/ASCII
@@ -15,6 +14,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log 
+package-lock.json
 public/mix-manifest.json
 public/css/plantilla.css
 public/js/app.js

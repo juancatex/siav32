@@ -415,7 +415,7 @@
                                </div> 
 
 
-                              <div class="col-md-12" style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                              <!-- <div class="col-md-12" style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
                                     <div class="row h-100"> 
                                      <label style="text-align: right; align-items: center;" :class="cancelarprestamos?'col-md-6 my-auto':'col-md-6 my-auto'" for="text-input">Refinanciar  prestamos vigentes :</label>
                                     <div 
@@ -439,7 +439,7 @@
                                         :class="cancelarprestamos?'col-md-8':''" 
                                         style="background-color: #fff;">  
                                     </Ajaxselect> </div>
-                               </div> 
+                               </div>  -->
 
 
                                    
