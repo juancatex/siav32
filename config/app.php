@@ -1,6 +1,6 @@
 <?php
-//$ip=$_SERVER['SERVER_ADDR'];
-$ip='192.168.100.59';
+$ip=$_SERVER['SERVER_ADDR'];
+//$ip='192.168.100.59';
 return [
 
     /*
