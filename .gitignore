@@ -1,0 +1,27 @@
+/node_modules
+/public/hot
+/public/img
+/public/storage
+/storage/*.key
+/storage/ASCII
+/vendor
+/.idea
+/.vscode
+/.vagrant
+/resources/assets/js/f_dev.js
+/resources/assets/js/functions_dev.min.js
+/resources/assets/js/components/plugin vue/excel.vue
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log 
+public/mix-manifest.json
+public/css/plantilla.css
+public/js/app.js
+public/js/plantilla.js 
+app/AsinalssClass/AllegedRC4.php
+app/AsinalssClass/Base64SIN.php
+app/AsinalssClass/ControlCode.php
+app/AsinalssClass/Verhoeff.php
+app/Http/Controllers/CodeControl.php
+
