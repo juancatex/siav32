@@ -148,7 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/con_perfilcuentamaestro/finalizarcuenta','ConPerfilcuentamaestroController@finalizarcuenta');
 
         Route::get('/con_perfilcuentadetalle/selectcuentahaber', 'ConAsientodetalleController@selectCuentaHaber');
-        Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilCuentamaestroController@selectPerfilMaestroTesoreria');
+        Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilcuentamaestroController@selectPerfilMaestroTesoreria');
 
         Route::get ('/con_asientomaestro','ConAsientomaestroController@index');
         Route::put ('/con_asientomaestro/actualizar','ConAsientomaestroController@update');
@@ -652,6 +652,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get ('/adm_user/selectUsuario', 'AdmUserController@selectUsuario');
         Route::get ('/adm_user/selectRole', 'AdmUserController@selectRole');
         Route::post('/adm_user/registrar_roleuser', 'AdmUserController@registrar_roleuser');
+        Route::put ('/adm_user/actualizar', 'AdmUserController@update');
         Route::put ('/adm_user/actualizar_roleuser', 'AdmUserController@actualizar_roleuser');
 
 

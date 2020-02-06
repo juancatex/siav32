@@ -129,17 +129,17 @@ class AdmRoleController extends Controller
                 $permisos = explode('-',$request->permisos[$i]);                 
                 if ($permisos[0] == $pe) {                    
                     if ($x==1) {
-                        $permisos_base = '[{'.$permisos[1].':1'; 
+                        $permisos_base = '{"'.$permisos[1].'":1'; 
                         $x++;
                     }
                     else {
-                        $permisos_base = $permisos_base.','.$permisos[1].':1';
+                        $permisos_base = $permisos_base.',"'.$permisos[1].'":1';
                     }                                         
                     $bandera=1;
                 }                
             }
             if ($bandera==1) {
-                $permisos_base = $permisos_base .'}]';
+                $permisos_base = $permisos_base .'}';
                 $bandera=0;
                 DB::table('adm__rolepermisos')
                 ->where('idrole', $role->idrole)
