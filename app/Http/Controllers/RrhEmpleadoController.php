@@ -32,17 +32,17 @@ class RrhEmpleadoController extends Controller
 
     public function verEmpleado(Request $request)
     {
-        $empleado=Rrh_Empleado:://select('rrh__empleados.*')
-        where('idempleado',$request->idempleado);
+        $empleado=Rrh_Empleado::where('idempleado',$request->idempleado);
         return ['empleado'=>$empleado->get()];
     }
 
     public function storeEmpleado(Request $request)
     {
-        $codFoto=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codFoto.=str_replace("-","",$request->fechanacimiento).".jpg";
-        Image::make($request->foto)->save(public_path("/img/empleados/").$codFoto);
+        $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
+        $codempleado.=str_replace("-","",$request->fechanacimiento);
+        if($request->foto) Image::make($request->foto)->save(public_path("/img/empleados/").$codempleado.".jpg");
         $empleado=new Rrh_Empleado();
+        $empleado->codempleado=$codempleado;
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
         $empleado->amaterno=$request->amaterno;
@@ -52,7 +52,7 @@ class RrhEmpleadoController extends Controller
         $empleado->fechanacimiento=$request->fechanacimiento;
         $empleado->idestadocivil=$request->idestadocivil;
         $empleado->gruposangre=$request->gruposangre;
-        $empleado->foto=$request->foto;
+        $empleado->foto=$request->foto?$codempleado.".jpg":"";
         $empleado->idformacion=$request->idformacion;
         $empleado->idprofesion=$request->idprofesion;
         $empleado->telcelular=$request->telcelular;
@@ -72,9 +72,9 @@ class RrhEmpleadoController extends Controller
 
     public function updateEmpleado(Request $request)
     {
-        $codFoto=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codFoto.=str_replace("-","",$request->fechanacimiento).".jpg";
-        Image::make($request->foto)->save(public_path("/img/empleados/").$codFoto);
+        $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
+        $codempleado.=str_replace("-","",$request->fechanacimiento);
+        if($request->foto) Image::make($request->foto)->save(public_path("/img/empleados/").$codempleado.".jpg");
         $empleado=Rrh_Empleado::findOrFail($request->idempleado);
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
@@ -85,7 +85,7 @@ class RrhEmpleadoController extends Controller
         $empleado->fechanacimiento=$request->fechanacimiento;
         $empleado->idestadocivil=$request->idestadocivil;
         $empleado->gruposangre=$request->gruposangre;
-        $empleado->foto=$codFoto;
+        $empleado->foto=$request->foto?$codempleado.".jpg":"";
         $empleado->idformacion=$request->idformacion;
         $empleado->idprofesion=$request->idprofesion;
         $empleado->telcelular=$request->telcelular;

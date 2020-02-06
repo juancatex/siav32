@@ -11,16 +11,17 @@ class FilOficinaController extends Controller
     {      
         if($request->responsables)
         {
-            $oficinas=Fil_Oficina::selectRaw("fil__oficinas.*,
+            $oficinas=Fil_Oficina::selectRaw("fil__oficinas.*,nomunidad,
             if(fil__oficinas.tiporesponsable='s',
             (select concat(nomgrado,' ',nombre,' ',apaterno) from socios  
                 join par_grados on par_grados.idgrado=socios.idgrado where idsocio=fil__oficinas.idresponsable),
             (select concat(nombre,' ',apaterno) from rrh__empleados where idempleado=fil__oficinas.idresponsable)) 
                 as nomresponsable");
         }
-        else $oficinas=Fil_Oficina::select('idoficina','idfilial','codoficina','nomoficina');
+        else $oficinas=Fil_Oficina::select('idoficina','idfilial','codoficina','nomoficina','nomunidad');
+        $oficinas->join('fil__unidads','fil__unidads.idunidad','fil__oficinas.idunidad');
         if($request->activo) $oficinas->where('fil__oficinas.activo',1);
-        $oficinas->where('idfilial',$request->idfilial)->orderBy('codoficina');
+        $oficinas->where('idfilial',$request->idfilial)->orderBy($request->orden)->orderBy('codoficina');
         return ['oficinas'=>$oficinas->get()];
     }
 
@@ -28,7 +29,7 @@ class FilOficinaController extends Controller
     {
         $oficina=new Fil_Oficina();
         $oficina->idfilial=$request->idfilial;
-        $oficina->idcargo=$request->idcargo;
+        $oficina->idunidad=$request->idunidad;
         $oficina->codoficina=$request->codoficina;
         $oficina->nomoficina=$request->nomoficina;
         $oficina->idresponsable=$request->idresponsable;
@@ -39,6 +40,7 @@ class FilOficinaController extends Controller
     public function updateOficina(Request $request)
     {
         $oficina=Fil_Oficina::findOrFail($request->idoficina);
+        $oficina->idunidad=$request->idunidad;
         $oficina->nomoficina=$request->nomoficina;
         $oficina->idresponsable=$request->idresponsable;
         $oficina->tiporesponsable=$request->tiporesponsable;

@@ -15,7 +15,7 @@ class CreateFilDirectivosTable extends Migration
     {
         Schema::create('fil__directivos', function (Blueprint $table) {
             $table->increments('iddirectivo');
-            $table->integer('idcargo');
+            $table->integer('idunidad');
             $table->integer('idfilial');
             $table->integer('idsocio');
             $table->date('fechaini')->nullable();

@@ -15,6 +15,7 @@ class CreateRrhEmpleadosTable extends Migration
     {
         Schema::create('rrh__empleados', function (Blueprint $table) {
             $table->increments('idempleado');
+            $table->string('codempleado',12);
             $table->string('nombre',30);
             $table->string('apaterno',30);
             $table->string('amaterno',30)->nullable();

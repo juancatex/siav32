@@ -175,7 +175,7 @@
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
                 <div v-else class="modal-footer">
-                    <button class="btn btn-secondary">Cerrar</button>
+                    <button class="btn btn-secondary" @click="modalPermisos=0">Cerrar</button>
                     <button class="btn btn-primary">Imprimir</button>
                 </div>
             </div>

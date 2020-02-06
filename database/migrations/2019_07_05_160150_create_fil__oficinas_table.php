@@ -16,6 +16,7 @@ class CreateFilOficinasTable extends Migration
         Schema::create('fil__oficinas', function (Blueprint $table) {
             $table->increments('idoficina');
             $table->integer('idfilial');
+            $table->integer('idunidad');
             $table->string('codoficina',2);
             $table->string('nomoficina',50);
             $table->integer('idresponsable')->nullable();
