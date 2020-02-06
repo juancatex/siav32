@@ -415,31 +415,73 @@
                                </div> 
 
 
-                              <!-- <div class="col-md-12" style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                    <div class="row h-100"> 
+                              <div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                                    <div class="row "> 
                                      <label style="text-align: right; align-items: center;" :class="cancelarprestamos?'col-md-6 my-auto':'col-md-6 my-auto'" for="text-input">Refinanciar  prestamos vigentes :</label>
-                                    <div 
-                                    class="col-md-4 my-auto" 
-                                    :style="cancelarprestamos?'margin-bottom: 9px !important;':''"  
-                                    > 
+                                    <div class="col-md-6 my-auto"> 
                                          <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
                                         <input class="switch-input" type="checkbox" checked="" v-model="cancelarprestamos">
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>   
                                     </div>
-                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-3 my-auto" for="text-input">Cuenta transitoria :</label>
-                                    <Ajaxselect  v-if="cancelarprestamos"
-                                        ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
-                                        resp_ruta="cuentas"
-                                        labels="cuentas"
-                                        placeholder="Ingrese la cuenta para este proceso" 
-                                        idtabla="idcuenta"
-                                        :clearable='true'
-                                         selectedStyle="font-size: 11px;"
-                                        :class="cancelarprestamos?'col-md-8':''" 
-                                        style="background-color: #fff;">  
-                                    </Ajaxselect> </div>
-                               </div>  -->
+                                    </div>
+                                    <div v-if="cancelarprestamos" class="row" style="margin-top: 15px;"> 
+                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Desembolso :</label>
+                                     <div class="col-md-4" v-if="cancelarprestamos" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="cancelarprestamos" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Desembolso')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Desembolso" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilRefinanciamientoDesembolso"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                 <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Desembolso') }}</span> 
+                                    </div>
+                                    
+                                     <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Cobranza :</label>
+                                     <div class="col-md-4" v-if="cancelarprestamos" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="cancelarprestamos" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilRefinanciamientoCobranza"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza') }}</span> 
+                                    </div>
+
+                                    </div>
+                               </div> 
 
 
                                    
@@ -494,6 +536,8 @@
                 nomproducto : '',
                 codproducto : '',
                 idPerfilDesembolso:'',
+                idPerfilRefinanciamientoDesembolso:'',
+                idPerfilRefinanciamientoCobranza:'',
                 idPerfilCobranza:'',
                 moneda :'',
                 tasa:0,
@@ -535,7 +579,7 @@
             validateAfterLoad: true,
             validateAfterChanged: true
         },
-//  watch:{
+ watch:{
 //    max_prestamos: function() {
 //       if(this.max_prestamos){
 //        $('input[id="lineacredito"]').attr("disabled", false);
@@ -563,8 +607,14 @@
 //          this.lineaC=0;
 //      }
 //  }
+  cancelarprestamos:function(){
+     if(this.cancelarprestamos){
+         this.idPerfilRefinanciamientoDesembolso=''; 
+         this.idPerfilRefinanciamientoCobranza=''; 
+     }
+ }
 
-//  },
+ },
         computed:{
             isActived: function(){
                 return this.pagination.current_page;
