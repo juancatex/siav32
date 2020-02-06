@@ -19,7 +19,8 @@ class ConReportesController extends Controller
         'REP_LIBRO_COMPRAS'=>$rutas['REP_LIBRO_COMPRAS'],
         'REP_SEG_CCUENTAS'=>$rutas['REP_SEG_CCUENTAS'],
         'REP_PLAN_CUENTAS'=>$rutas['REP_PLAN_CUENTAS'],
-        'REP_DOC_OBLIGACION'=>$rutas['REP_DOC_OBLIGACION']
+        'REP_DOC_OBLIGACION'=>$rutas['REP_DOC_OBLIGACION'],
+        'REP_DOC_OBLIGACION_DIRECTORIO'=>$rutas['REP_DOC_OBLIGACION_DIRECTORIO']
         ];
     }
     public function libromayor(Request $request)

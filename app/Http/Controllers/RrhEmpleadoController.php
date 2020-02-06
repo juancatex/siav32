@@ -143,7 +143,7 @@ class RrhEmpleadoController extends Controller
         $buscararray = array(); 
         if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
         $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
-        $rawidempleado=DB::raw('socios.numpapeleta as idempleado,socios.idsocio as id');
+        $rawidempleado=DB::raw('socios.numpapeleta as idempleado,socios.numpapeleta as id');
         $rawdirectivos=DB::raw('1 as directivos');
         $rawnodirectivos=DB::raw('0 as directivos');
         if (sizeof($buscararray)>0) { 

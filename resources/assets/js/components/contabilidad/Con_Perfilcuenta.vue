@@ -228,7 +228,7 @@
                             </div>
                             <div v-for="(rowregistro, index) in rowregistrosdebe" :key="index" class="row">
                                 <div class="border col-md-8" >
-                                    <Ajaxselect  
+                                    <Ajaxselect  v-if="clearSelected"
                                         ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
                                         resp_ruta="cuentas"
                                         labels="cuentas"
@@ -301,7 +301,7 @@
                             </div>
                             <div v-for="(rowregistro, index) in rowregistroshaber" :key="index" class="row">
                                 <div class="border col-md-8" >
-                                    <Ajaxselect  
+                                    <Ajaxselect  v-if="clearSelected" 
                                         ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentash" @cleaning="cleanh"
                                         resp_ruta="cuentas"
                                         labels="cuentas"
@@ -396,7 +396,7 @@
                             </div>
                             <div v-for="(rowregistro, index) in rowregistrosdebe" :key="index" class="row">
                                 <div class="border col-md-10" >
-                                    <Ajaxselect  
+                                    <Ajaxselect   v-if="clearSelected"
                                         ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
                                         resp_ruta="cuentas"
                                         labels="cuentas"
@@ -458,7 +458,7 @@
                             </div>
                             <div v-for="(rowregistro, index) in rowregistroshaber" :key="index" class="row">
                                 <div class="border col-md-10" >
-                                    <Ajaxselect  
+                                    <Ajaxselect  v-if="clearSelected"
                                         ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentash" @cleaning="cleanh"
                                         resp_ruta="cuentas"
                                         labels="cuentas"
@@ -595,7 +595,8 @@ export default {
                                 perfil_eliminar:0
                                 },
                 
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                clearSelected:1
 
             }
         },
@@ -694,6 +695,9 @@ export default {
         }
     }, 
     methods : {
+        tiempo(){
+            this.clearSelected=1;
+            },
         selectAll: function (event) {
     
             setTimeout(function () {
@@ -1003,6 +1007,8 @@ export default {
                     me.rowregistroshaber= [{idcuenta:'',porcentaje:0}];
                     me.porcentajehaber=0;
                     me.rowcuentah=false;
+                    me.clearSelected=0;
+                    setTimeout(me.tiempo, 200); 
                     break;
                 case 'noporcentaje':
                     me.classModal.closeModal('noporcentaje');
@@ -1010,6 +1016,8 @@ export default {
                     me.rowcuentad=false;
                     me.rowregistroshaber= [{idcuenta:'',porcentaje:0}];
                     me.rowcuentah=false;
+                    me.clearSelected=0;
+                    setTimeout(me.tiempo, 200); 
                     break;
                 
             }
@@ -1046,7 +1054,9 @@ export default {
                     switch(accion){
                         case 'registrar':
                         {
-                            console.log('intra registrar');
+                            //console.log('intra registrar');
+                            me.clearSelected=0;
+                            setTimeout(me.tiempo, 200); 
                             me.classModal.openModal('perfilcuentamaestro');
                             me.tituloModal = 'Registrar Perfil de Cuenta Maestro';
                             me.idmodulo1='';
@@ -1082,6 +1092,8 @@ export default {
             switch(accion){
                 case 'registrar':
                 {
+                    me.clearSelected=0;
+                    setTimeout(me.tiempo, 200); 
                     me.perfilcuentamaestro_id=data['idperfilcuentamaestro'];
                     
                     me.tipoAccion = 1; //
@@ -1099,6 +1111,8 @@ export default {
                 }
                 case 'ver':
                 {
+                    me.clearSelected=0;
+                    setTimeout(me.tiempo, 200); 
                     me.perfilcuentamaestro_id=data['idperfilcuentamaestro'];
                     
                     me.tipoAccion = 2;
