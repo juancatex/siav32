@@ -18,7 +18,8 @@
                 <thead class="tcabecera">
                     <tr>
                         <th><span class="badge badge-success" v-text="arrayOficinas.length+' items'"></span></th>
-                        <th>Cód.</th>
+                        <th>Secretaría</th>
+                        <th>Código</th>
                         <th>Oficina</th>
                         <th>Responsable</th>
                     </tr>
@@ -35,6 +36,7 @@
                             <button class="btn btn-warning ing btn-sm icon-action-redo" title="Reactivar Oficina"
                                 @click="estadoOficina(oficina)"></button>
                         </td>
+                        <td v-text="oficina.nomunidad"></td>
                         <td v-text="oficina.codoficina" align="center"></td>
                         <td v-text="oficina.nomoficina"></td>
                         <td v-text="oficina.nomresponsable"></td>
@@ -105,7 +107,7 @@ export default {
 
     methods: {
         listaOficinas(idfilial){
-            var url='/fil_oficina/listaOficinas?idfilial='+idfilial+'&responsables=1';
+            var url='/fil_oficina/listaOficinas?idfilial='+idfilial+'&responsables=1'+'&orden=codunidad';
             axios.get(url).then(response=>{
                 this.arrayOficinas=response.data.oficinas;
             });

@@ -72,9 +72,9 @@
                 </div>
                 <div class="modal-body">
                     Cargo:
-                    <select class="form-control" v-model="idcargo">
-                        <option v-for="cargo in arrayCargos" :key="cargo.id"
-                            :value="cargo.idcargo" v-text="cargo.nomcargo"></option>
+                    <select class="form-control" v-model="idunidad">
+                        <option v-for="unidad in arrayUnidades" :key="unidad.id"
+                            :value="unidad.idunidad" v-text="unidad.nomcargo"></option>
                     </select>
                     Socio:
                     <autocomplete @encontrado="verIDsocio($event)"></autocomplete>
@@ -109,8 +109,8 @@ export default {
 
     data(){ return{
         modalDirectivo:0, accion:1, jsfechas:'', completo:'', activo:'',
-        arrayFiliales:[], arrayDirectivos:[], arrayCargos:[], 
-        iddirectivo:'', idcargo:'', idsocio:'', fechaini:'', fechafin:'', telcelular:'',
+        arrayFiliales:[], arrayDirectivos:[], arrayUnidades:[], 
+        iddirectivo:'', idunidad:'', idsocio:'', fechaini:'', fechafin:'', telcelular:'',
     }},
 
     methods:{
@@ -123,10 +123,10 @@ export default {
             });
         },
 
-        listaCargos(){
-            var url='/fil_cargo/listaCargos?activo=1';
+        listaUnidades(){
+            var url='/fil_unidad/listaUnidades?activo=1';
             axios.get(url).then(response=>{
-                this.arrayCargos=response.data.cargos;
+                this.arrayUnidades=response.data.unidades;
             });
         },
 
@@ -134,8 +134,8 @@ export default {
             this.modalDirectivo=1;
             this.accion=1;
             this.completo=0;
-            this.listaCargos();
-            this.idcargo='';
+            this.listaUnidades();
+            this.idunidad='';
             this.idsocio='';
             this.fechaini='';
             this.fechafin='';
@@ -145,9 +145,9 @@ export default {
             this.modalDirectivo=1;
             this.accion=2;
             this.completo=1;
-            this.listaCargos();
+            this.listaUnidades();
             this.iddirectivo=directivo.iddirectivo;
-            this.idcargo=directivo.idcargo;
+            this.idunidad=directivo.idunidad;
             this.idsocio=directivo.idsocio;
             this.fechaini=directivo.fechaini;
             this.fechafin=directivo.fechafin; 
@@ -155,7 +155,7 @@ export default {
 
         valDirectivo(){
             this.completo=0;
-            if((this.idcargo)&&(this.idsocio)&&(this.fechaini)&&(this.fechafin))
+            if((this.idunidad)&&(this.idsocio)&&(this.fechaini)&&(this.fechafin))
                 this.completo=1;
         },
 
@@ -166,7 +166,7 @@ export default {
                 onOpen:() => { swal.showLoading() }
             });
             axios.post('fil_directivo/storeDirectivo',{
-                'idcargo':this.idcargo,
+                'idunidad':this.idunidad,
                 'idfilial':this.regFilial.idfilial,
                 'idsocio':this.idsocio,
                 'fechaini':this.fechaini,
@@ -181,7 +181,7 @@ export default {
         updateDirectivo(){
             axios.put('/fil_directivo/updateDirectivo',{
                 'iddirectivo':this.iddirectivo,
-                'idcargo':this.idcargo,
+                'idunidad':this.idunidad,
                 'idsocio':this.idsocio,
                 'fechaini':this.fechaini,
                 'fechafin':this.fechafin         
