@@ -107,9 +107,9 @@ export default {
 
     data(){ return {
         modalOficina:0, accion:1, completo:0,
-        arrayOficinas:[], arrayDirectivos:[], arrayEmpleados:[], 
+        arrayOficinas:[], arrayDirectivos:[], arrayEmpleados:[], arrayUnidades:[],
         regResponsable:[], esDirectivo:'', tiporesponsable:'',
-        idoficina:'', codoficina:'', nomoficina:'', idresponsable:'', 
+        idunidad:'', idoficina:'', codoficina:'', nomoficina:'', idresponsable:'', 
     }}, 
 
     methods: {
@@ -155,6 +155,7 @@ export default {
             this.listaUnidades();            
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
+            this.idunidad='';
             this.nomoficina='';
             this.idresponsable='';
             this.tiporesponsable='';
@@ -169,6 +170,7 @@ export default {
             this.listaDirectivos(this.regFilial.idfilial);
             this.idoficina=oficina.idoficina;
             this.codoficina=oficina.codoficina;
+            this.idunidad=unidad.idunidad;
             this.nomoficina=oficina.nomoficina;
             this.tiporesponsable=oficina.tiporesponsable;
             this.esDirectivo=oficina.tiporesponsable=='s'?true:false;
@@ -187,6 +189,7 @@ export default {
                 'idfilial':this.idfilial,
                 'idcargo':this.idcargo,
                 'codoficina':this.codoficina,
+                'idunidad':this.idunidad,
                 'nomoficina':this.nomoficina.toUpperCase(),
                 'idresponsable':this.idresponsable,
                 'tiporesponsable':this.esDirectivo?'s':'c'
@@ -200,6 +203,7 @@ export default {
         updateOficina(){
             axios.put('fil_oficina/updateOficina',{
                 'idoficina':this.idoficina,
+                'idunidad':this.idunidad,
                 'nomoficina':this.nomoficina,
                 'idresponsable':this.idresponsable,
                 'tiporesponsable':this.esDirectivo?'s':'c'

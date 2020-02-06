@@ -29,7 +29,7 @@ class FilOficinaController extends Controller
     {
         $oficina=new Fil_Oficina();
         $oficina->idfilial=$request->idfilial;
-        $oficina->idcargo=$request->idcargo;
+        $oficina->idunidad=$request->idunidad;
         $oficina->codoficina=$request->codoficina;
         $oficina->nomoficina=$request->nomoficina;
         $oficina->idresponsable=$request->idresponsable;
@@ -40,6 +40,7 @@ class FilOficinaController extends Controller
     public function updateOficina(Request $request)
     {
         $oficina=Fil_Oficina::findOrFail($request->idoficina);
+        $oficina->idunidad=$request->idunidad;
         $oficina->nomoficina=$request->nomoficina;
         $oficina->idresponsable=$request->idresponsable;
         $oficina->tiporesponsable=$request->tiporesponsable;
