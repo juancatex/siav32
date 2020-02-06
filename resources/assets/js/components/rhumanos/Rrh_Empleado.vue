@@ -198,10 +198,10 @@
                                     <table width="100%">
                                         <tr><td nowrap>Celular: <span class="txtasterisco"></span></td>
                                             <td><input type="text" class="form-control" v-model="telcelular" 
-                                                name="Tel Celular" v-validate.initial="'required|numeric'">
+                                                name="Celular" v-validate.initial="'required|numeric'">
                                             </td>
                                         </tr>
-                                        <tr><td colspan="2" class="txtvalerror text-right" v-text="errors.first('Tel Celular')"></td></tr>
+                                        <tr><td colspan="2" class="txtvalerror text-right" v-text="errors.first('Celular')"></td></tr>
                                         <tr><td>Tel Fijo: </td>
                                             <td><input type="text" class="form-control" v-model="telfijo"></td>
                                         </tr>
@@ -378,76 +378,69 @@ directives: { focus },
 
     methods : {
         listaEmpleados(){
-            let me=this; var activo;
+            var activo;
             this.activo?activo=1:activo=0;
             var url='/rrh_empleado/listaEmpleados?activo='+activo+'&buscado='+this.buscado;
-            axios.get(url).then(function(response){
-                me.arrayEmpleados=response.data.empleados;
-                me.ipbirt=response.data.ipbirt;
+            axios.get(url).then(response=>{
+                this.arrayEmpleados=response.data.empleados;
+                this.ipbirt=response.data.ipbirt;
             });
         },
 
         listaDepartamentos(){
-            let me=this;
-            axios.get('/par_departamento/listaDepartamentos').then(function(response){
-                me.arrayDepartamentos=response.data.departamentos;
+            axios.get('/par_departamento/listaDepartamentos').then(response=>{
+                this.arrayDepartamentos=response.data.departamentos;
             });
         },
 
         listaFormaciones(){
-            let me=this;
-            axios.get('/rrh_formacion/listaFormaciones?activo=1').then(function(response){
-                me.arrayFormaciones=response.data.formaciones;
+            axios.get('/rrh_formacion/listaFormaciones?activo=1').then(response=>{
+                this.arrayFormaciones=response.data.formaciones;
             });
         },
 
         listaProfesiones(){
-            let me=this;
-            axios.get('/rrh_profesion/listaProfesiones?activo=1').then(function(response){
-                me.arrayProfesiones=response.data.profesiones;
+            axios.get('/rrh_profesion/listaProfesiones?activo=1').then(response=>{
+                this.arrayProfesiones=response.data.profesiones;
             });
         },
 
         listaFiliales(){
-            let me=this;
-            axios.get('/fil_filial/listaFiliales?activo=1').then(function(response){
-                me.arrayFiliales=response.data.filiales;
+            axios.get('/fil_filial/listaFiliales?activo=1').then(response=>{
+                this.arrayFiliales=response.data.filiales;
             });
         },
 
         listaOficinas(idfilial){
-            let me=this;
             var url='/fil_oficina/listaOficinas?activo=1&idfilial='+idfilial;
-            axios.get(url).then(function(response){
-                me.arrayOficinas=response.data.oficinas;
+            axios.get(url).then(response=>{
+                this.arrayOficinas=response.data.oficinas;
             });
         },
 
         listaCargos(){
-            let me=this;
-            axios.get('/rrh_cargo/listaCargos?activo=1').then(function(response){
-                me.arrayCargos=response.data.cargos;
+            axios.get('/rrh_cargo/listaCargos?activo=1').then(response=>{
+                this.arrayCargos=response.data.cargos;
             });
         },
 
         listaBancos(){
-            let me=this;
             var url='/con_entidadbancaria/selectEntidadbancaria?activo=1';
-            axios.get(url).then(function(response){
-                me.arrayBancos=response.data.bancos;
+            axios.get(url).then(response=>{
+                this.arrayBancos=response.data.bancos;
             });
         },
 
         resetEmpleado(){ 
-            this.nombre=''; this.apaterno=''; this.amaterno=''; 
-            this.sexo=''; this.ci=''; this.iddepartamento='';
-            this.fechanacimiento=''; this.idestadocivil=''; 
+            this.nombre='hhh'; this.apaterno='hhh'; this.amaterno=''; 
+            this.sexo='M'; this.ci='444'; this.iddepartamento='1';
+            this.fechanacimiento='1987-01-01'; this.idestadocivil=''; 
             this.idformacion=''; this.idprofesion=''; this.foto='';
-            this.telcelular=''; this.telfijo=''; this.email=''; 
-            this.domicilio=''; this.zona=''; this.foto='';
-            this.idfilial=''; this.idoficina=''; this.cargo=''; this.fechaingreso='';
+            this.telcelular='777'; this.telfijo=''; this.email=''; 
+            this.domicilio='yyy'; this.zona=''; this.foto='';
+            this.idfilial='1'; this.idoficina='1'; this.idcargo='1'; this.fechaingreso='2020-01-01';
             this.nrcontrato=''; this.tipocontrato=''; this.inicontrato=''; this.fincontrato=''; 
-            this.sueldo=''; this.idbanco=''; this.nrcuenta=''; this.codbiom='';
+            this.sueldo=''; this.idbanco=''; this.nrcuenta=''; this.codbiom='11';
         },
 
         buscarImagen(event){
@@ -466,7 +459,7 @@ directives: { focus },
                 autoCropArea: 1,
                 restore: false,
                 guides: false, 
-                rotatable: false,
+                rotable: true,
                 multiple: false
             });
         },
@@ -535,7 +528,11 @@ directives: { focus },
         },
 */
         storeEmpleado(){
-            let me=this;
+            swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
+                showCancelButton:false, showConfirmButton:false, 
+                allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
+                onOpen:() => { swal.showLoading() }
+            });             
             axios.post('/rrh_empleado/storeEmpleado',{
                 'nombre':this.nombre.toUpperCase(),
                 'apaterno':this.apaterno.toUpperCase(),
@@ -546,7 +543,7 @@ directives: { focus },
                 'gruposangre':this.gruposangre,
                 'fechanacimiento':this.fechanacimiento,
                 'idestadocivil':this.idestadocivil,
-                'foto':$("#lafoto").cropper('getCroppedCanvas').toDataURL(),
+                'foto':$('#lafoto').length?$('#lafoto').cropper('getCroppedCanvas').toDataURL():'',
                 'idformacion':this.idformacion,
                 'idprofesion':this.idprofesion,
                 'telcelular':this.telcelular,
@@ -565,17 +562,16 @@ directives: { focus },
                 'codssocial':this.codssocial,
                 'ssalud':this.ssalud,
                 'codssalud':this.codssalud,
-            }).then(function(){
+            }).then(response=>{
                 swal('Registro creado correctamente','','success');
-                me.activo=1;
-                me.buscado=me.apaterno;
-                me.modalEmpleado=0;
-                me.listaEmpleados();
+                //this.activo=1;
+                this.buscado=this.apaterno;
+                this.modalEmpleado=0;
+                this.listaEmpleados();
             });
         },
 
         updateEmpleado(){
-            let me=this;
             axios.put('/rrh_empleado/updateEmpleado',{
                 'idempleado':this.idempleado,
                 'nombre':this.nombre.toUpperCase(),
@@ -587,7 +583,7 @@ directives: { focus },
                 'gruposangre':this.gruposangre,
                 'fechanacimiento':this.fechanacimiento,
                 'idestadocivil':this.idestadocivil,
-                'foto':$("#lafoto").cropper('getCroppedCanvas').toDataURL(),
+                'foto':$('#lafoto').length?$("#lafoto").cropper('getCroppedCanvas').toDataURL():'',
                 'idformacion':this.idformacion,
                 'idprofesion':this.idprofesion,
                 'telcelular':this.telcelular,
@@ -606,11 +602,11 @@ directives: { focus },
                 'codssocial':this.codssocial,
                 'ssalud':this.ssalud,
                 'codssalud':this.codssalud,
-            }).then(function(){
+            }).then(response=>{
                 swal('Datos Actualizados','','success');
-                me.modalEmpleado=0;
-                me.activo=1;
-                me.listaEmpleados();
+                this.modalEmpleado=0;
+                //this.activo=1;
+                this.listaEmpleados();
             });
             
         },
