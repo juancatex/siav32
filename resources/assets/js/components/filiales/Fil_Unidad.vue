@@ -14,6 +14,11 @@
                 </div>
             </div>
             <div class="card-body table-responsive">
+                <div style="display:table; float:right; border:1px solid #acb4bc; border-radius:5px; padding:5px 15px; margin-top:0px; margin-bottom:10px;">Ver: &nbsp;
+                    <input type="radio" name="estado" @click="listaUnidades(1)" checked >Vigentes &nbsp;
+                    <input type="radio" name="estado" @click="listaUnidades(0)">Inactivas
+                </div>
+
                 <table class="table table-striped table-sm">
                     <thead class="tcabecera">
                         <tr>
@@ -81,8 +86,8 @@ export default {
         nomunidad:'', nomcargo:'', abrev:'',
     }},
     methods:{
-        listaUnidades(){
-            var url='/fil_unidad/listaUnidades';
+        listaUnidades(activo){
+            var url='/fil_unidad/listaUnidades?activo='+activo;
             axios.get(url).then(response=>{
                 this.arrayUnidades=response.data.unidades;
             });
@@ -169,7 +174,7 @@ export default {
     },
 
     mounted(){
-        this.listaUnidades();
+        this.listaUnidades(1);
     }
 }
 </script>
