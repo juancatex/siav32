@@ -647,6 +647,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get ('/adm_user/selectUsuario', 'AdmUserController@selectUsuario');
         Route::get ('/adm_user/selectRole', 'AdmUserController@selectRole');
         Route::post('/adm_user/registrar_roleuser', 'AdmUserController@registrar_roleuser');
+        Route::put ('/adm_user/actualizar', 'AdmUserController@update');
         Route::put ('/adm_user/actualizar_roleuser', 'AdmUserController@actualizar_roleuser');
 
 
