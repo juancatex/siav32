@@ -18,6 +18,7 @@ class CreateRrhMarcasTable extends Migration
             $table->integer('codbiom');
             $table->date('fecha');
             $table->time('hora');
+            $table->tinyInteger('atraso')->nullable();
             $table->timestamps();
         });
     }
