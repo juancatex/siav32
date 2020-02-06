@@ -18,7 +18,8 @@
                 <thead class="tcabecera">
                     <tr>
                         <th><span class="badge badge-success" v-text="arrayOficinas.length+' items'"></span></th>
-                        <th>Cód.</th>
+                        <th>Secretaría</th>
+                        <th>Código</th>
                         <th>Oficina</th>
                         <th>Responsable</th>
                     </tr>
@@ -35,6 +36,7 @@
                             <button class="btn btn-warning ing btn-sm icon-action-redo" title="Reactivar Oficina"
                                 @click="estadoOficina(oficina)"></button>
                         </td>
+                        <td v-text="oficina.nomunidad"></td>
                         <td v-text="oficina.codoficina" align="center"></td>
                         <td v-text="oficina.nomoficina"></td>
                         <td v-text="oficina.nomresponsable"></td>
@@ -58,6 +60,13 @@
                         Nombre Oficina:
                             <input type="text" class="form-control" v-model="nomoficina">
                         
+                        Dependencia:
+                            <select class="form-control" v-model="idunidad">
+                                <option v-for="unidad in arrayUnidades" :key="unidad.id" 
+                                :value="unidad.idunidad" v-text="unidad.nomunidad">
+                                </option>
+                            </select>
+
                         
                             <div class="tabla100">
                                 <div class="tcelda">Responsable:</div>
@@ -98,14 +107,14 @@ export default {
 
     data(){ return {
         modalOficina:0, accion:1, completo:0,
-        arrayOficinas:[], arrayDirectivos:[], arrayEmpleados:[], 
+        arrayOficinas:[], arrayDirectivos:[], arrayEmpleados:[], arrayUnidades:[],
         regResponsable:[], esDirectivo:'', tiporesponsable:'',
-        idoficina:'', codoficina:'', nomoficina:'', idresponsable:'', 
+        idunidad:'', idoficina:'', codoficina:'', nomoficina:'', idresponsable:'', 
     }}, 
 
     methods: {
         listaOficinas(idfilial){
-            var url='/fil_oficina/listaOficinas?idfilial='+idfilial+'&responsables=1';
+            var url='/fil_oficina/listaOficinas?idfilial='+idfilial+'&responsables=1'+'&orden=codunidad';
             axios.get(url).then(response=>{
                 this.arrayOficinas=response.data.oficinas;
             });
@@ -123,7 +132,14 @@ export default {
             axios.get(url).then(response=>{
                 this.arrayDirectivos=response.data.directivos;
             });
-        },        
+        },
+        
+        listaUnidades(){
+            var url='/fil_unidad/listaUnidades?activo=1';
+            axios.get(url).then(response=>{
+                this.arrayUnidades=response.data.unidades;
+            });
+        },
 
         generarCodigo(){
             var tam=this.arrayOficinas.length-1;
@@ -136,8 +152,10 @@ export default {
         nuevaOficina(){
             this.modalOficina=1;
             this.generarCodigo();
+            this.listaUnidades();            
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
+            this.idunidad='';
             this.nomoficina='';
             this.idresponsable='';
             this.tiporesponsable='';
@@ -147,10 +165,12 @@ export default {
             this.modalOficina=1;
             this.accion=2;
             this.completo=1;
+            this.listaUnidades();
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
             this.idoficina=oficina.idoficina;
             this.codoficina=oficina.codoficina;
+            this.idunidad=oficina.idunidad;
             this.nomoficina=oficina.nomoficina;
             this.tiporesponsable=oficina.tiporesponsable;
             this.esDirectivo=oficina.tiporesponsable=='s'?true:false;
@@ -169,6 +189,7 @@ export default {
                 'idfilial':this.idfilial,
                 'idcargo':this.idcargo,
                 'codoficina':this.codoficina,
+                'idunidad':this.idunidad,
                 'nomoficina':this.nomoficina.toUpperCase(),
                 'idresponsable':this.idresponsable,
                 'tiporesponsable':this.esDirectivo?'s':'c'
@@ -182,6 +203,7 @@ export default {
         updateOficina(){
             axios.put('fil_oficina/updateOficina',{
                 'idoficina':this.idoficina,
+                'idunidad':this.idunidad,
                 'nomoficina':this.nomoficina,
                 'idresponsable':this.idresponsable,
                 'tiporesponsable':this.esDirectivo?'s':'c'

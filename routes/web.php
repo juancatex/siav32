@@ -335,6 +335,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS 
     //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS 
+    Route::post('/act_ambiente/storeAmbiente','ActAmbienteController@storeAmbiente');     //C
+    Route::get ('/act_ambiente/listaAmbientes','ActAmbienteController@listaAmbientes');   //R
+    Route::put ('/act_ambiente/updateAmbiente','ActAmbienteController@updateAmbiente');   //U
+    Route::put ('/act_ambiente/switchAmbiente','ActAmbienteController@switchAmbiente');   //D
+
     Route::post('/act_grupo/storeGrupo' ,'ActGrupoController@storeGrupo');   //C
     Route::get ('/act_grupo/listaGrupos','ActGrupoController@listaGrupos');  //R
     Route::get ('/act_grupo/listaCuentas','ActGrupoController@listaCuentas');//R

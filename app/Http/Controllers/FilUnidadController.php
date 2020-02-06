@@ -9,8 +9,8 @@ class FilUnidadController extends Controller
 {
     public function listaUnidades(Request $request)
     {   
-        $unidades=Fil_Unidad::select('*');
-        if($request->activo) $unidades->where('activo',1);
+        //$unidades=Fil_Unidad::select('*');if($request->activo) $unidades->where('activo',1);
+        $unidades=Fil_Unidad::where('activo',$request->activo);
         return ['unidades'=>$unidades->get()];
     }
 

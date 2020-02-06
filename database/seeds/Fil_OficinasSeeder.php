@@ -33,7 +33,7 @@ class Fil_OficinasSeeder extends Seeder
         DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>6,'codoficina'=>'01','nomoficina'=>'DEPTO DE RECURSOS HUMANOS']);
         DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>6,'codoficina'=>'02','nomoficina'=>'CONSERJERÍAS']);
         DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>7,'codoficina'=>'01','nomoficina'=>'DEPTO DE RRPP']);
-        DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>8,'codoficina'=>'01','nomoficina'=>'']);
+        DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>8,'codoficina'=>'01','nomoficina'=>'STRIA. PRENSA']);
         DB::table('fil__oficinas')->insert(['idfilial'=>1,'idunidad'=>9,'codoficina'=>'01','nomoficina'=>'ARCHIVO GENERAL']);
         DB::table('fil__oficinas')->insert(['idfilial'=>2,'idunidad'=>1,'codoficina'=>'01','nomoficina'=>'PRESIDENCIA']);
         DB::table('fil__oficinas')->insert(['idfilial'=>2,'idunidad'=>3,'codoficina'=>'02','nomoficina'=>'HACIENDA']);
