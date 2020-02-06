@@ -148,7 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/con_perfilcuentamaestro/finalizarcuenta','ConPerfilcuentamaestroController@finalizarcuenta');
 
         Route::get('/con_perfilcuentadetalle/selectcuentahaber', 'ConAsientodetalleController@selectCuentaHaber');
-        Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilCuentamaestroController@selectPerfilMaestroTesoreria');
+        Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilcuentamaestroController@selectPerfilMaestroTesoreria');
 
         Route::get ('/con_asientomaestro','ConAsientomaestroController@index');
         Route::put ('/con_asientomaestro/actualizar','ConAsientomaestroController@update');
