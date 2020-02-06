@@ -432,15 +432,15 @@ directives: { focus },
         },
 
         resetEmpleado(){ 
-            this.nombre='hhh'; this.apaterno='hhh'; this.amaterno=''; 
-            this.sexo='M'; this.ci='444'; this.iddepartamento='1';
-            this.fechanacimiento='1987-01-01'; this.idestadocivil=''; 
+            this.nombre=''; this.apaterno=''; this.amaterno=''; 
+            this.sexo=''; this.ci=''; this.iddepartamento='1';
+            this.fechanacimiento=''; this.idestadocivil=''; 
             this.idformacion=''; this.idprofesion=''; this.foto='';
-            this.telcelular='777'; this.telfijo=''; this.email=''; 
-            this.domicilio='yyy'; this.zona=''; this.foto='';
-            this.idfilial='1'; this.idoficina='1'; this.idcargo='1'; this.fechaingreso='2020-01-01';
+            this.telcelular=''; this.telfijo=''; this.email=''; 
+            this.domicilio=''; this.zona=''; this.foto='';
+            this.idfilial=''; this.idoficina=''; this.idcargo=''; this.fechaingreso='';
             this.nrcontrato=''; this.tipocontrato=''; this.inicontrato=''; this.fincontrato=''; 
-            this.sueldo=''; this.idbanco=''; this.nrcuenta=''; this.codbiom='11';
+            this.sueldo=''; this.idbanco=''; this.nrcuenta=''; this.codbiom='';
         },
 
         buscarImagen(event){
