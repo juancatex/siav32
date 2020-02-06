@@ -170,7 +170,7 @@ export default {
             this.listaDirectivos(this.regFilial.idfilial);
             this.idoficina=oficina.idoficina;
             this.codoficina=oficina.codoficina;
-            this.idunidad=unidad.idunidad;
+            this.idunidad=oficina.idunidad;
             this.nomoficina=oficina.nomoficina;
             this.tiporesponsable=oficina.tiporesponsable;
             this.esDirectivo=oficina.tiporesponsable=='s'?true:false;
