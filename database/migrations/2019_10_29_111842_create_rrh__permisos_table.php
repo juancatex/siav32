@@ -20,10 +20,9 @@ class CreateRrhPermisosTable extends Migration
             $table->boolean('gocehaberes')->nullable();
             $table->boolean('cargovacacion')->nullable();
             $table->date('fechasolicitud');
-            $table->date('fechaini')->nullable();
-            $table->date('fechafin')->nullable();
-            $table->time('horaini')->nullable();
-            $table->time('horafin')->nullable();
+            $table->date('fechasalida')->nullable();
+            $table->time('horasalida')->nullable();
+            $table->tinyInteger('cantidad')->nullable();
             $table->string('obs',100)->nullable();
             $table->timestamps();
         });

@@ -21,12 +21,17 @@
                             <div class="tfila">
                                 <div class="tcelda">Periodo:&nbsp;</div>
                                 <div class="tcelda">
-                                    <select class="form-control" v-model="periodo" @change="verAtraso(periodo)">
-                                        <option value="2019-09-30">Sep/2019</option>
-                                        <option value="2019-10-31">Oct/2019</option>
-                                        <option value="2019-11-30">Nov/2019</option>
-                                        <option value="2019-12-31">Dic/2019</option>
+
+
+
+                                    <select class="form-control" v-model="per" @change="verAtraso(periodo)">
+                                        <option v-for="mes in arrayMeses" :key="mes" :value="mes" v-text="mes"></option>                                        
                                     </select>
+                                    <select v-model="ges">
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                    </select>
+
                                 </div>
                             </div>                           
                         </div>
@@ -94,7 +99,9 @@ export default {
     data(){ return {
         regEmpleado:[], arrayMarcas:[],
         modalAsistencia:'', accion:'', jsfechas:'',
-        idatraso:'',minutos:'', periodo:'', ipbirt:'',
+        idatraso:'',minutos:'', periodo:'', ipbirt:'', per:'', ges:'',
+        arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        diasMes:[31,28,31,30,31,30,31,31,30,31,30,31],        
     }},
 
     methods:{

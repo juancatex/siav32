@@ -57,6 +57,9 @@
                                     @click="$refs.empAsistencia.abrirModal(empleado)"></button>
                                 <button class="btn btn-warning btn-sm icon-umbrella" title="Permisos"
                                     @click="$refs.empPermiso.abrirModal(empleado)"></button>
+                                <button class="btn btn-warning btn-sm icon-credit-card" title="Credencial"
+                                    ></button>
+
                                 <button class="btn btn-warning btn-sm icon-briefcase" title="Contratos" 
                                     @click="$refs.empContrato.abrirModal(empleado)"></button>
                                 <button class="btn btn-warning btn-sm icon-docs"  title="Documentos" 

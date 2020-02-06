@@ -20,7 +20,7 @@ class FilOficinaController extends Controller
         }
         else $oficinas=Fil_Oficina::select('idoficina','idfilial','codoficina','nomoficina');
         if($request->activo) $oficinas->where('fil__oficinas.activo',1);
-        $oficinas->where('idfilial',$request->idfilial)->orderBy('codoficina');
+        $oficinas->where('idfilial',$request->idfilial)->orderBy('nomoficina');
         return ['oficinas'=>$oficinas->get()];
     }
 

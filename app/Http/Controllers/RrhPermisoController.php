@@ -28,7 +28,7 @@ class RrhPermisoController extends Controller
         $permiso->gocehaberes=$request->gocehaberes;
         $permiso->cargovacacion=$request->cargovacacion;
         $permiso->fechasolicitud=$request->fechasolicitud;
-        $permiso->lapso=$request->lapso;
+        //$permiso->lapso=$request->lapso;
         $permiso->cantidad=$request->cantidad;
         $permiso->fechasalida=$request->fechasalida;
         $permiso->horasalida=$request->horasalida;
@@ -43,7 +43,7 @@ class RrhPermisoController extends Controller
         $permiso->gocehaberes=$request->gocehaberes;
         $permiso->cargovacacion=$request->cargovacacion;
         $permiso->fechasolicitud=$request->fechasolicitud;
-        $permiso->lapso=$request->lapso;
+        //$permiso->lapso=$request->lapso;
         $permiso->cantidad=$request->cantidad;
         $permiso->fechasalida=$request->fechasalida;
         $permiso->horasalida=$request->horasalida;
