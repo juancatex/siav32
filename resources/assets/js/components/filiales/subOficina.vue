@@ -60,6 +60,13 @@
                         Nombre Oficina:
                             <input type="text" class="form-control" v-model="nomoficina">
                         
+                        Dependencia:
+                            <select class="form-control" v-model="idunidad">
+                                <option v-for="unidad in arrayUnidades" :key="unidad.id" 
+                                :value="unidad.idunidad" v-text="unidad.nomunidad">
+                                </option>
+                            </select>
+
                         
                             <div class="tabla100">
                                 <div class="tcelda">Responsable:</div>
@@ -125,7 +132,14 @@ export default {
             axios.get(url).then(response=>{
                 this.arrayDirectivos=response.data.directivos;
             });
-        },        
+        },
+        
+        listaUnidades(){
+            var url='/fil_unidad/listaUnidades?activo=1';
+            axios.get(url).then(response=>{
+                this.arrayUnidades=response.data.unidades;
+            });
+        },
 
         generarCodigo(){
             var tam=this.arrayOficinas.length-1;
@@ -138,6 +152,7 @@ export default {
         nuevaOficina(){
             this.modalOficina=1;
             this.generarCodigo();
+            this.listaUnidades();            
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
             this.nomoficina='';
@@ -149,6 +164,7 @@ export default {
             this.modalOficina=1;
             this.accion=2;
             this.completo=1;
+            this.listaUnidades();
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
             this.idoficina=oficina.idoficina;

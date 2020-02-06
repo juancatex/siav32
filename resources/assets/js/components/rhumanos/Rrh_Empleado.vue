@@ -58,8 +58,7 @@
                                 <button class="btn btn-warning btn-sm icon-umbrella" title="Permisos"
                                     @click="$refs.empPermiso.abrirModal(empleado)"></button>
                                 <button class="btn btn-warning btn-sm icon-credit-card" title="Credencial"
-                                    ></button>
-
+                                    @click="credencialEmpleado(empleado)"></button>
                                 <button class="btn btn-warning btn-sm icon-briefcase" title="Contratos" 
                                     @click="$refs.empContrato.abrirModal(empleado)"></button>
                                 <button class="btn btn-warning btn-sm icon-docs"  title="Documentos" 
@@ -415,7 +414,7 @@ directives: { focus },
         },
 
         listaOficinas(idfilial){
-            var url='/fil_oficina/listaOficinas?activo=1&idfilial='+idfilial;
+            var url='/fil_oficina/listaOficinas?activo=1&idfilial='+idfilial+'&orden=nomoficina';
             axios.get(url).then(response=>{
                 this.arrayOficinas=response.data.oficinas;
             });
@@ -476,6 +475,17 @@ directives: { focus },
             url.push('&__format=pdf'); //formato
             url.push('&ip='+this.ipbirt);//pa la foto
             reporte.viewPDF(url.join(''),'Kardex Personal');
+        },
+
+        credencialEmpleado(empleado){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/rhumanos');
+            url.push('/rrh_credencial.rptdesign'); //archivo
+            url.push('&idempleado='+empleado.idempleado); //idempleado
+            url.push('&__format=pdf'); //formato
+            url.push('&ip='+this.ipbirt);//pa la foto
+            reporte.viewPDF(url.join(''),'Credencial');
         },
 
         nuevoEmpleado(){            

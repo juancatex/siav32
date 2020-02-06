@@ -98,7 +98,7 @@
     <!-- MODAL FILIAL  MODAL FILIAL  MODAL FILIAL  MODAL FILIAL  MODAL FILIAL -->
     <!-- MODAL FILIAL  MODAL FILIAL  MODAL FILIAL  MODAL FILIAL  MODAL FILIAL -->
     <div class="modal" :class="modalFilial?'mostrar':''" >
-        <div class="modal-dialog modal-primary modal-sm">
+        <div class="modal-dialog modal-primary">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nueva':'Modificar'"></span> Filial</h4>

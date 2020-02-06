@@ -3,25 +3,22 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <div class="tablatit titcard">
                         <div class="tcelda">Filial <span v-text="regFilial.nommunicipio"></span> - Directorio</div> 
                     </div>
                 </div>
-                <div class="col-md-3 text-center">
-                    <div class="tablatit" style="width:100%; border:1px solid #acb4bc; border-radius:5px">
-                        <div class="tcelda" style="padding:0px 15px">Mostrando: 
-                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,1)" checked >Activos &nbsp;
-                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 text-right">
+                <div class="col-md-4 text-right">
                     <button class="btn btn-primary" style="margin-top:0" @click="nuevoDirectivo()">Nuevo Directivo</button>
                 </div>
             </div>
         </div>
-        <div class="card-body table-responsive">
+        <div class="card-body ">
+                        <div style="display:table; float:right; border:1px solid #acb4bc; border-radius:5px; padding:5px 15px; margin-top:0px; margin-bottom:10px;">Ver: &nbsp;
+                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,1)" checked >Vigentes &nbsp;
+                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
+                        </div>
+<div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead class="tcabecera">
                     <tr>
@@ -60,6 +57,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 
