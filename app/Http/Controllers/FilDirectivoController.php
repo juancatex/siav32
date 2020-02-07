@@ -20,7 +20,6 @@ class FilDirectivoController extends Controller
         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
         ->leftjoin('par_especialidades','par_especialidades.idespecialidad','socios.idespecialidad')
         ->where('idfilial',$request->idfilial)->where('fil__directivos.activo',$request->activo);;
-        //if($request->activo) $directivos->where('fil__directivos.activo',1);
         $directivos->orderBy('fil__unidads.idunidad');
         return ['directivos'=>$directivos->get()];
     }

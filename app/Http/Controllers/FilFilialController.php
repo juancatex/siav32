@@ -16,7 +16,7 @@ class FilFilialController extends Controller
         ->join('par_municipios','fil__filials.idmunicipio','par_municipios.idmunicipio');
         if($request->iddepartamento) 
             $filiales->where('fil__filials.iddepartamento',$request->iddepartamento);
-        if($request->activo) $filiales->where('fil__filials.activo',1);
+        $filiales->where('fil__filials.activo',$request->activo);
         if($request->idfilial) $filiales->where('idfilial',$request->idfilial);
         return ['filiales'=>$filiales->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
@@ -55,6 +55,7 @@ class FilFilialController extends Controller
     // debo susituir con mi autocomplete
     // debo susituir con mi autocomplete
     // debo susituir con mi autocomplete
+    /*
     public function listaSocios(Request $request) // debo susituir con mi autocomplete
     {
         $nomsocio=DB::raw('concat (apaterno," ",amaterno," ",nombre) as nomsocio');
@@ -76,6 +77,7 @@ class FilFilialController extends Controller
         else $socios->where('idsocio','=',0);
         return ['socios'=>$socios->get()];
     }
+    */
 
     public function selectFiliales(Request $request)
     {
