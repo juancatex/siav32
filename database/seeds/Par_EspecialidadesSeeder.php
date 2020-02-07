@@ -12,7 +12,7 @@ class Par_EspecialidadesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('par_especialidades')->insert(['idfuerza'=>'3','nomespecialidad'=>'A VERIFICAR','abrvesp'=>'-']);
+        DB::table('par_especialidades')->insert(['idfuerza'=>'3','nomespecialidad'=>'','abrvesp'=>'-']);
         DB::table('par_especialidades')->insert(['idfuerza'=>'3','nomespecialidad'=>'ING.','abrvesp'=>'ING.']);
         DB::table('par_especialidades')->insert(['idfuerza'=>'3','nomespecialidad'=>'MOT.','abrvesp'=>'MOT.']);
         DB::table('par_especialidades')->insert(['idfuerza'=>'3','nomespecialidad'=>'INTEND.','abrvesp'=>'INTEND.']);
