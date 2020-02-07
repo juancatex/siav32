@@ -67,13 +67,15 @@ class CreateApoAportesProcedures extends Migration
             if tiposubcuenta=1 THEN
                 select 	sum(debe) as sdebe,
                             sum(haber) as shaber, 
-                            concat(apaterno,' ',amaterno,' ',nombre) as nombres,
+                            concat(nomgrado,' ',apaterno,' ',amaterno,' ',nombre) as nombres,
                             numpapeleta,
                             numdocumento
             from con__asientodetalles a join con__asientomaestros b
             on a.idasientomaestro=b.idasientomaestro 
             join socios c
             on a.subcuenta=c.numpapeleta
+            join par_grados h
+            on c.idgrado=h.idgrado
             where b.idagrupacion=idmaestro or a.idasientomaestro=idmaestro
             GROUP BY a.idasientomaestro
             ORDER BY fechahora_desembolso DESC;

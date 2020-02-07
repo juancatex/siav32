@@ -236,7 +236,7 @@
     import * as plugin from './../functions.js';
 
     export default {
-        props:['idmodulo'],
+        props:['idmodulo','idventanamodulo'],
         data (){
             return {
                 csvdata_id: 0,
@@ -638,7 +638,7 @@
 
             },
              getPermisos() {
-            var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo;
+            var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo+'&idventanamodulo='+this.idventanamodulo;
                 let me = this; 
                 axios.get(url).then(function (response) {
                     if(response.data.datapermiso.length!=0)

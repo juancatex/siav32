@@ -525,7 +525,7 @@
 
    
     export default {
-        props:['idmodulo'],
+        props:['idmodulo','idventanamodulo'],
         data (){
             return {
                 mdebito:null,
@@ -696,7 +696,7 @@
         }, 
         methods : {   
             getPermisos() {
-            var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo;
+            var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo+'&idventanamodulo='+this.idventanamodulo;
                 let me = this; 
                 axios.get(url).then(function (response) {
                     if(response.data.datapermiso.length!=0)
