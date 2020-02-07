@@ -353,7 +353,7 @@ if(!empty($request->buscar)){
         
      $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
-            ->select('par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->select('par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
             ->where('par__productos.idproducto','=',$request->idpro)  
             ->get();
 
@@ -371,7 +371,7 @@ if(!empty($request->buscar)){
        $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
        ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
        ->select( 'par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes',
-       'par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos',
+       'par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos',
        'par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto',
        'par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
        'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')

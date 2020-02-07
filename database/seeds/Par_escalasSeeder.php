@@ -12,7 +12,7 @@ class Par_EscalasSeeder extends Seeder
     public function run()
     {
         DB::table('par__escalas')->insert(['idescala'=>'1','minmonto'=>'0','maxmonto'=>'10000','minanios'=>'6','maxanios'=>'420']);  
-        DB::table('par__escalas')->insert(['idescala'=>'2','minmonto'=>'1000','maxmonto'=>'7000','minanios'=>'6','maxanios'=>'420']);  
+        DB::table('par__escalas')->insert(['idescala'=>'2','minmonto'=>'0','maxmonto'=>'7000','minanios'=>'6','maxanios'=>'420']);  
 
         DB::table('par__escalas')->insert(['idescala'=>'3','minmonto'=>'0','maxmonto'=>'6000','minanios'=>'12','maxanios'=>'48']);  
         DB::table('par__escalas')->insert(['idescala'=>'3','minmonto'=>'0','maxmonto'=>'10000','minanios'=>'60','maxanios'=>'108']);

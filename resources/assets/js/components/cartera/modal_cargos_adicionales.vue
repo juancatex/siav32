@@ -17,7 +17,7 @@
                                 </div>  
 
                                 <div class="modal-footer">  
-                                <button type="button" class="btn btn-secondary" @click="classModal2.closeModal('primarymodal')">Cerrar</button>     
+                                <button type="button" class="btn btn-secondary" @click="cerrarmodal_principal()">Cerrar</button>     
                                 <button type="button" class="btn btn-secondary" @click="mostrarelement()">Probar</button>         
                                 <button type="button" class="btn btn-primary" @click="save()">Guardar</button>    
                                 </div>    
@@ -68,23 +68,28 @@
 
                         try {
                             _pl._mmf2251_3325(me.mapData);
-                            me.mapDataGeneral.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
-                            axios.put('/par_producto/actualizar/map', {
-                                'idproducto': me.idproducto,
-                                'map': JSON.stringify(Array.from(me.mapDataGeneral))
-                            }).then(function (response) {
-                                me.$emit('cerrarvueprincipal');
+                           // me.mapDataGeneral.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
+                            // axios.put('/par_producto/actualizar/map', {
+                            //     'idproducto': me.idproducto,
+                            //     'map': JSON.stringify(Array.from(me.mapDataGeneral))
+                            // }).then(function (response) {
+                            //     me.$emit('cerrarvueprincipal');
+                            //     me.classModal2.closeModal('primarymodal');
+                            //     swal("¡Se registro los datos correctamente!", "", "success");
+                            //     $(".swal2-modal").css('z-index', '2000');
+                            //     $(".swal2-container").css('z-index', '2000');
+                            // }).catch(function (error) {
+                            //     console.log(error);
+                            // });
+                                me.$emit('savePerfil',me.idmaestro,me.mapData);
                                 me.classModal2.closeModal('primarymodal');
                                 swal("¡Se registro los datos correctamente!", "", "success");
                                 $(".swal2-modal").css('z-index', '2000');
                                 $(".swal2-container").css('z-index', '2000');
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
                         } catch (error) {
                             console.error(error.stack);
                             swal("¡Existe un error en la compilacion de la formula!", error.name + ' <b>:</b><span style="font-weight: 400;"> ' + error.message + '</span>', "error").then((result) => {
-                                me.$emit('cerrarvue');
+                                me.$emit('cerrarvueprincipal');
                             })
                             $(".swal2-modal").css('z-index', '2000');
                             $(".swal2-container").css('z-index', '2000');
@@ -106,6 +111,10 @@
              cerrarModalvue(){   
                 this.classModal2.openModal('primarymodal'); 
               },
+            cerrarmodal_principal(){ 
+                this.classModal2.closeModal('primarymodal');
+                this.$emit('cerrarvueprincipal');
+            },
              mostrarelement(mapinto=this.mapData,nombre=this.nombreperfilmaestro,tipoc=this.tipocambio,cod=this.codmoneda,name=this.nombreproducto){
                  let me=this; 
                 this.validateData(this.mapData).then(function(responses) { 

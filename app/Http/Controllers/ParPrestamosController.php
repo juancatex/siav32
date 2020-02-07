@@ -504,23 +504,50 @@ class ParPrestamosController extends Controller
     public function prueba(Request $request)
     { 
        
-        $productos_array = array();
-        $productos=DB::select('select idproducto from par__productos where activo=1'); 
-        foreach($productos as $valor){
-         $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
-        ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
-        ->select( 'par__productos.linea','par__productos.cobranza_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
-        'par__productos__perfilcuentas.valor_abc',
-        'par__productos__perfilcuentas.formula',
-        'con__perfilcuentadetalles.tipocargo',
-        'con__perfilcuentadetalles.idcuenta',
-        'par__productos__perfilcuentas.iscargo')
-        ->where('par__productos__perfilcuentas.activo','=','1')
-        ->where('par__productos.idproducto','=',$valor->idproducto)
-        ->get()->toArray();
-        $productos_array[$valor->idproducto] =$formulascobranza;
-        }
-        return  $productos_array;
+        // $productos_array = array();
+        // $productos=DB::select('select idproducto from par__productos where activo=1'); 
+        // foreach($productos as $valor){
+        //  $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+        // ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+        // ->select( 'par__productos.linea','par__productos.cobranza_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
+        // 'par__productos__perfilcuentas.valor_abc',
+        // 'par__productos__perfilcuentas.formula',
+        // 'con__perfilcuentadetalles.tipocargo',
+        // 'con__perfilcuentadetalles.idcuenta',
+        // 'par__productos__perfilcuentas.iscargo')
+        // ->where('par__productos__perfilcuentas.activo','=','1')
+        // ->where('par__productos.idproducto','=',$valor->idproducto)
+        // ->get()->toArray();
+        // $productos_array[$valor->idproducto] =$formulascobranza;
+        // }
+        // return  $productos_array;
+
+        $tipo = DB::raw("par__prestamos__tipo__ejecucion.nombre as nombretipo");
+        $socios=Par_Prestamos::select('con__asientomaestros.observaciones','par__prestamos.fecharde_apro_conta','par__prestamos.idasiento',
+        'socios.numpapeleta','par__productos.cancelarprestamos','par__prestamos.lote','par__prestamos.fechardesembolso',
+        'par__prestamos.idejecucion','par__prestamos.apro_conta','par__prestamos.idtransaccionD','par__prestamos.idestado',
+        'par__prestamos__estados.nombreestado',
+        'par__prestamos.no_prestamo','par__monedas.tipocambio','par__productos.idproducto','socios.idsocio','par__productos.tasa',
+        'par__prestamos.detalle_desembolso','par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
+        'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo',
+        'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes')
+        ->join ('par__productos','par__prestamos.idproducto','=','par__productos.idproducto')
+        ->join ('par__prestamos__estados','par__prestamos.idestado','=','par__prestamos__estados.idestado')
+        ->join ('socios','par__prestamos.idsocio','=','socios.idsocio')
+        ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+        ->join ('par__prestamos__tipo__ejecucion','par__prestamos.idejecucion','=','par__prestamos__tipo__ejecucion.idejecucion')
+        ->join ('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
+        ->leftJoin ('con__asientomaestros','par__prestamos.idasiento','=','con__asientomaestros.idasientomaestro')
+       
+        ->where('par__prestamos.apro_conta','!=','1') 
+        ->where('par__prestamos.apro_conta','!=','2') 
+
+        ->where('par__prestamos.idoperario','=',Auth::id()) 
+        ->whereBetween('par__prestamos.idestado',[1,2])
+        ->orderBy('par__prestamos.apro_conta', 'DESC')
+        ->orderBy('par__prestamos.idestado', 'asc')
+        ->orderBy('socios.nombre', 'asc')->toSql();
+                return  $socios;
     }
      
 }
