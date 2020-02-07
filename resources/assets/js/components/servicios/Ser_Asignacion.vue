@@ -48,7 +48,6 @@
         <asgMausoleo     :regEstablecimiento="regEstablecimiento" v-if="vueMausoleo" ></asgMausoleo>
         <asgRegular      :regEstablecimiento="regEstablecimiento" v-if="vueRegular"></asgRegular>
         <asgEventual     :regEstablecimiento="regEstablecimiento" v-if="vueEventual"></asgEventual>
-        <!--  <ser_multifamiliar ref="vuemultifamiliar"></ser_multifamiliar> -->
     </div>
 </main>
 </template>
@@ -75,7 +74,6 @@ export default {
     }},
 
     methods:{
-        /* this.$refs.vuemultifamiliar.cerrarvue();  pasar parametros a un vue*/ 
         listaFiliales(){
             axios.get('/fil_filial/listaFiliales?activo=1').then(response=>{
                 this.arrayFiliales=response.data.filiales;
@@ -200,6 +198,15 @@ export default {
     padding:5px;
 }
 
+.vervigente{
+    display:table; 
+    float:right; 
+    border:1px solid #acb4bc; 
+    border-radius:5px; 
+    padding:5px 15px; 
+    margin-bottom:10px;
+}
+
 .bloquecelda{
     padding:10px 15px; 
     font-size:20px; 
@@ -235,7 +242,6 @@ export default {
 .tablacen { display:table; margin-left: auto; margin-right: auto; }
 .tablatit { display:table; height:100%;}
 .tabla100 { display:table; width:100%; } 
-/* .ttabla { display:table; width:100%;} */
 .tfila  { display:table-row; }
 .tcelda { display:table-cell; vertical-align:middle; }
 .taltura{ padding: 10px 0px; }

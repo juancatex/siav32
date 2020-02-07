@@ -17,16 +17,21 @@ class RrhEmpleadoController extends Controller
         select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','telcelular',
         'foto','codbiom','rrh__empleados.activo')
         ->join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento');
-        if($request->idoficina) $empleados=$empleados->where('idoficina',$request->idoficina);
-        //if($request->activo) $empleados->where('rrh__empleados.activo',1);
         if($request->buscado)
         {
             if(is_numeric($request->buscado)) $empleados=$empleados->where('ci','like',$request->buscado.'%');
             else $empleados=$empleados->where('apaterno','like','%'.$request->buscado.'%')
                 ->orWhere('amaterno','like','%'.$request->buscado.'%')
                 ->orWhere('nombre','like','%'.$request->buscado.'%');
-        }
-        $empleados->orderBy('apaterno')->orderBy('amaterno')->where('rrh__empleados.activo',$request->activo);
+        }       
+        if($request->sede=='lpz') $empleados->where('idfilial',1);
+        if($request->sede=='int') $empleados->where('idfilial','>',1);
+        $empleados->where('rrh__empleados.activo',$request->activo);
+
+        $empleados->orderBy('apaterno')->orderBy('amaterno');
+        
+
+
         return ['empleados'=>$empleados->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 

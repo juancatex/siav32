@@ -236,11 +236,14 @@ class SocioController extends Controller
             else $filtro.=" and ".$criterio;
         }
         if($request->idsocio) $filtro="idsocio=$request->idsocio";
-        $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta from socios 
+        $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
+        concat(nomgrado,' ',nombre,' ',apaterno,' ',amaterno) as nomcompleto from socios 
         join par_grados on par_grados.idgrado=socios.idgrado where $filtro";
         $socios=DB::select($sql);
         return ['socios'=>$socios];
     }
+
+
 
     public function verSocio(Request $request)
     {   

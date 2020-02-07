@@ -14,49 +14,52 @@
             </div>
         </div>
         <div class="card-body ">
-                        <div style="display:table; float:right; border:1px solid #acb4bc; border-radius:5px; padding:5px 15px; margin-top:0px; margin-bottom:10px;">Ver: &nbsp;
-                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,1)" checked >Vigentes &nbsp;
-                            <input type="radio" name="estado" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
-                        </div>
-<div class="table-responsive">
-            <table class="table table-striped table-sm">
-                <thead class="tcabecera">
-                    <tr>
-                        <th><span class="badge badge-success" v-text="arrayDirectivos.length+' items'"></span></th>
-                        <th>Cargo</th>
-                        <th>Nombre</th>
-                        <th>Fuerza</th>
-                        <th>Periodo</th>
-                        <th>Celular</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="directivo in arrayDirectivos" :key="directivo.iddirectivo" :class="directivo.activo?'':'txtdesactivado'">
-                        <td v-if="directivo.activo" nowrap align="center">
-                            <button class="btn btn-warning btn-sm icon-pencil" @click="editarDirectivo(directivo)"></button>
-                            <button class="btn btn-danger btn-sm icon-trash" @click="estadoDirectivo(directivo)" title="Desactivar al Directivo"></button>
-                        </td>
-                        <td v-else align="center">
-                            <button class="btn btn-warning btn-sm icon-action-redo" @click="estadoDirectivo(directivo)"  title="Reactivar al Directivo"></button>
-                        </td>
-                        <td v-text="directivo.nomcargo"></td>
-                        <td><span v-text="directivo.nomgrado"></span> <span v-text="directivo.nomespecialidad"></span>
-                            <span v-text="directivo.nombre"></span> <span v-text="directivo.apaterno"></span>
-                            <span v-text="directivo.amaterno"></span>
-                        </td>
-                        <td v-text="directivo.nomfuerza" align="center"></td>
-                        <td align="center">
-                            <span v-text="directivo.fechaini?jsfechas.fechames(directivo.fechaini):''"></span> al
-                            <span v-text="directivo.fechafin?jsfechas.fechames(directivo.fechafin):''"></span>
-                        </td>
-                        <td v-if="directivo.telcelular" v-text="directivo.telcelular" align="center"></td>
-                        <td v-else align="center">
-                            <span class="badge badge-danger">Registrar en</span>
-                            <span class="badge badge-danger">Afiliaciones</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="vervigente">Ver: &nbsp;
+                <input type="radio" name="estado" id="r1" @click="listaDirectivos(regFilial.idfilial,1)">Vigentes &nbsp;
+                <input type="radio" name="estado" id="r0" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead class="tcabecera">
+                        <tr>
+                            <th><span class="badge badge-success" v-text="arrayDirectivos.length+' items'"></span></th>
+                            <th>Cargo</th>
+                            <th>Nombre</th>
+                            <th>Fuerza</th>
+                            <th>Periodo</th>
+                            <th>Celular</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="directivo in arrayDirectivos" :key="directivo.iddirectivo" :class="directivo.activo?'':'txtdesactivado'">
+                            <td v-if="directivo.activo" nowrap align="center">
+                                <button class="btn btn-warning btn-sm icon-pencil" title="Editar Directivo"
+                                    @click="editarDirectivo(directivo)"></button>
+                                <button class="btn btn-danger btn-sm icon-trash" title="Desactivar Directivo"
+                                    @click="estadoDirectivo(directivo)"></button>
+                            </td>
+                            <td v-else align="center">
+                                <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar al Directivo"
+                                    @click="estadoDirectivo(directivo)"></button>
+                            </td>
+                            <td v-text="directivo.nomcargo"></td>
+                            <td><span v-text="directivo.nomgrado"></span> <span v-text="directivo.nomespecialidad"></span>
+                                <span v-text="directivo.nombre"></span> <span v-text="directivo.apaterno"></span>
+                                <span v-text="directivo.amaterno"></span>
+                            </td>
+                            <td v-text="directivo.nomfuerza" align="center"></td>
+                            <td align="center">
+                                <span v-text="directivo.fechaini?jsfechas.fechames(directivo.fechaini):''"></span> al
+                                <span v-text="directivo.fechafin?jsfechas.fechames(directivo.fechafin):''"></span>
+                            </td>
+                            <td v-if="directivo.telcelular" v-text="directivo.telcelular" align="center"></td>
+                            <td v-else align="center">
+                                <span class="badge badge-danger">Registrar en</span>
+                                <span class="badge badge-danger">Afiliaciones</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -66,30 +69,42 @@
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Directivo</h4>
-                    <button class="close" @click="modalDirectivo=0">x</button>
+                    <button class="close" @click="clearSelected=0;modalDirectivo=0">x</button>
                 </div>
                 <div class="modal-body">
-                    Cargo:
+                    Cargo: <span class="txtasterisco"></span>
                     <select class="form-control" v-model="idunidad">
                         <option v-for="unidad in arrayUnidades" :key="unidad.id"
                             :value="unidad.idunidad" v-text="unidad.nomcargo"></option>
                     </select>
-                    Socio:
-                    <autocomplete @encontrado="verIDsocio($event)"></autocomplete>
+                    <br>Socio: <span class="txtasterisco"></span> 
+                    <!-- <autocomplete :idsocio="idsocio" edit="1" :accion="accion" @encontrado="verIDsocio($event)"></autocomplete>  -->
+                    <Ajaxselect v-if="clearSelected"
+                        ruta="/socio/listaSocios?cadena=" 
+                        @found="loadIDsocio" @cleaning="cleanSocios"
+                        resp_ruta="socios" 
+                        labels="nomcompleto" 
+                        placeholder="Ingrese Texto..." 
+                        idtabla="idsocio" 
+                        :id="idsocio" 
+                        :clearable="true">
+                    </Ajaxselect>
+                    <br>
                     <div class="row">
-                        <div class="col-md-4">Celular:
-                            <input type="text" class="form-control" v-model="telcelular">
-                        </div>
-                        <div class="col-md-4">Fecha Inicio:
+                        <!--
+                        <div class="col-md-4">Celular:<input type="text" class="form-control" v-model="telcelular"></div>
+                        -->
+                        <div class="col-md-6 col-sm-6">Fecha Inicio:
                             <input type="date" class="form-control" v-model="fechaini">
                         </div>
-                        <div class="col-md-4">Fecha Fin:
+                        <div class="col-md-6 col-sm-6">Fecha Fin:
                             <input type="date" class="form-control" v-model="fechafin">
                         </div>
                     </div>
+                    <div class="txtvalidador text-right">* Campos obligatorios</div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalDirectivo=0">Cerrar</button>
+                    <button class="btn btn-secondary" @click="clearSelected=0;modalDirectivo=0">Cerrar</button>
                     <button class="btn btn-primary" @click="accion==1?storeDirectivo():updateDirectivo()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
@@ -106,15 +121,19 @@ export default {
     props:['regFilial'],
 
     data(){ return{
-        modalDirectivo:0, accion:1, jsfechas:'', completo:'', activo:'',
+        modalDirectivo:0, accion:1, jsfechas:'', completo:'',  clearSelected:1,
         arrayFiliales:[], arrayDirectivos:[], arrayUnidades:[], 
         iddirectivo:'', idunidad:'', idsocio:'', fechaini:'', fechafin:'', telcelular:'',
     }},
 
     methods:{
-        verIDsocio(idsocio){ this.idsocio=idsocio; },
+        //verIDsocio(idsocio){ this.idsocio=idsocio; },
+        tiempo() { this.clearSelected=1},
+        cleanSocios(){ this.idsocio=''; },
+        loadIDsocio(resultado) { this.idsocio=resultado.idsocio; },
 
         listaDirectivos(idfilial,activo){
+            $('#r'+activo).prop('checked',true);
             var url='/fil_directivo/listaDirectivos?idfilial='+idfilial+'&activo='+activo;
             axios.get(url).then(response=>{
                 this.arrayDirectivos=response.data.directivos;
@@ -128,7 +147,8 @@ export default {
             });
         },
 
-        nuevoDirectivo(){
+        nuevoDirectivo(){           this.clearSelected=1;
+            
             this.modalDirectivo=1;
             this.accion=1;
             this.completo=0;
@@ -139,7 +159,7 @@ export default {
             this.fechafin='';
         },
 
-        editarDirectivo(directivo){
+        editarDirectivo(directivo){           this.clearSelected=0; setTimeout(this.tiempo, 200);
             this.modalDirectivo=1;
             this.accion=2;
             this.completo=1;
@@ -159,7 +179,7 @@ export default {
 
         storeDirectivo(){
             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
-                showCancelButton:false, showConfirmButton:false, //closeOnConfirm: false,
+                showCancelButton:false, showConfirmButton:false, 
                 allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
                 onOpen:() => { swal.showLoading() }
             });
@@ -172,7 +192,7 @@ export default {
             }).then(response=>{
                 swal('Creado correctamente','','success');
                 this.modalDirectivo=0;
-                this.listaDirectivos(this.regFilial.idfilial);
+                this.listaDirectivos(this.regFilial.idfilial,1);
             });
         },
 
@@ -186,7 +206,7 @@ export default {
             }).then(response=>{
                 swal('Datos actualizados','','success');
                 this.modalDirectivo=0;
-                this.listaDirectivos(this.regFilial.idfilial);
+                this.listaDirectivos(this.regFilial.idfilial,1);
             });
         },
 
@@ -197,19 +217,16 @@ export default {
                     html: 'No podrá acceder a la información dependiente', showCancelButton: true,
                     confirmButtonColor:'#f86c6b', confirmButtonText:'Desactivar Directivo',
                     cancelButtonText:'Cancelar', reverseButtons: true
-                }).then(confirmar=>{
-                    if(confirmar.value) this.switchDirectivo(1);
-                });
+                }).then(confirmar=>{confirmar.value?this.switchDirectivo(0):''});
             }
-            else this.switchDirectivo(0);
+            else this.switchDirectivo(1);
         },
 
         switchDirectivo(activo){
-            if(activo) var titswal='Desactivado'; else var titswal='Activado';
             var url='/fil_directivo/switchDirectivo?iddirectivo='+this.iddirectivo;
             axios.put(url).then(response=>{
-                swal(titswal+' correctamente','','success');
-                this.listaDirectivos(this.regFilial.idfilial);
+                swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
+                this.listaDirectivos(this.regFilial.idfilial,activo);
             });
         }       
 
