@@ -553,7 +553,7 @@ export default {
         limpiarajax:1,
         idmodulo:0,
         idcuenta:[],
-        idsubcuenta:[],
+        subcuenta:'',
         classModal:null,
         modal : 0,
         tituloModal : '',
@@ -650,6 +650,7 @@ export default {
         sigla:'',
         idfilial:'',
         detalle:'',
+        sidirectorio:''
     }},
     computed:{
         menorfacturas(){
@@ -762,12 +763,14 @@ export default {
             this.idfilial=arrayValores['idfilial'];
             this.nommunicipio=arrayValores['nommunicipio'];
             this.sigla=arrayValores['sigla'];
+            this.sidirectorio=arrayValores['sidirectorio'];
+            this.subcuenta=arrayValores['subcuenta'];
             this.selectCuentaHaber(this.idasientomaestro);
             //console.log(arrayValores);
             this.tipoAccion=1;
             this.borrador=false;
             this.rowcuentas= [{   idcuenta:'',
-                    idsubcuenta: '',
+                    idsubcuenta: this.subcuenta,
                     moneda:'bs',
                     documento:'',
                     debe:0,
@@ -825,7 +828,7 @@ export default {
                         if(index==0)
                         {
                         me.rowcuentas= [{ idcuenta:element.idcuenta,
-                                    idsubcuenta: '',
+                                    idsubcuenta: this.subcuenta,
                                     moneda:'bs',
                                     documento:optdocumento,
                                     debe:optdebe,
@@ -836,7 +839,7 @@ export default {
                         {
                             me.addrowcuentas();
                             me.rowcuentas[index].idcuenta=element.idcuenta;              
-                            me.rowcuentas[index].idsubcuenta='';
+                            me.rowcuentas[index].idsubcuenta=this.subcuenta;
                             me.rowcuentas[index].moneda=element.moneda;
                             me.rowcuentas[index].documento=optdocumento;
                             me.rowcuentas[index].debe=optdebe;
@@ -855,7 +858,7 @@ export default {
                             if(index==0)
                             {
                             me.rowcuentas= [{ idcuenta:element.idcuenta,
-                                        idsubcuenta: '',
+                                        idsubcuenta: this.subcuenta,
                                         moneda:'bs',
                                         documento:optdocumento,
                                         debe:0,
@@ -866,7 +869,7 @@ export default {
                             {
                                 me.addrowcuentas();
                                 me.rowcuentas[index].idcuenta=element.idcuenta;              
-                                me.rowcuentas[index].idsubcuenta='';
+                                me.rowcuentas[index].idsubcuenta=this.subcuenta;
                                 me.rowcuentas[index].moneda=element.moneda;
                                 me.rowcuentas[index].documento='';
                                 me.rowcuentas[index].debe=0;
@@ -889,7 +892,7 @@ export default {
         },
         addrowcuentas() {
             this.rowcuentas.push({   idcuenta:'',
-                            idsubcuenta: '',
+                            idsubcuenta: this.subcuenta,
                             moneda:'bs',
                             documento:'',
                             debe:0,
@@ -1041,7 +1044,7 @@ export default {
             me.acumulado87=0;
             var validarfacturas=0;
             me.rowcuentas.push({ idcuenta: me.idcuentahaber,
-                                            idsubcuenta:'',
+                                            idsubcuenta:this.subcuenta,
                                             moneda:'bs',
                                             documento:'',
                                             debe:"",
@@ -1065,6 +1068,7 @@ export default {
                 'idfacturas':me.idfacturas,
                 'validarfacturas':validarfacturas,
                 'saldoc':me.saldoc,
+                'sidirectorio':this.sidirectorio
 
             }).then(function (response) {
                 //console.log(response);
@@ -1080,8 +1084,14 @@ export default {
                 {
                     me.actualizarsolicitud(1,residasientomaestro)
                 }      
-                me.reporteAsientoautomatico(response.data);
+                if(me.sidirectorio)
+                    var directorio=1;
+                else
+                    var directorio=2;
+
+                me.reporteAsientoautomatico(response.data,directorio);
                 me.resetComprobante();
+                me.$emit('cerrardescargo');
                 //me.listrcomprobantes();
                 //me.$refs.comprobanteprincipal.listacomprobantes();
             }).catch(function (error) {
@@ -1104,10 +1114,10 @@ export default {
                     console.log(error);
                 });
         },
-        reporteAsientoautomatico(idasientomaestro){
+        reporteAsientoautomatico(idasientomaestro,directorio){
                 let me=this;
-                var url=me.reporte_automatico + idasientomaestro; 
-                //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);	
+                var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+                console.log(url);
                 plugin.viewPDF(url,'Asiento Contable');
 
             },

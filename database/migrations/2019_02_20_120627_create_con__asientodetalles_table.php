@@ -17,6 +17,7 @@ class CreateConAsientodetallesTable extends Migration
             $table->increments('idasientodetalle');
             $table->integer('idasientomaestro')->unsigned();
             $table->integer('idcuenta')->unsigned();
+            $table->tinyInteger('tiposubcuenta')->unsigned()->default(1)->comment('1=>num papeleta socio,2=>idempleado');
             $table->float('monto',15,2);
             $table->float('debe',15,2)->nullable();
             $table->float('haber',15,2)->nullable();

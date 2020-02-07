@@ -67,7 +67,7 @@
                                         <span class="badge badge-success">Validado Conta</span>
                                     </div>
                                     <div v-else-if="solicitud.estado_aprobado==0">
-                                        <span class="badge badge-info">No Desembolsado</span>
+                                        <span class="badge badge-warning">No Desembolsado</span>
                                     </div>
                                     <div v-else-if="solicitud.estado_aprobado==3">
                                         <span class="badge badge-info">Desembolsado</span>

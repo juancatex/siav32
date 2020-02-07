@@ -233,7 +233,7 @@
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Bono Frontera:</label>
                       <div class="input-group">
-                        <input v-validate.initial="'required|numeric'" type="number" class="form-control"
+                        <input v-validate.initial="'decimal:2'" type="number" class="form-control"
                           v-model.number="frontera" placeholder="ej.: 10000" name="Bono Frontera" />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
@@ -250,7 +250,7 @@
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Bono Pro Libro:</label>
                       <div class="input-group">
-                        <input v-validate.initial="'required|numeric'" type="number" class="form-control"
+                        <input v-validate.initial="'decimal:2'" type="number" class="form-control"
                           v-model.number="prolibro" placeholder="ej.: 10000" name="Bono Pro Libro" />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
@@ -272,7 +272,7 @@
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Bono Asig. Familiar:</label>
                       <div class="input-group">
-                        <input v-validate.initial="'required|numeric'" type="number" class="form-control"
+                        <input v-validate.initial="'decimal:2'" type="number" class="form-control"
                           v-model.number="familiar" placeholder="ej.: 10000" name="Bono Asi" />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
@@ -288,7 +288,7 @@
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Bono Riesgo:</label>
                       <div class="input-group">
-                        <input v-validate.initial="'required|numeric'" type="number" class="form-control"
+                        <input v-validate.initial="'decimal:2'" type="number" class="form-control"
                           v-model.number="riesgo" placeholder="ej.: 10000" name="Bono Riesgo" />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
