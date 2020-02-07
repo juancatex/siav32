@@ -64,14 +64,14 @@
                     <div class="tabla100">
                         <div class="tcelda">Código Oficina (autogenerado):</div>
                         <div class="tcelda">
-                            <input type="text" class="form-control txtnegrita text-center" v-model="codoficina" disabled>
+                            <input type="text" class="form-control txtnegrita text-center" v-model="codoficina">
                         </div>
                     </div>
                     <br>Nombre Oficina: <span class="txtasterisco"></span>
                         <input type="text" class="form-control" v-model="nomoficina" @keyup="valOficina()">
                     <br>Dependencia: <span class="txtasterisco"></span>
                         <select class="form-control" v-model="idunidad" 
-                            @change="valOficina(),generarCodigo(regFilial.idfilial,idunidad)">
+                            @change="valOficina()">
                             <option v-for="unidad in arrayUnidades" :key="unidad.id" 
                             :value="unidad.idunidad" v-text="unidad.nomunidad">
                             </option>

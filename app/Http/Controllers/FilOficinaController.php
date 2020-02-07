@@ -20,9 +20,9 @@ class FilOficinaController extends Controller
         }
         else $oficinas=Fil_Oficina::select('idoficina','idfilial','codoficina','nomoficina','nomunidad');
         $oficinas->join('fil__unidads','fil__unidads.idunidad','fil__oficinas.idunidad')
-        ->where('idfilial',$request->idfilial);
-        if($request->activo) $oficinas->where('fil__oficinas.activo',$request->activo);
-        if($request->idunidad) $oficinas->where('fil__unidads.idunidad',$request->idunidad);
+        ->where('idfilial',$request->idfilial)->where('fil__oficinas.activo',$request->activo);
+        //if($request->activo) $oficinas->where('fil__oficinas.activo',$request->activo);
+        //if($request->idunidad) $oficinas->where('fil__unidads.idunidad',$request->idunidad);
         if($request->orden) $oficinas->orderBy($request->orden)->orderBy('codoficina');         
         return ['oficinas'=>$oficinas->get()];
     }
