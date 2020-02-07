@@ -575,6 +575,19 @@ class ConAsientomaestroController extends Controller
     {
         //
     }
+    public function editarcabecera (Request $request)
+    {
+        $asientomaestroclass= new AsientoMaestroClass();
+        
+        $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
+        $asientomaestro->tipodocumento=$request->documento;
+        $asientomaestro->numdocumento=$request->numdocumento;
+        $asientomaestro->glosa= $request->glosa;
+        $asientomaestro->u_modifica=Auth::id();
+
+        $asientomaestro->save(); 
+
+    }
     public function update(Request $request)
     {
         //if (!$request->ajax()) return redirect('/');
