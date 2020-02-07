@@ -81,7 +81,7 @@
                                             <button type="button" @click="cargarvue(cargocuenta)" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Seguimiento">
                                                 <i class="icon-loop"></i>
                                             </button>  
-                                            <button type="button" @click="repdocobligacion(cargocuenta.idsolccuenta)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Doc. Obligacion">
+                                            <button type="button" @click="repdocobligacion(cargocuenta.idsolccuenta,cargocuenta.sidirectorio)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Doc. Obligacion">
                                                 <i class="cui-file"></i>
                                             </button>  
                                         </div>
@@ -143,7 +143,7 @@
                     </nav>
                 </div>
             </div>
-            <con_descargo ref="vuedescargo"></con_descargo>
+            <con_descargo @cerrardescargo="cerrarvuedescargo" ref="vuedescargo"></con_descargo>
         </div>
          <!-- MODAL Validar Cargo de cuenta --> 
         <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="ccuenta"  data-backdrop="static" data-keyboard="false">
@@ -434,12 +434,15 @@
                 reporte_automatico:'',
                 reporte_seg_ccuentas:'',
                 reporte_documento:'',
+                reporte_documento_directorio:'',
                 divCargoPrincipal:1,
                 arrayConciliacionExterna:[],
                 idcuentadesembolso:'',
                 nomcuentadesembolso:'',
                 codcuenta:'',
                 numchequeregistrado:'',
+                sidirectorio:'',
+                subcuenta:''
 
             }
         },
@@ -492,12 +495,21 @@
             },
         },
         methods:{
+            cerrarvuedescargo(){
+                this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
+                $('#divdescargo').css('display','none');
+                //console.log('hola');
+                this.divCargoPrincipal=1;
+                
+                
+            },
             listaCargos(){
                 this.divCargoPrincipal=1;
                 this.$refs.vuedescargo.cerrarvue();
                 this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
             },
             cargarvue(cargocuenta=[]){
+                //console.log(cargocuenta);
                 this.divCargoPrincipal=0;
                 var arrayValores=[];
                 arrayValores['asignadoa']=cargocuenta['nombres'];
@@ -512,6 +524,9 @@
                 arrayValores['nommunicipio']=cargocuenta['nommunicipio'];
                 arrayValores['sigla']=cargocuenta['sigla'];
                 arrayValores['idmodulo']=this.idmodulo;
+                arrayValores['sidirectorio']=cargocuenta['sidirectorio'];
+                arrayValores['subcuenta']=cargocuenta['subcuenta'];
+                //console.log(arrayValores);
                 this.$refs.vuedescargo.cargarvue(arrayValores);
                
             },
@@ -632,6 +647,7 @@
                         me.monto=data['saldo_descargo'];
                         me.glosa=data['glosa'];
                         me.solicitadopor=data['username'];
+                        me.sidirectorio=data['sidirectorio'];
                         me.cargo=data['nomrol'];
                         me.tituloModal='Asiento Contable Cargo de Cuenta';
                         me.clearSelected=0;
@@ -662,7 +678,8 @@
                     'numdocumento':this.numdoc,
                     'idmodulo':this.idmodulo,
                     'idsolccuenta':this.solccuenta_id,
-                    'idmovimiento':this.idmovimiento
+                    'idmovimiento':this.idmovimiento,
+                    'sidirectorio':this.sidirectorio
 
                 }).then(function (response) {
                     console.log(response.data);
@@ -681,7 +698,12 @@
                             'Registrado correctamente',
                        )                    
                     }
-                    me.reporteAsientoautomatico(response.data);
+                    if(me.sidirectorio)
+                        var directorio=1;
+                    else    
+                        var directorio=2;
+
+                    me.reporteAsientoautomatico(response.data,directorio);
                     me.listarCargoCuenta(1,'',me.tipocargo,me.filtro);
                     me.cerrarModal('ccuenta');
                 }).catch(function (error) {
@@ -744,15 +766,19 @@
                     me.reporte_seg_ccuentas = respuesta.REP_SEG_CCUENTAS; 
                     me.reporte_automatico=respuesta.REP_ASIENTO_AUTOMATICO;
                     me.reporte_documento=respuesta.REP_DOC_OBLIGACION;
+                    me.reporte_documento_directorio=respuesta.REP_DOC_OBLIGACION_DIRECTORIO;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
-            repdocobligacion(idsolccuenta){
+            repdocobligacion(idsolccuenta,sidirectorio){
                 let me=this;
+                if(sidirectorio)
+                var url=me.reporte_documento_directorio+idsolccuenta;
+                else
                 var url=me.reporte_documento+idsolccuenta;
-                console.log(url);
+                //console.log(url);
                 
                 plugin.viewPDF(url,'Documento de Obligacion Cargo de Cuenta');
             },
@@ -763,10 +789,11 @@
                 plugin.viewPDF(url,'Reporte Seguimiento Cargo de Cuenta');
 
             },
-            reporteAsientoautomatico(idasientomaestro){
+            reporteAsientoautomatico(idasientomaestro,directorio){
                 let me=this;
-                var url=me.reporte_automatico + idasientomaestro; 
-                //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);	
+                var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+                console.log(url);
+
                 plugin.viewPDF(url,'Asiento Contable');
 
             },

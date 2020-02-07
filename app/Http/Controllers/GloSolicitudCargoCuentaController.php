@@ -44,7 +44,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
                                                             $raw,
                                                             $raw2,
-                                                            //'subcuenta',
+                                                            'subcuenta',
                                                             //'idusuario',
                                                             //'idrole',
                                                             'glo__solicitud_cargo_cuentas.glosa',
@@ -59,15 +59,18 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
             
-            $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.idsocio','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+            $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                                     //->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
                                                     //->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
-                                                    //->join('fil__cargos','fil__cargos.idcargo','fil__directivos.idcargo')
+                                                    //->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
                                                     //->join('par_municipios','par_municipios.idmunicipio','fil__idfilial.idmunicipio')
                                                     ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                            $raw,
+                                                            DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                             $raw2,
+                                                            DB::raw('numpapeleta as subcuenta'),
                                                             //'subcuenta',
                                                             //'idusuario',
                                                             //'idrole',
@@ -107,7 +110,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
                                                             $raw,
                                                             $raw2,
-                                                            //'subcuenta',
+                                                            'subcuenta',
                                                             //'idusuario',
                                                             //'idrole',
                                                             'glo__solicitud_cargo_cuentas.glosa',
@@ -123,16 +126,13 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->whereraw($sqls)
                                                     ->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
             
-            $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.idsocio','glo__solicitud_cargo_cuentas.subcuenta')
-                                                    //
-                                                    //
-                                                    //
-                                                    //->join('par_municipios','par_municipios.idmunicipio','fil__idfilial.idmunicipio')
+            $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                                     ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                            $raw,
+                                                            DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                             $raw2,
-                                                            //'subcuenta',
+                                                            DB::raw('numpapeleta as subcuenta'),
                                                             //'idusuario',
                                                             //'idrole',
                                                             'glo__solicitud_cargo_cuentas.glosa',
@@ -247,6 +247,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
                                                         ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                         ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                                    'subcuenta',
                                                                     'rrh__empleados.idfilial',
                                                                     'par_municipios.nommunicipio',
                                                                     'sigla',
@@ -270,8 +271,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'con___movimientobancarios.numdocumento',
                                                                     'idmovimiento',
                                                                     'sidirectorio',
-                                                                    'glo__solicitud_cargo_cuentas.created_at'
-                                                                    )
+                                                                    'glo__solicitud_cargo_cuentas.created_at')
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->where(function($query) use ($filtro)
                                                             {
@@ -303,10 +303,11 @@ class GloSolicitudCargoCuentaController extends Controller
 
 
 
-        $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.idsocio','glo__solicitud_cargo_cuentas.subcuenta')
+        $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                                     ->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
                                                     ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
-                                                    ->join('fil__cargos','fil__cargos.idcargo','fil__directivos.idcargo')
+                                                    ->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
                                                     ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
                                                     ->join('adm__users','adm__users.id','=','idusuario')
                                                     ->join('adm__roles','adm__roles.idrole','=','glo__solicitud_cargo_cuentas.idrole')
@@ -314,10 +315,11 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
                                                     ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                                DB::raw('numpapeleta as subcuenta'),
                                                                 'fil__directivos.idfilial',
                                                                 'par_municipios.nommunicipio',
                                                                 'sigla',
-                                                                $raw,
+                                                                DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                                 $raw2,
                                                                 'adm__roles.idrole',
                                                                 'adm__users.id',
@@ -337,8 +339,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'con___movimientobancarios.numdocumento',
                                                                 'idmovimiento',
                                                                 'sidirectorio',
-                                                                'glo__solicitud_cargo_cuentas.created_at'
-                                                                )
+                                                                'glo__solicitud_cargo_cuentas.created_at')
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->where(function($query) use ($filtro)
                                                         {
@@ -398,6 +399,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
                                                         ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                        'subcuenta',
                                                         'rrh__empleados.idfilial',
                                                         'par_municipios.nommunicipio',
                                                         'sigla',
@@ -454,10 +456,11 @@ class GloSolicitudCargoCuentaController extends Controller
                                                 });
                                                 
 
-        $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.idsocio','glo__solicitud_cargo_cuentas.subcuenta')
+        $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                                 ->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
                                                 ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
-                                                ->join('fil__cargos','fil__cargos.idcargo','fil__directivos.idcargo')
+                                                ->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
                                                 ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
                                                 ->join('adm__users','adm__users.id','=','idusuario')
                                                 ->join('adm__roles','adm__roles.idrole','=','glo__solicitud_cargo_cuentas.idrole')
@@ -465,10 +468,11 @@ class GloSolicitudCargoCuentaController extends Controller
                                                 ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
                                                 ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                 ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                            DB::raw('numpapeleta as subcuenta'),
                                                             'fil__directivos.idfilial',
                                                             'par_municipios.nommunicipio',
                                                             'sigla',
-                                                            $raw,
+                                                            DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                             $raw2,
                                                             'adm__roles.idrole',
                                                             'adm__users.id',
@@ -488,7 +492,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'con___movimientobancarios.numdocumento',
                                                             'idmovimiento',
                                                             'sidirectorio',
-                                                            'glo__solicitud_cargo_cuentas.created_at'
+                                                            'glo__solicitud_cargo_cuentas.created_at',
+                                                            'socios.numpapeleta'
                                                             )
                                             ->where('glo__solicitud_cargo_cuentas.activo',1)
                                             ->whereraw($sqls)
@@ -612,19 +617,20 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->orWhere('estado_aprobado', 3); //cargos desembolsados
                                             });
     
-    $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.idsocio','glo__solicitud_cargo_cuentas.subcuenta')
+    $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                            ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                             ->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
                                             ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
-                                            ->join('fil__cargos','fil__cargos.idcargo','fil__directivos.idcargo')
+                                            ->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
                                             ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
                                             ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                             ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
                                                         'fil__directivos.idfilial',
                                                         'par_municipios.nommunicipio',
                                                         'sigla',
-                                                        $raw,
+                                                        DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                         $raw2,
-                                                        'subcuenta',
+                                                        DB::raw('numpapeleta as subcuenta'),
                                                         'idusuario',
                                                         'glo__solicitud_cargo_cuentas.glosa',
                                                         'glo__solicitud_cargo_cuentas.monto',

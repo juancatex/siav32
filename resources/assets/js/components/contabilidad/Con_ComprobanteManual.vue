@@ -499,7 +499,7 @@
             },
             abrirAsientoMaestro(asientomaestro){
                 let me=this;
-                var url=me.reporte_asiento_automatico + asientomaestro; 
+                var url=me.reporte_asiento_automatico + asientomaestro+'&tiposubcuenta=1'; 
                 //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);	
                 plugin.viewPDF(url,'Reporte Asiento Automatico');
 

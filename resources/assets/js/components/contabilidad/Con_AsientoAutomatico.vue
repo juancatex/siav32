@@ -140,21 +140,15 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-md-2 form-control-label" ><b>Documento: </b></label>
-                            <template v-if="tipodocumento">
-                                <label class="col-md-4 form-control-label" v-text="' '+tipodocumento"></label>
-                            </template>
-                            <template v-else>
                                 <div class="col-md-4">
                                     <input  v-validate.initial="'required'"
                                             type="text" 
-                                            v-model="tipodocumento1" 
+                                            v-model="tipodocumento" 
                                             class="form-control" 
                                             placeholder="Tipo Documento"
                                             name="Tipo Documento">   
                                     <span class="text-error">{{ errors.first('Tipo Documento')}}</span>   <!--Lineas Agregadas<-->                                     
                                 </div>
-                            </template>
-                            
                             <label class="col-md-2 form-control-label" ><b>Num. Doc.:</b></label>
                             <template v-if="numdocumento">
                                 <label class="col-md-4 form-control-label"  v-text="' '+numdocumento"></label>
@@ -309,7 +303,7 @@
                             <label class="form-control-label" ><b>Documento: </b></label>
                             <input  v-validate.initial="'required'"
                                     type="text" 
-                                    v-model="tipodocumento1" 
+                                    v-model="tipodocumento" 
                                     class="form-control" 
                                     placeholder="Tipo Documento"
                                     name="Tipo Documento">   
@@ -463,7 +457,6 @@
                 numeroliteral:null,
                 total:0,
                 totalliteral:'',
-                tipodocumento1:'',
                 numdocumento1:'',
                 reporte_asiento_automatico:'',
                 observado:'',
@@ -493,7 +486,7 @@
             isCompleteagrupacion(){
                 var valor=false;
                 let me=this;
-                if(me.fechatransaccion && me.tipodocumento1 && me.numdocumento1 && me.glosa)
+                if(me.fechatransaccion && me.tipodocumento && me.numdocumento1 && me.glosa)
                     valor=true;
                 
                 return valor;
@@ -536,7 +529,7 @@
                 {
                     if(this.numdocumento || this.numdocumento1)
                     {
-                        if(this.tipodocumento || this.tipodocumento1)
+                        if(this.tipodocumento)
                         {
                             correcto=true;
                         }
@@ -617,7 +610,7 @@
                 axios.post(url,{
                     'idperfilcuentamaestro':me.idperfil,
                     'tipocomprobante':me.idtipocomprobante,
-                    'tipodocumento':me.tipodocumento1,
+                    'tipodocumento':me.tipodocumento,
                     'numdocumento':me.numdocumento1,
                     'glosa':me.glosa,
                     'arrayDetalle':me.arrayMaestros,
@@ -863,8 +856,6 @@
         },
         validarAsiento(){
             let me = this;
-                if(me.tipodocumento1!='')
-                    me.tipodocumento=me.tipodocumento1;
                 if(me.numdocumento1!='')
                     me.numdocumento=me.numdocumento1;
             swal({
@@ -888,7 +879,7 @@
                 swal(
                         'Asiento Contable Validado Correctamente',
                     ) 
-                    var url=me.reporte_asiento_automatico + me.asientomaestro_id; 
+                    var url=me.reporte_asiento_automatico + me.asientomaestro_id+'&tiposubcuenta=1'; 
                     //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);		                   
                     plugin2.viewPDF(url,'Reporte Asiento Automatico');
                     me.listarAsientomaestro(1,me.idmodulo,me.idperfil)
@@ -910,8 +901,8 @@
                         this.asientomaestro_id=0;
                         this.tipocomprobante='';
                         this.glosa='';
-                        this.tipocodumento='';
-                        this.tipodocumento1='';
+                        this.tipodocumento='';
+                        
                         this.fecharegistro='';
                         this.nomperfil='';
                         this.numdocumento='';
@@ -924,7 +915,7 @@
                     {
                         this.numdocumento1='';
                         this.glosa='';
-                        this.tipodocumento1='';
+                        this.tipodocumento='';
                         this.idtipocomprobante=0;
                         this.classModal.closeModal('agruparcomprobantes');
                     }
