@@ -32,12 +32,18 @@
     @if(Auth::check())
     <div class="app-body">
             @include('plantilla.sidebar') 
-            @yield('contenido') 
+            @yield('contenido')
         </div>
     @endif
     <!-- Cambios realizados por ing. Juan Carlos-->
     <footer class="app-footer">
-        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; 2019</span>
+        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?echo date('Y')?></span>
+        <span class="ml-auto">Fecha del Sistema:  <b>
+        
+        <?php use App\Http\Controllers\AdmUserController;
+        echo AdmUserController::fecha_sistema(); ?>
+        
+        </b></span>
         <span class="ml-auto">Desarrollado por <a href="http://www.ascinalss.org/ascinalss/index.html">Dep. Sistemas</a></span>
     </footer>  
     </div> 
