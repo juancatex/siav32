@@ -172,7 +172,7 @@
     <!-- MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS   -->
     <!-- MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS   -->
     <div class="modal" :class="modalGrupos?'mostrar':''">
-        <div class="modal-dialog modal-primary">
+        <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Grupo</h4>

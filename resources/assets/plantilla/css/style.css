@@ -1226,9 +1226,6 @@ caption {
   text-align: left;
   caption-side: bottom; }
 
-th {
-  text-align: left; }
-
 label {
   display: inline-block;
   margin-bottom: .5rem; }

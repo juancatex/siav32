@@ -23,11 +23,11 @@ class ActGrupoController extends Controller
     public function listaCuentas(Request $request)
     {   
         $sql="(select idcuenta,codcuenta,nomcuenta,1 as grupo
-        from con__cuentas where codcuenta like '122%' and nomcuenta not like 'dep%' and activo=1)
+        from con__cuentas where codcuenta like '122%' and nomcuenta not like '%dep%' and nomcuenta not like 'terr%' and activo=1)
         union (select idcuenta,codcuenta,nomcuenta,2 as grupo
-        from con__cuentas where codcuenta like '122%' and nomcuenta like 'dep%' and activo=1)
+        from con__cuentas where codcuenta like '122%' and nomcuenta like '%dep%' and activo=1)
         union (select idcuenta,codcuenta,nomcuenta,3 as grupo
-        from con__cuentas where codcuenta like '511%' and nomcuenta like 'dep%' and activo=1)";
+        from con__cuentas where codcuenta like '621%' and nomcuenta like 'dep%' and activo=1)";
         return ['cuentas'=>DB::select($sql)];
     }    
 
