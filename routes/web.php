@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/con_asientomaestro/desembolsar','ConAsientomaestroController@desembolsar');
         Route::get ('/con_asientomaestro/agruparcomprobante', 'ConAsientomaestroController@agruparcomprobante');
         Route::post('/con_asientomaestro/registraragrupacion','ConAsientomaestroController@registraragrupacion');
-        
+        Route::put ('/con_asientomaestro/editarcabecera','ConAsientomaestroController@editarcabecera');
 
         Route::get ('/con_asientodetalle/selectasientodetalle', 'ConAsientodetalleController@selectAsientoDetalle');
         Route::get ('/con_asientomaestro/recuperarsubcuenta', 'ConAsientomaestroController@recuperarSubcuenta');

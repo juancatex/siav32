@@ -38,6 +38,7 @@ class CreateConAsientomaestrosTable extends Migration
             $table->integer('u_registro')->nullable()->comment('id del usuario que registra o envia el asiento');
             $table->integer('u_obs_val')->nullable()->comment('usuario de contabilidad que observa un asiento contable o que valida el asiento contable');
             $table->integer('u_eliminacion')->nullable()->comment('usuario que elimina (cambia de estado) un asiento contable');
+            $table->integer('u_modifica')->nullable()->comment('usuario que edita la cabecera del comprobante contable');
             $table->boolean('fact_modificada')->default(0)->comment('0->factura asociada no modificada,1->factura asociada modificada');
             $table->integer('idsolccuenta')->nullable()->comment('si registra el id del asiento maestro a los que corresponde el descargo de cargo de cuenta');
             $table->smallInteger('gestion')->unsigned()->default(0)->comment('si esta en 0 indica que es la gestion activa');

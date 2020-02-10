@@ -84,7 +84,7 @@ class ConAsientomaestroController extends Controller
                                                                 'cod_comprobante'
                                                                 )
                                                     ->orderBy('fecharegistro', 'asc')
-                                                    ->orderBy('cont_comprobante','desc')->paginate(15);
+                                                    ->orderBy('cont_comprobante','desc')->paginate(50);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                     ->orderBy('fecharegistro', 'desc')
                                                     ->orderBy('cont_comprobante','desc')
-                                                    ->groupBy('con__asientomaestros.idasientomaestro')->paginate(15);
+                                                    ->groupBy('con__asientomaestros.idasientomaestro')->paginate(50);
 
                     $perfilcuentadetalles = Con_Perfilcuentadetalle::join('con__cuentas','con__cuentas.idcuenta','=','con__perfilcuentadetalles.idcuenta')
                                                     ->select('con__cuentas.nomcuenta','con__cuentas.codcuenta','con__cuentas.idcuenta','tipocargo','idperfilcuentadetalle')
@@ -171,7 +171,7 @@ class ConAsientomaestroController extends Controller
                                                         ->orderBy('fecharegistro', 'desc')
                                                         ->orderBy('cont_comprobante','desc')
                                                         ->groupBy('con__asientomaestros.idasientomaestro')
-                                                        ->limit(50)->paginate(10);
+                                                        ->limit(50)->paginate(15);
                 }
                 elseif ($borradorcheck=='borrador')
                 {
@@ -206,7 +206,7 @@ class ConAsientomaestroController extends Controller
                                                                     )
                                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                         ->orderBy('fecharegistro', 'desc')
-                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
                     
                 }
             }
@@ -260,7 +260,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
             }
             elseif ($borradorcheck=='borrador')
             {
@@ -302,7 +302,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                                 ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
                 
             }
         }
@@ -574,6 +574,19 @@ class ConAsientomaestroController extends Controller
     public function edit(Con_Asientomaestro $con_Asientomaestro)
     {
         //
+    }
+    public function editarcabecera (Request $request)
+    {
+        $asientomaestroclass= new AsientoMaestroClass();
+        
+        $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
+        $asientomaestro->tipodocumento=$request->documento;
+        $asientomaestro->numdocumento=$request->numdocumento;
+        $asientomaestro->glosa= $request->glosa;
+        $asientomaestro->u_modifica=Auth::id();
+
+        $asientomaestro->save(); 
+
     }
     public function update(Request $request)
     {
