@@ -79,6 +79,9 @@
                                                 <i class="icon-docs"></i><!-- fa fa-exchange   icon-shuffle -->
                                             </button>      
                                         </template>
+                                        <button type="button" v-if="check('editar_cabecera')" @click="abrirmodalcabecera(asientomaestro)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Cabecera">
+                                            <i class="cui-bold"></i><!-- fa fa-exchange   icon-shuffle -->
+                                        </button>
                                     </td>
                                     <td v-text="asientomaestro.cod_comprobante" ></td>
                                     <td v-text="asientomaestro.fecharegistro"></td>
@@ -159,6 +162,60 @@
             </div>
             <con_comprobante ref="vuecomprobante"></con_comprobante>
         </div>
+        <!-- MODAL EDITAR CABECERA  -->
+        <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="cabecera"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar Cabecera Comprobante de {{`${edit_nomtipocomprobante} Nº ${edit_cont_comprobante}   por: Bs. ${edit_monto}`}}</h4>
+                        <button class="close" @click="cerrarmodalcabecera()">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label ><strong>Documento:</strong></label>
+                                <input type="text" 
+                                            v-model="edit_documento"
+                                            class="form-control formu-entrada" 
+                                            v-validate.initial="'required'"
+                                            name="Documento">
+                                        <span class="text-error">{{ errors.first('Documento')}}</span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label ><strong>Nº Documento:</strong></label>
+                                <input type="text" 
+                                            v-model="edit_numdocumento"
+                                            class="form-control formu-entrada" 
+                                            v-validate.initial="'required'"
+                                            name="num documento">
+                                        <span class="text-error">{{ errors.first('num documento')}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+                                <label class="col-md-12"><strong>Glosa:</strong></label>
+                                <div class="col-md-12">
+                                    <textarea 
+                                        :class="{'form-control': true, 'is-invalid textareaerror': errors.has('glosa')}"  
+                                        rows="4" 
+                                        v-model="edit_glosa"
+                                        name="glosa"
+                                        v-validate.initial="'required'" >
+                                    </textarea>
+                                    <span class="text-error">{{ errors.first('glosa')}}</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalcabecera()">Cerrar</button>
+                        <button :disabled="!iscompleteedit" class="btn btn-primary" @click="editarcabecera()">Editar Cabecera</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fin modal EDITAR CABECERA -->
     </main>
 </template>
 
@@ -210,10 +267,19 @@
                                 revertir:0,
                                 copiar:0,
                                 editar_borrador:0,
-                                eliminar_borrador:0
+                                eliminar_borrador:0,
+                                editar_cabecera:0
                                 },
                 
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                edit_documento:'',
+                edit_numdocumento:'',
+                edit_glosa:'',
+                edit_cod_comprobante:'',
+                edit_monto:0,
+                edit_nomtipocomprobante:'',
+                edit_cont_comprobante:0,
+                edit_idasientomaestro:0,
             }
         },
         components: {
@@ -224,6 +290,15 @@
                 validateAfterChanged: true
             },
         computed:{
+            iscompleteedit(){
+                let valor=false;
+                let me=this;
+                    if(me.edit_documento && me.edit_numdocumento && me.edit_glosa)
+                        valor=true;
+                    else
+                        valor=false;
+                return valor
+            },
             isActived: function(){
                 return this.pagination.current_page;
             },
@@ -251,6 +326,47 @@
             }
         }, 
         methods : {
+            abrirmodalcabecera(data=[]){
+                let me=this;
+                me.edit_documento=data['tipodocumento'];
+                me.edit_numdocumento=data['numdocumento'];
+                me.edit_glosa=data['glosa'];
+                me.edit_monto=data['total'];
+                me.edit_cod_comprobante=data['cod_comprobante'];
+                me.edit_cont_comprobante=data['cont_comprobante'];
+                me.edit_nomtipocomprobante=data['nomtipocomprobante'];
+                me.edit_idasientomaestro=data['idasientomaestro'];
+                //console.log(data);
+                me.classModal.openModal('cabecera');
+
+            },
+            cerrarmodalcabecera(){
+                let me=this;
+                me.edit_documento='';
+                me.edit_numdocumento='';
+                me.edit_glosa='';
+                me.edit_monto=0;
+                me.edit_cod_comprobante='';
+                me.edit_cont_comprobante=0;
+                me.edit_nomtipocomprobante='';
+                me.edit_idasientomaestro=0;
+
+                me.classModal.closeModal('cabecera'); 
+            },
+            editarcabecera(){
+                let me=this;
+                axios.put('/con_asientomaestro/editarcabecera',{
+                    'idasientomaestro':me.edit_idasientomaestro,
+                    'documento':me.edit_documento,
+                    'numdocumento':me.edit_numdocumento,
+                    'glosa':me.edit_glosa,
+                }).then(function (response) {
+                    me.cerrarmodalcabecera();
+                    me.listarAsientoMaestro(1,me.criterio,me.borradorcheck);
+                }).catch(function (error) {
+                    console.log(error);
+                }); 
+            },
             selectAll: function (event) {
                 setTimeout(function () {
                     event.target.select()
@@ -499,7 +615,7 @@
             },
             abrirAsientoMaestro(asientomaestro){
                 let me=this;
-                var url=me.reporte_asiento_automatico + asientomaestro; 
+                var url=me.reporte_asiento_automatico + asientomaestro+'&tiposubcuenta=1'; 
                 //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);	
                 plugin.viewPDF(url,'Reporte Asiento Automatico');
 
@@ -551,6 +667,8 @@
             this.getRutasReports();
             this.getPermisos();
             this.selectTipocomprobante();
+            this.classModal=new _pl.Modals();
+            this.classModal.addModal('cabecera');
         }
     }
 </script>

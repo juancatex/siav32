@@ -36,7 +36,7 @@
                             <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
                                 <a href="#" class="dropdown-item" @click="listaFiliales()">(Todos)</a>
                                 <a href="#" v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
-                                    class="dropdown-item" v-text="departamento.nomdepartamento" @click="listaFiliales(departamento.iddepartamento)"></a>
+                                    class="dropdown-item" v-text="departamento.nomdepartamento" @click="listaFiliales(departamento.iddepartamento,1)"></a>
                             </div>
                         </div>
                         <button class="btn btn-primary" style="margin-top:0px" @click="nuevaFilial()">Crear nueva Filial</button>
@@ -44,48 +44,52 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="vervigente"> Ver: &nbsp;
+                    <input type="radio" name="estado" id="r1" @click="listaFiliales(iddepartamento,1)">Vigentes &nbsp;
+                    <input type="radio" name="estado" id="r0" @click="listaFiliales(iddepartamento,0)">Inactivas
+                </div>
                 <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead class="tcabecera">
-                        <tr>
-                            <th><span class="badge badge-success" v-text="arrayFiliales.length+' items'"></span></th>
-                            <th v-if="!iddepartamento" >Depto</th>                            
-                            <th>Código</th>
-                            <th>Sigla</th>
-                            <th>Filial</th>
-                            <th>Dirección</th>
-                            <th>Tel. Fijo</th>
-                            <th>Tel. Celular</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="filial in arrayFiliales" :key="filial.idfilial" :class="filial.activo?'':'txtdesactivado'">
-                            <td v-if="filial.activo" nowrap align="center">
-                                <button class="btn btn-warning btn-sm icon-pencil" title="Editar datos"
-                                    @click="editarFilial(filial)"></button>
-                                <button class="btn btn-warning btn-sm icon-chart" title="Movimiento económico"
-                                    @click="economicoFilial(filial)"></button>
-                                <button class="btn btn-warning btn-sm icon-people" title="Directorio"
-                                    @click="directivosFilial(filial)"></button>
-                                <button class="btn btn-warning btn-sm icon-directions" title="Oficinas y Unidades"
-                                    @click="oficinasFilial(filial)"></button>
-                                <button class="btn btn-danger btn-sm icon-trash" title="Desactivar filial"
-                                    @click="estadoFilial(filial)"></button>
-                            </td>
-                            <td v-else align="center">
-                                <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar oficina"
-                                    @click="estadoFilial(filial)"></button>
-                            </td>
-                            <td v-if="!iddepartamento" v-text="filial.abrvdep" align="center"></td>
-                            <td v-text="filial.codfilial" align="center"></td>
-                            <td v-text="filial.sigla" align="center"></td>
-                            <td v-text="filial.nommunicipio"></td>
-                            <td v-text="filial.direccion"></td>
-                            <td v-text="filial.telfijo" align="center"></td>
-                            <td v-text="filial.telcelular" align="center"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class="table table-striped table-sm">
+                        <thead class="tcabecera">
+                            <tr>
+                                <th><span class="badge badge-success" v-text="arrayFiliales.length+' items'"></span></th>
+                                <th v-if="!iddepartamento" >Depto</th>                            
+                                <th>Código</th>
+                                <th>Sigla</th>
+                                <th>Filial</th>
+                                <th>Dirección</th>
+                                <th>Tel. Fijo</th>
+                                <th>Tel. Celular</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="filial in arrayFiliales" :key="filial.idfilial" :class="filial.activo?'':'txtdesactivado'">
+                                <td v-if="filial.activo" nowrap align="center">
+                                    <button class="btn btn-warning btn-sm icon-pencil" title="Editar datos"
+                                        @click="editarFilial(filial)"></button>
+                                    <button class="btn btn-warning btn-sm icon-chart" title="Movimiento económico"
+                                        @click="economicoFilial(filial)"></button>
+                                    <button class="btn btn-warning btn-sm icon-people" title="Directorio"
+                                        @click="directivosFilial(filial)"></button>
+                                    <button class="btn btn-warning btn-sm icon-directions" title="Oficinas y Unidades"
+                                        @click="oficinasFilial(filial)"></button>
+                                    <button class="btn btn-danger btn-sm icon-trash" title="Desactivar filial"
+                                        @click="estadoFilial(filial)"></button>
+                                </td>
+                                <td v-else align="center">
+                                    <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar oficina"
+                                        @click="estadoFilial(filial)"></button>
+                                </td>
+                                <td v-if="!iddepartamento" v-text="filial.abrvdep" align="center"></td>
+                                <td v-text="filial.codfilial" align="center"></td>
+                                <td v-text="filial.sigla" align="center"></td>
+                                <td v-text="filial.nommunicipio"></td>
+                                <td v-text="filial.direccion"></td>
+                                <td v-text="filial.telfijo" align="center"></td>
+                                <td v-text="filial.telcelular" align="center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div> 
             </div>
         </div>
@@ -112,20 +116,22 @@
                             :value="municipio.idmunicipio" v-text="municipio.nommunicipio"></option>
                     </select>
                     <div><br>
-                        <div class="tfila">
+                        <div class="tabla100">
                             <div class="tcelda" style="width:45%">Código:
-                                <input type="text" class="form-control tinput text-center txtnegrita" readonly maxlength="2" v-model="codfilial">
+                                <input type="text" class="form-control tinput text-center txtnegrita" readonly 
+                                    maxlength="2" v-model="codfilial">
                             </div>
                             <div class="tcelda" style="width:10%"></div>
                             <div class="tcelda" style="width:45%">Sigla: <span class="txtasterisco"></span>
-                                <input type="text" class="form-control tinput text-center" placeholder="2 caracteres" maxlength="2" v-model="sigla" @keyup="valFilial()">
+                                <input type="text" class="form-control tinput text-center" placeholder="2 caracteres" 
+                                    maxlength="2" v-model="sigla" @keyup="valFilial()">
                             </div>
                         </div>
                     </div>
                     <br>Dirección  
-                    <textarea rows="2" style="resize:none" name="direccion" class="form-control" v-model="direccion"></textarea>
+                    <input type="text" class="form-control " v-model="direccion">
                     <div><br>
-                        <div class="tfila">
+                        <div class="tabla100">
                             <div class="tcelda" style="width:45%">Tel. Fijo:
                                 <input type="text" name="fijo" class="form-control tinput text-center" v-model="telfijo">
                             </div>
@@ -167,16 +173,17 @@ export default {
     }},
 
     methods:{
-        listaFiliales(iddepartamento){
+        listaFiliales(iddepartamento,activo){
+            $('#r'+activo).prop('checked',true);
             if(this.arrayDepartamentos.length) this.verDepartamento(iddepartamento);
             this.iddepartamento=iddepartamento;
-            var url='/fil_filial/listaFiliales';
-            if(iddepartamento) url+='?iddepartamento='+iddepartamento;
+            var url='/fil_filial/listaFiliales?activo='+activo;
+            if(iddepartamento) url+='&iddepartamento='+iddepartamento;
             axios.get(url).then(response=>{
                 this.arrayFiliales=response.data.filiales;
                 if(!iddepartamento){
                     var tam=this.arrayFiliales.length-1;
-                    this.codfilial=1*(this.arrayFiliales[tam].codfilial)+1;
+                    if(tam>0) this.codfilial=1*(this.arrayFiliales[tam].codfilial)+1;
                     this.ipbirt=response.data.ipbirt;
                 }
             });
@@ -191,7 +198,7 @@ export default {
         },
 
         listaMunicipios(iddepartamento){
-            var url='/par_municipio/listaMunicipios?iddepartamento='+iddepartamento;
+            var url='/par_municipio/listaMunicipios?iddepartamento='+iddepartamento+'&activo=1';
             axios.get(url).then(response=>{
                 this.arrayMunicipios=response.data.municipios;
             });
@@ -213,14 +220,12 @@ export default {
             this.regFilial=filial;
             this.divFiliales=0;
             this.divOficinas=1;
-            //this.idfilial=filial.idfilial;
         },
 
         directivosFilial(filial){
             this.regFilial=filial;
             this.divFiliales=0;
             this.divDirectivos=1;
-            //this.idfilial=filial.idfilial;
         },
 
         nuevaFilial(){
@@ -260,7 +265,7 @@ export default {
 
         storeFilial(){
             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
-                showCancelButton:false, showConfirmButton:false, closeOnConfirm: false,
+                showCancelButton:false, showConfirmButton:false,
                 allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
                 onOpen:() => { swal.showLoading() }
             });
@@ -275,7 +280,7 @@ export default {
             }).then(response=>{
                 swal('Filial creada correctamente','','success');
                 this.modalFilial=0;
-                this.listaFiliales(this.iddepartamento);
+                this.listaFiliales(this.iddepartamento,1);
             });
         },
 
@@ -291,7 +296,7 @@ export default {
             }).then(response=>{
                 swal('Datos actualizados','','success');
                 this.modalFilial=0;
-                this.listaFiliales(this.iddepartamento);
+                this.listaFiliales(this.iddepartamento,1);
             });
         },
 
@@ -302,19 +307,16 @@ export default {
                     html: 'No podrá acceder a la información dependiente', showCancelButton: true,
                     confirmButtonColor:'#f86c6b', confirmButtonText:'Desactivar Filial',
                     cancelButtonText:'Cancelar', reverseButtons: true
-                }).then(confirmar=>{
-                    if(confirmar.value) this.switchFilial(1);
-                });
+                }).then(confirmar=>{confirmar.value?this.switchFilial(0):''});
             }
-            else this.switchFilial(0);
+            else this.switchFilial(1);
         },
 
         switchFilial(activo){
-            if(activo) var titswal='Desactivado'; else var titswal='Activado';
             var url='/fil_filial/switchFilial?idfilial='+this.idfilial;
             axios.put(url).then(response=>{
-                swal(titswal+' correctamente','','success');
-                this.listaFiliales(this.iddepartamento);
+                swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
+                this.listaFiliales(this.iddepartamento,activo);
             });
         },
 
@@ -330,7 +332,7 @@ export default {
 
     mounted() {
         this.listaDepartamentos();
-        this.listaFiliales(this.iddepartamento);
+        this.listaFiliales(this.iddepartamento,1);
     }
 
 }

@@ -296,6 +296,7 @@ return [
         'REP_SEG_CCUENTAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/seg_ccuentas.rptdesign&__format=pdf&idsolccuenta=', 
         'REP_PLAN_CUENTAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/plan_cuentas.rptdesign&__format=pdf', 
         'REP_DOC_OBLIGACION'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/doc_obligacion.rptdesign&__format=pdf&idsolccuenta=', 
+        'REP_DOC_OBLIGACION_DIRECTORIO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/doc_obligacion_directorio.rptdesign&__format=pdf&idsolccuenta=', 
         
       ],
       

@@ -14,6 +14,12 @@ use App\Par_Ventanamodulo;
 
 class AdmUserController extends Controller
 {
+
+    public static function fecha_sistema() {
+        $fecha=(DB::select("select getfecha() as total"))[0]->total; 
+        $fecha_=explode(' ',$fecha);
+        return $fecha_[0];
+    }
     /**
      * Display a listing of the resource.
      *

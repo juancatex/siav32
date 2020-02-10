@@ -84,7 +84,7 @@ class ConAsientomaestroController extends Controller
                                                                 'cod_comprobante'
                                                                 )
                                                     ->orderBy('fecharegistro', 'asc')
-                                                    ->orderBy('cont_comprobante','desc')->paginate(15);
+                                                    ->orderBy('cont_comprobante','desc')->paginate(50);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                     ->orderBy('fecharegistro', 'desc')
                                                     ->orderBy('cont_comprobante','desc')
-                                                    ->groupBy('con__asientomaestros.idasientomaestro')->paginate(15);
+                                                    ->groupBy('con__asientomaestros.idasientomaestro')->paginate(50);
 
                     $perfilcuentadetalles = Con_Perfilcuentadetalle::join('con__cuentas','con__cuentas.idcuenta','=','con__perfilcuentadetalles.idcuenta')
                                                     ->select('con__cuentas.nomcuenta','con__cuentas.codcuenta','con__cuentas.idcuenta','tipocargo','idperfilcuentadetalle')
@@ -171,7 +171,7 @@ class ConAsientomaestroController extends Controller
                                                         ->orderBy('fecharegistro', 'desc')
                                                         ->orderBy('cont_comprobante','desc')
                                                         ->groupBy('con__asientomaestros.idasientomaestro')
-                                                        ->limit(50)->paginate(10);
+                                                        ->limit(50)->paginate(15);
                 }
                 elseif ($borradorcheck=='borrador')
                 {
@@ -206,7 +206,7 @@ class ConAsientomaestroController extends Controller
                                                                     )
                                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                         ->orderBy('fecharegistro', 'desc')
-                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
                     
                 }
             }
@@ -260,7 +260,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
             }
             elseif ($borradorcheck=='borrador')
             {
@@ -302,7 +302,7 @@ class ConAsientomaestroController extends Controller
                                                                 )
                                                                 ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(10);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
                 
             }
         }
@@ -358,6 +358,11 @@ class ConAsientomaestroController extends Controller
         $librocomprasok=$request->librocomprasok;
         $idfacturas=$request->idfacturas;
         $validarfacturas=$request->validarfacturas;
+        if($request->sidirectorio)
+            $tiposubcuenta=1;
+        else
+            $tiposubcuenta=2;
+        //dd($rowregistros);
         
         //dd($borrador);
         //echo "idmodulo". $idmodulo;
@@ -374,6 +379,7 @@ class ConAsientomaestroController extends Controller
             $arrayDetalle[$cont]['subcuenta']=$valor['idsubcuenta'];
             $arrayDetalle[$cont]['documento']=$valor['documento'];
             $arrayDetalle[$cont]['moneda']=$valor['moneda'];
+            $arrayDetalle[$cont]['tiposubcuenta']=$tiposubcuenta;
             if($valor['debe']!=0)
                 $arrayDetalle[$cont]['monto']=$valor['debe'];
             else
@@ -568,6 +574,19 @@ class ConAsientomaestroController extends Controller
     public function edit(Con_Asientomaestro $con_Asientomaestro)
     {
         //
+    }
+    public function editarcabecera (Request $request)
+    {
+        $asientomaestroclass= new AsientoMaestroClass();
+        
+        $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
+        $asientomaestro->tipodocumento=$request->documento;
+        $asientomaestro->numdocumento=$request->numdocumento;
+        $asientomaestro->glosa= $request->glosa;
+        $asientomaestro->u_modifica=Auth::id();
+
+        $asientomaestro->save(); 
+
     }
     public function update(Request $request)
     {
@@ -924,13 +943,14 @@ class ConAsientomaestroController extends Controller
         $idtipocomprobante=2;//TODO: tipo de comprobante manual se debe cambiar a dinamico
         $idsolccuenta=$request->idsolccuenta;
         $borrador=false;
+        $directivo=$request->sidirectorio;
+        //dd($directivo);
 
-        $directivo=Glo_SolicitudCargoCuenta::select('sidirectorio')
-                                                ->where('idsolccuenta',$idsolccuenta)
-                                                ->get()->toarray();
         
-        if($directivo[0]['sidirectorio']==0)
+        
+        if($directivo==0)
         {
+            $tiposubcuenta=2;
             $solccuenta=Glo_SolicitudCargoCuenta::join('rrh__empleados as a','a.idempleado','=','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->select('glo__solicitud_cargo_cuentas.activo','idfilial')
                                                     ->where('idsolccuenta',$idsolccuenta)
@@ -938,7 +958,8 @@ class ConAsientomaestroController extends Controller
         }
         else
         {
-            $solccuenta=Glo_SolicitudCargoCuenta::join('socios as a','a.idsocio','=','glo__solicitud_cargo_cuentas.subcuenta')
+            $tiposubcuenta=1;
+            $solccuenta=Glo_SolicitudCargoCuenta::join('socios as a','a.numpapeleta','=','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->join('fil__directivos','fil__directivos.idsocio','a.idsocio')
                                                     ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
                                                     ->select('glo__solicitud_cargo_cuentas.activo','fil__filials.idfilial')
@@ -967,12 +988,14 @@ class ConAsientomaestroController extends Controller
             $arrayDetalle[0]['documento']='';
             $arrayDetalle[0]['moneda']='Bs.';
             $arrayDetalle[0]['monto']=$monto;
+            $arrayDetalle[0]['tiposubcuenta']=$tiposubcuenta;
 
             $arrayDetalle[1]['idcuenta']=$idcuentahaber;
             $arrayDetalle[1]['subcuenta']=$subcuenta;
             $arrayDetalle[1]['documento']='';
             $arrayDetalle[1]['moneda']='Bs.';
             $arrayDetalle[1]['monto']=$monto * (-1);
+            $arrayDetalle[0]['tiposubcuenta']=$tiposubcuenta;
 
             $asientomaestro= new AsientoMaestroClass();
             $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial);

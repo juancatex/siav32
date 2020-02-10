@@ -8,7 +8,7 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Reportes Modulo Afiliaciones
+                        <i class="fa fa-align-justify"></i> Reportes Modulo Afiliaciones.
                         <ul>
                             
                             <!-- <li><a class="nav-link" v-bind:href="''+kardex+''" target="_blank"><i class="icon-link"></i> Kardex Personal</a></li>                             -->

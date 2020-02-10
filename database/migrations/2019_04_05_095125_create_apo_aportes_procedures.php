@@ -61,6 +61,41 @@ class CreateApoAportesProcedures extends Migration
                 
             DB::unprepared($validadoconta_aportes);
 
+            $detalles_socio_empleado="CREATE or replace PROCEDURE `detalles_socio_empleado`(IN `tiposubcuenta` INT, IN `idmaestro` INT)
+    
+            BEGIN
+            if tiposubcuenta=1 THEN
+                select 	sum(debe) as sdebe,
+                            sum(haber) as shaber, 
+                            concat(nomgrado,' ',apaterno,' ',amaterno,' ',nombre) as nombres,
+                            numpapeleta,
+                            numdocumento
+            from con__asientodetalles a join con__asientomaestros b
+            on a.idasientomaestro=b.idasientomaestro 
+            join socios c
+            on a.subcuenta=c.numpapeleta
+            join par_grados h
+            on c.idgrado=h.idgrado
+            where b.idagrupacion=idmaestro or a.idasientomaestro=idmaestro
+            GROUP BY a.idasientomaestro
+            ORDER BY fechahora_desembolso DESC;
+            ELSE
+            select 	sum(debe) as sdebe,
+                            sum(haber) as shaber, 
+                            concat(apaterno,' ',amaterno,' ',nombre) as nombres,
+                            '-' as numpapeleta,
+                            numdocumento
+            from con__asientodetalles a join con__asientomaestros b
+            on a.idasientomaestro=b.idasientomaestro 
+            join rrh__empleados c
+            on a.subcuenta=c.idempleado
+            where b.idagrupacion=idmaestro or a.idasientomaestro=idmaestro
+            GROUP BY a.idasientomaestro
+            ORDER BY fechahora_desembolso DESC;
+
+            end IF;
+            END";
+            DB::unprepared($detalles_socio_empleado);
             
 }
 
@@ -76,6 +111,7 @@ class CreateApoAportesProcedures extends Migration
         DB::unprepared('DROP PROCEDURE IF EXISTS agregarasientomaestro;');
         DB::unprepared('DROP PROCEDURE IF EXISTS asientomaestrodebitoaporte;');
         DB::unprepared('DROP PROCEDURE IF EXISTS validadoconta_aportes;');
+        DB::unprepared('DROP PROCEDURE IF EXISTS detalles_socio_empleado;');
         
     }
 }
