@@ -1,6 +1,6 @@
 @media all and (max-width: 1500px) {
   .modal[role='dialog'] {
-    zoom: 80%;
+    zoom: 75%;
   }
 }
 @keyframes spring { 
