@@ -15,7 +15,7 @@ class ActActivoController extends Controller
         'codactivo','nomauxiliar','descripcion','act__activos.activo')
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
         ->where('act__activos.idfilial',$request->idfilial)
-        ->where('act__activos.idoficina',$request->idoficina)
+        ->where('act__activos.idambiente',$request->idambiente)
         ->where('act__activos.idgrupo',$request->idgrupo);
         if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         if($request->activo) $activos->where('act__activos.activo',1);
@@ -30,7 +30,7 @@ class ActActivoController extends Controller
         vida,'round(100/vida,1) as coeficiente',codauxiliar,nomauxiliar")
         ->join('fil__filials','fil__filials.idfilial','act__activos.idfilial')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
-        ->join('fil__oficinas','fil__oficinas.idoficina','act__activos.idoficina')
+        ->join('fil__ambientes','fil__ambientes.idambiente','act__activos.idambiente')
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
         ->join('act_grupos','act__grupos.idgrupo','act__activos.idgrupo')
         ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso')
@@ -72,7 +72,7 @@ class ActActivoController extends Controller
         $activo=new Act_Activo();
         $activo->codactivo=$request->codactivo;
         $activo->idfilial=$request->idfilial;
-        $activo->idoficina=$request->idoficina;
+        $activo->idambiente=$request->idambiente;
         $activo->idgrupo=$request->idgrupo;
         $activo->idauxiliar=$request->idauxiliar;
         $activo->descripcion=$request->descripcion;
