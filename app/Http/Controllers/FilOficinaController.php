@@ -19,6 +19,7 @@ class FilOficinaController extends Controller
                 as nomresponsable");
         }
         else $oficinas=Fil_Oficina::select('idoficina','idfilial','codoficina','nomoficina','nomunidad');
+        
         $oficinas->join('fil__unidads','fil__unidads.idunidad','fil__oficinas.idunidad')
         ->where('idfilial',$request->idfilial);
         if($request->idunidad) $oficinas->where('fil__unidads.idunidad',$request->idunidad);

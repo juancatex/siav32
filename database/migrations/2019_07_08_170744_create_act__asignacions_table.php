@@ -23,7 +23,7 @@ class CreateActAsignacionsTable extends Migration
             $table->integer('estadoini')->comment('1-bueno, 2-regular, 3-malo');
             $table->integer('estadofin')->nullable();
             $table->string('obs',100)->nullable();
-            $table->boolean('vigente')->default(0);
+            $table->boolean('activo')->default(0);
             $table->timestamps();
         });
     }

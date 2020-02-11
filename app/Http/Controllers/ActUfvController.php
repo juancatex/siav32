@@ -25,8 +25,11 @@ class ActUfvController extends Controller
     {
         if($request->fecha) $fecha=$request->fecha; 
         else $fecha=date("Y-m-d");
-        $ufvfecha=Act_Ufv::select('valor')->where('fecha',$fecha)->get();
-        return ['ufvfecha'=>$ufvfecha[0],'fecha'=>$fecha];
+        $ufvfecha=Act_Ufv::select('valor')->where('fecha',$fecha)->get(); 
+        if (count($ufvfecha)==0)    
+            return ['ufvfecha'=>0,'fecha'=>$fecha];
+        else             
+            return ['ufvfecha'=>$ufvfecha[0],'fecha'=>$fecha];
     }
 
     public function cargarExcel(Request $request)
