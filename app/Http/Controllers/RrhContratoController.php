@@ -11,9 +11,8 @@ class RrhContratoController extends Controller
     {
         $contratos=Rrh_Contrato::select('rrh__contratos.*','nomtipocontrato')
         ->join('rrh__tipocontratos','rrh__tipocontratos.idtipocontrato','rrh__contratos.idtipocontrato')
-        ->where('idempleado',$request->idempleado)
-        ->orderBy('inicontrato','desc');
-        return ['contratos'=>$contratos->get()];
+        ->where('idempleado',$request->idempleado)->orderBy('inicontrato','desc');
+        return ['contratos'=>$contratos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function storeContrato(Request $request)
@@ -43,6 +42,7 @@ class RrhContratoController extends Controller
 
     public function switchContrato(Request $request)
     {
+        //$contrato=Rrh_Contrato::where('idempleado','127')->update(['activo'=>0]);
         $contrato=Rrh_Contrato::findOrFail($request->idcontrato);
         $contrato->activo=abs($contrato->activo-1);
         $contrato->save();

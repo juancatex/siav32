@@ -15,6 +15,7 @@ class CreateRrhPermisosTable extends Migration
     {
         Schema::create('rrh__permisos', function (Blueprint $table) {
             $table->increments('idpermiso');
+            $table->string('nrpermiso',10)->nullable();
             $table->integer('idempleado');
             $table->integer('idmotivo');
             $table->boolean('gocehaberes')->nullable();
@@ -24,6 +25,7 @@ class CreateRrhPermisosTable extends Migration
             $table->time('horasalida')->nullable();
             $table->tinyInteger('cantidad')->nullable();
             $table->string('obs',100)->nullable();
+            $table->boolean('activo')->default(1);
             $table->timestamps();
         });
     }
