@@ -34,7 +34,7 @@
                                 Departamento...<span class="caret"></span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                <a href="#" class="dropdown-item" @click="listaFiliales()">(Todos)</a>
+                                <a href="#" class="dropdown-item" @click="listaFiliales('',1)">(Todos)</a>
                                 <a href="#" v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
                                     class="dropdown-item" v-text="departamento.nomdepartamento" @click="listaFiliales(departamento.iddepartamento,1)"></a>
                             </div>
@@ -44,22 +44,26 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="vervigente"> Ver: &nbsp;
-                    <input type="radio" name="estado" id="r1" @click="listaFiliales(iddepartamento,1)">Vigentes &nbsp;
-                    <input type="radio" name="estado" id="r0" @click="listaFiliales(iddepartamento,0)">Inactivas
-                </div>
+                <div class="text-right" style="padding-bottom:10px">
+                    <div class="vervigente"> Ver: &nbsp;
+                        <input type="radio" name="estado" id="r1" @click="listaFiliales(iddepartamento,1)">Vigentes &nbsp;
+                        <input type="radio" name="estado" id="r0" @click="listaFiliales(iddepartamento,0)">Inactivas
+                    </div>
+                    <button class="btn btn-success btn-sm icon-printer" title="Vista de Impresión" style="margin-left:10px"
+                        @click="reporteFiliales()"></button>
+                </div>                
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead class="tcabecera">
                             <tr>
-                                <th><span class="badge badge-success" v-text="arrayFiliales.length+' items'"></span></th>
-                                <th v-if="!iddepartamento" >Depto</th>                            
-                                <th>Código</th>
-                                <th>Sigla</th>
+                                <th align="center"><span class="badge badge-success" v-text="arrayFiliales.length+' items'"></span></th>
+                                <th align="center">Código</th>
+                                <th align="center">Sigla</th>
                                 <th>Filial</th>
                                 <th>Dirección</th>
-                                <th>Tel. Fijo</th>
-                                <th>Tel. Celular</th>
+                                <th align="center">Tel. Fijo</th>
+                                <th align="center">Tel. Celular</th>
+                                <th v-if="!iddepartamento" >Depto</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,7 +75,7 @@
                                         @click="economicoFilial(filial)"></button>
                                     <button class="btn btn-warning btn-sm icon-people" title="Directorio"
                                         @click="directivosFilial(filial)"></button>
-                                    <button class="btn btn-warning btn-sm icon-directions" title="Oficinas y Unidades"
+                                    <button class="btn btn-warning btn-sm icon-directions" title="Oficinas operativas"
                                         @click="oficinasFilial(filial)"></button>
                                     <button class="btn btn-danger btn-sm icon-trash" title="Desactivar filial"
                                         @click="estadoFilial(filial)"></button>
@@ -80,13 +84,13 @@
                                     <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar oficina"
                                         @click="estadoFilial(filial)"></button>
                                 </td>
-                                <td v-if="!iddepartamento" v-text="filial.abrvdep" align="center"></td>
                                 <td v-text="filial.codfilial" align="center"></td>
                                 <td v-text="filial.sigla" align="center"></td>
                                 <td v-text="filial.nommunicipio"></td>
                                 <td v-text="filial.direccion"></td>
                                 <td v-text="filial.telfijo" align="center"></td>
                                 <td v-text="filial.telcelular" align="center"></td>
+                                <td v-if="!iddepartamento" v-text="filial.abrvdep" align="center"></td>                                
                             </tr>
                         </tbody>
                     </table>
@@ -111,20 +115,24 @@
                 <div class="modal-body">
                     <h4 class="titsubrayado">Departamento de <span v-text="regDepartamento.nomdepartamento"></span></h4>
                     Municipio: <span class="txtasterisco"></span>
-                    <select class="form-control" name="municipio" v-model="idmunicipio" @change="valFilial()">
+                    <select class="form-control" v-model="idmunicipio"
+                        name="mun" :class="{'invalido':errors.has('mun')}" v-validate="'required'">
                         <option v-for="municipio in arrayMunicipios" :key="municipio.idmunicipio"
                             :value="municipio.idmunicipio" v-text="municipio.nommunicipio"></option>
                     </select>
+                    <p v-if="errors.has('mun')" class="txtvalidador">Seleccione un municipio</p>
                     <div><br>
                         <div class="tabla100">
-                            <div class="tcelda" style="width:45%">Código:
-                                <input type="text" class="form-control tinput text-center txtnegrita" readonly 
+                            <div class="tcelda" style="width:45%; vertical-align:top;">Código (autoasignado):
+                                <input type="text" class="form-control text-center txtnegrita" readonly 
                                     maxlength="2" v-model="codfilial">
                             </div>
                             <div class="tcelda" style="width:10%"></div>
-                            <div class="tcelda" style="width:45%">Sigla: <span class="txtasterisco"></span>
-                                <input type="text" class="form-control tinput text-center" placeholder="2 caracteres" 
-                                    maxlength="2" v-model="sigla" @keyup="valFilial()">
+                            <div class="tcelda" style="width:45%;  vertical-align:top;">Sigla: <span class="txtasterisco"></span>
+                                <input type="text" class="form-control text-center" v-model="sigla" 
+                                    maxlength="2" placeholder="2 caracteres" 
+                                    name="sig" :class="{'invalido':errors.has('sig')}" v-validate="'required|alpha'">
+                                <p v-if="errors.has('sig')" class="txtvalidador">Dato requerido, 2 letras.</p>                                    
                             </div>
                         </div>
                     </div>
@@ -141,11 +149,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="txtvalidador text-center">* Campos obligatorios</div>
+                    <div class="txtobligatorio text-center"></div>
                 </div>
                 <div class="modal-footer text-center">
                     <button class="btn btn-secondary" @click="modalFilial=0">Cerrar</button>
-                    <button class="btn btn-primary" :disabled="!completo" @click="accion==1?storeFilial():updateFilial()">
+                    <button class="btn btn-primary" @click="validarFilial()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -164,7 +172,7 @@ import * as reporte from '../../functions.js';
 
 export default {
     data(){return{
-        modalFilial:0, accion:1, completo:'', ipbirt:'', 
+        modalFilial:0, accion:1, ipbirt:'', 
         arrayDepartamentos:[], arrayMunicipios:[], arrayFiliales:[], 
         regDepartamento:[], regFilial:'',
         iddepartamento:'', idmunicipio:'', codfilial:'', 
@@ -181,11 +189,7 @@ export default {
             if(iddepartamento) url+='&iddepartamento='+iddepartamento;
             axios.get(url).then(response=>{
                 this.arrayFiliales=response.data.filiales;
-                if(!iddepartamento){
-                    var tam=this.arrayFiliales.length-1;
-                    if(tam>0) this.codfilial=1*(this.arrayFiliales[tam].codfilial)+1;
-                    this.ipbirt=response.data.ipbirt;
-                }
+                this.ipbirt=response.data.ipbirt;
             });
         },
 
@@ -228,24 +232,32 @@ export default {
             this.divDirectivos=1;
         },
 
+        generarCodigo(){
+            var url='/fil_filial/listaFiliales?orden=desc';
+            axios.get(url).then(response=>{
+                var arrayCodigos=response.data.filiales;
+                var codfilial=(arrayCodigos.length?(arrayCodigos[0].codfilial*1):0)+1;
+                this.codfilial=codfilial<10?'0'+codfilial:codfilial;
+            })
+        },
+
         nuevaFilial(){
             if(!this.iddepartamento){ swal('Especifique un departamento','','error'); return; }
             this.listaMunicipios(this.iddepartamento);
+            this.generarCodigo();
             this.modalFilial=1;
             this.accion=1;
-            this.completo=0;
             this.idmunicipio='';
             this.sigla='';
-            this.codfilial='';
             this.direccion='';
             this.telfijo='';
             this.telcelular='';
         },
 
         editarFilial(filial){
+            window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalFilial=1;
             this.accion=2;
-            this.completo=1;
             this.listaMunicipios(filial.iddepartamento);
             this.verDepartamento(filial.iddepartamento);
             this.idfilial=filial.idfilial;
@@ -258,9 +270,11 @@ export default {
             this.telcelular=filial.telcelular;
         },
 
-        valFilial(){
-            this.completo=0;
-            if((this.idmunicipio)&&(this.sigla)) this.completo=1;
+        validarFilial(){
+            this.$validator.validateAll().then(result=>{
+                if(!result) {swal('Datos inválidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeFilial():this.updateFilial();
+            });
         },
 
         storeFilial(){
@@ -327,6 +341,15 @@ export default {
             url.push('/fil_ingresos.rptdesign&idfilial='+filial.idfilial);
             url.push('&__format=pdf');
             reporte.viewPDF(url.join(''),'Movimiento Económico');
+        },
+
+        reporteFiliales(){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/filiales');
+            url.push('/fil_filiales.rptdesign'); //archivo
+            url.push('&__format=pdf'); //formato
+            reporte.viewPDF(url.join(''),'Directivos');
         },
     },
 

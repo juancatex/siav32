@@ -164,26 +164,6 @@ export default {
     
 }
 
-.txtvalidador{
-    font-size:12px;
-    color:#f33;
-    font-weight: bold;
-}
-
-.txtvalerror{
-    color: #f13; /* #c93f23 */
-    font-size: 12px;
-    font-style: italic; 
-    margin-top:0px; margin-bottom:8px;
-}
-
-.txtasterisco:before{
-    content: "*";
-    font-size:14px;
-    color:#fd4b49;
-    font-weight: bold;
-}
-
 .txtdesactivado{
     font-style: italic;
     color:#acb4bc;
@@ -193,18 +173,50 @@ export default {
     font-weight: bold;
 }
 
+
+.txtasterisco:before{
+    content: "*";
+    font-size:14px;
+    color:#fd4b49;
+    font-weight: bold;
+}
+
+.txtobligatorio:before{
+    content: "* Datos obligatorios";
+    font-size:12px;
+    color:#fd4b49;
+    font-weight: bold;
+}
+
+.txtvalidador{
+    font-size:12px;
+    color:#fd4b49;
+    font-style: italic;
+    /* text-align: right;  */
+    margin-top:0px; 
+    padding-bottom:8px;
+    margin-bottom:0px;
+}
+
+.invalido{
+  /* display: block; */
+    width: 100%; 
+    height: calc(1.5em + 0.75rem + 2px);
+    border: 1px solid #fd4b49;/* #f86c6b;*/
+    box-shadow: 0 0 0 0.2rem rgba(253, 75, 75, 0.25);
+}
+
 .botonnav{ 
     font-size:20px; 
     padding:5px;
 }
 
 .vervigente{
-    display:table; 
-    float:right; 
+    display:inline; 
     border:1px solid #acb4bc; 
     border-radius:5px; 
     padding:5px 15px; 
-    margin-bottom:10px;
+    vertical-align: middle;
 }
 
 .bloquecelda{
@@ -249,7 +261,6 @@ export default {
 .nowrap { white-space:nowrap; }
 .tcabecera th{ 
     background-color: #e4e7ea; 
-    text-align:center; 
     vertical-align:middle;
 }
 

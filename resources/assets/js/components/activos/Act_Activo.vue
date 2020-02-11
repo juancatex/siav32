@@ -28,7 +28,7 @@
                                 <div class="tcelda">Filial:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idfilial" 
-                                        @change="listaOficinas(idfilial),listaActivos(idfilial,idoficina,idgrupo,idauxiliar)">
+                                        @change="listaOficinas(idfilial),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
                                         <option v-for="filial in arrayFiliales" :key="filial.idfilial"
                                             v-text="filial.nommunicipio" :value="filial.idfilial"></option>
                                     </select>
@@ -39,12 +39,12 @@
                     <div class="col-md-3">
                         <div class="tabla100">                        
                             <div class="tfila">
-                                <div class="tcelda">Oficina:</div>
+                                <div class="tcelda">Ambiente:</div>
                                 <div class="tcelda">
-                                    <select class="form-control" v-model="idoficina" 
-                                        @change="listaActivos(idfilial,idoficina,idgrupo,idauxiliar)">
-                                        <option v-for="oficina in arrayOficinas" :key="oficina.idoficina"
-                                            v-text="oficina.nomoficina" :value="oficina.idoficina"></option>
+                                    <select class="form-control" v-model="idambiente" 
+                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
+                                        <option v-for="ambiente in arrayAmbientes" :key="ambiente.id"
+                                            v-text="ambiente.nomambiente" :value="ambiente.idambiente"></option>
                                     </select>
                                 </div>
                             </div>
@@ -56,8 +56,8 @@
                                 <div class="tcelda">Cuenta:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idgrupo" 
-                                        @change="listaAuxiliares(idgrupo),listaActivos(idfilial,idoficina,idgrupo,idauxiliar)">
-                                        <option v-for="grupo in arrayGrupos" :key="grupo.idgrupo" 
+                                        @change="listaAuxiliares(idgrupo),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
+                                        <option v-for="grupo in arrayGrupos" :key="grupo.id" 
                                             v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
                                     </select>
                                 </div>
@@ -70,9 +70,9 @@
                                 <div class="tcelda">Auxiliar:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idauxiliar" 
-                                        @change="listaActivos(idfilial,idoficina,idgrupo,idauxiliar)">
+                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
                                         <option value="">(todos)</option>
-                                        <option v-for="auxiliar in arrayAuxiliares" :key="auxiliar.idauxiliar" 
+                                        <option v-for="auxiliar in arrayAuxiliares" :key="auxiliar.id" 
                                             v-text="auxiliar.nomauxiliar" :value="auxiliar.idauxiliar"></option>
                                     </select>
                                 </div>
@@ -89,7 +89,7 @@
                     <div class="col-md-5 titcard">
                         <div class="tablatit">
                             <div class="tcelda">
-                                <span v-text="regOficina.nomoficina+' - '+regFilial.nommunicipio"></span>
+                                <span v-text="regAmbiente.nomambiente+' - '+regFilial.nommunicipio"></span>
                             </div>
                         </div>
                     </div>
@@ -294,7 +294,7 @@
                         </div>                        
                         <div class="tfila">
                             <div class="tcelda titcampo">Oficina:</div>
-                            <div class="tcelda" v-text="regActivo.nomoficina"></div>
+                            <div class="tcelda" v-text="regActivo.nomambiente"></div>
                         </div>                        
                         <div class="tfila">
                             <div class="tcelda titcampo">Responsable:</div>
@@ -438,7 +438,7 @@
                                 </div>
                                 <div class="tfila">
                                     <div class="tcelda titcampo" style="vertical-align:top">Oficina:</div>
-                                    <div class="tcelda" v-text="regOficina.nomoficina"></div>
+                                    <div class="tcelda" v-text="regAmbiente.nomambiente"></div>
                                 </div>
                                 <div class="tfila">
                                     <div class="tcelda titcampo" style="vertical-align:top">Cuenta:</div>
@@ -458,7 +458,7 @@
                                     <span class="titsubrayado" v-text="regFilial.codfilial"></span><br>filial
                                 </div>
                                 <div class="tcelda" style="padding:0px 4px">
-                                    <span class="titsubrayado" v-text="regOficina.codoficina"></span><br>ofic
+                                    <span class="titsubrayado" v-text="regAmbiente.codambiente"></span><br>ofic
                                 </div>
                                 <div class="tcelda" style="padding:0px 4px">
                                     <span class="titsubrayado" v-text="regGrupo.codgrupo"></span><br>cta
@@ -556,7 +556,7 @@
                             </div>
                             <div class="tfila">
                                 <div class="tcelda titcampo">Oficina:</div>
-                                <div class="tcelda" v-text="regActivo.nomoficina"></div>
+                                <div class="tcelda" v-text="regActivo.nomambiente"></div>
                             </div>
                             <div class="tfila">
                                 <div class="tcelda titcampo">Costo Inicial:</div>
@@ -624,7 +624,7 @@
 
     </div> 
     -->
-    <subAsignacion ref="subAsignacion" @cerrarAsignacion="listaActivos(idfilial,idoficina,idgrupo,idauxiliar)"></subAsignacion>    
+    <subAsignacion ref="subAsignacion" @cerrarAsignacion="listaActivos(idfilial,idambiente,idgrupo,idauxiliar)"></subAsignacion>    
 
 </main>    
 </template>
@@ -642,11 +642,11 @@ export default {
         jsfechas:'', jsfunc:'', rutas:[], ipbirt:'',
         //divDepreciacion:0, 
         modalActivo:0, modalBaja:0, accion:1, 
-        arrayFiliales:[], arrayOficinas:[], arrayGrupos:[], arrayAuxiliares:[], 
+        arrayFiliales:[], arrayAmbientes:[], arrayGrupos:[], arrayAuxiliares:[], 
         arrayActivos:[], arrayEmpleados:[], arrayDepreciaciones:[], 
         arrayMotivos:[], arrayAsignaciones:[], 
-        regFilial:[], regOficina:[], regGrupo:[], regAuxiliar:[], regActivo:[], // regDepreciacion:[],
-        idfilial:1, idoficina:1, idgrupo:1, idauxiliar:'',
+        regFilial:[], regAmbiente:[], regGrupo:[], regAuxiliar:[], regActivo:[], // regDepreciacion:[],
+        idfilial:1, idambiente:1, idgrupo:2, idauxiliar:'',
         codactivo:'', descripcion:'', marca:'', serie:'', correlativo:'',
         idcompra:'', fechaingreso:'', costo:'', residual:0, obs:'', 
 
@@ -659,18 +659,18 @@ export default {
 
     methods:{
         listaFiliales(){
-            var url='/fil_filial/listaFiliales';
+            var url='/fil_filial/listaFiliales?activo=1';
             axios.get(url).then(response=>{
                 this.arrayFiliales=response.data.filiales;
                 this.verFilial(this.idfilial);
             })
         },
 
-        listaOficinas(idfilial){
-            var url='/fil_oficina/listaOficinas?idfilial='+idfilial+'&idactivo=1';
+        listaAmbientes(idfilial){
+            var url='/act_ambiente/listaAmbientes?idfilial='+idfilial+'&idactivo=1';
             axios.get(url).then(response=>{
-                this.arrayOficinas=response.data.oficinas;
-                this.verOficina(this.idoficina);
+                this.arrayAmbientes=response.data.ambientes;
+                this.verAmbiente(this.idambiente);
             });
         },
 
@@ -689,12 +689,12 @@ export default {
             });
         },
 
-        listaActivos(idfilial,idoficina,idgrupo,idauxiliar){
+        listaActivos(idfilial,idambiente,idgrupo,idauxiliar){
             if(this.arrayFiliales.length) this.verFilial(idfilial);
-            if(this.arrayOficinas.length) this.verOficina(idoficina);
+            if(this.arrayAmbientes.length) this.verAmbiente(idambiente);
             if(this.arrayGrupos.length)  this.verGrupo(idgrupo);
             if(this.arrayAuxiliares.length)this.verAuxiliar(idauxiliar);
-            var url='/act_activo/listaActivos?idfilial='+idfilial+'&idoficina='+idoficina+'&idgrupo='+idgrupo;
+            var url='/act_activo/listaActivos?idfilial='+idfilial+'&idambiente='+idambiente+'&idgrupo='+idgrupo;
             if(idauxiliar) url+='&idauxiliar='+idauxiliar;
             axios.get(url).then(response=>{
                 this.arrayActivos=response.data.activos;
@@ -703,7 +703,7 @@ export default {
             //let response=await axios.get(url);
             //if(!response.data.activos) return;
             //this.arrayActivos=response.data.activos;
-            //url='/act_asignacion/listaResponsables?idfilial='+idfilial+'&idoficina='+idoficina+'&idgrupo='+idgrupo;
+            //url='/act_asignacion/listaResponsables?idfilial='+idfilial+'&idambiente='+idambiente+'&idgrupo='+idgrupo;
             //response=await axios.get(url);
             //this.arrayResponsables=response.data.responsables;
             //url='act_ufv/verUfv?fecha='+this.arrayActivos[0].currfecha;
@@ -723,8 +723,8 @@ export default {
                 
         },
         /*
-        listaEmpleados(idoficina){
-            var url='/rrh_empleado/listaEmpleados?idoficina='+idoficina;
+        listaEmpleados(idambiente){
+            var url='/rrh_empleado/listaEmpleados?idambiente='+idambiente;
             let me=this;
             axios.get(url).then(function(response){
                 me.arrayEmpleados=response.data.empleados;
@@ -758,10 +758,10 @@ export default {
                     this.regFilial=this.arrayFiliales[i]; return; }
         },
 
-        verOficina(idoficina){
-            for(var i=0;i<this.arrayOficinas.length;i++)
-                if(this.arrayOficinas[i].idoficina==idoficina){
-                    this.regOficina=this.arrayOficinas[i]; return; }
+        verAmbiente(idambiente){
+            for(var i=0;i<this.arrayAmbientes.length;i++)
+                if(this.arrayAmbientes[i].idambiente==idambiente){
+                    this.regAmbiente=this.arrayAmbientes[i]; return; }
         },
 
         verGrupo(idgrupo){
@@ -788,14 +788,14 @@ export default {
 
         generarCodigo(){
             this.verFilial(this.idfilial);
-            this.verOficina(this.idoficina);
+            this.verAmbiente(this.idambiente);
             this.verGrupo(this.idgrupo);
             this.verAuxiliar(this.idauxiliar);
             var ult=this.arrayActivos.length;
             if(ult>0) ult=this.arrayActivos[ult-1].codactivo.substr(-3);
             ult++;
             if(ult<10) ult='0'+ult; if(ult<100) ult='0'+ult;
-            this.codactivo=this.regFilial.codfilial+this.regOficina.codoficina
+            this.codactivo=this.regFilial.codfilial+this.regAmbiente.codambiente
                 +this.regGrupo.codgrupo+this.regAuxiliar.codauxiliar + ult;
             this.correlativo=ult;
         },
@@ -843,14 +843,14 @@ export default {
                 'fechaingreso':this.fechaingreso,
                 'costo':this.costo,
                 'idfilial':this.idfilial,
-                'idoficina':this.idoficina,
+                'idambiente':this.idambiente,
                 'idgrupo':this.idgrupo,
                 'idauxiliar':this.idauxiliar,
                 'obs':this.obs
             }).then(reponse=>{
                 swal('Activo creado correctamente','Proceda a la asignación de responsable','success');
                 this.modalActivo=0;
-                this.listaActivos(this.idfilial,this.idoficina,this.idgrupo,this.idauxiliar);
+                this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
         },
 
@@ -867,7 +867,7 @@ export default {
             }).then(response=>{
                 swal('Datos Actualizados','','success');
                 this.modalActivo=0;
-                this.listaActivos(this.idfilial,this.idoficina,this.idgrupo,this.idauxiliar);
+                this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
         },
 
@@ -891,7 +891,7 @@ export default {
             var url='/act_activo/switchActivo?idactivo='+this.idactivo;
             axios.put(url).then(response=>{
                 swal(titswal+' correctamente','','success');
-                this.listaActivos(this.idfilial,this.idoficina,this.idgrupo,this.idauxiliar);
+                this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
         },
 
@@ -1040,7 +1040,7 @@ export default {
             }).then(function(){
                 swal('Operación correcta','Se ha dado de baja este activo. Verifique en el módulo Activos -> Bajas','success');
                 me.modalBaja=0;
-                me.listaActivos(activo.idfilial,activo.idoficina,activo.idgrupo,activo.idauxiliar);
+                me.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);
             });
         },
 
@@ -1095,10 +1095,10 @@ export default {
 
     mounted(){
         this.listaFiliales();
-        this.listaOficinas(this.idfilial);
+        this.listaAmbientes(this.idfilial);
         this.listaGrupos();
         this.listaAuxiliares(this.idgrupo);
-        this.listaActivos(this.idfilial,this.idoficina,this.idgrupo,this.idauxiliar);
+        this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
         this.jsfechas=jsfechas;
         this.jsfunc=jsfunc;
     }

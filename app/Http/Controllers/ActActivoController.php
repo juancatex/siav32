@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 use App\Act_Activo;
 use App\Act_Depreciacion;
 
@@ -12,10 +12,10 @@ class ActActivoController extends Controller
     public function listaActivos(Request $request)
     {   
         $activos=Act_Activo::select('idactivo','idfilial',
-        'codactivo','nomauxiliar','descripcion','act__activos.activo')
+        'codactivo','nomauxiliar','descripcion','act__activos.activo','act__activos.fechaingreso')
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
         ->where('act__activos.idfilial',$request->idfilial)
-        ->where('act__activos.idoficina',$request->idoficina)
+        ->where('act__activos.idambiente',$request->idambiente)
         ->where('act__activos.idgrupo',$request->idgrupo);
         if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         if($request->activo) $activos->where('act__activos.activo',1);
@@ -26,13 +26,13 @@ class ActActivoController extends Controller
     public function verActivo(Request $request)
     {        
         $activo=Act_Activo::selectRaw("act__activos.*,'curdate() as currfecha',valor as ufvini,
-        codfilial,nommunicipio,codoficina,nomoficina,codcuenta,nomcuenta,
+        codfilial,nommunicipio,codambiente,nomambiente,codgrupo,nomgrupo,
         vida,'round(100/vida,1) as coeficiente',codauxiliar,nomauxiliar")
         ->join('fil__filials','fil__filials.idfilial','act__activos.idfilial')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
-        ->join('fil__oficinas','fil__oficinas.idoficina','act__activos.idoficina')
+        ->join('act__ambientes','act__ambientes.idambiente','act__activos.idambiente')
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
-        ->join('act_grupos','act__grupos.idgrupo','act__activos.idgrupo')
+        ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
         ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso')
         //->join('act__asignacions','act__asignacions.idactivo','=','act__activos.idactivo')
         ->where('act__activos.idactivo',$request->idactivo);
@@ -72,7 +72,7 @@ class ActActivoController extends Controller
         $activo=new Act_Activo();
         $activo->codactivo=$request->codactivo;
         $activo->idfilial=$request->idfilial;
-        $activo->idoficina=$request->idoficina;
+        $activo->idambiente=$request->idambiente;
         $activo->idgrupo=$request->idgrupo;
         $activo->idauxiliar=$request->idauxiliar;
         $activo->descripcion=$request->descripcion;
@@ -128,7 +128,7 @@ class ActActivoController extends Controller
         valor as ufvini, costo,residual,vida, floor(datediff(curdate(),fechaingreso)/30) as meses
         from act__activos
         join act__ufvs on act__ufvs.fecha=act__activos.fechaingreso
-        join con__cuentas on con__cuentas.idcuenta=act__activos.idcuenta
+        join act__grupos on act__grupos.idgrupo=act__activos.idgrupo
         where idactivo=".$request->idactivo;
         $activo=DB::select($sql)[0];
         $meses=13-(($activo->mesini)*1);

@@ -21,7 +21,7 @@ class FilDirectivoController extends Controller
         ->leftjoin('par_especialidades','par_especialidades.idespecialidad','socios.idespecialidad')
         ->where('idfilial',$request->idfilial)->where('fil__directivos.activo',$request->activo);;
         $directivos->orderBy('fil__unidads.idunidad');
-        return ['directivos'=>$directivos->get()];
+        return ['directivos'=>$directivos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function storeDirectivo(Request $request)
