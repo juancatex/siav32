@@ -30,6 +30,7 @@ class ConLibrocompraController extends Controller
             $librocompras = con__librocompra::join('alm__proveedors','alm__proveedors.idproveedor','=','con__librocompras.idproveedor')
                                             ->join('adm__users','adm__users.id','=','con__librocompras.registrado_por')
                                             ->join('fil__filials','fil__filials.idfilial','=','con__librocompras.idfilial')
+                                            ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','con__librocompras.idasientomaestro')
                                                 ->select('con__librocompras.idlibrocompra',
                                                      'con__librocompras.numeracion',
                                                      'con__librocompras.fecha_factura',
@@ -37,7 +38,7 @@ class ConLibrocompraController extends Controller
                                                      'con__librocompras.importe',
                                                      'alm__proveedors.nomproveedor',
                                                      'alm__proveedors.nit',
-                                                     'idasientomaestro',
+                                                     'con__librocompras.idasientomaestro',
                                                      'validadoconta',
                                                      'lote',
                                                      'credfiscal',
@@ -45,7 +46,8 @@ class ConLibrocompraController extends Controller
                                                      'username',
                                                      'detalle_fac',
                                                      'sigla',
-                                                     'con__librocompras.idfilial')
+                                                     'con__librocompras.idfilial',
+                                                     'con__asientomaestros.estado')
                                             ->where('con__librocompras.activo',1)
                                             ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                             ->whereYear('con__librocompras.fecha_factura','=',$anio)
@@ -142,7 +144,8 @@ class ConLibrocompraController extends Controller
                                                          'username',
                                                          'detalle_fac',
                                                          'sigla',
-                                                         'con__librocompras.idfilial')
+                                                         'con__librocompras.idfilial',
+                                                         'con__asientomaestros.estado')
                                                     ->where('con__librocompras.activo',1)
                                                     ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                                     ->whereYear('con__librocompras.fecha_factura','=',$anio);
@@ -192,7 +195,8 @@ class ConLibrocompraController extends Controller
                                                         'credfiscal',
                                                         'restoimporte',
                                                         'cod_comprobante',
-                                                        'username')
+                                                        'username',
+                                                        'con__asientomaestros.estado')
                                                     ->where('con__librocompras.activo',1)
                                                     ->whereraw($sqls)
                                                     ->whereMonth('con__librocompras.fecha_factura','=',$mes)

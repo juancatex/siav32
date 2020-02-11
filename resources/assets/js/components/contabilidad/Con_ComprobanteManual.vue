@@ -160,7 +160,7 @@
                     </nav>
                 </div>
             </div>
-            <con_comprobante ref="vuecomprobante"></con_comprobante>
+            <con_comprobante @cerrarmanual="cerrarvuemanual" ref="vuecomprobante"></con_comprobante>
         </div>
         <!-- MODAL EDITAR CABECERA  -->
         <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="cabecera"  data-backdrop="static" data-keyboard="false">
@@ -326,6 +326,14 @@
             }
         }, 
         methods : {
+            cerrarvuemanual(){
+                this.listarAsientoMaestro(1,this.criterio,this.borradorcheck);
+                $('#divcomprobante').css('display','none');
+                //console.log('hola');
+                this.divCompPrincipal=1;
+                
+                
+            },
             abrirmodalcabecera(data=[]){
                 let me=this;
                 me.edit_documento=data['tipodocumento'];
