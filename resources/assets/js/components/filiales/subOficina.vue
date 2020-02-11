@@ -14,16 +14,20 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="vervigente">Ver: &nbsp;
-                <input type="radio" name="estado" id="r1" @click="listaOficinas(regFilial.idfilial,1)">Vigentes &nbsp;
-                <input type="radio" name="estado" id="r0" @click="listaOficinas(regFilial.idfilial,0)">Inactivos
+            <div class="text-right" style="padding-bottom:10px">
+                <div class="vervigente">Ver: &nbsp;
+                    <input type="radio" name="estado" id="r1" @click="listaOficinas(regFilial.idfilial,1)">Vigentes &nbsp;
+                    <input type="radio" name="estado" id="r0" @click="listaOficinas(regFilial.idfilial,0)">Inactivos
+                </div>
+                <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
+                    @click="reporteOficinas(regFilial.idfilial)"></button>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead class="tcabecera">
                         <tr>
-                            <th><span class="badge badge-success" v-text="arrayOficinas.length+' items'"></span></th>
-                            <th>Código</th>
+                            <th align="center"><span class="badge badge-success" v-text="arrayOficinas.length+' items'"></span></th>
+                            <th align="center">Código</th>
                             <th>Oficina</th>
                             <th>Responsable</th>
                             <th>Dependencia </th>
@@ -43,7 +47,7 @@
                             </td>
                             <td v-text="oficina.codoficina" align="center"></td>
                             <td v-text="oficina.nomoficina"></td>
-                            <td v-text="oficina.nomresponsable"></td>
+                            <td v-text="oficina.nomresponsable" nowrap></td>
                             <td v-text="oficina.nomunidad"></td>                            
                         </tr>
                     </tbody>
@@ -62,20 +66,22 @@
                     <h4 class="titsubrayado" v-text="'Filial '+regFilial.nommunicipio"></h4>
                     <br>
                     <div class="tabla100">
-                        <div class="tcelda">Código Oficina (autogenerado):</div>
+                        <div class="tcelda">Código (según Dependencia):</div>
                         <div class="tcelda">
-                            <input type="text" class="form-control txtnegrita text-center" v-model="codoficina">
+                            <input type="text" class="form-control txtnegrita text-center" readonly v-model="codoficina">
                         </div>
                     </div>
                     <br>Nombre Oficina: <span class="txtasterisco"></span>
-                        <input type="text" class="form-control" v-model="nomoficina" @keyup="valOficina()">
+                        <input type="text" class="form-control" v-model="nomoficina"
+                            name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required|alpha_spaces'">
+                        <p v-if="errors.has('nom')" class="txtvalidador">Dato requerido</p>
                     <br>Dependencia: <span class="txtasterisco"></span>
-                        <select class="form-control" v-model="idunidad" 
-                            @change="valOficina()">
+                        <select class="form-control" v-model="idunidad" @change="generarCodigo(regFilial.idfilial,idunidad)"
+                            name="dep" :class="{'invalido':errors.has('dep')}" v-validate="'required'">
                             <option v-for="unidad in arrayUnidades" :key="unidad.id" 
-                            :value="unidad.idunidad" v-text="unidad.nomunidad">
-                            </option>
+                                :value="unidad.idunidad" v-text="unidad.nomunidad"></option>
                         </select>
+                        <p v-if="errors.has('dep')" class="txtvalidador">Selecione una Dependencia</p>
                     <br>
                     <div class="tabla100">
                         <div class="tcelda">Responsable:</div>
@@ -97,11 +103,11 @@
                             <span v-text="empleado.nombre"></span> 
                         </option>
                     </select>
-                    <div class="txtvalidador text-right">* Campos obligatorios</div>                    
+                    <div class="txtobligatorio text-right"></div>                    
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="modalOficina=0">Cancelar</button>
-                    <button class="btn btn-primary" :disabled="!completo" @click="accion==1?storeOficina():updateOficina()">
+                    <button class="btn btn-primary" @click="validarOficina()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -112,11 +118,13 @@
 
 <script>
 
+import * as reporte from '../../functions.js';
+
 export default {
     props:['regFilial'],
 
     data(){ return {
-        modalOficina:0, accion:1, completo:0,
+        modalOficina:0, accion:1, ipbirt:'',
         arrayOficinas:[], arrayDirectivos:[], arrayEmpleados:[], arrayUnidades:[],
         regResponsable:[], esDirectivo:'', tiporesponsable:'', idfilial:'',
         idunidad:'', idoficina:'', codoficina:'', nomoficina:'', idresponsable:'', 
@@ -129,12 +137,13 @@ export default {
             +'&responsables=1'+'&orden=codunidad&activo='+activo;
             axios.get(url).then(response=>{
                 this.arrayOficinas=response.data.oficinas;
+                this.ipbirt=response.data.ipbirt;
             });
         },
 
         listaEmpleados(idfilial){
-            var url='/rrh_empleado/listaEmpleados?activo=1&sede=';
-            url+=idfilial==1?'lpz':'int';
+            var url='/rrh_empleado/listaEmpleados?activo=1&sedelp='+idfilial;
+            //url+=idfilial==1?'1':'0';
             axios.get(url).then(response=>{
                 this.arrayEmpleados=response.data.empleados;
             });
@@ -167,6 +176,7 @@ export default {
 
         nuevaOficina(){
             this.modalOficina=1;
+            this.accion=1;
             this.listaUnidades();            
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
@@ -175,13 +185,13 @@ export default {
             this.nomoficina='';
             this.idresponsable='';
             this.tiporesponsable='';
+            this.$validator.reset();
         },
 
         editarOficina(oficina){          
-             window.scroll({top:0,left:0,behavior:'smooth'});  
+            window.scroll({top:0,left:0,behavior:'smooth'});  
             this.modalOficina=1;
             this.accion=2;
-            this.completo=1;
             this.listaUnidades();
             this.listaEmpleados(this.regFilial.idfilial);
             this.listaDirectivos(this.regFilial.idfilial);
@@ -195,10 +205,11 @@ export default {
             this.idresponsable=oficina.idresponsable;
         },
 
-        valOficina(){
-            this.completo=0;
-            if((this.nomoficina)&&(this.idunidad)) 
-                this.completo=1;
+        validarOficina(){
+            this.$validator.validateAll().then(result=>{
+                if(!result) {swal('Datos inválidos','Revise los errores','error'); return;}
+                this.accion==1?this.storeOficina():this.updateOficina();
+            });
         },
 
         storeOficina(){
@@ -234,7 +245,7 @@ export default {
         estadoOficina(oficina){
             this.idoficina=oficina.idoficina;
             if(oficina.activo){
-                swal({title:'Desactivará la Oficina '+oficina.nomoficina, type:'warning',
+                swal({title:'Desactivará la Oficina<br>'+oficina.nomoficina, type:'warning',
                     html: 'No podrá acceder a la información dependiente', showCancelButton: true,
                     confirmButtonColor:'#f86c6b', confirmButtonText:'Desactivar Oficina',
                     cancelButtonText:'Cancelar', reverseButtons: true
@@ -249,6 +260,16 @@ export default {
                 swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
                 this.listaOficinas(this.regFilial.idfilial,activo);
             });
+        },
+
+        reporteOficinas(idfilial){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/filiales');
+            url.push('/fil_oficinas.rptdesign'); //archivo
+            url.push('&idfilial='+idfilial); 
+            url.push('&__format=pdf'); //formato
+            reporte.viewPDF(url.join(''),'Oficinas');
         },
     }, 
 
