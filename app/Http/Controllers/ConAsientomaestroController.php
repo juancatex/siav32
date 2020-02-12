@@ -399,7 +399,9 @@ class ConAsientomaestroController extends Controller
             
             if($idfacturas)
             {
-                //echo "entra idfacturas1";
+                DB::table('con__librocompras')->where('lote', $request->reslote)->update(['idasientomaestro' => null,
+                                                                                            'lote'=>null,
+                                                                                            'validadoconta'=>0]);    
                 foreach ($idfacturas as $indice => $valor) {
                     DB::table('con__librocompras')->where('idlibrocompra', $valor)->update(['idasientomaestro' => $request->idasientomaestro,
                                                                                                                     'lote'=>$request->reslote]);    
@@ -410,7 +412,17 @@ class ConAsientomaestroController extends Controller
                                                     ->get()->toArray();
                 $lote=$librocompra[0]['maximo']+1;
                 DB::table('con__librocompras')->where('idasientomaestro', $request->idasientomaestro)->update(['idasientomaestro' => $respuesta,
-                                                                                                                 'lote'=>$lote]);    
+                                                                                                                 'lote'=>$lote,
+                                                                                                                 'validadoconta'=>1]);    
+            }
+            else
+            {
+                if($request->reslote)
+                {
+                    DB::table('con__librocompras')->where('lote', $request->reslote)->update(['idasientomaestro' => null,
+                                                                                                                 'lote'=>null,
+                                                                                                                 'validadoconta'=>0]);   
+                }
             }
         }
         else {

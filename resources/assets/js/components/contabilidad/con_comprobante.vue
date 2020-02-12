@@ -71,8 +71,8 @@
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
                             <h4 class="col-md-8">Asiento Contable</h4>
-                            <div class="col-md-4" v-if="(accion=='editar' && silibrocompra==1)">
-                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar">
+                            <div class="col-md-4" >  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
+                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir libro de compras">
                                     <i class="icon-basket"></i>
                                 </button> 
                             </div>
@@ -133,7 +133,7 @@
                                                 type="text" >
                                     </div>
                                     <template v-if="rowcuentas.idcuenta==lc && acumulado13!=0">
-                                        <div class="ancho12 border" >
+                                        <div class="ancho12 border"  style="text-align:right">
                                             <vue-numeric  
                                                 :disabled="rowcuentas.haber!=0"
                                                 readOnly
@@ -299,26 +299,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(librocompras, index) in arrayLibrocompras" :key="librocompras.idlibrocompra"  v-bind:class="[(librocompras.idasientomaestro==idasientomaestro)&&(librocompras.validadoconta==0)  ? 'table-warning' :true , false]">
+                                    <tr v-for="librocompras in arrayLibrocompras" :key="librocompras.idlibrocompra"  v-bind:class="[(librocompras.idasientomaestro==idasientomaestro)&&(librocompras.validadoconta==0)  ? 'table-warning' :true , false]">
                                         <td v-text="librocompras.numeracion"></td>
                                         <td v-text="librocompras.fecha_factura"></td>
                                         <td v-text="librocompras.nit + ' ' +  librocompras.nomproveedor"></td>
                                         <td v-text="librocompras.numfactura" style="text-align:right"></td>
                                         <td v-text="librocompras.username"></td>
                                         <td v-text="librocompras.importe+' Bs.'" style="text-align:right"></td>
-                                        <td><template v-if="librocompras.lote && librocompras.idasientomaestro && librocompras.validadoconta">
+                                        <td><template v-if="librocompras.estado==1">
                                                 <span class="badge badge-success">Validado</span>
                                             </template>
-                                            <template v-if="librocompras.lote && librocompras.idasientomaestro && !librocompras.validadoconta">
-                                                <span class="badge badge-warning">No Validado</span>
+                                            <template v-if="librocompras.estado==5">
+                                                <span class="badge badge-warning">Borrador</span>
                                             </template>
                                             <template v-if="librocompras.idasientomaestro==null && librocompras.lote==null">
                                                 <span class="badge badge-danger">Sin Compr.</span>
                                             </template>
                                         </td>
                                         <td style="text-align:right">
-                                            <template v-if="!librocompras.idasientomaestro">
-                                                <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="index" @change="sumar13()" >
+                                            <template v-if="!librocompras.idasientomaestro || (librocompras.estado==5 && librocompras.idasientomaestro==asientomaestro.idasientomaestro)">
+                                                <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="librocompras.idlibrocompra" @change="sumar13()"  :checked="verchecked(librocompras.idlibrocompra)">
                                             </template>
                                         </td>
                                     </tr>                                
@@ -719,6 +719,7 @@ export default {
         arrayFilial:[],
         filialselected:1,
         detalle:'',
+        loteverificacion:'',
 
       
     }
@@ -770,7 +771,7 @@ export default {
         },
         iscompletelibro(){
             let me=this;
-            if(me.idproveedor && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal)
+            if(me.idproveedor.length!=0 && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal && me.detalle)
                 return true;
             else
                 return false
@@ -817,6 +818,19 @@ export default {
         },
     },
     methods:{
+        verchecked(id){
+            // console.log(id);
+            let me=this;
+            let valor=false;
+            let resultado = me.checkusarfactura.find( elem => elem == id );
+            if(resultado)
+                valor=true;
+            else
+                valor= false;            
+            //console.log(valor);
+            return valor;
+            
+        },
         cargarvue(arrayvalores,valor){
             $('#divcomprobante').css('display','block');
             this.classModal=new _pl.Modals();
@@ -835,7 +849,8 @@ export default {
             this.titulo=arrayvalores['titulo'];
             this.idtipocomprobante=arrayvalores['idtipocomprobante'];
             this.selectDocumento();
-            console.log(valor);
+            this.reslote=0;
+            //console.log(valor);
             switch (valor) {
                 case 'nuevo':
                     this.tipoAccion=1;
@@ -851,6 +866,8 @@ export default {
                 break;
                 case 'editar':
                     this.asientomaestro=arrayvalores['idasientomaestro'];
+                    //console.log(this.asientomaestro.idasientomaestro);
+                    
                     this.numdocumento=this.asientomaestro.numdocumento;
                     this.tipodocumento=this.asientomaestro.tipodocumento;
                     this.glosa=this.asientomaestro.glosa;
@@ -861,7 +878,7 @@ export default {
                     this.accion='editar';
                 break;
                 case 'copiar':
-                    console.log('switch copiar');
+                   // console.log('switch copiar');
                     
                     this.asientomaestro=arrayvalores['idasientomaestro'];
                     this.idasientomaestro=this.asientomaestro.idasientomaestro;
@@ -939,7 +956,7 @@ export default {
         selectConciliacion(idcuenta){
             let me=this;
             var url= '/con_conciliacion/selectconciliacion?idcuenta='+idcuenta;
-            console.log(url);
+            //console.log(url);
             
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
@@ -994,7 +1011,7 @@ export default {
                 var optdocumento='';
                 if(tipo=='editar')
     	        {
-                    console.log(tipo);
+                    //console.log(tipo);
                     for (let index = 0; index < respuesta.asientodetalles.length; index++) {
                         const element = respuesta.asientodetalles[index];
                         //console.log(element.nomcuenta);
@@ -1038,7 +1055,7 @@ export default {
                 else {
                     if(tipo=='copiar')
                     {
-                        console.log(tipo);
+                        //console.log(tipo);
                         
                         for (let index = 0; index < respuesta.asientodetalles.length; index++) {
                             const element = respuesta.asientodetalles[index];
@@ -1114,17 +1131,38 @@ export default {
         
         },
         cuentas(cuentas,index){ 
-            this.idcuenta=[];
-            this.idcuenta.push({"idcuenta":cuentas.idcuenta,"indice":index,"nomcuenta":cuentas.nomcuenta});
-            this.rowcuentas[index].idcuenta=cuentas.idcuenta;  
-            cuentas='';  
-            if(this.idcuenta[0].idcuenta==this.lc)
-            {   
-                this.abrirmodalCompras(this.idcuenta[0].indice);
-            }
-            if(this.cuentasconciliacion.includes( this.idcuenta[0].idcuenta))
+            let me=this;
+            var cont=0;
+            me.idcuenta=[];
+            me.idcuenta.push({"idcuenta":cuentas.idcuenta,"indice":index,"nomcuenta":cuentas.nomcuenta});
+            me.rowcuentas.forEach(element => {
+                if(element.idcuenta==me.lc)
+                {
+                    cont++;
+                }
+            });
+            if(cont==0)
             {
-                this.abrirModalConciliacion(this.idcuenta[0].idcuenta,index,this.idcuenta[0].nomcuenta);
+                me.rowcuentas[index].idcuenta=cuentas.idcuenta;  
+                cont++;
+                cuentas='';  
+                if(me.idcuenta[0].idcuenta==me.lc)
+                {   
+                    me.abrirmodalCompras(me.idcuenta[0].indice);
+                }
+            }
+            else if(me.idcuenta[0].idcuenta==me.lc)
+            {
+                swal('Cuenta de Credito Fiscal Ya Seleccionada','','error');
+            }
+            else
+            {
+                me.rowcuentas[index].idcuenta=cuentas.idcuenta;  
+                cuentas=''; 
+            }
+            if(me.cuentasconciliacion.includes( me.idcuenta[0].idcuenta))
+            {
+                me.abrirModalConciliacion(me.idcuenta[0].idcuenta,index,me.idcuenta[0].nomcuenta);
             }
         },
         clean(a){
@@ -1133,7 +1171,7 @@ export default {
         selectDocumento(){
             let me=this;
             var url= '/par_documento/selectDocumento?idmodulo='+this.idmodulo;
-            console.log(url);
+            //console.log(url);
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
                 me.arrayDocumento = respuesta.documentos;
@@ -1170,9 +1208,24 @@ export default {
         },           
         cerrarModalCompras(){
             let me=this;
-            console.log(me.acumulado13);
-            
-            me.rowcuentas[me.indice].debe=me.acumulado13;
+            //console.log(me.acumulado13);
+            var sw=0;
+            me.rowcuentas.forEach((element,index) => {
+                if(element.idcuenta==me.lc)
+                {
+                    me.indice=index;
+                    sw=1;
+                }
+            });
+            if(sw==1)
+                me.rowcuentas[me.indice].debe=me.acumulado13;
+            else
+            {
+                me.addrowcuentas();
+                me.indice=me.rowcuentas.length-1;
+                me.rowcuentas[me.indice].idcuenta=me.lc;
+                me.rowcuentas[me.indice].debe=me.acumulado13;
+            }
 
             me.classModal.closeModal('librocompras'); 
             me.classModal.openModal('comprobantecontable')
@@ -1247,8 +1300,11 @@ export default {
         },
         registrarAsiento(borrador){
             let me = this;
-            me.acumulado13=0;
-            me.acumulado87=0;
+            var validarfacturas=0;
+           /*  me.acumulado13=0;
+            me.acumulado87=0; */
+            if(me.checkusarfactura.length>0)
+            validarfacturas=1;
             axios.post('/con_asientomaestro/registrar',{
                 'rowregistros':me.rowcuentas,
                 'fechatransaccion':me.fechatransaccion,
@@ -1260,8 +1316,9 @@ export default {
                 'borrador':borrador,
                 //'librocomprasok':me.librocomprasOk,
                 //'reslote':me.reslote
-                'idfacturas':me.idfacturas,
-                'idmovimiento':me.idmovimiento
+                'idfacturas':me.checkusarfactura,
+                'idmovimiento':me.idmovimiento,
+                'validarfacturas':validarfacturas,
 
             }).then(function (response) {
                 //console.log(response);
@@ -1273,6 +1330,7 @@ export default {
                     )   
                                
                 me.resetComprobante();
+                me.$emit('cerrarmanual');
                 //me.listrcomprobantes();
                 //me.$refs.comprobanteprincipal.listacomprobantes();
             }).catch(function (error) {
@@ -1292,14 +1350,15 @@ export default {
                 'borrador':true,
                 'idasientomaestro':me.idasientomaestro,
                 'reslote':me.reslote,
-                'idfacturas':me.idfacturas,
+                'idfacturas':me.checkusarfactura,
             }).then(function (response) {
                 var residasientomaestro=response.data;
                 //console.log(response.data)
                 swal(
                         'Editado Correctamente'
                     )  
-                me.resetComprobante();                  
+                me.resetComprobante(); 
+                me.$emit('cerrarmanual');                 
                 //me.listacomprobantes();
                 
             }).catch(function (error) {
@@ -1326,18 +1385,16 @@ export default {
             this.idfacturas=[];
         },
         abrirmodalCompras(indice=''){
-            //console.log(indice);
+            
             let me=this;
             me.indice=0;
             //me.selectProveedor();
+            
+            me.checkusarfactura=[];
             me.selectLibrocompras();
             me.clearSelected=0;
             setTimeout(me.tiempo, 50); 
-            me.acumulado13=0;
-            me.acumulado87=0;
-            me.acumulado13=me.acumulado13+me.acumulado13_return;
-            me.idfacturas=[];
-            me.checkusarfactura=[];
+            //me.sumar13();
             
             //me.classModal.closeModal('comprobantecontable');
             me.classModal.openModal('librocompras');
@@ -1378,6 +1435,16 @@ export default {
                 //console.log(respuesta);
                 me.arrayLibrocompras = respuesta.librocompras;
                 me.cierremes=respuesta.cierremes;
+                //const result = words.filter(word => word.length > 6);
+                var regreso=me.arrayLibrocompras.filter(elem => elem.idasientomaestro==me.asientomaestro.idasientomaestro);
+                regreso.forEach(element => {
+                    me.checkusarfactura.push(element.idlibrocompra);
+                    me.reslote=element.lote;
+                });
+                
+               // console.log(me.loteverificacion);
+                me.sumar13();
+                
             })
             .catch(function (error) {
                 console.log(error);
@@ -1433,6 +1500,7 @@ export default {
                 me.acumulado13=0;
                 me.acumulado87=0;
                 me.idfacturas=[];
+                me.idproveedor=[];
                 //me.cerrarModalCompras();
             }).catch(function (error) {
                 console.log(error);
@@ -1444,31 +1512,22 @@ export default {
             var sumacheck=0;
             var suma87=0;
             me.idfacturas=[];
-            if(me.acumulado13_return==0)
-                me.acumulado13=0;
-            else
-                me.acumulado13=me.acumulado13_return;
             
-            //console.log(me.checkusarfactura);
-            for (var key in me.checkusarfactura) {
-                //console.log('entra for');
+            me.acumulado13=0;
+            me.acumulado87=0;
+            me.checkusarfactura.forEach(element => {
+                var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
+                sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
+                suma87=parseFloat(suma87)+parseFloat(resultado.importe);
+                //me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
                 
-                if (me.checkusarfactura.hasOwnProperty(key)) {
-                    var element = me.checkusarfactura[key];
-                    //console.log(key);
-                    //console.log(me.arrayLibrocompras[element].credfiscal);
-                    //console.log(element);
-                    sumacheck=parseFloat(sumacheck)+parseFloat(me.arrayLibrocompras[element].credfiscal);
-                    suma87=parseFloat(suma87)+parseFloat(me.arrayLibrocompras[element].importe);
-                    me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
-                }
-            }
+            });
             me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
             me.acumulado13=me.acumulado13.toFixed(2);
             me.sumafac=suma87;
             me.acumulado87=parseFloat(me.sumafac)-parseFloat(me.acumulado13);
             me.acumulado87=me.acumulado87.toFixed(2);
-            console.log(me.acumulado13);
+           //console.log(me.acumulado13);
             
             if(me.acumulado13>0)
                 me.sifacturas=true;
@@ -1481,7 +1540,7 @@ export default {
             var url= '/con_librocompras/verificarfactura?idasientomaestro='+idasientomaestro;
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
-                console.log(response);
+               // console.log(response);
                 
                 
                 if(respuesta.success)

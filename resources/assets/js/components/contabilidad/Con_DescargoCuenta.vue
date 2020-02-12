@@ -99,8 +99,8 @@
 
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
-                            <div class="col-md-4" v-if="(accion=='editar' && silibrocompra==1)">
-                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar">
+                            <div class="col-md-4" ><!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar el boton  -->
+                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir Libro Compras">
                                     <i class="icon-basket"></i>
                                 </button> 
                             </div>
@@ -318,7 +318,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(librocompras, index) in arrayLibrocompras" :key="librocompras.idlibrocompra"  v-bind:class="[(librocompras.idasientomaestro==idasientomaestro)&&(librocompras.validadoconta==0)  ? 'table-warning' :true , false]">
+                                    <tr v-for="librocompras in arrayLibrocompras" :key="librocompras.idlibrocompra"  v-bind:class="[(librocompras.idasientomaestro==idasientomaestro)&&(librocompras.validadoconta==0)  ? 'table-warning' :true , false]">
                                         <td v-text="librocompras.numeracion"></td>
                                         <td v-text="librocompras.fecha_factura"></td>
                                         <td v-text="librocompras.nit + ' ' +  librocompras.nomproveedor"></td>
@@ -337,7 +337,7 @@
                                         </td>
                                         <td style="text-align:right">
                                             <template v-if="!librocompras.idasientomaestro">
-                                                <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="index" @change="sumar13()" >
+                                                <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="librocompras.idlibrocompra" @change="sumar13()" :checked="verchecked(librocompras.idlibrocompra)" >
                                             </template>
                                         </td>
                                     </tr>                                
@@ -703,7 +703,7 @@ export default {
         },
         iscompletelibro(){
             let me=this;
-            if(me.idproveedor && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal)
+            if(me.idproveedor.length!=0 && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal&& me.detalle)
                 return true;
             else
                 return false
@@ -738,8 +738,22 @@ export default {
             //console.log(cont); 
             return complet
         },
+       
     },
     methods:{
+         verchecked(id){
+            // console.log(id);
+            let me=this;
+            let valor=false;
+            let resultado = me.checkusarfactura.find( elem => elem == id );
+            if(resultado)
+                valor=true;
+            else
+                valor= false;            
+            //console.log(valor);
+            return valor;
+            
+        },
         cargarvue(arrayValores){
             $('#divdescargo').css('display','block');
             this.fechahoy();
@@ -926,13 +940,36 @@ export default {
         
         },
         cuentas(cuentas,index){ 
-            this.idcuenta=[];
-            this.idcuenta.push({"idcuenta":cuentas.idcuenta,"indice":index});
-            this.rowcuentas[index].idcuenta=cuentas.idcuenta;  
-            cuentas='';  
-            if(this.idcuenta[0].idcuenta==this.lc)
-            {   
-                this.abrirmodalCompras(this.idcuenta[0].indice);
+            let me=this;
+            var cont=0;
+            me.idcuenta=[];
+            me.idcuenta.push({"idcuenta":cuentas.idcuenta,"indice":index});
+            me.rowcuentas.forEach(element => {
+                if(element.idcuenta==me.lc)
+                {
+                    cont++;
+                }
+            });
+            //console.log(cont);
+            
+            if(cont==0)
+            {
+                me.rowcuentas[index].idcuenta=cuentas.idcuenta;  
+                cont++;
+                cuentas='';  
+                if(me.idcuenta[0].idcuenta==me.lc)
+                {   
+                    me.abrirmodalCompras(me.idcuenta[0].indice);
+                }
+            }
+            else if(me.idcuenta[0].idcuenta==me.lc)
+            {
+                swal('Cuenta de Credito Fiscal Ya Seleccionada','','error');
+            }
+            else
+            {
+                me.rowcuentas[index].idcuenta=cuentas.idcuenta;  
+                cuentas=''; 
             }
         },
         clean(a){
@@ -979,11 +1016,31 @@ export default {
         },           
         cerrarModalCompras(){
             let me=this;
-            me.rowcuentas[me.indice].debe=me.acumulado13;
+            var sw=0;
+            me.rowcuentas.forEach((element,index) => {
+                if(element.idcuenta==me.lc)
+                {
+                    me.indice=index;
+                    sw=1;
+                }
+            });
+            if(sw==1)
+                me.rowcuentas[me.indice].debe=me.acumulado13;
+            else
+            {
+                me.addrowcuentas();
+                me.indice=me.rowcuentas.length-1;
+                me.rowcuentas[me.indice].idcuenta=me.lc;
+                me.rowcuentas[me.indice].debe=me.acumulado13;
+            }
+          
+               // me.rowcuentas[me.indice].debe=me.acumulado13;
+            
 
             me.classModal.closeModal('librocompras'); 
             me.classModal.openModal('comprobantecontable')
             me.sifacturas=false;
+            //me.indice='';
         },
         diaminmax(){
             var primerDiaMes = new Date(this.anioselected, this.messelected - 1  , 1);
@@ -1040,8 +1097,8 @@ export default {
         },
         registrarAsiento(){
             let me = this;
-            me.acumulado13=0;
-            me.acumulado87=0;
+            /* me.acumulado13=0;
+            me.acumulado87=0; */
             var validarfacturas=0;
             me.rowcuentas.push({ idcuenta: me.idcuentahaber,
                                             idsubcuenta:this.subcuenta,
@@ -1051,7 +1108,7 @@ export default {
                                             haber:me.debe }); 
 
 
-            if(me.idfacturas.length>0)
+            if(me.checkusarfactura.length>0)
             validarfacturas=1;
 
             
@@ -1063,15 +1120,13 @@ export default {
                 'numdocumento':me.numdocumento,
                 'glosa':me.glosa2,
                 'idmodulo':me.idmodulo,
-                //'librocomprasok':me.librocomprasOk,
-                //'reslote':me.reslote
-                'idfacturas':me.idfacturas,
+                'idfacturas':me.checkusarfactura,
                 'validarfacturas':validarfacturas,
                 'saldoc':me.saldoc,
                 'sidirectorio':this.sidirectorio
 
             }).then(function (response) {
-                //console.log(response);
+                
                 var residasientomaestro=response.data;
                 swal(
                         'Registrado y validado Correctamente'
@@ -1181,19 +1236,12 @@ export default {
             this.idfacturas=[];
         },
         abrirmodalCompras(indice=''){
-            //console.log(indice);
+            
             let me=this;
-            //me.selectProveedor();
             me.selectLibrocompras();
             me.clearSelected=0;
             setTimeout(me.tiempo, 50); 
-            me.acumulado13=0;
-            me.acumulado87=0;
-            me.acumulado13=me.acumulado13+me.acumulado13_return;
-            me.idfacturas=[];
-            me.checkusarfactura=[];
-            
-            //me.classModal.closeModal('comprobantecontable');
+            me.sumar13();
             me.classModal.openModal('librocompras');
             me.tituloModallibro = 'Libro de Compras';
             //me.$refs.comboproveedor.clearSelection(); 
@@ -1287,6 +1335,8 @@ export default {
                 me.acumulado13=0;
                 me.acumulado87=0;
                 me.idfacturas=[];
+                me.detalle='';
+                me.idproveedor=[];
                 //me.cerrarModalCompras();
             }).catch(function (error) {
                 console.log(error);
@@ -1297,32 +1347,21 @@ export default {
             let me=this;
             var sumacheck=0;
             var suma87=0;
-            me.idfacturas=[];
-            if(me.acumulado13_return==0)
-                me.acumulado13=0;
-            else
-                me.acumulado13=me.acumulado13_return;
+            me.acumulado13=0;
             
-            //console.log(me.checkusarfactura);
-            for (var key in me.checkusarfactura) {
-                //console.log('entra for');
+            me.checkusarfactura.forEach(element => {
+                var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
+                sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
+                suma87=parseFloat(suma87)+parseFloat(resultado.importe);
+                //me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
                 
-                if (me.checkusarfactura.hasOwnProperty(key)) {
-                    var element = me.checkusarfactura[key];
-                    //console.log(key);
-                    //console.log(me.arrayLibrocompras[element].credfiscal);
-                    //console.log(element);
-                    sumacheck=parseFloat(sumacheck)+parseFloat(me.arrayLibrocompras[element].credfiscal);
-                    suma87=parseFloat(suma87)+parseFloat(me.arrayLibrocompras[element].importe);
-                    me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
-                }
-            }
+            });
             me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
             me.acumulado13=me.acumulado13.toFixed(2);
             me.sumafac=suma87;
             me.acumulado87=parseFloat(me.sumafac)-parseFloat(me.acumulado13);
             me.acumulado87=me.acumulado87.toFixed(2);
-            console.log(me.acumulado13);
+            //console.log(me.acumulado13);
             
             if(me.acumulado13>0)
                 me.sifacturas=true;
