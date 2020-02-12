@@ -362,9 +362,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U
     Route::put ('/act_activo/storeBaja','ActActivoController@storeBaja');    //baja
     Route::get ('/act_activo/listaBajas','ActActivoController@listaBajas');  //baja 
-    Route::put ('/act_activo/restoreBaja','ActActivoController@restoreBaja');//baja 
 
-    //Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion'); 
+    Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion'); 
 
     Route::post('/act_asignacion/storeAsignacion','ActAsignacionController@storeAsignacion');     //C
     Route::get ('/act_asignacion/listaAsignaciones','ActAsignacionController@listaAsignaciones'); //R

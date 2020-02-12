@@ -24,10 +24,9 @@ class ActAsignacionController extends Controller
             ->where('act__activos.idgrupo',$request->idgrupo);
             if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         }
-        return['asignaciones'=>$asignaciones->get()];
+        return['asignaciones'=>$asignaciones->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
-    /*
     public function listaResponsables(Request $request)
     {
         $responsables=Act_Asignacion::selectRaw("act__activos.idactivo, 
@@ -47,6 +46,7 @@ class ActAsignacionController extends Controller
         return ['responsables'=>$responsables];
     }
 
+    /*
     public function verResponsable(Request $request)
     {   
         $responsable=Act_Asignacion::selectRaw("if(tiporesponsable='s',

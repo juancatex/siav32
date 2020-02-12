@@ -3,33 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\DB;
 //use Maatwebsite\Excel\Facades\Excel; //laravel-excel.com 2.1
 use App\Http\Controllers\Controller;
 use App\Act_Ufv;
 
 class ActUfvController extends Controller
 {
-    /*
-    public function ufvGestion(Request $request)
-    {
-        if($request->criterio=="ini") $criterio="%-01-01";
-        if($request->criterio=="fin") $criterio="%-12-31";
-        $sql="select valor from act__ufvs where fecha like '".$criterio."'";
-        $ufvgestion=DB::select($sql);
-        return ['ufvgestion'=>$ufvgestion];
-    }
-    */
-
     public function verUfv(Request $request)
     {
         if($request->fecha) $fecha=$request->fecha; 
         else $fecha=date("Y-m-d");
         $ufvfecha=Act_Ufv::select('valor')->where('fecha',$fecha)->get(); 
+        
+
         if (count($ufvfecha)==0)    
             return ['ufvfecha'=>0,'fecha'=>$fecha];
         else             
             return ['ufvfecha'=>$ufvfecha[0],'fecha'=>$fecha];
+    }
+
+    public function ufvGestion(Request $request)
+    {
+        $ufvgestion=Act_Ufv::select('valor');
+        if($request->criterio=="ini") $ufvgestion->where('fecha','like','%-01-01');
+        if($request->criterio=="fin") $ufvgestion->where('fecha','like','%-12-31');
+        return ['ufvgestion'=>$ufvgestion->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function cargarExcel(Request $request)
