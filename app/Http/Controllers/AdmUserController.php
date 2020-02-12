@@ -15,10 +15,16 @@ use App\Par_Ventanamodulo;
 class AdmUserController extends Controller
 {
 
+    /**
+     * Mostrar la fecha del sistema.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public static function fecha_sistema() {
         $fecha=(DB::select("select getfecha() as total"))[0]->total; 
-        $fecha_=explode(' ',$fecha);
-        return $fecha_[0];
+        $fecha_=explode(' ',$fecha); 
+        $fecha_sis = date('d-m-Y', strtotime($fecha_[0]));
+        return $fecha_sis;
     }
     /**
      * Display a listing of the resource.
