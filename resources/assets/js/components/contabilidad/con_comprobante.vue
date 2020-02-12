@@ -850,7 +850,7 @@ export default {
             this.idtipocomprobante=arrayvalores['idtipocomprobante'];
             this.selectDocumento();
             this.reslote=0;
-            console.log(valor);
+            //console.log(valor);
             switch (valor) {
                 case 'nuevo':
                     this.tipoAccion=1;
@@ -866,7 +866,7 @@ export default {
                 break;
                 case 'editar':
                     this.asientomaestro=arrayvalores['idasientomaestro'];
-                    console.log(this.asientomaestro.idasientomaestro);
+                    //console.log(this.asientomaestro.idasientomaestro);
                     
                     this.numdocumento=this.asientomaestro.numdocumento;
                     this.tipodocumento=this.asientomaestro.tipodocumento;
@@ -878,7 +878,7 @@ export default {
                     this.accion='editar';
                 break;
                 case 'copiar':
-                    console.log('switch copiar');
+                   // console.log('switch copiar');
                     
                     this.asientomaestro=arrayvalores['idasientomaestro'];
                     this.idasientomaestro=this.asientomaestro.idasientomaestro;
@@ -956,7 +956,7 @@ export default {
         selectConciliacion(idcuenta){
             let me=this;
             var url= '/con_conciliacion/selectconciliacion?idcuenta='+idcuenta;
-            console.log(url);
+            //console.log(url);
             
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
@@ -1011,7 +1011,7 @@ export default {
                 var optdocumento='';
                 if(tipo=='editar')
     	        {
-                    console.log(tipo);
+                    //console.log(tipo);
                     for (let index = 0; index < respuesta.asientodetalles.length; index++) {
                         const element = respuesta.asientodetalles[index];
                         //console.log(element.nomcuenta);
@@ -1055,7 +1055,7 @@ export default {
                 else {
                     if(tipo=='copiar')
                     {
-                        console.log(tipo);
+                        //console.log(tipo);
                         
                         for (let index = 0; index < respuesta.asientodetalles.length; index++) {
                             const element = respuesta.asientodetalles[index];
@@ -1171,7 +1171,7 @@ export default {
         selectDocumento(){
             let me=this;
             var url= '/par_documento/selectDocumento?idmodulo='+this.idmodulo;
-            console.log(url);
+            //console.log(url);
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
                 me.arrayDocumento = respuesta.documentos;
@@ -1442,7 +1442,7 @@ export default {
                     me.reslote=element.lote;
                 });
                 
-                console.log(me.loteverificacion);
+               // console.log(me.loteverificacion);
                 me.sumar13();
                 
             })
@@ -1540,7 +1540,7 @@ export default {
             var url= '/con_librocompras/verificarfactura?idasientomaestro='+idasientomaestro;
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
-                console.log(response);
+               // console.log(response);
                 
                 
                 if(respuesta.success)
