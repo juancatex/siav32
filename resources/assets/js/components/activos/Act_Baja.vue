@@ -60,7 +60,7 @@ export default {
 
         listaBajas(){
             let me=this;
-            var url='act_activo/listaBajas';
+            var url='/act_activo/listaBajas';
             axios.get(url).then(function(response){
                 me.arrayActivos=response.data.activos;
             })
