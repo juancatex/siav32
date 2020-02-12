@@ -119,11 +119,11 @@
                                 <td v-text="librocompras.username"></td>
                                 <td v-text="librocompras.importe+' Bs.'" style="text-align:right"></td>
                                 <td v-if="filialselected==0" v-text="librocompras.sigla"></td>
-                                <td><template v-if="librocompras.lote && librocompras.idasientomaestro && librocompras.validadoconta">
+                                <td><template v-if="librocompras.estado==1">
                                         <span class="badge badge-success">Validado</span>
                                     </template>
-                                    <template v-if="librocompras.lote && librocompras.idasientomaestro && !librocompras.validadoconta">
-                                        <span class="badge badge-warning">No Validado</span>
+                                    <template v-if="librocompras.estado==5">
+                                        <span class="badge badge-warning">Comprobante borrador</span>
                                     </template>
                                     <template v-if="librocompras.idasientomaestro==null && librocompras.lote==null">
                                         <span class="badge badge-danger">Sin Comprobante</span>

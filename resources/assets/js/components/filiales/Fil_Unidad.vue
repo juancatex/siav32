@@ -14,17 +14,19 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="vervigente"> Ver: &nbsp;
-                    <input type="radio" name="estado" id="r1" @click="listaUnidades(1)">Vigentes &nbsp;
-                    <input type="radio" name="estado" id="r0" @click="listaUnidades(0)">Inactivas
+                <div class="text-right" style="padding-bottom:10px">
+                    <div class="vervigente"> Ver: &nbsp;
+                        <input type="radio" name="estado" id="r1" @click="listaUnidades(1)">Vigentes &nbsp;
+                        <input type="radio" name="estado" id="r0" @click="listaUnidades(0)">Inactivas
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead class="tcabecera">
                             <tr>
-                                <th><span class="badge badge-success" v-text="arrayUnidades.length+' items'"></span></th>
-                                <th>Código</th>
-                                <th>Abrev</th>
+                                <th align="center"><span class="badge badge-success" v-text="arrayUnidades.length+' items'"></span></th>
+                                <th align="center">Código</th>
+                                <th align="center">Abrev</th>
                                 <th>Nombre Unidad</th>
                                 <th>Cargo Relacionado</th>
                             </tr>
@@ -61,25 +63,31 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
-                            Código (nivel jerárquico) <span class="txtasterisco"></span>
-                            <input type="text" class="form-control text-center" maxlength="2" v-model="codunidad"
-                                @keyup="valUnidad()" placeholder="(dos dígitos)">
+                            Código (nivel jerárquico): <span class="txtasterisco"></span>
+                            <input type="text" class="form-control text-center" v-model="codunidad"
+                                maxlength="2" placeholder="(dos dígitos)"
+                                name="cod" :class="{'invalido':errors.has('cod')}" v-validate="'required|numeric'">
+                            <p v-if="errors.has('cod')" class="txtvalidador">Dato requerido. Debe ser numérico.</p>
                         </div>
                         <div class="col-md-6">
                             Abreviación <span class="txtasterisco"></span>
-                            <input type="text" class="form-control text-center" maxlength="4" v-model="abrev" 
-                                @keyup="valUnidad()" placeholder="(hasta cuatro letras)">
+                            <input type="text" class="form-control text-center" v-model="abrev"
+                                maxlength="4" placeholder="(hasta cuatro letras)"  
+                                name="abr" :class="{'invalido':errors.has('abr')}" v-validate="'required|alpha'">
+                            <p v-if="errors.has('abr')" class="txtvalidador">Dato requerido. Hasta 4 letras.</p>
                         </div>
                     </div>
                     <br>Nombre de la Unidad: <span class="txtasterisco"></span>
-                    <input type="text" class="form-control" v-model="nomunidad" @keyup="valUnidad()">
+                    <input type="text" class="form-control" v-model="nomunidad" 
+                        name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required'" >
+                    <p v-if="errors.has('nom')" class="txtvalidador">Dato requerido</p>                        
                     <br>Nombre del Cargo:
-                    <input type="text" class="form-control" v-model="nomcargo" @keyup="valUnidad()">
-                    <div class="txtvalidador text-right">* Datos obligatorios</div>
+                    <input type="text" class="form-control" v-model="nomcargo">
+                    <div class="txtobligatorio text-right"></div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="modalUnidad=0">Cerrar</button>
-                    <button class="btn btn-primary" :disabled="!completo" @click="accion==1?storeUnidad():updateUnidad()">
+                    <button class="btn btn-primary" @click="validarUnidad()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -91,7 +99,7 @@
 <script>
 export default {
     data(){ return {
-        modalUnidad:0, accion:1, completo:0, 
+        modalUnidad:0, accion:1, 
         arrayUnidades:[], idunidad:'', codunidad:'', 
         nomunidad:'', nomcargo:'', abrev:'',
     }},
@@ -106,17 +114,17 @@ export default {
 
         nuevaUnidad(){
             this.modalUnidad=1;
-            this.completo=0;
             this.accion=1;
             this.codunidad='';
             this.nomunidad='';
             this.nomcargo='';
             this.abrev='';
+            this.$validator.reset();
         },
 
         editarUnidad(unidad){
+            window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalUnidad=1;
-            this.completo=1;
             this.accion=2;
             this.idunidad=unidad.idunidad;
             this.codunidad=unidad.codunidad;
@@ -125,10 +133,11 @@ export default {
             this.abrev=unidad.abrev;
         },
 
-        valUnidad(){
-            this.completo=0;
-            if((this.nomunidad)&&(this.nomcargo)&&(this.codunidad)&&(this.abrev))
-                this.completo=1;
+        validarUnidad(){
+            this.$validator.validateAll().then(result => {
+                if (!result) { swal('Datos inválidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeUnidad():this.updateUnidad();
+            });
         },
 
         storeUnidad(){
@@ -141,7 +150,7 @@ export default {
                 'codunidad':this.codunidad,
                 'abrev':this.abrev.toUpperCase(),
                 'nomunidad':this.nomunidad.toUpperCase(),
-                'nomcargo':this.nomcargo.toUpperCase(),
+                'nomcargo':this.nomcargo?this.nomcargo.toUpperCase():'',
             }).then(response=>{
                 swal('Unidad creada correctamente','','success');
                 this.modalUnidad=0;
@@ -154,7 +163,7 @@ export default {
                 'idunidad':this.idunidad,
                 'abrev':this.abrev.toUpperCase(),
                 'nomunidad':this.nomunidad.toUpperCase(),
-                'nomcargo':this.nomcargo.toUpperCase(),
+                'nomcargo':this.nomcargo?this.nomcargo.toUpperCase():'',
             }).then(response=>{
                 swal('Datos actualizados','','success');
                 this.modalUnidad=0;

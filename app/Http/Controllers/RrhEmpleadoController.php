@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Rrh_Empleado;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use App\Rrh_Empleado;
 use App\Socio;
 
 class RrhEmpleadoController extends Controller
@@ -14,9 +13,11 @@ class RrhEmpleadoController extends Controller
     public function listaEmpleados(Request $request)
     {
         $empleados=Rrh_Empleado::
-        select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','telcelular',
-        'foto','codbiom','rrh__empleados.activo')
-        ->join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento');
+        select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','rrh__empleados.telcelular',
+        'foto','codbiom','rrh__empleados.activo','nommunicipio as filial')
+        ->join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento')
+        ->join('fil__filials','fil__filials.idfilial','rrh__empleados.idfilial')
+        ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio');
         if($request->buscado)
         {
             if(is_numeric($request->buscado)) $empleados=$empleados->where('ci','like',$request->buscado.'%');
@@ -24,15 +25,11 @@ class RrhEmpleadoController extends Controller
                 ->orWhere('amaterno','like','%'.$request->buscado.'%')
                 ->orWhere('nombre','like','%'.$request->buscado.'%');
         }       
-        if($request->sede=='lpz') $empleados->where('idfilial',1);
-        if($request->sede=='int') $empleados->where('idfilial','>',1);
+        if($request->sedelp=='1') $empleados->where('rrh__empleados.idfilial',1);
+        if($request->sedelp!='1') $empleados->where('rrh__empleados.idfilial','>',1);
         $empleados->where('rrh__empleados.activo',$request->activo);
-
         $empleados->orderBy('apaterno')->orderBy('amaterno');
-        
-
-
-        return ['empleados'=>$empleados->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['empleados'=>$empleados->get(),'currfecha'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function verEmpleado(Request $request)
@@ -105,6 +102,8 @@ class RrhEmpleadoController extends Controller
         $empleado->idbanco=$request->idbanco;
         $empleado->nrcuenta=$request->nrcuenta;
         $empleado->codbiom=$request->codbiom;
+        $empleado->fecharetiro=$request->fecharetiro;
+        $empleado->obs=$request->obs;
         $empleado->save();
     }
 

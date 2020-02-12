@@ -358,7 +358,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/act_activo/storeActivo','ActActivoController@storeActivo');  //C
     Route::get ('/act_activo/listaActivos','ActActivoController@listaActivos');//R 
-    //Route::get ('/act_activo/verActivo','ActActivoController@verActivo');      //R 
+    Route::get ('/act_activo/verActivo','ActActivoController@verActivo');      //R 
+    Route::get ('/act_motivo/listaMotivos','ActMotivoController@listaMotivos');   //R
     Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U 
     Route::put ('/act_activo/switchActivo','ActActivoController@switchActivo');//D 
     

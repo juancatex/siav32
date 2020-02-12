@@ -17,10 +17,10 @@ class CreateActActivosTable extends Migration
             $table->increments('idactivo');
             $table->string('codactivo',20);
             $table->integer('idfilial');
-            $table->integer('idoficina');
+            $table->integer('idambiente');
             $table->integer('idgrupo');
             $table->integer('idauxiliar');
-            $table->string('descripcion',100)->nullable();
+            $table->string('descripcion',150)->nullable();
             $table->string('marca',20)->nullable();
             $table->string('serie',20)->nullable();
             $table->string('imagen',20)->nullable();

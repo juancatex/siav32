@@ -14,20 +14,24 @@
             </div>
         </div>
         <div class="card-body ">
-            <div class="vervigente">Ver: &nbsp;
-                <input type="radio" name="estado" id="r1" @click="listaDirectivos(regFilial.idfilial,1)">Vigentes &nbsp;
-                <input type="radio" name="estado" id="r0" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
-            </div>
+            <div class="text-right" style="padding-bottom:10px">
+                <div class="vervigente">Ver: &nbsp;
+                    <input type="radio" name="estado" id="r1" @click="listaDirectivos(regFilial.idfilial,1)">Vigentes &nbsp;
+                    <input type="radio" name="estado" id="r0" @click="listaDirectivos(regFilial.idfilial,0)">Inactivos
+                </div>
+                <button class="btn btn-success btn-sm icon-printer" title="Vista de Impresión" style="margin-left:10px"
+                    @click="reporteDirectivos(regFilial.idfilial)"></button>
+            </div>                
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                     <thead class="tcabecera">
                         <tr>
-                            <th><span class="badge badge-success" v-text="arrayDirectivos.length+' items'"></span></th>
+                            <th align="center"><span class="badge badge-success" v-text="arrayDirectivos.length+' items'"></span></th>
                             <th>Cargo</th>
                             <th>Nombre</th>
-                            <th>Fuerza</th>
-                            <th>Periodo</th>
-                            <th>Celular</th>
+                            <th align="center">Fuerza</th>
+                            <th align="center">Periodo</th>
+                            <th align="center">Celular</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,10 +77,12 @@
                 </div>
                 <div class="modal-body">
                     Cargo: <span class="txtasterisco"></span>
-                    <select class="form-control" v-model="idunidad">
+                    <select class="form-control" v-model="idunidad"
+                        name="car" :class="{'invalido':errors.has('car')}" v-validate="'required'">
                         <option v-for="unidad in arrayUnidades" :key="unidad.id"
                             :value="unidad.idunidad" v-text="unidad.nomcargo"></option>
                     </select>
+                    <p v-if="errors.has('car')" class="txtvalidador">Seleccione un Cargo</p>
                     <br>Socio: <span class="txtasterisco"></span> 
                     <!-- <autocomplete :idsocio="idsocio" edit="1" :accion="accion" @encontrado="verIDsocio($event)"></autocomplete>  -->
                     <Ajaxselect v-if="clearSelected"
@@ -101,11 +107,11 @@
                             <input type="date" class="form-control" v-model="fechafin">
                         </div>
                     </div>
-                    <div class="txtvalidador text-right">* Campos obligatorios</div>
+                    <div class="txtobligatorio text-center"></div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="clearSelected=0;modalDirectivo=0">Cerrar</button>
-                    <button class="btn btn-primary" @click="accion==1?storeDirectivo():updateDirectivo()">
+                    <button class="btn btn-primary" @click="validarDirectivo()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -116,12 +122,13 @@
 
 <script>
 import * as jsfechas from '../../fechas.js';
+import * as reporte from '../../functions';
 
 export default {
     props:['regFilial'],
 
     data(){ return{
-        modalDirectivo:0, accion:1, jsfechas:'', completo:'',  clearSelected:1,
+        modalDirectivo:0, accion:1, jsfechas:'', ipbirt:'', clearSelected:1,
         arrayFiliales:[], arrayDirectivos:[], arrayUnidades:[], 
         iddirectivo:'', idunidad:'', idsocio:'', fechaini:'', fechafin:'', telcelular:'',
     }},
@@ -137,6 +144,7 @@ export default {
             var url='/fil_directivo/listaDirectivos?idfilial='+idfilial+'&activo='+activo;
             axios.get(url).then(response=>{
                 this.arrayDirectivos=response.data.directivos;
+                this.ipbirt=response.data.ipbirt;
             });
         },
 
@@ -147,22 +155,20 @@ export default {
             });
         },
 
-        nuevoDirectivo(){           this.clearSelected=1;
-            
+        nuevoDirectivo(){                  this.clearSelected=1;
             this.modalDirectivo=1;
             this.accion=1;
-            this.completo=0;
             this.listaUnidades();
             this.idunidad='';
             this.idsocio='';
             this.fechaini='';
             this.fechafin='';
+            this.$validator.reset();
         },
 
-        editarDirectivo(directivo){           this.clearSelected=0; setTimeout(this.tiempo, 200);
+        editarDirectivo(directivo){        this.clearSelected=0; setTimeout(this.tiempo, 200);
             this.modalDirectivo=1;
             this.accion=2;
-            this.completo=1;
             this.listaUnidades();
             this.iddirectivo=directivo.iddirectivo;
             this.idunidad=directivo.idunidad;
@@ -171,10 +177,11 @@ export default {
             this.fechafin=directivo.fechafin; 
         }, 
 
-        valDirectivo(){
-            this.completo=0;
-            if((this.idunidad)&&(this.idsocio)&&(this.fechaini)&&(this.fechafin))
-                this.completo=1;
+        validarDirectivo(){
+            this.$validator.validateAll().then(result=>{
+                if(!result) { swal('Datos inválidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeDirectivo():this.updateDirectivo();
+            });
         },
 
         storeDirectivo(){
@@ -228,7 +235,17 @@ export default {
                 swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
                 this.listaDirectivos(this.regFilial.idfilial,activo);
             });
-        }       
+        },
+
+        reporteDirectivos(idfilial){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/filiales');
+            url.push('/fil_directivos.rptdesign'); //archivo
+            url.push('&idfilial='+idfilial); 
+            url.push('&__format=pdf'); //formato
+            reporte.viewPDF(url.join(''),'Directivos');            
+        }
 
     },
 
