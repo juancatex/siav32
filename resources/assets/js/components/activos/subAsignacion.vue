@@ -194,7 +194,7 @@ export default {
         },
 
         validarAsignacion(){
-            this.$validator.validateAll().theen(result=>{
+            this.$validator.validateAll().then(result=>{
                 if(!result){ swal('Datos inválidos','Revise los errores','success'); return; }
                 this.accion==1?this.storeAsignacion():this.updateAsignacion();
             });

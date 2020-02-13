@@ -19,7 +19,7 @@
                             <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
                                 <a href="#" class="dropdown-item" v-for="grupo in arrayGrupos" 
                                 :key="grupo.id" v-text="grupo.nomgrupo" 
-                                @click="listaAuxiliares(grupo.idgrupo)"></a>
+                                @click="listaAuxiliares(grupo.idgrupo,1)"></a>
                             </div>
                         </div>
                         <button class="btn btn-primary" style="margin-top:0px" 
@@ -30,11 +30,11 @@
             <div class="card-body">
                 <div class="text-right" style="padding-bottom:10px">
                     <div class="vervigente">Ver: &nbsp;
-                        <input type="radio" name="estado" id="r1" @click="listaAuxiliares(this.idgrupo,1)">Vigentes &nbsp;
-                        <input type="radio" name="estado" id="r0" @click="listaAuxiliares(this.idgrupo,0)">Inactivos
+                        <input type="radio" name="estado" id="r1" @click="listaAuxiliares(idgrupo,1)">Vigentes &nbsp;
+                        <input type="radio" name="estado" id="r0" @click="listaAuxiliares(idgrupo,0)">Inactivos
                     </div>
                     <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
-                        @click="reporteAuxiliales(this.idgrupo)"></button>
+                        @click="reporteAuxiliares(idgrupo)"></button>
                 </div>                
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
@@ -85,11 +85,13 @@
                         </div>
                     </div>                                
                     Descripción: <span class="txtasterisco"></span>
-                    <input type="text" class="form-control" v-model="nomauxiliar">
+                    <input type="text" class="form-control" v-model="nomauxiliar"
+                        name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required'">
+                    <p class="txtvalidador" v-if="errors.has('nom')">Dato requerido</p>
                 </div>
                 <div class="modal-footer">                                                            
                     <button class="btn btn-secondary" @click="modalAuxiliar=0">Cancelar</button>
-                    <button class="btn btn-primary" @click="accion==1?storeAuxiliar():updateAuxiliar()">
+                    <button class="btn btn-primary" @click="validarAuxiliar()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -100,21 +102,24 @@
 </template>
 
 <script>
+import * as reporte from '../../functions';
 
 export default {
     data(){ return {
-        modalAuxiliar:0, accion:1, 
+        modalAuxiliar:0, accion:1, ipbirt:'',
         arrayGrupos:[], arrayAuxiliares:[], regGrupo:[],
         idgrupo:2, codcuenta:'', idauxiliar:'', codauxiliar:'', nomauxiliar:'', 
     }},
 
     methods:{
-        listaAuxiliares(idgrupo){
+        listaAuxiliares(idgrupo,activo){
+            $('#r'+activo).prop('checked',true);
             if(this.arrayGrupos.length) this.verGrupo(idgrupo);
-            var url='/act_auxiliar/listaAuxiliares?idgrupo='+idgrupo+'?activo=1';
+            var url='/act_auxiliar/listaAuxiliares?idgrupo='+idgrupo+'&activo='+activo;
             axios.get(url).then(response=>{
                 this.arrayAuxiliares=response.data.auxiliares;
-            })
+                this.ipbirt=response.data.ipbirt;
+            });
         },
 
         listaGrupos(){
@@ -145,15 +150,24 @@ export default {
             this.generarCodigo();
             this.idgrupo=this.regGrupo.idgrupo;
             this.nomauxiliar='';
+            this.$validator.reset();
         },
 
         editarAuxiliar(auxiliar){
+            window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalAuxiliar=1;
             this.accion=2;
             this.idauxiliar=auxiliar.idauxiliar;
             this.codauxiliar=auxiliar.codauxiliar;
             this.idgrupo=auxiliar.idgrupo;
             this.nomauxiliar=auxiliar.nomauxiliar;
+        },
+
+        validarAuxiliar(){
+            this.$validator.validateAll().then(result=>{
+                if(!result){ swal('Datos inválidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeAuxiliar():this.updateAuxiliar();
+            });
         },
 
         storeAuxiliar(){
@@ -207,6 +221,16 @@ export default {
                 swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
                 this.listaAuxiliares(this.idgrupo,activo);
             });
+        },
+
+        reporteAuxiliares(idgrupo){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/activos');
+            url.push('/act_auxiliares.rptdesign'); 
+            url.push('&__format=pdf'); 
+            url.push('&idgrupo='+idgrupo); 
+            reporte.viewPDF(url.join(''),'Cuentas Auxiliares');
         },
     },
 

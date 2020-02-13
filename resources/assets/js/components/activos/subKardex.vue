@@ -8,20 +8,18 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="tfila">
-                                <div class="tcelda titcampo nowrap">Cuenta Contable:</div>
-                                <div class="tcelda" v-text="regActivo.nomcuenta"></div>
+                                <div class="tcelda titcampo nowrap">Grupo Contable:</div>
+                                <div class="tcelda" v-text="regActivo.nomgrupo"></div>
                             </div>
                             <div class="tfila">
                                 <div class="tcelda titcampo">Auxiliar:</div>
                                 <div class="tcelda" v-text="regActivo.nomauxiliar"></div>
                             </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Descripción:</div>
-                                <div class="tcelda" v-text="regActivo.descripcion"></div>
-                            </div>
-                            <div class="tfila" v-if="regActivo.obs">
-                                <div class="tcelda titcampo">Observaciones:</div>
-                                <div class="tcelda" v-text="regActivo.obs"></div>
+                            <span class="titcampo">Descripción:</span><br>
+                            <span v-text="regActivo.descripcion"></span>
+                            <div v-if="regActivo.obs"><br>
+                                <span class="titcampo">Observaciones:</span><br>
+                                <span v-text="regActivo.obs"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -86,7 +84,8 @@
         <div class="card-body table-responsive">
             <div class="row">
                 <div class="col-md-2 nowrap">
-                    <span class="titcampo">Compra:</span><span v-text="(regActivo.fechaingreso)"> </span> 
+                    <span class="titcampo">Compra:</span>
+                    <span v-text="regActivo.fechaingreso?jsfechas.fechames(regActivo.fechaingreso):''"> </span> 
                 </div>
                 <div class="col-md-2">
                     <span class="titcampo">UFV:</span><span v-text="regActivo.ufvini"></span>
@@ -153,7 +152,7 @@
                 <tbody>
                     <tr align="center">
                         <td><input type="date" class="form-control"  v-model="fechahoy" 
-                            @change="depreciacionActual(regActivo,fechahoy)"></td>
+                            @change="depreciacionActual(idactivo,fechahoy)"></td>
                         <td v-text="regDepreciacion.ufvini"></td>
                         <td v-text="regDepreciacion.ufvfin"></td>
                         <td v-text="regDepreciacion.consumido"></td>
@@ -176,22 +175,26 @@ import * as jsfechas from '../../fechas.js';
 import * as jsfunc from '../../funciones.js';
 
 export default {
-    props:['regActivo'],
+    props:['idactivo','currfecha'],
 
     data(){ return {
-        jsfechas:'', jsfunc:'', ipbirt:'',
-        arrayDepreciaciones:[], regDepreciacion:[],
-        fechahoy:'', arrayUfvini:[], arrayUfvfin:[],
+        jsfechas:'', jsfunc:'', ipbirt:'', fechahoy:'',
+        arrayDepreciaciones:[], regDepreciacion:[], regActivo:[],
+        arrayUfvini:[], arrayUfvfin:[],
     }},
 
     methods:{
-        async depreciacionAnual(activo){
-            let response=await axios.get('/act_ufv/ufvGestion?criterio=ini');
+        async depreciacionAnual(idactivo){
+            var url='/act_activo/verActivo?idactivo='+idactivo;
+            let response = await axios.get(url);
+            this.regActivo=response.data.activo[0];
+            response=await axios.get('/act_ufv/ufvGestion?criterio=ini');
             this.arrayUfvini=response.data.ufvgestion;
             response=await axios.get('/act_ufv/ufvGestion?criterio=fin');
             this.arrayUfvfin=response.data.ufvgestion;
             this.ipbirt=response.data.ipbirt;
             this.arrayDepreciaciones=[];
+            var activo=this.regActivo;    
             var gesini=activo.fechaingreso.substr(0,4)*1;
             var gesfin=activo.currfecha.substr(0,4)*1;
             var depranual=(activo.costo/activo.vida);
@@ -220,9 +223,12 @@ export default {
         },
         
 
-        async depreciacionActual(activo,fecha){
-            var url='/act_ufv/verUfv?fecha='+activo.fechaingreso;
+        async depreciacionActual(idactivo,fecha){
+            var url='/act_activo/verActivo?idactivo='+idactivo;
             let response=await axios.get(url);
+            var activo=response.data.activo[0];
+            var url='/act_ufv/verUfv?fecha='+activo.fechaingreso;
+            response=await axios.get(url);
             this.regDepreciacion.ufvini=response.data.ufvfecha.valor;
             url='/act_ufv/verUfv?fecha='+fecha; 
             response=await axios.get(url);
@@ -242,8 +248,7 @@ export default {
             var url=[];
             url.push('http://'+this.ipbirt+':8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
-            //url.push('/act_kardex.rptdesign'); //archivo
-            url.push('/depr_activo.rptdesign'); //archivo
+            url.push('/depr_activo.rptdesign');
             url.push('&__format=pdf'); 
             url.push('&idactivo='+idactivo); 
             url.push('&ip='+this.ipbirt);//pa la foto
@@ -268,14 +273,9 @@ export default {
             return arr.reverse().join('');
         },
 
-
-
-
         tiempotransc(fini,ffin){
-            //var diasmes=[31,28,31,30,31,30,31,31,30,31,30,31];
             var aa=ffin.substr(0,4)-fini.substr(0,4);
             var mm=ffin.substr(5,2)-fini.substr(5,2);
-
             if(mm<0) {mm=12+mm; aa--;}
             //var dd=ffin.substr(8,2)-fini.substr(8,2);
             //if(dd<0) {dd=30+dd; mm--;}
@@ -295,9 +295,9 @@ export default {
     mounted(){
         this.jsfechas=jsfechas;
         this.jsfunc=jsfunc;
-        this.fechahoy=this.regActivo.currfecha;
-        this.depreciacionAnual(this.regActivo);
-        this.depreciacionActual(this.regActivo,this.fechahoy);
+        this.fechahoy=this.currfecha;
+        this.depreciacionAnual(this.idactivo);
+        this.depreciacionActual(this.idactivo,this.currfecha);
     }
 }
 </script>
