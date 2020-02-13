@@ -356,19 +356,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/act_auxiliar/updateAuxiliar','ActAuxiliarController@updateAuxiliar');  //U
     Route::put ('/act_auxiliar/switchAuxiliar','ActAuxiliarController@switchAuxiliar');  //D
 
-    Route::post('/act_activo/storeActivo','ActActivoController@storeActivo');  //C
-    Route::get ('/act_activo/listaActivos','ActActivoController@listaActivos');//R 
-    Route::get ('/act_activo/verActivo','ActActivoController@verActivo');      //R 
-    Route::get ('/act_motivo/listaMotivos','ActMotivoController@listaMotivos');   //R
-    Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U 
-    Route::put ('/act_activo/switchActivo','ActActivoController@switchActivo');//D 
-    
+    Route::post('/act_activo/storeActivo','ActActivoController@storeActivo');   //C
+    Route::get ('/act_activo/listaActivos','ActActivoController@listaActivos'); //R 
+    Route::get ('/act_activo/verActivo','ActActivoController@verActivo');       //R    
+    Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U
     Route::put ('/act_activo/storeBaja','ActActivoController@storeBaja');    //baja
     Route::get ('/act_activo/listaBajas','ActActivoController@listaBajas');  //baja 
-    Route::put ('/act_activo/restoreBaja','ActActivoController@restoreBaja');//baja 
 
     Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion'); 
-    Route::get ('/act_activo/reportes','ActActivoController@reportes');
 
     Route::post('/act_asignacion/storeAsignacion','ActAsignacionController@storeAsignacion');     //C
     Route::get ('/act_asignacion/listaAsignaciones','ActAsignacionController@listaAsignaciones'); //R

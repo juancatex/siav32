@@ -20,14 +20,14 @@ class ActActivoController extends Controller
         if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         if($request->activo) $activos->where('act__activos.activo',1);
         if($request->idactivo) $activos=Act_Activo::where('act__activos.idactivo',$request->idactivo);   
-        return ['activos'=>$activos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['activos'=>$activos->get(),'fechahoy'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function verActivo(Request $request)
     {        
-        $activo=Act_Activo::selectRaw("act__activos.*,'curdate() as currfecha',valor as ufvini,
-        codfilial,nommunicipio,codambiente,nomambiente,codgrupo,nomgrupo,
-        vida,'round(100/vida,1) as coeficiente',codauxiliar,nomauxiliar")
+        $activo=Act_Activo::selectRaw("act__activos.*,curdate() as currfecha, fechaingreso,
+        codfilial,nommunicipio,codambiente,nomambiente,codgrupo,nomgrupo,valor as ufvini,
+        vida,round(100/vida,1) as coeficiente,codauxiliar,nomauxiliar")  
         ->join('fil__filials','fil__filials.idfilial','act__activos.idfilial')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
         ->join('act__ambientes','act__ambientes.idambiente','act__activos.idambiente')
@@ -35,37 +35,21 @@ class ActActivoController extends Controller
         ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
         ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso')
         //->join('act__asignacions','act__asignacions.idactivo','=','act__activos.idactivo')
-        ->where('act__activos.idactivo',$request->idactivo);
-        return ['activo'=>$activo->get()];
+        ->where('act__activos.idactivo',$request->idactivo)->get();
+        
+        return ['activo'=>$activo];
     }
 
-    /*
+    
     public function listaBajas(Request $request)
     {
         $activos=Act_Activo::select('act__activos.*','nommotivo','nomauxiliar')
-        ->join('act__motivos','act__motivos.idmotivo','=','act__activos.idmotivo')
-        ->join('con__cuentas','con__cuentas.idcuenta','=','act__activos.idcuenta')
-        ->join('act__auxiliars','act__auxiliars.idauxiliar','=','act__activos.idauxiliar')
-        ->where('act__activos.baja','=',1)->orderBy('codactivo')->get();
-        return ['activos'=>$activos];
+        ->join('act__motivos','act__motivos.idmotivo','act__activos.idmotivo')
+        ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
+        ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
+        ->where('act__activos.fechabaja','>',1)->orderBy('codactivo')->get();
+        return ['activos'=>$activos,'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
-    */
-
-    /*
-    public function resumenGrupo(Request $request) //idcuenta idfilial
-    {   
-        //$sql="select valor from act__ufvs where fecha='".$request->fecha."'";
-        $ufvfin=DB::select("select valor from act__ufvs where fecha='".$request->fecha."'");
-        $dias=DB::raw('datediff(curdate(),fechaingreso) as dias');
-        $increm=DB::raw('round((('.$ufvfin[0]->valor.'/valor)-1)*costo,2) as increm');
-        $deprec=DB::raw('round((costo/(vida*365))*datediff(curdate(),fechaingreso),2) as deprec');
-        $resumen=Act_Activo::select('costo','fechaingreso','vida','valor as ufvini',$dias,$increm,$deprec)
-        ->join('act__ufvs','act__ufvs.fecha','=','act__activos.fechaingreso')
-        ->join('con__cuentas','con__cuentas.idcuenta','=','act__activos.idcuenta')
-        ->where('con__cuentas.idcuenta','=',$request->idcuenta)->get();
-        return ['resumen'=>$resumen];
-    }
-    */
 
     public function storeActivo(Request $request)
     {
@@ -80,7 +64,6 @@ class ActActivoController extends Controller
         $activo->serie=$request->serie;
         $activo->fechaingreso=$request->fechaingreso;
         $activo->costo=$request->costo;
-        //$activo->residual=$request->residual;
         $activo->obs=$request->obs;
         $activo->save();
     }
@@ -93,15 +76,7 @@ class ActActivoController extends Controller
         $activo->serie=$request->serie;
         $activo->fechaingreso=$request->fechaingreso;
         $activo->costo=$request->costo;
-        //$activo->residual=$request->residual;        
         $activo->obs=$request->obs;
-        $activo->save();
-    }
-
-    public function switchActivo(Request $request)
-    {
-        $activo=Act_Activo::findOrFail($request->idactivo);
-        $activo->activo=abs($activo->activo-1);
         $activo->save();
     }
 
@@ -109,7 +84,6 @@ class ActActivoController extends Controller
     {
         $activo=Act_Activo::findOrFail($request->idactivo);
         $activo->activo=0;
-        $activo->baja=1;
         $activo->fechabaja=$request->fechabaja;
         $activo->nrorden=$request->nrorden;
         $activo->idmotivo=$request->idmotivo;
@@ -170,20 +144,6 @@ class ActActivoController extends Controller
 */
         $sql="select * from act__depreciacions";
         return ['depreciaciones'=>DB::select($sql)];
-    }
-
-
-
-
-
-
-
-
-
-    public function reportes(Request $request)
-    {   
-        if (!$request->ajax()) return redirect('/'); 
-        return config('app.rutaActivos');
     }
 
 }

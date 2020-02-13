@@ -15,8 +15,7 @@ class ActGrupoController extends Controller
         (select nomcuenta from con__cuentas where idcuenta=idcuentaconta) as cuentaconta,
         (select nomcuenta from con__cuentas where idcuenta=idcuentadepre) as cuentadepre,
         (select nomcuenta from con__cuentas where idcuenta=idcuentagasto) as cuentagasto
-        from act__grupos";
-        if($request->activo) $sql.=" where activo=1";
+        from act__grupos where activo=$request->activo";
         return ['grupos'=>DB::select($sql),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 

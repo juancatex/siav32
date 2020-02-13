@@ -11,6 +11,19 @@
 
     <div class="container-fluid">
         <div class="card">
+            <div class="card-header">
+            <div class="row">
+                <div class="col-md-6 titcard">
+                    <div class="tablatit">
+                        <div class="tcelda">Cálculo de Depreciación</div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button class="btn btn-success icon-printer" style="margin-top:0px" title="Vista de impresión" 
+                        @click="reporteBajatotal()"></button>
+                </div>
+            </div>                
+            </div>
             <div class="card-body">
                 <table class="table table-sm table-striped">
                     <thead>
@@ -27,7 +40,8 @@
                     <tbody>
                         <tr v-for="activo in arrayActivos" :key="activo.idactivo">
                             <td nowrap>
-                                <button class="btn btn-warning btn-sm icon-docs" title="Informe de Baja"></button>
+                                <button class="btn btn-warning btn-sm icon-printer" title="Informe de Baja"
+                                    @click="reporteBaja(activo.idactivo)"></button>
                             </td>    
                             <td v-text="activo.codactivo" align="center"></td>
                             <td v-text="activo.nomauxiliar"></td>
@@ -46,11 +60,13 @@
 
 <script>
 import * as jsfechas from '../../fechas.js';
+import * as reporte from '../../functions.js';
 
 export default {
     data(){ return {
         arrayActivos:[],
         regActivo:[],
+        ipbirt:''
     }},
 
     methods:{
@@ -59,10 +75,11 @@ export default {
         },
 
         listaBajas(){
-            let me=this;
-            var url='act_activo/listaBajas';
-            axios.get(url).then(function(response){
-                me.arrayActivos=response.data.activos;
+            var url='/act_activo/listaBajas';
+            axios.get(url).then(response=>{
+                this.arrayActivos=response.data.activos;
+                this.ipbirt=response.data.ipbirt;
+
             })
         },
 
@@ -82,15 +99,31 @@ export default {
                 }
             });
         },
-        /*
-        verActivo(idactivo){
-            url='/act_activo/verActivo?idactivo='+idactivo;
-            axios.get(url).then(function(response){
-                me.regActivo=response.data.activo;
-            });
+
+        reporteBajatotal(){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/activos');
+            url.push('/act_bajastotal.rptdesign'); //archivo
+            url.push('&__format=pdf'); 
+            url.push('&idactivo='+idactivo); 
+            url.push('&ip='+this.ipbirt);//pa la foto
+            reporte.viewPDF(url.join(''),'Baja del Activo');
         },
-        */
-    },
+
+        reporteBaja(idactivo){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/activos');
+            url.push('/act_baja.rptdesign'); //archivo
+            url.push('&__format=pdf'); 
+            url.push('&idactivo='+idactivo); 
+            url.push('&ip='+this.ipbirt);//pa la foto
+            reporte.viewPDF(url.join(''),'Baja del Activo');
+        },
+
+
+},
 
     mounted(){
         this.listaBajas();

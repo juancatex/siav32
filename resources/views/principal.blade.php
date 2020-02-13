@@ -27,6 +27,12 @@
         <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
             <span class="navbar-toggler-icon"></span>
         </button> 
+
+        <span class="ml-auto">Fecha del Sistema:<b>
+            <?php use App\Http\Controllers\AdmUserController;
+            echo AdmUserController::fecha_sistema(); ?></b>
+        </span>
+
          @yield('bodyheader') 
     </header>
     @if(Auth::check())
@@ -37,13 +43,7 @@
     @endif
     <!-- Cambios realizados por ing. Juan Carlos-->
     <footer class="app-footer">
-        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?echo date('Y')?></span>
-        <span class="ml-auto">Fecha del Sistema:  <b>
-        
-        <?php use App\Http\Controllers\AdmUserController;
-        echo AdmUserController::fecha_sistema(); ?>
-        
-        </b></span>
+        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?echo date('Y')?></span>    
         <span class="ml-auto">Desarrollado por <a href="http://www.ascinalss.org/ascinalss/index.html">Dep. Sistemas</a></span>
     </footer>  
     </div> 

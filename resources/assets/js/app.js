@@ -47,6 +47,8 @@ setvue(1, 'rrh_operacion', './components/rhumanos/Rrh_Operacion.vue');
 
 //activos fijos
 setvue(1, 'act_configuracion', './components/activos/Act_Configuracion.vue');
+setvue(1, 'act_ambiente', './components/activos/Act_Ambiente.vue');
+setvue(1, 'act_grupo', './components/activos/Act_Grupo.vue');
 setvue(1, 'act_auxiliar', './components/activos/Act_Auxiliar.vue');
 setvue(1, 'act_activo', './components/activos/Act_Activo.vue');
 setvue(1, 'act_baja', './components/activos/Act_Baja.vue');
