@@ -33,7 +33,7 @@
                                 <div class="tcelda">Filial:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idfilial" 
-                                        @change="listaOficinas(idfilial),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
+                                        @change="listaAmbientes(idfilial),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
                                         <option v-for="filial in arrayFiliales" :key="filial.idfilial"
                                             v-text="filial.nommunicipio" :value="filial.idfilial"></option>
                                     </select>
@@ -133,8 +133,6 @@
                                     @click="kardexActivo(activo)"></button>
                                 <button class="btn btn-danger btn-sm icon-fire" title="Dar de baja" 
                                     @click="bajaActivo(activo)"></button>
-                                <!-- <button class="btn btn-danger  btn-sm icon-trash" title="Desactivar activo" 
-                                    @click="estadoActivo(activo)"></button> -->
                             </td>
                             <td v-text="activo.codactivo" align="center"></td>
                             <td v-if="!idauxiliar" v-text="activo.nomauxiliar"> </td>
@@ -158,7 +156,7 @@
             </div>
         </div>
 
-        <subKardex v-if="divKardex" :regActivo="regActivo"></subKardex>
+        <subKardex v-if="divKardex" :idactivo="idactivo" :currfecha="currfecha"></subKardex>
         <subAsignacion v-if="divAsignacion" :regActivo="regActivo"></subAsignacion>
 
     </div>
@@ -379,7 +377,7 @@ import * as reporte from '../../functions.js';
 export default {
     data(){ return {
         modalActivo:'', jsfechas:'', jsfunc:'', ipbirt:'',       
-        modalBaja:0, accion:1, 
+        modalBaja:0, accion:1, currfecha:'',
         divActivos:1, divKardex:0, divAsignacion:0,
         arrayFiliales:[], arrayAmbientes:[], arrayGrupos:[], arrayAuxiliares:[], 
         arrayActivos:[], arrayEmpleados:[], arrayMotivos:[], arrayAsignaciones:[],  
@@ -400,7 +398,7 @@ export default {
         },
 
         listaAmbientes(idfilial){
-            var url='/act_ambiente/listaAmbientes?idfilial='+idfilial+'&idactivo=1&orden=nomambiente';
+            var url='/act_ambiente/listaAmbientes?idfilial='+idfilial+'&activo=1&orden=nomambiente';
             axios.get(url).then(response=>{
                 this.arrayAmbientes=response.data.ambientes;
                 this.verAmbiente(this.idambiente);
@@ -416,7 +414,7 @@ export default {
         },
 
         listaAuxiliares(idgrupo){
-            var url='/act_auxiliar/listaAuxiliares?idgrupo='+idgrupo+'&activo=1';
+            var url='/act_auxiliar/listaAuxiliares?idgrupo='+idgrupo+'&activo=1&orden=nomauxiliar';
             axios.get(url).then(response=>{
                 this.arrayAuxiliares=response.data.auxiliares;
             });
@@ -432,6 +430,7 @@ export default {
             axios.get(url).then(response=>{
                 this.arrayActivos=response.data.activos;
                 this.ipbirt=response.data.ipbirt;
+                this.currfecha=response.data.fechahoy;
             });
         },
         
@@ -495,11 +494,9 @@ export default {
         },
 
         async kardexActivo(activo){
-            var url='/act_activo/verActivo?idactivo='+activo.idactivo;
-            let response=await axios.get(url);
-            this.regActivo=response.data.activo[0];
             this.divActivos=0;
             this.divKardex=1;
+            this.idactivo=activo.idactivo;
         },
 
         async bajaActivo(activo){

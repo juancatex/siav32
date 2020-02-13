@@ -9,8 +9,9 @@ class ActAmbienteController extends Controller
 {
     public function listaAmbientes(Request $request)
     {
-        $ambientes=Act_Ambiente::select('*');
-        if($request->activo) $ambientes->where('activo',1);
+        $ambientes=Act_Ambiente::
+        where('idfilial',$request->idfilial)->where('activo',$request->activo);
+        if($request->orden) $ambientes->orderBy($request->orden);
         return ['ambientes'=>$ambientes->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 

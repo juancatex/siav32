@@ -20,7 +20,7 @@ class ActActivoController extends Controller
         if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         if($request->activo) $activos->where('act__activos.activo',1);
         if($request->idactivo) $activos=Act_Activo::where('act__activos.idactivo',$request->idactivo);   
-        return ['activos'=>$activos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['activos'=>$activos->get(),'fechahoy'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function verActivo(Request $request)
@@ -35,8 +35,9 @@ class ActActivoController extends Controller
         ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
         ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso')
         //->join('act__asignacions','act__asignacions.idactivo','=','act__activos.idactivo')
-        ->where('act__activos.idactivo',$request->idactivo);
-        return ['activo'=>$activo->get()];
+        ->where('act__activos.idactivo',$request->idactivo)->get();
+        
+        return ['activo'=>$activo];
     }
 
     

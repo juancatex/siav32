@@ -37,8 +37,8 @@ setvue(1, 'ser_establecimiento', './components/servicios/Ser_Establecimiento.vue
 setvue(1, 'ser_asignacion', './components/servicios/Ser_Asignacion.vue');
 
 //filiales
-setvue(1,'fil_unidad','./components/filiales/Fil_Unidad.vue'); 
-setvue(1,'fil_filial','./components/filiales/Fil_Filial.vue'); 
+setvue(1, 'fil_unidad', './components/filiales/Fil_Unidad.vue');
+setvue(1, 'fil_filial', './components/filiales/Fil_Filial.vue');
 
 //rrhh
 setvue(1, 'rrh_empleado', './components/rhumanos/Rrh_Empleado.vue');
@@ -47,6 +47,8 @@ setvue(1, 'rrh_operacion', './components/rhumanos/Rrh_Operacion.vue');
 
 //activos fijos
 setvue(1, 'act_configuracion', './components/activos/Act_Configuracion.vue');
+setvue(1, 'act_ambiente', './components/activos/Act_Ambiente.vue');
+setvue(1, 'act_grupo', './components/activos/Act_Grupo.vue');
 setvue(1, 'act_auxiliar', './components/activos/Act_Auxiliar.vue');
 setvue(1, 'act_activo', './components/activos/Act_Activo.vue');
 setvue(1, 'act_baja', './components/activos/Act_Baja.vue');
@@ -71,6 +73,7 @@ setvue(1, 'apo_estado', './components/Apo_Estado.vue');
 setvue(1, 'apo_aporte', './components/Apo_Aporte.vue');
 setvue(1, 'apo_debitoascii', './components/Apo_DebitoAscii.vue');
 setvue(1, 'apo_reportes', './components/Apo_Reportes.vue');
+setvue(0, 'apo_configuracion', './components/Apo_Configuracion_Perfil.vue');
 
 
 //adm
@@ -134,8 +137,10 @@ setvue(1, 'liq_acreedores', './components/cartera/Liq_acreedores.vue');
 setvue(1, 'par_cobranzaacreedor', './components/cartera/Par_cobranzaacreedor.vue');
 setvue(1, 'liq_reportes', './components/cartera/liq_reportes.vue');
 
-function setvue(e, a, s) { var r = require(`${s}`).default;
-    1 == e && DatasVues.push({ name: a, permisos: r.data().arrayPermisos }), Vue.component(a, r) }
+function setvue(e, a, s) {
+    var r = require(`${s}`).default;
+    1 == e && DatasVues.push({ name: a, permisos: r.data().arrayPermisos }), Vue.component(a, r)
+}
 
 window.vue = new Vue({
     el: "#app",

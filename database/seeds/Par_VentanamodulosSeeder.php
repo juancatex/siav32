@@ -83,10 +83,12 @@ class Par_VentanamodulosSeeder extends Seeder
 
 //activos
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Configuración','template'=>'act_configuracion']);
+        DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Grupos','template'=>'act_grupo']);
+        DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Ambientes','template'=>'act_ambiente']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Auxiliares','template'=>'act_auxiliar']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Catálogo','template'=>'act_activo']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'9','nomventanamodulo'=>'Bajas','template'=>'act_baja']);
-
+        
 //filiales
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'10','nomventanamodulo'=>'Unidades','template'=>'fil_unidad']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'10','nomventanamodulo'=>'Filiales','template'=>'fil_filial']);
