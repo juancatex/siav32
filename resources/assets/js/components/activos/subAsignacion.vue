@@ -1,88 +1,103 @@
 <template>
+<main>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="tablatit titcard">
+                        <div class="tcelda">Asignación de Responsable</div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button class="btn btn-primary" style="margin-top:0" @click="nuevaAsignacion()">Nueva Asignación</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <span class="titcampo">Título:</span>
+                    <span  v-text="regActivo.nomauxiliar"></span>
+                    <span class="titcampo">Código:</span>
+                    <span v-text="regActivo.codactivo"></span>
+                    <br>
+                    <span class="titcampo">Descripción:</span>
+                    <span v-text="regActivo.descripcion"></span>
+                </div>
+            </div>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm table-bordered">
+                    <thead class="tcabecera">
+                        <tr align="center">
+                            <th></th>
+                            <th align="left">Responsable</th>
+                            <th>F. Asignación</th>
+                            <th>Estado</th>
+                            <th>F. Devolución</th>
+                            <th>Estado</th>
+                            <th align="left">Obs.</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="asignacion in arrayAsignaciones" :key="asignacion.idasignacion" align="center">
+                            <td>
+                                <button class="btn btn-warning btn-sm icon-printer" title="Boleta de Asignación" 
+                                    @click="reporteAsignacion(asignacion)"></button>
+                                <button class="btn btn-warning btn-sm icon-pencil" @click="editarAsignacion(asignacion)" 
+                                    title="Editar/Registrar devolución"></button>
+                            </td>
+                            <td v-text="asignacion.nomresponsable" align="left"></td>
+                            <td v-text="jsfechas.fechames(asignacion.fechaini)"></td>
+                            <td v-text="arrayEstados[asignacion.estadoini]"></td>
+                            <td>
+                                <span v-if="asignacion.fechafin" v-text="jsfechas.fechames(asignacion.fechafin)"></span>
+                                <span v-else class="badge badge-success">En uso</span>
+                            </td>
+                            <td v-text="arrayEstados[asignacion.estadofin]"></td>
+                            <td v-text="asignacion.obs" align="left"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" :class="modalAsignar?'mostrar':''" >
         <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
-                    <h4 class="modal-title">Asignación del Activo</h4>
-                    <button type="button" class="close" @click="modalAsignar=0,$emit('cerrarAsignacion')">x</button>
+                    <h4 class="modal-title"><span v-text="accion==1?'Nueva':'Modificar'"></span> Asignación</h4>
+                    <button type="button" class="close" @click="modalAsignar=0">x</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-9">
-                            <span class="titcampo">Título:</span>
-                            <span  v-text="regActivo.nomauxiliar"></span>
-                            <span class="titcampo">Código:</span>
-                            <span v-text="regActivo.codactivo"></span>
-                            <br>
-                            <span class="titcampo">Descripción:</span>
-                            <span v-text="regActivo.descripcion"></span>
-                        </div>
-                        <div class="col-md-3 text-right">
-                            <button v-if="!divFormulario" class="btn btn-primary" @click="nuevaAsignacion()">Nueva Asignación</button>
-                        </div>
-                    </div>
-                    <br>
-                    <div v-if="!divFormulario" class="table-responsive">
-                        <table class="table table-striped table-sm table-bordered">
-                            <thead class="tcabecera">
-                                <tr>
-                                    <th>Responsable</th>
-                                    <th>F. Asignación</th>
-                                    <th>Estado</th>
-                                    <th>F. Devolución</th>
-                                    <th>Estado</th>
-                                    <th>Obs.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="asignacion in arrayAsignaciones" :key="asignacion.idasignacion" align="center">
-                                    <td v-text="asignacion.nomresponsable" align="left"></td>
-                                    <td v-text="jsfechas.fechames(asignacion.fechaini)"></td>
-                                    <td v-text="arrayEstados[asignacion.estadoini]"></td>
-                                    <td>
-                                        <span v-if="asignacion.fechafin" v-text="jsfechas.fechames(asignacion.fechafin)"></span>
-                                        <span v-else class="badge badge-success">En uso</span>
-                                    </td>
-                                    <td v-text="arrayEstados[asignacion.estadofin]"></td>
-                                    <td><button v-if="asignacion.obs" :title="asignacion.obs"
-                                            class="btn btn-light icon-bubble" style="font-size:18px;padding:2px"></button></td>
-                                    <td>
-                                        <!--
-                                        <button class="btn btn-sm icon-check" :class="asignacion.activo?'btn-success':'btn-light'"
-                                            title="Activar/Desactivar Asignación" @click="activarAsignacion(asignacion)"></button>
-                                            -->
-                                        <button class="btn btn-warning btn-sm icon-printer" title="Boleta de Asignación" 
-                                            @click="printAsignacion(asignacion)"></button>
-                                        <button class="btn btn-warning btn-sm icon-pencil" @click="editarAsignacion(asignacion)" 
-                                            title="Editar/Registrar devolución"></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h4  v-if="divFormulario" class="titazul">Nueva Asignación</h4>
-                    <div v-if="divFormulario" class="row">
                         <div class="col-md-4">
-                            Responsable: 
-                            <select class="form-control" v-model="idresponsable">
+                            Responsable: <span class="txtasterisco"></span> 
+                            <select class="form-control" v-model="idresponsable"
+                                name="res" :class="{'invalido':errors.has('res')}" v-validate="'required'">
                                 <option v-for="directivo in arrayDirectivos" :key="directivo.id"
                                     :value="'s'+directivo.idsocio" v-text="directivo.nomgrado+' '+directivo.nombre+' '+directivo.apaterno"></option>
                                 <option v-for="empleado in arrayEmpleados" :key="empleado.idempleado"
                                     :value="'c'+empleado.idempleado" v-text="empleado.nombre+' '+empleado.apaterno">
                                 </option> 
-                            </select> 
+                            </select>
+                            <p class="txtvalidador" v-if="errors.has('res')">Seleccione un Responsable</p>
                         </div>
-                        <div class="col-md-4" >F. Asignación:
-                            <input type="date" class="form-control" v-model="fechaini">
-                            Estado Inicial:
-                            <select v-model="estadoini" class="form-control">
+                        <div class="col-md-4" >F. Asignación: <span class="txtasterisco"></span> 
+                            <input type="date" class="form-control" v-model="fechaini"
+                                name="fini" :class="{'invalido':errors.has('fini')}" v-validate="'required'">
+                            <p class="txtvalidador" v-if="errors.has('fini')">Dato requerido</p>
+                            Estado Inicial: <span class="txtasterisco"></span> 
+                            <select v-model="estadoini" class="form-control"
+                                name="eini" :class="{'invalido':errors.has('eini')}" v-validate="'required'">
                                 <option value="1">Bueno</option>
                                 <option value="2">Regular</option>
                                 <option value="3">Malo</option>
                             </select>
+                            <p class="txtvalidador" v-if="errors.has('eini')">Seleccione un Estado</p>
                         </div>
-                        <div class="col-md-4"  >F. Devolución:
+                        <div class="col-md-4">F. Devolución:
                             <input type="date" class="form-control" v-model="fechafin">
                             Estado Devolución
                             <select v-model="estadofin" class="form-control">
@@ -97,35 +112,30 @@
                                 <input type="text" class="form-control" v-model="obs">
                         </div>
                     </div>
-
-                    
-
                 </div>
 
-                <div v-if="divFormulario" class="modal-footer">
-                    <button class="btn btn-secondary" @click="divFormulario=0">Cancelar</button>
-                    <button class="btn btn-primary" @click="accion==1?storeAsignacion():updateAsignacion()">
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @click="modalAsignar=0">Cerrar</button>
+                    <button class="btn btn-primary" @click="validarAsignacion()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
-                </div>
-                <div v-else class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalAsignar=0, $emit('cerrarAsignacion')">Cerrar</button>
-                    <button class="btn btn-primary"> Imprimir</button>
                 </div>
 
 
             </div>
         </div>
     </div>
-
+</main>
 </template>
 
 <script>
 import * as jsfechas from '../../fechas.js';
+import * as reporte from '../../functions.js';
 
 export default {
+    props:['regActivo'],
+
     data(){ return {
-        modalAsignar:'', divFormulario:0, accion:'', jsfechas:'',
-        regActivo:[], regOficina:[], 
+        modalAsignar:'', accion:'', jsfechas:'', ipbirt:'',
         arrayAsignaciones:[], arrayEmpleados:[], arrayDirectivos:[],
         idasignacion:'', idresponsable:'', tiporesponsable:'', 
         fechaini:'', fechafin:'', estadoini:'', estadofin:'', obs:'',
@@ -133,22 +143,16 @@ export default {
     }},
     
     methods:{
-        abrirModal(activo){
-            this.modalAsignar=1;
-            this.regActivo=activo;
-            this.jsfechas=jsfechas;
-            this.listaAsignaciones(activo.idactivo);
-        },
-
         listaAsignaciones(idactivo){
             var url='/act_asignacion/listaAsignaciones?idactivo='+idactivo;
             axios.get(url).then(response=>{
                 this.arrayAsignaciones=response.data.asignaciones;
+                this.ipbirt=response.data.ipbirt;
             });
         },
 
         listaEmpleados(){
-            var url='/rrh_empleado/listaEmpleados?activo=1';
+            var url='/rrh_empleado/listaEmpleados?idfilial='+this.regActivo.idfilial+'&activo=1';
             axios.get(url).then(response=>{
                 this.arrayEmpleados=response.data.empleados;
             });
@@ -162,7 +166,7 @@ export default {
         },
 
         nuevaAsignacion(){
-            this.divFormulario=1;
+            this.modalAsignar=1;
             this.accion=1;
             this.listaEmpleados();
             this.listaDirectivos();
@@ -171,11 +175,12 @@ export default {
             this.fechafin='';
             this.estadoini='';
             this.estadofin='';
-            this.obs='';            
+            this.obs='';
+            this.$validator.reset();
         },
 
         editarAsignacion(asignacion){
-            this.divFormulario=1;
+            this.modalAsignar=1;
             this.accion=2;
             this.listaEmpleados();
             this.listaDirectivos();
@@ -188,10 +193,16 @@ export default {
             this.obs=asignacion.obs;
         },
 
+        validarAsignacion(){
+            this.$validator.validateAll().theen(result=>{
+                if(!result){ swal('Datos inválidos','Revise los errores','success'); return; }
+                this.accion==1?this.storeAsignacion():this.updateAsignacion();
+            });
+        },
 
         storeAsignacion(){
             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
-                showCancelButton:false, showConfirmButton:false, closeOnConfirm: false,
+                showCancelButton:false, showConfirmButton:false, 
                 allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
                 onOpen:() => { swal.showLoading() }
             });
@@ -205,7 +216,7 @@ export default {
             }).then(response=>{
                 swal('Activo asignado','','success');
                 this.listaAsignaciones(this.regActivo.idactivo);
-                this.divFormulario=0;
+                this.modalAsignar=0;
             });
         },
 
@@ -222,7 +233,7 @@ export default {
             }).then(response=>{
                 swal('Operación correcta','Se han actualizado los datos requeridos','success');
                 this.listaAsignaciones(this.regActivo.idactivo);
-                this.divFormulario=0;
+                this.modalAsignar=0;
             });
         },
         /*
@@ -237,11 +248,23 @@ export default {
         },
         */
 
-        printAsignacion(asignacion){
-            alert('reporte pendiente');
+        reporteAsignacion(asignacion){
+            var url=[];
+            url.push('http://'+this.ipbirt+':8080');
+            url.push('/birt-viewer/frameset?__report=reportes/activos');
+            url.push('/act_asignacion.rptdesign'); //archivo
+            url.push('&__format=pdf'); 
+            url.push('&idasignacion='+asignacion.idasignacion); 
+            url.push('&ip='+this.ipbirt);//pa la foto
+            reporte.viewPDF(url.join(''),'Boleta de Asignación');
         },
 
 
+    },
+
+    mounted(){
+        this.jsfechas=jsfechas;
+        this.listaAsignaciones(this.regActivo.idactivo);
     },
 }
 </script>

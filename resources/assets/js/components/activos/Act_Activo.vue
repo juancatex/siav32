@@ -158,7 +158,7 @@
             </div>
         </div>
 
-        <subKardex v-if="divKardex" :regActivo="regActivo" :currfecha="currfecha"></subKardex>
+        <subKardex v-if="divKardex" :regActivo="regActivo"></subKardex>
         <subAsignacion v-if="divAsignacion" :regActivo="regActivo"></subAsignacion>
 
     </div>
@@ -233,13 +233,17 @@
                         </div>
                         <div class="col-md-12"><h5 class="titazul">Detalle de la compra</h5></div>
                         <div class="col-md-4">
-                            Fecha de adquisición: 
-                            <input type="date" class="form-control" v-model="fechaingreso">
+                            Fecha de adquisición: <span class="txtasterisco"></span>
+                            <input type="date" class="form-control" v-model="fechaingreso"
+                                name="adq" :class="{'invalido':errors.has('adq')}" v-validate="'required'">
+                            <p class="txtvalidador" v-if="errors.has('adq')">Dato requerido</p>
                             Costo: 
                             <div class="input-group">
-                                <input type="text" v-model="costo" class="form-control text-right">
+                                <input type="text" v-model="costo" class="form-control text-right"
+                                    name="cos" :class="{'invalido':errors.has('cos')}" v-validate="'required|decimal:2'">
                                 <div class="input-group-append"><span class="input-group-text">Bs.</span></div>
                             </div>
+                            <p class="txtvalidador" v-if="errors.has('cos')">Dato numérico requerido</p>
                         </div>
                         <div class="col-md-4">
                             Factura:
@@ -257,7 +261,7 @@
                 </div>
                 <div class="modal-footer text-center">
                     <button class="btn btn-secondary" @click="modalActivo=0">Cerrar</button>
-                    <button class="btn btn-primary" @click="accion==1?storeActivo():updateActivo()">
+                    <button class="btn btn-primary" @click="validarActivo()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -276,8 +280,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            
+                        <div class="col-md-4">
                             <h5 class="titazul">Información</h5>
                             <div class="tfila">
                                 <div class="tcelda titcampo">Código:</div>
@@ -287,10 +290,9 @@
                                 <div class="tcelda titcampo">Título:</div>
                                 <div class="tcelda" v-text="regActivo.nomauxiliar"></div>
                             </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Descripción:</div>
-                                <div class="tcelda" v-text="regActivo.descripcion"></div>
-                            </div>
+                            <div class="titcampo">Descripción:</div>
+                            <div v-text="regActivo.descripcion"></div>
+                            <br>
                             <div class="tfila">
                                 <div class="tcelda titcampo">Adquisición:</div>
                                 <div class="tcelda" v-text="(regActivo.fechaingreso)"></div>
@@ -300,11 +302,11 @@
                                 <div class="tcelda" v-text="regActivo.nommunicipio"></div>
                             </div>
                             <div class="tfila">
-                                <div class="tcelda titcampo">Oficina:</div>
+                                <div class="tcelda titcampo" style="vertical-align:top">Oficina:</div>
                                 <div class="tcelda" v-text="regActivo.nomambiente"></div>
                             </div>
                             <div class="tfila">
-                                <div class="tcelda titcampo">Costo Inicial:</div>
+                                <div class="tcelda titcampo nowrap">Costo Inicial:</div>
                                 <div class="tcelda" v-text="regActivo.costo+'Bs.'"></div>
                             </div>
                             <!--
@@ -325,46 +327,39 @@
                                 <div class="tcelda"> {{formatomon(regDepreciacion.valorfin)}}Bs.</div>
                             </div>
                             -->
-                            
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <h5 class="titazul">Estado físico</h5><br>
+                            <img src="img/activos/general.jpg" :alt="regActivo.nomauxiliar">
+                        </div>
+                        <div class="col-md-4">
                             <h5 class="titazul">Registro de Baja</h5>
                             <div class="tfila">
-                                <div class="tcelda" style="vertical-align:middle">Fecha:</div>
-                                <div class="tcelda" style="padding:5px 0px">
-                                    <input type="date" class="form-control" v-model="fechabaja">
-                                </div>
+                                Fecha: <span class="txtasterisco"></span>
+                                <input type="date" class="form-control" v-model="fechabaja"
+                                    name="baj" :class="{'invalido':errors.has('baj')}" v-validate="'required'">
+                                <p class="txtvalidador" v-if="errors.has('baj')">Dato requerido</p>
+                                Número Orden/Informe: <span class="txtasterisco"></span>
+                                <input v-model="nrorden" type="text" class="form-control"
+                                    name="nro" :class="{'invalido':errors.has('nro')}" v-validate="'required'">
+                                <p class="txtvalidador" v-if="errors.has('nro')">Dato requerido</p>                                    
+                                Motivo: <span class="txtasterisco"></span>
+                                <select v-model="idmotivo" class="form-control"
+                                    name="mot" :class="{'invalido':errors.has('mot')}" v-validate="'required'">
+                                    <option v-for="motivo in arrayMotivos" :key="motivo.idmotivo"
+                                        :value="motivo.idmotivo" v-text="motivo.nommotivo"></option>
+                                </select>
+                                <p class="txtvalidador" v-if="errors.has('mot')">Selecciones un Motivo</p>
+                                Obervaciones:
+                                <textarea class="form-control" style="resize:none" rows="2" v-model="obsbaja"></textarea>
+                                <p class="txtobligatorio text-right"></p>
                             </div>
-                            <div class="tfila">
-                                <div class="tcelda" style="vertical-align:middle">Nro. Orden:</div>
-                                <div class="tcelda" style="padding:5px 0px">
-                                    <input v-model="nrorden" type="text" class="form-control" >
-                                </div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda" style="vertical-align:middle">Motivo:</div>
-                                <div class="tcelda" > 
-                                    <select v-model="idmotivo" class="form-control">
-                                        <option v-for="motivo in arrayMotivos" :key="motivo.idmotivo"
-                                            :value="motivo.idmotivo" v-text="motivo.nommotivo"></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda" style="vertical-align:middle">Obervaciones:&nbsp;</div>
-                                <div class="tcelda" style="padding:5px 0px">
-                                    <textarea class="form-control" style="resize:none" rows="2" v-model="obsbaja">
-                                    </textarea></div>
-                            </div>                             
                         </div>
-
                     </div>
-
                 </div>
                 <div class="modal-footer text-center">
                     <button class="btn btn-secondary" @click="modalBaja=0">Cerrar</button>
-                    <button v-if="accion==1" class="btn btn-danger" @click="storeBaja(regActivo)">Dar de Baja </button>
-                    <!-- <button v-if="accion==2" class="btn btn-primary" @click="updateActivo()">Guardar modificaciones</button> -->
+                    <button class="btn btn-danger" @click="validarBaja(regActivo)">Ejecutar Baja </button>
                 </div>
             </div>
         </div>
@@ -384,7 +379,7 @@ import * as reporte from '../../functions.js';
 export default {
     data(){ return {
         modalActivo:'', jsfechas:'', jsfunc:'', ipbirt:'',       
-        modalBaja:0, accion:1, currfecha:'',
+        modalBaja:0, accion:1, 
         divActivos:1, divKardex:0, divAsignacion:0,
         arrayFiliales:[], arrayAmbientes:[], arrayGrupos:[], arrayAuxiliares:[], 
         arrayActivos:[], arrayEmpleados:[], arrayMotivos:[], arrayAsignaciones:[],  
@@ -436,7 +431,6 @@ export default {
             if(idauxiliar) url+='&idauxiliar='+idauxiliar;
             axios.get(url).then(response=>{
                 this.arrayActivos=response.data.activos;
-                this.currfecha=response.data.currfecha;
                 this.ipbirt=response.data.ipbirt;
             });
         },
@@ -501,7 +495,7 @@ export default {
         },
 
         async kardexActivo(activo){
-            var url='/act_activo/verActivo?idactivo='+activo.idactivo+'&fecha='+this.currfecha;
+            var url='/act_activo/verActivo?idactivo='+activo.idactivo;
             let response=await axios.get(url);
             this.regActivo=response.data.activo[0];
             this.divActivos=0;
@@ -515,10 +509,12 @@ export default {
             var url='/act_activo/verActivo?idactivo='+activo.idactivo;           
             let response=await axios.get(url);
             this.regActivo=response.data.activo[0];
+            this.$validator.reset();
             //this.depreciacionActual(activo,activo.currfecha);            
         },
 
-        asignarActivo(){
+        asignarActivo(activo){
+            this.regActivo=activo;
             this.divActivos=0;
             this.divKardex=0;
             this.divAsignacion=1;
@@ -550,6 +546,7 @@ export default {
             this.costo='';
             this.obs='';            
             this.generarCodigo();
+            this.$validator.reset();
         },
 
         async editarActivo(activo){
@@ -565,6 +562,13 @@ export default {
             this.fechaingreso=this.regActivo.fechaingreso;
             this.costo=this.regActivo.costo;
             this.obs=this.regActivo.obs;
+        },
+
+        validarActivo(){
+            this.$validator.validateAll().then(result=>{
+                if(!result) { swal('Datos no válidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeActivo():this.updateActivo();
+            });
         },
 
         storeActivo(){
@@ -607,6 +611,13 @@ export default {
                 this.modalActivo=0;
                 this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
+        },
+
+        validarBaja(){
+            this.$validator.validateAll().then(result=>{
+                if(!result){ swal('Datos no válidos','Revise los errores','error'); return; }
+                this.storeBaja();
+            })
         },
 
         storeBaja(activo){

@@ -27,32 +27,42 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body table-responsive">                
-                <table class="table table-bordered table-striped table-sm">
-                    <thead class="tcabecera">
-                        <tr>
-                            <th><span class="badge badge-success" v-text="arrayAuxiliares.length+' items'"></span></th>
-                            <th class="text-center">Cód. Auxiliar.</th>
-                            <th class="text-center">Descripción del Auxiliar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="auxiliar in arrayAuxiliares" :key="auxiliar.idauxiliar" :class="auxiliar.activo?'':'txtdesactivado'">
-                            <td v-if="auxiliar.activo" align="center">
-                                <button class="btn btn-warning btn-sm icon-pencil" title="Editar Categoría"
-                                    @click="editarAuxiliar(auxiliar)"></button>
-                                <button class="btn btn-danger btn-sm icon-trash" title="Desactivar Categoría"
-                                    @click="estadoAuxiliar(auxiliar)"></button>
-                            </td>
-                            <td v-else align="center">
-                                <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar Categoría"
-                                    @click="estadoAuxiliar(auxiliar)"></button>
-                            </td>
-                            <td v-text="auxiliar.codauxiliar" align="center"></td>
-                            <td v-text="auxiliar.nomauxiliar"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <div class="text-right" style="padding-bottom:10px">
+                    <div class="vervigente">Ver: &nbsp;
+                        <input type="radio" name="estado" id="r1" @click="listaAuxiliares(this.idgrupo,1)">Vigentes &nbsp;
+                        <input type="radio" name="estado" id="r0" @click="listaAuxiliares(this.idgrupo,0)">Inactivos
+                    </div>
+                    <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
+                        @click="reporteAuxiliales(this.idgrupo)"></button>
+                </div>                
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead class="tcabecera">
+                            <tr align="center">
+                                <th><span class="badge badge-success" v-text="arrayAuxiliares.length+' items'"></span></th>
+                                <th>Cód. Auxiliar.</th>
+                                <th align="left">Descripción del Auxiliar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="auxiliar in arrayAuxiliares" :key="auxiliar.idauxiliar" :class="auxiliar.activo?'':'txtdesactivado'">
+                                <td v-if="auxiliar.activo" align="center">
+                                    <button class="btn btn-warning btn-sm icon-pencil" title="Editar Categoría"
+                                        @click="editarAuxiliar(auxiliar)"></button>
+                                    <button class="btn btn-danger btn-sm icon-trash" title="Desactivar Categoría"
+                                        @click="estadoAuxiliar(auxiliar)"></button>
+                                </td>
+                                <td v-else align="center">
+                                    <button class="btn btn-warning btn-sm icon-action-redo" title="Reactivar Categoría"
+                                        @click="estadoAuxiliar(auxiliar)"></button>
+                                </td>
+                                <td v-text="auxiliar.codauxiliar" align="center"></td>
+                                <td v-text="auxiliar.nomauxiliar"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -91,11 +101,11 @@
 
 <script>
 
-export default{
+export default {
     data(){ return {
         modalAuxiliar:0, accion:1, 
         arrayGrupos:[], arrayAuxiliares:[], regGrupo:[],
-        idgrupo:1, codcuenta:'', idauxiliar:'', codauxiliar:'', nomauxiliar:'', 
+        idgrupo:2, codcuenta:'', idauxiliar:'', codauxiliar:'', nomauxiliar:'', 
     }},
 
     methods:{
@@ -148,7 +158,7 @@ export default{
 
         storeAuxiliar(){
             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
-                showCancelButton:false, showConfirmButton:false, //closeOnConfirm: false,
+                showCancelButton:false, showConfirmButton:false, 
                 allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
                 onOpen:() => { swal.showLoading() }
             });
@@ -159,7 +169,7 @@ export default{
             }).then(response=>{
                 swal('Adicionado correctamente','','success');
                 this.modalAuxiliar=0;
-                this.listaAuxiliares(this.idgrupo);
+                this.listaAuxiliares(this.idgrupo,1);
             });
         },
 
@@ -175,7 +185,7 @@ export default{
             }).then(response=>{
                 swal('Datos actualizados','','success');
                 this.modalAuxiliar=0;
-                this.listaAuxiliares(this.idgrupo);
+                this.listaAuxiliares(this.idgrupo,1);
             });
         },
 
@@ -186,26 +196,23 @@ export default{
                     html: 'No podrá acceder a la información dependiente', showCancelButton: true,
                     confirmButtonColor:'#f86c6b', confirmButtonText:'Desactivar Auxiliar',
                     cancelButtonText:'Cancelar', reverseButtons: true
-                }).then(confirmar=>{
-                    if(confirmar.value) this.switchAuxiliar(1);
-                });
+                }).then(confirmar=>{ confirmar.value?this.switchAuxiliar(0):'' });
             }
-            else this.switchAuxiliar(0);
+            else this.switchAuxiliar(1);
         },
 
         switchAuxiliar(activo){
-            if(activo) var titswal='Desactivado'; else var titswal='Activado';
             var url='/act_auxiliar/switchAuxiliar?idauxiliar='+this.idauxiliar;
             axios.put(url).then(response=>{
-                swal(titswal+' correctamente','','success');
-                this.listaAuxiliares(this.idgrupo);
+                swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
+                this.listaAuxiliares(this.idgrupo,activo);
             });
         },
     },
 
     mounted() {
         this.listaGrupos();
-        this.listaAuxiliares(this.idgrupo);
+        this.listaAuxiliares(this.idgrupo,1);
     },
 
 }
