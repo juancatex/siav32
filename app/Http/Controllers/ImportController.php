@@ -53,7 +53,9 @@ class ImportController extends Controller
         Apo_Carga_ascii::truncate();
         ini_set('memory_limit', '1024M');
         ini_set ('max_execution_time', 3200);
-        $importetotal=0;
+        $importe3=0;
+        $importe4=0;
+        $importe5=0;
         $csv_header = $request->csv_header;
         $csv_data = $request->csv_data;
         $fecha_archivo=$request->fecha_archivo;
@@ -84,13 +86,20 @@ class ImportController extends Controller
                     foreach ($csv_data as $indice=>$columna)
                     {
                         $cargaascii = new Apo_Carga_ascii();
+                        
+                        if($columna['codfuerza']==3)
+                            $importe3=$importe3+$columna['aporte'];
+                        if($columna['codfuerza']==4)
+                            $importe4=$importe4+$columna['aporte'];
+                        if($columna['codfuerza']==5)
+                            $importe5=$importe5+$columna['aporte'];
+                        
+                        
+                        
+                        
                         foreach($columna as $ind=>$col)
                         {
                             $resultado = str_replace("\r", "", $ind);
-                            if($resultado=="aporte")
-                            {
-                                $importetotal=$importetotal+$col;
-                            }
                             $cargaascii->$resultado=$col;
                         }
                         $cargaascii->fechaaporte=$fecha_archivo;
@@ -100,6 +109,7 @@ class ImportController extends Controller
                         $cargaascii->observaciones=$glosa;
                         $cargaascii->save();
                     }
+                    //dd($importe4);
                     
                 }
                 $tipodocumento='';

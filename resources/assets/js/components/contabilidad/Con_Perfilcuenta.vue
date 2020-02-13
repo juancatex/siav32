@@ -575,6 +575,7 @@ export default {
                 arrayTipocomprobante:[],
                 tituloModalSiPorcentaje:'',
                 tituloModalNoPorcentaje:'',
+                arrayDetalle:[],
                 arrayDetalleD:[],
                 arrayDetalleH:[],
                 porcentaje:'',
@@ -798,29 +799,17 @@ export default {
         selectPerfilcuentadetalle(idmaestro){
             let me=this;
             
-            var url= '/con_perfilcuentadetalle/selectPerfilcuentadetalle?idmaestro='+idmaestro+'&tipocargo=d';
+            var url= '/con_perfilcuentadetalle/selectPerfilcuentadetalle?idmaestro='+idmaestro;
             axios.get(url).then(function (response) {
                 //console.log(response);
                 var respuesta= response.data;
-                me.arrayDetalleD = respuesta.perfilcuentadetalles;
-                //me.recorrerarrayd();
+                me.arrayDetalle=respuesta.perfilcuentadetalles;
+                me.arrayDetalleD=me.arrayDetalle.filter(elem=>elem.tipocargo=='d')
+                me.arrayDetalleH=me.arrayDetalle.filter(elem=>elem.tipocargo=='h')
                 })
             .catch(function (error) {
                 console.log(error);
             });
-            var url= '/con_perfilcuentadetalle/selectPerfilcuentadetalle?idmaestro='+idmaestro+'&tipocargo=h';
-            axios.get(url).then(function (response) {
-                //console.log(response);
-                var respuesta= response.data;
-                me.arrayDetalleH = respuesta.perfilcuentadetalles;
-                //me.recorrerarrayh();
-                })
-            .catch(function (error) {
-                console.log(error);
-            });
-            
-            
-            
         },
         
 

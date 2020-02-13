@@ -40,11 +40,12 @@ class ConPerfilcuentadetalleController extends Controller
        
         //echo $tipooperacion;
         $idmaestro=$request->idmaestro;
-        $tipocargo=$request->tipocargo;
+        //$tipocargo=$request->tipocargo;
         $perfilcuentadetalles = Con_Perfilcuentadetalle::join('con__cuentas','con__cuentas.idcuenta','=','con__perfilcuentadetalles.idcuenta')
-                                                        ->select('con__cuentas.nomcuenta','con__cuentas.codcuenta','con__cuentas.idcuenta','tipocargo','porcentaje')
+                                                        ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','con__perfilcuentadetalles.relacionfuerza')
+                                                        ->select('con__cuentas.nomcuenta','con__cuentas.codcuenta','con__cuentas.idcuenta','tipocargo','porcentaje','relacionfuerza','nomfuerza')
                                                         ->where('idperfilcuentamaestro','=',$idmaestro)
-                                                        ->where('tipocargo','=',$tipocargo)
+                                                        //->where('tipocargo','=',$tipocargo)
                                                         ->orderBy('porcentaje', 'desc')->get();
         return ['perfilcuentadetalles' => $perfilcuentadetalles];
     }

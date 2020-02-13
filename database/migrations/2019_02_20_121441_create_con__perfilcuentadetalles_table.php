@@ -19,6 +19,7 @@ class CreateConPerfilcuentadetallesTable extends Migration
             $table->integer('idcuenta')->unsigned();
             $table->string('tipocargo',1); //d-debe h-haber
             $table->decimal('porcentaje')->nullable();
+            $table->tinyInteger('relacionfuerza')->nullable()->comment('relacion de la cuenta con la fuerza a la que pertenece para realizar los calculos si el perfil es uno a uno no se necesita esta verificacion ');
             $table->timestamps();
             $table->foreign('idperfilcuentamaestro')->references('idperfilcuentamaestro')->on('con__perfilcuentamaestros');
             $table->foreign('idcuenta')->references('idcuenta')->on('con__cuentas');
