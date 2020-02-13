@@ -73,7 +73,7 @@ setvue(1, 'apo_estado', './components/Apo_Estado.vue');
 setvue(1, 'apo_aporte', './components/Apo_Aporte.vue');
 setvue(1, 'apo_debitoascii', './components/Apo_DebitoAscii.vue');
 setvue(1, 'apo_reportes', './components/Apo_Reportes.vue');
-setvue(0, 'apo_configuracion', './components/Apo_Configuracion_Perfil.vue');
+
 
 
 //adm
