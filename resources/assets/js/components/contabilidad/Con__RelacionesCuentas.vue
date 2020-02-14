@@ -162,7 +162,14 @@ export default {
             arrayRelacion:[{abreviacion:"LV",descripcion:"Libro de Ventas"},
                           {abreviacion:"LC",descripcion:"Libro de Compras"},
                           {abreviacion:"CC",descripcion:"Cargo de Cuenta"},
-                          {abreviacion:"LB",descripcion:"Libreta Bancaria"}],
+                          {abreviacion:"LB",descripcion:"Libreta Bancaria"},
+                          {abreviacion:"EJD",descripcion:"Aportes Ejercito Debe"},
+                          {abreviacion:"AED",descripcion:"Aportes Aerea Debe"},
+                          {abreviacion:"ARD",descripcion:"Aportes Armada Debe"},
+                          {abreviacion:"EJH",descripcion:"Aportes Ejercito haber"},
+                          {abreviacion:"AEH",descripcion:"Aportes Aerea haber"},
+                          {abreviacion:"ARH",descripcion:"Aportes Armada haber"}
+                          ],
             
             arrayResRelaciones:[],
             idcuenta:[],
