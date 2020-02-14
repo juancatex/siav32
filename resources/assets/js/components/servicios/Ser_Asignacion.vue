@@ -28,7 +28,6 @@
                     </div>
                     <div class="card-body">
                         <select class="form-control" v-model="idestablecimiento" @change="verEstablecimiento(idestablecimiento)">
-                            <!-- <option>Servicios...</option> -->
                             <template v-for="establecimiento in arrayEstablecimientos">
                                 <option v-if="establecimiento.idfilial==filial.idfilial" 
                                     :key="establecimiento.idestablecimiento"
@@ -51,9 +50,6 @@
     </div>
 </main>
 </template>
-
-
-
 
 <script>
 Vue.component('asgVivienda',require('./asgVivienda.vue').default);
@@ -199,7 +195,6 @@ export default {
 }
 
 .invalido{
-  /* display: block; */
     width: 100%; 
     height: calc(1.5em + 0.75rem + 2px);
     border: 1px solid #fd4b49;/* #f86c6b;*/
@@ -220,8 +215,8 @@ export default {
 }
 
 .bloquecelda{
-    padding:10px 15px; 
-    font-size:20px; 
+    padding:10px 14px; 
+    font-size:18px; 
     text-align:center; 
     font-weight: 500;
 }
@@ -264,10 +259,19 @@ export default {
     vertical-align:middle;
 }
 
-.fotosocioservicios{
-    border:#efefef 2px solid;
-    filter:drop-shadow(4px 4px 5px #333);
-    height: auto;
+.advertencia{
+    border:1px #f86c6b solid; 
+    border-radius:5px; 
+    background-color:rgb(248, 108, 107,0.20); 
+    padding:15px;
 }
+
+.advertencia p{
+    color:#f86c6b; 
+    font-weight:bold; 
+    font-size:16px;
+    text-align: center;
+}
+
 
 </style>

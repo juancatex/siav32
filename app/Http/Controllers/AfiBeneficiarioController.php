@@ -18,6 +18,18 @@ class AfiBeneficiarioController extends Controller
         return ['beneficiarios' => $beneficiarios];
     }
 
+    public function listaBeneficiarios(Request $request)
+    {
+        $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*','abrvdep')
+        ->join('par_departamentos','par_departamentos.iddepartamento','afi__beneficiarios.iddepartamento')
+        ->join('socios','afi__beneficiarios.idsocio','socios.idsocio')
+        ->where('afi__beneficiarios.idsocio',$request->idsocio);
+        if($request->idactivo) $beneficiarios->where('afi__beneficiarios.activo',1);
+        if($request->idbeneficiario) 
+            $beneficiarios=Afi_Beneficiario::where('idbeneficiario',$request->idbeneficiario);
+        return ['beneficiarios'=>$beneficiarios->get()];
+    }
+
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
