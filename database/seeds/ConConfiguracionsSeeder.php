@@ -12,10 +12,18 @@ class ConConfiguracionsSeeder extends Seeder
     public function run()
     {
         //
-        DB::table('con__configuracions')->insert(['codigo'=>'LV','descripcion'=>'Relacion Libro de Ventas - id Cuenta Debito Fiscal','valor'=>'226','tipoconfiguracion'=>1]);
-        DB::table('con__configuracions')->insert(['codigo'=>'LC','descripcion'=>'Relacion Libro de Compras - id Cuenta Credito Fiscal','valor'=>'54','tipoconfiguracion'=>2]);
-        DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'7','tipoconfiguracion'=>3]);
-        DB::table('con__configuracions')->insert(['codigo'=>'CC','descripcion'=>'Cuenta cargo de cuenta para asiento contable','valor'=>'99','tipoconfiguracion'=>4]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LV','descripcion'=>'Relacion Libro de Ventas - id Cuenta Debito Fiscal','valor'=>'108','tipoconfiguracion'=>1]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LC','descripcion'=>'Relacion Libro de Compras - id Cuenta Credito Fiscal','valor'=>'23','tipoconfiguracion'=>2]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'3','tipoconfiguracion'=>3]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'4','tipoconfiguracion'=>3]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'5','tipoconfiguracion'=>3]);
+        DB::table('con__configuracions')->insert(['codigo'=>'CC','descripcion'=>'Cuenta cargo de cuenta para asiento contable','valor'=>'21','tipoconfiguracion'=>4]);
+        DB::table('con__configuracions')->insert(['codigo'=>'EJD','descripcion'=>'aportes de que estan relacionadas con el ejercito y la cuenta contable que van al debe','valor'=>'16','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'AED','descripcion'=>'aportes de que estan relacionadas con la fuerza aerea y la cuenta contable que van al debe','valor'=>'17','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'ARD','descripcion'=>'aportes de que estan relacionadas con la armada y la cuenta contable que van al debe','valor'=>'18','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'EJH','descripcion'=>'aportes de que estan relacionadas con el ejercito y la cuenta contable que van al haber','valor'=>'136','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'AEH','descripcion'=>'aportes de que estan relacionadas con la fuerza aerea y la cuenta contable que van al haber','valor'=>'137','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'ARH','descripcion'=>'aportes de que estan relacionadas con la armada y la cuenta contable que van al haber','valor'=>'138','tipoconfiguracion'=>5]);
         
     }
 }

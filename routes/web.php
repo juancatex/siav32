@@ -58,10 +58,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get ('/afi_beneficiario', 'AfiBeneficiarioController@index');
         Route::post('/afi_beneficiario/registrar', 'AfiBeneficiarioController@store');
+        Route::get ('/afi_beneficiario/listaBeneficiarios','AfiBeneficiarioController@listaBeneficiarios');
+        Route::get ('/afi_beneficiario/verEsposa', 'AfiBeneficiarioController@verEsposa');
         Route::put ('/afi_beneficiario/actualizar', 'AfiBeneficiarioController@update');
         Route::put ('/afi_beneficiario/desactivar', 'AfiBeneficiarioController@desactivar');
         Route::put ('/afi_beneficiario/activar', 'AfiBeneficiarioController@activar');
-        Route::get ('/afi_beneficiario/verEsposa', 'AfiBeneficiarioController@verEsposa');
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,7 +370,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/act_asignacion/listaAsignaciones','ActAsignacionController@listaAsignaciones'); //R
     Route::put ('/act_asignacion/updateAsignacion','ActAsignacionController@updateAsignacion');   //U
     //Route::put ('/act_asignacion/activarAsignacion','ActAsignacionController@activarAsignacion'); //U
-    //Route::get ('/act_asignacion/listaResponsables','ActAsignacionController@listaResponsables'); //R
 
     Route::post('/act_ufv/cargarExcel','ActUfvController@cargarExcel'); //C
     Route::get ('/act_ufv/verUfv','ActUfvController@verUfv');           //R

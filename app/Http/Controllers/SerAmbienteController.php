@@ -17,7 +17,7 @@ class SerAmbienteController extends Controller
         if($request->piso)   $ambientes->where('piso',$request->piso);
         $ambientes->orderBy('codambiente');
         if($request->idambiente) $ambientes=Ser_Ambiente::where('idambiente',$request->idambiente);
-        return ['ambientes'=>$ambientes->get()];
+        return ['ambientes'=>$ambientes->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function storeAmbiente(Request $request)

@@ -43,24 +43,6 @@
                             Externos: <span v-text="ambiente.tarifareal"></span>Bs,
                         </td>
                         <td> 
-                            <!-- <div class="tabla100">                               
-                                <div class="tfila bloquefila" v-for="ocupante in arrayOcupantes" :key="ocupante.id">
-                                    <template v-if="ocupante.idambiente==ambiente.idambiente"> 
-                                        <div class="tcelda" > {{c++}}.
-                                            <span v-text="ocupante.nomgrado+' '+ocupante.nombre+' '+ocupante.apaterno"></span></div>
-                                        <div class="tcelda"><span v-text="jsfechas.fechadia(ocupante.fechaentrada)"></span></div>
-                                        <div class="tcelda"><span v-text="ocupante.horaentrada"></span></div>
-                                        <div class="tcelda text-right">
-                                            <span v-text="ocupante.currhora<'12:31:00'?(ocupante.noches):(ocupante.noches+1)"></span> noches
-                                        </div>
-                                        <div class="tcelda text-right" style="padding:5px 0px">
-                                            <button class="btn btn-warning btn-sm icon-book-open" 
-                                                @click="verAsignacion(ocupante.idasignacion,ambiente)"></button> 
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>  -->
-
                             <div class="tabla100">                               
                                 <div class="tfila bloquefila" v-for="asignacion in arrayAsignaciones" :key="asignacion.id">
                                     <template v-if="asignacion.idambiente==ambiente.idambiente"> 
@@ -95,7 +77,7 @@
             <div class="card">
                 <div class="card-header titcard">Huésped</div>
                 <div class="card-body">
-                    <h4 class="titmodulo text-center">
+                    <h4 class="titcard text-center">
                         <span v-text="regCliente.nomgrado"></span>
                         <span v-text="regCliente.nombre"></span>
                         <span v-text="regCliente.apaterno"></span>
@@ -118,7 +100,7 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header titcard">HABITACIÓN</div>
+                <div class="card-header titcard">Habitación</div>
                 <div class="card-body">
                     <div class="tabla100">
                         <div class="tfila">
@@ -308,7 +290,7 @@
                     <h4 class="modal-title" v-text="titModal.toUpperCase()"></h4>
                     <button class="close" @click="modalAsignacion=0">x</button>
                 </div>
-                <div class="modal-body" style="overflow-y:scroll; height:400px;">
+                <div class="modal-body" style="overflow-y:scroll; height:420px;">
                     <h4 class="titsubrayado" v-text="regEstablecimiento.nomestablecimiento"></h4>
                     <div class="row">
                         <div class="col-md-6">
@@ -321,7 +303,7 @@
                             (<span v-text="nosocio?'Particular':'Socio'"></span>)
                         </div>
                     </div>
-                    <div v-if="!regAsignacion.idasignacion"><br>
+                    <div v-if="!regAsignacion.idasignacion" style="padding:5px 0px 10px 0px;">
                         <div class="tfila">
                             <div class="tcelda">Cliente:</div>
                             <div class="tcelda tinput text-right nowrap">
@@ -330,11 +312,10 @@
                         </div>
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
                     </div>
-                    <h4 v-if="regAsignacion.idcliente" class="titsubrayado"><br>
+                    <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
                         <span v-text="regCliente.apaterno"></span> <span v-text="regCliente.amaterno"></span>
-                    </h4><br>
-
+                    </h4>
                     <div class="row">
                         <div class="col-md-4">
                             <h4 class="titazul" v-text="titModal"></h4>
@@ -391,100 +372,25 @@
                     <h4 class="modal-title"><span v-text="accion==1?'Registrar':'Modificar'"></span> Pago</h4>
                     <button class="close" @click="modalPago=0">x</button>
                 </div>
-                <div class="modal-body">
-                            
-                                        Nro Factura:
-                                        <input type="text" class="form-control" v-model="nrdocumento"  @keyup="validarPago()">
-                                        Fecha:                                    
-                                        <input type="date" class="form-control" v-model="fecha">
-                                        NIT/CI:
-                                        <input type="text" class="form-control" v-model="nit" 
-                                            @input="razon=''" @blur="verRazon(nit)" @keyup="validarPago()">
-                                        Razón Social:                                   
-                                        <input type="text" class="form-control" v-model="razon"  @keyup="validarPago()">
-                                        <br>Concepto:
-                                        <br>Importe:
-
-                            
-                            <center class="taltura"><input type="checkbox" v-model="descuento"> Pago con descuento</center>
-
-                    <!--
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="titazul">Detalle</h4>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Titular:</div>
-                                <div class="tcelda"><span v-text="regCliente.nombre+' '+regCliente.apaterno"></span></div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Ingresó:</div>
-                                <div class="tcelda">
-                                    <span v-text="regAsignacion.fecha1"></span>; <span v-text="regAsignacion.horaentrada"></span>
-                                </div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Salió:</div>
-                                <div class="tcelda">
-                                    <span v-text="regAsignacion.fecha2"></span>; <span v-text="regAsignacion.horasalida"></span>
-                                </div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Estadía:</div>
-                                <div class="tcelda"><span v-text="regAsignacion.noches"></span> noches</div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Tarifa:</div>
-                                <div class="tcelda"> 
-                                    <span v-text="regAsignacion.tarifa"></span>Bs/noche
-                                    (<span v-text="regAsignacion.cliente"></span>)
-                                </div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo">Importe:</div>
-                                <div class="tcelda"><span v-text="regPago.importe"></span>Bs.</div>
-                            </div>
-                            <div class="tfila">
-                                <div class="tcelda titcampo" style="vertical-align:top">Son:</div>
-                                <div class="tcelda"><span v-text="regPago.literal"></span></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h4 class="titazul">Facturación</h4>
-                            <div class="ttable">
-                                <div class="tfila">
-                                    <div class="tcelda taltura">Nro Factura:</div>
-                                    <div class="tcelda tinput">
-                                        <input type="text" class="form-control" v-model="nrdocumento"  @keyup="validarPago()">
-                                    </div>
-                                </div>
-                                <div class="tfila">
-                                    <div class="tcelda taltura">Fecha:</div>
-                                    <div class="tcelda tinput">
-                                        <input type="date" class="form-control" v-model="fecha">
-                                    </div>
-                                </div>
-                                <div class="tfila">
-                                    <div class="tcelda taltura">NIT/CI:</div>
-                                    <div class="tcelda tinput">
-                                        <input type="text" class="form-control" v-model="nit" 
-                                            @input="razon=''" @blur="verRazon(nit)" @keyup="validarPago()">
-                                    </div>
-                                </div>
-                                <div class="tfila">
-                                    <div class="tcelda taltura nowrap">Razón Social:</div>
-                                    <div class="tcelda tinput">
-                                        <input type="text" class="form-control" v-model="razon"  @keyup="validarPago()">
-                                    </div>
-                                </div>
-                            </div>
-                            <center class="taltura"><input type="checkbox" v-model="descuento"> Pago con descuento</center>
-                        </div>
-                    </div>
-                    -->
+                <div class="modal-body">                            
+                    Nro Factura:
+                    <input type="text" class="form-control" v-model="nrdocumento"
+                        name="nrf" :clas="{'invalido':errors.has('nrf')}" v-validate="'required'">
+                    <p class="txtvalidador" v-if="errors.has('nrf')">Dato obligatorio</p>
+                    Fecha:                                    
+                    <input type="date" class="form-control" v-model="fecha">
+                    NIT/CI:
+                    <input type="text" class="form-control" v-model="nit" 
+                        @input="razon=''" @blur="verRazon(nit)">
+                    Razón Social:                                   
+                    <input type="text" class="form-control" v-model="razon">
+                    <br>Concepto:
+                    <br>Importe:
+                    <center class="taltura"><input type="checkbox" v-model="descuento"> Pago con descuento</center>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="modalPago=0">Cerrar</button>
-                    <button class="btn btn-primary" @click="accion==1?storePago():updatePago()">
+                    <button class="btn btn-primary" @click="validarPago()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
@@ -686,6 +592,13 @@ export default {
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
         },
 
+        validarPago(){
+            this.$validator.validateAll().then(result=>{
+                if(!result){ swal('Datos incorrectos','Revise los errores','error'); return; }
+                this.accion==1?this.storePago():this.updatePago();
+            });
+        },
+
         storePago(){
             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
                 showCancelButton:false, showConfirmButton:false, 
@@ -738,12 +651,6 @@ export default {
                 this.verPago(this.regAsignacion.idasignacion);
             });
         },
-
-        validarPago(){
-
-        },
-
-
 
         reporteEntrada(){
             var url=[];

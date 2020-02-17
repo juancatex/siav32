@@ -163,11 +163,6 @@
                                 <div class="tcelda"><span v-text="regPago.importe"></span>Bs.</div>
                             </div>
                         </div>
-                        <!-- <center v-if="regPago.modopago==3">PAGO CON DESCUENTO</center> -->
-                        <!-- <center v-if="regPago.modopago==3" class="alert alert-danger">PAGO CON DESCUENTO</center> -->
-                        <div v-if="regPago.modopago==3" style="background-color:#f86c6b; color:#fff; text-align:center; padding:5px; font-weight:bold">
-                            PAGO CON DESCUENTO</div>
-                        <br>
                     </div>
                     <center>
                         <button v-if="regAsignacion.fechasalida" class="btn btn-primary" 
@@ -185,7 +180,7 @@
     <!-- MODAL ASIGNACION  MODAL ASIGNACION  MODAL ASIGNACION  MODAL ASIGNACION  MODAL ASIGNACION -->
     <div class="modal" :class="modalAsignacion?'mostrar':''">
         <div class="modal-dialog modal-primary">
-            <div class="modal-content">
+            <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nueva':'Modificar'"></span> Reserva</h4>
                     <button class="close" @click="modalAsignacion=0">x</button>
@@ -194,7 +189,7 @@
                     <h4 class="titsubrayado" v-text="regEstablecimiento.nomestablecimiento"></h4>
                     <div class="row">
                         <div class="col-md-6">
-                            <span class="titcampo">Actividad:</span> <span v-text="regAmbiente.descripcion"></span>
+                            <span class="titcampo">Actividad:</span> <span v-text="regAmbiente.tipo"></span>
                         </div>
                         <div class="col-md-6 text-right">
                             <span class="titcampo">Tarifa:</span>
@@ -203,7 +198,7 @@
                             (<span v-text="nosocio?'Particular':'Socio'"></span>)
                         </div>
                     </div>
-                    <div v-if="!regAsignacion.idasignacion"><br>
+                    <div v-if="!regAsignacion.idasignacion" style="padding:5px 0px 10px 0px;">
                         <div class="tfila">
                             <div class="tcelda">Cliente:</div>
                             <div class="tcelda tinput text-right nowrap">
@@ -212,7 +207,7 @@
                         </div>
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
                     </div>
-                    <h4 v-if="regAsignacion.idcliente" class="titsubrayado"><br>
+                    <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
                         <span v-text="regCliente.apaterno"></span> <span v-text="regCliente.amaterno"></span>
                     </h4><br>
@@ -222,9 +217,9 @@
                             Nr. Contrato: <span class="txtasterisco"></span>
                             <input type="text" class="form-control" v-model="nrasignacion" @keyup="validarAsignacion()">
                             <div v-if="regAmbiente.porhora">Actividad: 
-                                <select class="form-control">
+                                <select class="form-control" v-model="tipo">
                                     <option v-for="ambiente in arrayAmbientes" :key="ambiente.id"
-                                        v-text="ambiente.descripcion"></option>
+                                        v-text="ambiente.tipo"></option>
                                 </select>
                             </div>
                         </div>
@@ -233,13 +228,11 @@
                             <input type="date" class="form-control" v-model="fechaentrada" @change="validarAsignacion()">
                             <div v-if="regAmbiente.porhora" class="tabla100">
                                 <div class="tfila">
-                                    <div class="tcelda">
-                                        Hora Inicio:
+                                    <div class="tcelda">Hora Inicio:
                                         <input type="time" class="form-control" v-model="horaentrada" @change="validarAsignacion()">
                                     </div>
                                     <div class="tcelda" style="width:20px"></div>
-                                    <div class="tcelda">
-                                        Hora Fin:
+                                    <div class="tcelda">Hora Fin:
                                         <input type="time" class="form-control" v-model="horasalida" @change="validarAsignacion()">
                                     </div>
                                 </div>
@@ -275,7 +268,7 @@ export default {
         modalAsignacion:0, modalPago:0, accion:'', divAsignaciones:1, nosocio:0,
         arrayAsignaciones:[], arrayAmbientes:[],
         regAsignacion:[], regAmbiente:[], regCliente:[], regPago:[],
-        idasignacion:'', nrasignacion:'', fechaentrada:'', horaentrada:'', horasalida:'', obs1:'',
+        idasignacion:'', nrasignacion:'', tipo:'', fechaentrada:'', horaentrada:'', horasalida:'', obs1:'',
         idpago:'', fecha:'', importe:'',
     }},
 
@@ -330,7 +323,10 @@ export default {
             this.modalAsignacion=1;
             this.accion=1;
             this.nrasignacion='';
+            this.tipo='';
             this.fechaentrada='';
+            this.horaentrada='';
+            this.horasalida='';
             this.obs1='';
         },
 
@@ -340,11 +336,17 @@ export default {
             this.idasignacion=asignacion.idasignacion;
             this.nrasignacion=asignacion.nrasignacion;
             this.fechaentrada=asignacion.fechaentrada;
+            this.tipo=asignacion.tipo;
+            this.horaentrada=asignacion.horaentrada;
+            this.horasalida=asignacion.horasalida;
             this.obs1=asignacion.obs1;
         },
 
         validarAsignacion(){
-
+            this.$validator.validateAll().then(result=>{
+                if(!result){ swal('Datos no válidos','Revise los errores','error'); return; }
+                this.accion==1?this.storeAsignacion():this.updateAsignacion();
+            });
         },
 
         storeAsignacion(){

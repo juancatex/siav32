@@ -11,6 +11,7 @@ use App\Http\Requests\CsvImportRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Apo_Total_Aporte;
+use App\Con_Configuracion;
 
 use App\AsinalssClass\AsientoMaestroClass;
 
@@ -53,84 +54,153 @@ class ImportController extends Controller
         Apo_Carga_ascii::truncate();
         ini_set('memory_limit', '1024M');
         ini_set ('max_execution_time', 3200);
-        $importe3=0;
-        $importe4=0;
-        $importe5=0;
-        $csv_header = $request->csv_header;
-        $csv_data = $request->csv_data;
-        $fecha_archivo=$request->fecha_archivo;
-        $nombre_archivo=$request->nombre_archivo;
-        $glosa=$request->observaciones;
-        $idmodulo=$request->idmodulo;
+
+        $cuentas=Con_Configuracion::select('codigo','valor')
+                                    ->where('activo',1)
+                                    ->where('tipoconfiguracion',5)
+                                    ->get()->toArray();
         
-        $maxcsvdata = CsvData::max('idlote');
-        $idlote=$maxcsvdata+1;
+        //dd($cuentas);
 
-        DB::beginTransaction();
+        
+        $idperfilcuentamaestro=$request->idperfilcuentamaestro;
+        if($idperfilcuentamaestro==7) //TODO:  MODIFICAR EL PERFIL DE CUENTA PARA QUE SE DINAMICO Y CONTROLE QUE SEA EL ID CORRECTO PARA EL PERFIL DE CARGA ASCII
         {
-            try{
-                foreach($nombre_archivo as $indicenom=>$valor)
-                {
-                    $csvdata = new CsvData();
-                    $csvdata->csv_filename = $valor;
-                    $csvdata->fecha_archivo=$fecha_archivo;
-                    $csvdata->tipoaporte=$request->idtipoaporte;
-                    $csvdata->idlote=$idlote;
-                    $csvdata->glosa=$glosa;
-                    $csvdata->save();
-                }
-                $idperfilcuentamaestro=$request->idperfilcuentamaestro;
+            $importe3=0;
+            $importe4=0;
+            $importe5=0;
+            $csv_header = $request->csv_header;
+            $csv_data = $request->csv_data;
+            $fecha_archivo=$request->fecha_archivo;
+            $nombre_archivo=$request->nombre_archivo;
+            $glosa=$request->observaciones;
+            $idmodulo=$request->idmodulo;
+            
+            $maxcsvdata = CsvData::max('idlote');
+            $idlote=$maxcsvdata+1;
 
-                if($csv_data)
-                {
-                    foreach ($csv_data as $indice=>$columna)
-                    {
-                        $cargaascii = new Apo_Carga_ascii();
-                        
-                        if($columna['codfuerza']==3)
-                            $importe3=$importe3+$columna['aporte'];
-                        if($columna['codfuerza']==4)
-                            $importe4=$importe4+$columna['aporte'];
-                        if($columna['codfuerza']==5)
-                            $importe5=$importe5+$columna['aporte'];
-                        
-                        
-                        
-                        
-                        foreach($columna as $ind=>$col)
-                        {
-                            $resultado = str_replace("\r", "", $ind);
-                            $cargaascii->$resultado=$col;
-                        }
-                        $cargaascii->fechaaporte=$fecha_archivo;
-                        $cargaascii->idtipoaporte=$request->idtipoaporte;
-                        $cargaascii->idlote=$idlote;
-                        $cargaascii->idperfilcuentamaestro=$idperfilcuentamaestro;
-                        $cargaascii->observaciones=$glosa;
-                        $cargaascii->save();
-                    }
-                    //dd($importe4);
-                    
-                }
-                $tipodocumento='';
-                $numdocumento='';
-                //$glosa=$ob;
-                //$idperfilcuentamaestro=$request->idperfilcuentamaestro;  este no
-                $asientomaestro= new AsientoMaestroClass();
-                $idasientomaestro=$asientomaestro->AsientosMaestroDetalle($idperfilcuentamaestro, $tipodocumento,$numdocumento,$glosa,$importetotal,$idmodulo,$fecha_archivo);
-                DB::unprepared('CALL agregarasientomaestro('.$idasientomaestro.','.$idlote.',0)');
-                
-                DB::commit();
-                //return $idasientomaestro;
-                return 'Correcto!';
-            }
-            catch(\Exception $e)
+            DB::beginTransaction();
             {
-                DB::rollback();
-                return "Error".$e->getMessage();
-                //echo 'error ('.$e->getCode().'):'.$e->getMessage();
+                try{
+                    
+                    foreach($nombre_archivo as $indicenom=>$valor)
+                    {
+                        $csvdata = new CsvData();
+                        $csvdata->csv_filename = $valor;
+                        $csvdata->fecha_archivo=$fecha_archivo;
+                        $csvdata->tipoaporte=$request->idtipoaporte;
+                        $csvdata->idlote=$idlote;
+                        $csvdata->glosa=$glosa;
+                        $csvdata->save();
+                    }
+                    
+
+                    if($csv_data)
+                    {
+                        foreach ($csv_data as $indice=>$columna)
+                        {
+                            $cargaascii = new Apo_Carga_ascii();
+                            
+                            if($columna['codfuerza']==3)
+                                $importe3=$importe3+$columna['aporte'];
+                            if($columna['codfuerza']==4)
+                                $importe4=$importe4+$columna['aporte'];
+                            if($columna['codfuerza']==5)
+                                $importe5=$importe5+$columna['aporte'];
+                            
+                            
+                            
+                            
+                            foreach($columna as $ind=>$col)
+                            {
+                                $resultado = str_replace("\r", "", $ind);
+                                $cargaascii->$resultado=$col;
+                            }
+                            $cargaascii->fechaaporte=$fecha_archivo;
+                            $cargaascii->idtipoaporte=$request->idtipoaporte;
+                            $cargaascii->idlote=$idlote;
+                            $cargaascii->idperfilcuentamaestro=$idperfilcuentamaestro;
+                            $cargaascii->observaciones=$glosa;
+                            $cargaascii->save();
+                        }
+                        //dd($importe4);
+                        
+                    }
+                    $tipodocumento='';
+                    $numdocumento='';
+                    //$glosa=$ob;
+                    //$idperfilcuentamaestro=$request->idperfilcuentamaestro;  este no
+                    $cont=0;
+                    foreach ($cuentas as $valor) {
+                        if($valor['codigo']=='EJD')
+                        {   
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe3;
+                        }
+                        else if($valor['codigo']=='AED')
+                        {
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe4;
+                        }
+                        else if($valor['codigo']=='ARD')
+                        {
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe5;
+                        }
+                        else if($valor['codigo']=='EJH')
+                        {
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe3*(-1);
+                        }
+                        else if($valor['codigo']=='AEH')
+                        {
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe4*(-1);
+                        }
+                        else if($valor['codigo']=='ARH')
+                        {
+                            $arrayDetalle[$cont]['idcuenta']=$valor['valor'];
+                            $arrayDetalle[$cont]['subcuenta']='';
+                            $arrayDetalle[$cont]['documento']=$tipodocumento;
+                            $arrayDetalle[$cont]['moneda']='Bs';
+                            $arrayDetalle[$cont]['monto']=$importe5*(-1);
+                        }
+                        $cont++;                   
+                    }
+                    //dd($arrayDetalle);
+                    $asientomaestro= new AsientoMaestroClass();
+                    $idasientomaestro=$asientomaestro->AsientosMaestroArray($idperfilcuentamaestro, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fecha_archivo);
+                    DB::unprepared('CALL agregarasientomaestro('.$idasientomaestro.','.$idlote.',0)');
+                    
+                    DB::commit();
+                    //return $idasientomaestro;
+                    return 'Correcto!';
+                }
+                catch(\Exception $e)
+                {
+                    DB::rollback();
+                    return "Error".$e->getMessage();
+                    //echo 'error ('.$e->getCode().'):'.$e->getMessage();
+                }
             }
         }
+        else
+            return 'perfil de cuenta incorrecto';
     }
 
 }
