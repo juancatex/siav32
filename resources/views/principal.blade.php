@@ -28,9 +28,11 @@
             <span class="navbar-toggler-icon"></span>
         </button> 
 
-        <span class="ml-auto">Fecha del Sistema:<b>
-            <?php use App\Http\Controllers\AdmUserController;
-            echo AdmUserController::fecha_sistema(); ?></b>
+        <span class="ml-auto"><b>
+            <div class="alert alert-danger" role="alert">Fecha del Sistema:
+                <?php use App\Http\Controllers\AdmUserController;
+                echo  AdmUserController::fecha_sistema() ?></b>
+            </div>            
         </span>
 
          @yield('bodyheader') 
@@ -43,7 +45,7 @@
     @endif
     <!-- Cambios realizados por ing. Juan Carlos-->
     <footer class="app-footer">
-        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?echo date('Y')?></span>    
+        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?php echo date('Y')?></span>    
         <span class="ml-auto">Desarrollado por <a href="http://www.ascinalss.org/ascinalss/index.html">Dep. Sistemas</a></span>
     </footer>  
     </div> 

@@ -267,6 +267,7 @@ return [
         'RUTE_REPORT' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/afi/kardex.rptdesign&__format=pdf',
         'REP_FUERZA' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/afi/rep_fuerza.rptdesign&__format=pdf', 
         'REP_KARDEX' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/afi/rep_kardex.rptdesign&__format=pdf',
+        'REP_RESUMEN' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/global/rep_resumen_desem.rptdesign&__format=pdf',  //mover a contabilidad
         'REP_INSCRIPCION' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/afi/rep_inscripcion.rptdesign&__format=pdf',
         'REP_EGRESO' => 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/afi/rep_egreso.rptdesign&__format=pdf',
       //'REP_CARNET' => 'http://localhost:8080/birt-viewer/frameset?__report=reportes/afi/carnetSocio.rptdesign&id_socio=',
