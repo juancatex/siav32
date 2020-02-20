@@ -103,6 +103,7 @@ setvue(1, 'con_libroventa', './components/contabilidad/Con_Libroventa.vue');
 setvue(1, 'con_cargocuenta', './components/contabilidad/Con_Cargocuenta.vue');
 setvue(0, 'con_relacionescuentas', './components/contabilidad/Con__RelacionesCuentas.vue');
 setvue(0, 'con_reportes', './components/contabilidad/Con__Reportes.vue');
+setvue(0, 'con_reportes1', './components/contabilidad/Con__Reportes1.vue');
 setvue(0, 'con_conciliacion', './components/contabilidad/Con__ConciliacionBancaria.vue');
 setvue(0, 'con_productos', './components/contabilidad/Con__Productos.vue');
 setvue(1, 'con_facturaparametro', './components/contabilidad/Con__Facturaparametros.vue');

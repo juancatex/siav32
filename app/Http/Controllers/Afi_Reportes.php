@@ -16,6 +16,7 @@ class Afi_Reportes extends Controller
 		'REP_FUERZA' => $rutas['REP_FUERZA'].'&user='.Auth::user()->id.'&id=',
         'REP_EGRESO' => $rutas['REP_EGRESO'].'&user='.Auth::user()->id.'&id=',
         'REP_INSCRIPCION' => $rutas['REP_INSCRIPCION'].'&user='.Auth::user()->id.'&id=',
+        'REP_RESUMEN' => $rutas['REP_RESUMEN'].'&user='.Auth::user()->id.'&id=',  // mover a contabilidad
         'REP_CARNET' => $rutas['REP_CARNET'],
         'SER_CASACOM_ENT'=> $rutas['SER_CASACOM_ENT'],
         'SER_CASACOM_SAL'=> $rutas['SER_CASACOM_SAL'],
