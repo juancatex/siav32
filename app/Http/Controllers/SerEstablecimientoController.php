@@ -54,7 +54,7 @@ class SerEstablecimientoController extends Controller
             $establecimiento->idfilial=$request->idfilial;
             $establecimiento->idservicio=4;
             //$establecimiento->cantgrupos=$request->configuracion;
-            if($i==0) { $establecimiento->nomestablecimiento="MAUSOLEO NICHOS";     $establecimiento->cantgrupos="0,100"; }
+            if($i==0) { $establecimiento->nomestablecimiento="";     $establecimiento->cantgrupos="0,100"; }
             if($i==1) { $establecimiento->nomestablecimiento="MAUSOLEO SARCÓFAGOS"; $establecimiento->cantgrupos="0,100"; }
             if($i==2) $establecimiento->nomestablecimiento="MAUSOLEO FOSA COMÚN";
             $establecimiento->direccion=$request->direccion;

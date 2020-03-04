@@ -104,10 +104,10 @@ class ActActivoController extends Controller
         join act__ufvs on act__ufvs.fecha=act__activos.fechaingreso
         join act__grupos on act__grupos.idgrupo=act__activos.idgrupo
         where idactivo=".$request->idactivo;
-        $activo=DB::select($sql)[0];
+        $activo=DB::select($sql)[0]; 
         $meses=13-(($activo->mesini)*1);
         $gesini=$activo->gesini;
-        $gesfin=2019;
+        $gesfin=date('Y');
         $depracum=0;
         for($ges=$gesini; $ges<$gesfin; $ges++)
         {

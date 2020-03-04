@@ -40,7 +40,7 @@ class AfiBeneficiarioController extends Controller
         $beneficiario->amaterno=$request->amaterno;
         $beneficiario->parentesco=$request->parentesco;
         $beneficiario->ci=$request->ci;
-        $beneficiario->iddepartamentoexpedido=$request->iddepartamentoexpedido;
+        $beneficiario->iddepartamento=$request->iddepartamentoexpedido;
         $beneficiario->fechanac=$request->fechanac;
         $beneficiario->telcelular=$request->telcelular;
         $beneficiario->save();
@@ -60,7 +60,7 @@ class AfiBeneficiarioController extends Controller
         $beneficiario->amaterno=$request->amaterno;
         $beneficiario->parentesco=$request->parentesco;
         $beneficiario->ci=$request->ci;
-        $beneficiario->iddepartamentoexpedido=$request->iddepartamentoexpedido;
+        $beneficiario->iddepartamento=$request->iddepartamentoexpedido;
         $beneficiario->fechanac=$request->fechanac;
         $beneficiario->telcelular=$request->telcelular;
         $beneficiario->save();

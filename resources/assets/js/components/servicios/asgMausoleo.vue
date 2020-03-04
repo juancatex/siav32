@@ -97,8 +97,8 @@
                             <div class="tcelda" v-text="regResponsable.parentesco"></div>
                         </div>
                         <div class="tfila">
-                            <div class="tcelda titcampo">Celular:</div>
-                            <div class="tcelda" v-text="regResponsable.telcelular"></div>
+                            <div class="tcelda titcampo">Obs:</div>
+                            <div class="tcelda" v-text="regAsignacion.obs1"></div>
                         </div>
                         <br>
                     </div>
@@ -424,12 +424,13 @@ export default {
             this.fechadefuncion=asignacion.fechadefuncion;
             this.fechaentrada=asignacion.fechaentrada;
             this.idresponsable=asignacion.idresponsable;
+            this.obs1=asignacion.obs1;
             this.arrayIDdocumentos=JSON.parse('['+asignacion.iddocumentos+']');
         },
 
         validarAsignacion(){
             this.$validator.validateAll().then(result=>{
-                if(!result) { swal('Datos inválidos','Revise los errores','error'); return; }
+                if(!result) { swal('Datos inválidos','Revise los errores','error'); return; } 
                 this.accion==1?this.storeAsignacion():this.updateAsignacion();
             });
         },
@@ -462,6 +463,36 @@ export default {
                 this.listaAmbientes(this.regAmbiente.idestablecimiento,this.nrgrupo);
                 this.modalAsignacion=0;
             });
+        },
+
+        updateAsignacion(){
+             swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
+                showCancelButton:false, showConfirmButton:false, 
+                allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
+                onOpen:() => { swal.showLoading() }
+            });  
+            axios.put('/ser_asignacion/updateAsignacion',{
+                'idasignacion':this.regAsignacion.idasignacion,
+                'nrasignacion':this.nrasignacion,
+                'fechasolicitud':'',
+                'mesboleta':'',
+                'ocupantes':'',
+                'iddocumentos':this.arrayIDdocumentos.join(),
+                'idimplementos':'',
+                'fechaentrada':this.fechaentrada,
+                'horaentrada':'',
+                'horasalida':'',
+                'fechadefuncion':this.fechadefuncion,
+                'idresponsable':this.idresponsable,
+                'actividad':'',
+                'idrepresentante':'',
+                'obs1':this.obs1,  
+            }).then(response=>{
+                swal('Actualizado','Se han guardado los cambios realizados','success');
+                this.cualAsignacion(this.regAmbiente.idambiente)
+                this.modalAsignacion=0;
+            });
+            
         },
 
         nuevoPago(){

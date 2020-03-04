@@ -13,16 +13,16 @@ class SerPagoController extends Controller
 {
     public function listaPagos(Request $request)
     {
-        /*
+        
         $pagos=Ser_Pago:: select('ser__pagos.*','nombre','apaterno','idestado')
-        ->leftjoin('afi__beneficiarios','afi__sbeneficiarios.idbeneficiario','=','ser__pagos.idresponsable')
+        ->leftjoin('afi__beneficiarios','afi__beneficiarios.idbeneficiario','=','ser__pagos.idresponsable')
         ->leftjoin('par__prestamos','par__prestamos.no_prestamo','=','ser__pagos.nrdocumento')
         ->where('ser__pagos.idasignacion','=',$request->idasignacion);//mausoleo
-        */
-        $pagos=Ser_Pago::
-        where('idasignacion',$request->idasignacion);
-        if($request->nit) $pagos=Ser_Pago::select('razon')->where('nit',$request->nit);
-        if($request->periodo) $pagos=Ser_Pago::where('fecha','like',$request->periodo.'%');
+        
+        // $pagos=Ser_Pago::
+        // where('idasignacion',$request->idasignacion);
+        // if($request->nit) $pagos=Ser_Pago::select('razon')->where('nit',$request->nit);
+        // if($request->periodo) $pagos=Ser_Pago::where('fecha','like',$request->periodo.'%');
         return ['pagos'=>$pagos->get()];
     }
     
