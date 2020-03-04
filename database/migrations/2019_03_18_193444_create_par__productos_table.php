@@ -44,6 +44,7 @@ class CreateParProductosTable extends Migration
             $table->integer('cobranza_perfil_ascii')->unsigned()->comment('cobranza ascii'); 
             $table->integer('cobranza_perfil_acreedor')->unsigned()->comment('cobranza acreedor'); 
             $table->integer('cobranza_perfil_daro')->unsigned()->comment('cobranza daro'); 
+            $table->integer('perfil_cambio_estado')->unsigned()->comment('cambio de estado'); 
             
             $table->integer('cancelarprestamos')->default(0)->comment('refinanciamiento');  
             $table->integer('activar_garante')->default(0)->comment('activar a garante/titular'); 
@@ -60,6 +61,7 @@ class CreateParProductosTable extends Migration
             $table->foreign('cobranza_perfil_ascii')->references('idperfilcuentamaestro')->on('con__perfilcuentamaestros');
             $table->foreign('cobranza_perfil_acreedor')->references('idperfilcuentamaestro')->on('con__perfilcuentamaestros');
             $table->foreign('cobranza_perfil_daro')->references('idperfilcuentamaestro')->on('con__perfilcuentamaestros');
+            $table->foreign('perfil_cambio_estado')->references('idperfilcuentamaestro')->on('con__perfilcuentamaestros');
         });
     }
 

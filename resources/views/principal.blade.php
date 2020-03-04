@@ -29,7 +29,7 @@
         </button> 
 
         <span class="ml-auto"><b>
-            <div class="alert alert-danger" role="alert">Fecha del Sistema:
+            <div class="alert alert-danger" style="margin: 0 !important;" role="alert">Fecha del Sistema:
                 <?php use App\Http\Controllers\AdmUserController;
                 echo  AdmUserController::fecha_sistema() ?></b>
             </div>            

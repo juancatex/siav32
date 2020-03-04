@@ -64,7 +64,7 @@ class ImportController extends Controller
 
         
         $idperfilcuentamaestro=$request->idperfilcuentamaestro;
-        if($idperfilcuentamaestro==7) //TODO:  MODIFICAR EL PERFIL DE CUENTA PARA QUE SE DINAMICO Y CONTROLE QUE SEA EL ID CORRECTO PARA EL PERFIL DE CARGA ASCII
+        if($idperfilcuentamaestro==4) //TODO:  MODIFICAR EL PERFIL DE CUENTA PARA QUE SE DINAMICO Y CONTROLE QUE SEA EL ID CORRECTO PARA EL PERFIL DE CARGA ASCII
         {
             $importe3=0;
             $importe4=0;

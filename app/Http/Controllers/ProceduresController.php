@@ -134,10 +134,14 @@ return $request->ip();
              array_push($pos,["tipo" => $val->idf ,"value"=> $valor->html]); 
              $htmls['e2']=$valor->value;
               break;
-          case 3: 
-             $prestamos=(DB::select("select getPrestamos(?,?,0) as total", array($request->id,$request->idpro)))[0]->total; 
+          case 3:  
+             $total=DB::select("select IFNULL(ROUND(SUM(getcuota(pre.idprestamo,mo.tipocambio)),2),0)as total 
+             from par__prestamos pre,par__productos pro,par__monedas mo 
+             where pre.idproducto=pro.idproducto  
+             and pro.moneda=mo.idmoneda and pre.idsocio=? 
+             and pre.apro_conta not between 2 and 4 and pre.idestado between 2 and 3", array($request->id)); 
              $liquidopagable=(DB::select("SELECT liquidopagable_papeleta as total FROM socios where idsocio=?",array($request->id)))[0]->total;
-             $liquidopagable>$prestamos?$liquidopagable-=$prestamos:$liquidopagable=0;
+             $liquidopagable>$total[0]->total?$liquidopagable-=$total[0]->total:$liquidopagable=0;
 
              $valor=json_decode((DB::select("select valida_monto (?,?,?) as total", array($request->factor,$liquidopagable,$request->cuota)))[0]->total);
              

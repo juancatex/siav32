@@ -15,7 +15,7 @@ class CreatePreCobranzasTable extends Migration
     {
         Schema::create('pre__cobranzas', function (Blueprint $table) {
             $table->increments('idcobranza');
-            $table->integer('idprestamo')->unsigned();
+            $table->bigInteger('idprestamo')->unsigned();
             $table->integer('idperfilcuenta')->unsigned();
             $table->string('numdocumento');
             $table->string('detalle');

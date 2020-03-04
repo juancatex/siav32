@@ -217,7 +217,7 @@
                     <label class="col-md-12" style="font-weight: 500;">Suma de cuotas de prestamos vigentes :</label>
                     <div class="col-md-12">
                       <div class="input-group">
-                        <input style="background-color: white;" type="number" :value="prestamosvigentes"
+                        <input style="background-color: white;" type="number" :value="cuotas_vigentes"
                           class="form-control" placeholder="Suma de prestamos" name="Suma de prestamos" disabled />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
@@ -349,7 +349,7 @@
                         for="text-input">Liquido Pagable :</label>
                       <div class="input-group">
                         <input style="background-color: #f0f3f5;text-align: right;" type="number"
-                          :value="liquidopagablecomputable" class="form-control" placeholder="Monto maximo"
+                          :value="liquidopagablecomputable" class="form-control" placeholder="Liquido pagable"
                           name="monto maximo" step="any" disabled />
                         <div class="input-group-append">
                           <span style="min-width: 60px;" class="input-group-text">
@@ -837,12 +837,11 @@ export default {
       cuotaFinalSocio: 0,
       maxfactor: 0,
       valorfactor: 0,
-      prestamosvigentes: 0,
+      cuotas_vigentes: 0,
       montosolicitado: 0,
       cuotaaproximada: 0,
       total_saldo_capital: 0,
-      garantesporproducto: 0,
-      validadorcapital:0,
+      garantesporproducto: 0, 
       cargandocalculo:0,
       total_aportes: 0,
       islineal: 0,
@@ -897,7 +896,8 @@ export default {
           parseFloat(this.familiar) +
           parseFloat(this.prolibro) +
           parseFloat(this.frontera) +
-          parseFloat(this.prestamosvigentes));
+          (this.cancelarprestamos==0?parseFloat(this.cuotas_vigentes):0)
+          );
       return sum > 0 ? this.redondeo(sum, 2) : 0;
     }, 
     tasamensual: function() {
@@ -905,10 +905,8 @@ export default {
         ?  _pl.redondeo_valor(_pl.TEM(this.tasaanual), 2, false)
         : 0;
     },
- getmontodesembolso: function(){ 
- 
-      // return _pl.redondeo_valor(this.montosolicitado-this.total_saldo_capital);
-      return _pl.redondeo_valor((this.validadorcapital==3)?this.montosolicitado:(this.montosolicitado-this.total_saldo_capital));
+ getmontodesembolso: function(){  
+      return _pl.redondeo_valor((this.cancelarprestamos==0)?this.montosolicitado:(this.montosolicitado-this.total_saldo_capital));
     },
     isActived: function() {
       return this.pagination.current_page;
@@ -978,7 +976,7 @@ export default {
                   return id.idsocio;                 
     },
     getmontomin(a,b){
-      if(this.validadorcapital==0||this.validadorcapital==3){
+      if(this.cancelarprestamos==0){
         return a;
       }else{
       return a>0?_pl.redondeo_valor(parseFloat(a)+parseFloat(b)):_pl.redondeo_valor(parseFloat(b));
@@ -1005,7 +1003,7 @@ export default {
           ls.montosolicitado,
           ls.plazomeses,
           ls.fechacorte,
-          ls.prestamosvigentes, 
+          ls.total_saldo_capital, 
           ls.tipocambio,
           ls.arrayFormulasProducto
         )
@@ -1017,7 +1015,7 @@ export default {
           ls.montosolicitado,
           ls.plazomeses,
           ls.fechacorte,
-          ls.prestamosvigentes, 
+          ls.total_saldo_capital,  
           ls.tipocambio,
           ls.arrayFormulasProducto
         );
@@ -1061,7 +1059,7 @@ export default {
     },
 
     view() {
-      _pl._vvp2521_00001(this.PlandePagosPrint);
+       _pl._vvp2521_00001(this.PlandePagosPrint);
     },
     async regGarantes(array, id) {
       let responses = true;
@@ -1114,8 +1112,9 @@ export default {
           fami:this.familiar,
           libro:this.prolibro,
           fron:this.frontera,
-          pvig:this.prestamosvigentes,
-          cuo_aprox:this.cuotaFinalSocio  
+          pvig:this.cuotas_vigentes,  
+          cuo_aprox:this.cuotaFinalSocio,  
+          planPagosMap:JSON.stringify(Array.from(this.PlandePagosPrint)),  
         })
         .then(function(response) {
                    
@@ -1277,7 +1276,7 @@ export default {
       var conta="&conta=1"; 
         
       let me =this;
-       axios.get('/getsaldocapital_desembolso?idsocio='+this.socio_id+'&idpro='+idproducto+conta) 
+       axios.get('/getsaldocapital_desembolso?idsocio='+this.socio_id+'&idpro='+idproducto) 
        .then(function(response) {
          var salidaout=response.data.capital; 
          if(salidaout>=0){
@@ -1353,12 +1352,12 @@ export default {
         me.factorid = 0;
         me.valorfactor = 0;
         me.plazomesesmin = 0; 
-        me.islineal=0;
+        me.cuotas_vigentes = 0; 
+        me.islineal=0; 
         me.garantesporproducto = 0;
         me.arrayFormulasProducto = [];
         me.garantesseleccionados.clear();
-        me.totalgarantesseleccionados = 0;
-        me.validadorcapital=0;
+        me.totalgarantesseleccionados = 0; 
         var url =
           "/par_producto/productosid?id=" + e +  "&totalmesesaporte=" + me.total_aportes + "&idsocio=" +  me.socio_id;
         axios .get(url) .then(function(response) {
@@ -1373,11 +1372,11 @@ export default {
             me.factorid = respuesta.productos[0].idfactor;
             me.maxfactor = respuesta.productos[0].aprobacion;
             me.garantesporproducto = respuesta.productos[0].garantes;
-            me.validadorcapital=respuesta.cuotasvalidador; 
-            me.getTotalcapital(e); 
-             me.getprestamossocio(me.socio_id,respuesta.cuotasvalidador,e);
+ 
             if (respuesta.status == 0) { 
-             if(respuesta.cuotasvalidador==0||respuesta.cuotasvalidador==3) {
+              if(me.cancelarprestamos==1){
+                me.getTotalcapital(e); 
+            } 
                         if (respuesta.escala.length > 0) {
                           me.errors.removeById("8301791");
                           me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
@@ -1385,7 +1384,7 @@ export default {
                           me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
                           me.arrayFormulasProducto["desembolso"] = [];
                             console.log('formulas');
-console.log(respuesta.formulas);
+                            console.log(respuesta.formulas);
                         } else {
                           me.montomaximo=0;
                           me.errors.add({
@@ -1395,147 +1394,13 @@ console.log(respuesta.formulas);
                               "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
                           });
                         }
-            }else if(respuesta.cuotasvalidador==1) {
-                        if (respuesta.escala.length > 0) {
-                          me.errors.removeById("8301791");
-                          me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
-                          me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                             console.log('formulas');
-console.log(respuesta.formulas);
-                        } else {
-                          me.montomaximo=0;
-                          me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
-                          });
-                        }
-            }else if(respuesta.cuotasvalidador==2) {
-                        if (respuesta.escala.length > 0) {
-                          me.errors.removeById("8301791");
-                          me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
-                          me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                        console.log('formulas');
-console.log(respuesta.formulas);
-                        } else {
-                          me.montomaximo=0;
-                          me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
-                          });
-                        }
-            }else if(respuesta.cuotasvalidador==10) {
-              me.montomaximo=0;
-              me.errors.add({
-                id: "8301791",
-                field: "anios",
-                msg:
-                  "Error de configuracion del producto, contactese con el administrador del Sistema."
-              });
-            } 
-
- 
-
-            } else if(respuesta.cuotasvalidador==0) {
+            } else {
               me.montomaximo=0;
               me.errors.add({
                 id: "8301791",
                 field: "anios",
                 msg:
                   "Ya existe un prestamo con el mismo producto para el socio seleccionado"
-              });
-            }else if(respuesta.cuotasvalidador==1) {
-              if(respuesta.status<2){
-                          if (respuesta.escala.length > 0) {
-                          me.errors.removeById("8301791");
-                          me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
-                          me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                            console.log('formulas');
-console.log(respuesta.formulas);
-                        } else {
-                          me.montomaximo=0;
-                          me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
-                          });
-                        }
-              }else{
-                me.montomaximo=0;
-                me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio tiene "+respuesta.status+" prestamos vigentes, no puede optar a otro nuevo."
-                          });
-              }
-                
-
-            }else if(respuesta.cuotasvalidador==2) {
-                if(respuesta.status<2){
-                        if (respuesta.escala.length > 0) {
-                          me.errors.removeById("8301791");
-                          me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
-                          me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                            console.log('formulas');
-console.log(respuesta.formulas);
-                        } else {
-                          me.montomaximo=0;
-                          me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
-                          });
-                        }
-                  }else{
-                    me.montomaximo=0;
-                    me.errors.add({
-                                id: "8301791",
-                                field: "anios",
-                                msg:
-                                  "El socio tiene "+respuesta.status+" prestamos vigentes, no puede optar a otro nuevo."
-                              });
-                  }
-
-            }else if(respuesta.cuotasvalidador==3) {
-                        if (respuesta.escala.length > 0) {
-                          me.errors.removeById("8301791");
-                          me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
-                          me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                          console.log('formulas');
-console.log(respuesta.formulas);
-
-                        } else {
-                          me.montomaximo=0;
-                          me.errors.add({
-                            id: "8301791",
-                            field: "anios",
-                            msg:
-                              "El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado"
-                          });
-                        }
-            }else if(respuesta.cuotasvalidador==10) {
-              me.montomaximo=0;
-              me.errors.add({
-                id: "8301791",
-                field: "anios",
-                msg:
-                  "Error de configuracion del producto, contactese con el administrador del Sistema."
               });
             } 
         
@@ -1677,12 +1542,12 @@ console.log(respuesta.formulas);
         return;
       });
     },
-    getprestamossocio(id,validador=0,pro=0) {
+    getprestamossocio(id) {
       let me = this;
-      var url = "/prestamos/getprestamostotal?idsocio=" + id+'&pro='+pro+'&valor='+validador;
+      var url = "/prestamos/getprestamostotal?idsocio=" + id;
       axios.get(url).then(function(response) {
           var respuesta = response.data;
-          me.prestamosvigentes = me.redondeo(respuesta.cuotas, 2);
+          me.cuotas_vigentes = respuesta.cuotas;
         }).catch(function(response) {
           console.log(response);
         });
@@ -1820,7 +1685,7 @@ console.log(respuesta.formulas);
           this.total_bs = data.totalaportes;
           this.servicio = this.redondeo(this.total_aportes / 12);
           this.garantias = data.totalgarantias;
-          this.prestamosvigentes = 0; // debe obtener la suma de todos los prestmos anteriores....
+          this.cuotas_vigentes = 0; // debe obtener la suma de todos los prestmos anteriores....
           this.getprestamossocio(data.idsocio);
           this.listacuentabancaria(data.idsocio);
           break;
@@ -1838,9 +1703,9 @@ console.log(respuesta.formulas);
     this.classModal.addModal("plandepagos");
     this.classModal.addModal("factorview");
     this.classModal.addModal("factorviewgarante"); 
-    
-     
-    //$("#tttt *").prop('disabled',true); inhabilita todos los botones
+
+    console.log(_.replace('2/total_cuotas', 'cuota', '$cuota'));
+    console.log('2/total_cuotas'.replace(/cuota/gi, '$cuota'));
   }
 };
 </script>

@@ -30,10 +30,10 @@
 				</div>
 		</div> 
 	<div class="box"> 
+	
 		 <form id="loginform" class="form-horizontal" method="POST" action="{{ route('login') }}">
 			@csrf   
-			   <div class="title">LOGIN</div>
-
+			   <div class="title">LOGIN</div> 
 			   <div class="input">
 				  <label class="" for="name">Usuario :</label>
 				  <input type="text" name="username" autofocus value="{{ old('username') }}" id="name" required>
@@ -54,11 +54,19 @@
 				<div >
 				   <div class="material-button"> </div>
 				</div> 
+
 				<div class="button login">
-			    <button type="submit" ><span>Ingresar</span>
+			    <button type="submit" ><span>Ingresar</span> 
 	           </div>
-	   </form>
-	    
+
+			   <div class="title" style="height: 0; letter-spacing: normal; font-size: 15px;margin-bottom: 16px;"> 
+			      <div  style="  color: black;"><b>
+               			 <?php use App\Http\Controllers\AdmUserController;
+               			 echo  AdmUserController::fecha_sistema_login() ?></b>
+          		  </div>
+	           </div>
+	   </form> 
 	</div> 
+	 
 </div>
 @endsection

@@ -18,6 +18,7 @@
                                             <table class="table table-bordered table-sm">
                                                     <thead>
                                                         <tr> 
+                                                            <th>Plan</th>  
                                                             <th>Producto</th>  
                                                             <th>Moneda</th> 
                                                             <th>Monto</th> 
@@ -29,12 +30,16 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="prestamos in arrayPrestamos" :key="prestamos.idprestamo" >   
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nomproducto"></td> 
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nommoneda"></td> 
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;" v-text="completacero(prestamos.monto)"></td>
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;" v-text="prestamos.cuota"></td>
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: center;" v-text="prestamos.plazo"></td>
-                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: center;" v-text="prestamos.fecharegistro"></td>
+                                                                    <td style="vertical-align: middle; text-align: center;">
+                                                                     <button class="btn btn-primary" type="button"
+                                                                         @click="pdf(prestamos.planPagosMap)"> <i class="fa fa-file-pdf-o"></i> </button>
+                                                                    </td> 
+                                                                    <td style="vertical-align: middle;" :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nomproducto"></td> 
+                                                                    <td style="vertical-align: middle; text-align: center;" :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nommoneda"></td> 
+                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;vertical-align: middle;" v-text="completacero(prestamos.monto)"></td>
+                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;vertical-align: middle;" v-text="prestamos.cuota"></td>
+                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: center;vertical-align: middle;" v-text="prestamos.plazo"></td>
+                                                                    <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: center;vertical-align: middle;" v-text="prestamos.fecharegistro"></td>
                                                                     <td :class="{'tableviewstatus': prestamos.idestado>3}" style="width: 140px;text-align: left;background: rgba(128, 128, 128, 0.14);"> 
                                                                         
                                                                         <div style="width: 100%;display: inline-flex;" ><div class="col-md-4"><span style="font-weight: 600;">Tipo:</span></div><div class="col-md-9"><span style="width:100%;" class="badge badge-primary">{{prestamos.nombretipo}}</span></div> </div>
@@ -74,7 +79,30 @@
                         </div>
                     </div>
                 </div>
-  
+        <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="plandepagospdf">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Plan de pagos</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModalstatus.openModal('primarymodalstatus')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body-plandepagos">
+            <!--  <div style="display:none" v-html="plandepagosSimulacion"></div>-->
+            <iframe name="planoutpdf" id="planoutpdf" style="width:100%;height:100%;"></iframe>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModalstatus.openModal('primarymodalstatus')">cerrar</button>
+            <!--  <button class="btn btn-primary" type="button" @click="print()">Imprimir</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
         </main>
 </template>
 
@@ -144,6 +172,10 @@
             }
         },
         methods : { 
+            pdf(pdfin){
+       this.classModalstatus.openModal('plandepagospdf');        
+      _pl._vvp2521_00001(new Map(JSON.parse(pdfin)),'planoutpdf');
+            },
             completacero(g){
                 return _pl.fillDecimals(g);
             },
@@ -176,7 +208,7 @@
                 
                 this.classModalstatus=new _pl.Modals();
                 this.classModalstatus.addModal('primarymodalstatus'); 
-               
+                this.classModalstatus.addModal("plandepagospdf");
                 this.classModalstatus.openModal('primarymodalstatus'); 
               }
         } 

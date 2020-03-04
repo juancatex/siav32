@@ -8,24 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class ParProductosPerfilcuentaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -45,8 +30,10 @@ class ParProductosPerfilcuentaController extends Controller
         $productoperfil->idperfilcuentadetalle = $request->idperfilcuentadetalle; 
         $productoperfil->idperfilcuentamaestro = $request->idperfilcuentamaestro; 
         $productoperfil->valor_abc = $request->valor_abc;  
+        $productoperfil->valor_abc_php = $request->valor_abc_php;  
         $productoperfil->iscargo = $request->iscargo; 
         $productoperfil->formula = $request->formula;  
+        $productoperfil->formulaphp = $request->formulaphp;  
         $productoperfil->fecharegistro = $fecha; 
         $productoperfil->activo = '1';
         $productoperfil->save(); 

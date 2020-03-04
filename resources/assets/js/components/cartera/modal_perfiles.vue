@@ -5,7 +5,7 @@
             <div class="modal-content animated fadeIn"> 
                     <div class="modal-header"> 
                         <h4 class="modal-title" v-text="nombreperfilmaestro"></h4>
-                        <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="modalperfilesclass.closeModal('modalperfiles')">
+                        <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarmodalperfiles">
                             <span aria-hidden="true">×</span></button>
                     </div> 
 
@@ -14,9 +14,9 @@
                         <div class="col-md-12">
                             <div class="row" v-if="data_producto_main&&refreshh">  
                                    
-                                    <button v-if="data_producto_main.desembolso_perfil_refi!=0" type="button" :class="validateperfil(data_producto_main.desembolso_perfil_refi)?'btn-success':'btn-primary'" class="botonperfilespecial btn btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.desembolso_perfil_refi)">Perfil de Desembolso por Refinanciamiento</button>
+                                    <button v-if="data_producto_main.desembolso_perfil_refi!=0" type="button" :class="validateperfil(data_producto_main.desembolso_perfil_refi)?'btn-success':'btn-primary'" class="botonperfilespecial btn btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.desembolso_perfil_refi,true)">Perfil de Desembolso por Refinanciamiento<br><b style="color: red;font-size: 15px;font-weight: 800;">( Expresado en Bolivianos )</b></button>
+                                    <button v-if="data_producto_main.desembolso_perfil_garante!=0" type="button" :class="validateperfil(data_producto_main.desembolso_perfil_garante)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.desembolso_perfil_garante,true)">Perfil de Desembolso por Activación a garante/titular<br><b style="color: red;font-size: 15px;font-weight: 800;">( Expresado en Bolivianos )</b></button>
                                     <button v-if="data_producto_main.cobranza_perfil_refi!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_refi)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_refi)">Perfil de Cobranza Refinanciamiento</button>
-                                    <button v-if="data_producto_main.desembolso_perfil_garante!=0" type="button" :class="validateperfil(data_producto_main.desembolso_perfil_garante)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.desembolso_perfil_garante)">Perfil de Desembolso por Activación a garante/titular</button>
                                     <button v-if="data_producto_main.cobranza_perfil_garante!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_garante)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_garante)">Perfil de Cobranza Activación a garante/titular</button>
 
                                     <button v-if="data_producto_main.desembolso_perfil!=0" type="button" :class="validateperfil(data_producto_main.desembolso_perfil)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.desembolso_perfil)">Perfil de Desembolso</button>
@@ -24,6 +24,7 @@
                                     <button v-if="data_producto_main.cobranza_perfil_ascii!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_ascii)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_ascii)">Perfil de Cobranza ASCII</button>
                                     <button v-if="data_producto_main.cobranza_perfil_acreedor!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_acreedor)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_acreedor)">Perfil de Cobranza Acreedor</button>
                                     <button v-if="data_producto_main.cobranza_perfil_daro!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_daro)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_daro)">Perfil de Cobranza Daaro</button>
+                                    <button v-if="data_producto_main.perfil_cambio_estado!=0" type="button" :class="validateperfil(data_producto_main.perfil_cambio_estado)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.perfil_cambio_estado)">Perfil de Cambio de Estado (Vigente/Mora)</button>
                                      
                             </div>
                         </div>
@@ -31,14 +32,14 @@
                     </div>  
 
                     <div class="modal-footer" v-if="refreshh">  
-                    <button type="button" class="btn btn-secondary" @click="modalperfilesclass.closeModal('modalperfiles')">Cerrar</button>     
+                    <button type="button" class="btn btn-secondary" @click="cerrarmodalperfiles">Cerrar</button>     
                     <button v-if="buttonsave" type="button" class="btn btn-primary" @click="save()">Guardar</button>    
                     </div>    
             </div>
         </div>
     </div>
    <!-- <view-cargos  @cerrarvue="cerrarModalvue" ref="view"></view-cargos> -->
-    <cargos @cerrarvueprincipal="cerrarModalvue"  @savePerfil="saveperfilselected"  ref="ModalCargos" :idmodulo="idmoduloin"></cargos>
+    <cargos @cerrarvueprincipalperfiles="cerrarModalvue"  @savePerfil="saveperfilselected"  ref="ModalCargos" :idmodulo="idmoduloin"></cargos>
    </main>
 </template>
 
@@ -67,17 +68,13 @@
                     perfilesfinales:[],
                     data_producto_main:null ,
                     mapDataGeneral:new Map() ,
-                    refreshh:true             
+                    refreshh:true ,
+                    buttonsave:false            
             }
         } ,
-          computed: {
-              buttonsave: function () {
-                  if (this.data_producto_main == null) {
-                      console.log('falsooo');
-                      return false;
-                  } else { 
-                      console.log('valores:',this.mapDataGeneral);
-                      return (((this.data_producto_main.desembolso_perfil_refi != 0) ? this.mapDataGeneral.has(this.data_producto_main.desembolso_perfil_refi) : true) &&
+          watch: {
+              'data_producto_main.seriemap': function () { 
+               this.buttonsave= (((this.data_producto_main.desembolso_perfil_refi != 0) ? this.mapDataGeneral.has(this.data_producto_main.desembolso_perfil_refi) : true) &&
                           ((this.data_producto_main.cobranza_perfil_refi != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_refi) : true) &&
                           ((this.data_producto_main.desembolso_perfil_garante != 0) ? this.mapDataGeneral.has(this.data_producto_main.desembolso_perfil_garante) : true) &&
                           ((this.data_producto_main.cobranza_perfil_garante != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_garante) : true) &&
@@ -85,13 +82,25 @@
                           ((this.data_producto_main.cobranza_perfil != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil) : true) &&
                           ((this.data_producto_main.cobranza_perfil_ascii != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_ascii) : true) &&
                           ((this.data_producto_main.cobranza_perfil_acreedor != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_acreedor) : true) &&
+                          ((this.data_producto_main.perfil_cambio_estado != 0) ? this.mapDataGeneral.has(this.data_producto_main.perfil_cambio_estado) : true) &&
                           ((this.data_producto_main.cobranza_perfil_daro != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_daro) : true));
-                  }
-              }
+                }
           },
         methods : { 
             save(){
-
+              let me=this;
+               axios.put('/par_producto/actualizar/map', {
+                                'idproducto': this.data_producto_main.idproducto,
+                                'map': this.data_producto_main.seriemap
+                            }).then(function (response) { 
+                                me.modalperfilesclass.closeModal('modalperfiles');
+                                me.$emit('cerrarvueprincipal');
+                                swal("¡Se guardo los datos correctamente!", "", "success");
+                                $(".swal2-modal").css('z-index', '2000');
+                                $(".swal2-container").css('z-index', '2000');
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
             }, 
              validateperfil(idperfil){
               return  this.mapDataGeneral.has(idperfil);
@@ -101,27 +110,25 @@
                 this.mapDataGeneral.set(idmaestro, JSON.stringify(Array.from(valoresperfil)));
                 this.modalperfilesclass.openModal('modalperfiles');  
                 this.refreshh=true;
-                // this.data_producto_main.serializedmap=JSON.stringify(Array.from(this.mapDataGeneral));
- 
- 
-
+                this.data_producto_main.seriemap=JSON.stringify(Array.from(this.mapDataGeneral));
               },
-              cerrarModalvue(valor,valor2){
-                if(valor) console.log('valor:',valor);
-                if(valor2) console.log('valor2:',valor2);
+              cerrarModalvue(){ 
                 this.modalperfilesclass.openModal('modalperfiles'); 
               },
-         
+             cerrarmodalperfiles(){
+              this.modalperfilesclass.closeModal('modalperfiles');
+                this.$emit('cerrarvueprincipal');
+              },
             showVueperfiles(id){ 
               this.nombreperfilmaestro='Perfiles: '+id.nomproducto;  
               this.data_producto_main=id;
-              console.log(this.data_producto_main); 
+            //  console.log(this.data_producto_main); 
               this.modalperfilesclass.openModal('modalperfiles'); 
               
             } ,
-             set_perfil(id_in,perfil){
+             set_perfil(id_in,perfil,exp=false){
                    this.modalperfilesclass.closeModal('modalperfiles'); 
-                   this.$refs.ModalCargos.showVuecargos(id_in,perfil);  
+                   this.$refs.ModalCargos.showVuecargos(id_in,perfil,exp);  
                 }
         } ,
         mounted() {

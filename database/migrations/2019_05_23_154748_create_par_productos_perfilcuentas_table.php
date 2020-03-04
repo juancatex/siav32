@@ -19,9 +19,11 @@ class CreateParProductosPerfilcuentasTable extends Migration
             $table->integer('idperfilcuentadetalle')->unsigned();
             $table->integer('idperfilcuentamaestro')->unsigned();
             $table->string('valor_abc');
+            $table->string('valor_abc_php');
           //  $table->string('key_abc');
             $table->boolean('iscargo')->default(0);
             $table->string('formula'); 
+            $table->string('formulaphp'); 
            // $table->text('html_value');  
             $table->dateTime('fecharegistro');
             $table->boolean('activo')->default(1); 

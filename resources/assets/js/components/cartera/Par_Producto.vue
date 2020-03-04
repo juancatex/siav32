@@ -9,7 +9,7 @@
                 <div class="card animated fadeIn">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Registro de Productos
-                        <button type="button" @click="abrirModal('modalproducto','producto','registrar')" class="btn btn-secondary">
+                        <button v-if="check('Nuevo')" type="button" @click="abrirModal('modalproducto','producto','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                     </div>
@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
-                                    <th>Perfiles</th>
+                                    <!-- <th>Perfiles</th> -->
                                     <th>Nombre</th>
                                     <th>Codigo</th>
                                     <th>Moneda</th>
@@ -43,15 +43,16 @@
                             <tbody>
                                 <tr v-for="producto in arrayproducto" :key="producto.idproducto">
                                     <td>
-                                            <button v-if="producto.activo==0" data-toggle="tooltip" data-placement="top" title="Activar" type="button" class="btn btn-success btn-sm" @click="activarproducto(producto.idproducto)"><i class="icon-check"></i></button> 
-                                            <button v-if="producto.activo==1" data-toggle="tooltip" data-placement="top" title="Desactivar" type="button" class="btn btn-danger btn-sm" @click="desactivarproducto(producto.idproducto)"><i class="icon-trash"></i></button> 
-                                            <button v-if="producto.activo==2" data-toggle="tooltip" data-placement="top" title="Editar" type="button" @click="abrirModal('modalproducto','producto','actualizar',producto)" class="btn btn-warning btn-sm"><i class="icon-pencil"></i> </button>
-                                            <button v-if="producto.activo==2" data-toggle="tooltip" data-placement="top" title="Consolidar" type="button" class="btn btn-primary btn-sm" @click="consolidar(producto)"> <i class="icon-login"></i></button>    
+                                            <button v-if="producto.activo==0&&check('Habilitar_Deshabilitar_Producto')" data-toggle="tooltip" data-placement="top" title="Activar" type="button" class="btn btn-success btn-sm" @click="activarproducto(producto.idproducto)"><i class="icon-check"></i></button> 
+                                            <button v-if="producto.activo==1&&check('Habilitar_Deshabilitar_Producto')" data-toggle="tooltip" data-placement="top" title="Desactivar" type="button" class="btn btn-danger btn-sm" @click="desactivarproducto(producto.idproducto)"><i class="icon-trash"></i></button> 
+                                            <button v-if="producto.activo==2&&check('Edición')" data-toggle="tooltip" data-placement="top" title="Editar" type="button" @click="abrirModal('modalproducto','producto','actualizar',producto)" class="btn btn-warning btn-sm"><i class="icon-pencil"></i> </button>
+                                            <button v-if="producto.activo==2&&visormaps(producto)&&check('Consolidar_perfil')" data-toggle="tooltip" data-placement="top" title="Consolidar" type="button" class="btn btn-primary btn-sm" @click="consolidar(producto)"> <i class="icon-login"></i>&nbsp;Consolidar</button>    
+                                            <button v-if="producto.activo==2&&!visormaps(producto)&&check('Edición_Perfiles')" data-toggle="tooltip" data-placement="top" title="Perfiles" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilesproducto(producto)"> <i class="icon-list"></i> &nbsp;Perfiles</button>
                                     </td>
-                                    <td>    
-                                     <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilesproducto(producto)"> <i class="icon-list"></i> &nbsp;Perfiles</button>
-                                     <!-- <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilcobranzaVista(producto)"> <i class="icon-list"></i> &nbsp;Cobranza</button> -->
-                                    </td>
+                                    <!-- <td>    
+                                    
+                                     <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilcobranzaVista(producto)"> <i class="icon-list"></i> &nbsp;Cobranza</button>
+                                    </td> -->
                                     <td v-text="producto.nomproducto"></td>
                                     <td v-text="producto.codproducto"></td>
                                     <td v-text="producto.codmoneda"></td>
@@ -431,6 +432,33 @@
                                     </div>
                             </div> 
 
+                             <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil Cambio de <br><b>Estado</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cambio Estado')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cambio Estado" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCambio_estado"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cambio Estado') }}</span> 
+                                    </div>
+                            </div>
+
 <!-- ////////////////////// -->
 <div class="form-group row" style="font-weight: bold;background-color: #c2cfd6;padding: 7px; margin-left: 3px;margin-right: 3px; margin-bottom: 0px; margin-top: 12px;">    
                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Agrupar por Lote : </label>
@@ -454,7 +482,50 @@
                                 <div class="form-group row" style=" margin-left: 3px;
                                         border: 1px solid rgb(194, 207, 214);
                                         margin-right: 3px;    margin-top: 0px;"> 
-                                     
+                                        <!-- ///////////////////////////////////  es refinanciable  ////////////////////////////////////// -->
+<div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                                    <div class="row "> 
+                                     <label style="text-align: right; align-items: center;"  class="col-md-6 my-auto"
+                                      for="text-input">Es refinanciable :</label>
+                                    <div class="col-md-6 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="isrefinanciable">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>   
+                                    </div>
+                                    </div>
+                                    <div v-if="isrefinanciable" class="row" style="margin-top: 15px;"> 
+                                     <label v-if="isrefinanciable" style="text-align: right; align-items: center;" class="col-md-3" for="text-input">Cobranza por<br><b>Refinanciamiento</b>:</label>
+                                     <div class="col-md-9" v-if="isrefinanciable" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="isrefinanciable&&modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Refinanciamiento')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Refinanciamiento" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilRefinanciamientoCobranza"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Refinanciamiento') }}</span> 
+                                    </div>
+
+                                    </div>
+                               </div> 
+
+<!-- //////////////////////////////  refinanciar  ///////////////////////////// -->
                               <div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
                                     <div class="row "> 
                                      <label style="text-align: right; align-items: center;" :class="cancelarprestamos?'col-md-6 my-auto':'col-md-6 my-auto'"
@@ -467,8 +538,8 @@
                                     </div>
                                     </div>
                                     <div v-if="cancelarprestamos" class="row" style="margin-top: 15px;"> 
-                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Desembolso :</label>
-                                     <div class="col-md-4" v-if="cancelarprestamos" >   
+                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-3" for="text-input">Desembolso por<br><b>Refinanciamiento</b>:</label>
+                                     <div class="col-md-9" v-if="cancelarprestamos" >   
                                         <div style="display:flex"> 
                                             <Combo  v-if="cancelarprestamos&&modal==1" 
                                                 style="width: 100%" 
@@ -487,39 +558,14 @@
                                                     {{ option.nomperfil }}
                                                 </template>
                                                 <template slot="selected-option" slot-scope="optionselected">
-                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
+                                                    <div class="selected d-center" >  {{ optionselected.nomperfil }} </div>
                                                  </template>
                                               </Combo> 
                                         </div>
                                         <span class="text-error">{{ errors.first('Perfil Desembolso Refinanciamiento') }}</span> 
                                     </div>
                                     
-                                     <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Cobranza :</label>
-                                     <div class="col-md-4" v-if="cancelarprestamos" >   
-                                        <div style="display:flex"> 
-                                            <Combo  v-if="cancelarprestamos&&modal==1" 
-                                                style="width: 100%" 
-                                                :class="{'error': errors.has('Perfil Cobranza Refinanciamiento')}"    
-                                                v-validate.initial="'required'"
-                                                name="Perfil Cobranza Refinanciamiento" 
-                                                label="nomperfil" 
-                                                :options="arrayPerfiles"
-                                                v-model="idPerfilRefinanciamientoCobranza"  
-                                                placeholder="Seleccione perfil" 
-                                                :reduce="json => json.idperfilcuentamaestro" 
-                                                :searchable="false"
-                                                :clearable="false"   
-                                                ><span slot="no-options">No existen Datos</span>
-                                                <template slot="option" slot-scope="option"> 
-                                                    {{ option.nomperfil }}
-                                                </template>
-                                                <template slot="selected-option" slot-scope="optionselected">
-                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
-                                                 </template>
-                                              </Combo> 
-                                        </div>
-                                        <span class="text-error">{{ errors.first('Perfil Cobranza Refinanciamiento') }}</span> 
-                                    </div>
+                                      
 
                                     </div>
                                </div> 
@@ -626,10 +672,11 @@
      Vue.component('Combo', vSelect);
     
     export default {
-         props: ['idmodulo'],
+         props:['idmodulo','idventanamodulo'],
         data (){
             return {
-                arrayPermisos:{Nuevo:0,Edición:0},
+                arrayPermisos:{Nuevo:0,Edición:0,Habilitar_Deshabilitar_Producto:0,Edición_Perfiles:0,Consolidar_perfil:0},
+                arrayPermisosIn:[],
                 classModal:null,
                 producto_id: 0,
                 pasoeditar:0,
@@ -647,17 +694,19 @@
                 idPerfilCobranza_ascii:'',
                 idPerfilCobranza_acreedor:'',
                 idPerfilCobranza_daro:'',
+                idPerfilCambio_estado:'',
                 moneda :'',
                 tasa:0,
                 garantes:0,  
                 plazominimo: 0,
                 plazomaximo: 0,
 
-                max_prestamos:1,
+                max_prestamos:0,
                 activacion_a_garante:0,
                 lineaC:0,
                 lote:0,
                 cancelarprestamos:0, 
+                isrefinanciable:0, 
 
                 arrayproducto : [],
                 arrayPerfiles:[],
@@ -719,8 +768,7 @@
      if(this.cancelarprestamos){
          this.activacion_a_garante=0;
             if(this.pasoeditar==0){
-                this.idPerfilRefinanciamientoDesembolso=''; 
-                this.idPerfilRefinanciamientoCobranza=''; 
+                this.idPerfilRefinanciamientoDesembolso='';  
             } 
          this.idPerfil_ActivacionGarante_Desembolso=''; 
          this.idPerfil_ActivacionGarante_Cobranza='';
@@ -729,11 +777,15 @@
           
      }
  },
+   isrefinanciable:function(){
+     if(this.isrefinanciable&&this.pasoeditar==0){  
+                this.idPerfilRefinanciamientoCobranza='';    
+     }
+ },
   activacion_a_garante:function(){
      if(this.activacion_a_garante){
          this.cancelarprestamos=0; 
          this.idPerfilRefinanciamientoDesembolso=''; 
-         this.idPerfilRefinanciamientoCobranza=''; 
          
          if(this.pasoeditar==0){
             this.idPerfil_ActivacionGarante_Desembolso=''; 
@@ -774,15 +826,29 @@
             }
         },
         methods : {
-            cuentas(value){
-                console.log(value);
+            getPermisos() {   
+                var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data.datapermiso[0].permisos;  
+                    me.arrayPermisosIn = JSON.parse((respuesta)); console.log('permisos:',me.arrayPermisosIn);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }, 
+            check(n){
+                return _pl.validatePermission(this.arrayPermisosIn,n);
             },
-            clean(value){
-                 console.log(value);
+             
+            visormaps(value){
+              var aux = new Map(JSON.parse(value.serializedmap));
+              return aux.size>0;
             },
             consolidar(prod){
               var mapDataGeneral = new Map(JSON.parse(prod.serializedmap));
-              if(mapDataGeneral.size==2){
+              
+              if(mapDataGeneral.size>0){
  
             swal({
                 title: '¿Esta seguro de consolidar este Producto?',
@@ -842,8 +908,10 @@
                             'idperfilcuentadetalle':values.idperfilcuentadetalle, 
                             'idperfilcuentamaestro':values.idperfilcuentamaestro, 
                             'valor_abc':values.data, 
+                            'valor_abc_php':values.data_php, 
                             'iscargo':values.adi, 
-                            'formula':values.formula 
+                            'formula':values.formula, 
+                            'formulaphp':values.formula2 
                             }).then(function (response) { responses=true;  }).catch(function (error) {  responses=false;  });   
                           }
                         };
@@ -862,12 +930,9 @@
                 cerrarModalvue(){   
                     this.listarProducto(1,this.buscar,this.criterio);
                 },
-                perfilesproducto(id){
+                perfilesproducto(id){ 
                    this.$refs.ModalPerfiles.showVueperfiles(id);  
-                },
-                // perfilcobranzaVista(id){
-                //    this.$refs.ModalPerfiles.showVuecargos(id,id.cobranza_perfil);  
-                // }, 
+                },  
             listar(){
                 let me=this; 
                 var url= '/con_perfilcuentamaestro/selectPerfilcuentamaestro?idmodulo='+ this.idmodulo;
@@ -960,7 +1025,8 @@
                     'cobranza_perfil':this.idPerfilCobranza_manual,                   
                     'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
                     'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
-                    'cobranza_perfil_daro':this.idPerfilCobranza_daro                   
+                    'cobranza_perfil_daro':this.idPerfilCobranza_daro,                   
+                    'perfil_cambio_estado':this.idPerfilCambio_estado                   
                     
                 }).then(function (response) {
                    me.cerrarModal('modalproducto'); 
@@ -1013,7 +1079,8 @@
                         'cobranza_perfil':this.idPerfilCobranza_manual,
                         'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
                         'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
-                        'cobranza_perfil_daro':this.idPerfilCobranza_daro  
+                        'cobranza_perfil_daro':this.idPerfilCobranza_daro,  
+                        'perfil_cambio_estado':this.idPerfilCambio_estado  
                     }).then(function (response) {
                     me.cerrarModal('modalproducto'); 
                         swal("¡Se actualizo los datos correctamente!", "", "success").then((result) => {
@@ -1145,8 +1212,9 @@
                                 this.idPerfilCobranza_ascii='';                   
                                 this.idPerfilCobranza_acreedor='';                   
                                 this.idPerfilCobranza_daro='';  
+                                this.idPerfilCambio_estado='';  
                                 this.tipoAccion = 1;
-                                this.max_prestamos= 1;
+                                this.max_prestamos= 0;
                                 this.lote= 0;
                                 this.activacion_a_garante= 0;
                                 this.lineaC= 0;
@@ -1180,6 +1248,7 @@
 
                                 this.idPerfilRefinanciamientoDesembolso= parseInt(data['desembolso_perfil_refi'])>0?data['desembolso_perfil_refi']:'';
                                 this.idPerfilRefinanciamientoCobranza= parseInt(data['cobranza_perfil_refi'])>0?data['cobranza_perfil_refi']:'';
+                                this.isrefinanciable=parseInt(data['cobranza_perfil_refi'])>0?1:0;
                                 this.idPerfil_ActivacionGarante_Desembolso= parseInt(data['desembolso_perfil_garante'])>0?data['desembolso_perfil_garante']:'';
                                 this.idPerfil_ActivacionGarante_Cobranza= parseInt(data['cobranza_perfil_garante'])>0?data['cobranza_perfil_garante']:'';
  
@@ -1187,6 +1256,7 @@
                                 this.idPerfilCobranza_ascii= data['cobranza_perfil_ascii'];                    
                                 this.idPerfilCobranza_acreedor= data['cobranza_perfil_acreedor'];                    
                                 this.idPerfilCobranza_daro= data['cobranza_perfil_daro']; 
+                                this.idPerfilCambio_estado= data['perfil_cambio_estado']; 
                                 
                                 
                                 break;
@@ -1205,6 +1275,7 @@
             this.selectMoneda();
             this.selectFactor();
             this.selectEscala();
+            this.getPermisos(); 
         }
     }
 </script>

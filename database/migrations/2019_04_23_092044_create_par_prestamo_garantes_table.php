@@ -17,7 +17,7 @@ class CreateParPrestamoGarantesTable extends Migration
             $table->increments('idgarante');
             $table->integer('idsocio')->unsigned();
             $table->float('factor')->default(0);
-            $table->integer('idprestamo')->unsigned();
+            $table->bigInteger('idprestamo')->unsigned();
             $table->dateTime('fecharegistro');
             $table->boolean('activo')->default(1); 
             $table->timestamps();

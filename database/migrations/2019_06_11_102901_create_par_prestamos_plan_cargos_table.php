@@ -15,7 +15,7 @@ class CreateParPrestamosPlanCargosTable extends Migration
     {
         Schema::create('par__prestamos__plan__cargos', function (Blueprint $table) {
             $table->bigIncrements('idcargos');
-            $table->integer('idplan')->unsigned()->index();
+            $table->bigInteger('idplan')->unsigned()->index();
             $table->integer('idperfilcuentadetalle')->unsigned();
             $table->float('cargo');
             $table->integer('rev')->default(0); 

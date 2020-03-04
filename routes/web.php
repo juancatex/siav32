@@ -759,6 +759,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
         Route::put('/prestamos/desembolsoupdate', 'ParPrestamosController@grabar_estado');
+        Route::put('/prestamos/grabar_desembolsoNormal', 'ParPrestamosController@grabar_desembolsoNormal');
         Route::get('/start_desembolso', 'ParPrestamosController@desembolso'); 
         Route::get('/getprestamosEstado', 'ParPrestamosController@getprestamosEstado'); 
         Route::put ('/par_prestamos/eliminar','ParPrestamosController@delete_estado');
@@ -766,8 +767,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/update_estado_revertir','ParPrestamosController@update_estado_revertir');
         Route::put ('/reversionPrestamos','ParPrestamosController@reversionPrestamos');
         Route::get ('/getprestamoRefi','ParPrestamosController@getprestamoRefi');
-
         Route::get ('/pruebare','ParPrestamosController@prueba');
+        Route::post ('/start_refinanciamiento','ParPrestamosController@start_refinanciamiento');
+
         Route::get ('/liq_saldosmenores','LiqSaldosmenorController@index');
         Route::get ('/liq_saldosmenores/procesarsaldos','LiqSaldosmenorController@procesarsaldos');
         Route::post ('/liq_saldosmenores/liquidarsaldos','LiqSaldosmenorController@liquidarsaldos');

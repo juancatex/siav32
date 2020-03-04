@@ -518,101 +518,77 @@ class Procedures extends Migration
 
 
            
-             DB::unprepared("CREATE OR REPLACE FUNCTION getmonto_refinciamiento (idprestamoin int,tasa float,paso int) 
+             DB::unprepared("CREATE OR REPLACE FUNCTION getmonto_refinciamiento (idprestamoin int) 
              RETURNS FLOAT
              DETERMINISTIC
              BEGIN  
-                        set @validaconta=1; 
-                                 if paso=1 then 
-                                     set @validaconta=(select apro_conta from par__prestamos where idprestamo=idprestamoin);
-                                 end if; 
+             set @validaconta=1; 
+                             set @validaconta=(select pre.apro_conta from par__prestamos pre,par__productos pro where pre.idproducto=pro.idproducto   and pre.idprestamo=idprestamoin);
+                                
                          if @validaconta=1 then  
                                  set @mesdesembolso=(select month(fechardesembolso) from par__prestamos where idprestamo=idprestamoin);
                                  set @diadesembolso=(select day(fechardesembolso) from par__prestamos where idprestamo=idprestamoin);
                                  set @tipocambio=(select mo.tipocambio from par__prestamos pre,par__productos pro,par__monedas mo 
                                      where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pre.idprestamo=idprestamoin);
                                  
+                                 set @tasa=(select pro.tasa from par__prestamos pre,par__productos pro where pre.idproducto=pro.idproducto   and pre.idprestamo=idprestamoin);   
                                  set @tem=0;
-                                 if tasa>0 then
-                                 set @tem =(tasa/12)/100;
+                                 if @tasa>0 then
+                                 set @tem =(@tasa/12)/100;
                                  end if;
                                   
                                  SET @dias=0;
-                                 set @por_cobrar=(select if(sum(am)>0,sum(am),0) from par__prestamos__plans where idprestamo=idprestamoin and idestado=2);
-                                 set @cobrado=(select if(sum(am)>0,sum(am),0)  from par__prestamos__plans where idprestamo=idprestamoin and idestado>9);
-                                 set @value=0;
-                                 set @montosolicitado=(SELECT monto FROM par__prestamos  WHERE idprestamo=idprestamoin);
-                                 
-                                 if(ROUND(@por_cobrar+@cobrado,2)=ROUND(@montosolicitado,2)) then
+                                 set @por_cobrar=(select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @fecha_plan=(select plan.fp from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @dias_plan=(select plan.di from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @dias_fecha_plan=(select day(@fecha_plan));
+                                 set @mes_fecha_plan=(select month(@fecha_plan));
+                                
+                                 set @value=0; 
                                      if(@tem>0) then   
-                                     SET @fecha = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1);
-                                     SET @mesactual =(SELECT month(@fecha));
-                                     SET @dias =(SELECT DAY(@fecha)); 
-                                     if @mesactual=@mesdesembolso then
-                                     SET @dias=(@dias-@diadesembolso)+1;
-                                     end if;
-                                     
-                                     set @interes=((@por_cobrar*@tem*@dias)/30);
-                                     set @value=@por_cobrar+@interes; 
-                                     set @value=@value*@tipocambio;  
+	                                     SET @fecha = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1);
+	                                     SET @mesactual =(SELECT month(@fecha));
+	                                     SET @dias =(SELECT DAY(@fecha));  
+	                                    	 
+                                             if @mesactual=@mesdesembolso then
+		                                         SET @dias=(@dias-@diadesembolso)+1;
+		                                     elseif @mes_fecha_plan<@mesactual  then
+		                                         SET @dias=(@dias+@dias_plan)+1;
+		                                     elseif @mes_fecha_plan=@mesactual  then
+		                                         SET @dias=(@dias+(@dias_plan-@dias_fecha_plan))+1;
+		                                     end if;
+	                                     
+	                                     set @interes=((@por_cobrar*@tem*@dias)/30);
+	                                     set @value=@por_cobrar+@interes; 
+	                                     set @value=@value*@tipocambio;  
                                      else
-                                     set @value=@por_cobrar; 
-                                     set @value=@value*@tipocambio; 
+	                                     set @value=@por_cobrar; 
+	                                     set @value=@value*@tipocambio; 
                                      end if;
-                                 else
-                                     set @value=-15; 
-                                 end if; 
+                                  
                          else
                              set @value=-25; 
                          end if;  
-                             RETURN @value;  
+                             RETURN @value;
              END");
 
-             $getprestamos="CREATE OR REPLACE FUNCTION getcapitaltotal (idsocioin int,producto int,tipo int,paso int) 
-            RETURNS FLOAT
-            DETERMINISTIC
-            BEGIN  /* si tipo es igual a 0,3 = todos productos, 1= solo del producto ingresado, 2=todos menos servicio (o cualquier producto con tasa 0)*/
-                                      SET @value=0;
-                                        
-                                      set @validate=(select count(*) from par__prestamos where idsocio=idsocioin and (apro_conta=0 or apro_conta=5) and idestado between 2 and 3);
-                       
-                                        if @validate>0 then 
-                                           set @value=-25;
-                                        else 
-                                                     if tipo=0 or tipo=3 then  
-                                                       /*CALL get_capitalTotal_0(@value,idsocioin,producto,0); */
-                                                     SET @value=0;
-                                                    if @value is null then set @value=0; end if;
-                                                 elseif tipo=1 then 
-                                                         if paso=1 then
-                                                         CALL get_capitalTotal_1(@value,idsocioin,producto,1); 
-                                                         else
-                                                         CALL get_capitalTotal_1(@value,idsocioin,producto,0); 
-                                                         end if;
-                                                     
-                                                     if @value is null then set @value=0; end if;
-                                                         
-                                                 elseif tipo=2 then 
-                                                    
-                                                         if paso=1 then
-                                                         CALL get_capitalTotal_2(@value,idsocioin,producto,1);   
-                                                         else
-                                                         CALL get_capitalTotal_2(@value,idsocioin,producto,0);  
-                                                         end if;
-                                                     if @value is null then set @value=0; end if; 
-                                                 else
-                                                     SET @value=-10;
-                                                 end if;
-                                                
-                                       end if;          
-                                                /* if @value>0 then
-                                                 set @tipocambio=(select mo.tipocambio from par__productos pro,par__monedas mo 
-                                                         where  pro.moneda=mo.idmoneda   and pro.idproducto=producto);
-                                                 set @value=@value/@tipocambio;
-                                                 end if; */
-                                     RETURN @value;
-            END";
-             DB::unprepared($getprestamos);
+            
+             DB::unprepared("CREATE OR REPLACE FUNCTION getcapitaltotal (idsocioin int,producto int) 
+             RETURNS FLOAT
+             DETERMINISTIC
+             BEGIN  SET @value=0; 
+                                       set @validate=(select count(*) from par__prestamos where idsocio=idsocioin and (apro_conta=0 or apro_conta=5) and idestado between 2 and 3);
+                        
+                                         if @validate>0 then 
+                                            set @value=-25;
+                                         else 
+                                             CALL get_capitalTotal_0(@value,idsocioin,producto);  
+                                            if @value is null then set @value=0; end if;
+                                                 
+                                        end if;          
+                                                  
+                                      RETURN @value;
+             END");
 
 
              $checkcut="CREATE OR REPLACE  FUNCTION checkcut() RETURNS BOOL
@@ -648,25 +624,21 @@ class Procedures extends Migration
 	                        end if;
                             END");
 
-                DB::unprepared("CREATE OR REPLACE  PROCEDURE get_capitalTotal_0 (INOUT value float,in idsocio int,in producto int,in paso int)
+                DB::unprepared("CREATE OR REPLACE  PROCEDURE get_capitalTotal_0 (INOUT value float,in idsocio int,in producto int)
                 BEGIN
                 DECLARE v_finished INTEGER DEFAULT 0;
-                        DECLARE idprestamoin int;
-                        DECLARE tasa_in float; 
-                        DEClARE cursor_prestmos CURSOR FOR select pre.idprestamo,pro.tasa from par__prestamos pre,par__productos pro,par__monedas mo 
-                                        where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pre.idejecucion!=2 and pre.idejecucion!=6
-                                        and pre.idsocio=idsocio and pre.idestado between 2 and 3;
+                        DECLARE idprestamoin int; 
+                        DEClARE cursor_prestmos CURSOR FOR select pre.idprestamo  from par__prestamos pre,par__productos pro,par__monedas mo 
+									where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pro.cobranza_perfil_refi!=0
+                                    and pre.idsocio=idsocio and pre.idestado between 2 and 3;
                         DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1; 
                                     OPEN cursor_prestmos; 
                                                 puntero: LOOP 
-                                                        FETCH cursor_prestmos INTO idprestamoin,tasa_in;
-                                                
+                                                        FETCH cursor_prestmos INTO idprestamoin; 
                                                 IF v_finished = 1 THEN 
                                                 LEAVE puntero;
                                                 END IF; 
-                                                set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,paso);
-                                               /*set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,0);*/
-                                                
+                                                set @outsum=getmonto_refinciamiento(idprestamoin); 
                                                     if @outsum>=0 then
                                                     set value=value+@outsum;
                                                     else
@@ -700,7 +672,7 @@ class Procedures extends Migration
 			                            LEAVE puntero;
 			                            END IF; 
 			                           
-			                             set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,paso);
+			                             set @outsum=getmonto_refinciamiento(idprestamoin);
 			                            /*set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,1);*/
 			                             
 			                                  if @outsum>=0 then
@@ -737,7 +709,7 @@ class Procedures extends Migration
 			                            IF v_finished = 1 THEN 
 			                            LEAVE puntero;
 			                            END IF; 
-			                             set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,paso);
+			                             set @outsum=getmonto_refinciamiento(idprestamoin);
 				                         /*set @outsum=getmonto_refinciamiento(idprestamoin,tasa_in,1);*/
                                           
 			                                 if @outsum>=0 then
@@ -775,6 +747,69 @@ class Procedures extends Migration
                     end if;
                          RETURN @sumasjson;
                 end");
+   
+   
+   DB::unprepared("CREATE OR REPLACE FUNCTION getcuota(id int,cambio float) RETURNS float 
+                 DETERMINISTIC
+                 BEGIN  
+                 return (select plan.cut*cambio from par__prestamos__plans plan where plan.idprestamo=id and plan.idestado=2 ORDER by plan.pe asc limit 1);
+                 END");
+DB::unprepared('CREATE OR REPLACE FUNCTION getmontoRefi2 (idprestamoin int)
+RETURNS text
+DETERMINISTIC
+BEGIN   set @validaconta=1; 
+                             set @validaconta=(select pre.apro_conta from par__prestamos pre,par__productos pro where pre.idproducto=pro.idproducto   and pre.idprestamo=idprestamoin);
+							set @value=0; 
+							SET @dias=0;
+							set @indi_sum=0;
+							set @interes=0;
+							set @por_cobrar=0;
+							set @periodo=0;
+                         if @validaconta=1 then  
+                                 set @indi_sum=(select sum(indi) from par__prestamos__plans where idprestamo=idprestamoin and (idestado=2 or idestado=10));
+                                 set @mesdesembolso=(select month(fechardesembolso) from par__prestamos where idprestamo=idprestamoin);
+                                 set @diadesembolso=(select day(fechardesembolso) from par__prestamos where idprestamo=idprestamoin);
+                                 
+                                 set @tasa=(select pro.tasa from par__prestamos pre,par__productos pro where pre.idproducto=pro.idproducto   and pre.idprestamo=idprestamoin);   
+                                 set @tem=0;
+			                                 if @tasa>0 then
+			                                 set @tem =(@tasa/12)/100;
+			                                 end if; 
+                                 SET @dias=0;
+                                 set @por_cobrar=(select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                set @periodo=(select plan.pe from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @fecha_plan=(select plan.fp from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @dias_plan=(select plan.di from par__prestamos__plans plan where plan.idprestamo=idprestamoin and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1);
+                                 set @dias_fecha_plan=(select day(@fecha_plan));
+                                 set @mes_fecha_plan=(select month(@fecha_plan));
+                                
+                                 set @value=0; 
+                                     if(@tem>0) then   
+	                                     SET @fecha = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1);
+	                                     SET @mesactual =(SELECT month(@fecha));
+	                                     SET @dias =(SELECT DAY(@fecha)); 
+		                     
+	                                    	 if @mesactual=@mesdesembolso then
+		                                     SET @dias=(@dias-@diadesembolso)+1;
+		                                     elseif @mes_fecha_plan<@mesactual  then
+		                                     SET @dias=(@dias+@dias_plan)+1;
+		                                     elseif @mes_fecha_plan=@mesactual  then
+		                                     SET @dias=(@dias+(@dias_plan-@dias_fecha_plan))+1;
+		                                     end if;
+	                                     /* obtener el total de papeleria que debe al momento de hacer el refinanciamiento que no se hace en este momento*/
+	                                     set @interes=round(((@por_cobrar*@tem*@dias)/30),2);
+	                                     set @value=round((@por_cobrar+@interes+@indi_sum),2) ;  
+                                     else
+                                         set @value_total=0;
+	                                     set @value=@por_cobrar;  
+                                     end if;
+                                  
+                         else
+                             set @value=-25; 
+                         end if;  
+                         RETURN JSON_OBJECT("values",JSON_OBJECT("dias",@dias,"indi",ifnull(round(@indi_sum,2),0)),"datas",JSON_OBJECT("am",ifnull(@por_cobrar,0),"in",ifnull(@interes,0),"cuota",ifnull(@value,0)));
+END');
+
     }
 
     /**
@@ -787,6 +822,7 @@ class Procedures extends Migration
         DB::unprepared('DROP FUNCTION IF EXISTS valida_historial;');
         DB::unprepared('DROP FUNCTION IF EXISTS valida_historial_garante;');
         DB::unprepared('DROP FUNCTION IF EXISTS getPrestamos;');
+        DB::unprepared('DROP FUNCTION IF EXISTS getcuota;');
         DB::unprepared('DROP FUNCTION IF EXISTS getmonto_refinciamiento;');
         DB::unprepared('DROP FUNCTION IF EXISTS valida_monto;');
         DB::unprepared('DROP FUNCTION IF EXISTS valida_estado;');

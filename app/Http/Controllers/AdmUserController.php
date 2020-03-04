@@ -14,27 +14,25 @@ use App\Par_Ventanamodulo;
 
 class AdmUserController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Mostrar la fecha del sistema.
      *
      * @return \Illuminate\Http\Response
      */
-    public static function fecha_sistema() {
-        $fecha=(DB::select("select getfecha() as total"))[0]->total; 
-        $fecha_=explode(' ',$fecha); 
-        $fecha_sis = date('d-m-Y', strtotime($fecha_[0]));
+    public static function fecha_sistema() { 
+        $fecha=(DB::select("select getfecha() as total"))[0]->total;  
+        $fecha_sis = date('d-m-Y', strtotime($fecha ));
         return $fecha_sis;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function __construct()
-    {
-        $this->middleware('auth');
+    
+    public static function fecha_sistema_login() {
+        DB::statement("SET lc_time_names = 'es_ES'");
+        $fecha=(DB::select('select  (DATE_FORMAT(LAST_DAY(getfecha()), "La Paz, %d de %M de %Y")) as total'))[0]->total;  
+        return $fecha;
     }
 
     public function index2(Request $request) {
