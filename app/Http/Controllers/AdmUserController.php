@@ -31,7 +31,7 @@ class AdmUserController extends Controller
     
     public static function fecha_sistema_login() {
         DB::statement("SET lc_time_names = 'es_ES'");
-        $fecha=(DB::select('select  (DATE_FORMAT(LAST_DAY(getfecha()), "La Paz, %d de %M de %Y")) as total'))[0]->total;  
+        $fecha=(DB::select('select  (DATE_FORMAT(getfecha(), "La Paz, %d de %M de %Y")) as total'))[0]->total;  
         return $fecha;
     }
 

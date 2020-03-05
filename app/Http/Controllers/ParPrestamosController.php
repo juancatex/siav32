@@ -112,8 +112,7 @@ class ParPrestamosController extends Controller
     {
         if (!$request->ajax()) return redirect('/'); 
         $prestamo = Par_Prestamos::findOrFail($request->idp);  
-        $prestamo->cuota = $request->cuota; 
-        $prestamo->lote = $request->lote; 
+        $prestamo->cuota = $request->cuota;  
         $prestamo->idusuario=Auth::id();   
         $prestamo->save();
  
