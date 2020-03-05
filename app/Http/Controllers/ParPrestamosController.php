@@ -309,7 +309,7 @@ class ParPrestamosController extends Controller
             'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
             'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
             ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
-            ,'par__productos.lote'
+           
             ,'par__productos.cancelarprestamos'
             ,'par__productos.activar_garante'
             ,'par__productos.desembolso_perfil' 
@@ -329,6 +329,7 @@ class ParPrestamosController extends Controller
             ->whereBetween('par__prestamos.idestado',[1,6])
             ->where('par__prestamos.idestado','!=','3')
             ->whereraw($sqls)
+            ->orderBy('par__prestamos.lote', 'asc')
             ->orderBy('par__prestamos.apro_conta', 'DESC')
             ->orderBy('par__prestamos.idestado', 'asc')
             ->orderBy('socios.nombre', 'asc')->paginate(10);
@@ -341,7 +342,7 @@ class ParPrestamosController extends Controller
             'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
             'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
             ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
-            ,'par__productos.lote'
+          
             ,'par__productos.cancelarprestamos'
             ,'par__productos.activar_garante'
             ,'par__productos.desembolso_perfil' 
@@ -362,6 +363,7 @@ class ParPrestamosController extends Controller
 
             ->where('par__prestamos.idoperario','=',Auth::id()) 
             ->whereBetween('par__prestamos.idestado',[1,2])
+            ->orderBy('par__prestamos.lote', 'asc')
             ->orderBy('par__prestamos.apro_conta', 'DESC')
             ->orderBy('par__prestamos.idestado', 'asc')
             ->orderBy('socios.nombre', 'asc')->paginate(10);
