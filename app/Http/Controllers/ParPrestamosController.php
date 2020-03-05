@@ -328,7 +328,7 @@ class ParPrestamosController extends Controller
             ->whereBetween('par__prestamos.idestado',[1,6])
             ->where('par__prestamos.idestado','!=','3')
             ->whereraw($sqls)
-            ->orderBy('par__prestamos.lote', 'asc')
+            ->orderBy('par__prestamos.lote', 'DESC')
             ->orderBy('par__prestamos.apro_conta', 'DESC')
             ->orderBy('par__prestamos.idestado', 'asc')
             ->orderBy('socios.nombre', 'asc')->paginate(10);
@@ -362,7 +362,7 @@ class ParPrestamosController extends Controller
 
             ->where('par__prestamos.idoperario','=',Auth::id()) 
             ->whereBetween('par__prestamos.idestado',[1,2])
-            ->orderBy('par__prestamos.lote', 'asc')
+            ->orderBy('par__prestamos.lote', 'DESC')
             ->orderBy('par__prestamos.apro_conta', 'DESC')
             ->orderBy('par__prestamos.idestado', 'asc')
             ->orderBy('socios.nombre', 'asc')->paginate(10);
