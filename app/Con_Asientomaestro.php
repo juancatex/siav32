@@ -24,6 +24,7 @@ class Con_Asientomaestro extends Model
                             'agrupacion',
                             'segcobranza',
                             'u_registro',
+                            'u_registro_tesoreria',
                             'u_obs_val',
                             'u_eliminacion',
                             'fact_modificada',

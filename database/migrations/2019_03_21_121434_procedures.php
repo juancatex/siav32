@@ -73,6 +73,14 @@ class Procedures extends Migration
                     RETURN CONCAT(@valor,' ',@valor2);
                     END";
             DB::unprepared($getfecha);
+          
+            DB::unprepared("CREATE OR REPLACE FUNCTION getfecha2() 
+            RETURNS TEXT
+            DETERMINISTIC
+            BEGIN 
+            SET @valor = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1);  
+            RETURN @valor;
+            END");
 
             // funcion para obtener el numero papeleta en base al idsocio
             $getpapeleta = "CREATE OR REPLACE FUNCTION getpapeleta (entrada int) RETURNS VARCHAR(20)
@@ -828,6 +836,7 @@ END');
         DB::unprepared('DROP FUNCTION IF EXISTS valida_estado;');
         DB::unprepared('DROP FUNCTION IF EXISTS getfechas;');
         DB::unprepared('DROP FUNCTION IF EXISTS getfecha;');
+        DB::unprepared('DROP FUNCTION IF EXISTS getfecha2;');
         DB::unprepared('DROP FUNCTION IF EXISTS checkcut;');
         DB::unprepared('DROP FUNCTION IF EXISTS getasciisended;');
         DB::unprepared('DROP FUNCTION IF EXISTS refinanciar;');

@@ -33,7 +33,7 @@ class PreCalificacionController extends Controller
 
         $raw = DB::raw("count(apo__aportes.numpapeleta) as total_aportes");
         $raw2= DB::raw("sum(apo__aportes.aporte) as total_bs");
-        $raw3 = DB::raw("TIMESTAMPDIFF(YEAR, socios.fechaincorporacion, CURDATE()) as servicio");
+        $raw3 = DB::raw("TIMESTAMPDIFF(YEAR, socios.fechaincorporacion, getfecha2()) as servicio");
 
         $idsocio = $request->idsocio;        
          

@@ -185,9 +185,9 @@ class ParPrestamosController extends Controller
                              $fechaasiento=(DB::select("select getfecha() as total"))[0]->total;  
                                      $asientomaestro= new AsientoMaestroClass();
                                      $respuesta_perfil=$asientomaestro->AsientosMaestroArray($product_perfil->desembolso_perfil,
-                                     'lote', //lote
+                                     'Lote', //lote
                                      $product_perfil->no_prestamo,  
-                                     'Desembolso del prestamo - automatico', 
+                                     $request->detalle, 
                                      $arrayDesembolso,
                                      $request->idmodulo,$fechaasiento,$request->lote,$request->idprestamoin); 
                             
@@ -705,12 +705,13 @@ class ParPrestamosController extends Controller
                                             $prestamo_plan->idestado=13;
                                             $prestamo_plan->idtransaccionC="R-".$request->idprestamoin."-".$prestamo->idprestamo;
                                             $prestamo_plan->numDocC=(DB::select("SELECT no_prestamo as total FROM par__prestamos WHERE idprestamo=?",array($request->idprestamoin)))[0]->total;
-                                            $prestamo_plan->glosa='Refinanciamiento del prestamo - automatico'; 
+                                            $prestamo_plan->glosa='Cobranza del prestamo - Refinanciamiento - automatico'; 
                                             $prestamo_plan->fechaCobranza=(DB::select("select getfecha() as total"))[0]->total;  
                                             $prestamo_plan->tipocambio=$prestamo->tipocambio;
                                             $prestamo_plan->importe=$cuotafinal;
                                             $prestamo_plan->idusuario=Auth::id();
                                             $prestamo_plan->save();
+                                            $documentoDocc=$prestamo_plan->numDocC;
                                             $planid=$prestamo_plan->idplan; 
                                                     foreach ($cargoscobranza as $val){  
                                                         $cargosadicionales = new Par_prestamos_plan_cargo();   
@@ -724,8 +725,8 @@ class ParPrestamosController extends Controller
                                   $fechaasiento=(DB::select("select getfecha() as total"))[0]->total; 
                                     $asientomaestro= new AsientoMaestroClass();
                                     $respuesta_perfil=$asientomaestro->AsientosMaestroArray($prestamo->cobranza_perfil_refi,
-                                    '', 
-                                    '',  
+                                    'Cobranza', 
+                                    $documentoDocc,  
                                     'Cobranza del prestamo - Refinanciamiento - automatico', 
                                     $arrayDetalle,
                                     $request->idmodulo,$fechaasiento,'',$request->idprestamoin);
@@ -818,9 +819,10 @@ class ParPrestamosController extends Controller
                                     $fechaasiento=(DB::select("select getfecha() as total"))[0]->total;  
                                             $asientomaestro= new AsientoMaestroClass();
                                             $respuesta_perfil=$asientomaestro->AsientosMaestroArray($product_perfil->desembolso_perfil_refi,
-                                            'lote', //lote
+                                            'Lote',
                                             $product_perfil->no_prestamo,  
-                                            'Desembolso del prestamo'.($total_refinanciar>0?' - Refinanciamiento ':' ').'- automatico', 
+                                            // 'Desembolso del prestamo'.($total_refinanciar>0?' - Refinanciamiento ':' ').'- automatico', 
+                                            $request->detalle, 
                                             $arrayDesembolso,
                                             $request->idmodulo,$fechaasiento,$request->lote,$request->idprestamoin); 
                                     $prestamo_desembolso = Par_Prestamos::findOrFail($request->idprestamoin); 

@@ -4,12 +4,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-4" style="padding-top: 8px;">
+                        <div class="col-md-3" style="padding-top: 8px;">
                             <i class="fa fa-align-justify"></i> Tesoreria
                         </div>
-                        <div class="col-md-4">
+                        <div :class="tipodesembolso>0?'col-md-4':'col-md-9'">
                             <div class="row">
-                                <div class="col-md-5" style="padding-top: 8px;">
+                                <div class="col-md-5 my-auto" style="text-align: right;">
                                     <strong>Tipo Desembolso:</strong>
                                 </div>
                                 <div class="col-md-7">
@@ -20,25 +20,29 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
-                            <div class="form-group" style="margin-bottom: 5px;" v-if="tipodesembolso==1">
+                        <div v-if="tipodesembolso==1" class="col-md-5 col-form-label " style="text-align: center;border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
+                            <div class="form-group" style="margin-bottom: 5px;" >
                                 <label class="form-check-label" style="margin-right: 15px;">
                                     <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarDesembolso()" style="margin-right: 5px;">Por Desembolsar
                                 </label>
                                 <label class="form-check-label">
                                     <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarDesembolso()" style="margin-right: 5px;">Ya Desembolsados
                                 </label>
-                            </div>
-                            <div v-else-if="tipodesembolso==2">
-                                <label class="form-check-label" style="margin-right: 15px;">
-                                    <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Por Desembolsar
-                                </label>
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Ya Desembolsados
-                                </label>
-
-                            </div>
+                            </div> 
                         </div>
+                        <div v-else-if="tipodesembolso==2" class="col-md-5"> 
+                                        <div class="row">
+                                            <strong class="col-md-4 my-auto" style="text-align: right;">Seleccionar Perfil:</strong>
+                                            <div class="col-md-8">
+                                                <select class="form-control" v-model="perfildesembolso" @change="listarDesembolsoPrestamos()">
+                                                    <option value="0" disabled>Seleccionar...</option>
+                                                    <option v-for="desembolso in arrayPerfilDesembolso" :key="desembolso.idperfilcuentamaestro" :value="desembolso.idperfilcuentamaestro" v-text="desembolso.nomperfil"></option>
+                                                </select>
+                                            </div>
+                                        </div> 
+                            </div>
+
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -106,42 +110,53 @@
                     </table>
                     <!-- fin de cargo de cuenta -->
                      <!-- inicio prestamos -->
-                    <div v-else-if="tipodesembolso==2">
-                        <div class="form-group row">
-                            <div class="col-md-7">
-
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group row">
-                                    <strong class="col-md-4">Seleccionar Perfil:</strong>
-                                    <div class="col-md-8">
-                                        <select class="form-control" v-model="perfildesembolso" @change="listarDesembolsoPrestamos()">
-                                            <option value="0" disabled>Seleccionar...</option>
-                                            <option v-for="desembolso in arrayPerfilDesembolso" :key="desembolso.idperfilcuentamaestro" :value="desembolso.idperfilcuentamaestro" v-text="desembolso.nomperfil"></option>
-                                        </select>
+    <div v-if="perfildesembolso>0" class="form-group row" style="justify-content: flex-end;">
+            <div v-if="tipodesembolso==2" class="col-md-8">
+              <div class="input-group" style="align-items: center;">
+                <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
+                </p>
+                <input type="text" v-model="buscar" @keyup.enter="listarDesembolsoPrestamos()" class="form-control"
+                  placeholder="Nombres , Apellidos , Numero de Papeleta , lote , Fecha Solicitud" />
+                <button type="submit" @click="listarDesembolsoPrestamos()" class="btn btn-primary">
+                  <i class="fa fa-search"></i> Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+                        <div v-if="perfildesembolso>0" class="row" style="text-align: center;margin:15px;"> 
+                            <div v-if="tipodesembolso==2" class="col-md-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
+                                    <div>
+                                        <label class="form-check-label" style="margin-right: 15px;">
+                                            <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Por Desembolsar
+                                        </label>
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Ya Desembolsados
+                                        </label> 
                                     </div>
-                                </div>
                             </div>
                         </div>
-                    </div>
+                        
+
                     <table class="table table-bordered table-striped table-sm" v-if="tipodesembolso==2">
                         <thead class="thead-dark">
                             <tr>
                                 <th v-if="desembolsocheck=='ya_desembolsado'">Nº</th>
                                 <th v-else style="width:50px">Opciones</th>
                                 <th style="width:110px">Fecha Sol.</th>
-                                <th>a Nombre de:</th>
+                                <th style="min-width:90px">Papeleta</th>
+                                <th style="min-width:270px">a Nombre de:</th> 
                                 <th>Nº Cuenta</th>
                                 <th style="width:130px"># Prestamo</th>
                                 <th >Glosa</th>
                                 <th style="width:100px">Monto</th>
+                                <th style="width:70px">Lote</th>
                                 <th style="width:170px"><span v-if="desembolsocheck=='ya_desembolsado'">Hora Desembolso </span><span v-else>Desembolso/Cheque</span> </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(movimiento,index) in arrayPrestamos" :key="movimiento.idasientomaestro" v-bind:class="[movimiento.estado==3 ? 'table-danger' :true , false]">
-                                <td v-if="desembolsocheck=='ya_desembolsado'" style="text-align:right">{{ index+1}}</td>
-                                <td v-else>
+                                <td v-if="desembolsocheck=='ya_desembolsado'" style="vertical-align: middle;text-align: center;">{{ index+1}}</td>
+                                <td v-else style="vertical-align: middle;text-align: center;">
                                     <button type="button" v-if="movimiento.estado!=3" @click="observarCargo(movimiento.idasientomaestro,2)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Observar Desembolso">
                                         <i class="icon-eye"></i>
                                     </button> 
@@ -149,40 +164,51 @@
                                         <i class="icon-eye"></i>
                                     </button> 
                                 </td>
-                                <td v-text="movimiento.fecharegistro" style="text-align:right"></td>
-                                <td v-text="movimiento.nomsocio"></td>
-                                <td v-text="movimiento.numcuentasocio"></td>
-                                <td v-text="movimiento.numdocumento"></td>
-                                <td v-text="movimiento.glosa"></td>
-                                <td style="text-align:right">{{movimiento.monto | currency}}</td><!--  -->
-                                <td v-if="desembolsocheck=='ya_desembolsado'">
+                                <td v-text="movimiento.fecharegistro" style="text-align:right;vertical-align: middle;"></td>
+                                 <td v-text="movimiento.numpapeleta" style="vertical-align: middle;text-align: center;"></td>
+                                <td v-text="movimiento.nomsocio"  style="vertical-align: middle; "></td> 
+                                <td v-text="movimiento.numcuentasocio" style="vertical-align: middle;text-align: center;"></td>
+                                <td v-text="movimiento.numdocumento" style="vertical-align: middle;"></td>
+                                <td v-text="movimiento.glosa"  style="vertical-align: middle;"></td>
+                                <td style="text-align:right;vertical-align: middle;">{{movimiento.monto | currency}}</td> 
+                                <td style="text-align: center;vertical-align: middle;"> <h5>{{movimiento.lote}}</h5></td>
+                                <td v-if="desembolsocheck=='ya_desembolsado'" style="vertical-align: middle;text-align: center;">
                                     <span  v-text="movimiento.fechahora_desembolso"></span>
                                 </td>                              
-                                <td v-else-if="desembolsocheck=='por_desembolsar'">
-                                    <label class="switch switch-label switch-pill switch-outline-primary-alt">
+                                <td v-else-if="desembolsocheck=='por_desembolsar'" style="vertical-align: middle;text-align: center;">
+                                    <label class="switch switch-label switch-pill switch-outline-primary-alt" style="margin: 0;">
                                         <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="movimiento.idasientomaestro" :disabled="movimiento.estado==3">
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                     </label>
-                                    <input v-if="checkValidacion[index]" type="text"  v-model="num_documento[index]" placeholder="Nº Cheque" style="width:100px;text-align: right;">
+                                    <input v-if="checkValidacion[index]" type="text"  v-model="num_documento[index]" placeholder="Nº Cheque" style="text-align: right;">
                                 </td>                                  
                             </tr> 
-                            <tr v-if="desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
-                                <td colspan="2" ></td>
-                                <td colspan="5" style="text-align:right"><span>Cuenta de Desembolso:</span><strong v-text="cuentasconciliacion.codcuenta + ' - '+ cuentasconciliacion.nomcuenta"></strong>
-
-                                </td>
-                                <td style="text-align:center"><button class="btn btn-primary" type="button" @click="registrarDesembolso(2)" :disabled="!cuentasconciliacion || !vercheckvalidacion">
-                                            Desembolsar
-                                    </button>
-                                </td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                      
-                   
+                  
                     <!-- fin prestamos -->
                 </div>
             </div>
+             
+                <div id="inferior" class="position-fixed"  v-if="tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
+                                
+                                
+                                    <div class="col-md-5 row" style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
+                                            <div class="col-md-8 my-auto">     
+                                                <span style="padding-right: 8px;">Cuenta de Desembolso:</span>
+                                                <strong style="font-size: 15px;" v-text="cuentasconciliacion.codcuenta + ' - '+ cuentasconciliacion.nomcuenta"></strong> 
+                                            </div>
+                                            <div class="col-md-3"><button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
+                                            @click="registrarDesembolso(2)" :disabled="!cuentasconciliacion || !vercheckvalidacion">
+                                                        Desembolsar
+                                                </button>
+                                            </div>
+                                    </div>
+                                  
+                                
+                  </div> 
         </div>
     </main>
 </template>
@@ -233,7 +259,7 @@
                 arrayPerfilDesembolso:[],
                 arrayPrestamos:[],
                 arraycuentasHaber:[],
-
+                buscar:'',
 
                 arrayCuentasC:[],
                 cuentasconciliacion:0,
@@ -478,6 +504,7 @@
             },
             listarDesembolso(){
                 let me=this;
+                this.buscar='';
                 switch (me.tipodesembolso) {
                     case 1:
                         var url= '/glo_solccuenta/listartesoreria';
@@ -496,7 +523,7 @@
                         //console.log(url);
                         axios.get(url).then(function (response) {
                             var respuesta= response.data; 
-                            //console.log(respuesta);
+                            //console.log(respuesta); 
                             me.arrayPerfilDesembolso=respuesta.perfilcuentamaestros;
                         })
                         .catch(function (error) {
@@ -506,6 +533,7 @@
                 }
             },
             listarDesembolsoPrestamos(){
+                this.arrayPrestamos=[];
                 var estadodesembolso=0;//id de modulo prestamos
                 let me=this;
                 me.checkValidacion=[];
@@ -515,7 +543,7 @@
                 else
                     estadodesembolso=1;
                 
-                var url= '/con_asientomaestro/selectdesembolso?idperfil='+me.perfildesembolso+'&estadodesembolso='+estadodesembolso;
+                var url= '/con_asientomaestro/selectdesembolso?idperfil='+me.perfildesembolso+'&estadodesembolso='+estadodesembolso+'&buscar='+me.buscar;
                 //console.log(url);
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; 
@@ -682,5 +710,11 @@
     color:red;
 
 }
-
+ #inferior{ 
+position:absolute; /*El div será ubicado con relación a la pantalla*/
+left:0px; /*A la derecha deje un espacio de 0px*/
+right:0px; /*A la izquierda deje un espacio de 0px*/
+bottom:0px; /*Abajo deje un espacio de 0px*/ 
+z-index:99999;
+ }
 </style>

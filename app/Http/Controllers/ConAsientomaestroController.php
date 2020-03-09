@@ -521,17 +521,22 @@ class ConAsientomaestroController extends Controller
     }
     public function selectdesembolso(Request $request)  
     {
-        //if (!$request->ajax()) return redirect('/');
+       if (!$request->ajax()) return redirect('/');
+       $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        } 
         
         $idperfil = $request->idperfil;  
         $estadodesembolso=$request->estadodesembolso;
-        
-        //$raw=DB::raw('concat(numpapeleta," ",apaterno," ",amaterno," ",nombre) as nomsocio');
+
+         
         $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nomsocio');
         $desembolsados = Con_Asientomaestro::join('par__prestamos','par__prestamos.idasiento','=','con__asientomaestros.idasientomaestro')
                                             ->join('con__cuentasocios','con__cuentasocios.idcuentasocio','=','par__prestamos.idcuentasocio')
                                             ->join('socios','socios.idsocio','=','par__prestamos.idsocio')
                                             ->select('con__asientomaestros.idasientomaestro',
+                                                        'socios.numpapeleta',
                                                         'con__asientomaestros.fecharegistro',
                                                         'con__asientomaestros.numdocumento',
                                                         'con__asientomaestros.glosa',
@@ -542,21 +547,52 @@ class ConAsientomaestroController extends Controller
                                                         'desembolso',
                                                         'fechahora_desembolso',
                                                         'con__asientomaestros.estado',
+                                                        'par__prestamos.lote',
                                                         'con__asientomaestros.observaciones')
                                             ->where('idperfilcuentamaestro',$idperfil)
                                             ->where('con__asientomaestros.gestion',0)
                                             ->where('con__asientomaestros.desembolso',$estadodesembolso);
-                                            if($estadodesembolso==0)
-                                                $desembolsados=$desembolsados->orderBy('con__asientomaestros.fecharegistro','desc')
-                                                                                ->where(function($query) {
-                                                                                    $query->where('con__asientomaestros.estado', 0)
-                                                                                        ->orWhere('con__asientomaestros.estado', 3);
-                                                                                });
-                                            else {
-                                                $desembolsados=$desembolsados->orderBy('con__asientomaestros.fechahora_desembolso','desc')
-                                                ->limit(30);
+                                            
+                                               
+                                            if (sizeof($buscararray)>0){
+                                                $sqls=''; 
+                                                foreach($buscararray as $valor){
+                                                    if(empty($sqls)){
+                                                        $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '%".$valor."%' )";
+                                                    }else{
+                                                        $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '%".$valor."%')";
+                                                    } 
+                                                } 
+                                                if($estadodesembolso==0){
+                                                    $desembolsados=$desembolsados->orderBy('con__asientomaestros.fecharegistro','desc')
+                                                    ->whereraw($sqls)
+                                                    ->orderBy('par__prestamos.lote','desc')
+                                                    ->where(function($query) {
+                                                        $query->where('con__asientomaestros.estado', 0)
+                                                            ->orWhere('con__asientomaestros.estado', 3);
+                                                    });
+                                                } 
+                                                else {
+                                                    $desembolsados=$desembolsados->orderBy('con__asientomaestros.fechahora_desembolso','desc')
+                                                    ->whereraw($sqls)
+                                                    ->orderBy('par__prestamos.lote','desc')
+                                                    ->limit(30);
+                                                } 
+                                            }else{
+                                                if($estadodesembolso==0){
+                                                    $desembolsados=$desembolsados->orderBy('con__asientomaestros.fecharegistro','desc')
+                                                    ->orderBy('par__prestamos.lote','desc')
+                                                    ->where(function($query) {
+                                                        $query->where('con__asientomaestros.estado', 0)
+                                                            ->orWhere('con__asientomaestros.estado', 3);
+                                                    });
+                                                } 
+                                                else {
+                                                    $desembolsados=$desembolsados->orderBy('con__asientomaestros.fechahora_desembolso','desc')
+                                                    ->orderBy('par__prestamos.lote','desc')
+                                                    ->limit(30);
+                                                }
                                             }
-                                                
 
                                             
         
@@ -1042,6 +1078,7 @@ class ConAsientomaestroController extends Controller
             $asientomaestro=Con_Asientomaestro::findOrFail($valor['idasientomaestro']);
             $asientomaestro->desembolso = 1;
             $asientomaestro->fechahora_desembolso=$fecha;
+            $asientomaestro->u_registro_tesoreria=Auth::id();
             //$asientomaestro->idcuentadesembolso=$request->idcuentadesembolso;
             if($valor['num_cheque'])
             {

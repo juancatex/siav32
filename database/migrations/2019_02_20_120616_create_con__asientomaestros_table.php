@@ -36,6 +36,7 @@ class CreateConAsientomaestrosTable extends Migration
             $table->integer('agrupacion')->unsigned()->default(0)->comment('para agrupar los desembolsos y cobranzas de prestamos');
             $table->integer('segcobranza')->nullable()->unsigned()->comment('idasientomaestro de la cobranza al que este prestamo esta asociado en adelante y sirve para verificar si se permite o no la reversion de este comprobante');
             $table->integer('u_registro')->nullable()->comment('id del usuario que registra o envia el asiento');
+            $table->integer('u_registro_tesoreria')->nullable()->comment('id del usuario que registra el desembolso por tesoreria');
             $table->integer('u_obs_val')->nullable()->comment('usuario de contabilidad que observa un asiento contable o que valida el asiento contable');
             $table->integer('u_eliminacion')->nullable()->comment('usuario que elimina (cambia de estado) un asiento contable');
             $table->integer('u_modifica')->nullable()->comment('usuario que edita la cabecera del comprobante contable');
