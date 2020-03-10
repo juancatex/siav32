@@ -17,6 +17,7 @@ FROM finanzas.ptm_prestamos where fecha_desembolso='".$_GET["fecha"]."' and id_p
     $arr = pg_fetch_all($response)?pg_fetch_all($response):[]; 
 	    if(sizeof($arr) > 0){
 			   echo '<table   border="0" cellpadding="15">';
+			   $pasofinal=true;
 					foreach($arr as $rowpsql){  
 							$paso=true;
 							$sql = "SELECT s.numpapeleta,p.* FROM par__prestamos p,socios s where p.idsocio=s.idsocio and p.fecharegistro like '%".$_GET["fecha"]."%'"; 
@@ -33,10 +34,12 @@ FROM finanzas.ptm_prestamos where fecha_desembolso='".$_GET["fecha"]."' and id_p
 								echo "0 - sin filas";
 							}
 
-							if($paso){   
+							if($paso){  
+								$pasofinal=false;
 								echo '<tr><td><b>Prestamo : </b>'.$rowpsql['id_prestamo'].'</td><td><b>num. papeleta : </b>'.$rowpsql['id_persona'].'</td><td><b>monto : </b>'.$rowpsql['imp_desembolsado'].'</td><td><b>plazo : </b>'.$rowpsql['plazo'].'</td></tr>';
-							  } 
+							} 
 					}
+					if($pasofinal)echo '<b>Todos los prestamos estan registrados, BIEN HECHO</b>';
 			}else{ 
 			   echo '<b>No se tiene prestamos registrados a la fecha</b>';
 			} 
