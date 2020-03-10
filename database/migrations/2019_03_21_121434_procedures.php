@@ -581,20 +581,22 @@ class Procedures extends Migration
              END");
 
             
-             DB::unprepared("CREATE OR REPLACE FUNCTION getcapitaltotal (idsocioin int,producto int) 
+             DB::unprepared("CREATE OR REPLACE FUNCTION getcapitaltotal (idsocioin int,producto int,cancelar int) 
              RETURNS FLOAT
              DETERMINISTIC
              BEGIN  SET @value=0; 
-                                       set @validate=(select count(*) from par__prestamos where idsocio=idsocioin and (apro_conta=0 or apro_conta=5) and idestado between 2 and 3);
-                        
-                                         if @validate>0 then 
-                                            set @value=-25;
-                                         else 
-                                             CALL get_capitalTotal_0(@value,idsocioin,producto);  
-                                            if @value is null then set @value=0; end if;
-                                                 
-                                        end if;          
-                                                  
+                                      set @validate1=(select count(*) FROM par__prestamos  where  idsocio=idsocioin  and idestado=1);
+                                      set @validate2=(select count(*) from par__prestamos where idsocio=idsocioin and (apro_conta=0 or apro_conta=5) and idestado between 2 and 3);
+                                     if @validate1>0 then
+                                            set @value=-35;
+                                          elseif @validate2>0 then 
+                                              set @value=-25;
+                                          elseif cancelar=1 then  
+                                               CALL get_capitalTotal_0(@value,idsocioin,producto);  
+                                               if @value is null then set @value=0; end if; 
+                                          else
+                                               set @value=0;
+                                         end if;  
                                       RETURN @value;
              END");
 

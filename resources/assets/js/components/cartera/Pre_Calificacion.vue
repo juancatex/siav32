@@ -1272,11 +1272,11 @@ export default {
       $(".swal2-container").css("z-index", "2000");
     },
 
-    getTotalcapital(idproducto){  
+    getTotalcapital(idproducto,cancelaprestamos){  
       var conta="&conta=1"; 
         
       let me =this;
-       axios.get('/getsaldocapital_desembolso?idsocio='+this.socio_id+'&idpro='+idproducto) 
+       axios.get('/getsaldocapital_desembolso?idsocio='+this.socio_id+'&idpro='+idproducto+'&cancelar='+cancelaprestamos) 
        .then(function(response) {
          var salidaout=response.data.capital; 
          if(salidaout>=0){
@@ -1302,6 +1302,8 @@ export default {
               me.errors.add({ id: "8301791", field: "anios",  msg:  "Existe una variación con el saldo capital y el monto solicitado, contactese con el administrador del Sistema parta verificación de datos." });
             }else if(salidaout==25){
               me.errors.add({ id: "8301791", field: "anios",  msg:  "El socio tiene prestamos pendientes de aprovación por contabilidad." });
+            }else if(salidaout==35){
+              me.errors.add({ id: "8301791", field: "anios",  msg:  "El socio tiene prestamos pendientes de desembolso." });
             }else{
              me.errors.add({ id: "8301791", field: "anios",  msg:  "Error no identificado, contactese con el administrador del Sistema." });
             }
@@ -1374,9 +1376,9 @@ export default {
             me.garantesporproducto = respuesta.productos[0].garantes;
  
             if (respuesta.status == 0) { 
-              if(me.cancelarprestamos==1){
-                me.getTotalcapital(e); 
-            } 
+             
+                me.getTotalcapital(e,me.cancelarprestamos); 
+            
                         if (respuesta.escala.length > 0) {
                           me.errors.removeById("8301791");
                           me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
