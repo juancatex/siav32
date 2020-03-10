@@ -6,7 +6,7 @@ set_time_limit(0);
   
   if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
   if (!$db_connection) { die("Error in connection: " . pg_last_error()); }
- $querypostgresql="SELECT id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
+ $querypostgresql="SELECT usuario_reg,id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
 id_estado, par_estado_prestamo, par_estado,eliminado, fecha_reg,numero_cuenta_abono
 FROM finanzas.ptm_prestamos where fecha_desembolso='".$_GET["fecha"]."' and id_producto ='G'";	
 		   
@@ -36,7 +36,7 @@ FROM finanzas.ptm_prestamos where fecha_desembolso='".$_GET["fecha"]."' and id_p
 
 							if($paso){  
 								$pasofinal=false;
-								echo '<tr><td><b>Prestamo : </b>'.$rowpsql['id_prestamo'].'</td><td><b>num. papeleta : </b>'.$rowpsql['id_persona'].'</td><td><b>monto : </b>'.$rowpsql['imp_desembolsado'].'</td><td><b>plazo : </b>'.$rowpsql['plazo'].'</td></tr>';
+								echo '<tr><td><b>Usuario : </b>'.$rowpsql['usuario_reg'].'</td><td><b>Prestamo : </b>'.$rowpsql['id_prestamo'].'</td><td><b>num. papeleta : </b>'.$rowpsql['id_persona'].'</td><td><b>monto : </b>'.$rowpsql['imp_desembolsado'].'</td><td><b>plazo : </b>'.$rowpsql['plazo'].'</td></tr>';
 							} 
 					}
 					if($pasofinal)echo '<b>Todos los prestamos estan registrados, BIEN HECHO</b>';
