@@ -6,6 +6,7 @@ use App\Par_prestamos_lote;
 use App\Par_Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ParPrestamosLoteController extends Controller
 {
@@ -75,14 +76,29 @@ class ParPrestamosLoteController extends Controller
      */
     public function closeLote(Request $request)
     { 
-        if (!$request->ajax()) return redirect('/');
+       if (!$request->ajax()) return redirect('/');
         if(((DB::select("SELECT count(*) as total FROM par__prestamos__lotes WHERE activo=1"))[0]->total)>0){   
             $value=(DB::select("SELECT idlote,min,max FROM par__prestamos__lotes WHERE activo=1"))[0]; 
                 $lote = Par_prestamos_lote::findOrFail($value->idlote); 
                 $lote->close =1;  
+                $lote->user=Auth::id();
                 $lote->save();  
-             DB::table('par__prestamos__lotes')->update(['activo' => 0]);   
+             DB::table('par__prestamos__lotes')->update(['activo' => 0]);  
+             $maxlote=(DB::select("SELECT valor FROM configs WHERE codigo='LOTE'"))[0]->valor; 
+             $fecha=(DB::select("SELECT getfecha() as total"))[0]->total; 
+             $lotenew = new Par_prestamos_lote();  
+             $lotenew->max=$maxlote;  
+             $lotenew->fecha=$fecha;
+             $lotenew->user=Auth::id();
+             $lotenew->save(); 
+             
         }
+    }
+    public function statusLote(Request $request)
+    { 
+       if (!$request->ajax()) return redirect('/');
+       $value=(DB::select("SELECT idlote,min,max FROM par__prestamos__lotes WHERE activo=1"))[0]; 
+       return ['lote' => $value];
     }
 
     /**

@@ -292,6 +292,7 @@
                 arrayFormulasProducto: [],
                 arrayPrestamosSeleccionado: [],
 
+                statusLote: [],
                 idpres: '',
                 pagination: {
                     'total': 0,
@@ -621,6 +622,18 @@
                          console.log(response);
                      });
              },
+             getloteStatus(){
+                  let me = this; 
+                 axios.get('/statusLote').then(function (response) {
+                         me.statusLote = response.data.lote; 
+                          console.log('idlote',me.statusLote.idlote);
+                          console.log('min',me.statusLote.min);
+                          console.log('max',me.statusLote.max);
+                     })
+                     .catch(function (response) {
+                         console.log(response);
+                     });
+             },
            fechasistema(){
                 let me=this; 
                  var url= '/getdatacalculo';
@@ -891,6 +904,7 @@
             this.classModal.addModal('primarymodal');
             this.classModal.addModal('plandepagos');  
             this.listar(); 
+            this.getloteStatus(); 
             this.fechasistema(); 
             this.getRutasReports(); 
             

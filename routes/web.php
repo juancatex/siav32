@@ -804,6 +804,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('/getlote/getstatus','ParPrestamosLoteController@get_lote_id');
         Route::get('/closeLote','ParPrestamosLoteController@closeLote');
+        Route::get('/statusLote','ParPrestamosLoteController@statusLote');
 
         Route::get('/ascii' ,'File_Ascii@createFile'); 
         Route::get('/download' ,'File_Ascii@download'); 
