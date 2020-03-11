@@ -645,7 +645,7 @@ class ConAsientomaestroController extends Controller
                                                 $sqls=''; 
                                                 if(sizeof($buscararray)==1){
                                                     $valor = $request->buscar;
-                                                    $sqls="(".(is_numeric($valor)?"par__prestamos.lote = ".$valor." or ":"")."socios.numpapeleta like '%".$valor."%' or socios.nombre ='".$valor."' or socios.apaterno ='".$valor."' or socios.amaterno ='".$valor."'  or con__asientomaestros.fecharegistro like '".$valor."%' )";
+                                                    $sqls="(".(is_numeric($valor)?"par__prestamos.lote = ".$valor." or ":"")."socios.numpapeleta like '%".$valor."' or socios.nombre ='".$valor."' or socios.apaterno ='".$valor."' or socios.amaterno ='".$valor."'  or con__asientomaestros.fecharegistro like '".$valor."%' )";
                                                     
                                                     
                                                 }else{
