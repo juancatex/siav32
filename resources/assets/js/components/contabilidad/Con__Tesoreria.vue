@@ -192,7 +192,7 @@
                 </div>
             </div>
              
-                <div id="inferior" class="position-fixed"  v-if="tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
+                <div id="inferior" class="position-fixed animated slideInUp"  v-if="tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
                                 
                                 
                                     <div class="col-md-5 row" style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">

@@ -109,8 +109,7 @@
 
                  <div id="inferior2" class="position-fixed animated "  :class="(idperfil!=0 && arrayAsientomaestro.length!=0&&checkValidacion.length>1)?'slideInUp':'slideOutDown'">
                                  <div class="col-md-4 row " style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
-                                             
-                                            <div class="col-md-12">
+                                             <div class="col-md-12">
                                                 <button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
                                                           @click="abrirModalAgrupacion()" :disabled="checkValidacion.length<=1">
                                                         Agrupar Asientos Contables
