@@ -186,7 +186,7 @@ class ParPrestamosController extends Controller
                                      $asientomaestro= new AsientoMaestroClass();
                                      $respuesta_perfil=$asientomaestro->AsientosMaestroArray($product_perfil->desembolso_perfil,
                                      'Lote', //lote
-                                     $product_perfil->no_prestamo,  
+                                     $request->numdoc,  
                                      $request->detalle, 
                                      $arrayDesembolso,
                                      $request->idmodulo,$fechaasiento,$request->lote,$request->idprestamoin); 
@@ -704,7 +704,7 @@ class ParPrestamosController extends Controller
                                             $prestamo_plan->tipo=3;
                                             $prestamo_plan->idestado=13;
                                             $prestamo_plan->idtransaccionC="R-".$request->idprestamoin."-".$prestamo->idprestamo;
-                                            $prestamo_plan->numDocC=(DB::select("SELECT no_prestamo as total FROM par__prestamos WHERE idprestamo=?",array($request->idprestamoin)))[0]->total;
+                                            $prestamo_plan->numDocC=$request->numdoc;
                                             $prestamo_plan->glosa='Cobranza del prestamo - Refinanciamiento - automatico'; 
                                             $prestamo_plan->fechaCobranza=(DB::select("select getfecha() as total"))[0]->total;  
                                             $prestamo_plan->tipocambio=$prestamo->tipocambio;
@@ -820,7 +820,7 @@ class ParPrestamosController extends Controller
                                             $asientomaestro= new AsientoMaestroClass();
                                             $respuesta_perfil=$asientomaestro->AsientosMaestroArray($product_perfil->desembolso_perfil_refi,
                                             'Lote',
-                                            $product_perfil->no_prestamo,  
+                                            $request->numdoc,  
                                             // 'Desembolso del prestamo'.($total_refinanciar>0?' - Refinanciamiento ':' ').'- automatico', 
                                             $request->detalle, 
                                             $arrayDesembolso,

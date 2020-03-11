@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/con_perfilcuentamaestro','ConPerfilcuentamaestroController@index');
         Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro');
+        Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro_contable', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro_contable');
         Route::get('/con_perfilcuentamaestro/selectmaestrofinalizado', 'ConPerfilcuentamaestroController@selectmaestrofinalizado');
         Route::get('/con_perfilcuentamaestro/getnamePerfilcuentamaestro', 'ConPerfilcuentamaestroController@getnamePerfilcuentamaestro');
 
@@ -152,6 +153,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilcuentamaestroController@selectPerfilMaestroTesoreria');
 
         Route::get ('/con_asientomaestro','ConAsientomaestroController@index');
+        Route::get ('/con_asientomaestro_getasientosmaestros_automatico','ConAsientomaestroController@getasientosmaestros_automatico');
         Route::put ('/con_asientomaestro/actualizar','ConAsientomaestroController@update');
         Route::get ('/con_asientomaestro/selectsubcuenta', 'ConAsientomaestroController@selectSubcuenta');
         Route::get ('/con_asientomaestro/selectsocio2', 'ConAsientomaestroController@selectSocio2');
@@ -279,6 +281,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/par_modulo/storeModulo','ParModuloController@storeModulo');       //C
     Route::get ('/par_modulo/listaModulos', 'ParModuloController@listaModulos');    //R
     Route::get ('/par_modulo/selectModulo', 'ParModuloController@selectModulo');    //R
+    Route::get ('/par_modulo/selectModulo_contable', 'ParModuloController@selectModulocontable');    //R
     Route::put ('/par_modulo/updateModulo', 'ParModuloController@updateModulo');    //U
     Route::put ('/par_modulo/switchModulo', 'ParModuloController@switchModulo');    //D
 

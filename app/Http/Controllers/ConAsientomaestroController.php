@@ -321,6 +321,93 @@ class ConAsientomaestroController extends Controller
         ];
     }
 
+
+    public function getasientosmaestros_automatico(Request $request)
+    {
+      if (!$request->ajax()) return redirect('/');
+ 
+        $idmodulo=$request->idmodulo;  
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        } 
+        $sqlss=''; 
+        if (sizeof($buscararray)>0){
+           
+            
+            if(sizeof($buscararray)==1){
+                $valor2=$request->buscar; 
+                $sqlss="(".(is_numeric($valor2)?"con__asientomaestros.loteprestamos =".$valor2." or con__asientomaestros.cont_comprobante =".$valor2." or ":"")."con__asientomaestros.glosa like '%".$valor2."%'  or con__asientomaestros.fecharegistro like '".$valor2."%' or con__asientomaestros.tipodocumento = '".$valor2."' or con__asientomaestros.numdocumento = '".$valor2."' or con__asientomaestros.cod_comprobante = '".$valor2."')";
+           
+            }else{
+                foreach($buscararray as $valor){
+                    if(empty($sqlss)){
+                        $sqlss="(con__asientomaestros.fecharegistro like '%".$valor."%' or con__asientomaestros.loteprestamos like '%".$valor."%' or con__asientomaestros.cont_comprobante like '%".$valor."%' or con__asientomaestros.tipodocumento like '%".$valor."%' or con__asientomaestros.numdocumento like '%".$valor."%' or con__asientomaestros.glosa like '%".$valor."%'  or con__asientomaestros.cod_comprobante like '%".$valor."%')";
+                    }else{
+                        $sqlss.=" and (con__asientomaestros.fecharegistro like '%".$valor."%' or con__asientomaestros.loteprestamos like '%".$valor."%' or con__asientomaestros.cont_comprobante like '%".$valor."%' or con__asientomaestros.tipodocumento like '%".$valor."%' or con__asientomaestros.numdocumento like '%".$valor."%' or con__asientomaestros.glosa like '%".$valor."%'  or con__asientomaestros.cod_comprobante like '%".$valor."%')";
+                    } 
+     
+                } 
+            }
+        }
+     
+        $raw=DB::raw('sum(debe) as sdebe,sum(haber) as shaber');
+                    $asientomaestros = Con_Asientomaestro::leftjoin('con__tipocomprobantes','con__asientomaestros.idtipocomprobante','=','con__tipocomprobantes.idtipocomprobante')
+                                                    ->join('con__perfilcuentamaestros','con__asientomaestros.idperfilcuentamaestro','=','con__perfilcuentamaestros.idperfilcuentamaestro')
+                                                    ->join('con__asientodetalles','con__asientomaestros.idasientomaestro','=','con__asientodetalles.idasientomaestro')
+                                                    ->where(function($query) {
+                                                        $query->where('con__asientomaestros.estado', 0)
+                                                            ->orWhere('con__asientomaestros.estado', 3);
+                                                    }) 
+                                                    ->where('con__asientomaestros.idmodulo', '=', $idmodulo)
+                                                    ->where('con__asientomaestros.idperfilcuentamaestro',$request->idperfil)
+                                                    ->where('con__asientomaestros.gestion',0)
+                                                    //->where('con__asientomaestros.desembolso', '=','1')
+                                                    ->select('con__asientomaestros.idasientomaestro',
+                                                                'con__asientomaestros.loteprestamos',
+                                                                'con__asientomaestros.idtipocomprobante',
+                                                                'cont_comprobante',
+                                                                'con__asientomaestros.idperfilcuentamaestro',
+                                                                'fecharegistro',
+                                                                'tipodocumento',
+                                                                'numdocumento',
+                                                                'glosa',
+                                                                'idfilial',
+                                                                'con__asientomaestros.idmodulo',
+                                                                'con__asientomaestros.estado',
+                                                                'nomtipocomprobante',
+                                                                'nomperfil',
+                                                                'observaciones',
+                                                                'fact_modificada',
+                                                                'cod_comprobante',
+                                                                'desembolso',
+                                                                $raw
+                                                            );
+                                                if(!empty($sqlss)){
+                                                    $asientomaestros= $asientomaestros->whereraw($sqlss);
+                                                }
+                                                      
+                                                    $asientomaestros=$asientomaestros->orderBy('fecharegistro', 'desc')
+                                                    ->orderBy('cont_comprobante','desc')
+                                                    ->groupBy('con__asientomaestros.idasientomaestro')->paginate(50);
+ 
+        return [
+            'pagination' => [
+                'total'        => $asientomaestros->total(),
+                'current_page' => $asientomaestros->currentPage(),
+                'per_page'     => $asientomaestros->perPage(),
+                'last_page'    => $asientomaestros->lastPage(),
+                'from'         => $asientomaestros->firstItem(),
+                'to'           => $asientomaestros->lastItem(),
+            ],
+            'asientomaestros' => $asientomaestros 
+        ];
+    }
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -556,13 +643,22 @@ class ConAsientomaestroController extends Controller
                                                
                                             if (sizeof($buscararray)>0){
                                                 $sqls=''; 
-                                                foreach($buscararray as $valor){
-                                                    if(empty($sqls)){
-                                                        $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '%".$valor."%' )";
-                                                    }else{
-                                                        $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '%".$valor."%')";
-                                                    } 
-                                                } 
+                                                if(sizeof($buscararray)==1){
+                                                    $valor = $request->buscar;
+                                                    $sqls="(".(is_numeric($valor)?"par__prestamos.lote = ".$valor." or ":"")."socios.numpapeleta like '%".$valor."%' or socios.nombre ='".$valor."' or socios.apaterno ='".$valor."' or socios.amaterno ='".$valor."'  or con__asientomaestros.fecharegistro like '".$valor."%' )";
+                                                    
+                                                    
+                                                }else{
+                                                    foreach($buscararray as $valor){
+                                                        if(empty($sqls)){
+                                                            $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%' )";
+                                                        }else{
+                                                            $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%')";
+                                                        } 
+                                                    }
+                                                }
+                                                 
+
                                                 if($estadodesembolso==0){
                                                     $desembolsados=$desembolsados->orderBy('con__asientomaestros.fecharegistro','desc')
                                                     ->whereraw($sqls)

@@ -8,6 +8,13 @@
             <div class="card animated fadeIn">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Estado de Prestamos
+                    <div  style="  float: right; text-align: center;border: solid 1.5px gray;">
+                        <div  style=" text-align: center;margin: 4px 10px 17px 10px;">
+                            <h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> 
+                            <h6 style="font-size: 16px;"> ({{statusLote.min}} de {{statusLote.max}})</h6>
+                            
+                         </div><button v-if="check('Cerrar_lote')" type="submit" @click="closeLote()" class="btn btn-danger btn-block">  Cerrar Lote</button>
+                        </div>
                 </div>
                 <div class="card-body">
                     <div class="form-group row" style="justify-content: flex-end;">
@@ -18,7 +25,7 @@
                                     Criterio de busqueda:</p>
                                 <input type="text" v-model="buscar" @keyup.enter="listar(1,buscar)" class="form-control"
                                     placeholder="Ingresar  Nombres , Apellidos , Ci , Numero de Papeleta , Nombre producto, Numero de prestamo">
-                                <button type="submit" @click="listar(1,buscar)" class="btn btn-primary"><i
+                                <button  type="submit" @click="listar(1,buscar)" class="btn btn-primary"><i
                                         class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
@@ -256,18 +263,18 @@
     Vue.use(VeeValidate);
 
     export default {
-        props: ['idmodulo','object','permisos'],
+        props: ['idmodulo','object','idventanamodulo'],
         data (){
             return {
                 arrayPermisos: {
-                    Alta_garantes: 1,
-                    Aprobacion_desembolso: 1,
-                    Imprimir_calificacion: 1,
-                    Eliminar_calificacion: 1,
-                    Corregir_observacion: 1,
-                    Revertir_prestamo: 1
-                },
-                permisoId: this.permisos,
+                    Alta_garantes: 0,
+                    Aprobacion_desembolso: 0,
+                    Imprimir_calificacion: 0,
+                    Eliminar_calificacion: 0,
+                    Corregir_observacion: 0,
+                    Revertir_prestamo: 0,
+                    Cerrar_lote:0
+                }, 
                 arrayPermisosIn: {},
 
                 classModal: null,
@@ -337,6 +344,9 @@
         },
         methods : { 
             altaGarantes(data){
+
+            },
+            closeLote(){
 
             },
             printer(idpres){ 
@@ -625,10 +635,12 @@
              getloteStatus(){
                   let me = this; 
                  axios.get('/statusLote').then(function (response) {
-                         me.statusLote = response.data.lote; 
-                          console.log('idlote',me.statusLote.idlote);
+                         me.statusLote = response.data.lote;  
+                         console.log(response.data)
+                         console.log('idlote',me.statusLote.idlote);
                           console.log('min',me.statusLote.min);
                           console.log('max',me.statusLote.max);
+                             console.log('tam', _.size(me.statusLote));
                      })
                      .catch(function (response) {
                          console.log(response);
@@ -890,7 +902,16 @@
             },
             getPermisos() {
                 //permisoId poner axios para obtener los permisos
-                this.arrayPermisosIn = JSON.parse(JSON.stringify(this.arrayPermisos)); 
+              
+                 var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data.datapermiso[0].permisos;  
+                    me.arrayPermisosIn = JSON.parse((respuesta)); console.log('permisos:',me.arrayPermisosIn);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
           check(n){
              return _pl.validatePermission(this.arrayPermisosIn,n);
