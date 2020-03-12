@@ -52,6 +52,7 @@ setvue(1, 'act_grupo', './components/activos/Act_Grupo.vue');
 setvue(1, 'act_auxiliar', './components/activos/Act_Auxiliar.vue');
 setvue(1, 'act_activo', './components/activos/Act_Activo.vue');
 setvue(1, 'act_baja', './components/activos/Act_Baja.vue');
+setvue(1, 'act_reportes', './components/activos/Act_Reportes.vue');
 
 //almacenes
 setvue(0, 'alm_configuracion', './components/almacenes/Alm_Configuracion.vue');
