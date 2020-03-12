@@ -20,32 +20,7 @@ class ParPrestamosController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     { if (!$request->ajax()) return redirect('/');
         $fecha=(DB::select("select getfecha() as total"))[0]->total;
@@ -85,28 +60,7 @@ class ParPrestamosController extends Controller
         return response()->json(array('id' => $prestamo->idprestamo), 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Par_Prestamos  $par_Prestamos
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Par_Prestamos $par_Prestamos)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Par_Prestamos  $par_Prestamos
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Par_Prestamos $par_Prestamos)
-    {
-        //
-    }
-
+   
   
     public function grabar_estado(Request $request) 
     {
@@ -854,8 +808,7 @@ class ParPrestamosController extends Controller
 
 
     }
-function getperfil($producto,$idperfil){
-    if (!$request->ajax()) return redirect('/');
+function getperfil($producto,$idperfil){ 
    return Par_productos_perfilcuenta::join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
     ->select('par__productos__perfilcuentas.idperfilcuentamaestro',
     'par__productos__perfilcuentas.idperfilcuentadetalle',
