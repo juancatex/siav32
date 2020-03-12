@@ -368,7 +368,7 @@ class ParPrestamosController extends Controller
         $socios=Par_Prestamos::select('par__productos.tasa',
         'par__prestamos.detalle_desembolso','par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,$ascii,
         'par__productos.nomproducto','par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno',
-        'par__prestamos.monto','par__prestamos.plazo','par__prestamos.fecharegistro','par__prestamos.idestado','par__prestamos.planPagosMap',
+        'par__prestamos.monto','par__prestamos.plazo','par__prestamos.fecharegistro','par__prestamos.idestado','par__prestamos.planPagosMap','par__prestamos.no_prestamo',
         'par__prestamos__estados.nombreestado','par__prestamos.cuota','par__prestamos.apro_conta')
             ->join ('par__productos','par__prestamos.idproducto','=','par__productos.idproducto')
             ->join ('socios','par__prestamos.idsocio','=','socios.idsocio')
