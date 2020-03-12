@@ -14,7 +14,7 @@ class CreateParPrestamosTable extends Migration
     public function up()
     {
         Schema::create('par__prestamos', function (Blueprint $table) {
-            $table->increments('idprestamo');
+            $table->bigIncrements('idprestamo');
             $table->string('idprestamo_antiguo',30)->nullable()->comment('id de prestamos de la migracion');//id de prestamos de la migracion
             $table->integer('idref')->nullable();
             $table->string('idrefaux')->nullable();
@@ -57,6 +57,7 @@ class CreateParPrestamosTable extends Migration
             $table->float('b_familiar')->default(0); 
             $table->float('b_riesgo')->default(0); 
             $table->float('cuota_aprox')->default(0); 
+            $table->text('planPagosMap')->default('[]'); 
             
             $table->timestamps();
 

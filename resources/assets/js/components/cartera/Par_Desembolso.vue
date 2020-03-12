@@ -8,6 +8,12 @@
             <div class="card animated fadeIn">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Estado de Prestamos
+                    <div v-if="statusLote" style="  float: right; text-align: center;border: solid 1.5px gray;">
+                        <div class="row" style=" text-align: center;margin: 4px">
+                            <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
+                            <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                         </div> 
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="form-group row" style="justify-content: flex-end;">
@@ -18,7 +24,7 @@
                                     Criterio de busqueda:</p>
                                 <input type="text" v-model="buscar" @keyup.enter="listar(1,buscar)" class="form-control"
                                     placeholder="Ingresar  Nombres , Apellidos , Ci , Numero de Papeleta , Nombre producto, Numero de prestamo">
-                                <button type="submit" @click="listar(1,buscar)" class="btn btn-primary"><i
+                                <button  type="submit" @click="listar(1,buscar)" class="btn btn-primary"><i
                                         class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
@@ -112,18 +118,20 @@
                                             class="badge badge-warning">Revertido</span>
                                     </h6>
                                 </td>
-                                <td class="tdcell" style="font-size: 12px; text-align: center;vertical-align: middle;">
+                                <td class="tdcell" style="font-size: 12px; text-align: center;vertical-align: middle;padding: 0;">
                                     <div v-if="prestamos.fecharegistro!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
                                             v-text="prestamos.fecharegistro"></span></div>
+                                    <div v-if="prestamos.fechardesembolso!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
                                     <div v-if="prestamos.fechardesembolso!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
                                             v-text="prestamos.fechardesembolso"></span></div>
                                 </td>
-                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;">
+                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;padding: 0;">
                                     <div v-if="prestamos.no_prestamo!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
                                             v-text="prestamos.no_prestamo"></span></div>
+                                    <div v-if="prestamos.idtransaccionD!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
                                     <div v-if="prestamos.idtransaccionD!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
                                             v-text="prestamos.idtransaccionD"></span></div>
@@ -172,6 +180,14 @@
 
                     <div class="modal-body">
 
+                        <div class=" row " style="justify-content: center; margin-bottom: 15px;">
+                            <div v-if="statusLote" style=" text-align: center;border: solid 1.5px gray;">
+                                <div class="row" style=" text-align: center;margin: 4px">
+                                    <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
+                                    <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                                </div> 
+                            </div>
+                        </div>
                         <div class="form-group row ">
                             <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label"
                                 for="text-input">Numero de Documento : </label>
@@ -201,7 +217,7 @@
                     </div>
                     <div class="modal-footer">
                         <button :disabled="errors.any()" type="button" class="btn btn-primary"
-                            @click="regaprovacion('primarymodal')">Aprobar Desembolso</button>
+                            @click="regaprovacion('primarymodal',arrayPrestamosSeleccionado)">Aprobar Desembolso</button>
                         <button type="button" class="btn btn-secondary"
                             @click="classModal.closeModal('primarymodal')">Cerrar</button>
 
@@ -256,18 +272,17 @@
     Vue.use(VeeValidate);
 
     export default {
-        props: ['idmodulo','object','permisos'],
+        props: ['idmodulo','object','idventanamodulo'],
         data (){
             return {
                 arrayPermisos: {
-                    Alta_garantes: 1,
-                    Aprobacion_desembolso: 1,
-                    Imprimir_calificacion: 1,
-                    Eliminar_calificacion: 1,
-                    Corregir_observacion: 1,
-                    Revertir_prestamo: 1
-                },
-                permisoId: this.permisos,
+                    Alta_garantes: 0,
+                    Aprobacion_desembolso: 0,
+                    Imprimir_calificacion: 0,
+                    Eliminar_calificacion: 0,
+                    Corregir_observacion: 0,
+                    Revertir_prestamo: 0 
+                }, 
                 arrayPermisosIn: {},
 
                 classModal: null,
@@ -279,8 +294,7 @@
                 tipocambio: 0,
                 tasaanual: 0,
                 plazomeses: 0,
-                perfilmaestrodesembolso: 0,
-                cobrarprestamos: 0,
+                perfilmaestrodesembolso: 0, 
                 montosolicitado: 0,
                 idsocio: 0,
                 fechasjson: '',
@@ -293,6 +307,7 @@
                 arrayFormulasProducto: [],
                 arrayPrestamosSeleccionado: [],
 
+                statusLote: null,
                 idpres: '',
                 pagination: {
                     'total': 0,
@@ -337,6 +352,9 @@
         },
         methods : { 
             altaGarantes(data){
+
+            },
+            closeLote(){
 
             },
             printer(idpres){ 
@@ -588,8 +606,8 @@
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; 
                      me.arrayFormulasProducto['cobranza']=respuesta.formulascobranza; 
-                     me.arrayFormulasProducto['desembolso']=respuesta.formulasdesembolso; 
-                     me.perfilmaestrodesembolso=respuesta.formulasdesembolso[0].desembolso_perfil; 
+                     me.arrayFormulasProducto['desembolso']=[]; 
+                     me.perfilmaestrodesembolso=0; 
                 })
                 .catch(function (response) {
                     console.log(response);
@@ -622,6 +640,20 @@
                          console.log(response);
                      });
              },
+             getloteStatus(){
+                  let me = this; 
+                 axios.get('/statusLote').then(function (response) {
+                         me.statusLote = response.data.lote;  
+                         console.log(response.data)
+                         console.log('idlote',me.statusLote.idlote);
+                          console.log('min',me.statusLote.min);
+                          console.log('max',me.statusLote.max);
+                             console.log('tam', _.size(me.statusLote));
+                     })
+                     .catch(function (response) {
+                         console.log(response);
+                     });
+             },
            fechasistema(){
                 let me=this; 
                  var url= '/getdatacalculo';
@@ -642,7 +674,7 @@
                 me.pagination.current_page = page; 
                 me.listar(page,buscar);
             },
-            regaprovacion(id){
+            regaprovacion(id,data_Prestamo_Seleccionado){
               let me=this; 
                 this.classModal.closeModal(id); 
               swal({
@@ -656,205 +688,156 @@
                 buttonsStyling: true,
                 reverseButtons: true
                 }).then((result) => {
-                if (result.value) {
-                    swal({
-                    title: "Registrando los Datos",
-                    html:_pl._ppf351_2516(), 
-                    allowOutsideClick: () => false,
-                    allowEscapeKey:() => false,
-                    showConfirmButton:false,
-                    showCancelButton:false
-                    }).catch(error => { swal.showValidationError( 'Request failed: ${error}' )  }); 
-                   
-axios.get('/getprestamoRefi?id=' + me.idpres).then(function (response) {
-    me.revertirPrestamo(response.data.refi).then(
-        function (responses) {
-            if (responses) { 
-                axios.put('/delete_planpagos', {
-                    'id': me.idpres
-                }).then(function (response) {
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                if (result.value) { 
+                                        if(me.arrayPrestamosSeleccionado.cancelarprestamos==1){
+                                                        swal({
+                                                            title: "Registrando los Datos",
+                                                            html:_pl._ppf351_2516(), 
+                                                            allowOutsideClick: () => false,
+                                                            allowEscapeKey:() => false,
+                                                            showConfirmButton:false,
+                                                            showCancelButton:false
+                                                            }).catch(error => { swal.showValidationError( 'Request failed: ${error}' )  }); 
+                                                                    $('#text_saving').text('Obteniendo numero de lote...'); 
+                                                                    axios.get('/getlote/getstatus?idproducto='+me.idproducto).then(function (responselote) { 
+                                                                                /////////////////////////////////////////////////////////////////
+                                                                                        $('#text_saving').text('Realizando el refinanciamiento de prestamos existentes.');
+                                                                                        axios.post('/start_refinanciamiento',{
+                                                                                                    'socio':me.arrayPrestamosSeleccionado.idsocio,
+                                                                                                    'idmodulo':me.idmodulomain,
+                                                                                                    'idprestamoin':me.idpres,
+                                                                                                    'detalle':me.obs,
+                                                                                                    'lote':responselote.data.id,
+                                                                                                    'numdoc':me.numdoc_desembolso 
+                                                                                            }).then(function (response) {  
+                                                                                                if(response.data.status){
+                                                                                                    $('#text_saving').text('Generando plan de cuotas.');
+                                                                                                            var salida =(me.tasaanual>0)?_pl._fff3512_23622(
+                                                                                                                                                me.fecha_actual,
+                                                                                                                                                me.fechasjson,
+                                                                                                                                                me.tasaanual,
+                                                                                                                                                me.montosolicitado,
+                                                                                                                                                me.plazomeses,
+                                                                                                                                                me.fechacorte,
+                                                                                                                                                response.data.total,
+                                                                                                                                                me.tipocambio,
+                                                                                                                                                me.arrayFormulasProducto,
+                                                                                                                                                me.arrayPrestamosSeleccionado.numpapeleta):
+                                                                                                                                        _pl._fff3512_23623(
+                                                                                                                                                me.fecha_actual,
+                                                                                                                                                me.fechasjson,
+                                                                                                                                                me.tasaanual,
+                                                                                                                                                me.montosolicitado,
+                                                                                                                                                me.plazomeses,
+                                                                                                                                                me.fechacorte,
+                                                                                                                                                response.data.total,
+                                                                                                                                                me.tipocambio,
+                                                                                                                                                me.arrayFormulasProducto,
+                                                                                                                                                me.arrayPrestamosSeleccionado.numpapeleta); 
+                                                                                                                        me.regPlan_de_pagos(salida.data,me.idpres).then(function(responses) { 
+                                                                                                                                if(responses){  
+                                                                                                                                    $('#text_saving').text('Registrando desembolso...');
+                                                                                                                                    axios.put('/prestamos/desembolsoupdate',{ 
+                                                                                                                                        'idp':me.idpres,
+                                                                                                                                        'cuota':salida.cuota   
+                                                                                                                                    }).then(function (responsess) {  
+                                                                                                                                        me.listar(); 
+                                                                                                                                        _pl._vm2154_12185_145(me.idpres,me.rutas);
+                                                                                                                                    }).catch(function (error) { 
+                                                                                                                                        swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
+                                                                                                                                    });
 
-                    $('#text_saving').text('Realizando el refinanciamiento de prestamos existentes.');
-                        var url= '/start_desembolso?idsocio='+me.idsocio+'&idpro='+me.idproducto+'&prestamo='+me.idpres;
-                        axios.get(url).then(function (response) {
-                                let jsonin=response.data; 
-                                console.log(jsonin); 
-                                var total_prestamos= parseFloat(jsonin.total);   
-                             
-                                     if(total_prestamos>0){ 
-                                          console.log('entro a refinanciar');
-                                        $('#text_saving').text('Generando asientos contables de la cobranza.');
-                                        axios.get('/get_cobranza_refinanciamiento?json='+JSON.stringify(jsonin)).then(function (response) { 
-                                                var arrayin=response.data;  
-                                               var outlist=[]; 
-                                                for (let element of arrayin.values()) {
-                                                     var plan=element.datos[0]; 
-                                                        try{ 
-                                                         var outcobranza=_pl._mf36265_25421(element.formula,plan.am,plan.cut,plan.inn,plan.indi,plan.monto,plan.numpapeleta,plan.plazo,plan.cuota,plan.tipocambio);                                                         
-                                                          outlist.push({idplan:plan.idplan, value:outcobranza,asiento:plan.idasiento});
-                                                        }catch(error){ 
-                                                                console.log(error.message);
-                                                                console.log(error.name);
-                                                        }     
-                                                    } 
-                                                 console.log('outlist'); 
-                                                 console.log(outlist); 
-                                                // console.log(JSON.stringify(outlist));    
-                                                    $('#text_saving').text('Registrando los asientos contables...');
-                                                        axios.put('/grabar_estado_plan',{  
-                                                            'idmodulo':me.idmodulomain, 
-                                                            'agrup':me.idpres, 
-                                                            'cargos':JSON.stringify(outlist) 
-                                                        }).then(function (response) { 
-                                                            $('#text_saving').text('Generando plan de cuotas.');
-                                                            var salida =(me.tasaanual>0)?_pl._fff3512_23622(
-                                                                                    me.fecha_actual,
-                                                                                    me.fechasjson,
-                                                                                    me.tasaanual,
-                                                                                    me.montosolicitado,
-                                                                                    me.plazomeses,
-                                                                                    me.fechacorte,
-                                                                                    total_prestamos,
-                                                                                    me.tipocambio,
-                                                                                    me.arrayFormulasProducto,
-                                                                                    me.arrayPrestamosSeleccionado.numpapeleta) :
-                                                                        _pl._fff3512_23623(
-                                                                                    me.fecha_actual,
-                                                                                    me.fechasjson,
-                                                                                    me.tasaanual,
-                                                                                    me.montosolicitado,
-                                                                                    me.plazomeses,
-                                                                                    me.fechacorte,
-                                                                                    total_prestamos,
-                                                                                    me.tipocambio,
-                                                                                    me.arrayFormulasProducto,
-                                                                                    me.arrayPrestamosSeleccionado.numpapeleta); 
+                                                                                                                                } else{
+                                                                                                                                swal("¡ocurrio un problema al registrar el plan de pagos!",'', "error"); 
+                                                                                                                                }
+                                                                                                                            });  
+                                                                                                    
+                                                                                                }else{
+                                                                                                    swal("¡ocurrio un problema al refinanciar el prestamo!",response.data.mensaje, "error");
+                                                                                                }    
+                                                                                            }).catch(function (error) { 
+                                                                                                swal("¡ocurrio un problema al registrar prestamos!",'', "error");
+                                                                                            });
+                                                                                /////////////////////////////////////////////////////////////////
+                                                                    }).catch(function (error) { 
+                                                                        swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
+                                                                    }); 
+                                        }else if(me.arrayPrestamosSeleccionado.activar_garante==1){
 
+                                        }else{
+                                            swal({
+                                                            title: "Registrando los Datos",
+                                                            html:_pl._ppf351_2516(), 
+                                                            allowOutsideClick: () => false,
+                                                            allowEscapeKey:() => false,
+                                                            showConfirmButton:false,
+                                                            showCancelButton:false
+                                                            }).catch(error => { swal.showValidationError( 'Request failed: ${error}' )  }); 
+                                                                    $('#text_saving').text('Obteniendo numero de lote...'); 
+                                                                    axios.get('/getlote/getstatus?idproducto='+me.idproducto).then(function (responselote) { 
+                                                                                /////////////////////////////////////////////////////////////////
+                                                                                        
+                                                                                    $('#text_saving').text('Registrando desembolso...');
+                                                                                        axios.put('/prestamos/grabar_desembolsoNormal',{ 
+                                                                                                'idprestamoin':me.idpres, 
+                                                                                                'detalle':me.obs,
+                                                                                                'numdoc':me.numdoc_desembolso,
+                                                                                                'lote':responselote.data.id,
+                                                                                                'idmodulo':me.idmodulomain,
+                                                                                                'perfilmaestro':me.perfilmaestrodesembolso  
+                                                                                        }).then(function (responsess) {  
 
-                                                                            console.log(salida.desembolsoperfil);
-                                                                                me.regPlan_de_pagos(salida.data,me.idpres).then(function(responses) { 
-                                                                                                    if(responses){ 
-                                                                                                        $('#text_saving').text('Obteniendo numero de lote...'); 
-                                                                                                        axios.get('/getlote/getstatus?idproducto='+me.idproducto).then(function (response) { 
-                                                                                                            $('#text_saving').text('Registrando desembolso...');
-                                                                                                                        axios.put('/prestamos/desembolsoupdate',{ 
-                                                                                                                            'idp':me.idpres,
-                                                                                                                            'cuota':salida.cuota,
-                                                                                                                            'cuotafinal':salida.cuotafinal,
-                                                                                                                            'detalle':me.obs,
-                                                                                                                            'numdoc':me.numdoc_desembolso,
-                                                                                                                            'lote':response.data.id,
-                                                                                                                            'idmodulo':me.idmodulomain,
-                                                                                                                            'perfilmaestro':me.perfilmaestrodesembolso,
-                                                                                                                            'cargos':JSON.stringify(salida.desembolsoperfil) 
-                                                                                                                        }).then(function (response) {  
-                                                                                                                            me.listar(); 
-                                                                                                                            _pl._vm2154_12185_145(me.idpres,me.rutas);
-                                                                                                                        }).catch(function (error) { 
-                                                                                                                            swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
-                                                                                                                        });
-                                                                                                        }).catch(function (error) { 
-                                                                                                            swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
-                                                                                                        });
-                                                                                                    } else{
-                                                                                                    swal("¡ocurrio un problema al registrar el plan de pagos!",'', "error"); 
-                                                                                                    }
-                                                                                                });  
-                                                            
-                                                        }).catch(function (error) { 
-                                                            swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
-                                                        }); 
-                                            }).catch(function (error) { 
-                                                console.log(error);
-                                                swal("¡ocurrio un problema al actualizar el registro (registro de cobranza)!",'', "error");
-                                            }); 
+                                                                                                        $('#text_saving').text('Generando plan de cuotas.');
+                                                                                                            var salida =(me.tasaanual>0)?_pl._fff3512_23622(
+                                                                                                                                                me.fecha_actual,
+                                                                                                                                                me.fechasjson,
+                                                                                                                                                me.tasaanual,
+                                                                                                                                                me.montosolicitado,
+                                                                                                                                                me.plazomeses,
+                                                                                                                                                me.fechacorte,
+                                                                                                                                                0,
+                                                                                                                                                me.tipocambio,
+                                                                                                                                                me.arrayFormulasProducto,
+                                                                                                                                                me.arrayPrestamosSeleccionado.numpapeleta):
+                                                                                                                                        _pl._fff3512_23623(
+                                                                                                                                                me.fecha_actual,
+                                                                                                                                                me.fechasjson,
+                                                                                                                                                me.tasaanual,
+                                                                                                                                                me.montosolicitado,
+                                                                                                                                                me.plazomeses,
+                                                                                                                                                me.fechacorte,
+                                                                                                                                                0,
+                                                                                                                                                me.tipocambio,
+                                                                                                                                                me.arrayFormulasProducto,
+                                                                                                                                                me.arrayPrestamosSeleccionado.numpapeleta); 
+                                                                                                                        me.regPlan_de_pagos(salida.data,me.idpres).then(function(responses) { 
+                                                                                                                                if(responses){  
+                                                                                                                                $('#text_saving').text('Registrando desembolso...');
+                                                                                                                                    axios.put('/prestamos/desembolsoupdate',{ 
+                                                                                                                                        'idp':me.idpres,
+                                                                                                                                        'cuota':salida.cuota   
+                                                                                                                                    }).then(function (responsess) {  
+                                                                                                                                        me.listar(); 
+                                                                                                                                        _pl._vm2154_12185_145(me.idpres,me.rutas);
+                                                                                                                                    }).catch(function (error) { 
+                                                                                                                                        swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
+                                                                                                                                    });
+                                                                                                                                } else{
+                                                                                                                                swal("¡ocurrio un problema al registrar el plan de pagos!",'', "error"); 
+                                                                                                                                }
+                                                                                                                            }); 
 
-                                            }else{ console.log('sin refinanciar');
-                                                 $('#text_saving').text('Generando plan de cuotas.');
-                                                            var salida =(me.tasaanual>0)?_pl._fff3512_23622(
-                                                                                    me.fecha_actual,
-                                                                                    me.fechasjson,
-                                                                                    me.tasaanual,
-                                                                                    me.montosolicitado,
-                                                                                    me.plazomeses,
-                                                                                    me.fechacorte,
-                                                                                    total_prestamos,
-                                                                                    me.tipocambio,
-                                                                                    me.arrayFormulasProducto,
-                                                                                    me.arrayPrestamosSeleccionado.numpapeleta):
-                                                                          _pl._fff3512_23623(
-                                                                                    me.fecha_actual,
-                                                                                    me.fechasjson,
-                                                                                    me.tasaanual,
-                                                                                    me.montosolicitado,
-                                                                                    me.plazomeses,
-                                                                                    me.fechacorte,
-                                                                                    total_prestamos,
-                                                                                    me.tipocambio,
-                                                                                    me.arrayFormulasProducto,
-                                                                                    me.arrayPrestamosSeleccionado.numpapeleta); 
-                                                             
-                                                                                me.regPlan_de_pagos(salida.data,me.idpres).then(function(responses) { 
-                                                                                                    if(responses){ 
-                                                                                                        $('#text_saving').text('Obteniendo numero de lote...'); 
-                                                                                                        axios.get('/getlote/getstatus?idproducto='+me.idproducto).then(function (response) { 
-                                                                                                            $('#text_saving').text('Registrando desembolso...');
-                                                                                                                        axios.put('/prestamos/desembolsoupdate',{ 
-                                                                                                                            'idp':me.idpres,
-                                                                                                                            'cuota':salida.cuota,
-                                                                                                                            'cuotafinal':salida.cuotafinal,
-                                                                                                                            'detalle':me.obs,
-                                                                                                                            'numdoc':me.numdoc_desembolso,
-                                                                                                                            'lote':response.data.id,
-                                                                                                                            'idmodulo':me.idmodulomain,
-                                                                                                                            'perfilmaestro':me.perfilmaestrodesembolso,
-                                                                                                                            'cargos':JSON.stringify(salida.desembolsoperfil) 
-                                                                                                                        }).then(function (response) {  
-                                                                                                                                 me.listar(); 
-                                                                                                                                _pl._vm2154_12185_145(me.idpres,me.rutas);
-                                                                                                                        }).catch(function (error) { 
-                                                                                                                            swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
-                                                                                                                        });
-                                                                                                        }).catch(function (error) { 
-                                                                                                            swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
-                                                                                                        });
-                                                                                                    } else{
-                                                                                                    swal("¡ocurrio un problema al registrar el plan de pagos!",'', "error"); 
-                                                                                                    }
-                                                                                                });  
-                                            }
-                        }) .catch(function (error) { 
-                        swal(error.response.data.mensaje,error.response.data.mensaje_into, "error").then(result => {
-                        me.classModal.closeModal('primarymodal'); 
-                        });
-                            $(".swal2-modal").css("z-index", "2000");
-                            $(".swal2-container").css("z-index", "2000");
-                        });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
-                }).catch(function (error) { 
-                     swal(
-                    "¡ocurrio un problema al eliminar el plan de pagos generado!",
-                    "",
-                    "error"
-                );
-                });
-
-            } else {
-                swal(
-                    "¡ocurrio un problema al modificar los datos generados!",
-                    "",
-                    "error"
-                );
-            }
-        }
-    );
-}).catch(function (error) {
-    swal("¡ocurrio un problema al registrar el dato!", error, "error");
-});
- 
-                }  
+                                                                                        }).catch(function (error) { 
+                                                                                            swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
+                                                                                        });
+                                                                                /////////////////////////////////////////////////////////////////
+                                                                    }).catch(function (error) { 
+                                                                        console.log(error);
+                                                                        swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
+                                                                    }); 
+                                        }
+                                }
+   
                 });
  
                
@@ -903,8 +886,7 @@ axios.get('/getprestamoRefi?id=' + me.idpres).then(function (response) {
                 this.idpres=data.idprestamo;
                 this.idsocio=data.idsocio;
                 this.getproductoperfil(data.idproducto);
-                this.idproducto=data.idproducto;
-                this.cobrarprestamos=data.cancelarprestamos;
+                this.idproducto=data.idproducto; 
                 this.tipocambio=data.tipocambio;
                 this.tasaanual=data.tasa;
                 this.plazomeses=data.plazo;
@@ -928,7 +910,16 @@ axios.get('/getprestamoRefi?id=' + me.idpres).then(function (response) {
             },
             getPermisos() {
                 //permisoId poner axios para obtener los permisos
-                this.arrayPermisosIn = JSON.parse(JSON.stringify(this.arrayPermisos)); 
+              
+                 var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data.datapermiso[0].permisos;  
+                    me.arrayPermisosIn = JSON.parse((respuesta)); console.log('permisos:',me.arrayPermisosIn);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
           check(n){
              return _pl.validatePermission(this.arrayPermisosIn,n);
@@ -942,6 +933,7 @@ axios.get('/getprestamoRefi?id=' + me.idpres).then(function (response) {
             this.classModal.addModal('primarymodal');
             this.classModal.addModal('plandepagos');  
             this.listar(); 
+            this.getloteStatus(); 
             this.fechasistema(); 
             this.getRutasReports(); 
             

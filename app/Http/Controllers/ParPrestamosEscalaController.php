@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 class ParPrestamosEscalaController extends Controller
 {
 
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
    /* SELECT maxmonto FROM `par__escalas` WHERE idescala = 4 and minanios<=9 and maxanios>=9*/
  

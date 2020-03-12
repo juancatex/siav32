@@ -18,7 +18,7 @@ class ParFechaSistemaController extends Controller
        if (!$request->ajax()) return redirect('/'); 
         if ($request->modal)
         {
-            return  DB::select('select curdate() as fecha');     
+            return  DB::select('select getfecha2() as fecha');     
         }
         else 
         {

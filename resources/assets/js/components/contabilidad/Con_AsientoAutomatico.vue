@@ -12,42 +12,58 @@
             </div>
             <div class="card-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <strong class="col-md-4">Seleccione Modulo:</strong>
-                            <select class="form-control col-md-8" v-model="idmodulo" @change="listarPerfil()">
-                                <option value="0">Seleccionar</option>
-                                <option v-for="modulo in arrayModulo" :key="modulo.idmodulo" :value="modulo.idmodulo" v-text="modulo.nommodulo"></option>
-                            </select>
-                        </div>
+                    <div class="row col-md-6"> 
+                            <strong class="col-md-3">Seleccione Modulo:</strong> 
+                            <v-select  class=" col-md-9" label="nommodulo" :options="arrayModulo"
+                            v-model="idmodulo" placeholder="Seleccione modulo"
+                            :reduce="moduloo => moduloo.idmodulo" :searchable="false" :clearable="false" 
+                            @input="listarPerfil()"> 
+                            <span slot="no-options">No existen Datos</span>
+                            <template slot="option" slot-scope="option"  >{{ option.nommodulo }}</template>
+                           </v-select> 
                     </div>
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <strong class="col-md-4">Seleccione Perfil:</strong>
-                            <select class="form-control col-md-8" v-model="idperfil" @change="listarAsientomaestro(1,idmodulo,idperfil)">
-                                <option value="0">Seleccionar</option>
-                                <option v-for="perfil in arrayPerfilcuentamaestro" :key="perfil.idperfilcuentamaestro" :value="perfil.idperfilcuentamaestro" v-text="perfil.nomperfil"></option>
-                            </select>
-                        </div>
+                    <div v-if="idmodulo" class="row col-md-6"> 
+                      <strong class="col-md-3">Seleccione Perfil:</strong> 
+                        <v-select  class=" col-md-9" label="nomperfil" :options="arrayPerfilcuentamaestro"
+                            v-model="idperfil" placeholder="Seleccione perfil"
+                            :reduce="productoSS => productoSS.idperfilcuentamaestro" :searchable="false" :clearable="false" 
+                            @input="listarAsientomaestro(1,idmodulo,idperfil)"> 
+                            <span slot="no-options">No existen Datos</span>
+                            <template slot="option" slot-scope="option"  ><div class="row"><div class="col-md-9 my-auto">{{ option.nomperfil }}</div><div class="col-md-3" style="text-align: center;padding-right: 12px;font-size: smaller;  padding: 6px;   border: dashed 1px lightgray; font-weight: 700;">Pendientes <br> {{ option.total }} </div></div></template>
+                        </v-select>
                     </div>
                 </div>
+           <div v-if="idperfil" class="form-group row" style="justify-content: flex-end;">
+            <div   class="col-md-10">
+              <div class="input-group" style="align-items: center;">
+                <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
+                </p>
+                <input type="text" v-model="buscar" @keyup.enter="listarAsientomaestro(1,idmodulo,idperfil)" class="form-control"
+                  placeholder="Codigo del comprobante, Glosa , Numero documento , Tipo comprobante , lote , Fecha Solicitud (YYYY-MM-DD)" />
+                <button type="submit" @click="listarAsientomaestro(1,idmodulo,idperfil)" class="btn btn-primary">
+                  <i class="fa fa-search"></i> Buscar
+                </button>
+              </div>
+            </div>
+          </div>
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
                             <th>Opciones</th>
                             <th>Glosa</th>
                             <th># Documento</th>
-                            <th>Documento</th>
                             <th>Fecha de Registro</th>
+                            <th>Documento</th> 
                             <th>comprobante</th>
                             <th>Monto</th>
+                            <th>Lote</th>
                             <th>Agrupar</th>
                             <!--<th>Estado</th>-->
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="asientomaestro in arrayAsientomaestro" :key="asientomaestro.idasientomaestro" v-bind:class="[asientomaestro.estado==3 ? 'table-danger' :true , false]">
-                            <td>
+                            <td v-if="asientomaestro.desembolso==1" style="text-align: center;vertical-align: middle;">
                                 <button type="button" v-if="asientomaestro.estado!=3" @click="abrirModal('asientodetalle','detalle',asientomaestro)" class="btn btn-warning btn-sm" title="Asiento Contable" :disabled="asientomaestro.idtipocomprobante==2 && asientomaestro.desembolso==0">
                                     <i class="cui-dashboard"></i>
                                 </button> 
@@ -64,14 +80,16 @@
                                         <i class="icon-check"></i>
                                     </button>
                                 </template>
-                                -->
+                                --> 
                             </td>
+                            <td v-else style="text-align: center;vertical-align: middle;"><h6> <span  class="badge badge-danger">No Desembolsado<br>por Tesoreria</span></h6></td>
                             <td v-text="asientomaestro.glosa"></td>
                             <td v-text="asientomaestro.numdocumento"></td>
-                            <td v-text="asientomaestro.tipodocumento"></td>
-                            <td v-text="asientomaestro.fecharegistro"></td>
+                             <td v-text="asientomaestro.fecharegistro"></td>
+                            <td v-text="asientomaestro.tipodocumento"></td>  
                             <td v-text="asientomaestro.nomtipocomprobante"></td>
                             <td >{{asientomaestro.sdebe | currency }}</td>
+                            <td style="text-align: center;vertical-align: middle;"> <h5>{{asientomaestro.loteprestamos}}</h5></td>
                             <td>
                                 <label class="switch switch-label switch-pill switch-outline-primary-alt">
                                     <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion" :value="asientomaestro.idasientomaestro" :disabled="(asientomaestro.idtipocomprobante==2 && asientomaestro.desembolso==0) || asientomaestro.estado==3" >
@@ -79,15 +97,33 @@
                                 </label>
                             </td>
                         </tr>  
-                        <tr v-if="idperfil!=0 && arrayAsientomaestro.length!=0">
+                        <!-- <tr v-if="idperfil!=0 && arrayAsientomaestro.length!=0">
                             <td colspan="7" style="text-align:right"></td>
                             <td style="text-align:center"><button class="btn btn-primary" type="button" @click="abrirModalAgrupacion()" :disabled="checkValidacion.length<=1">
                                         Agrupar
                                 </button>
                             </td>
-                        </tr>                  
+                        </tr>                   -->
                     </tbody>
                 </table>
+
+                 <div id="inferior2" class="position-fixed animated "  :class="(idperfil!=0 && arrayAsientomaestro.length!=0&&checkValidacion.length>1)?'slideInUp':'slideOutDown'">
+                                 <div class="col-md-4 row " style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
+                                             <div class="col-md-12">
+                                                <button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
+                                                          @click="abrirModalAgrupacion()" :disabled="checkValidacion.length<=1">
+                                                        Agrupar Asientos Contables
+                                                </button> 
+                                            </div>
+                                    </div>
+                                  
+                                
+                  </div>
+
+
+
+
+
                 <nav>
                     <ul class="pagination">
                         <li class="page-item" v-if="pagination.current_page > 1">
@@ -417,7 +453,8 @@
     symbolPosition: 'front',
     symbolSpacing: true
     })
-    
+    import vSelect from "vue-select";  
+Vue.component("v-select", vSelect);
 
     export default {
         data (){
@@ -465,7 +502,7 @@
                 arrayPerfilcuentamaestro:[],
                 idperfil:0,
                 checkValidacion:[],
-                arrayPerfilDetalle:[],
+               
                 arrayMaestros:[],
                 arrayDetalles:[],
                 fechacomprobantes:[],
@@ -659,12 +696,12 @@
 
             },
             listarPerfil(){
+                this.buscar='';
                 let me=this;
                 me.idperfil=0;
                 me.arrayAsientomaestro=[];
-                var url= '/con_perfilcuentamaestro/selectPerfilcuentamaestro?idmodulo='+me.idmodulo;
-                axios.get(url).then(function (response) {
-                    //console.log(response);
+                var url= '/con_perfilcuentamaestro/selectPerfilcuentamaestro_contable?idmodulo='+me.idmodulo;
+                axios.get(url).then(function (response) { 
                     var respuesta= response.data;
                     me.arrayPerfilcuentamaestro = respuesta.perfilcuentamaestros;
                 })
@@ -770,7 +807,7 @@
         },
         selectModulo(){
             let me=this;
-            var url= '/par_modulo/selectModulo';
+            var url= '/par_modulo/selectModulo_contable';
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
                 me.arrayModulo = respuesta.modulos;
@@ -810,12 +847,11 @@
             let me=this;
             me.arrayAsientomaestro=[];
             me.checkValidacion=[];
-            var url= '/con_asientomaestro?page=' + page + '&idmodulo='+ idmodulo+'&idperfil='+idperfil;
+            var url= '/con_asientomaestro_getasientosmaestros_automatico?page=' + page + '&idmodulo='+ idmodulo+'&idperfil='+idperfil+'&buscar='+me.buscar;
             axios.get(url).then(function (response) {
-                var respuesta= response.data;
+                var respuesta= response.data; 
                 me.arrayAsientomaestro = respuesta.asientomaestros.data;
-                me.pagination= respuesta.pagination;
-                me.arrayPerfilDetalle=respuesta.perfildetalle;
+                me.pagination= respuesta.pagination; 
             })
             .catch(function (response) {
                 console.log(response);
@@ -1038,5 +1074,11 @@
         color: red !important;
         font-style: italic;
     }
-    
+     #inferior2{ 
+position:absolute; /*El div será ubicado con relación a la pantalla*/
+left:0px; /*A la derecha deje un espacio de 0px*/
+right:0px; /*A la izquierda deje un espacio de 0px*/
+bottom:0px; /*Abajo deje un espacio de 0px*/ 
+z-index:99999;
+ }
 </style>

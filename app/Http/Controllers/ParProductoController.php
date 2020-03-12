@@ -37,8 +37,9 @@ class ParProductoController extends Controller
  
             $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
-            ->select( 'par__productos.moneda','par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes',
-            'par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos',
+            ->select( 'par__productos.moneda','par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala',
+            'par__productos.garantes',
+            'par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos',
             'par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto',
             'par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
             'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
@@ -53,37 +54,16 @@ class ParProductoController extends Controller
           ->get();
 
           $validador=0;
-          $validadorcuota=0;
-          
+            
           if($productos[0]->max_prestamos==1){
-            $validador = Par_Prestamos::join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
-            //->where('par__prestamos.idproducto','=',$productos[0]->idproducto)
-            ->where('par__prestamos.idsocio','=',$request->idsocio)
-            ->where('par__productos.tasa','!=','0')
-            ->where('par__productos.moneda','=',$productos[0]->moneda)
+            $validador = Par_Prestamos::where('par__prestamos.idproducto','=',$productos[0]->idproducto)
+            ->where('par__prestamos.idsocio','=',$request->idsocio) 
             ->whereBetween('par__prestamos.idestado', [1, 3])
             ->whereBetween('par__prestamos.apro_conta', [0, 1])
-            ->orWhere('par__prestamos.idestado','=',10)->count(); 
-
-             if($productos[0]->linea==0&&$productos[0]->cancelarprestamos==0){
-                  $validadorcuota=0;
-             }elseif($productos[0]->linea==1&&$productos[0]->cancelarprestamos==0){
-                 $validadorcuota=1;
-             }elseif($productos[0]->linea==0&&$productos[0]->cancelarprestamos==1){
-                 $validadorcuota=2;
-             }else{
-                $validadorcuota=10;// indica error de configuracion del producto
-             }
-          }else{
-            $validador=0;
-            if($productos[0]->linea==0&&$productos[0]->cancelarprestamos==0){
-                $validadorcuota=3;
-            }else{
-                $validadorcuota=10;// indica error de configuracion del producto
-            }
-          }
+            ->orWhere('par__prestamos.idestado','=',10)->count();  
+          } 
       
-          $formulas = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+          $formulas = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
             ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
             'par__productos__perfilcuentas.valor_abc',
             'par__productos__perfilcuentas.formula',
@@ -94,7 +74,7 @@ class ParProductoController extends Controller
             ->get();
           
          
-        return ['productos' => $productos,'escala' => $escala,'formulas' => $formulas ,'status'=>$validador,'cuotasvalidador'=>$validadorcuota];
+        return ['productos' => $productos,'escala' => $escala,'formulas' => $formulas ,'status'=>$validador];
     }
     public function getproductosid_tabla(Request $request)
     {
@@ -103,7 +83,7 @@ class ParProductoController extends Controller
             $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
             ->select( 'par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes',
-            'par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos',
+            'par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos',
             'par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto',
             'par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
             'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
@@ -142,9 +122,9 @@ class ParProductoController extends Controller
     {
       if (!$request->ajax()) return redirect('/');
        //DB::connection()->enableQueryLog();
-          $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+          $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
           ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
-          ->select( 'par__productos.linea','par__productos.cobranza_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
+          ->select( 'par__productos.linea','par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
           'par__productos__perfilcuentas.valor_abc',
           'par__productos__perfilcuentas.formula',
           'con__perfilcuentadetalles.tipocargo',
@@ -152,21 +132,23 @@ class ParProductoController extends Controller
           'par__productos__perfilcuentas.iscargo')
           ->where('par__productos__perfilcuentas.activo','=','1')
           ->where('par__productos.idproducto','=',$request->id)
-            ->get();
-        $formulasdesembolso = Par_productos_perfilcuenta::join('par__productos','par__productos.desembolso_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
-            ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
-            ->select( 'par__productos.linea','par__productos.desembolso_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
-            'par__productos__perfilcuentas.valor_abc',
-            'par__productos__perfilcuentas.formula',
-            'con__perfilcuentadetalles.tipocargo',
-            'con__perfilcuentadetalles.idcuenta',
-            'par__productos__perfilcuentas.iscargo')
-            ->where('par__productos__perfilcuentas.activo','=','1')
-            ->where('par__productos.idproducto','=',$request->id)
-            ->get();
+          ->get();
+
+        // $formulasdesembolso = Par_productos_perfilcuenta::join('par__productos','par__productos.desembolso_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+        //     ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+        //     ->select( 'par__productos.linea','par__productos.desembolso_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
+        //     'par__productos__perfilcuentas.valor_abc',
+        //     'par__productos__perfilcuentas.formula',
+        //     'con__perfilcuentadetalles.tipocargo',
+        //     'con__perfilcuentadetalles.idcuenta',
+        //     'par__productos__perfilcuentas.iscargo')
+        //     ->where('par__productos__perfilcuentas.activo','=','1')
+        //     ->where('par__productos.idproducto','=',$request->id)
+        //     ->get();
         // echo dd(DB::getQueryLog());
         //printf($formulasdesembolso);
-       return ['formulascobranza' => $formulascobranza,'formulasdesembolso' => $formulasdesembolso ];
+    //    return ['formulascobranza' => $formulascobranza,'formulasdesembolso' => $formulasdesembolso ];
+       return ['formulascobranza' => $formulascobranza];
     }
 
     /**
@@ -180,17 +162,44 @@ class ParProductoController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
+        $raw2= DB::raw("par__productos.serializedmap as seriemap");
         
         if ($buscar==''){
             $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor')
-            ->select(  'par__productos.linea','par__productos.serializedmap','par__productos.desembolso_perfil','par__productos.cobranza_perfil','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->select( $raw2, 'par__productos.linea','par__productos.serializedmap','par__productos.desembolso_perfil',
+            'par__productos.cobranza_perfil','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos',
+            'par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos','par__productos.idfactor',
+            'par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto',
+            'par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda',
+            'par__monedas.idmoneda','par__monedas.tipocambio'
+            ,'par__productos.desembolso_perfil_refi'
+            ,'par__productos.desembolso_perfil_garante'
+            ,'par__productos.cobranza_perfil_refi'
+            ,'par__productos.cobranza_perfil_garante'
+            ,'par__productos.cobranza_perfil_ascii'
+            ,'par__productos.cobranza_perfil_acreedor'
+            ,'par__productos.perfil_cambio_estado'
+            ,'par__productos.cobranza_perfil_daro')
             ->orderBy('idproducto', 'asc')->paginate(10);
         }
         else{
             $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor')
-            ->select( 'par__productos.linea','par__productos.serializedmap','par__productos.desembolso_perfil','par__productos.cobranza_perfil','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->select($raw2, 'par__productos.linea','par__productos.serializedmap','par__productos.desembolso_perfil',
+            'par__productos.cobranza_perfil','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos',
+            'par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos','par__productos.idfactor',
+            'par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto',
+            'par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda',
+            'par__monedas.idmoneda','par__monedas.tipocambio'
+            ,'par__productos.desembolso_perfil_refi'
+            ,'par__productos.desembolso_perfil_garante'
+            ,'par__productos.cobranza_perfil_refi'
+            ,'par__productos.cobranza_perfil_garante'
+            ,'par__productos.cobranza_perfil_ascii'
+            ,'par__productos.cobranza_perfil_acreedor'
+            ,'par__productos.perfil_cambio_estado'
+            ,'par__productos.cobranza_perfil_daro')
             ->where($criterio, 'like', '%'. $buscar . '%')->orderBy('idproducto', 'asc')->paginate(10);
         }
          
@@ -246,7 +255,7 @@ class ParProductoController extends Controller
         $producto->garantes = $request->garantes;
         $producto->max_prestamos = $request->max_prestamos;
         $producto->lote = $request->lote; 
-        $producto->blockauto = $request->blockauto;
+        $producto->activar_garante = $request->activar_garante;
         $producto->linea = $request->linea;
         $producto->cancelarprestamos = $request->cancelarprestamos; 
         $producto->plazominimo = $request->plazominimo;
@@ -254,6 +263,16 @@ class ParProductoController extends Controller
 
         $producto->desembolso_perfil = $request->desembolso_perfil; 
         $producto->cobranza_perfil = $request->cobranza_perfil; 
+
+        $producto->desembolso_perfil_refi = $request->desembolso_perfil_refi; 
+        $producto->desembolso_perfil_garante = $request->desembolso_perfil_garante; 
+        $producto->cobranza_perfil_refi = $request->cobranza_perfil_refi; 
+        $producto->cobranza_perfil_garante = $request->cobranza_perfil_garante; 
+
+        $producto->cobranza_perfil_ascii = $request->cobranza_perfil_ascii; 
+        $producto->cobranza_perfil_acreedor = $request->cobranza_perfil_acreedor; 
+        $producto->cobranza_perfil_daro = $request->cobranza_perfil_daro; 
+        $producto->perfil_cambio_estado = $request->perfil_cambio_estado; 
         $producto->serializedmap = '[]';
         $producto->fecharegistro = $fecha; 
         $producto->save();  
@@ -304,13 +323,23 @@ class ParProductoController extends Controller
         $producto->idescala = $request->idescala;
         $producto->max_prestamos = $request->max_prestamos;
         $producto->lote = $request->lote;
-        $producto->blockauto = $request->blockauto;
+        $producto->activar_garante = $request->activar_garante;
         $producto->linea = $request->linea;
         $producto->cancelarprestamos = $request->cancelarprestamos;
         $producto->plazominimo = $request->plazominimo;
         $producto->plazomaximo = $request->plazomaximo;  
         $producto->desembolso_perfil = $request->desembolso_perfil; 
         $producto->cobranza_perfil = $request->cobranza_perfil; 
+        
+        $producto->desembolso_perfil_refi = $request->desembolso_perfil_refi; 
+        $producto->desembolso_perfil_garante = $request->desembolso_perfil_garante; 
+        $producto->cobranza_perfil_refi = $request->cobranza_perfil_refi; 
+        $producto->cobranza_perfil_garante = $request->cobranza_perfil_garante; 
+
+        $producto->cobranza_perfil_ascii = $request->cobranza_perfil_ascii; 
+        $producto->cobranza_perfil_acreedor = $request->cobranza_perfil_acreedor; 
+        $producto->cobranza_perfil_daro = $request->cobranza_perfil_daro;
+        $producto->perfil_cambio_estado = $request->perfil_cambio_estado;
         $producto->serializedmap = '[]';  
         $producto->save();
     }

@@ -11,13 +11,17 @@
                                 <div class="modal-body">
                                      
                                     <div class="col-md-12">
+                                        <h4 v-if="expresion" style=" text-align: center; 
+                                        margin-bottom: 22px;
+                                        font-weight: 900;
+                                        color: red;" class="parpadea">( Expresado en Bolivianos )</h4>
                                      <div class="row contenedor" id="contenedor">  
                                     </div></div>
                                    
                                 </div>  
 
                                 <div class="modal-footer">  
-                                <button type="button" class="btn btn-secondary" @click="classModal2.closeModal('primarymodal')">Cerrar</button>     
+                                <button type="button" class="btn btn-secondary" @click="cerrarmodal_principal()">Cerrar</button>     
                                 <button type="button" class="btn btn-secondary" @click="mostrarelement()">Probar</button>         
                                 <button type="button" class="btn btn-primary" @click="save()">Guardar</button>    
                                 </div>    
@@ -54,6 +58,7 @@
                tipocambio:0,
                idmaestro:0,
                codmoneda:'',
+               expresion:false,
                nombreproducto:'', 
                mapData:new Map(),
                mapDataGeneral:new Map()
@@ -68,23 +73,28 @@
 
                         try {
                             _pl._mmf2251_3325(me.mapData);
-                            me.mapDataGeneral.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
-                            axios.put('/par_producto/actualizar/map', {
-                                'idproducto': me.idproducto,
-                                'map': JSON.stringify(Array.from(me.mapDataGeneral))
-                            }).then(function (response) {
-                                me.$emit('cerrarvueprincipal');
+                           // me.mapDataGeneral.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
+                            // axios.put('/par_producto/actualizar/map', {
+                            //     'idproducto': me.idproducto,
+                            //     'map': JSON.stringify(Array.from(me.mapDataGeneral))
+                            // }).then(function (response) {
+                            //     me.$emit('cerrarvueprincipalperfiles');
+                            //     me.classModal2.closeModal('primarymodal');
+                            //     swal("¡Se registro los datos correctamente!", "", "success");
+                            //     $(".swal2-modal").css('z-index', '2000');
+                            //     $(".swal2-container").css('z-index', '2000');
+                            // }).catch(function (error) {
+                            //     console.log(error);
+                            // });
+                                me.$emit('savePerfil',me.idmaestro,me.mapData);
                                 me.classModal2.closeModal('primarymodal');
                                 swal("¡Se registro los datos correctamente!", "", "success");
                                 $(".swal2-modal").css('z-index', '2000');
                                 $(".swal2-container").css('z-index', '2000');
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
                         } catch (error) {
                             console.error(error.stack);
                             swal("¡Existe un error en la compilacion de la formula!", error.name + ' <b>:</b><span style="font-weight: 400;"> ' + error.message + '</span>', "error").then((result) => {
-                                me.$emit('cerrarvue');
+                                me.$emit('cerrarvueprincipalperfiles');
                             })
                             $(".swal2-modal").css('z-index', '2000');
                             $(".swal2-container").css('z-index', '2000');
@@ -106,6 +116,10 @@
              cerrarModalvue(){   
                 this.classModal2.openModal('primarymodal'); 
               },
+            cerrarmodal_principal(){ 
+                this.classModal2.closeModal('primarymodal');
+                this.$emit('cerrarvueprincipalperfiles');
+            },
              mostrarelement(mapinto=this.mapData,nombre=this.nombreperfilmaestro,tipoc=this.tipocambio,cod=this.codmoneda,name=this.nombreproducto){
                  let me=this; 
                 this.validateData(this.mapData).then(function(responses) { 
@@ -136,11 +150,11 @@
             async validateData(map){
              let responses = true; 
                 for (var [key, value] of map)  {  
-                    console.log(value);
+                   // console.log(value);
                     var item=$('.itemrow[id="'+key+'"] .divdrag[id="'+value.key+'"]'); 
                     if(item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').is(':checked')){  value.adi=1; }else{value.adi=0;}
                     if(item.contents().length==0){ item.addClass('noF');responses = false; 
-                    }else{ value.idpro=this.idproducto;value.formula=_pl._perff_00125(item);
+                    }else{ value.idpro=this.idproducto;value.formula=_pl._perff_00125(item);value.formula2=_pl._perff_00126(item);
                     value.item=$('.itemrow[id="'+key+'"]')[0].outerHTML; map.set(key,value);} 
                  }  
                 return responses;
@@ -166,15 +180,16 @@
                     console.log(response);
                 });
             } ,
-            showVuecargos(id,idperfilmaestro){ 
+            showVuecargos(id,idperfilmaestro,exp=false){ 
                 $('#contenedor').empty(); 
+              this.expresion=exp;
               this.idmaestro=idperfilmaestro;
               this.listar(idperfilmaestro);  
               this.idproducto=id.idproducto;
               this.tipocambio=id.tipocambio;
               this.codmoneda=id.codmoneda;
               this.nombreproducto=id.nomproducto;   
-              this.mapDataGeneral = new Map(JSON.parse(id.serializedmap));
+              this.mapDataGeneral = new Map(JSON.parse(id.seriemap));
               if(this.mapDataGeneral.has(idperfilmaestro)){
                this.mapData = new Map(JSON.parse(this.mapDataGeneral.get(idperfilmaestro)));
               }else{
@@ -197,7 +212,15 @@
 <style> 
   .hoverdrop { background:#ffa70770 !important; } 
   .hoverdropfunctions { background:#e8e30ebf !important; padding-right: 37px !important;} 
-	
+	.parpadea {
+   animation: parpadeo 3s infinite ease-in-out;
+} 
+
+@keyframes parpadeo {  
+ 0%,10%,20%,30%,40%{ opacity: 1.0; }
+    50%,60%  { opacity: 0.0; } 
+  70%,80%,90%,100% { opacity: 1.0; }  
+}
  
     .div-error{
         display: flex;

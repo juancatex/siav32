@@ -12,80 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class PreCalificacionController extends Controller
 {
-    /**
-     * Display a listing of the resource. 
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Pre_Calificacion  $pre_Calificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pre_Calificacion $pre_Calificacion)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pre_Calificacion  $pre_Calificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pre_Calificacion $pre_Calificacion)
-    {
-        //
-    }
- 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pre_Calificacion  $pre_Calificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pre_Calificacion $pre_Calificacion)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Pre_Calificacion  $pre_Calificacion
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pre_Calificacion $pre_Calificacion)
-    {
-        //
+        $this->middleware('auth');
     }
 
     public function getcuota(Request $request){
@@ -104,7 +33,7 @@ class PreCalificacionController extends Controller
 
         $raw = DB::raw("count(apo__aportes.numpapeleta) as total_aportes");
         $raw2= DB::raw("sum(apo__aportes.aporte) as total_bs");
-        $raw3 = DB::raw("TIMESTAMPDIFF(YEAR, socios.fechaincorporacion, CURDATE()) as servicio");
+        $raw3 = DB::raw("TIMESTAMPDIFF(YEAR, socios.fechaincorporacion, getfecha2()) as servicio");
 
         $idsocio = $request->idsocio;        
          
@@ -181,8 +110,10 @@ class PreCalificacionController extends Controller
 if(!empty($request->buscar)){
     $buscararray = explode(" ",$request->buscar);
 } 
-        $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
-        $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
+         $raw = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.cantobligados+apo__total_aportes.cantjubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion)) as cantaportes");
+        $raw2 = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.totalobligados+apo__total_aportes.totaljubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion)) as totalaportes");
+        // $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
+        // $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
         $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
         
          
@@ -342,18 +273,18 @@ if(!empty($request->buscar)){
             ->orderBy('socios.nombre', 'asc')->limit(20)->get();
         }
         
-        $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
-            ->select('par__productos.cobranza_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
+        $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+            ->select('par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
             'par__productos__perfilcuentas.valor_abc',
             'par__productos__perfilcuentas.formula',
             'par__productos__perfilcuentas.iscargo')
             ->where('par__productos__perfilcuentas.activo','=','1')
             ->where('par__productos.idproducto','=',$request->idpro)
-            ->get();
+            ->get(); 
         
      $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
-            ->select('par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->select('par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo','par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
             ->where('par__productos.idproducto','=',$request->idpro)  
             ->get();
 
@@ -368,46 +299,8 @@ if(!empty($request->buscar)){
     public function getsaldocapital_desembolso(Request $request)
     { 
        if (!$request->ajax()) return redirect('/'); 
-       $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
-       ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
-       ->select( 'par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes',
-       'par__productos.max_prestamos','par__productos.lote','par__productos.blockauto','par__productos.cancelarprestamos',
-       'par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto',
-       'par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
-       'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
-       ->where('par__productos.idproducto','=',$request->idpro)  
-       ->get();
-        
-     
-     $validadorcuota=0;
-     
-     if($productos[0]->max_prestamos==1){
-       
-
-        if($productos[0]->linea==0&&$productos[0]->cancelarprestamos==0){
-             $validadorcuota=0;
-        }elseif($productos[0]->linea==1&&$productos[0]->cancelarprestamos==0){
-            $validadorcuota=1;
-        }elseif($productos[0]->linea==0&&$productos[0]->cancelarprestamos==1){
-            $validadorcuota=2;
-        }else{
-           $validadorcuota=10;// indica error de configuracion del producto
-        }
-     }else{
-       
-       if($productos[0]->linea==0&&$productos[0]->cancelarprestamos==0){
-           $validadorcuota=3;
-       }else{
-           $validadorcuota=10;// indica error de configuracion del producto
-       }
-     }
-           
-     $variablepaso=0;
-     if(!empty($request->conta)){
-        $variablepaso=1;
-            } 
-         
-         $total=DB::select("select  ROUND(getcapitaltotal(?,?,?,?),2) as total", array($request->idsocio,$request->idpro,$validadorcuota,$variablepaso));
+      
+         $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
      return ['capital'=>($total[0]->total + 0)];
     }
 

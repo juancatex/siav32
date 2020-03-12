@@ -126,10 +126,11 @@ setvue(1, 'par_prestamo_factor', './components/cartera/Par_factores.vue');
 setvue(1, 'pre_calificacion', './components/cartera/Pre_Calificacion.vue');
 setvue(1, 'par_producto', './components/cartera/Par_Producto.vue');
 setvue(1, 'par_desembolso', './components/cartera/Par_Desembolso.vue');
-setvue(1, 'cargos', './components/cartera/modal_cargos_adicionales.vue');
-setvue(1, 'view-cargos', './components/cartera/modal_cargos_adicionales_view.vue');
-setvue(1, 'cuentaBancaria', './components/cartera/modal_cuentaBancaria.vue');
-setvue(1, 'status', './components/cartera/modal_status_prestamos.vue');
+setvue(0, 'cargos', './components/cartera/modal_cargos_adicionales.vue');
+setvue(0, 'view-cargos', './components/cartera/modal_cargos_adicionales_view.vue');
+setvue(0, 'cuentaBancaria', './components/cartera/modal_cuentaBancaria.vue');
+setvue(0, 'status', './components/cartera/modal_status_prestamos.vue');
+setvue(0, 'perfiles', './components/cartera/modal_perfiles.vue');
 
 setvue(0, 'cobranza_ascii', './components/cartera/modal_cobranza.vue');
 setvue(1, 'liq_saldosmenores', './components/cartera/Liq_saldosmenores.vue');
@@ -137,6 +138,9 @@ setvue(1, 'liq_saldosacreedor', './components/cartera/Liq_saldosacreedores.vue')
 setvue(1, 'liq_acreedores', './components/cartera/Liq_acreedores.vue');
 setvue(1, 'par_cobranzaacreedor', './components/cartera/Par_cobranzaacreedor.vue');
 setvue(1, 'liq_reportes', './components/cartera/liq_reportes.vue');
+
+
+setvue(0, 'registro_estatus', './components/cartera/Par_Estatus_registro.vue');
 
 function setvue(e, a, s) {
     var r = require(`${s}`).default;

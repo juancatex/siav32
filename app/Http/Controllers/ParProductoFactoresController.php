@@ -6,14 +6,9 @@ use Illuminate\Http\Request;
 
 class ParProductoFactoresController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
     public function selectfactores(Request $request){
         if (!$request->ajax()) return redirect('/');

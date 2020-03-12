@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Con_Perfilcuentamaestro;
+use App\Con_Asientomaestro;
 use App\Con_Tipocomprobante;
 use App\Par_Modulo;
+use Illuminate\Support\Facades\DB;
 
 class ConPerfilcuentamaestroController extends Controller
 {
@@ -72,6 +74,35 @@ class ConPerfilcuentamaestroController extends Controller
         
         return ['perfilcuentamaestros' => $perfilcuentamaestros];
     }
+    public function selectPerfilcuentamaestro_contable(Request $request){
+       // if (!$request->ajax()) return redirect('/');
+  
+         $idmodulo=$request->idmodulo;
+         $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro','nomperfil','descripcion')
+                                                         ->where('idmodulo','=',$idmodulo)
+                                                         ->where('activo','=','1')
+                                                         ->where('completo','=','1')
+                                                         ->orderBy('nomperfil', 'asc')->get();
+         foreach($perfilcuentamaestros as  $value){ 
+            
+            $value['total']=  Con_Asientomaestro::leftjoin('con__tipocomprobantes','con__asientomaestros.idtipocomprobante','=','con__tipocomprobantes.idtipocomprobante')
+                                                    ->join('con__perfilcuentamaestros','con__asientomaestros.idperfilcuentamaestro','=','con__perfilcuentamaestros.idperfilcuentamaestro')
+                                                    ->join('con__asientodetalles','con__asientomaestros.idasientomaestro','=','con__asientodetalles.idasientomaestro')
+                                                    ->where(function($query) {
+                                                        $query->where('con__asientomaestros.estado', 0)
+                                                            ->orWhere('con__asientomaestros.estado', 3);
+                                                    })
+                                                    ->where('con__asientomaestros.idmodulo', '=', $idmodulo) 
+                                                    ->where('con__asientomaestros.desembolso', '=','1')
+                                                    ->where('con__asientomaestros.idperfilcuentamaestro','=',$value->idperfilcuentamaestro)
+                                                    ->where('con__asientomaestros.gestion',0) 
+                                                    ->orderBy('fecharegistro', 'desc')
+                                                    ->orderBy('cont_comprobante','desc')
+                                                    ->groupBy('con__asientomaestros.idasientomaestro')->get()->count();
+         }
+
+         return ['perfilcuentamaestros' => $perfilcuentamaestros];
+     }
     public function selectPerfilMaestroTesoreria(Request $request){
         //if (!$request->ajax()) return redirect('/');
   

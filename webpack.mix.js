@@ -18,6 +18,7 @@ mix.styles([
     'resources/assets/plantilla/css/bootstrap.css', 
     'resources/assets/plantilla/css/style.css',
     'resources/assets/plantilla/css/daterangepicker.css',
+    'resources/assets/plantilla/css/animated.css',
     'resources/assets/plantilla/css/vue-select.css',
     'resources/assets/plantilla/css/ion.css',
     'resources/assets/plantilla/css/spinkit.min.css',

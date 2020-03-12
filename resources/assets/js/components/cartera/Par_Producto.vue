@@ -9,7 +9,7 @@
                 <div class="card animated fadeIn">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Registro de Productos
-                        <button type="button" @click="abrirModal('modalproducto','producto','registrar')" class="btn btn-secondary">
+                        <button v-if="check('Nuevo')" type="button" @click="abrirModal('modalproducto','producto','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                     </div>
@@ -30,7 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
-                                    <th>Perfiles</th>
+                                    <!-- <th>Perfiles</th> -->
                                     <th>Nombre</th>
                                     <th>Codigo</th>
                                     <th>Moneda</th>
@@ -43,15 +43,16 @@
                             <tbody>
                                 <tr v-for="producto in arrayproducto" :key="producto.idproducto">
                                     <td>
-                                            <button v-if="producto.activo==0" data-toggle="tooltip" data-placement="top" title="Activar" type="button" class="btn btn-success btn-sm" @click="activarproducto(producto.idproducto)"><i class="icon-check"></i></button> 
-                                            <button v-if="producto.activo==1" data-toggle="tooltip" data-placement="top" title="Desactivar" type="button" class="btn btn-danger btn-sm" @click="desactivarproducto(producto.idproducto)"><i class="icon-trash"></i></button> 
-                                            <button v-if="producto.activo==2" data-toggle="tooltip" data-placement="top" title="Editar" type="button" @click="abrirModal('modalproducto','producto','actualizar',producto)" class="btn btn-warning btn-sm"><i class="icon-pencil"></i> </button>
-                                            <button v-if="producto.activo==2" data-toggle="tooltip" data-placement="top" title="Consolidar" type="button" class="btn btn-primary btn-sm" @click="consolidar(producto)"> <i class="icon-login"></i></button>    
+                                            <button v-if="producto.activo==0&&check('Habilitar_Deshabilitar_Producto')" data-toggle="tooltip" data-placement="top" title="Activar" type="button" class="btn btn-success btn-sm" @click="activarproducto(producto.idproducto)"><i class="icon-check"></i></button> 
+                                            <button v-if="producto.activo==1&&check('Habilitar_Deshabilitar_Producto')" data-toggle="tooltip" data-placement="top" title="Desactivar" type="button" class="btn btn-danger btn-sm" @click="desactivarproducto(producto.idproducto)"><i class="icon-trash"></i></button> 
+                                            <button v-if="producto.activo==2&&check('Edición')" data-toggle="tooltip" data-placement="top" title="Editar" type="button" @click="abrirModal('modalproducto','producto','actualizar',producto)" class="btn btn-warning btn-sm"><i class="icon-pencil"></i> </button>
+                                            <button v-if="producto.activo==2&&visormaps(producto)&&check('Consolidar_perfil')" data-toggle="tooltip" data-placement="top" title="Consolidar" type="button" class="btn btn-primary btn-sm" @click="consolidar(producto)"> <i class="icon-login"></i>&nbsp;Consolidar</button>    
+                                            <button v-if="producto.activo==2&&!visormaps(producto)&&check('Edición_Perfiles')" data-toggle="tooltip" data-placement="top" title="Perfiles" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilesproducto(producto)"> <i class="icon-list"></i> &nbsp;Perfiles</button>
                                     </td>
-                                    <td>    
-                                     <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfildesembolsoVista(producto)"> <i class="icon-list"></i> &nbsp;Desembolso</button>
+                                    <!-- <td>    
+                                    
                                      <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilcobranzaVista(producto)"> <i class="icon-list"></i> &nbsp;Cobranza</button>
-                                    </td>
+                                    </td> -->
                                     <td v-text="producto.nomproducto"></td>
                                     <td v-text="producto.codproducto"></td>
                                     <td v-text="producto.codmoneda"></td>
@@ -102,7 +103,7 @@
                               <span aria-hidden="true">×</span>
                             </button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="overflow-y: scroll;max-height: 600px;">
                             
                                 <div class="form-group row">
                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Nombre del Producto : </label>
@@ -114,11 +115,126 @@
                                                 placeholder="Nombre del Producto"
                                                 name='Nombre producto'
                                                 autofocus
-                                                >  <!-- @keyup.enter="registrarproducto()"  para habilitar enter -->
-                                        <span class="text-error">{{ errors.first('Nombre producto')}}</span>   <!--Lineas Agregadas<-->
+                                                >  
+                                        <span class="text-error">{{ errors.first('Nombre producto')}}</span>  
                                     </div>
                                 </div>   
-                                 <div class="form-group row">
+                                 
+
+                                <div class="form-group row">
+                                   <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Codigo Producto : </label>
+                                    <div class="col-md-3">
+                                        <input  v-validate.initial= "'required'"   
+                                                type="text" 
+                                                v-model="codproducto"  
+                                                class="form-control" 
+                                                placeholder="Codigo de producto"
+                                                name='codigo'
+                                                autofocus
+                                                >   
+                                        <span class="text-error">{{ errors.first('codigo')}}</span>   
+                                    </div>
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Moneda : </label>
+                                    <div class="col-md-3">
+                                             
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Moneda')}"    
+                                                v-validate.initial="'required'"
+                                                name="Moneda" 
+                                                label="nommoneda" 
+                                                :options="arrayMoneda"
+                                                v-model="moneda"  
+                                                placeholder="Seleccione moneda" 
+                                                :reduce="json => json.idmoneda"  
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nommoneda }}  
+                                                </template>
+                                              </Combo> 
+                                        </div> 
+                                        <span class="text-error">{{ errors.first('Moneda')}}</span> 
+                                    </div>
+                                       
+
+                                </div>
+                                
+                                <div class="form-group row">
+                                  <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Tasa de Interes Anual : </label>
+                                    <div class="col-md-3">
+                                         <div class="input-group">
+                                        <input  v-validate.initial= "'required|max_value:100'" 
+                                                data-vv-as="tasa anual"  
+                                                type="number" 
+                                                v-model.number="tasa"  
+                                                class="form-control"  
+                                                placeholder="Tasa de interes anual"
+                                                name='tasa'
+                                                autofocus
+                                                step="any">   
+                                                <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-percent"></i>
+                                                </span>
+                                                </div>
+                                         </div>
+                                          <span class="text-error">{{ errors.first('tasa')}}</span> 
+                                    </div> 
+                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Numero de Garantes : </label>
+                                    <div class="col-md-3">
+                                         <div class="input-group">
+                                        <input  id="idgarante" v-validate.initial= "'required'"   
+                                                type="number" 
+                                                v-model.number="garantes"  
+                                                class="form-control"  
+                                                placeholder="Numero de garantes"
+                                                name='numero de garantes'
+                                                autofocus
+                                                step="any">   
+                                                <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-users"></i>
+                                                </span>
+                                                </div>
+                                         </div>
+                                          <span class="text-error">{{ errors.first('numero de garantes')}}</span> 
+                                    </div>
+                                     
+                                </div>
+
+                                
+                                <div class="form-group row">    
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Plazo Minimo (meses) : </label>
+                                    <div class="col-md-3">
+                                        <input  v-validate.initial= "'required|integer'"   
+                                                type="number" 
+                                                v-model.number="plazominimo" 
+                                                class="form-control" 
+                                                placeholder="ej.: 1"
+                                                name='plazo minimo'
+                                                autofocus
+                                                >   
+                                        <span class="text-error">{{ errors.first('plazo minimo')}}</span> 
+                                    </div>
+                                    
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Plazo Maximo (meses) : </label>
+                                    <div class="col-md-3">
+                                        <input  v-validate.initial= "'required|integer'"   
+                                                type="number" 
+                                                v-model.number="plazomaximo"  
+                                                class="form-control" 
+                                                placeholder="ej.: 9999"
+                                                name='plazo maximo'
+                                                autofocus
+                                                >  <!-- @keyup.enter="registrarproducto()"  para habilitar enter -->
+                                        <span class="text-error">{{ errors.first('plazo maximo')}}</span>   <!--Lineas Agregadas<-->
+                                    </div>
+                                </div>
+
+ <div class="form-group row">
                                    
                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Factor determinante : </label>
                                     <div class="col-md-9">
@@ -142,11 +258,8 @@
                                                     {{ option.nombrefactor }} - {{ option.descripcion }}
                                                 </template>
                                               </Combo> 
-                                        </div>
-
-                                        
-                                                                              
-                                        <span class="text-error">{{ errors.first('factor')}}</span>   <!--Lineas Agregadas<-->
+                                        </div>                                    
+                                        <span class="text-error">{{ errors.first('factor')}}</span>   
                                     </div>
                                      
 
@@ -179,130 +292,14 @@
                                         <span class="text-error">{{ errors.first('escala de montos')}}</span>    
                                     </div>
                                 </div>
- 
-
-                                <div class="form-group row">
-                                   <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Codigo Producto : </label>
-                                    <div class="col-md-3">
-                                        <input  v-validate.initial= "'required'"   
-                                                type="text" 
-                                                v-model="codproducto"  
-                                                class="form-control" 
-                                                placeholder="codigo de producto"
-                                                name='codigo'
-                                                autofocus
-                                                >  <!-- @keyup.enter="registrarproducto()"  para habilitar enter -->
-                                        <span class="text-error">{{ errors.first('codigo')}}</span>   <!--Lineas Agregadas<-->
-                                    </div>
-                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Moneda : </label>
-                                    <div class="col-md-3">
-                                             
-                                        <div style="display:flex"> 
-                                            <Combo  v-if="modal==1" 
-                                                style="width: 100%" 
-                                                :class="{'error': errors.has('Moneda')}"    
-                                                v-validate.initial="'required'"
-                                                name="Moneda" 
-                                                label="nommoneda" 
-                                                :options="arrayMoneda"
-                                                v-model="moneda"  
-                                                placeholder="Seleccione escala" 
-                                                :reduce="json => json.idmoneda"  
-                                                :searchable="false"
-                                                :clearable="false"   
-                                                ><span slot="no-options">No existen Datos</span>
-                                                <template slot="option" slot-scope="option">
-                                                    {{ option.nommoneda }}  
-                                                </template>
-                                              </Combo> 
-                                        </div>
+    
 
 
-
-                                        <span class="text-error">{{ errors.first('Moneda')}}</span>   <!--Lineas Agregadas<-->
-                                    </div>
-                                       
-
-                                </div>
-                                
-                                <div class="form-group row">
-                                  <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Tasa de Interes Anual : </label>
-                                    <div class="col-md-3">
-                                         <div class="input-group">
-                                        <input  v-validate.initial= "'required|max_value:100'" 
-                                                data-vv-as="tasa anual"  
-                                                type="number" 
-                                                v-model.number="tasa"  
-                                                class="form-control"  
-                                                placeholder="Tasa de interes anual"
-                                                name='tasa'
-                                                autofocus
-                                                step="any">  
-                                       
-                                                <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-percent"></i>
-                                                </span>
-                                                </div>
-                                         </div>
-                                          <span class="text-error">{{ errors.first('tasa')}}</span>   <!--Lineas Agregadas<-->
-                                    </div> 
-                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Numero de Garantes : </label>
-                                    <div class="col-md-3">
-                                         <div class="input-group">
-                                        <input  id="idgarante" v-validate.initial= "'required'"   
-                                                type="number" 
-                                                v-model.number="garantes"  
-                                                class="form-control"  
-                                                placeholder="Numero de garantes"
-                                                name='numero de garantes'
-                                                autofocus
-                                                step="any">  
-                                       
-                                                <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-users"></i>
-                                                </span>
-                                                </div>
-                                         </div>
-                                          <span class="text-error">{{ errors.first('numero de garantes')}}</span>   <!--Lineas Agregadas<-->
-                                    </div>
-                                     
-                                </div>
-
-                                
-                                <div class="form-group row">    
-                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Plazo Minimo (meses): </label>
-                                    <div class="col-md-3">
-                                        <input  v-validate.initial= "'required|integer'"   
-                                                type="number" 
-                                                v-model.number="plazominimo" 
-                                                class="form-control" 
-                                                placeholder="ej.: 1"
-                                                name='plazo minimo'
-                                                autofocus
-                                                >  <!-- @keyup.enter="registrarproducto()"  para habilitar enter -->
-                                        <span class="text-error">{{ errors.first('plazo minimo')}}</span>   <!--Lineas Agregadas<-->
-                                    </div>
-                                    
-                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Plazo Maximo (meses): </label>
-                                    <div class="col-md-3">
-                                        <input  v-validate.initial= "'required|integer'"   
-                                                type="number" 
-                                                v-model.number="plazomaximo"  
-                                                class="form-control" 
-                                                placeholder="ej.: 9999"
-                                                name='plazo maximo'
-                                                autofocus
-                                                >  <!-- @keyup.enter="registrarproducto()"  para habilitar enter -->
-                                        <span class="text-error">{{ errors.first('plazo maximo')}}</span>   <!--Lineas Agregadas<-->
-                                    </div>
-                                </div>
-                            <div class="form-group row">
+                            <div v-if="modal==1&&!cancelarprestamos&&!activacion_a_garante" class="form-group row">
                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Perfil de Desembolso : </label>
                                     <div class="col-md-9">   
                                         <div style="display:flex"> 
-                                            <Combo  v-if="modal==1"
+                                            <Combo  v-if="modal==1&&!cancelarprestamos&&!activacion_a_garante"
                                                 ref="perfilldesembolso"
                                                 style="width: 100%" 
                                                 :class="{'error': errors.has('Perfil Desembolso')}"    
@@ -324,19 +321,22 @@
                                         <span class="text-error">{{ errors.first('Perfil Desembolso') }}</span> 
                                     </div>
                                     </div>
-                            <div class="form-group row">
-                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Perfil de Cobranza : </label>
+                           
+
+<!-- ////////// cobranzas //////////// -->
+                             <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil de Cobranza <br><b>Manual</b> :</label>
                                     <div class="col-md-9">   
                                         <div style="display:flex"> 
-                                            <Combo v-if="modal==1"
-                                                ref="PrefilCobranza"
+                                            <Combo v-if="modal==1" 
                                                 style="width: 100%" 
-                                                :class="{'error': errors.has('Perfil Cobranza')}"    
+                                                :class="{'error': errors.has('Perfil Cobranza Manual')}"    
                                                 v-validate.initial="'required'"
-                                                name="Perfil Cobranza" 
+                                                name="Perfil Cobranza Manual" 
                                                 label="nomperfil" 
                                                 :options="arrayPerfiles"
-                                                v-model="idPerfilCobranza"  
+                                                v-model="idPerfilCobranza_manual"  
                                                 placeholder="Seleccione perfil" 
                                                 :reduce="json => json.idperfilcuentamaestro" 
                                                 :searchable="false"
@@ -347,111 +347,300 @@
                                                 </template>
                                                 </Combo> 
                                         </div>
-                                        <span class="text-error">{{ errors.first('Perfil Cobranza') }}</span> 
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Manual') }}</span> 
                                     </div>
-                                    </div> 
- 
-                                <div class="form-group row" style=" margin-left: 3px;
-                                        border: 1px solid rgb(194, 207, 214);
-                                        margin-right: 3px;    margin-top: 27px;"> 
-                                   
-                                 <!--  <div class="col-md-6" style="text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                       <label style="display: table-row;">¿Solo permitir un prestamo como maximo para este producto?</label>  
-                                      <label class="switch switch-label switch-pill switch-primary">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="max_prestamos">
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label> 
-                                         
+                            </div> 
+                        
+                        
+                         <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil de Cobranza <br><b>Ascii</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Ascii')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Ascii" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCobranza_ascii"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Ascii') }}</span> 
                                     </div>
-                                     
-                                     <div class="col-md-6" style="text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                      <label style="display: table-row;">¿Bloqueo por Mora?</label> 
-                                      <label class="switch switch-label switch-pill switch-primary">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="mora">
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label>   
-                                           
-                                    </div> 
-                                     <div class="col-md-6" style="text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                      <label style="display: table-row;">¿Linea de Credito?</label> 
-                                      <span class="text-error">desactivado </span> 
-                                      <label class="switch switch-label switch-pill switch-primary">
-                                        <input id="lineacredito" class="switch-input" type="checkbox" checked="" v-model="lineaC">
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label>   
-                                           
+                            </div> 
+                            <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil de Cobranza <br><b>Acreedor</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Acreedor')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Acreedor" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCobranza_acreedor"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Acreedor') }}</span> 
                                     </div>
-                                     <div class="col-md-6" style="text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                       <label style="display: table-row;">¿Agrupar por Lote?</label>  
-                                      <label class="switch switch-label switch-pill switch-primary">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="lote" >
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label> 
-                                        
-                                    </div> 
-                                    -->
-                                <div class="col-md-6" style="min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                    <div class="row h-100"> 
-                                     <label style="text-align: right; align-items: center;" class="col-md-6 my-auto" for="text-input">Prestamo Unico: </label>
-                                    <div class="col-md-3 my-auto"> 
-                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="max_prestamos">
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label>   
+                            </div> 
+
+                            <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil de Cobranza <br><b>Daaro</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Daaro')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Daaro" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCobranza_daro"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Daaro') }}</span> 
                                     </div>
+                            </div> 
+
+                             <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil Cambio de <br><b>Estado</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cambio Estado')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cambio Estado" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCambio_estado"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cambio Estado') }}</span> 
                                     </div>
-                               </div> 
-                               
-                               <div class="col-md-6" style="min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                    <div class="row h-100"> 
-                                     <label style="text-align: right; align-items: center;" class="col-md-6 my-auto" for="text-input">Agrupar por Lote :</label>
+                            </div>
+
+<!-- ////////////////////// -->
+<div class="form-group row" style="font-weight: bold;background-color: #c2cfd6;padding: 7px; margin-left: 3px;margin-right: 3px; margin-bottom: 0px; margin-top: 12px;">    
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Agrupar por Lote : </label>
                                     <div class="col-md-3 my-auto"> 
                                          <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
                                         <input class="switch-input" type="checkbox" checked="" v-model="lote">
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>   
                                     </div>
+
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Prestamo Unico : </label>
+                                    <div class="col-md-3 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="max_prestamos">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>   
+                                    </div>
+                            </div>
+
+ 
+                                <div class="form-group row" style=" margin-left: 3px;
+                                        border: 1px solid rgb(194, 207, 214);
+                                        margin-right: 3px;    margin-top: 0px;"> 
+                                        <!-- ///////////////////////////////////  es refinanciable  ////////////////////////////////////// -->
+<div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                                    <div class="row "> 
+                                     <label style="text-align: right; align-items: center;"  class="col-md-6 my-auto"
+                                      for="text-input">Es refinanciable :</label>
+                                    <div class="col-md-6 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="isrefinanciable">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>   
+                                    </div>
+                                    </div>
+                                    <div v-if="isrefinanciable" class="row" style="margin-top: 15px;"> 
+                                     <label v-if="isrefinanciable" style="text-align: right; align-items: center;" class="col-md-3" for="text-input">Cobranza por<br><b>Refinanciamiento</b>:</label>
+                                     <div class="col-md-9" v-if="isrefinanciable" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="isrefinanciable&&modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Refinanciamiento')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Refinanciamiento" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilRefinanciamientoCobranza"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Refinanciamiento') }}</span> 
+                                    </div>
+
                                     </div>
                                </div> 
 
-
-                              <!-- <div class="col-md-12" style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                    <div class="row h-100"> 
-                                     <label style="text-align: right; align-items: center;" :class="cancelarprestamos?'col-md-6 my-auto':'col-md-6 my-auto'" for="text-input">Refinanciar  prestamos vigentes :</label>
-                                    <div 
-                                    class="col-md-4 my-auto" 
-                                    :style="cancelarprestamos?'margin-bottom: 9px !important;':''"  
-                                    > 
+<!-- //////////////////////////////  refinanciar  ///////////////////////////// -->
+                              <div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                                    <div class="row "> 
+                                     <label style="text-align: right; align-items: center;" :class="cancelarprestamos?'col-md-6 my-auto':'col-md-6 my-auto'"
+                                      for="text-input">Refinanciar prestamos vigentes :</label>
+                                    <div class="col-md-6 my-auto"> 
                                          <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
                                         <input class="switch-input" type="checkbox" checked="" v-model="cancelarprestamos">
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>   
                                     </div>
-                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-3 my-auto" for="text-input">Cuenta transitoria :</label>
-                                    <Ajaxselect  v-if="cancelarprestamos"
-                                        ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
-                                        resp_ruta="cuentas"
-                                        labels="cuentas"
-                                        placeholder="Ingrese la cuenta para este proceso" 
-                                        idtabla="idcuenta"
-                                        :clearable='true'
-                                         selectedStyle="font-size: 11px;"
-                                        :class="cancelarprestamos?'col-md-8':''" 
-                                        style="background-color: #fff;">  
-                                    </Ajaxselect> </div>
-                               </div>  -->
+                                    </div>
+                                    <div v-if="cancelarprestamos" class="row" style="margin-top: 15px;"> 
+                                    <label v-if="cancelarprestamos" style="text-align: right; align-items: center;" class="col-md-3" for="text-input">Desembolso por<br><b>Refinanciamiento</b>:</label>
+                                     <div class="col-md-9" v-if="cancelarprestamos" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="cancelarprestamos&&modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Desembolso Refinanciamiento')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Desembolso Refinanciamiento" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilRefinanciamientoDesembolso"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                 <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center" >  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Desembolso Refinanciamiento') }}</span> 
+                                    </div>
+                                    
+                                      
 
-
-                                   
-                                    <div class="col-md-6" style="text-align: center;border: 1px solid rgb(194, 207, 214);">
-                                       <label style="display: table-row;">¿Cancelar prestamos vigentes?</label>  
-                                      <label class="switch switch-label switch-pill switch-primary">
-                                        <input id="lineacancelarprestamos" class="switch-input" type="checkbox" checked="" v-model="cancelarprestamos" >
+                                    </div>
+                               </div> 
+<!-- ////////////   activar garantes    /////////// -->
+                                <div class="col-md-12 h-100 " style="padding: 9px;min-height: 60px; text-align: center;border: 1px solid rgb(194, 207, 214);">
+                                    <div class="row "> 
+                                     <label style="text-align: right; align-items: center;" :class="activacion_a_garante?'col-md-6 my-auto':'col-md-6 my-auto'"
+                                      for="text-input">Activar a garantes/titular :</label>
+                                    <div class="col-md-6 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="activacion_a_garante">
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label> 
-                                        
-                                    </div> 
-                                     
+                                        </label>   
+                                    </div>
+                                    </div>
+                                    <div v-if="activacion_a_garante" class="row" style="margin-top: 15px;"> 
+                                    <label v-if="activacion_a_garante" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Desembolso :</label>
+                                     <div class="col-md-4" v-if="activacion_a_garante" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="activacion_a_garante&&modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Desembolso Activación')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Desembolso Activación" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfil_ActivacionGarante_Desembolso"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                 <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Desembolso Activación') }}</span> 
+                                    </div>
+                                    
+                                     <label v-if="activacion_a_garante" style="text-align: right; align-items: center;" class="col-md-2" for="text-input">Cobranza :</label>
+                                     <div class="col-md-4" v-if="activacion_a_garante" >   
+                                        <div style="display:flex"> 
+                                            <Combo  v-if="activacion_a_garante&&modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cobranza Activación')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cobranza Activación" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfil_ActivacionGarante_Cobranza"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option"> 
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                <template slot="selected-option" slot-scope="optionselected">
+                                                    <div class="selected d-center" style="font-size: 11px;">  {{ optionselected.nomperfil }} </div>
+                                                 </template>
+                                              </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cobranza Activación') }}</span> 
+                                    </div>
+
+                                    </div>
+                               </div> 
+
+
+                                 
                                 </div> 
                                 
 
@@ -470,7 +659,8 @@
             </div>
           
             <!--Fin del modal-->
-     <cargos @cerrarvueprincipal="cerrarModalvue"  ref="ModalCargos" :idmodulo="idmodulo"></cargos>
+     <perfiles @cerrarvueprincipal="cerrarModalvue"  ref="ModalPerfiles" :idmodulo="idmodulo"></perfiles>
+     
         </main>
 
 </template>
@@ -482,30 +672,41 @@
      Vue.component('Combo', vSelect);
     
     export default {
-         props: ['idmodulo'],
+         props:['idmodulo','idventanamodulo'],
         data (){
             return {
-                arrayPermisos:{Nuevo:0,Edición:0},
+                arrayPermisos:{Nuevo:0,Edición:0,Habilitar_Deshabilitar_Producto:0,Edición_Perfiles:0,Consolidar_perfil:0},
+                arrayPermisosIn:[],
                 classModal:null,
                 producto_id: 0,
+                pasoeditar:0,
                 id_factor:'',
                 id_escala:'',
                 idmoneda: '',
                 nomproducto : '',
                 codproducto : '',
                 idPerfilDesembolso:'',
-                idPerfilCobranza:'',
+                idPerfilRefinanciamientoDesembolso:'',
+                idPerfilRefinanciamientoCobranza:'',
+                idPerfil_ActivacionGarante_Desembolso:'',
+                idPerfil_ActivacionGarante_Cobranza:'',
+                idPerfilCobranza_manual:'',
+                idPerfilCobranza_ascii:'',
+                idPerfilCobranza_acreedor:'',
+                idPerfilCobranza_daro:'',
+                idPerfilCambio_estado:'',
                 moneda :'',
                 tasa:0,
                 garantes:0,  
                 plazominimo: 0,
                 plazomaximo: 0,
 
-                max_prestamos:1,
-                mora:1,
+                max_prestamos:0,
+                activacion_a_garante:0,
                 lineaC:0,
                 lote:0,
                 cancelarprestamos:0, 
+                isrefinanciable:0, 
 
                 arrayproducto : [],
                 arrayPerfiles:[],
@@ -535,7 +736,7 @@
             validateAfterLoad: true,
             validateAfterChanged: true
         },
-//  watch:{
+ watch:{
 //    max_prestamos: function() {
 //       if(this.max_prestamos){
 //        $('input[id="lineacredito"]').attr("disabled", false);
@@ -563,8 +764,38 @@
 //          this.lineaC=0;
 //      }
 //  }
+  cancelarprestamos:function(){
+     if(this.cancelarprestamos){
+         this.activacion_a_garante=0;
+            if(this.pasoeditar==0){
+                this.idPerfilRefinanciamientoDesembolso='';  
+            } 
+         this.idPerfil_ActivacionGarante_Desembolso=''; 
+         this.idPerfil_ActivacionGarante_Cobranza='';
+         
+         this.idPerfilDesembolso='';
+          
+     }
+ },
+   isrefinanciable:function(){
+     if(this.isrefinanciable&&this.pasoeditar==0){  
+                this.idPerfilRefinanciamientoCobranza='';    
+     }
+ },
+  activacion_a_garante:function(){
+     if(this.activacion_a_garante){
+         this.cancelarprestamos=0; 
+         this.idPerfilRefinanciamientoDesembolso=''; 
+         
+         if(this.pasoeditar==0){
+            this.idPerfil_ActivacionGarante_Desembolso=''; 
+            this.idPerfil_ActivacionGarante_Cobranza='';
+         } 
+         this.idPerfilDesembolso='';
+     }
+ }
 
-//  },
+ },
         computed:{
             isActived: function(){
                 return this.pagination.current_page;
@@ -595,15 +826,29 @@
             }
         },
         methods : {
-            cuentas(value){
-                console.log(value);
+            getPermisos() {   
+                var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data.datapermiso[0].permisos;  
+                    me.arrayPermisosIn = JSON.parse((respuesta)); console.log('permisos:',me.arrayPermisosIn);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }, 
+            check(n){
+                return _pl.validatePermission(this.arrayPermisosIn,n);
             },
-            clean(value){
-                 console.log(value);
+             
+            visormaps(value){
+              var aux = new Map(JSON.parse(value.serializedmap));
+              return aux.size>0;
             },
             consolidar(prod){
               var mapDataGeneral = new Map(JSON.parse(prod.serializedmap));
-              if(mapDataGeneral.size==2){
+              
+              if(mapDataGeneral.size>0){
  
             swal({
                 title: '¿Esta seguro de consolidar este Producto?',
@@ -663,8 +908,10 @@
                             'idperfilcuentadetalle':values.idperfilcuentadetalle, 
                             'idperfilcuentamaestro':values.idperfilcuentamaestro, 
                             'valor_abc':values.data, 
+                            'valor_abc_php':values.data_php, 
                             'iscargo':values.adi, 
-                            'formula':values.formula 
+                            'formula':values.formula, 
+                            'formulaphp':values.formula2 
                             }).then(function (response) { responses=true;  }).catch(function (error) {  responses=false;  });   
                           }
                         };
@@ -683,12 +930,9 @@
                 cerrarModalvue(){   
                     this.listarProducto(1,this.buscar,this.criterio);
                 },
-                perfildesembolsoVista(id){
-                   this.$refs.ModalCargos.showVuecargos(id,id.desembolso_perfil);  
-                },
-                perfilcobranzaVista(id){
-                   this.$refs.ModalCargos.showVuecargos(id,id.cobranza_perfil);  
-                }, 
+                perfilesproducto(id){ 
+                   this.$refs.ModalPerfiles.showVueperfiles(id);  
+                },  
             listar(){
                 let me=this; 
                 var url= '/con_perfilcuentamaestro/selectPerfilcuentamaestro?idmodulo='+ this.idmodulo;
@@ -766,21 +1010,28 @@
                     'garantes': this.garantes,
                     'max_prestamos': this.max_prestamos,
                     'lote': this.lote,
-                    'blockauto': this.mora,
+                    'activar_garante': this.activacion_a_garante,
                     'linea': this.lineaC,
                     'cancelarprestamos': this.cancelarprestamos, 
                     'idfactor':this.id_factor, 
                     'idescala':this.id_escala, 
                     'plazominimo': this.plazominimo,
                     'plazomaximo': this.plazomaximo,
-                    'desembolso_perfil':this.idPerfilDesembolso,
-                    'cobranza_perfil':this.idPerfilCobranza                   
+                    'desembolso_perfil':this.idPerfilDesembolso.toString().length>0?this.idPerfilDesembolso:0,
+                    'desembolso_perfil_refi':this.idPerfilRefinanciamientoDesembolso.toString().length>0?this.idPerfilRefinanciamientoDesembolso:0,
+                    'cobranza_perfil_refi':this.idPerfilRefinanciamientoCobranza.toString().length>0?this.idPerfilRefinanciamientoCobranza:0,
+                    'desembolso_perfil_garante':this.idPerfil_ActivacionGarante_Desembolso.toString().length>0?this.idPerfil_ActivacionGarante_Desembolso:0,
+                    'cobranza_perfil_garante':this.idPerfil_ActivacionGarante_Cobranza.toString().length>0?this.idPerfil_ActivacionGarante_Cobranza:0,
+                    'cobranza_perfil':this.idPerfilCobranza_manual,                   
+                    'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
+                    'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
+                    'cobranza_perfil_daro':this.idPerfilCobranza_daro,                   
+                    'perfil_cambio_estado':this.idPerfilCambio_estado                   
                     
                 }).then(function (response) {
                    me.cerrarModal('modalproducto'); 
                     swal("¡Se registro los datos correctamente!", "", "success").then((result) => {
-					   me.listarProducto(1,'','nomproducto'); 
-                       me.$refs.ModalCargos.showVuecargos(response.data.id); 
+					   me.listarProducto(1,'','nomproducto');   
                       });
                 }).catch(function (error) {
                     console.log(error);
@@ -812,7 +1063,7 @@
                         'garantes': this.garantes,
                         'max_prestamos': this.max_prestamos,
                         'lote': this.lote,
-                        'blockauto': this.mora,
+                        'activar_garante': this.activacion_a_garante,
                         'linea': this.lineaC,
                         'cancelarprestamos': this.cancelarprestamos, 
                         'idfactor':this.id_factor,
@@ -820,8 +1071,16 @@
                         'plazominimo': this.plazominimo,
                         'plazomaximo': this.plazomaximo,
                         'idproducto': this.producto_id,
-                        'desembolso_perfil':this.idPerfilDesembolso,
-                        'cobranza_perfil':this.idPerfilCobranza
+                        'desembolso_perfil':this.idPerfilDesembolso.toString().length>0?this.idPerfilDesembolso:0, 
+                        'desembolso_perfil_refi':this.idPerfilRefinanciamientoDesembolso.toString().length>0?this.idPerfilRefinanciamientoDesembolso:0,
+                        'cobranza_perfil_refi':this.idPerfilRefinanciamientoCobranza.toString().length>0?this.idPerfilRefinanciamientoCobranza:0,
+                        'desembolso_perfil_garante':this.idPerfil_ActivacionGarante_Desembolso.toString().length>0?this.idPerfil_ActivacionGarante_Desembolso:0,
+                        'cobranza_perfil_garante':this.idPerfil_ActivacionGarante_Cobranza.toString().length>0?this.idPerfil_ActivacionGarante_Cobranza:0,
+                        'cobranza_perfil':this.idPerfilCobranza_manual,
+                        'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
+                        'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
+                        'cobranza_perfil_daro':this.idPerfilCobranza_daro,  
+                        'perfil_cambio_estado':this.idPerfilCambio_estado  
                     }).then(function (response) {
                     me.cerrarModal('modalproducto'); 
                         swal("¡Se actualizo los datos correctamente!", "", "success").then((result) => {
@@ -933,6 +1192,7 @@
                             {   
                                 
                                 this.listar(); 
+                                this.pasoeditar=0;
                                 this.tituloModal = 'Registrar Producto Crediticio';
                                 this.nomproducto= '';
                                 this.codproducto='';
@@ -944,11 +1204,19 @@
                                 this.plazominimo= 0;
                                 this.plazomaximo= 0;
                                 this.idPerfilDesembolso= '';
-                                this.idPerfilCobranza= ''; 
+                                this.idPerfilRefinanciamientoDesembolso='';
+                                this.idPerfil_ActivacionGarante_Desembolso='';
+                                this.idPerfilRefinanciamientoCobranza='';
+                                this.idPerfil_ActivacionGarante_Cobranza='';
+                                this.idPerfilCobranza_manual= '';
+                                this.idPerfilCobranza_ascii='';                   
+                                this.idPerfilCobranza_acreedor='';                   
+                                this.idPerfilCobranza_daro='';  
+                                this.idPerfilCambio_estado='';  
                                 this.tipoAccion = 1;
-                                this.max_prestamos= 1;
+                                this.max_prestamos= 0;
                                 this.lote= 0;
-                                this.mora= 1;
+                                this.activacion_a_garante= 0;
                                 this.lineaC= 0;
                                 this.cancelarprestamos= 0;
                                 break;
@@ -956,8 +1224,7 @@
                             case 'actualizar':
                             {
                                 //console.log(data);
-                                
-                               
+                                this.pasoeditar=1;
                                 this.tituloModal='Actualizar Producto Crediticio';
                                 this.tipoAccion=2;
                                 this.listar(); 
@@ -974,11 +1241,23 @@
 
                                 this.max_prestamos= data['max_prestamos'];
                                 this.lote= data['lote'];
-                                this.mora= data['blockauto'];
+                                this.activacion_a_garante= data['activar_garante'];
                                 this.lineaC= data['linea'];
-                                this.idPerfilDesembolso= data['desembolso_perfil'];
-                                this.idPerfilCobranza= data['cobranza_perfil']; 
                                 this.cancelarprestamos= data['cancelarprestamos'];
+                                this.idPerfilDesembolso= parseInt(data['desembolso_perfil'])>0?data['desembolso_perfil']:'';
+
+                                this.idPerfilRefinanciamientoDesembolso= parseInt(data['desembolso_perfil_refi'])>0?data['desembolso_perfil_refi']:'';
+                                this.idPerfilRefinanciamientoCobranza= parseInt(data['cobranza_perfil_refi'])>0?data['cobranza_perfil_refi']:'';
+                                this.isrefinanciable=parseInt(data['cobranza_perfil_refi'])>0?1:0;
+                                this.idPerfil_ActivacionGarante_Desembolso= parseInt(data['desembolso_perfil_garante'])>0?data['desembolso_perfil_garante']:'';
+                                this.idPerfil_ActivacionGarante_Cobranza= parseInt(data['cobranza_perfil_garante'])>0?data['cobranza_perfil_garante']:'';
+ 
+                                this.idPerfilCobranza_manual= data['cobranza_perfil']; 
+                                this.idPerfilCobranza_ascii= data['cobranza_perfil_ascii'];                    
+                                this.idPerfilCobranza_acreedor= data['cobranza_perfil_acreedor'];                    
+                                this.idPerfilCobranza_daro= data['cobranza_perfil_daro']; 
+                                this.idPerfilCambio_estado= data['perfil_cambio_estado']; 
+                                
                                 
                                 break;
                             }
@@ -996,6 +1275,7 @@
             this.selectMoneda();
             this.selectFactor();
             this.selectEscala();
+            this.getPermisos(); 
         }
     }
 </script>

@@ -14,10 +14,11 @@ class CreateParPrestamosLotesTable extends Migration
     public function up()
     {
         Schema::create('par__prestamos__lotes', function (Blueprint $table) {
-            $table->increments('idlote');
+            $table->bigincrements('idlote');
             $table->integer('min')->default(0);
             $table->integer('max')->default(0);
             $table->integer('close')->default(0);
+            $table->integer('user')->default(0);
             $table->dateTime('fecha')->nullable();
             $table->integer('activo')->default(1);
 

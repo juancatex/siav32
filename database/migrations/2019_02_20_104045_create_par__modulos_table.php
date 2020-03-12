@@ -17,6 +17,7 @@ class CreateParModulosTable extends Migration
             $table->tinyIncrements('idmodulo');
             $table->string('nommodulo',40);
             $table->boolean('activo')->default(1);
+            $table->boolean('contabilizable')->default(0);
             $table->timestamps();
         });
     }

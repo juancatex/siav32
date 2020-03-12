@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/con_perfilcuentamaestro','ConPerfilcuentamaestroController@index');
         Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro');
+        Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro_contable', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro_contable');
         Route::get('/con_perfilcuentamaestro/selectmaestrofinalizado', 'ConPerfilcuentamaestroController@selectmaestrofinalizado');
         Route::get('/con_perfilcuentamaestro/getnamePerfilcuentamaestro', 'ConPerfilcuentamaestroController@getnamePerfilcuentamaestro');
 
@@ -152,6 +153,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/con_perfilcuentamaestro/selectcuentatesoreria', 'ConPerfilcuentamaestroController@selectPerfilMaestroTesoreria');
 
         Route::get ('/con_asientomaestro','ConAsientomaestroController@index');
+        Route::get ('/con_asientomaestro_getasientosmaestros_automatico','ConAsientomaestroController@getasientosmaestros_automatico');
         Route::put ('/con_asientomaestro/actualizar','ConAsientomaestroController@update');
         Route::get ('/con_asientomaestro/selectsubcuenta', 'ConAsientomaestroController@selectSubcuenta');
         Route::get ('/con_asientomaestro/selectsocio2', 'ConAsientomaestroController@selectSocio2');
@@ -279,6 +281,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/par_modulo/storeModulo','ParModuloController@storeModulo');       //C
     Route::get ('/par_modulo/listaModulos', 'ParModuloController@listaModulos');    //R
     Route::get ('/par_modulo/selectModulo', 'ParModuloController@selectModulo');    //R
+    Route::get ('/par_modulo/selectModulo_contable', 'ParModuloController@selectModulocontable');    //R
     Route::put ('/par_modulo/updateModulo', 'ParModuloController@updateModulo');    //U
     Route::put ('/par_modulo/switchModulo', 'ParModuloController@switchModulo');    //D
 
@@ -761,6 +764,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
         Route::put('/prestamos/desembolsoupdate', 'ParPrestamosController@grabar_estado');
+        Route::put('/prestamos/grabar_desembolsoNormal', 'ParPrestamosController@grabar_desembolsoNormal');
         Route::get('/start_desembolso', 'ParPrestamosController@desembolso'); 
         Route::get('/getprestamosEstado', 'ParPrestamosController@getprestamosEstado'); 
         Route::put ('/par_prestamos/eliminar','ParPrestamosController@delete_estado');
@@ -768,8 +772,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/update_estado_revertir','ParPrestamosController@update_estado_revertir');
         Route::put ('/reversionPrestamos','ParPrestamosController@reversionPrestamos');
         Route::get ('/getprestamoRefi','ParPrestamosController@getprestamoRefi');
-
         Route::get ('/pruebare','ParPrestamosController@prueba');
+        Route::get ('/get_status_reg','ParPrestamosController@get_status_reg');
+        Route::post ('/start_refinanciamiento','ParPrestamosController@start_refinanciamiento');
+
         Route::get ('/liq_saldosmenores','LiqSaldosmenorController@index');
         Route::get ('/liq_saldosmenores/procesarsaldos','LiqSaldosmenorController@procesarsaldos');
         Route::post ('/liq_saldosmenores/liquidarsaldos','LiqSaldosmenorController@liquidarsaldos');
@@ -804,6 +810,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('/getlote/getstatus','ParPrestamosLoteController@get_lote_id');
         Route::get('/closeLote','ParPrestamosLoteController@closeLote');
+        Route::get('/statusLote','ParPrestamosLoteController@statusLote');
 
         Route::get('/ascii' ,'File_Ascii@createFile'); 
         Route::get('/download' ,'File_Ascii@download'); 

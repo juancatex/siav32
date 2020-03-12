@@ -38,4 +38,8 @@ class ParModuloController extends Controller
         $modulos=Par_Modulo::where('activo',1)->orderBy('nommodulo')->get(); 
         return ['modulos' => $modulos];
     }
+    public function selectModulocontable(Request $request){
+        $modulos=Par_Modulo::where('activo',1)->where('contabilizable',1)->orderBy('nommodulo')->get(); 
+        return ['modulos' => $modulos];
+    }
 }

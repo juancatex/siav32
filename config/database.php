@@ -56,11 +56,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST_P', '192.168.100.24'),
+            'port' => env('DB_PORT_P', '5432'),
+            'database' => env('DB_DATABASE_P', 'SAFCon'),
+            'username' => env('DB_USERNAME_P', 'postgres'),
+            'password' => env('DB_PASSWORD_P', 'pos@2k0015'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
