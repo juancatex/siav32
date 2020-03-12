@@ -10,6 +10,12 @@
         <div class="card-header">
           <i class="fa fa-align-justify"></i>
           Calificacion del Prestamo
+          <div v-if="statusLote" style="  float: right; text-align: center;border: solid 1.5px gray;">
+                        <div class="row" style=" text-align: center;margin: 4px">
+                            <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
+                            <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                         </div> 
+                    </div>
         </div>
         <div class="card-body">
           <!-- <div class="form-group row">
@@ -183,6 +189,7 @@
             <div class="card-header" style="margin-bottom: 12px;">
               <i class="fa fa-align-justify"></i>
               {{pasoPrestamo==0?'Descripción de Ingresos y Descuentos':(pasoPrestamo==1?'Valoración del Prestamo':(pasoPrestamo==2?'Registro de Garantes':(pasoPrestamo==3?'Registro del Prestamo':'')))}}
+           
             </div>
             <!-- ///////////////////////////////////////////////////////Descripcion de ingresos y descuentos/////////////////////////////////////////////////////////////////////////// -->
             <div v-if="pasoPrestamo==0">
@@ -691,6 +698,15 @@
             <button :disabled="errors.any()" type="submit" v-if="pasoPrestamo==3" class="btn btn-primary"
               @click="regprestamo('modalCalificacion')">Registrar Prestamo</button>
             <button type="button" class="btn btn-secondary" @click="cerrarModal('modalCalificacion')">Cerrar</button>
+ 
+            <div class=" row w-100" style="position: absolute;padding-left: 20px;z-index: -100;">
+                  <div v-if="statusLote" >
+                      <div  style=" text-align: center;margin: 4px">
+                          <div><h4 style="margin: 0;font-size: 19px;">Lote <b style="font-size: 21px;">{{statusLote.idlote}}</b></h4> </div>
+                          <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                      </div> 
+                  </div>
+            </div>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -850,7 +866,7 @@ export default {
       arraysocio: [],
       arraygarantes: [],
       arrayperfilgarante: [],
-      
+      statusLote: null,
       arrayProducto: [],
       arrayCuentaSocio: [],
       arrayFormulasProducto: [],
@@ -954,7 +970,15 @@ export default {
     //   this.valorfactor = 0;
     //   this.cuotaaproximada = 0;
     // },
-     
+     getloteStatus(){
+                  let me = this; 
+                 axios.get('/statusLote').then(function (response) {
+                         me.statusLote = response.data.lote;   
+                     })
+                     .catch(function (response) {
+                         console.log(response);
+                     });
+             },
           printer(idpres){ 
            return _pl._vm2154_12186_135(this.reporte1+idpres,'Calificación del Prestamo'); 
             },
@@ -1700,14 +1724,13 @@ export default {
     this.listarProductos();
     this.getRutasReports();
     this.getfecha();
+    this.getloteStatus();
     this.classModal = new _pl.Modals();
     this.classModal.addModal("modalCalificacion");
     this.classModal.addModal("plandepagos");
     this.classModal.addModal("factorview");
     this.classModal.addModal("factorviewgarante"); 
-
-    console.log(_.replace('2/total_cuotas', 'cuota', '$cuota'));
-    console.log('2/total_cuotas'.replace(/cuota/gi, '$cuota'));
+ 
   }
 };
 </script>

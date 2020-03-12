@@ -771,6 +771,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/reversionPrestamos','ParPrestamosController@reversionPrestamos');
         Route::get ('/getprestamoRefi','ParPrestamosController@getprestamoRefi');
         Route::get ('/pruebare','ParPrestamosController@prueba');
+        Route::get ('/get_status_reg','ParPrestamosController@get_status_reg');
         Route::post ('/start_refinanciamiento','ParPrestamosController@start_refinanciamiento');
 
         Route::get ('/liq_saldosmenores','LiqSaldosmenorController@index');

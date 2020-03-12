@@ -29,6 +29,7 @@ class CreateConAsientomaestrosTable extends Migration
             $table->tinyInteger('estado')->default(0)->unsigned()->comment('0=no validado, 1=validado y para comprobantes agrupados verificar que id agrupacion sea diferente de null, 2=eliminacion logica, 3=error de datos-observado,4=reversion,5=borrador,6=borrador eliminado');
             $table->integer('idagrupacion')->unsigned()->nullable()->comment('idasientomaestro del comprobante que resulte de la agrupacion de comprobantes por parte de contabilidad ');
             $table->tinyInteger('desembolso')->unsigned()->nullable()->default(0)->comment('solo para cuentas en las que interviene el desembolso por tesoreria 0->no desembolsado,1->desembolsado');
+            $table->integer('id_movimiento')->default(0)->comment('si el desembolso se realizo por cheque, se guarda el id del movimiento donde se detalla el monto  y numero de cheque');
             $table->dateTime('fechahora_desembolso')->nullable();
             $table->integer('idrevertido')->unsigned()->nullable();
             $table->integer('loteprestamos')->unisgned()->nullable();

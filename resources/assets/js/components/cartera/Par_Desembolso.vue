@@ -8,13 +8,12 @@
             <div class="card animated fadeIn">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Estado de Prestamos
-                    <div  style="  float: right; text-align: center;border: solid 1.5px gray;">
-                        <div  style=" text-align: center;margin: 4px 10px 17px 10px;">
-                            <h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> 
-                            <h6 style="font-size: 16px;"> ({{statusLote.min}} de {{statusLote.max}})</h6>
-                            
-                         </div><button v-if="check('Cerrar_lote')" type="submit" @click="closeLote()" class="btn btn-danger btn-block">  Cerrar Lote</button>
-                        </div>
+                    <div v-if="statusLote" style="  float: right; text-align: center;border: solid 1.5px gray;">
+                        <div class="row" style=" text-align: center;margin: 4px">
+                            <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
+                            <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                         </div> 
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="form-group row" style="justify-content: flex-end;">
@@ -119,18 +118,20 @@
                                             class="badge badge-warning">Revertido</span>
                                     </h6>
                                 </td>
-                                <td class="tdcell" style="font-size: 12px; text-align: center;vertical-align: middle;">
+                                <td class="tdcell" style="font-size: 12px; text-align: center;vertical-align: middle;padding: 0;">
                                     <div v-if="prestamos.fecharegistro!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
                                             v-text="prestamos.fecharegistro"></span></div>
+                                    <div v-if="prestamos.fechardesembolso!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
                                     <div v-if="prestamos.fechardesembolso!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
                                             v-text="prestamos.fechardesembolso"></span></div>
                                 </td>
-                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;">
+                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;padding: 0;">
                                     <div v-if="prestamos.no_prestamo!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
                                             v-text="prestamos.no_prestamo"></span></div>
+                                    <div v-if="prestamos.idtransaccionD!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
                                     <div v-if="prestamos.idtransaccionD!=null" class="" style=" width: 100%; "><span
                                             style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
                                             v-text="prestamos.idtransaccionD"></span></div>
@@ -179,6 +180,14 @@
 
                     <div class="modal-body">
 
+                        <div class=" row " style="justify-content: center; margin-bottom: 15px;">
+                            <div v-if="statusLote" style=" text-align: center;border: solid 1.5px gray;">
+                                <div class="row" style=" text-align: center;margin: 4px">
+                                    <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
+                                    <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                                </div> 
+                            </div>
+                        </div>
                         <div class="form-group row ">
                             <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label"
                                 for="text-input">Numero de Documento : </label>
@@ -272,8 +281,7 @@
                     Imprimir_calificacion: 0,
                     Eliminar_calificacion: 0,
                     Corregir_observacion: 0,
-                    Revertir_prestamo: 0,
-                    Cerrar_lote:0
+                    Revertir_prestamo: 0 
                 }, 
                 arrayPermisosIn: {},
 
@@ -299,7 +307,7 @@
                 arrayFormulasProducto: [],
                 arrayPrestamosSeleccionado: [],
 
-                statusLote: [],
+                statusLote: null,
                 idpres: '',
                 pagination: {
                     'total': 0,

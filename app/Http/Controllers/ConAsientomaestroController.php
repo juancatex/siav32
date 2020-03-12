@@ -1166,16 +1166,12 @@ class ConAsientomaestroController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $hora = time();
-        $fecha= date('Y-m-d H:i:s',$hora);
+      //  $fecha= date('Y-m-d H:i:s',$hora);
+        $fecha=(DB::select("select getfecha() as total"))[0]->total;
         //echo $fecha;
         //echo date("d-m-Y (H:i:s)", $time);
         foreach ($request->arrayids as $indice => $valor) {
-            $idmovimientobancario='';
-            $asientomaestro=Con_Asientomaestro::findOrFail($valor['idasientomaestro']);
-            $asientomaestro->desembolso = 1;
-            $asientomaestro->fechahora_desembolso=$fecha;
-            $asientomaestro->u_registro_tesoreria=Auth::id();
-            //$asientomaestro->idcuentadesembolso=$request->idcuentadesembolso;
+            
             if($valor['num_cheque'])
             {
                 $mov_bancario= new Con__Movimientobancario();
@@ -1186,9 +1182,23 @@ class ConAsientomaestroController extends Controller
                 $mov_bancario->importe=$valor['importe'];
                 $mov_bancario->tipocargo='h';
                 $mov_bancario->save();
-                $idmovimientobancario=$mov_bancario->idmovimiento;                
+
+                $idmovimientobancario=$mov_bancario->idmovimiento; 
+                $asientomaestro=Con_Asientomaestro::findOrFail($valor['idasientomaestro']);
+                $asientomaestro->desembolso = 1;
+                $asientomaestro->id_movimiento = $idmovimientobancario;
+                $asientomaestro->fechahora_desembolso=$fecha;
+                $asientomaestro->u_registro_tesoreria=Auth::id();
+                $asientomaestro->save();              
+            }else{
+                $idmovimientobancario='';
+                $asientomaestro=Con_Asientomaestro::findOrFail($valor['idasientomaestro']);
+                $asientomaestro->desembolso = 1;
+                $asientomaestro->fechahora_desembolso=$fecha;
+                $asientomaestro->u_registro_tesoreria=Auth::id();
+                $asientomaestro->save();
             }
-            $asientomaestro->save();
+            
         }
     }
     public function agruparcomprobante(Request $request)

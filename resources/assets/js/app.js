@@ -138,6 +138,9 @@ setvue(1, 'liq_acreedores', './components/cartera/Liq_acreedores.vue');
 setvue(1, 'par_cobranzaacreedor', './components/cartera/Par_cobranzaacreedor.vue');
 setvue(1, 'liq_reportes', './components/cartera/liq_reportes.vue');
 
+
+setvue(0, 'registro_estatus', './components/cartera/Par_Estatus_registro.vue');
+
 function setvue(e, a, s) {
     var r = require(`${s}`).default;
     1 == e && DatasVues.push({ name: a, permisos: r.data().arrayPermisos }), Vue.component(a, r)

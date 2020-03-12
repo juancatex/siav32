@@ -139,9 +139,8 @@
 
                     <table class="table table-bordered table-striped table-sm" v-if="tipodesembolso==2">
                         <thead class="thead-dark">
-                            <tr>
-                                <th v-if="desembolsocheck=='ya_desembolsado'">Nº</th>
-                                <th v-else style="width:50px">Opciones</th>
+                            <tr><th>Nº</th> 
+                                <th v-if="desembolsocheck!='ya_desembolsado'" style="width:50px">Opciones</th>
                                 <th style="width:110px">Fecha Sol.</th>
                                 <th style="min-width:90px">Papeleta</th>
                                 <th style="min-width:270px">a Nombre de:</th> 
@@ -155,8 +154,8 @@
                         </thead>
                         <tbody>
                             <tr v-for="(movimiento,index) in arrayPrestamos" :key="movimiento.idasientomaestro" v-bind:class="[movimiento.estado==3 ? 'table-danger' :true , false]">
-                                <td v-if="desembolsocheck=='ya_desembolsado'" style="vertical-align: middle;text-align: center;">{{ index+1}}</td>
-                                <td v-else style="vertical-align: middle;text-align: center;">
+                                <td  style="vertical-align: middle;text-align: center;">{{ index+1}}</td> 
+                                <td v-if="desembolsocheck!='ya_desembolsado'" style="vertical-align: middle;text-align: center;">
                                     <button type="button" v-if="movimiento.estado!=3" @click="observarCargo(movimiento.idasientomaestro,2)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Observar Desembolso">
                                         <i class="icon-eye"></i>
                                     </button> 
@@ -200,7 +199,7 @@
                                                 <span style="padding-right: 8px;">Cuenta de Desembolso:</span>
                                                 <strong style="font-size: 15px;" v-text="cuentasconciliacion.codcuenta + ' - '+ cuentasconciliacion.nomcuenta"></strong> 
                                             </div>
-                                            <div class="col-md-3"><button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
+                                            <div class="col-md-4"><button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
                                             @click="registrarDesembolso(2)" :disabled="!cuentasconciliacion || !vercheckvalidacion">
                                                         Desembolsar
                                                 </button>

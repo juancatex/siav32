@@ -518,7 +518,7 @@ class ParPrestamosController extends Controller
     }
 
     public function alta_garantes(Request $request)
-    {  
+    {   if (!$request->ajax()) return redirect('/');
         $total=DB::select("select * from par__prestamos__plans where idprestamo=? and (idestado=2 or idestado=10) ORDER by pe asc", array($request->id));
         $tasain=DB::select("select p.tasa from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($request->id));
         $tasa=$tasain[0]->tasa;
@@ -855,6 +855,7 @@ class ParPrestamosController extends Controller
 
     }
 function getperfil($producto,$idperfil){
+    if (!$request->ajax()) return redirect('/');
    return Par_productos_perfilcuenta::join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
     ->select('par__productos__perfilcuentas.idperfilcuentamaestro',
     'par__productos__perfilcuentas.idperfilcuentadetalle',
@@ -871,6 +872,31 @@ function getperfil($producto,$idperfil){
     ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
     ->get()->toArray();
 }
+public function get_status_reg(Request $request)
+    { 
+        if (!$request->ajax()) return redirect('/');
+        $productos=DB::connection('pgsql')->select("SELECT usuario_reg,id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
+        id_estado, par_estado_prestamo, par_estado,eliminado, fecha_reg,numero_cuenta_abono
+        FROM finanzas.ptm_prestamos where fecha_desembolso='$request->fecha' and id_producto ='G'"); 
+        $pasofinal=true;
+        $array_out=[];
+        foreach($productos as $rowpsql){  
+                 $paso=true; 
+                 $sql=DB::select("SELECT s.numpapeleta,p.* FROM par__prestamos p,socios s where p.idsocio=s.idsocio and p.fecharegistro like '%$request->fecha%'"); 
+                           foreach($sql as $row){  
+                                if(($rowpsql->id_persona==$row->numpapeleta)&&($rowpsql->imp_desembolsado==$row->monto)&&($rowpsql->plazo==$row->plazo)){
+                                    $paso=false;
+                                    break;											  
+                                } 
+                           }  
+                 if($paso){  
+                     $pasofinal=false;
+                     array_push($array_out,$rowpsql);
+                  } 
+        }
+          
+        return ['data'=>$array_out,'paso'=>$pasofinal];
+    }
     public function prueba(Request $request)
     { 
        
