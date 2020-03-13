@@ -33,7 +33,7 @@
                                 <div class="tcelda">Filial:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idfilial" 
-                                        @change="listaAmbientes(idfilial),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
+                                        @change="listaAmbientes(idfilial),listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
                                         <option v-for="filial in arrayFiliales" :key="filial.idfilial"
                                             v-text="filial.nommunicipio" :value="filial.idfilial"></option>
                                     </select>
@@ -47,8 +47,9 @@
                                 <div class="tcelda">Ambiente:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idambiente" 
-                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
-                                        <option v-for="ambiente in arrayAmbientes" :key="ambiente.id"
+                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
+                                        <option value="">...TODO</option>
+                                        <option v-for="ambiente in arrayAmbientes" :key="ambiente.idambiente"
                                             v-text="ambiente.nomambiente" :value="ambiente.idambiente"></option>
                                     </select>
                                 </div>
@@ -61,7 +62,8 @@
                                 <div class="tcelda">Cuenta:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idgrupo" 
-                                        @change="listaAuxiliares(idgrupo),listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
+                                        @change="listaAuxiliares(idgrupo),listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
+                                        <option value="">...TODO</option>
                                         <option v-for="grupo in arrayGrupos" :key="grupo.id" 
                                             v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
                                     </select>
@@ -75,8 +77,8 @@
                                 <div class="tcelda">Auxiliar:</div>
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idauxiliar" 
-                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar)">
-                                        <option value="">(todos)</option>
+                                        @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
+                                        <option value="">...TODO</option>
                                         <option v-for="auxiliar in arrayAuxiliares" :key="auxiliar.id" 
                                             v-text="auxiliar.nomauxiliar" :value="auxiliar.idauxiliar"></option>
                                     </select>
@@ -84,6 +86,19 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <br/>
+                <div class="row">                   
+                    <div class="col-md-6">
+                        <div class="tabla100">
+                            <div class="tfila">
+                                <div class="tcelda">
+                                <input type="text" v-model="buscar" @keyup.enter="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="form-control" placeholder="Ingrese codigo activo">
+                                <button type="submit" @click="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
                 </div>
             </div>
         </div><!-- los filtros -->
@@ -126,9 +141,12 @@
                         <tr v-for="activo in arrayActivos" :key="activo.idactivo">
                             <td align="center" nowrap>
                                 <button class="btn btn-warning btn-sm icon-pencil"  title="Editar datos"
-                                    @click="editarActivo(activo)"></button>
+                                    @click="editarActivo(activo)">
+                                    </button>
                                 <button class="btn btn-warning btn-sm icon-user-following" title="Asignar responsable"
                                     @click="asignarActivo(activo)"></button> 
+                                <button class="btn btn-warning btn-sm icon-list" title="Reporte Asignacion"
+                                    @click="rep_asignacion(activo.idactivo)"></button> 
                                 <button class="btn btn-warning btn-sm icon-chart" title="Kárdex y Depreciación"
                                     @click="kardexActivo(activo)"></button>
                                 <button class="btn btn-danger btn-sm icon-fire" title="Dar de baja" 
@@ -142,7 +160,9 @@
                             </td>
                             <td>
                                 <!-- <span v-text="listaAsignaciones(activo.idactivo)"></span> -->
-                                <span v-text="quienUsa(activo.idactivo)"></span>
+                                <!-- <span v-text="quienUsa(activo.idactivo)"></span> -->
+                                <span v-if="activo.nombre" v-text="activo.nombre"></span>
+                                <span v-else>No asignado</span>
                             </td>
                             <!--
                             <td :align="verResponsable(activo.idactivo)?'left':'center'">
@@ -153,6 +173,19 @@
                         </tr>
                     </tbody>
                 </table>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item" v-if="pagination.current_page > 1">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,buscar1,buscar2,buscar3)">Ant</a>
+                        </li>
+                        <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,buscar1,buscar2,buscar3)" v-text="page"></a>
+                        </li>
+                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,buscar1,buscar2,buscar3)">Sig</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 
@@ -177,11 +210,19 @@
                             <div class="table">
                                 <div class="tfila">
                                     <div class="tcelda titcampo" style="vertical-align:top">Filial:</div>
-                                    <div class="tcelda" style="text-transform:uppercase" v-text="regFilial.nommunicipio"></div>
+                                    <select class="form-control" v-model="idfilial" 
+                                        @change="listaAmbientes(idfilial)">
+                                        <option v-for="filial in arrayFiliales" :key="filial.idfilial"
+                                            v-text="filial.nommunicipio" :value="filial.idfilial"></option>
+                                    </select>
                                 </div>
                                 <div class="tfila">
                                     <div class="tcelda titcampo" style="vertical-align:top">Oficina:</div>
-                                    <div class="tcelda" v-text="regAmbiente.nomambiente"></div>
+                                    <select class="form-control" v-model="idambiente" 
+                                        >
+                                        <option v-for="ambiente in arrayAmbientes" :key="ambiente.id"
+                                            v-text="ambiente.nomambiente" :value="ambiente.idambiente"></option>
+                                    </select>
                                 </div>
                                 <div class="tfila">
                                     <div class="tcelda titcampo" style="vertical-align:top">Cuenta:</div>
@@ -224,31 +265,67 @@
                             Nro de Serie:
                             <input type="text" class="form-control" v-model="serie">
                         </div>
+                        
                         <div class="col-md-4">
                             <h5 class="titazul">Imagen</h5>
-                            <img src="img/activos/general.jpg" :alt="regAuxiliar.nomauxiliar">
-                            <center><button class="btn btn-primary">Cargar Imagen</button></center>
+                            
+                            <div v-if="image">   
+                            <div v-if="success">   
+                                    <img :src="image" id="imgC"  class="fotosocio" >		
+                                    <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
+                                    <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
+                                    <div class="formu-tabla" style="display:none"> 
+                                    <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
+                                    </div>
+                                    <p class="text-error">{{ errors.first('fotografia')}}</p>
+                        
+                            </div>
+                            <div v-else> 
+                                    <img :src="image" id="imgC"  class="fotosocio" v-on:load="cambio"> 
+                                    <div style="padding: 9px;"><button  type="button" class="btn btn-success" @click="saveFoto()">Seleccionar</button> 
+                                    <button  type="button" class="btn btn-danger" @click="cancelSaveFoto()">Cancelar</button></div>	 															
+                                    <div class="formu-tabla" style="display:none"> 
+                                    <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
+                                    </div>
+                                    <p class="text-error">{{ errors.first('fotografia')}}</p>                                                    
+                            </div> 												 
                         </div>
+                        <div v-else> 															 															
+                            <img v-if="imagen" :src="'img/activos/'+imagen"   class="fotosocio">
+                            <img v-else :src="'img/activos/general.jpg'"  class="fotosocio">		
+                            <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
+                            
+                            <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
+                            
+                            <div class="formu-tabla" style="display:none"> 
+                            <!-- <input v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" > -->
+                            <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
+                            </div>
+                            <p class="text-error">{{ errors.first('fotografia')}}</p>															
+                        </div>  
+
+
+                            
+                        </div>
+
                         <div class="col-md-12"><h5 class="titazul">Detalle de la compra</h5></div>
                         <div class="col-md-4">
                             Fecha de adquisición: <span class="txtasterisco"></span>
                             <input type="date" class="form-control" v-model="fechaingreso"
-                                name="adq" :class="{'invalido':errors.has('adq')}" v-validate="'required'">
-                            <p class="txtvalidador" v-if="errors.has('adq')">Dato requerido</p>
+                                name="adq" >
+                            
                             Costo: 
                             <div class="input-group">
                                 <input type="text" v-model="costo" class="form-control text-right"
-                                    name="cos" :class="{'invalido':errors.has('cos')}" v-validate="'required|decimal:2'">
+                                    name="cos" >
                                 <div class="input-group-append"><span class="input-group-text">Bs.</span></div>
                             </div>
-                            <p class="txtvalidador" v-if="errors.has('cos')">Dato numérico requerido</p>
+                            
                         </div>
                         <div class="col-md-4">
                             Factura:
                             <input type="text" v-model="idcompra" class="form-control text-right">
-                            <!--
-                            Proveedor: JOTA IMPRENTA – OFFSET 
-                            <br>tEL: 2202275-->
+
                         </div>
                         <div class="col-md-4">
                             Observaciones:
@@ -382,14 +459,128 @@ export default {
         arrayFiliales:[], arrayAmbientes:[], arrayGrupos:[], arrayAuxiliares:[], 
         arrayActivos:[], arrayEmpleados:[], arrayMotivos:[], arrayAsignaciones:[],  
         regFilial:[], regAmbiente:[], regGrupo:[], regAuxiliar:[], regActivo:[],
-        idfilial:1, idambiente:1, idgrupo:2, idauxiliar:'',
+        idfilial:1, idambiente:'', idgrupo:'', idauxiliar:'',
         codactivo:'', descripcion:'', marca:'', serie:'', correlativo:'',
         idcompra:'', fechaingreso:'', costo:'', residual:0, obs:'', 
         baja:'', fechabaja:'', nrorden:'', idmotivo:'', obsbaja:'',
+        imagen:'',  image:'',fotografia:'', success: '', buscar: '',
+        pagination : {
+                    'total' : 0,
+                    'current_page' : 0,
+                    'per_page' : 0,
+                    'last_page' : 0,
+                    'from' : 0,
+                    'to' : 0,
+                },
+        offset : 3,
     }},
 
+    computed:{
+            isActived: function(){
+                return this.pagination.current_page;
+            },
+            //Calcula los elementos de la paginación
+            pagesNumber: function() {
+                if(!this.pagination.to) {
+                    return [];
+                }
+                
+                var from = this.pagination.current_page - this.offset; 
+                if(from < 1) {
+                    from = 1;
+                }
+
+                var to = from + (this.offset * 2); 
+                if(to >= this.pagination.last_page){
+                    to = this.pagination.last_page;
+                }  
+
+                var pagesArray = [];
+                while(from <= to) {
+                    pagesArray.push(from);
+                    from++;
+                }
+                return pagesArray;             
+
+            }
+        },
+
     methods:{
-        listaFiliales(){
+    cambiarPagina(page,buscar,buscar1,buscar2,buscar3){
+                let me = this;
+                //Actualiza la página actual
+                me.pagination.current_page = page;
+                //Envia la petición para visualizar la data de esa página
+                me.listarLog(page,buscar,buscar1,buscar2,buscar3);
+            },
+
+        cambio(){ 
+        let vm = this;
+                
+        var canvas = $("#imgC").cropper({
+                    aspectRatio: 1/1,
+                    viewMode: 3,
+                    dragMode: 'move',
+                    autoCropArea: 1,
+                    restore: false, 
+                    guides: false, 
+                    rotatable: false,
+                    multiple: false
+                });            
+        },
+        
+        saveFoto(){
+        let vm = this;
+        vm.success='ok'; 
+                        
+                var canvas = $("#imgC").cropper('getCroppedCanvas').toDataURL(); 
+                vm.image=canvas; 
+                vm.fotografia=canvas; 
+                $('#imgC').cropper('destroy');
+        },
+        
+        cancelSaveFoto(){
+            let vm = this;
+            vm.success='';
+            vm.image='';
+            vm.fotografia=vm.rutafoto;                                
+        }, 
+        
+        onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                this.createImage(files[0]);
+                // console.log(this.image);                             
+            },
+
+        createImage(file) { 			
+                if(!file.type.match('image.*')){
+                console.log('${file.name} is not an image');
+                alert("Incorrecto...!, debe seleccionar solo Imágen:");
+               return;
+				}else{
+				let reader = new FileReader();
+					let vm = this;
+					vm.success=''; 
+					vm.fotografia=vm.rutafoto;
+					
+					reader.onload = (e) => {
+					vm.image = e.target.result; 
+					};
+					reader.readAsDataURL(file);
+			 	}                               
+            }, 
+
+        rep_asignacion(idactivo) { 
+            var url=[];
+            url.push('http://localhost:8080');
+            url.push('/birt-viewer/frameset?__report=reportes/activos');
+            url.push('/act_incorporacion.rptdesign'); //archivo
+            url.push('&idactivo='+idactivo); //idempleado
+            url.push('&__format=pdf'); //formato
+            reporte.viewPDF(url.join(''),'UFVs Gestión '+idactivo);
+        },
+
+        listaFiliales(){ 
             var url='/fil_filial/listaFiliales?activo=1';
             axios.get(url).then(response=>{
                 this.arrayFiliales=response.data.filiales;
@@ -420,17 +611,19 @@ export default {
             });
         },
 
-        listaActivos(idfilial,idambiente,idgrupo,idauxiliar){
-            if(this.arrayFiliales.length) this.verFilial(idfilial);
-            if(this.arrayAmbientes.length) this.verAmbiente(idambiente);
-            if(this.arrayGrupos.length)  this.verGrupo(idgrupo);
+        listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar){
+            if(this.arrayFiliales.length && idfilial>0) this.verFilial(idfilial);
+            if(this.arrayAmbientes.length && idambiente>0) this.verAmbiente(idambiente);
+            if(this.arrayGrupos.length && idgrupo>0)  this.verGrupo(idgrupo);
             if(this.arrayAuxiliares.length)this.verAuxiliar(idauxiliar);
             var url='/act_activo/listaActivos?idfilial='+idfilial+'&idambiente='+idambiente+'&idgrupo='+idgrupo;
             if(idauxiliar) url+='&idauxiliar='+idauxiliar;
+            if(buscar) url+='&buscar='+buscar;
             axios.get(url).then(response=>{
                 this.arrayActivos=response.data.activos;
                 this.ipbirt=response.data.ipbirt;
                 this.currfecha=response.data.fechahoy;
+                //this.pagination= response.data.pagination; console.log('as:'+this.pagination);
             });
         },
         
@@ -448,9 +641,9 @@ export default {
             });
         },
 
-        quienUsa(){
-            return;
-        },
+        // quienUsa(idactivo){ 
+        //     return;
+        // },
         
 
         verFilial(idfilial){
@@ -491,6 +684,11 @@ export default {
             this.divActivos=1;
             this.divKardex=0;
             this.divAsignacion=0;
+            this.listaFiliales();
+            this.listaAmbientes(this.idfilial);
+            this.listaGrupos();
+            this.listaAuxiliares(this.idgrupo);
+            this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
         },
 
         async kardexActivo(activo){
@@ -553,7 +751,13 @@ export default {
             this.regActivo=response.data.activos[0];
             this.idactivo=this.regActivo.idactivo;
             this.idfilial=this.regActivo.idfilial;
-            this.descripcion=this.regActivo.descripcion;
+            this.idambiente=this.regActivo.idambiente;
+            this.regAuxiliar.nomauxiliar=activo.nomauxiliar;
+            this.regGrupo.nomgrupo=activo.nomgrupo;
+            this.regAmbiente.codambiente=activo.codambiente;
+            this.regGrupo.codgrupo=activo.codgrupo;
+            this.regAuxiliar.codauxiliar=activo.codauxiliar;
+            this.descripcion=this.regActivo.descripcion; 
             this.marca=this.regActivo.marca;
             this.serie=this.regActivo.serie;
             this.fechaingreso=this.regActivo.fechaingreso;
@@ -563,7 +767,8 @@ export default {
 
         validarActivo(){
             this.$validator.validateAll().then(result=>{
-                if(!result) { swal('Datos no válidos','Revise los errores','error'); return; }
+                //if(!result) { swal('Datos no válidos','Revise los errores','error'); return; }
+                console.log(result);
                 this.accion==1?this.storeActivo():this.updateActivo();
             });
         },
@@ -593,11 +798,14 @@ export default {
             });
         },
 
-        updateActivo(){
+        updateActivo(){  console.log(this.imagen, this.fotografia);
             let me=this;
             axios.put('/act_activo/updateActivo',{
                 'idactivo':this.idactivo,
+                'idfilial':this.idfilial,
+                'idambiente':this.idambiente,
                 'descripcion':this.descripcion,
+                'imagen':this.imagen,
                 'marca':this.marca,
                 'serie':this.serie,
                 'fechaingreso':this.fechaingreso,
@@ -610,10 +818,10 @@ export default {
             });
         },
 
-        validarBaja(){
+        validarBaja(activo){
             this.$validator.validateAll().then(result=>{
                 if(!result){ swal('Datos no válidos','Revise los errores','error'); return; }
-                this.storeBaja();
+                this.storeBaja(activo);
             })
         },
 
@@ -624,8 +832,13 @@ export default {
                 'nrorden':this.nrorden,
                 'idmotivo':this.idmotivo,
                 'obsbaja':this.obsbaja
-            }).then(response=>{
-                swal('Operación correcta','Se ha dado de baja este activo. Verifique en el módulo Activos -> Bajas','success');
+            }).then(response=>{ console.log('da: '+response.data)
+                if(response.data===1) {
+                    swal('Activo aun asignado','Se ha dado de baja este activo','error');
+                }
+                else {
+                    swal('Operación correcta','Se ha dado de baja este activo. Verifique en el módulo Activos -> Bajas','success');
+                }                
                 this.modalBaja=0;
                 this.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);
             });
@@ -644,3 +857,11 @@ export default {
 }
 </script>
 
+<style>
+    .fotosocio{
+        border:#efefef 2px solid;
+        filter:drop-shadow(4px 4px 5px #333);
+        width:90%;
+		max-width: 100%;
+    }
+</style>

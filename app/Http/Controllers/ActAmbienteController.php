@@ -11,7 +11,7 @@ class ActAmbienteController extends Controller
     {
         $ambientes=Act_Ambiente::
         where('idfilial',$request->idfilial)->where('activo',$request->activo);
-        if($request->orden) $ambientes->orderBy($request->orden);
+        if($request->orden) $ambientes->orderBy($request->orden,'asc');
         return ['ambientes'=>$ambientes->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 

@@ -366,6 +366,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U
     Route::put ('/act_activo/storeBaja','ActActivoController@storeBaja');    //baja
     Route::get ('/act_activo/listaBajas','ActActivoController@listaBajas');  //baja 
+    Route::get ('/act_activo/validaAsignacion','ActActivoController@validaAsignacion');  //baja 
 
     Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion'); 
 
@@ -376,6 +377,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/act_ufv/cargarExcel','ActUfvController@cargarExcel'); //C
     Route::get ('/act_ufv/verUfv','ActUfvController@verUfv');           //R
+    Route::get ('/act_ufv/maxverUfv','ActUfvController@maxverUfv');           //R
     Route::get ('/act_ufv/ufvGestion','ActUfvController@ufvGestion');   //R
     
 

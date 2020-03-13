@@ -11,15 +11,40 @@ class ActActivoController extends Controller
 {
     public function listaActivos(Request $request)
     {   
-        $activos=Act_Activo::select('idactivo','idfilial',
-        'codactivo','nomauxiliar','descripcion','act__activos.activo','act__activos.fechaingreso')
+        $raw=DB::raw('(select concat(re.nombre," ",re.apaterno," ",re.amaterno) 
+                        from act__asignacions aa, rrh__empleados re 
+                        where aa.idactivo = act__activos.idactivo 
+                        and re.idempleado = aa.idresponsable 
+                        and aa.activo =1) as nombre');
+        $activos=Act_Activo::select('act__activos.idactivo','act__activos.idfilial',
+        'act__activos.codactivo','act__auxiliars.nomauxiliar','act__auxiliars.idauxiliar','act__auxiliars.nomauxiliar',
+        'act__grupos.nomgrupo',
+        'act__grupos.codgrupo','act__ambientes.codambiente','act__auxiliars.codauxiliar',
+        'act__activos.descripcion','act__activos.activo','act__activos.fechaingreso', $raw)
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
-        ->where('act__activos.idfilial',$request->idfilial)
-        ->where('act__activos.idambiente',$request->idambiente)
-        ->where('act__activos.idgrupo',$request->idgrupo);
+        ->join('act__grupos','act__activos.idgrupo','act__grupos.idgrupo')
+        ->join('act__ambientes','act__activos.idambiente','act__ambientes.idambiente')
+        ->whereNull('act__activos.fechabaja')->whereNull('act__activos.idmotivo');
+
+        if($request->idfilial>0) $activos->where('act__activos.idfilial',$request->idfilial);
+        if($request->idambiente>0) $activos->where('act__activos.idambiente',$request->idambiente);
+        if($request->idgrupo>0) $activos->where('act__activos.idgrupo',$request->idgrupo);                
         if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
+        if($request->buscar!='') $activos->where('act__activos.codactivo', 'like', '%'. $request->buscar . '%');
         if($request->activo) $activos->where('act__activos.activo',1);
-        if($request->idactivo) $activos=Act_Activo::where('act__activos.idactivo',$request->idactivo);   
+        
+        // si solo el por el id del activo (cuando editamos)
+        if($request->idactivo) {
+            $activos=Act_Activo::select('act__activos.*','act__auxiliars.idauxiliar',
+            'act__auxiliars.nomauxiliar','act__auxiliars.nomauxiliar',
+            'act__grupos.nomgrupo',
+            'act__grupos.codgrupo','act__ambientes.codambiente','act__auxiliars.codauxiliar')            
+            ->where('act__activos.idactivo',$request->idactivo)   
+            ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')            
+            ->join('act__grupos','act__activos.idgrupo','act__grupos.idgrupo')
+            ->join('act__ambientes','act__activos.idambiente','act__ambientes.idambiente');            
+        }
+        
         return ['activos'=>$activos->get(),'fechahoy'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
@@ -73,6 +98,9 @@ class ActActivoController extends Controller
         $activo=Act_Activo::findOrFail($request->idactivo);
         $activo->descripcion=$request->descripcion;
         $activo->marca=$request->marca;
+        $activo->idfilial=$request->idfilial;
+        $activo->idambiente=$request->idambiente;
+        $activo->imagen=$request->imagen;
         $activo->serie=$request->serie;
         $activo->fechaingreso=$request->fechaingreso;
         $activo->costo=$request->costo;
@@ -82,13 +110,23 @@ class ActActivoController extends Controller
 
     public function storeBaja(Request $request)
     {
-        $activo=Act_Activo::findOrFail($request->idactivo);
-        $activo->activo=0;
-        $activo->fechabaja=$request->fechabaja;
-        $activo->nrorden=$request->nrorden;
-        $activo->idmotivo=$request->idmotivo;
-        $activo->obsbaja=$request->obsbaja;
-        $activo->save();
+        //verificamos si no esta asignado
+        $verifica=Act_Activo::join('act__asignacions','act__activos.idactivo','act__asignacions.idactivo')
+        ->select('act__asignacions.activo')->where('act__activos.idactivo','=',$request->idactivo)->get();
+        foreach($verifica as $data) {            
+            if($data->activo==1) {
+                return '1';
+            }                
+            else {
+                $activo=Act_Activo::findOrFail($request->idactivo);
+                $activo->activo=0;
+                $activo->fechabaja=$request->fechabaja;
+                $activo->nrorden=$request->nrorden;
+                $activo->idmotivo=$request->idmotivo;
+                $activo->obsbaja=$request->obsbaja;
+                $activo->save();
+            }
+        }                         
     }
 
     public function calcDepreciacion(Request $request)
@@ -146,4 +184,14 @@ class ActActivoController extends Controller
         return ['depreciaciones'=>DB::select($sql)];
     }
 
+    public function validaAsignacion(Request $request)
+    {  // validar si un activo esta asignado y vigente
+        $idactivo =  $request->idactivo;
+        $valida=Act_Activo::select('act__activos.*','act__asignacions.*')
+        ->join('act__asignacions','act__activos.idactivo','act__asignacions.idactivo')
+        ->where('act__activos.idactivo','=',$idactivo)
+        ->where('act__asignacions.activo','=',1)->get();         
+        return ['valida'=>count($valida)];
+    
+    }
 }

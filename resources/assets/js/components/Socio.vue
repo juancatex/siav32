@@ -2049,7 +2049,7 @@
                                 this.amaterno=data.amaterno;
                                 this.ci=data.ci;
                                 this.idsocio=data.idsocio;
-                                this.iddepartamentoexpedido=data.iddepartamentoexpedido
+                                this.iddepartamentoexpedido=data.iddepartamento
                                 this.fechanacimiento=data.fechanac;
                                 this.telcelular=data.telcelular;
                                 //this.sexo.data.sexo

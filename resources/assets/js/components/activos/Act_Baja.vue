@@ -15,13 +15,13 @@
             <div class="row">
                 <div class="col-md-6 titcard">
                     <div class="tablatit">
-                        <div class="tcelda">Cálculo de Depreciación</div>
+                        <div class="tcelda">Baja de Activos Fijos</div>
                     </div>
                 </div>
-                <div class="col-md-6 text-right">
+                <!-- <div class="col-md-6 text-right">
                     <button class="btn btn-success icon-printer" style="margin-top:0px" title="Vista de impresión" 
                         @click="reporteBajatotal()"></button>
-                </div>
+                </div> -->
             </div>                
             </div>
             <div class="card-body">
@@ -104,21 +104,21 @@ export default {
             var url=[];
             url.push('http://'+this.ipbirt+':8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
-            url.push('/act_bajastotal.rptdesign'); //archivo
+            url.push('/act_bajastotal.rptdesign'); 
             url.push('&__format=pdf'); 
             url.push('&idactivo='+idactivo); 
-            url.push('&ip='+this.ipbirt);//pa la foto
+            url.push('&ip='+this.ipbirt);
             reporte.viewPDF(url.join(''),'Baja del Activo');
         },
 
         reporteBaja(idactivo){
             var url=[];
-            url.push('http://'+this.ipbirt+':8080');
+            url.push('http://localhost:8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
-            url.push('/act_baja.rptdesign'); //archivo
+            url.push('/act_baja_activo.rptdesign'); 
             url.push('&__format=pdf'); 
             url.push('&idactivo='+idactivo); 
-            url.push('&ip='+this.ipbirt);//pa la foto
+            console.log(url.join(''));
             reporte.viewPDF(url.join(''),'Baja del Activo');
         },
 

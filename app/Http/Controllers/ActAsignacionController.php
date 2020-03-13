@@ -11,13 +11,17 @@ class ActAsignacionController extends Controller
 {
     public function listaAsignaciones(Request $request)
     {   
-        $asignaciones=Act_Asignacion::selectRaw("act__asignacions.*,
+        $asignaciones=Act_Asignacion::selectRaw("act__asignacions.*, act__ambientes.nomambiente, par_municipios.nommunicipio,
             if(tiporesponsable='s',
             (select concat(nomgrado,' ',nombre,' ',apaterno) from socios 
                 join par_grados on par_grados.idgrado=socios.idgrado where idsocio=act__asignacions.idresponsable),
             (select concat(nombre,' ',apaterno) from rrh__empleados where idempleado=act__asignacions.idresponsable)) 
                 as nomresponsable");
-        if($request->idactivo) $asignaciones->where('idactivo',$request->idactivo)->orderBy('idasignacion','desc');
+        $asignaciones->join('act__activos','act__asignacions.idactivo','act__activos.idactivo');
+        $asignaciones->join('act__ambientes','act__activos.idambiente','act__ambientes.idambiente');
+        $asignaciones->join('fil__filials','act__activos.idfilial','fil__filials.idfilial');
+        $asignaciones->join('par_municipios','fil__filials.idmunicipio','par_municipios.idmunicipio');
+        if($request->idactivo) $asignaciones->where('act__asignacions.idactivo',$request->idactivo)->orderBy('idasignacion','desc');
         if($request->idfilial) { $asignaciones
             ->where('act__activos.idfilial',$request->idfilial)
             ->where('act__activos.idoficina',$request->idoficina)
@@ -69,6 +73,7 @@ class ActAsignacionController extends Controller
         $asignacion->tiporesponsable=$request->tiporesponsable;
         $asignacion->fechaini=$request->fechaini;
         $asignacion->estadoini=$request->estadoini;
+        $asignacion->activo=1;
         $asignacion->obs=$request->obs;
         $asignacion->save();
     }
@@ -81,8 +86,11 @@ class ActAsignacionController extends Controller
         $asignacion->fechaini=$request->fechaini;
         $asignacion->fechafin=$request->fechafin;
         $asignacion->estadoini=$request->estadoini;
-        $asignacion->estadofin=$request->estadofin;
+        $asignacion->estadofin=$request->estadofin;        
         $asignacion->obs=$request->obs;
+        //si existe fecha de devolucion y estado devolucion -> cambiamos de estado
+        if ($request->fechafin && $request->estadofin)
+            $asignacion->activo=0;
         $asignacion->save();
     }
     /*

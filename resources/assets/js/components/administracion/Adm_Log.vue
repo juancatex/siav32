@@ -170,7 +170,9 @@
             },
             leercontenido1(dato) {
                 var obj = JSON.parse(dato);                
-                    return(obj.user['name']);                
+                    if(2)
+                    return 1;                
+                    else return 2;
             },
             leercontenido2(dato) {
                 var obj = JSON.parse(dato);
