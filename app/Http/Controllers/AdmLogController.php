@@ -28,7 +28,7 @@ class AdmLogController extends Controller
             $logs = DB::table('db_sia_logs.telescope_entries as log')
             ->select('log.*')        
             ->where ('content', 'like', '%sql":"'. $buscar . '%')
-            ->where ('content', 'like', '%"name":"'. $buscar1 . '%')
+            // ->orwhere ('content', 'like', '%"name":"'. $buscar1 . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         }

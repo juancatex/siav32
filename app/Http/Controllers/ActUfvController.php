@@ -22,6 +22,13 @@ class ActUfvController extends Controller
             return ['ufvfecha'=>$ufvfecha[0],'fecha'=>$fecha];
     }
 
+    public function maxverUfv(Request $request)
+    {
+        $maxufvfecha=Act_Ufv::max('fecha');                 
+        return ['maxufvfecha'=>$maxufvfecha];
+    }
+
+
     public function ufvGestion(Request $request)
     {
         $ufvgestion=Act_Ufv::select('valor');

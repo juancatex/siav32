@@ -12,8 +12,9 @@ class ActAuxiliarController extends Controller
         $auxiliares=Act_Auxiliar::
         select('idauxiliar','codauxiliar','nomauxiliar','act__auxiliars.idgrupo','act__auxiliars.activo')
         ->join('act__grupos','act__grupos.idgrupo','act__auxiliars.idgrupo')
-        ->where('act__grupos.idgrupo',$request->idgrupo)
-        ->where('act__auxiliars.activo',$request->activo);
+        ->where('act__grupos.idgrupo',$request->idgrupo);
+        if ($request->activo)
+            $auxiliares->where('act__auxiliars.activo',$request->activo);
         if($request->orden) $auxiliares->orderBy($request->orden);
         return ['auxiliares'=>$auxiliares->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }

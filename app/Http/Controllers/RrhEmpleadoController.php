@@ -25,9 +25,9 @@ class RrhEmpleadoController extends Controller
                 ->orWhere('amaterno','like','%'.$request->buscado.'%')
                 ->orWhere('nombre','like','%'.$request->buscado.'%');
         }       
-        if($request->sedelp=='1') $empleados->where('rrh__empleados.idfilial',1);
-        if($request->sedelp!='1') $empleados->where('rrh__empleados.idfilial','>',1);
-        $empleados->where('rrh__empleados.activo',$request->activo);
+        
+        if($request->sedelp!='1') $empleados->where('rrh__empleados.idfilial','>=',1);
+        $empleados->where('rrh__empleados.activo','=',1);
         $empleados->orderBy('apaterno')->orderBy('amaterno');
         return ['empleados'=>$empleados->get(),'currfecha'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }

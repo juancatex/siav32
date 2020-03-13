@@ -69,18 +69,18 @@
                         <div class="tabla100">
                             <div class="tfila">
                                 <div class="tcelda">Índices hasta:</div>
-                                <div class="tcelda">10/02/2020</div>
+                                <span v-text="fecha?jsfechas.fechadia(maxufvfecha):''"></span>                                
                                 <div class="tcelda"></div>
                             </div>
                             <br>
                             <div class="tfila">
                                 <div class="tcelda">Consultar Fecha:</div>
                                 <div class="tcelda">
-                                    <input type="date" class="form-control" v-model="fecha" min="2009-01-01" max="2020-02-10" @change="verUfv(fecha)">
+                                    <input type="date" class="form-control" v-model="fecha" min="2009-01-01" :max=maxufvfecha @change="verUfv(fecha)">
                                 </div>
-                                <div class="tcelda">
+                                <!-- <div class="tcelda">
                                     <button class="btn btn-primary btn-block" @click="verIndice(gestion)">Ver</button>
-                                </div>
+                                </div> -->
                             </div>
                             <br>
 
@@ -132,8 +132,8 @@ export default {
     data (){ return {
         formMotivo:'', accion:'', ipbirt:'', jsfechas:'', csrfToken:'',
         arrayMotivos:[], idmotivo:'', nommotivo:'',
-        gestion:'', fecha:'', ufvfecha:'',
-                parse_csv:[], nombre_archivo:[],
+        gestion:'', fecha:'', ufvfecha:'', maxufvfecha:'2020-01-01',
+        parse_csv:[], nombre_archivo:[],
     }},
 
     methods : {
@@ -222,6 +222,14 @@ export default {
             });
         },
 
+        valormaxufvfecha(){ 
+            var url='/act_ufv/maxverUfv';
+            axios.get(url).then(response=>{ 
+                //console.log(response.data.maxufvfecha);
+                this.maxufvfecha=response.data.maxufvfecha;
+            });
+        },
+
             datasArray(data) {
                 this.parse_csv=[]; this.nombre_archivo=[];
                 if(data!=null){
@@ -246,7 +254,7 @@ export default {
 
         verPlanilla(gestion){
             var url=[];
-            url.push('http://'+this.ipbirt+':8080');
+            url.push('http://localhost:8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
             url.push('/act_ufvs.rptdesign'); //archivo
             url.push('&gestion='+gestion); //idempleado
@@ -263,6 +271,7 @@ export default {
         this.jsfechas=jsfechas;
         //this.csrfToken = document.querySelector('meta[name="csrf-token"]').content;
         this.listaMotivos();
+        this.valormaxufvfecha();
         this.verUfv();
     }
 }

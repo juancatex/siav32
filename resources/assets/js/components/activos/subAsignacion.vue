@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button class="btn btn-primary" style="margin-top:0" @click="nuevaAsignacion()">Nueva Asignación</button>
+                    <button class="btn btn-primary" style="margin-top:0" @click="nuevaAsignacion(regActivo.idactivo)">Nueva Asignación</button>
                 </div>
             </div>
         </div>
@@ -33,23 +33,27 @@
                             <th></th>
                             <th align="left">Responsable</th>
                             <th>F. Asignación</th>
-                            <th>Estado</th>
+                            <th>Estado Entrega</th>
+                            <th>Filial</th>
+                            <th>Ambiente</th>
                             <th>F. Devolución</th>
-                            <th>Estado</th>
+                            <th>Estado Recepcion</th>
                             <th align="left">Obs.</th>                            
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="asignacion in arrayAsignaciones" :key="asignacion.idasignacion" align="center">
                             <td>
-                                <button class="btn btn-warning btn-sm icon-printer" title="Boleta de Asignación" 
-                                    @click="reporteAsignacion(asignacion)"></button>
+                                <button v-if="asignacion.activo===1 && arrayAsignaciones.length>1" class="btn btn-warning btn-sm icon-printer" title="Boleta de Traspaso" 
+                                    @click="repTraspaso(asignacion.idactivo)"></button>
                                 <button class="btn btn-warning btn-sm icon-pencil" @click="editarAsignacion(asignacion)" 
                                     title="Editar/Registrar devolución"></button>
                             </td>
-                            <td v-text="asignacion.nomresponsable" align="left"></td>
+                            <td v-text="asignacion.nomresponsable" align="left"></td>                            
                             <td v-text="jsfechas.fechames(asignacion.fechaini)"></td>
                             <td v-text="arrayEstados[asignacion.estadoini]"></td>
+                            <td v-text="asignacion.nommunicipio" align="left"></td>
+                            <td v-text="asignacion.nomambiente" align="left"></td>
                             <td>
                                 <span v-if="asignacion.fechafin" v-text="jsfechas.fechames(asignacion.fechafin)"></span>
                                 <span v-else class="badge badge-success">En uso</span>
@@ -82,7 +86,7 @@
                                     :value="'c'+empleado.idempleado" v-text="empleado.nombre+' '+empleado.apaterno">
                                 </option> 
                             </select>
-                            <p class="txtvalidador" v-if="errors.has('res')">Seleccione un Responsable</p>
+                            <p class="txtvalidador" v-if="errors.has('res')">Seleccione un Responsable</p>                            
                         </div>
                         <div class="col-md-4" >F. Asignación: <span class="txtasterisco"></span> 
                             <input type="date" class="form-control" v-model="fechaini"
@@ -140,9 +144,25 @@ export default {
         idasignacion:'', idresponsable:'', tiporesponsable:'', 
         fechaini:'', fechafin:'', estadoini:'', estadofin:'', obs:'',
         arrayEstados:['','Bueno','Regular','Malo'],
+        arrayFiliales:[], arrayAmbientes:[], idfilial:'', idambiente:''
     }},
     
     methods:{
+        
+        listaFiliales(){
+            var url='/fil_filial/listaFiliales?activo=1';
+            axios.get(url).then(response=>{
+                this.arrayFiliales=response.data.filiales;                
+            })
+        },
+
+        listaAmbientes(idfilial){
+            var url='/act_ambiente/listaAmbientes?idfilial='+idfilial+'&activo=1&orden=nomambiente';
+            axios.get(url).then(response=>{
+                this.arrayAmbientes=response.data.ambientes;
+            });
+        },
+
         listaAsignaciones(idactivo){
             var url='/act_asignacion/listaAsignaciones?idactivo='+idactivo;
             axios.get(url).then(response=>{
@@ -165,7 +185,32 @@ export default {
             });
         },
 
-        nuevaAsignacion(){
+        nuevaAsignacion(idactivo){ 
+            //verificamos si el activo esta asignado y activo
+            var url='/act_activo/validaAsignacion?idactivo='+idactivo;
+            axios.get(url).then(response=>{                
+                console.log(response.data.valida);
+                if (response.data.valida===1) {
+                    swal('Activo ya asignado','No se puede Asignar','success'); 
+                    this.modalAsignar=0;
+                }
+                else {
+                    this.modalAsignar=1;
+                    this.accion=1;
+                    this.listaEmpleados();
+                    this.listaDirectivos();
+                    this.idresponsable='';
+                    this.idfilial='';
+                    this.idambiente='';
+                    this.fechaini='';
+                    this.fechafin='';
+                    this.estadoini='';
+                    this.estadofin='';
+                    this.obs='';
+                    this.$validator.reset();        
+                }
+            });
+
             this.modalAsignar=1;
             this.accion=1;
             this.listaEmpleados();
@@ -248,15 +293,14 @@ export default {
         },
         */
 
-        reporteAsignacion(asignacion){
+        repTraspaso(idactivo){ 
             var url=[];
-            url.push('http://'+this.ipbirt+':8080');
+            url.push('http://localhost:8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
-            url.push('/act_asignacion.rptdesign'); //archivo
+            url.push('/act_traspaso.rptdesign'); 
             url.push('&__format=pdf'); 
-            url.push('&idasignacion='+asignacion.idasignacion); 
-            url.push('&ip='+this.ipbirt);//pa la foto
-            reporte.viewPDF(url.join(''),'Boleta de Asignación');
+            url.push('&idactivo='+idactivo); 
+            reporte.viewPDF(url.join(''),'Rep. Traspaso');
         },
 
 
@@ -265,6 +309,8 @@ export default {
     mounted(){
         this.jsfechas=jsfechas;
         this.listaAsignaciones(this.regActivo.idactivo);
+        this.listaFiliales();
+        this.listaAmbientes(this.idfilial);
     },
 }
 </script>

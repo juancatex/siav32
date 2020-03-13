@@ -123,7 +123,7 @@ class SocioController extends Controller
         $socio->save();
     }
 
-    /*
+    
     public function updatefoto(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
@@ -138,7 +138,7 @@ class SocioController extends Controller
         $socio->activo = '1';
         $socio->save();
     }
-    */
+    
 
     public function update(Request $request)
     {
