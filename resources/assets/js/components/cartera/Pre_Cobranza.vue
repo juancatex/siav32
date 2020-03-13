@@ -245,14 +245,12 @@
             procesarFiles() {
                 let me = this; 
                 axios.get('/getFormulas').then((response) => {  
-                     var productos = new Map();
+                     var productos_in = new Map();
                     _.forEach(response.data, function(value, key) { 
-                       productos.set(parseInt(key),value); 
+                       productos_in.set(parseInt(key),value); 
                     });
-                    return productos;
-                }).then((out)=>{ 
-                    let ott=this;
-
+                    return productos_in;
+                }).then((out)=>{  
                     axios.get('/getSendedAscii').then((response_ascii) => { 
                          me.processing(response_ascii.data,out);  
                     });

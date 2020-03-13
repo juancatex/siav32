@@ -126,12 +126,12 @@ class File_Ascii extends Controller
                         $catidadtotal=sizeof($arrayPdf);
                         $montototal=0;
                         foreach($arrayPdf as $valor){ 
-                            $montototal+=$valor['cuota'];
+                            $montototal=round( $montototal+$valor['cuota'],2);
                             if (array_key_exists($valor['idfuerza'],$pdfout)){
                                 $temporal=$pdfout[$valor['idfuerza']];
                                 $aux=$temporal['value'];
                                 $auxcantidad=$temporal['cantidad']+1;
-                                $auxtotal=$temporal['total']+$valor['cuota']; 
+                                $auxtotal=round($temporal['total']+$valor['cuota'],2); 
                                 array_push($aux,$valor); 
                                $pdfout[$valor['idfuerza']]=array('cod'=>124,'nombre'=>$valor['fuerza'],'value'=>$aux,'cantidad'=>$auxcantidad,'total'=>$auxtotal);
                             }else{

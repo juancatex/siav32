@@ -107,7 +107,7 @@
                     </tbody>
                 </table>
 
-                 <div id="inferior2" class="position-fixed animated "  :class="(idperfil!=0 && arrayAsientomaestro.length!=0&&checkValidacion.length>1)?'slideInUp':'slideOutDown'">
+                 <div id="inferior2" class="position-fixed animated "  :class="(idperfil!=0 && arrayAsientomaestro.length!=0&&checkValidacion.length>1&&modal==0)?'slideInUp':'slideOutDown'">
                                  <div class="col-md-4 row " style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
                                              <div class="col-md-12">
                                                 <button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
@@ -142,8 +142,9 @@
         <!-- Fin ejemplo de tabla Listado -->
     </div>
     <!--Inicio del modal agregar/actualizar-->
-    <form @submit.prevent="validateBeforeSubmit" @keyup.esc="cerrarModal('individual')">
-    <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+   
+    <!-- <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true"> -->
+     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true" id="comprobanteindividual">   
         <div class="modal-dialog modal-primary modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -305,7 +306,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    </form>
+    
     <!--Fin del modal-->
     <!-- modal de agrupacion -->
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true" id="agruparcomprobantes">
@@ -664,7 +665,7 @@ Vue.component("v-select", vSelect);
             },
             abrirModalAgrupacion(){
                 let me=this;
-                
+                me.modal=0;
                 var url= '/con_asientomaestro/agruparcomprobante?listaagrupados='+me.checkValidacion;
                 axios.get(url).then(function (response) {
                 var respuesta= response.data;
@@ -677,7 +678,7 @@ Vue.component("v-select", vSelect);
                         'Las fechas de registro No son las mismas!',
                         'Debe agrupar comprobantes con la misma fecha.',
                         'error'
-                        )
+                        ); 
                 }
                 else{
                     //console.log(me.fechacomprobantes[0].fecha);
@@ -688,6 +689,7 @@ Vue.component("v-select", vSelect);
                     me.nomperfil=me.arrayAsientomaestro[0].nomperfil;
                     me.sumatotalagrupado(me.arrayMaestros);
                     me.classModal.openModal('agruparcomprobantes');
+                    me.modal=1;
                 }
             })
             .catch(function (response) {
@@ -944,16 +946,18 @@ Vue.component("v-select", vSelect);
                         this.numdocumento='';
                         this.numdocumento1='';
                         this.idtipocomprobante=0;
+                        this.classModal.closeModal('comprobanteindividual');
                     }
                     
                 break;
                 case 'agrupar':
-                    {
+                    {   this.modal=0;
                         this.numdocumento1='';
                         this.glosa='';
                         this.tipodocumento='';
                         this.idtipocomprobante=0;
                         this.classModal.closeModal('agruparcomprobantes');
+                        
                     }
                     
                 break;
@@ -1004,7 +1008,7 @@ Vue.component("v-select", vSelect);
                             this.listarAsientodetalle(this.asientomaestro_id)
                             this.selectTipocomprobante();
                             this.tipoAccion=1;
-                            
+                            this.classModal.openModal('comprobanteindividual');
                             break;
 
                         }
@@ -1049,7 +1053,7 @@ Vue.component("v-select", vSelect);
         this.getRutasReports();
         this.classModal=new _pl.Modals();
         this.classModal.addModal('agruparcomprobantes');
-        
+        this.classModal.addModal('comprobanteindividual');
         
     }
 }
