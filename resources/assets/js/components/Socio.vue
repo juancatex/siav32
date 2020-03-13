@@ -735,7 +735,8 @@
                                             <option value='Hij@'>Hij@</option>
                                             <option value='Herman@'>Herman@</option>
                                             <option value='Padre'>Padre</option>
-                                            <option value='Madre'>Madre</option>                                            
+                                            <option value='Madre'>Madre</option>
+                                            <option value='Otro'>Otro</option>                                            
                                             </select></td>
                                     </tr>
                                         <span class="text-error">{{ errors.first('paren')}}</span>

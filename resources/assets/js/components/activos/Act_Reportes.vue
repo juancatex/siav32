@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Reportes Activos Fijos.
-                        <br/>>
+                        <br/><br/>
                         <ul>
                             <li>
                                 <button class="col-md-3 btn btn-block btn-primary" @click="verPorsocio()">Activos asignados por Socio</button>                            
@@ -82,11 +82,11 @@
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                                                                                 
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Empleado:</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Funcionario:</label>
                                                                         
                                     <div class="col-md-6">
-                                        <Ajaxselect 
-                                            ruta="/rrh_empleado/listaEmpleados?buscado=" @found="empleados"
+                                        <Ajaxselect v-if="clearSelected"
+                                            ruta="/rrh_empleado/listaEmpleados?buscado=" @found="empleados" 
                                             resp_ruta="empleados"
                                             labels="nombre,apaterno,amaterno"
                                             placeholder="buscar por Nombre o Apellidos" 
@@ -138,8 +138,8 @@
             return {                                
                 Modalview: '',
                 modal : 0,                
-                tituloModalK : 'Por socio',                
-                tituloModalD : 'Por socio',
+                tituloModalK : 'Asignacion Por socio',                
+                tituloModalD : 'Devolucion Por socio',
                 idempleado : '',
                 //empleados:'',
                 tipoAccion : 0,
@@ -157,7 +157,8 @@
                 criterio : 'nomestado',
                 buscar : '',
                 arrayPermisos : {por_kardex:0,por_egreso:0,por_inscripcion:0,por_fuerza:0},
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                clearSelected : 1,
             }
         },
 
@@ -197,6 +198,10 @@
         },
         methods : {
 
+            tiempo(){
+                this.clearSelected=1;
+            },
+
             empleados(empleados) { 
                 this.idempleado=empleados.idempleado; 
             },
@@ -224,20 +229,24 @@
             //     });
             // },
 
-            setear (){                
-                this.idempleado=''
+            setear(){                
+                this.idempleado='';
             },
             
             verPorsocio(){ 
                 this.Modalview='K';  
                 this.setear();
                 this.modal=1;                 
+                this.clearSelected=0;
+                setTimeout(this.tiempo, 200); 
             },
 
             devPorsocio(){ 
                 this.Modalview='D';  
                 this.setear();
                 this.modal=1;                 
+                this.clearSelected=0;
+                setTimeout(this.tiempo, 200); 
             },
             
             repPorSocio(idempleado,modal){ 

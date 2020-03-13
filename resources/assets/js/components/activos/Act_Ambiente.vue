@@ -80,12 +80,12 @@
                     <div class="tabla100">
                         <div class="tcelda">Código asignado:</div>
                         <div class="tcelda">
-                            <input type="text" class="form-control txtnegrita text-center" readonly v-model="codambiente">
+                            <input type="text" class="form-control txtnegrita text-center" readonly v-model="idambiente">
                         </div>
                     </div>
                     <br>Nombre Ambiente: <span class="txtasterisco"></span>
                         <input type="text" class="form-control" v-model="nomambiente"
-                            name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required|alpha_spaces'">
+                            name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required'">
                         <p v-if="errors.has('nom')" class="txtvalidador">Dato requerido</p>
                     <br>
                     <div class="txtobligatorio text-right"></div>                    

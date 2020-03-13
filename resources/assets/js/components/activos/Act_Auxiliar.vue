@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-md-6 text-right ">
                         <div class="input-group-append" style="display:inline">
-                            <button class="btn btn-primary dropdown-toggle" style="margin-top:0px" 
+                            <!-- <button class="btn btn-primary dropdown-toggle" style="margin-top:0px" 
                                 data-toggle="dropdown" aria-expanded="false">
                                 Otra cuenta... <span class="caret"></span>
                             </button>
@@ -20,7 +20,18 @@
                                 <a href="#" class="dropdown-item" v-for="grupo in arrayGrupos" 
                                 :key="grupo.id" v-text="grupo.nomgrupo" 
                                 @click="listaAuxiliares(grupo.idgrupo,1)"></a>
+                            </div> -->
+
+                            <div class="tfila">
+                                <div class="tcelda titcampo" style="vertical-align:top">Grupo:</div>
+                                <select class="form-control"  v-model="idgrupo" 
+                                    @change="listaAuxiliares(idgrupo,1)">
+                                    <option v-for="grupo in arrayGrupos" :key="grupo.idgrupo"
+                                        v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
+                                </select>
                             </div>
+
+
                         </div>
                         <button class="btn btn-primary" style="margin-top:0px" 
                             @click="nuevoAuxiliar()">Nuevo Auxiliar</button>
