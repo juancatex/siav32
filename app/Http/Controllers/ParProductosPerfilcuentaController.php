@@ -40,13 +40,13 @@ class ParProductosPerfilcuentaController extends Controller
     }
     public function getFormulas(Request $request)
     { 
-       
+        if (!$request->ajax()) return redirect('/'); 
         $productos_array = array();
         $productos=DB::select('select idproducto from par__productos where activo=1'); 
         foreach($productos as $valor){
-         $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+         $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
         ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
-        ->select( 'par__productos.linea','par__productos.cobranza_perfil','par__productos__perfilcuentas.idperfilcuentadetalle',
+        ->select( 'par__productos.linea','par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
         'par__productos__perfilcuentas.valor_abc',
         'par__productos__perfilcuentas.formula',
         'con__perfilcuentadetalles.tipocargo',

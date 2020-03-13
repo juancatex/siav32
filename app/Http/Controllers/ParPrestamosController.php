@@ -926,15 +926,57 @@ public function get_status_reg(Request $request)
         //  eval($variable."=$suma_total;");
         //  eval("\$Ar2=$A+3;");
         //  eval("\$B=($Ar2*2)/100+$A;");
-        for($i=65; $i<=90; $i++) {  
-            $abc="$".chr($i); 
-            eval($abc."=0;");
-        }
+        
+        
+        
+        // for($i=65; $i<=90; $i++) {  
+        //     $abc="$".chr($i); 
+        //     eval($abc."=0;");
+        // }
 
-        for($i=65; $i<=90; $i++) {  
-            $abc="$".chr($i);  
-            echo $abc.'='.eval("return ".$abc.";").'    ';
+        // for($i=65; $i<=90; $i++) {  
+        //     $abc="$".chr($i);  
+        //     echo $abc.'='.eval("return ".$abc.";").'    ';
+        // }
+    
+        $productos_array = array();
+        $productos=DB::select('select idproducto from par__productos where activo=1'); 
+        foreach($productos as $valor){
+         $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+        ->join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+        ->select( 'par__productos.linea','par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
+        'par__productos__perfilcuentas.valor_abc',
+        'par__productos__perfilcuentas.formula',
+        'con__perfilcuentadetalles.tipocargo',
+        'con__perfilcuentadetalles.idcuenta',
+        'par__productos__perfilcuentas.iscargo')
+        ->where('par__productos__perfilcuentas.activo','=','1')
+        ->where('par__productos.idproducto','=',$valor->idproducto)
+        ->get()->toArray();
+        $productos_array[$valor->idproducto] =$formulascobranza;
         }
+        dd($productos_array);
+        return  $productos_array;
+
+
+
+
+        return Par_productos_perfilcuenta::join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+        ->select('par__productos__perfilcuentas.idperfilcuentamaestro',
+        'par__productos__perfilcuentas.idperfilcuentadetalle',
+        'par__productos__perfilcuentas.valor_abc',
+        'par__productos__perfilcuentas.valor_abc_php',
+        'par__productos__perfilcuentas.formula',
+        'par__productos__perfilcuentas.formulaphp',
+        'con__perfilcuentadetalles.tipocargo',
+        'con__perfilcuentadetalles.idcuenta',
+        'par__productos__perfilcuentas.iscargo')
+        ->where('par__productos__perfilcuentas.activo','=','1')  
+        ->where('par__productos__perfilcuentas.idproducto','=',$producto)
+        ->where('par__productos__perfilcuentas.idperfilcuentamaestro','=',$idperfil)
+        ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
+        ->get()->toArray();
+    
     }
      
 }
