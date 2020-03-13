@@ -2,7 +2,7 @@
             <main class="main"> 
                       
                 <div class="modal fade " tabindex="-1"  role="dialog"  style="z-index: 1600;" aria-hidden="true" id="primarymodalstatus" >
-                    <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-dialog modal-primary modal-xl" role="document">
                         <div class="modal-content animated fadeIn"> 
                                 <div class="modal-header"> 
                                     <div style="margin-right: 17px;">
@@ -20,6 +20,7 @@
                                                         <tr> 
                                                             <th>Plan</th>  
                                                             <th>Producto</th>  
+                                                            <th>Codigo</th>  
                                                             <th>Moneda</th> 
                                                             <th>Monto</th> 
                                                             <th>Cuota</th> 
@@ -35,6 +36,7 @@
                                                                          @click="pdf(prestamos.planPagosMap)"> <i class="fa fa-file-pdf-o"></i> </button>
                                                                     </td> 
                                                                     <td style="vertical-align: middle;" :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nomproducto"></td> 
+                                                                    <td style="vertical-align: middle;" :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.no_prestamo"></td> 
                                                                     <td style="vertical-align: middle; text-align: center;" :class="{'tableviewstatus': prestamos.idestado>3}" v-text="prestamos.nommoneda"></td> 
                                                                     <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;vertical-align: middle;" v-text="completacero(prestamos.monto)"></td>
                                                                     <td :class="{'tableviewstatus': prestamos.idestado>3}" style="text-align: right;vertical-align: middle;" v-text="prestamos.cuota"></td>
