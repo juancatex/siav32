@@ -96,8 +96,18 @@ class ParPrestamosLoteController extends Controller
     }
     public function statusLote(Request $request)
     { 
-       if (!$request->ajax()) return redirect('/');
-       $value=(DB::select("SELECT idlote,min,max FROM par__prestamos__lotes WHERE activo=1"))[0]; 
+      if (!$request->ajax()) return redirect('/'); 
+           $count =(DB::select("SELECT count(*) as total FROM par__prestamos__lotes WHERE activo=1"))[0]->total; 
+            if($count==0){
+                $fecha=(DB::select("SELECT getfecha() as total"))[0]->total; 
+                $maxlote=(DB::select("SELECT valor FROM configs WHERE codigo='LOTE'"))[0]->valor;
+                $lote = new Par_prestamos_lote();  
+                $lote->max=$maxlote;  
+                $lote->min=0;
+                $lote->fecha=$fecha;
+                $lote->save();  
+            } 
+           $value=(DB::select("SELECT idlote,min,max FROM par__prestamos__lotes WHERE activo=1"))[0]; 
        return ['lote' => $value];
     }
 
