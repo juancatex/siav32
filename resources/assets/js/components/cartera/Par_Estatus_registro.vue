@@ -18,6 +18,15 @@
                         </div>
                     </div>
 
+                    <div  class=" row " style="justify-content: center; margin-bottom: 15px;">
+                        <div class="col-md-4" style="text-align: center;">
+                             <h6><b>Total registro SAFCON : </b>{{totalregistros_pgsql}}</h6>
+                        </div>
+                        <div class="col-md-4" style="text-align: center;">
+                              <h6><b>Total registro SIA : </b>{{totalregistros_mysql}}</h6>
+                        </div>
+                    </div>
+
 
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
@@ -63,7 +72,9 @@
             return {
                   arrayvalue:[],
                   fecha:"",
-                  fecha_actual:""
+                  fecha_actual:"",
+                  totalregistros_pgsql:0,
+                  totalregistros_mysql:0
             }
         },  
         watch:{
@@ -79,6 +90,8 @@
                  axios.get('/get_status_reg?fecha='+this.fecha).then(function (response) {
                          var respuesta = response.data; 
                             me.arrayvalue=respuesta.data;
+                            me.totalregistros_pgsql=respuesta.pgsql;
+                            me.totalregistros_mysql=respuesta.mysql;
                      })
                      .catch(function (response) {
                          console.log(response);

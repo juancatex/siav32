@@ -116,7 +116,7 @@
                 <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
                 </p>
                 <input type="text" v-model="buscar" @keyup.enter="listarDesembolsoPrestamos()" class="form-control"
-                  placeholder="Nombres , Apellidos , Numero de Papeleta , lote , Fecha Solicitud (YYYY-MM-DD)" />
+                  placeholder="Nombres , Numero de Prestamos , Apellidos , Numero de Papeleta , lote , Fecha Solicitud (YYYY-MM-DD)" />
                 <button type="submit" @click="listarDesembolsoPrestamos()" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
