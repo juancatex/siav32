@@ -337,7 +337,7 @@ class ConAsientomaestroController extends Controller
             
             if(sizeof($buscararray)==1){
                 $valor2=$request->buscar; 
-                $sqlss="(".(is_numeric($valor2)?"con__asientomaestros.loteprestamos =".$valor2." or con__asientomaestros.cont_comprobante =".$valor2." or ":"")."con__asientomaestros.glosa like '%".$valor2."%'  or con__asientomaestros.fecharegistro like '".$valor2."%' or con__asientomaestros.tipodocumento = '".$valor2."' or con__asientomaestros.numdocumento = '".$valor2."' or con__asientomaestros.cod_comprobante = '".$valor2."')";
+                $sqlss="(".(is_numeric($valor2)?"con__asientomaestros.loteprestamos =".$valor2." or con__asientomaestros.cont_comprobante =".$valor2." or ":"")."con__asientomaestros.glosa like '%".$valor2."%'  or con__asientomaestros.fecharegistro like '".$valor2."%' or con__asientomaestros.tipodocumento = '".$valor2."' or con__asientomaestros.numdocumento like '%".$valor2."%' or con__asientomaestros.cod_comprobante = '".$valor2."')";
            
             }else{
                 foreach($buscararray as $valor){
@@ -644,16 +644,15 @@ class ConAsientomaestroController extends Controller
                                             if (sizeof($buscararray)>0){
                                                 $sqls=''; 
                                                 if(sizeof($buscararray)==1){
-                                                    $valor = $request->buscar;
-                                                    $sqls="(".(is_numeric($valor)?"par__prestamos.lote = ".$valor." or ":"")."socios.numpapeleta like '%".$valor."' or socios.nombre ='".$valor."' or socios.apaterno ='".$valor."' or socios.amaterno ='".$valor."'  or con__asientomaestros.fecharegistro like '".$valor."%' )";
-                                                    
-                                                    
+                                                    $valor = trim($request->buscar);
+                                                    $sqls="(".(is_numeric($valor)?"par__prestamos.lote = ".$valor." or ":"")."socios.numpapeleta like '%".$valor."' or socios.nombre ='".$valor."' or socios.apaterno ='".$valor."' or socios.amaterno ='".$valor."' or con__asientomaestros.numdocumento like '%".$valor."%'  or con__asientomaestros.fecharegistro like '".$valor."%' )";
+                                                     
                                                 }else{
                                                     foreach($buscararray as $valor){
                                                         if(empty($sqls)){
-                                                            $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%' )";
+                                                            $sqls="(con__asientomaestros.numdocumento like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%' )";
                                                         }else{
-                                                            $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%')";
+                                                            $sqls.=" and (con__asientomaestros.numdocumento like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%'  or par__prestamos.lote = '".$valor."' or con__asientomaestros.fecharegistro like '".$valor."%')";
                                                         } 
                                                     }
                                                 }
