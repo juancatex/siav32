@@ -11,7 +11,7 @@ class ActMotivoController extends Controller
     {
         $motivos=Act_Motivo::select('*');
         if($request->activo) $motivos=$motivos->where('activo',1);
-        return ['motivos'=>$motivos->get()];
+        return ['motivos'=>$motivos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
     }
 
     public function storeMotivo(Request $request)

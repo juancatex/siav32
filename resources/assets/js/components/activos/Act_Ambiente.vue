@@ -33,8 +33,8 @@
                             <input type="radio" name="estado" id="r1" @click="listaAmbientes(idfilial,1)">Vigentes &nbsp;
                             <input type="radio" name="estado" id="r0" @click="listaAmbientes(idfilial,0)">Inactivos
                         </div>
-                        <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
-                            @click="reporteAmbientes(idfilial)"></button>
+                        <!-- <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
+                            @click="reporteAmbientes(idfilial)"></button> -->
                     </div>
                 </div>
                 <div class="table-responsive">

@@ -141,8 +141,7 @@
                         <tr v-for="activo in arrayActivos" :key="activo.idactivo">
                             <td align="center" nowrap>
                                 <button class="btn btn-warning btn-sm icon-pencil"  title="Editar datos"
-                                    @click="editarActivo(activo)">
-                                    </button>
+                                    @click="editarActivo(activo)"></button>
                                 <button class="btn btn-warning btn-sm icon-user-following" title="Asignar responsable"
                                     @click="asignarActivo(activo)"></button> 
                                 <button class="btn btn-warning btn-sm icon-list" title="Reporte Asignacion"
@@ -506,12 +505,12 @@ export default {
         },
 
     methods:{
-    cambiarPagina(page,buscar,buscar1,buscar2,buscar3){
+    cambiarPagina(page){
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarLog(page,buscar,buscar1,buscar2,buscar3);
+                me.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);                                
             },
 
         cambio(){ 
@@ -571,13 +570,13 @@ export default {
             }, 
 
         rep_asignacion(idactivo) { 
-            var url=[];
-            url.push('http://localhost:8080');
+            var url=[];            
+            url.push('http://'+this.ipbirt+':8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
             url.push('/act_incorporacion.rptdesign'); //archivo
             url.push('&idactivo='+idactivo); //idempleado
             url.push('&__format=pdf'); //formato
-            reporte.viewPDF(url.join(''),'UFVs Gestión '+idactivo);
+            reporte.viewPDF(url.join(''),'Asignacion');
         },
 
         listaFiliales(){ 
@@ -623,7 +622,7 @@ export default {
                 this.arrayActivos=response.data.activos;
                 this.ipbirt=response.data.ipbirt;
                 this.currfecha=response.data.fechahoy;
-                //this.pagination= response.data.pagination; console.log('as:'+this.pagination);
+                //this.pagination= response.data.pagination; 
             });
         },
         

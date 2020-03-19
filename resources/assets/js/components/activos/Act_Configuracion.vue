@@ -143,6 +143,7 @@ export default {
             var url='/act_motivo/listaMotivos';
             axios.get(url).then(response=>{
                 this.arrayMotivos = response.data.motivos;
+                this.ipbirt= response.data.ipbirt;
             });
         },
 
@@ -252,9 +253,9 @@ export default {
             });
         },
 
-        verPlanilla(gestion){
+        verPlanilla(gestion){ console.log('ip: ' + this.ipbirt);
             var url=[];
-            url.push('http://localhost:8080');
+            url.push('http://'+this.ipbirt+':8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
             url.push('/act_ufvs.rptdesign'); //archivo
             url.push('&gestion='+gestion); //idempleado
