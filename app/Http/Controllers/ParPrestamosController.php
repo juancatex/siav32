@@ -827,15 +827,15 @@ function getperfil($producto,$idperfil){
 }
 public function get_status_reg(Request $request)
     { 
-        if (!$request->ajax()) return redirect('/');
+       if (!$request->ajax()) return redirect('/');
         $productos=DB::connection('pgsql')->select("SELECT usuario_reg,id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
         id_estado, par_estado_prestamo, par_estado,eliminado, fecha_reg,numero_cuenta_abono
-        FROM finanzas.ptm_prestamos where fecha_desembolso='$request->fecha' and id_producto ='G'"); 
+        FROM finanzas.ptm_prestamos where fecha_desembolso='$request->fecha' and id_producto ='G' order by id_prestamo"); 
         $pasofinal=true;
         $array_out=[];
+        $sql=DB::select("SELECT s.numpapeleta,p.* FROM par__prestamos p,socios s where p.idsocio=s.idsocio and p.fecharegistro like '%$request->fecha%'"); 
         foreach($productos as $rowpsql){  
-                 $paso=true; 
-                 $sql=DB::select("SELECT s.numpapeleta,p.* FROM par__prestamos p,socios s where p.idsocio=s.idsocio and p.fecharegistro like '%$request->fecha%'"); 
+                 $paso=true;  
                            foreach($sql as $row){  
                                 if(($rowpsql->id_persona==$row->numpapeleta)&&($rowpsql->imp_desembolsado==$row->monto)&&($rowpsql->plazo==$row->plazo)){
                                     $paso=false;
@@ -848,7 +848,7 @@ public function get_status_reg(Request $request)
                   } 
         }
           
-        return ['data'=>$array_out,'paso'=>$pasofinal];
+        return ['data'=>$array_out,'paso'=>$pasofinal,'pgsql'=>count($productos),'mysql'=>count($sql)];
     }
     public function prueba(Request $request)
     { 
