@@ -233,7 +233,7 @@
                             </div>
                             
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" style="padding-left: 15px;padding-right: 15px;  overflow: scroll; max-height: 500px; border: solid 1px #c2cfd6;  margin-left: -7px;   margin-right: -7px;">
                             <table class="table table-bordered table-striped table-sm">
                                 <thead>
                                     <tr>
@@ -370,7 +370,7 @@
                             <span class="text-error">{{ errors.first('glosa')}}</span>   <!--Lineas Agregadas<-->                                     
                         </div>
                     </div>
-                    <div class="form-group row" style="padding-left: 15px;padding-right: 15px;">
+                    <div class="form-group row" style="padding-left: 15px;padding-right: 15px;  overflow: scroll; max-height: 500px; border: solid 1px #c2cfd6;  margin-left: -7px;   margin-right: -7px;">
                         <table class="table table-sm">
                             <thead>
                                 <tr>
