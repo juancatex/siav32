@@ -44,8 +44,8 @@
                         <input type="radio" name="estado" id="r1" @click="listaAuxiliares(idgrupo,1)">Vigentes &nbsp;
                         <input type="radio" name="estado" id="r0" @click="listaAuxiliares(idgrupo,0)">Inactivos
                     </div>
-                    <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
-                        @click="reporteAuxiliares(idgrupo)"></button>
+                    <!-- <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
+                        @click="reporteAuxiliares(idgrupo)"></button> -->
                 </div>                
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">

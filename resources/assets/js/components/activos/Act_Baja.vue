@@ -113,7 +113,7 @@ export default {
 
         reporteBaja(idactivo){
             var url=[];
-            url.push('http://localhost:8080');
+             url.push('http://'+this.ipbirt+':8080');
             url.push('/birt-viewer/frameset?__report=reportes/activos');
             url.push('/act_baja_activo.rptdesign'); 
             url.push('&__format=pdf'); 

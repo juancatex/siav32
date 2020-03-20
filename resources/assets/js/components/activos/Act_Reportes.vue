@@ -159,6 +159,7 @@
                 arrayPermisos : {por_kardex:0,por_egreso:0,por_inscripcion:0,por_fuerza:0},
                 arrayPermisosIn:[],
                 clearSelected : 1,
+                ipbirt:'',
             }
         },
 
@@ -229,6 +230,13 @@
             //     });
             // },
 
+            listaMotivos(){
+                var url='/act_motivo/listaMotivos';
+                axios.get(url).then(response=>{                    
+                    this.ipbirt= response.data.ipbirt;
+                });
+            },
+
             setear(){                
                 this.idempleado='';
             },
@@ -251,7 +259,7 @@
             
             repPorSocio(idempleado,modal){ 
                     var url=[];
-                    url.push('http://localhost:8080');
+                    url.push('http://'+this.ipbirt+':8080');
                     url.push('/birt-viewer/frameset?__report=reportes/activos');
                     url.push('/act_asig_indi.rptdesign'); 
                     url.push('&__format=pdf'); 
@@ -261,7 +269,7 @@
 
             devPorSocio(idempleado,modal){ 
                     var url=[];
-                    url.push('http://localhost:8080');
+                    url.push('http://'+this.ipbirt+':8080');
                     url.push('/birt-viewer/frameset?__report=reportes/activos');
                     url.push('/act_dev_grupo.rptdesign'); 
                     url.push('&__format=pdf'); 
@@ -294,6 +302,7 @@
         mounted() {
             //this.getPermisos(); 
             //this.getRutasReports();
+            this.listaMotivos();
         }
     }
 </script>
