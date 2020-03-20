@@ -191,7 +191,7 @@
                 </div>
             </div>
              
-                <div id="inferior" class="position-fixed animated slideInUp"  v-if="tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
+                <div id="inferior" class="position-fixed animated slideInUp"  v-if="checkvalidate&&tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
                                 
                                 
                                     <div class="col-md-5 row" style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
@@ -296,7 +296,8 @@
                 conceptodebNoBanco:'',
                 iddepartamentodebNoBanco:2,
                 num_operaciondebNoBanco:'',
-                montodebNoBanco:0
+                montodebNoBanco:0,
+                boton:true
 
             }
         },
@@ -320,6 +321,9 @@
                 return valor
 
 
+            },
+            checkvalidate(){ 
+                return this.boton;
             },
             arrayDesembolso(){
                 let me=this;
@@ -594,6 +598,7 @@
                 });
             },
             registrarDesembolso(valor){
+                this.boton=false;
                 swal({
                         title: "Registrando los datos",
                         allowOutsideClick: () => false,
@@ -630,6 +635,7 @@
                                 'arrayids': me.arrayDatosDesembolso,
                                 'idcuentadesembolso':me.cuentasconciliacion
                             }).then(function (response) {
+                                me.boton=true;
                                 if(response.data.length){
                                 //console.log(response)
                                 swal(
@@ -651,6 +657,7 @@
                                 }
                             }).catch(function (error) {
                                 console.log(error);
+                                me.boton=true;
                             });   
                         }
                         break;
@@ -676,6 +683,7 @@
                             'arrayids': me.arrayDatosDesembolso,
                             'idcuentadesembolso':me.cuentasconciliacion.valor
                         }).then(function (response) {
+                            me.boton=true;
                             if(response.data.length){
                             //console.log(response)
                             swal(
@@ -697,6 +705,7 @@
                             }
                         }).catch(function (error) {
                             console.log(error);
+                            me.boton=true;
                         });   
                         
                         break;
