@@ -594,6 +594,16 @@
                 });
             },
             registrarDesembolso(valor){
+                swal({
+                        title: "Registrando los datos",
+                        allowOutsideClick: () => false,
+                        allowEscapeKey: () => false,
+                        onOpen: function () {
+                            swal.showLoading();
+                        }
+                    }).catch(error => {
+                        swal.showValidationError('Request failed: ${error}')
+                    });
                 let me=this;
                 me.arrayDatosDesembolso=[];
                 var cheque='';
