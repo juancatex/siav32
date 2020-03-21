@@ -218,6 +218,7 @@
                 ascii: '',
                 nuevosascii:'',
                 detalleascii:'',
+                verificarfecha:'',
                 tipoAccion : 0,
                 errorEstado : 0,
                 errorMostrarMsjEstado : [],

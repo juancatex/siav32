@@ -178,11 +178,175 @@ class ParPrestamosPlanController extends Controller
         ini_set ('max_execution_time', 3200);
         DB::beginTransaction();
         try{
-            $fecha=(DB::select("select getfecha() as total"))[0]->total; 
-               
-            foreach ($request->prestamos as $clave => $val){  
-                        $arrayDetalle=[];
-                        $idmaestro=0;
+             
+            $prestamosOrder = array(); 
+            foreach ($request->prestamos as  $valorder){ 
+                if (array_key_exists($valorder['idproducto'],$prestamosOrder)){
+                    $array=$prestamosOrder[$valorder['idproducto']];
+                    array_push($array, $valorder);
+                    $prestamosOrder[$valorder['idproducto']]=$array;
+                }else{
+                    $prestamosOrder[$valorder['idproducto']]=array($valorder);
+                }
+            }
+          
+    $fecha=(DB::select("select getfecha() as total"))[0]->total; 
+
+     foreach ($prestamosOrder as  $idproducto=>$valorproducto){ 
+           
+            $idmaestro = 0;
+            $arrayDetalle = array();
+            $cargoscobranza = array();
+            $debe=0;
+            $haber=0;
+
+            foreach ($valorproducto as  $val){ 
+                if($val['estatus']==1){ 
+                           
+                      $perfilcobranza =$this->getperfil($val['idproducto'],$val['cobranza_perfil_ascii']); 
+                      
+                      $total_cuotas = $val['plazo'];   
+                      $cuota =$val['cuota'];  
+                      $cuotaf =$val['cut'];  
+                      $capital = $val['am'];  
+                      $intereses = $val['inn']; 
+                      $interes_diferido =$val['indi'];
+                    
+                      $sumacargos=0;
+
+                      for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+
+                            foreach($perfilcobranza as $perfil){ 
+                                    $abc="$".$perfil['valor_abc'];
+                                    eval($abc."=".$perfil['formulaphp'].";");
+                                    if($perfil['iscargo']==1){ 
+                                        $cargoin=eval("return round(".$abc.",2);");
+                                        $sumacargos+=$cargoin;  
+                                        array_push($cargoscobranza,['idperfilcuentadetalle'=>$perfil['idperfilcuentadetalle'],'cargo'=>$cargoin,'rev'=>(strpos($perfil['formulaphp'],'$total_cuotas')>0)?1:0]);
+                                    }
+                            }
+  
+                    if($val['inn']>($val['cut']-$val['indi']-$sumacargos)){
+                                 $capital = 0;
+                                 $interesnew=$val['cut']-$val['indi']-$sumacargos;
+                                 $intermedio=round(($val['inn']/$val['di']),2);  
+                                 $newdias=round($interesnew/$intermedio); 
+
+                                $nuevocobro=new Par_prestamos_plan();
+                                
+                                $nuevocobro->file=$val['file'];
+                                $nuevocobro->send_ascii=$val['send_ascii'];
+                                $nuevocobro->cuota=$val['cuota'];
+                                $nuevocobro->ca_an=$val['ca_an'];
+                                $nuevocobro->ca=$val['ca'];
+                                $nuevocobro->cut=$val['cut']; 
+                                $nuevocobro->indi=$val['indi'];
+                                $nuevocobro->fp=$val['fp'];
+                                $nuevocobro->pe=$val['pe'];
+                                $nuevocobro->idprestamo=$val['idprestamo'];
+
+                                $nuevocobro->in=$interesnew;
+                                $nuevocobro->am=$capital;
+                                $nuevocobro->di=$newdias;
+                                $nuevocobro->car=$sumacargos;
+                                $nuevocobro->fecharegistro=$fecha;
+                                $nuevocobro->tipo=2;
+                                $nuevocobro->idestado=12;
+                                // $nuevocobro->idasiento=$respuesta_perfil;
+                                // $nuevocobro->idtransaccionC='C-ASCII-'.$respuesta_perfil;
+                                $nuevocobro->numDocC='ASCII';
+                                $nuevocobro->glosa='Cobranza por ascii';
+                                $nuevocobro->fechaCobranza=$fecha;
+                                $nuevocobro->importe=$nuevocobro->send_ascii;
+                                $nuevocobro->idusuario=Auth::id();
+                                $nuevocobro->save();  
+
+
+                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]);  
+                                foreach($valorinsert[2] as $akey=>$avalue) { $planpago->$akey=$avalue; } 
+                                $planpago->save();  
+
+                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]);  
+                                $planpago->am=(($planpago->cut-$planpago->car-$planpago->indi-$planpago->in)>0)?($planpago->cut-$planpago->car-$planpago->indi-$planpago->in):0;
+                                $planpago->save();  
+                                $this->recalcularPrestamos($valorinsert[3]);
+                    }else{
+                        $capital = $val['cut']-$val['indi']-$sumacargos-$val['inn'];
+
+                    }
+                     
+                     
+                            for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                                    
+                                                        foreach($perfilcobranza as $perfil){ 
+                                                        $abc="$".$perfil['valor_abc'];
+                                                        eval($abc."=".$perfil['formulaphp'].";");
+                                                        $value=eval("return round(".$abc.",2);");
+                                                        $value=round($value*$val['tipocambio'],2);  
+                                                                if($value>0){ 
+                                                                            if($perfil['tipocargo']=='h'){
+                                                                                $haber+=$value;
+                                                                                $value*= -1;
+                                                                            }else{
+                                                                                $debe+=$value;
+                                                                            }
+                                                                        ///////////////////////// registrar el perfil con su valor en un array
+                                                                    if (array_key_exists($perfil['idcuenta'],$arrayDetalle)){
+                                                                        $array=$arrayDetalle[$perfil['idcuenta']];
+                                                                        $array['monto']=round($array['monto']+$value,2);
+                                                                        $arrayDetalle[$perfil['idcuenta']]=$array;
+                                                                    }else{
+                                                                      $arrayDetalle[$perfil['idcuenta']]=array('idcuenta'=>$perfil['idcuenta'],
+                                                                        'subcuenta'=>'ascii', 
+                                                                        'documento'=>'Automatico', 
+                                                                        'moneda'=>'bs',	 
+                                                                        'monto'=>$value
+                                                                        );  
+                                                                    }
+                                                                        
+
+                                                                }else{
+                                                                    $value*= -1;
+                                                                    if($value>0){ 
+                                                                            if($perfil['tipocargo']=='h'){
+                                                                                $haber+=$value;
+                                                                                $value*= -1;
+                                                                            }else{
+                                                                                $debe+=$value;
+                                                                            }
+                                                                            ///////////////////////// registrar el perfil con su valor en un array
+                                                                            if (array_key_exists($perfil['idcuenta'],$arrayDetalle)){
+                                                                                $array=$arrayDetalle[$perfil['idcuenta']];
+                                                                        $array['monto']=round($array['monto']+$value,2);
+                                                                        $arrayDetalle[$perfil['idcuenta']]=$array;
+                                                                            }else{
+                                                                              $arrayDetalle[$perfil['idcuenta']]=array('idcuenta'=>$perfil['idcuenta'],
+                                                                                'subcuenta'=>'ascii', 
+                                                                                'documento'=>'Automatico', 
+                                                                                'moneda'=>'bs',	 
+                                                                                'monto'=>$value
+                                                                                );  
+                                                                            }
+                                                                    }
+
+                                                                }
+                                                        }
+                        
+                       
+                       
+                       
+                       
+                        
+                        
+
+
+
+                      
+                     
+                     
+/*
+
+
                             foreach ($val['perfil'] as $valin){ 
                                 $idmaestro=$valin['idmaestro'];
                                 array_push($arrayDetalle,array('idcuenta'=>$valin['id'],
@@ -195,10 +359,10 @@ class ParPrestamosPlanController extends Controller
                            $asientomaestro= new AsientoMaestroClass();
                             $respuesta_perfil=$asientomaestro->AsientosMaestroArray($idmaestro,
                             '', 
-                            '',  
+                            'ASCII',  
                             $request->obs, 
                             $arrayDetalle,
-                            $request->idmodulo,$fecha,'',-1); 
+                            $request->idmodulo,$fecha,''); 
 
                             foreach ($val['plans'] as $id){
                             $pruebamodifi=Par_prestamos_plan::findOrFail($id) ;
@@ -237,27 +401,18 @@ class ParPrestamosPlanController extends Controller
                                 $this->recalcularPrestamos($valorinsert[3]);
 
                             }
- 
- 
+  */
+                    }else{
 
-                        /*    $cambio=Par_Prestamos::whereIn('idprestamo',$val['prestamos']) 
-                            ->where('idestado','=',3); 
-                                foreach ($cambio->get()->toArray() as  $valor){ 
-                                        $sumaprestamos= Par_Prestamos::where('idsocio','=',$valor['idsocio'])
-                                        ->whereNotIn('idprestamo',$val['prestamos']) 
-                                        ->where('idestado','=',3)->count(); 
-                                        if($sumaprestamos==0){
-                                            $Socio = Socio::findOrFail($valor['idsocio']);  
-                                            $Socio->idestprestamos = '0';  
-                                            $Socio->save();
-                                        }
-                                } 
-
-
-                            $cambio->update(['idestado' => 2]); */ //para cobranza manual
+                    }
                 }
+                print_r($arrayDetalle);
 
-                foreach ($request->moras as $valuemoras){
+                echo $debe.' = '.$haber;
+
+    }
+
+           /*     foreach ($request->moras as $valuemoras){
                    Par_Prestamos::where('idprestamo','=',$valuemoras['idprestamo'])
                     ->update(['idestado' => 3]);
                     Socio::where('idsocio','=',$valuemoras['idsocio'])
@@ -271,7 +426,7 @@ class ParPrestamosPlanController extends Controller
                 }
 
 
-
+*/
 
                 DB::commit();
                 return ['status'=>1];
@@ -285,8 +440,23 @@ class ParPrestamosPlanController extends Controller
         
     }
 
-
- 
+    function getperfil($producto,$idperfil){ 
+        return Par_productos_perfilcuenta::join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+         ->select('par__productos__perfilcuentas.idperfilcuentamaestro',
+         'par__productos__perfilcuentas.idperfilcuentadetalle',
+         'par__productos__perfilcuentas.valor_abc',
+         'par__productos__perfilcuentas.valor_abc_php',
+         'par__productos__perfilcuentas.formula',
+         'par__productos__perfilcuentas.formulaphp',
+         'con__perfilcuentadetalles.tipocargo',
+         'con__perfilcuentadetalles.idcuenta',
+         'par__productos__perfilcuentas.iscargo')
+         ->where('par__productos__perfilcuentas.activo','=','1')  
+         ->where('par__productos__perfilcuentas.idproducto','=',$producto)
+         ->where('par__productos__perfilcuentas.idperfilcuentamaestro','=',$idperfil)
+         ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
+         ->get()->toArray();
+     }
 
      function recalcularPrestamos($prestamo)
      {  
@@ -582,7 +752,7 @@ public function mora($prestamo)
         round(plan.cuota*mo.tipocambio,2)as cuota, 
         round(pre.monto*mo.tipocambio,2)as monto,
         */
-        $valores=(DB::select("select  pre.idproducto,plan.idplan,pre.idprestamo,
+        $valores=(DB::select("select  pre.idproducto,plan.idplan,pre.idprestamo,pro.cobranza_perfil_ascii,
         plan.am,
         plan.in as inn,
         plan.indi, 
@@ -600,7 +770,7 @@ public function mora($prestamo)
         plan.di, 
         s.numpapeleta,pre.plazo,mo.tipocambio,s.idsocio 
      from socios s,par__prestamos pre,par__prestamos__plans plan ,par__productos pro,par__monedas mo 
-     where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pre.idprestamo=plan.idprestamo and plan.idestado=10 and pre.idsocio=s.idsocio
+     where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pre.idprestamo=plan.idprestamo and plan.idestado=10 and pre.idsocio=s.idsocio and (pre.idestado between 2 and 3) 
      order by s.numpapeleta,plan.send_ascii ASC")); 
     //  order by s.numpapeleta,plan.send_ascii DESC")); 
         return $valores; 

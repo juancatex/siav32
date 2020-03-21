@@ -21,12 +21,13 @@
                                             <label class="col-md-3" ><h6>Monto a Acreedor :</h6></label>   
                                             <label class="col-md-3" >{{subtotal}}</label> 
                                             <label class="col-md-3" ><h6>Monto a cobrar :</h6></label>  
-                                            <label class="col-md-3" >{{cobrado}}</label> 
-                                            
+                                            <label class="col-md-9" >{{cobrado}}</label> 
+                                            <label class="col-md-3" ><h6>Archivos Analizados :</h6></label>  
+                                            <label class="col-md-9" >{{names}}</label> 
                                         </div>
                                       
                                   
-                                   <div class="form-group row">
+                                   <div v-if="!errors.has('irregular')" class="form-group row">
                                         <label style="text-align: left; align-items: center;" class="col-md-12 form-control-label"
                                             for="text-input"><h6>Detalle : </h6></label>
                                         <div class="col-md-12">
@@ -39,6 +40,8 @@
                                             <span class="text-error">{{ errors.first('detalle') }}</span>
                                         </div>
                                     </div> 
+                                <div v-if="errors.has('irregular')" class="alert alert-danger" v-validate="'required'"
+                                                                 data-vv-name="anios" role="alert">{{ errors.first('irregular') }}</div>
                                     <div class="collapse"   id="detallecarga"> 
                                     <hr class="my-4">
 
@@ -57,8 +60,7 @@
                                                                                 
                                             </tbody>
                                         </table> 
-                                        <div v-if="errors.has('irregular')" class="alert alert-danger" v-validate="'required'"
-                                                                 data-vv-name="anios" role="alert">{{ errors.first('irregular') }}</div>
+                                        
                                    </div>   
                                    </div>
                                 </div>  
@@ -90,9 +92,9 @@
                     subtotal:'0',
                     cobrado:'0',
                     obs:'',
-                     idmodulomain:0,
-                    prestamosProducto:null,
-                    prestamosMoras:null,
+                    names:'',
+                     idmodulomain:0, 
+                    prestamosEnviadosAscii:null,
                     prestamosAcreedor:null
             }
         }, 
@@ -104,10 +106,11 @@
                 this.modalcobranza.closeModal(id);
                 this.$emit('cerrarvue');
             }, 
-            showVue(prestamos,moras,datas,total_ascii,subtotall,cobrados,errors,modulo){
+            showVue(enviadosAscii,datas,total_ascii,subtotall,cobrados,errorss,modulo,nombrefiles){
                 this.obs='';
+                this.names=nombrefiles.join(', ');
                 this.idmodulomain=modulo; 
-                if(!errors){
+                if(!errorss){
                     this.errors.add({ 
                     field: "irregular",
                     msg:
@@ -116,8 +119,8 @@
                 }
                
 
-                this.prestamosProducto=prestamos;
-                this.prestamosMoras=moras;
+                
+                this.prestamosEnviadosAscii=enviadosAscii;
                 this.prestamosAcreedor=datas;
                 this.totalascii= _num(parseFloat(total_ascii)).format('0,0[.]00 $');
                 this.subtotal= _num(parseFloat(subtotall)).format('0,0[.]00 $');
@@ -128,7 +131,7 @@
                 this.modalcobranza.openModal('modal_cobranza'); 
                 var dobytable='';
                 _.forEach(datas, function(value) {    
-                    dobytable+='<tr '+(_.has(value, 'plans')?'style="background-color: #0ee23f7d;"':'style="background-color: transparent;"')+'>'
+                    dobytable+='<tr '+(value.estado==1?'style="background-color: #0ee23f7d;"':'style="background-color: transparent;"')+'>'
                     +'<td>'+value.numpapeleta+'</td>'+'<td>'+
                     _num(parseFloat(value.totaloriginal)).format('0,0[.]00 $')
                     +'</td>'
@@ -140,32 +143,18 @@
                  this.initdata(dobytable);
             } ,
             procesar(){
-               this.prestamosProducto.forEach(function (valor, clave) { 
-                   console.log('clave:', clave, 'valor:', valor);
-               });
-
-               console.log(JSON.stringify(this.prestamosProducto));
-               
-               _.forEach(this.prestamosMoras, function (value) {
-                   console.log('value vector:', value);
-               });
-
-                 console.log(JSON.stringify( this.prestamosMoras) );
-
-
-        var acreedores = [];
+                
+                var acreedores = [];
                _.forEach(this.prestamosAcreedor, function(value) {    
                         if(parseFloat(value.aporte)>0){
                              acreedores.push(value);
                     }
                 }); 
-
-                      console.log(JSON.stringify( this.prestamosAcreedor) );
+ 
  
                     axios.post('/cobranzaascii',{
-                        'obs':this.obs,   
-                        'prestamos':this.prestamosProducto,
-                        'moras':this.prestamosMoras,
+                        'obs':this.obs,    
+                        'prestamos':this.prestamosEnviadosAscii,
                         'acreedores':acreedores,
                         'idmodulo':this.idmodulomain
                     }).then((response)=>{
