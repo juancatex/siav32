@@ -806,7 +806,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/cobranzaascii','ParPrestamosPlanController@cobranza_ascii');
         Route::get('/get_cobranza_refinanciamiento','ParPrestamosPlanController@get_cobranza_refinanciamiento');
         Route::get('/getSendedAscii','ParPrestamosPlanController@getSendedAscii'); 
-        Route::get('/getSendedAscii','ParPrestamosPlanController@getSendedAscii'); 
         Route::put ('/delete_planpagos','ParPrestamosPlanController@delete_planpagos');
         
         Route::get('/getlote/getstatus','ParPrestamosLoteController@get_lote_id');
