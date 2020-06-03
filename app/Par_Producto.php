@@ -28,6 +28,7 @@ class Par_Producto extends Model
     ,'cobranza_perfil_acreedor'
     ,'cobranza_perfil_daro'
     ,'perfil_cambio_estado'
+    ,'perfil_cambio_estado_mora'
     ,'serializedmap'
     ,'fecharegistro'];
   
