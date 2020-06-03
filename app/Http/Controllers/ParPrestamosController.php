@@ -938,7 +938,7 @@ public function get_status_reg(Request $request)
         //     echo $abc.'='.eval("return ".$abc.";").'    ';
         // }
     
-        $productos_array = array();
+     /*   $productos_array = array();
         $productos=DB::select('select idproducto from par__productos where activo=1'); 
         foreach($productos as $valor){
          $formulascobranza = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
@@ -974,7 +974,10 @@ public function get_status_reg(Request $request)
         ->where('par__productos__perfilcuentas.idproducto','=',$producto)
         ->where('par__productos__perfilcuentas.idperfilcuentamaestro','=',$idperfil)
         ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
-        ->get()->toArray();
+        ->get()->toArray();*/
+
+        return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
+        and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($request->id)))[0]->ca_an; 
     
     }
      

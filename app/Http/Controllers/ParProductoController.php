@@ -180,6 +180,7 @@ class ParProductoController extends Controller
             ,'par__productos.cobranza_perfil_ascii'
             ,'par__productos.cobranza_perfil_acreedor'
             ,'par__productos.perfil_cambio_estado'
+            ,'par__productos.perfil_cambio_estado_mora'
             ,'par__productos.cobranza_perfil_daro')
             ->orderBy('idproducto', 'asc')->paginate(10);
         }
@@ -199,6 +200,7 @@ class ParProductoController extends Controller
             ,'par__productos.cobranza_perfil_ascii'
             ,'par__productos.cobranza_perfil_acreedor'
             ,'par__productos.perfil_cambio_estado'
+            ,'par__productos.perfil_cambio_estado_mora'
             ,'par__productos.cobranza_perfil_daro')
             ->where($criterio, 'like', '%'. $buscar . '%')->orderBy('idproducto', 'asc')->paginate(10);
         }
@@ -273,6 +275,7 @@ class ParProductoController extends Controller
         $producto->cobranza_perfil_acreedor = $request->cobranza_perfil_acreedor; 
         $producto->cobranza_perfil_daro = $request->cobranza_perfil_daro; 
         $producto->perfil_cambio_estado = $request->perfil_cambio_estado; 
+        $producto->perfil_cambio_estado_mora = $request->perfil_cambio_estado_mora; 
         $producto->serializedmap = '[]';
         $producto->fecharegistro = $fecha; 
         $producto->save();  
@@ -340,6 +343,7 @@ class ParProductoController extends Controller
         $producto->cobranza_perfil_acreedor = $request->cobranza_perfil_acreedor; 
         $producto->cobranza_perfil_daro = $request->cobranza_perfil_daro;
         $producto->perfil_cambio_estado = $request->perfil_cambio_estado;
+        $producto->perfil_cambio_estado_mora = $request->perfil_cambio_estado_mora;
         $producto->serializedmap = '[]';  
         $producto->save();
     }

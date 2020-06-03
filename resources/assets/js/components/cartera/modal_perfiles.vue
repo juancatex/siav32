@@ -24,7 +24,8 @@
                                     <button v-if="data_producto_main.cobranza_perfil_ascii!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_ascii)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_ascii)">Perfil de Cobranza ASCII</button>
                                     <button v-if="data_producto_main.cobranza_perfil_acreedor!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_acreedor)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_acreedor)">Perfil de Cobranza Acreedor</button>
                                     <button v-if="data_producto_main.cobranza_perfil_daro!=0" type="button" :class="validateperfil(data_producto_main.cobranza_perfil_daro)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.cobranza_perfil_daro)">Perfil de Cobranza Daaro</button>
-                                    <button v-if="data_producto_main.perfil_cambio_estado!=0" type="button" :class="validateperfil(data_producto_main.perfil_cambio_estado)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.perfil_cambio_estado)">Perfil de Cambio de Estado (Vigente/Mora)</button>
+                                    <button v-if="data_producto_main.perfil_cambio_estado!=0" type="button" :class="validateperfil(data_producto_main.perfil_cambio_estado)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.perfil_cambio_estado)">Perfil de Cambio de Estado (Vigente a Vencido)</button>
+                                    <button v-if="data_producto_main.perfil_cambio_estado_mora!=0" type="button" :class="validateperfil(data_producto_main.perfil_cambio_estado_mora)?'btn-success':'btn-primary'" class="botonperfilespecial btn  btn-sm btn-block" @click="set_perfil(data_producto_main,data_producto_main.perfil_cambio_estado_mora)">Perfil de Cambio de Estado (Vencido a Vigente)</button>
                                      
                             </div>
                         </div>
@@ -83,6 +84,7 @@
                           ((this.data_producto_main.cobranza_perfil_ascii != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_ascii) : true) &&
                           ((this.data_producto_main.cobranza_perfil_acreedor != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_acreedor) : true) &&
                           ((this.data_producto_main.perfil_cambio_estado != 0) ? this.mapDataGeneral.has(this.data_producto_main.perfil_cambio_estado) : true) &&
+                          ((this.data_producto_main.perfil_cambio_estado_mora != 0) ? this.mapDataGeneral.has(this.data_producto_main.perfil_cambio_estado_mora) : true) &&
                           ((this.data_producto_main.cobranza_perfil_daro != 0) ? this.mapDataGeneral.has(this.data_producto_main.cobranza_perfil_daro) : true));
                 }
           },

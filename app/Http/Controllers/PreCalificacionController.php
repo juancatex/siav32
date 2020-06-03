@@ -103,7 +103,7 @@ class PreCalificacionController extends Controller
 
     public function pre_listasocio(Request $request)
     {  
-      if (!$request->ajax()) return redirect('/');
+      //if (!$request->ajax()) return redirect('/');
 
         
        $buscararray = array();  

@@ -197,43 +197,30 @@ class ParPrestamosPlanController extends Controller
             $idmaestro = 0;
             $arrayDetalle = array();
             $cargoscobranza = array();
+            $cobrados_plans = array();
             $debe=0;
             $haber=0;
 
             foreach ($valorproducto as  $val){ 
                 if($val['estatus']==1){ 
-                           
+                      $idmaestro=$val['cobranza_perfil_ascii'];
                       $perfilcobranza =$this->getperfil($val['idproducto'],$val['cobranza_perfil_ascii']); 
                       
                       $total_cuotas = $val['plazo'];   
                       $cuota =$val['cuota'];  
                       $cuotaf =$val['cut'];  
                       $capital = $val['am'];  
-                      $intereses = $val['inn']; 
-                      $interes_diferido =$val['indi'];
+                      $intereses = $val['inn'];  
                     
-                      $sumacargos=0;
-
-                      for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
-
-                            foreach($perfilcobranza as $perfil){ 
-                                    $abc="$".$perfil['valor_abc'];
-                                    eval($abc."=".$perfil['formulaphp'].";");
-                                    if($perfil['iscargo']==1){ 
-                                        $cargoin=eval("return round(".$abc.",2);");
-                                        $sumacargos+=$cargoin;  
-                                        array_push($cargoscobranza,['idperfilcuentadetalle'=>$perfil['idperfilcuentadetalle'],'cargo'=>$cargoin,'rev'=>(strpos($perfil['formulaphp'],'$total_cuotas')>0)?1:0]);
-                                    }
-                            }
-  
-                    if($val['inn']>($val['cut']-$val['indi']-$sumacargos)){
+                       
+                    if($val['inn']>($val['cut']-$val['indi']-$val['car'])){
                                  $capital = 0;
-                                 $interesnew=$val['cut']-$val['indi']-$sumacargos;
+                                 $interesnew=$val['cut']-$val['indi']-$val['car'];
+                                 $intereses = $interesnew;
                                  $intermedio=round(($val['inn']/$val['di']),2);  
                                  $newdias=round($interesnew/$intermedio); 
 
-                                $nuevocobro=new Par_prestamos_plan();
-                                
+                                $nuevocobro=new Par_prestamos_plan(); 
                                 $nuevocobro->file=$val['file'];
                                 $nuevocobro->send_ascii=$val['send_ascii'];
                                 $nuevocobro->cuota=$val['cuota'];
@@ -243,39 +230,36 @@ class ParPrestamosPlanController extends Controller
                                 $nuevocobro->indi=$val['indi'];
                                 $nuevocobro->fp=$val['fp'];
                                 $nuevocobro->pe=$val['pe'];
-                                $nuevocobro->idprestamo=$val['idprestamo'];
-
+                                $nuevocobro->idprestamo=$val['idprestamo']; 
                                 $nuevocobro->in=$interesnew;
                                 $nuevocobro->am=$capital;
-                                $nuevocobro->di=$newdias;
-                                $nuevocobro->car=$sumacargos;
+                                $nuevocobro->di=$newdias; 
                                 $nuevocobro->fecharegistro=$fecha;
-                                $nuevocobro->tipo=2;
-                                $nuevocobro->idestado=12;
-                                // $nuevocobro->idasiento=$respuesta_perfil;
-                                // $nuevocobro->idtransaccionC='C-ASCII-'.$respuesta_perfil;
-                                $nuevocobro->numDocC='ASCII';
-                                $nuevocobro->glosa='Cobranza por ascii';
-                                $nuevocobro->fechaCobranza=$fecha;
-                                $nuevocobro->importe=$nuevocobro->send_ascii;
+                                $nuevocobro->tipo=2; 
                                 $nuevocobro->idusuario=Auth::id();
-                                $nuevocobro->save();  
+                                $nuevocobro->save(); 
+                                array_push($cobrados_plans,$nuevocobro->idplan); 
 
 
-                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]);  
-                                foreach($valorinsert[2] as $akey=>$avalue) { $planpago->$akey=$avalue; } 
+                                $planpago = Par_prestamos_plan::findOrFail($val['idplan']);  
+                                $planpago->di=(intval($val['di']-$newdias)>0)?intval($val['di']-$newdias):1;
+                                $planpago->in=round(($val['inn']-$interesnew),2); 
+                                $planpago->indi=0;
+                                $planpago->send_ascii=0;
+                                $planpago->tipocambio=0; 
+                                $planpago->file='';
                                 $planpago->save();  
 
-                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]);  
-                                $planpago->am=(($planpago->cut-$planpago->car-$planpago->indi-$planpago->in)>0)?($planpago->cut-$planpago->car-$planpago->indi-$planpago->in):0;
+                                
+                                $planpago = Par_prestamos_plan::findOrFail($val['idplan']);  
+                                $auxliarcapital=round($planpago->cut-$planpago->car-$planpago->indi-$planpago->in);
+                                $planpago->am=($auxliarcapital>0)?$auxliarcapital:0; 
                                 $planpago->save();  
-                                $this->recalcularPrestamos($valorinsert[3]);
-                    }else{
-                        $capital = $val['cut']-$val['indi']-$sumacargos-$val['inn'];
-
+                                $this->recalcularPrestamos($val['idprestamo']);
+                    }else{ 
+                        array_push($cobrados_plans,$val['idplan']);  
                     }
-                     
-                     
+                      
                             for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
                                     
                                                         foreach($perfilcobranza as $perfil){ 
@@ -331,103 +315,55 @@ class ParPrestamosPlanController extends Controller
 
                                                                 }
                                                         }
-                        
-                       
-                       
-                       
-                       
-                        
-                        
-
-
-
-                      
-                     
-                     
-/*
-
-
-                            foreach ($val['perfil'] as $valin){ 
-                                $idmaestro=$valin['idmaestro'];
-                                array_push($arrayDetalle,array('idcuenta'=>$valin['id'],
-                                'subcuenta'=>$valin['num'], 
-                                'documento'=>'Automatico', 
-                                'moneda'=>'bs',	 
-                                'monto'=>$valin['value']
-                                ));  
+                            if($val['idestado']==3){
+                                Par_Prestamos::where('idprestamo','=',$val['idprestamo'])
+                                ->update(['idestado' => 2]); 
+                               $monto = $this->getMontoSaldoTotal($val['idprestamo']);
+                                //acumular el monto del capital del prestamo que esta ntrando a mora para generar su asiento contable
                             } 
-                           $asientomaestro= new AsientoMaestroClass();
-                            $respuesta_perfil=$asientomaestro->AsientosMaestroArray($idmaestro,
-                            '', 
-                            'ASCII',  
-                            $request->obs, 
-                            $arrayDetalle,
-                            $request->idmodulo,$fecha,''); 
-
-                            foreach ($val['plans'] as $id){
-                            $pruebamodifi=Par_prestamos_plan::findOrFail($id) ;
-                            $pruebamodifi->idestado=12;
-                            $pruebamodifi->idasiento=$respuesta_perfil;
-                            $pruebamodifi->idtransaccionC='C-ASCII-'.$respuesta_perfil;
-                            $pruebamodifi->numDocC='ASCII';
-                            $pruebamodifi->glosa='Cobranza por ascii';
-                            $pruebamodifi->fechaCobranza=$fecha; 
-                            $pruebamodifi->importe=$pruebamodifi->send_ascii;
-                            $pruebamodifi->idusuario=Auth::id();
-                            $pruebamodifi->save();
-                            } 
-                            
-                           
-                            foreach ($val['nuevos'] as $valorinsert){ 
-                                $nuevocobro=new Par_prestamos_plan();
-                                foreach($valorinsert[0] as $plannombre=>$planvalue) { $nuevocobro->$plannombre=$planvalue; }
-                                $nuevocobro->fecharegistro=$fecha;
-                                $nuevocobro->tipo=2;
-                                $nuevocobro->idestado=12;
-                                $nuevocobro->idasiento=$respuesta_perfil;
-                                $nuevocobro->idtransaccionC='C-ASCII-'.$respuesta_perfil;
-                                $nuevocobro->numDocC='ASCII';
-                                $nuevocobro->glosa='Cobranza por ascii';
-                                $nuevocobro->fechaCobranza=$fecha;
-                                $nuevocobro->importe=$nuevocobro->send_ascii;
-                                $nuevocobro->idusuario=Auth::id();
-                                $nuevocobro->save();  
-                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]); 
-                                foreach($valorinsert[2] as $akey=>$avalue) { $planpago->$akey=$avalue; } 
-                                $planpago->save();  
-                                $planpago = Par_prestamos_plan::findOrFail($valorinsert[1]);  
-                                $planpago->am=(($planpago->cut-$planpago->car-$planpago->indi-$planpago->in)>0)?($planpago->cut-$planpago->car-$planpago->indi-$planpago->in):0;
-                                $planpago->save();  
-                                $this->recalcularPrestamos($valorinsert[3]);
-
-                            }
-  */
+                            Socio::where('idsocio','=',$val['idsocio'])
+                            ->update(['idestprestamos' => 0]);
                     }else{
+                        $this->recalcularPrestamos($val['idprestamo']);
+                        
+                        if($val['idestado']==2){
+                            Par_Prestamos::where('idprestamo','=',$val['idprestamo'])
+                            ->update(['idestado' => 3]); 
 
+                            //acumular el monto del capital del prestamo que esta ntrando a mora para generar su asiento contable
+                        } 
+                        Socio::where('idsocio','=',$val['idsocio'])
+                        ->update(['idestprestamos' => 1]); 
                     }
                 }
-                print_r($arrayDetalle);
+                if($debe!=$haber){ 
+                    throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable
+                     al momento de realizar la cobranza por ascii, comuniquese con el administrador del sistema.
+                     (idproducto = ".$idproducto.")"); 
+                } 
+                $asientomaestro= new AsientoMaestroClass();
+                $respuesta_perfil=$asientomaestro->AsientosMaestroArray($idmaestro,
+                '', 
+                'ASCII',  
+                $request->obs, 
+                $arrayDetalle,
+                $request->idmodulo,$fecha,''); 
 
-                echo $debe.' = '.$haber;
-
+                foreach ($cobrados_plans as $id){
+                    $pruebamodifi=Par_prestamos_plan::findOrFail($id) ;
+                    $pruebamodifi->idestado=12;
+                    $pruebamodifi->idasiento=$respuesta_perfil;
+                    $pruebamodifi->idtransaccionC='C-ASCII-'.$respuesta_perfil;
+                    $pruebamodifi->numDocC='ASCII';
+                    $pruebamodifi->glosa='Cobranza por ascii';
+                    $pruebamodifi->fechaCobranza=$fecha; 
+                    $pruebamodifi->importe=$pruebamodifi->send_ascii;
+                    $pruebamodifi->idusuario=Auth::id();
+                    $pruebamodifi->save();
+                    } 
+                
     }
-
-           /*     foreach ($request->moras as $valuemoras){
-                   Par_Prestamos::where('idprestamo','=',$valuemoras['idprestamo'])
-                    ->update(['idestado' => 3]);
-                    Socio::where('idsocio','=',$valuemoras['idsocio'])
-                    ->update(['idestprestamos' => 1]);  
-                    $this->mora($valuemoras['idprestamo']); 
-                }
-
-                foreach ($request->acreedores as $valueacreedores){
-                    
-                    
-                }
-
-
-*/
-
+ 
                 DB::commit();
                 return ['status'=>1];
             }
@@ -458,13 +394,18 @@ class ParPrestamosPlanController extends Controller
          ->get()->toArray();
      }
 
+     function getMontoSaldoTotal($id){
+        return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
+        and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($id)))[0]->ca_an; 
+     }
      function recalcularPrestamos($prestamo)
      {  
          $total=DB::select("select * from par__prestamos__plans where idprestamo=? and (idestado=2 or idestado=10) ORDER by pe asc", array($prestamo));
-         $tasain=DB::select("select p.tasa,pp.plazo,p.idproducto from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($prestamo));
+         $tasain=DB::select("select p.tasa,pp.plazo,p.idproducto,p.cobranza_perfil_ascii from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($prestamo));
          $tasa=$tasain[0]->tasa;
          $plazo_prestamo=$tasain[0]->plazo;
          $idproducto=$tasain[0]->idproducto;
+         $idperfilcobranzaascii=$tasain[0]->cobranza_perfil_ascii;
          $tem =($tasa/12)/100; 
          $punterofechas=0;
          $sumatotal=0;
@@ -476,55 +417,75 @@ class ParPrestamosPlanController extends Controller
                  $punterofechas++;
               
                      if($valor->idestado==10){
-                         $fp_base=$valor->fp;   
-                         $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
-                         
-                         $totaldias=($valor->di);
-                         $interes=round(($valor->ca_an*$tem*$totaldias)/30,2);
-                         $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$interes,2);
-                         $amortiza=($auz_am>0)?$auz_am:0;
-                         $sumatotal=round(($valor->ca_an-$amortiza),2);
-     
-                         array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$amortiza,'di'=>$totaldias,'in'=>$interes,'ca'=>$sumatotal,'tipo'=>2,'idestado'=>2)));
-                         
+                        if($valor->pe==$plazo_prestamo){
+                            $fp_base=$valor->fp; 
+                            $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
+                            $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
+                            
+                            $sumatotal=$valor->ca_an; 
+                            $aux=$sumatotal;
+                            $totaldias=intval($valor->di+$dias[0]->dias);
+                            $interes=round(($aux*$tem*$totaldias)/30,2); 
+                            $cuota=round($aux+$interes,2);
+
+
+                            $total_cuotas = $plazo_prestamo;    
+                            $cuotaf =round($cuota+$valor->indi+$valor->car,2);  
+                            $capital = $aux;  
+                            $intereses = $interes; 
+        
+        //////////////////////////////////////////////////////////////////////////// 
+                               $perfilcobranza =$this->getperfil($idproducto,$idperfilcobranzaascii); 
+                               for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                                $cargoFinal=0;
+                                       foreach($perfilcobranza as $perfil){ 
+                                               $abc="$".$perfil['valor_abc'];
+                                               eval($abc."=".$perfil['formulaphp'].";");
+                                               if($perfil['iscargo']==1){ 
+                                                   $cargoin=eval("return round(".$abc.",2);");
+                                                   $cargoFinal+=$cargoin;  
+                                               }
+                                       } 
+        ////////////////////////////////////////////////////////////////////////////
+        
+                            array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$aux,'di'=>$totaldias,'in'=>$interes,
+                            'car'=>$cargoFinal,'ca'=>0,'cut'=>round($cuota+$valor->indi+$cargoFinal,2),'ca_an'=>$aux,'cuota'=>$cuota,'tipo'=>2,'idestado'=>2)));
+                              
+                        }else { 
+                            $fp_base=$valor->fp;   
+                            $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
+                            $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
+                            
+                            $totaldias=intval($valor->di+$dias[0]->dias);
+                            $interes=round(($valor->ca_an*$tem*$totaldias)/30,2);
+                            $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$interes,2);
+                            $amortiza=($auz_am>0)?$auz_am:0;
+                            $sumatotal=round(($valor->ca_an-$amortiza),2); 
+                            array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$amortiza,'di'=>$totaldias,'in'=>$interes,'ca'=>$sumatotal,'tipo'=>2,'idestado'=>2)));
+                        }
                      }elseif($valor->pe==$plazo_prestamo){
                          $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
                          $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
                          $aux=$sumatotal;
                          $interes=round(($aux*$tem*$dias[0]->dias)/30,2); 
-                        
-     
-     //////////////////////////////////////////////////////////////////////////// 
-                         Par_prestamos_plan_cargo::where('idplan','=',$valor->idplan)->delete(); 
-                         $perfilcobranza = Par_productos_perfilcuenta::select( 'idperfilcuentadetalle','formula')
-                         ->where('iscargo','=','1')
-                         ->where('activo','=','1')
-                         ->where('idproducto','=',$idproducto)
-                         ->get()->toArray();
-                         $cargoFinal=0;
                          $cuota=round($aux+$interes,2);
-                         foreach ($perfilcobranza as  $perfil){  
-                             $formula= $perfil['formula'];
-                             $rev=0;
-                             if(strpos($formula,'total_cuotas')>0){
-                               $formula = str_replace("total_cuotas", "\$plazo_prestamo", $formula);
-                               $rev=1;
-                             }else{
-                               $formula = str_replace("operador", "", $formula);
-                               $formula = str_replace("cuota", "\$cuota", $formula);
-                             }
-                           
-                           $formula=eval("return round($formula,2);");
-     
-                           $cargosadicionales = new Par_prestamos_plan_cargo();  
-                           $cargosadicionales->idplan=$valor->idplan;
-                           $cargosadicionales->idperfilcuentadetalle=$perfil['idperfilcuentadetalle'];
-                           $cargosadicionales->cargo=$formula;    
-                           $cargosadicionales->rev=$rev;
-                           $cargosadicionales->save(); 
-                           $cargoFinal+=$formula;
-                          }
-                          
+                        
+                         $total_cuotas = $plazo_prestamo;    
+                         $cuotaf =round($cuota+$valor->indi+$valor->car,2);  
+                         $capital = $aux;  
+                         $intereses = $interes;
+     //////////////////////////////////////////////////////////////////////////// 
+                            $perfilcobranza =$this->getperfil($idproducto,$idperfilcobranzaascii); 
+                            for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                             $cargoFinal=0;
+                                    foreach($perfilcobranza as $perfil){ 
+                                            $abc="$".$perfil['valor_abc'];
+                                            eval($abc."=".$perfil['formulaphp'].";");
+                                            if($perfil['iscargo']==1){ 
+                                                $cargoin=eval("return round(".$abc.",2);");
+                                                $cargoFinal+=$cargoin;  
+                                            }
+                                    } 
      ////////////////////////////////////////////////////////////////////////////
      
                          array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$aux,'di'=>$dias[0]->dias,'in'=>$interes,
@@ -564,13 +525,14 @@ class ParPrestamosPlanController extends Controller
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 ////////////////////////////////////////////
-public function mora($prestamo)
+public function recalcularPrestamos_sinmora($prestamo)
 {  
     $total=DB::select("select * from par__prestamos__plans where idprestamo=? and (idestado=2 or idestado=10) ORDER by pe asc", array($prestamo));
-    $tasain=DB::select("select p.tasa,pp.plazo,p.idproducto from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($prestamo));
+    $tasain=DB::select("select p.tasa,pp.plazo,p.idproducto,p.cobranza_perfil_ascii from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($prestamo));
     $tasa=$tasain[0]->tasa;
     $plazo_prestamo=$tasain[0]->plazo;
     $idproducto=$tasain[0]->idproducto;
+    $idperfilcobranzaascii=$tasain[0]->cobranza_perfil_ascii;
     $tem =($tasa/12)/100; 
     $punterofechas=0;
     $sumatotal=0;
@@ -582,103 +544,47 @@ public function mora($prestamo)
             $punterofechas++;
          
                 if($valor->idestado==10){
-                    if($valor->pe==$plazo_prestamo){
-                        $fp_base=$valor->fp;  
-                        $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
-                        $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
-                          
-                       $totaldias=($valor->di+$dias[0]->dias); 
-                       $aux=$valor->ca_an;
-                       $interes=round(($aux*$tem*$totaldias)/30,2);  
-    //////////////////////////////////////////////////////////////////////////// 
-                        Par_prestamos_plan_cargo::where('idplan','=',$valor->idplan)->delete(); 
-                        $perfilcobranza = Par_productos_perfilcuenta::select( 'idperfilcuentadetalle','formula')
-                        ->where('iscargo','=','1')
-                        ->where('activo','=','1')
-                        ->where('idproducto','=',$idproducto)
-                        ->get()->toArray();
-                        $cargoFinal=0;
-                        $cuota=round($aux+$interes,2);
-                        foreach ($perfilcobranza as  $perfil){  
-                            $formula= $perfil['formula'];
-                            $rev=0;
-                            if(strpos($formula,'total_cuotas')>0){
-                              $formula = str_replace("total_cuotas", "\$plazo_prestamo", $formula);
-                              $rev=1;
-                            }else{
-                              $formula = str_replace("operador", "", $formula);
-                              $formula = str_replace("cuota", "\$cuota", $formula);
-                            }
-                          
-                          $formula=eval("return round($formula,2);");
+                   if($valor->pe==$plazo_prestamo){
+                        
+                       $aux=$valor->ca_an; 
+                       $totaldias=intval($valor->di);
+                       $interes=round(($aux*$tem*$totaldias)/30,2); 
+                       $cuota=round($aux+$interes,2);
     
-                          $cargosadicionales = new Par_prestamos_plan_cargo();  
-                          $cargosadicionales->idplan=$valor->idplan;
-                          $cargosadicionales->idperfilcuentadetalle=$perfil['idperfilcuentadetalle'];
-                          $cargosadicionales->cargo=$formula;    
-                          $cargosadicionales->rev=$rev;
-                          $cargosadicionales->save(); 
-                          $cargoFinal+=$formula;
-                         }
+                       array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('am'=>$aux,'di'=>$totaldias,'in'=>$interes,
+                       'car'=>$cargoFinal,'ca'=>0,'cut'=>round($cuota+$valor->indi+$cargoFinal,2),'ca_an'=>$aux,'cuota'=>$cuota,'tipo'=>2,'idestado'=>2)));
                          
-    ////////////////////////////////////////////////////////////////////////////
-    
-                        array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$aux,'di'=>$totaldias,'in'=>$interes,
-                        'car'=>$cargoFinal,'ca'=>0,'cut'=>round($cuota+$valor->indi+$cargoFinal,2),'ca_an'=>$aux,'cuota'=>$cuota,'tipo'=>2,'idestado'=>2)));    
+                   }else { 
+                       $fp_base=$valor->fp;   
+                       $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
+                       $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
                        
-                    
-                    }else{
-                    $fp_base=$valor->fp;   
-                    $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
-                    $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
- 
-                    $totaldias=($valor->di+$dias[0]->dias);
-                    $interes=round(($valor->ca_an*$tem*$totaldias)/30,2);
-                    $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$interes,2);
-                    $amortiza=($auz_am>0)?$auz_am:0;
-                    $sumatotal=round(($valor->ca_an-$amortiza),2);
-
-                    array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$amortiza,'di'=>$totaldias,'in'=>$interes,'ca'=>$sumatotal,'tipo'=>2,'idestado'=>2)));
-                
-                    }
+                       $totaldias=intval($valor->di+$dias[0]->dias);
+                       $interes=round(($valor->ca_an*$tem*$totaldias)/30,2);
+                       $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$interes,2);
+                       $amortiza=($auz_am>0)?$auz_am:0;
+                       $sumatotal=round(($valor->ca_an-$amortiza),2); 
+                       array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$amortiza,'di'=>$totaldias,'in'=>$interes,'ca'=>$sumatotal,'tipo'=>2,'idestado'=>2)));
+                   }
                 }elseif($valor->pe==$plazo_prestamo){
                     $fechain=DB::select("SELECT LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH) as fecha", array($fp_base,$punterofechas));
                     $dias=DB::select("SELECT DAY(LAST_DAY((STR_TO_DATE(?,'%Y-%m-%d')) + INTERVAL ? MONTH)) as dias", array($fp_base,$punterofechas));
                     $aux=$sumatotal;
                     $interes=round(($aux*$tem*$dias[0]->dias)/30,2); 
-                   
+                    $cuota=round($aux+$interes,2);
 
 //////////////////////////////////////////////////////////////////////////// 
-                    Par_prestamos_plan_cargo::where('idplan','=',$valor->idplan)->delete(); 
-                    $perfilcobranza = Par_productos_perfilcuenta::select( 'idperfilcuentadetalle','formula')
-                    ->where('iscargo','=','1')
-                    ->where('activo','=','1')
-                    ->where('idproducto','=',$idproducto)
-                    ->get()->toArray();
-                    $cargoFinal=0;
-                    $cuota=round($aux+$interes,2);
-                    foreach ($perfilcobranza as  $perfil){  
-                        $formula= $perfil['formula'];
-                        $rev=0;
-                        if(strpos($formula,'total_cuotas')>0){
-                          $formula = str_replace("total_cuotas", "\$plazo_prestamo", $formula);
-                          $rev=1;
-                        }else{
-                          $formula = str_replace("operador", "", $formula);
-                          $formula = str_replace("cuota", "\$cuota", $formula);
-                        }
-                      
-                      $formula=eval("return round($formula,2);");
-
-                      $cargosadicionales = new Par_prestamos_plan_cargo();  
-                      $cargosadicionales->idplan=$valor->idplan;
-                      $cargosadicionales->idperfilcuentadetalle=$perfil['idperfilcuentadetalle'];
-                      $cargosadicionales->cargo=$formula;    
-                      $cargosadicionales->rev=$rev;
-                      $cargosadicionales->save(); 
-                      $cargoFinal+=$formula;
-                     }
-                     
+                       $perfilcobranza =$this->getperfil($idproducto,$idperfilcobranzaascii); 
+                       for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                        $cargoFinal=0;
+                               foreach($perfilcobranza as $perfil){ 
+                                       $abc="$".$perfil['valor_abc'];
+                                       eval($abc."=".$perfil['formulaphp'].";");
+                                       if($perfil['iscargo']==1){ 
+                                           $cargoin=eval("return round(".$abc.",2);");
+                                           $cargoFinal+=$cargoin;  
+                                       }
+                               } 
 ////////////////////////////////////////////////////////////////////////////
 
                     array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('fp'=>$fechain[0]->fecha,'am'=>$aux,'di'=>$dias[0]->dias,'in'=>$interes,
@@ -707,7 +613,6 @@ public function mora($prestamo)
                 foreach($valor["value"] as $akey=>$avalue) { $planpago->$akey=$avalue; }
                 $planpago->save(); 
            }  
- 
             
 } 
 ////////////////////////////////////////////
@@ -767,7 +672,8 @@ public function mora($prestamo)
         plan.ca_an,
         plan.send_ascii,
         plan.file,
-        plan.di, 
+        plan.di,
+        pre.idestado, 
         s.numpapeleta,pre.plazo,mo.tipocambio,s.idsocio 
      from socios s,par__prestamos pre,par__prestamos__plans plan ,par__productos pro,par__monedas mo 
      where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pre.idprestamo=plan.idprestamo and plan.idestado=10 and pre.idsocio=s.idsocio and (pre.idestado between 2 and 3) 

@@ -434,7 +434,7 @@
 
                              <div class="form-group row">
                                     <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
-                                    for="text-input">Perfil Cambio de <br><b>Estado</b> :</label>
+                                    for="text-input">Perfil Cambio de Estado<br><b>De Vigente a Vencido</b> :</label>
                                     <div class="col-md-9">   
                                         <div style="display:flex"> 
                                             <Combo v-if="modal==1" 
@@ -445,6 +445,32 @@
                                                 label="nomperfil" 
                                                 :options="arrayPerfiles"
                                                 v-model="idPerfilCambio_estado"  
+                                                placeholder="Seleccione perfil" 
+                                                :reduce="json => json.idperfilcuentamaestro" 
+                                                :searchable="false"
+                                                :clearable="false"   
+                                                ><span slot="no-options">No existen Datos</span>
+                                                <template slot="option" slot-scope="option">
+                                                    {{ option.nomperfil }}
+                                                </template>
+                                                </Combo> 
+                                        </div>
+                                        <span class="text-error">{{ errors.first('Perfil Cambio Estado') }}</span> 
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                    <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" 
+                                    for="text-input">Perfil Cambio de Estado<br><b>De Vencido a Vigente</b> :</label>
+                                    <div class="col-md-9">   
+                                        <div style="display:flex"> 
+                                            <Combo v-if="modal==1" 
+                                                style="width: 100%" 
+                                                :class="{'error': errors.has('Perfil Cambio Estado')}"    
+                                                v-validate.initial="'required'"
+                                                name="Perfil Cambio Estado" 
+                                                label="nomperfil" 
+                                                :options="arrayPerfiles"
+                                                v-model="idPerfilCambio_estado_mora"  
                                                 placeholder="Seleccione perfil" 
                                                 :reduce="json => json.idperfilcuentamaestro" 
                                                 :searchable="false"
@@ -695,6 +721,7 @@
                 idPerfilCobranza_acreedor:'',
                 idPerfilCobranza_daro:'',
                 idPerfilCambio_estado:'',
+                idPerfilCambio_estado_mora:'',
                 moneda :'',
                 tasa:0,
                 garantes:0,  
@@ -1026,7 +1053,8 @@
                     'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
                     'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
                     'cobranza_perfil_daro':this.idPerfilCobranza_daro,                   
-                    'perfil_cambio_estado':this.idPerfilCambio_estado                   
+                    'perfil_cambio_estado':this.idPerfilCambio_estado,                   
+                    'perfil_cambio_estado_mora':this.idPerfilCambio_estado_mora                   
                     
                 }).then(function (response) {
                    me.cerrarModal('modalproducto'); 
@@ -1080,7 +1108,8 @@
                         'cobranza_perfil_ascii':this.idPerfilCobranza_ascii,                   
                         'cobranza_perfil_acreedor':this.idPerfilCobranza_acreedor,                   
                         'cobranza_perfil_daro':this.idPerfilCobranza_daro,  
-                        'perfil_cambio_estado':this.idPerfilCambio_estado  
+                        'perfil_cambio_estado':this.idPerfilCambio_estado,  
+                        'perfil_cambio_estado_mora':this.idPerfilCambio_estado_mora  
                     }).then(function (response) {
                     me.cerrarModal('modalproducto'); 
                         swal("¡Se actualizo los datos correctamente!", "", "success").then((result) => {
@@ -1213,6 +1242,7 @@
                                 this.idPerfilCobranza_acreedor='';                   
                                 this.idPerfilCobranza_daro='';  
                                 this.idPerfilCambio_estado='';  
+                                this.idPerfilCambio_estado_mora='';  
                                 this.tipoAccion = 1;
                                 this.max_prestamos= 0;
                                 this.lote= 0;
@@ -1257,6 +1287,7 @@
                                 this.idPerfilCobranza_acreedor= data['cobranza_perfil_acreedor'];                    
                                 this.idPerfilCobranza_daro= data['cobranza_perfil_daro']; 
                                 this.idPerfilCambio_estado= data['perfil_cambio_estado']; 
+                                this.idPerfilCambio_estado_mora= data['perfil_cambio_estado_mora']; 
                                 
                                 
                                 break;

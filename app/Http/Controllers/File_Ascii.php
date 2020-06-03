@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Par_productos_perfilcuenta;
 use App\Par_prestamos_plan;
 class File_Ascii extends Controller
 {
@@ -39,7 +40,7 @@ class File_Ascii extends Controller
             try {
                 ini_set('memory_limit', '1024M');
                 ini_set ('max_execution_time', 3200);
-                $prestamos= DB::select("select round(pl.cut*mo.tipocambio,2) as cuota,p.idproducto,p.no_prestamo,pl.fp,mo.tipocambio,pl.cut,pl.idplan,pl.idprestamo, so.numpapeleta ,so.idfuerza,f.nomfuerza,g.nomgrado,so.apaterno,so.amaterno,so.nombre,concat('1') as estadoascii,
+                $prestamos= DB::select("select round(pl.cut*mo.tipocambio,2) as cuota,pl.cut,pl.in,pl.indi,pl.cuota as cuota2,pl.am,p.plazo,p.idproducto,pro.cobranza_perfil_ascii,p.no_prestamo,pl.fp,mo.tipocambio,pl.cut,pl.idplan,pl.idprestamo, so.numpapeleta ,so.idfuerza,f.nomfuerza,g.nomgrado,so.apaterno,so.amaterno,so.nombre,concat('1') as estadoascii,
                 concat('B') as monedaascii,concat('1') as plazoascii,concat('124') as codmindef,concat('00') as cerosascii,concat('1') as afirmacionascii
                 from socios so, par__prestamos p, par__prestamos__plans pl, par__productos pro, par__monedas mo, par_grados g, par_fuerzas f
                 where pro.moneda=mo.idmoneda
@@ -83,6 +84,51 @@ class File_Ascii extends Controller
                                 $dataprestamo->cerosascii.' '.  
                                 $dataprestamo->afirmacionascii
                                 .'<br>';*/
+
+                                $perfilcobranza =$this->getperfil($dataprestamo->idproducto,$dataprestamo->cobranza_perfil_ascii); 
+                                for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                                    $total_cuotas = $dataprestamo->plazo;   
+                                    $cuota =$dataprestamo->cuota2;  
+                                    $cuotaf =$dataprestamo->cut;  
+                                    $capital = $dataprestamo->am;  
+                                    $intereses = $dataprestamo->in; 
+                                    $interes_diferido =$dataprestamo->indi;
+                                $sumacargos=0;
+                                foreach($perfilcobranza as $perfil){ 
+                                        $abc="$".$perfil['valor_abc'];
+                                        eval($abc."=".$perfil['formulaphp'].";");
+                                        if($perfil['iscargo']==1){ 
+                                            $cargoin=eval("return round(".$abc.",2);");
+                                            $sumacargos+=$cargoin;  
+                                                    $cargosadicionales = new Par_prestamos_plan_cargo();  
+                                                    $cargosadicionales->idplan=$dataprestamo->idplan;
+                                                    $cargosadicionales->idperfilcuentadetalle=$perfil['idperfilcuentadetalle'];
+                                                    $cargosadicionales->cargo=$cargoin;    
+                                                    $cargosadicionales->rev=(strpos($perfil['formulaphp'],'$total_cuotas')>0)?1:0;
+                                                    $cargosadicionales->save(); 
+                                        }
+                                }
+                                
+                                $cuota_final_ok=round($dataprestamo->cut*$dataprestamo->tipocambio,2);
+
+                                $plan = Par_prestamos_plan::findOrFail($dataprestamo->idplan); 
+                                $plan->file=$nameFile;
+                                $plan->idestado=10;
+                                if($plan->pe==$dataprestamo->plazo){
+                                    $plan->cuota=$plan->ca_an+ $plan->in;
+                                    $plan->am=$plan->ca_an;
+                                    $cuotaaux=round($plan->ca_an+ $plan->in+$plan->indi+$sumacargos,2);
+                                    $plan->cut=$cuotaaux;
+                                    $plan->ca=0;
+                                    $cuota_final_ok=round($cuotaaux*$dataprestamo->tipocambio,2);
+                                } 
+                                $plan->send_ascii=$cuota_final_ok; 
+                                $plan->car=$sumacargos;
+                                $plan->tipocambio=$dataprestamo->tipocambio;
+                                $plan->save();
+
+                                
+
                                 $valuelinea=[];
                                 $valuelinea["idfuerza"]=$dataprestamo->idfuerza; 
                                 $valuelinea["fuerza"]=$dataprestamo->nomfuerza; 
@@ -97,7 +143,7 @@ class File_Ascii extends Controller
                                 $valuelinea["monedatipocambio"]=$dataprestamo->tipocambio;  
                                 $valuelinea["estado"]=$dataprestamo->estadoascii;
                                 $valuelinea["moneda"]=$dataprestamo->monedaascii;
-                                $valuelinea["cuota"]=$dataprestamo->cuota;
+                                $valuelinea["cuota"]=$cuota_final_ok;
                                 $valuelinea["cut"]=$dataprestamo->cut;
                                 $valuelinea["plazo"]=$dataprestamo->plazoascii;
                                 $valuelinea["codmindef"]=$dataprestamo->codmindef;
@@ -106,20 +152,15 @@ class File_Ascii extends Controller
                                 $valuelinea["idprestamo"]=$dataprestamo->idprestamo;
                                 $valuelinea["idproducto"]=$dataprestamo->idproducto; 
                                 array_push($arrayPdf,$valuelinea);
-                            
-                                $plan = Par_prestamos_plan::findOrFail($dataprestamo->idplan); 
-                                $plan->send_ascii=$dataprestamo->cuota;
-                                $plan->file=$nameFile;
-                                $plan->idestado=10;
-                                $plan->tipocambio=$dataprestamo->tipocambio;
-                                $plan->save();
-                                
+                             
                                     fwrite($file,$dataprestamo->idfuerza.'*'.$dataprestamo->numpapeleta.'*'.$dataprestamo->codmindef.'*'.$dataprestamo->cerosascii.'*'
-                                    .$dataprestamo->estadoascii.'*'.$dataprestamo->monedaascii.'*'.$dataprestamo->cuota.'*'.$dataprestamo->afirmacionascii."\r\n");
+                                    .$dataprestamo->estadoascii.'*'.$dataprestamo->monedaascii.'*'.$cuota_final_ok.'*'.$dataprestamo->afirmacionascii."\r\n");
                                     fwrite($file2,$dataprestamo->idfuerza.'*'.$dataprestamo->numpapeleta.'*'.$dataprestamo->codmindef.'*'.$dataprestamo->cerosascii.'*'
-                                    .$dataprestamo->estadoascii.'*'.$dataprestamo->monedaascii.'*'.$dataprestamo->cuota.'*'.$dataprestamo->afirmacionascii.'*'
+                                    .$dataprestamo->estadoascii.'*'.$dataprestamo->monedaascii.'*'.$cuota_final_ok.'*'.$dataprestamo->afirmacionascii.'*'
                                     .$dataprestamo->no_prestamo.'*'.$dataprestamo->idprestamo.'*'.$dataprestamo->idplan."\r\n"); 
-                        }  
+                       
+                                    $this->recalcularPrestamos_sinmora($dataprestamo->idprestamo);
+                         }  
                         fclose($file);
                         fclose($file2); 
                         $pdfout=[];
@@ -225,5 +266,87 @@ class File_Ascii extends Controller
         $pow = min($pow, count($units) - 1);  
         return round($bytes, $precision) . ' ' . $units[$pow]; 
     } 
- 
+    function getperfil($producto,$idperfil){ 
+        return Par_productos_perfilcuenta::join('con__perfilcuentadetalles','con__perfilcuentadetalles.idperfilcuentadetalle','=','par__productos__perfilcuentas.idperfilcuentadetalle')
+         ->select('par__productos__perfilcuentas.idperfilcuentamaestro',
+         'par__productos__perfilcuentas.idperfilcuentadetalle',
+         'par__productos__perfilcuentas.valor_abc',
+         'par__productos__perfilcuentas.valor_abc_php',
+         'par__productos__perfilcuentas.formula',
+         'par__productos__perfilcuentas.formulaphp',
+         'con__perfilcuentadetalles.tipocargo',
+         'con__perfilcuentadetalles.idcuenta',
+         'par__productos__perfilcuentas.iscargo')
+         ->where('par__productos__perfilcuentas.activo','=','1')  
+         ->where('par__productos__perfilcuentas.idproducto','=',$producto)
+         ->where('par__productos__perfilcuentas.idperfilcuentamaestro','=',$idperfil)
+         ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
+         ->get()->toArray();
+     }
+     public function recalcularPrestamos_sinmora($prestamo)
+     {  
+        $total=DB::select("select * from par__prestamos__plans where idprestamo=? and (idestado=2 or idestado=10) ORDER by pe asc", array($prestamo));
+        $tasain=DB::select("select p.tasa,pp.plazo,p.idproducto,p.cobranza_perfil_ascii from par__productos p, par__prestamos pp where p.idproducto=pp.idproducto and pp.idprestamo=?", array($prestamo));
+        $tasa=$tasain[0]->tasa;
+        $plazo_prestamo=$tasain[0]->plazo;
+        $idproducto=$tasain[0]->idproducto;
+        $idperfilcobranzaascii=$tasain[0]->cobranza_perfil_ascii;
+        $tem =($tasa/12)/100;  
+        $sumatotal=0; 
+        $pruebaarray=array(); 
+        foreach($total as $valor)
+               {      
+                    if($valor->idestado==10){
+                       if($valor->pe!=$plazo_prestamo){   
+                           $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$valor->in,2);
+                           $amortiza=($auz_am>0)?$auz_am:0;
+                           $sumatotal=round(($valor->ca_an-$amortiza),2); 
+                           array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>
+                           array( 'am'=>$amortiza,'ca'=>$sumatotal)));
+                       }
+                    }elseif($valor->pe==$plazo_prestamo){
+                         $aux=$sumatotal;
+                        $interes=round(($aux*$tem*$valor->di)/30,2); 
+                        $cuota=round($aux+$interes,2);
+                       
+                        $total_cuotas = $plazo_prestamo;    
+                        $cuotaf =round($cuota+$valor->indi+$valor->car,2);  
+                        $capital = $aux;  
+                        $intereses = $interes;
+    //////////////////////////////////////////////////////////////////////////// 
+                           $perfilcobranza =$this->getperfil($idproducto,$idperfilcobranzaascii); 
+                           for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                            $cargoFinal=0;
+                                   foreach($perfilcobranza as $perfil){ 
+                                           $abc="$".$perfil['valor_abc'];
+                                           eval($abc."=".$perfil['formulaphp'].";");
+                                           if($perfil['iscargo']==1){ 
+                                               $cargoin=eval("return round(".$abc.",2);");
+                                               $cargoFinal+=$cargoin;  
+                                           }
+                                   } 
+    ////////////////////////////////////////////////////////////////////////////
+    
+                        array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array( 'am'=>$aux,'in'=>$interes,
+                        'car'=>$cargoFinal,'ca'=>0,'cut'=>round($cuota+$valor->indi+$cargoFinal,2),'ca_an'=>$aux,'cuota'=>$cuota)));
+                          
+                    }else{
+                       $aux=$sumatotal; 
+                       $auz_am=round((($valor->cut-$valor->car)-$valor->indi)-$valor->in,2);
+                       $amortiza=($auz_am>0)?$auz_am:0;
+                       $sumatotal=round(($aux-$amortiza),2);
+                       array_push($pruebaarray,array('key'=>$valor->idplan,'value'=>array('am'=>$amortiza,
+                       'ca'=>$sumatotal,'ca_an'=>$aux))); 
+                    } 
+    
+    
+               } 
+              
+             foreach($pruebaarray as $valor){  
+                    $planpago = Par_prestamos_plan::findOrFail($valor["key"]); 
+                    foreach($valor["value"] as $akey=>$avalue) { $planpago->$akey=$avalue; }
+                    $planpago->save(); 
+               }  
+         
+     } 
 }
