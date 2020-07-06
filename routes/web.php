@@ -591,6 +591,7 @@ Route::group(['middleware' => 'auth'], function () {
        Route::put ('/par_producto/activar','ParProductoController@activar');
        Route::get ('/par_producto/productos','ParProductoController@getproductos');
        Route::get ('/par_producto/productosid','ParProductoController@getproductosid');
+       Route::get ('/par_producto/productosidLista','ParProductoController@getproductosidLista');
        Route::get ('/par_producto/getproductosid_tabla','ParProductoController@getproductosid_tabla');
        Route::get ('/par_producto/getproductosperfil','ParProductoController@getproductosperfil');
        
@@ -599,6 +600,7 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/vista','PruebaViewController@index'); 
        
        Route::get ('/pre_listasocio','PreCalificacionController@pre_listasocio'); 
+       Route::get ('/pre_listasocio2','PreCalificacionController@pre_listasocio_lista'); 
        Route::get ('/pre_listasocio_prueba','PreCalificacionController@pre_listasocio_prueba'); 
        Route::get ('/datos_aportes','PreCalificacionController@datos_aportes');
        Route::get ('/par_producto/selectProducto', 'PreCalificacionController@selectProducto');
@@ -763,6 +765,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/prestamos/prestamosMoras','ParPrestamosController@prestamosMoras');
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
+        Route::post('/prestamos/regprestamoLista','ParPrestamosController@storeLista');
         Route::put('/prestamos/desembolsoupdate', 'ParPrestamosController@grabar_estado');
         Route::put('/prestamos/grabar_desembolsoNormal', 'ParPrestamosController@grabar_desembolsoNormal');
         Route::get('/start_desembolso', 'ParPrestamosController@desembolso'); 

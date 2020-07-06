@@ -59,17 +59,17 @@
                                 <td class="tdcell" style="text-align:center;vertical-align: middle;">
                                     
                                    <div v-if="prestamos.idestado==3">
-                                       <button v-if="check('Alta_garantes')?(prestamos.garantes>0):false"
+                                       <!-- <button v-if="check('Alta_garantes')?(prestamos.garantes>0):false"
                                             @click="altaGarantes(prestamos)"
                                            type="button" class="btn btn-danger btn-sm"
-                                           title="Ejecutar alta garantes">Ejecutar Alta Garantes</button>
+                                           title="Ejecutar alta garantes">Ejecutar Alta Garantes</button> -->
                                        <h6>
                                            <span v-if="prestamos.garantes==0"
                                                class="badge badge-danger">{{prestamos.nombreestado}}</span>
                                        </h6>
                                    </div>
                                     <div v-else> 
-                                    <button v-if="check('Aprobacion_desembolso')?prestamos.idestado==1:false" :id="getid(prestamos)" type="button"
+                                    <button v-if="check('Aprobacion_desembolso')?prestamos.idestado==1&&!prestamos.no_prestamo.includes('P.L'):false" :id="getid(prestamos)" type="button"
                                         class="btn btn-success  btn-sm icon-check"
                                         @click="openmodal('primarymodal',prestamos)" title="Aprobar"></button>
                                      <button v-if="check('Imprimir_calificacion')?prestamos.idestado==1:false" class="btn btn-primary btn-sm icon-printer" type="button"
@@ -276,7 +276,7 @@
         data (){
             return {
                 arrayPermisos: {
-                    Alta_garantes: 0,
+                    // Alta_garantes: 0,
                     Aprobacion_desembolso: 0,
                     Imprimir_calificacion: 0,
                     Eliminar_calificacion: 0,
@@ -622,18 +622,18 @@
                          me.pagination = respuesta.pagination;
                          me.arrayPrestamos = respuesta.prestamos.data;
 
-                         if (me.check('Alta_garantes')) {
-                             var url = '/prestamos/prestamosMoras';
-                             axios.get(url).then(function (response) {
-                                     var respuesta = response.data;
-                                     me.arrayMoras = respuesta.moras;
-                                     me.arrayPrestamos = _.concat(me.arrayMoras, me.arrayPrestamos);
+                        //  if (me.check('Alta_garantes')) {
+                        //      var url = '/prestamos/prestamosMoras';
+                        //      axios.get(url).then(function (response) {
+                        //              var respuesta = response.data;
+                        //              me.arrayMoras = respuesta.moras;
+                        //              me.arrayPrestamos = _.concat(me.arrayMoras, me.arrayPrestamos);
 
-                                 })
-                                 .catch(function (response) {
-                                     console.log(response);
-                                 });
-                         }
+                        //          })
+                        //          .catch(function (response) {
+                        //              console.log(response);
+                        //          });
+                        //  }
 
                      })
                      .catch(function (response) {
@@ -763,7 +763,7 @@
                                                                         swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
                                                                     }); 
                                         }else if(me.arrayPrestamosSeleccionado.activar_garante==1){
-
+                                                // calcular el prestamo para dar altaa garante
                                         }else{
                                             swal({
                                                             title: "Registrando los Datos",

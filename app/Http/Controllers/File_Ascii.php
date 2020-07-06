@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Par_productos_perfilcuenta;
 use App\Par_prestamos_plan;
+use App\Par_prestamos_plan_cargo;
 class File_Ascii extends Controller
 {
      
@@ -109,18 +110,21 @@ class File_Ascii extends Controller
                                         }
                                 }
                                 
-                                $cuota_final_ok=round($dataprestamo->cut*$dataprestamo->tipocambio,2);
+                                $cuota_auxiliar=round($dataprestamo->am+ $dataprestamo->in+$dataprestamo->indi+$sumacargos,2);
+                                $cuota_final_ok=round($cuota_auxiliar*$dataprestamo->tipocambio,2);
 
                                 $plan = Par_prestamos_plan::findOrFail($dataprestamo->idplan); 
                                 $plan->file=$nameFile;
-                                $plan->idestado=10;
+                                $plan->idestado=10; 
                                 if($plan->pe==$dataprestamo->plazo){
                                     $plan->cuota=$plan->ca_an+ $plan->in;
-                                    $plan->am=$plan->ca_an;
+                                    $plan->am=$plan->ca_an; 
+                                    $plan->ca=0;
                                     $cuotaaux=round($plan->ca_an+ $plan->in+$plan->indi+$sumacargos,2);
                                     $plan->cut=$cuotaaux;
-                                    $plan->ca=0;
                                     $cuota_final_ok=round($cuotaaux*$dataprestamo->tipocambio,2);
+                                }else{
+                                    $plan->cut=$cuota_auxiliar; 
                                 } 
                                 $plan->send_ascii=$cuota_final_ok; 
                                 $plan->car=$sumacargos;

@@ -133,19 +133,23 @@
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label" for="date-input">Fecha Inicial:</label>
                             <div class="col-md-8">
-                                <input class="form-control" 
+                                <!-- <input class="form-control" 
                                     type="date" v-model="fechainicio"
                                     :max="fechafin"
-                                    :min="fechamin">
+                                    :min="fechamin"> -->
+                                <input class="form-control" 
+                                    type="date" v-model="fechainicio">
                                 <span class="text-error" v-if="!verificarfechainicio">La Fecha debe ser menor a la fecha actual o fecha final</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label" for="date-input">Fecha Final:</label>
                             <div class="col-md-8">
-                                <input class="form-control" 
+                                <!-- <input class="form-control" 
                                     type="date" v-model="fechafin"
-                                    :max="fechahoy">
+                                    :max="fechahoy"> -->
+                                         <input class="form-control" 
+                                    type="date" v-model="fechafin" >
                                 <span class="text-error" v-if="!verificarfechafin">La Fecha debe ser menor a la fecha actual</span>
                             </div>
                         </div>

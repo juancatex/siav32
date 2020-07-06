@@ -155,11 +155,18 @@
                             <div class="form-group row">
                                 <strong><label style="padding-top: 18px;padding-right: 10px;">Fecha:</label></strong>
                                 <div>
-                                    <input  type="date" 
+                                    <!-- <input  type="date" 
                                             v-model="fecharegistro" 
                                             class="form-control" 
                                             :max="fechaactual"
                                             :min="fechamin"
+                                            v-validate.initial="'required'"
+                                            name="Fecha"
+                                            style="margin-top: 10px;"> -->
+                                             <input  type="date" 
+                                            v-model="fecharegistro" 
+                                            class="form-control" 
+                                            :max="fechaactual"
                                             v-validate.initial="'required'"
                                             name="Fecha"
                                             style="margin-top: 10px;">

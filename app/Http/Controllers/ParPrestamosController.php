@@ -60,6 +60,45 @@ class ParPrestamosController extends Controller
         return response()->json(array('id' => $prestamo->idprestamo), 200);
     }
 
+    public function storeLista(Request $request)
+    { if (!$request->ajax()) return redirect('/');
+        $fecha=(DB::select("select getfecha() as total"))[0]->total;
+        $prestamo = new Par_Prestamos();
+        $prestamo->idproducto=$request->idproducto;
+        $prestamo->idsocio=$request->idsocio; 
+        $prestamo->idoperario=Auth::id();
+        $prestamo->idsupervisor=Auth::id();
+        $prestamo->monto=$request->monto;  
+        $prestamo->plazo=$request->plazo; 
+        $prestamo->factor=$request->factor; 
+        $prestamo->idcuentasocio=$request->cuenta; 
+        $prestamo->obs=$request->obs; 
+        $prestamo->fecharegistro=$fecha;
+        
+        $prestamo->liquidopagable=$request->lip; 
+        $prestamo->liquidocomputable=$request->lipcom; 
+        $prestamo->cuotasvigentes=$request->pvig; 
+        $prestamo->b_frontera=$request->fron; 
+        $prestamo->b_prolibro=$request->libro; 
+        $prestamo->b_familiar=$request->fami; 
+        $prestamo->b_riesgo=$request->riesgo; 
+        $prestamo->cuota_aprox=$request->cuo_aprox; 
+        $prestamo->planPagosMap=$request->planPagosMap; 
+ 
+
+        $prestamo->save(); 
+        $prestamo->idref =$prestamo->idprestamo;
+        $prestamo->idrefaux =$prestamo->idprestamo;
+        /*$prestamo->no_prestamo =$prestamo->idproducto.'-'.$prestamo->idejecucion.'-'.str_pad($prestamo->idprestamo, 10, "0", STR_PAD_LEFT);*/
+
+        $total=DB::select("select codproducto as total from  par__productos where idproducto=?", array($prestamo->idproducto));
+ 
+        $prestamo->no_prestamo ='P.L-'.strtoupper($total[0]->total).'-'.str_pad($prestamo->idprestamo, 10, "0", STR_PAD_LEFT);
+        $prestamo->save();
+
+        return response()->json(array('id' => $prestamo->idprestamo), 200);
+    }
+
    
   
     public function grabar_estado(Request $request) 
@@ -281,11 +320,14 @@ class ParPrestamosController extends Controller
             //  ->where('par__prestamos.apro_conta','!=','2') 
             ->whereBetween('par__prestamos.idestado',[1,6])
             ->where('par__prestamos.idestado','!=','3')
-            ->whereraw($sqls)
+            ->whereraw($sqls) 
             ->orderBy('par__prestamos.apro_conta', 'DESC') 
             ->orderBy('par__prestamos.idestado', 'asc')
-            ->orderBy('par__prestamos.lote', 'DESC') 
-            ->orderBy('socios.nombre', 'asc')->paginate(10);
+            ->orderBy('par__prestamos.lote', 'DESC')
+            // ->orderBy('socios.nombre', 'asc') 
+            ->orderBy('par__prestamos.idprestamo', 'asc')
+            ->paginate(10);
+            
         }
         else{	 
             $socios=Par_Prestamos::select('con__asientomaestros.observaciones','par__prestamos.fecharde_apro_conta','par__prestamos.idejecucion',
@@ -315,11 +357,13 @@ class ParPrestamosController extends Controller
             ->where('par__prestamos.apro_conta','!=','2') 
 
             ->where('par__prestamos.idoperario','=',Auth::id()) 
-            ->whereBetween('par__prestamos.idestado',[1,2])
+            ->whereBetween('par__prestamos.idestado',[1,2]) 
             ->orderBy('par__prestamos.apro_conta', 'DESC')
             ->orderBy('par__prestamos.idestado', 'asc')
             ->orderBy('par__prestamos.lote', 'DESC') 
-            ->orderBy('socios.nombre', 'asc')->paginate(10);
+            // ->orderBy('socios.nombre', 'asc') 
+            ->orderBy('par__prestamos.idprestamo', 'asc')
+            ->paginate(10);
         }
         
         return [

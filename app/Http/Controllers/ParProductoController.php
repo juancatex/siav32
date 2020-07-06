@@ -76,6 +76,34 @@ class ParProductoController extends Controller
          
         return ['productos' => $productos,'escala' => $escala,'formulas' => $formulas ,'status'=>$validador];
     }
+    public function getproductosidLista(Request $request)
+    {
+       if (!$request->ajax()) return redirect('/');
+ 
+            $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
+            ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
+            ->select( 'par__productos.moneda','par__productos.linea','par__productos__factores.aprobacion','par__productos.idescala',
+            'par__productos.garantes',
+            'par__productos.max_prestamos','par__productos.lote','par__productos.activar_garante','par__productos.cancelarprestamos',
+            'par__productos.idfactor','par__productos.tasa','par__productos.codproducto','par__productos.idproducto',
+            'par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
+            'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->where('par__productos.idproducto','=',$request->id)  
+            ->get();
+             
+          $formulas = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
+            ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
+            'par__productos__perfilcuentas.valor_abc',
+            'par__productos__perfilcuentas.formula',
+            'par__productos.linea',
+            'par__productos__perfilcuentas.iscargo')
+            ->where('par__productos__perfilcuentas.activo','=','1')
+            ->where('par__productos.idproducto','=',$request->id)
+            ->get();
+          
+         
+        return ['productos' => $productos, 'formulas' => $formulas];
+    }
     public function getproductosid_tabla(Request $request)
     {
        if (!$request->ajax()) return redirect('/');

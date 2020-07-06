@@ -151,20 +151,22 @@
                     }
                 }); 
  
- 
-                    axios.post('/cobranzaascii',{
-                        'obs':this.obs,    
-                        'prestamos':this.prestamosEnviadosAscii,
-                        'acreedores':acreedores,
-                        'idmodulo':this.idmodulomain
-                    }).then((response)=>{
+ console.log('prestamos',this.prestamosEnviadosAscii,
+                        'acreedores',acreedores,
+                        'idmodulo',this.idmodulomain);
+                    // axios.post('/cobranzaascii',{
+                    //     'obs':this.obs,    
+                    //     'prestamos':this.prestamosEnviadosAscii,
+                    //     'acreedores':acreedores,
+                    //     'idmodulo':this.idmodulomain
+                    // }).then((response)=>{
                    
-                        if(response.data.status){
-                            console.log('si');
-                        }else{
-                            console.log(response.data.mensaje);
-                        }
-                    });
+                    //     if(response.data.status){
+                    //         console.log('si');
+                    //     }else{
+                    //         console.log(response.data.mensaje);
+                    //     }
+                    // });
 
 
 

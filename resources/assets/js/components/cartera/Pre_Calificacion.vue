@@ -44,6 +44,9 @@
                 <button type="submit" @click="listarSocio(1,buscar)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
+                <button type="submit" @click="listacrear" class="btn btn-success">
+                    Registro lista
+                </button>
               </div>
             </div>
           </div>
@@ -742,6 +745,31 @@
       </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="plandepagos2">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Plan de pagos</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.openModal('listaPrestamos')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body-plandepagos">
+            <!--  <div style="display:none" v-html="plandepagosSimulacion"></div>-->
+            <iframe name="planout2" id="planout2" style="width:100%;height:100%;"></iframe>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.openModal('listaPrestamos')">cerrar</button>
+            <!--  <button class="btn btn-primary" type="button" @click="print()">Imprimir</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- para poner otro modal -->
     <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="factorview">
       <div class="modal-dialog modal-primary modal-lg" role="document">
@@ -788,6 +816,214 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               @click="classModal.openModal('modalCalificacion')">cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
+      id="listaPrestamos">
+      <div class="modal-dialog modal-primary modal-xl" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" >Registro de Prestamos por Lista</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('listaPrestamos')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body" style="padding: 30px;">
+            <div class="form-group row">
+             <template v-if="agregarlista">
+                 <Ajaxselect  class="col-md-10 mx-auto"   
+                        ruta="/pre_listasocio2?buscar=" @found="sociosListaView"
+                        resp_ruta="socios"
+                        labels="rutafoto,numpapeleta,nombre,apaterno,amaterno"
+                        placeholder="Ingrese texto" 
+                        idtabla="idsocio" >
+                    </Ajaxselect>
+             </template>
+                 
+
+                <button type="button" class="btn btn-warning col-md-2" aria-hidden="true" aria-label="Close" v-if="listaSocios.length>0"
+              @click="agregarSociolista">Borrar lista</button>
+            </div>
+
+
+
+            <div class=" row col-md-12 form-group" v-if="listaSocios.length>0">
+                <table class="tablelista table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th style="width: 60px;">Nro</th>   
+                <th>Foto</th>
+                <th>Grado</th>
+                <th>Nombre Completo</th>
+                <th>Num Papeleta</th>
+                <th>CI</th>
+                <th>Fuerza</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(socio, keyin) in listaSocios" :key="socio.idsocio"
+                v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
+                 <td style=" vertical-align: middle;width: 60px;text-align: center;" >{{keyin+1}}</td> 
+                <td style=" vertical-align: middle;text-align: center;">
+                  <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto" class="rounded-circle fotosociomini_pre"
+                    alt="Cinque Terre" />
+                  <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
+                </td>
+
+                <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
+                <td :id="getid(socio)" style=" vertical-align: middle;" v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno"></td>
+                <td style=" vertical-align: middle;text-align: center;" v-text="socio.numpapeleta"></td>
+                <td style=" vertical-align: middle;text-align: center;" v-text="socio.ci+' '+ socio.abrvdep"></td>
+                <td style=" vertical-align: middle;text-align: center;" v-text="socio.nomfuerza"></td>
+
+                <td style=" vertical-align: middle;text-align: center;">
+                  <div v-if="socio.activo">
+                    <span class="badge badge-success">Activo</span>
+                  </div>
+                  <div v-else>
+                    <span class="badge badge-danger">Desactivado</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            </div>
+
+
+              <div class="row form-group">
+                <div class="col-md-6" v-if="listaSocios.length>0">
+                  <label style="text-align: left; align-items: center;font-weight: 500;"
+                    class="form-control-label">Socio
+                    Beneficiario :</label>
+                  <template>
+                    <Ajaxselect ruta="/pre_listasocio2?buscar=" @found="sociosBeneficiario"
+                      @cleaning="sociosBeneficiarioClear" resp_ruta="socios"
+                      labels="numpapeleta,nombre,apaterno,amaterno" placeholder="Ingrese texto" idtabla="idsocio"
+                      :clearable="true">
+                    </Ajaxselect>
+                  </template>
+
+                </div>
+
+                <div class="col-md-6" v-if="arrayCuentaSocio.length>0">
+                  <label style="text-align: left; align-items: center;font-weight: 500;"
+                    class="form-control-label">Numero
+                    de Cuenta :</label>
+                  <div>
+                    <div style="display:flex">
+                      <v-select ref="cuentaB" style="width: 100%" :class="{'error': errors.has('cuenta bancaria')}"
+                        v-validate.initial="'required'" name="cuenta bancaria" label="numcuentasocio"
+                        :getOptionLabel="cuentaB => cuentaB.siglaentidadbancaria+' - '+cuentaB.numcuentasocio"
+                        :options="arrayCuentaSocio" v-model="cuentaBancaria" placeholder="Seleccione cuenta"
+                        :reduce="cuentaB=> cuentaB.idcuentasocio" :searchable="false" :clearable="false">
+                        <span slot="no-options">No existen Datos</span>
+                        <template slot="option" slot-scope="option">{{ option.siglaentidadbancaria }} -
+                          {{ option.numcuentasocio }}</template>
+                      </v-select>
+                    </div>
+                    <span class="text-error">{{ errors.first('cuenta bancaria') }}</span>
+                  </div>
+                </div>
+
+                <div class="row" v-if="listaSocios.length>0&&arrayCuentaSocio.length==0">
+                   <div class="col align-self-center">
+                    <span class="text-error">El socio no tiene una cuenta bancaria activa.</span>
+                  </div>
+                </div>
+              </div>
+
+
+              
+
+
+              <div class="form-group row" v-if="arrayCuentaSocio.length>0">
+                        <div class="col-md-4">
+                          <label style="text-align: right; align-items: center;font-weight: 500;"
+                            class="form-control-label" for="text-input">Plazo :</label>
+                          <div class="input-group">
+                            <input v-validate.initial="'required|between:1,12'"
+                              style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;"
+                              type="number" v-model.number="plazomeses"
+                              :class="{'form-control': true, 'is-invalid': errors.has('plazo')}"
+                              placeholder="Plazo en meses" name="plazo" autofocus step="any"
+                              @keyup.enter="calculoCuota(false)" />
+                            <div class="input-group-append">
+                              <span style="min-width: 60px;" class="input-group-text">
+                                <i style="font-size: 13px;font-weight: 600;">Meses</i>
+                              </span>
+                            </div>
+                          </div>
+                          <span class="text-error">{{ errors.first('plazo')}}</span>
+                        </div>
+                        <div class="col-md-4">
+                          <label style="text-align: right; align-items: center;font-weight: 500;"
+                            class="form-control-label" for="text-input">Monto Solicitado :</label>
+                          <div class="input-group"> 
+                            <input
+                              v-validate.initial="'required|between:1,1000'"
+                              style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;"
+                              type="number" v-model.number="montosolicitado"
+                              :class="{'form-control': true, 'is-invalid': errors.has('monto solicitado')}"
+                              placeholder="Monto solicitado" name="monto solicitado" step="any"
+                              @keyup.enter="calculoCuota(false)" />
+                            <div class="input-group-append">
+                              <span class="input-group-text" style="min-width: 60px;">
+                                <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
+                              </span>
+                            </div>
+                          </div>
+                          <span class="text-error">{{ errors.first('monto solicitado')}}</span>
+                        </div>
+                       <div class="col-md-4">
+                          <label style="text-align: right; align-items: center;font-weight: 500;"
+                            class="form-control-label" for="text-input">Cuota aproximada :</label>
+                          <div class="input-group">
+                            <div class="input-group-append">
+                              <span class="input-group-text" style="min-width: 60px;">
+                                <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
+                              </span>
+                            </div>
+                            <input style="background-color: #f0f3f5;font-weight: bold;font-size: 23px;" type="text"
+                              :value="cuotaaproximada" class="form-control" placeholder="Cuota aproximada"
+                              name="Cuota aproximada" step="any" disabled />
+                            <span v-if="cargandocalculo" class="input-group-append">
+                              <div style="min-width: 60px;    border-radius: 5px;" class="lds-dual-ring-wait"></div>
+                            </span>
+                            <span v-else class="input-group-append" v-bind:class="{'ocultaricono':cuotaaproximada==0}">
+                              <button style="min-width: 60px;" class="btn btn-primary" type="button"
+                                @click="view2();classModal.openModal('plandepagos2');">
+                                <i class="fa fa-file-pdf-o"></i>
+                              </button>
+                            </span>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                     <div class="form-group row" v-if="arrayCuentaSocio.length>0">
+                      <label style="text-align: right; align-items: center;" class="col-md-2 form-control-label"
+                        for="text-input">Observaciones :</label>
+                      <div class="col-md-9">
+                        <div class="input-group">
+                          <textarea class="col-md-12" rows="4" v-model="obs" placeholder="Observaciones"></textarea>
+                        </div>
+                      </div>
+                    </div>
+          </div>
+
+          <div class="modal-footer">
+            <button v-if="listaSocios.length>0&&cuotaaproximada>0&&cuentaBancaria!=''"  type="button" class="btn btn-success"
+              @click="regListaSocios()">Registrar</button>
+
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('listaPrestamos')">cerrar</button>
           </div>
         </div>
       </div>
@@ -877,6 +1113,8 @@ export default {
       tipoAccion: 0,
       errorsocio: 0,
       errorMostrarMsjsocio: [],
+      listaSocios:[],
+      agregarlista:1,
       pagination: {
         total: 0,
         current_page: 0,
@@ -1006,7 +1244,7 @@ export default {
       return a>0?_pl.redondeo_valor(parseFloat(a)+parseFloat(b)):_pl.redondeo_valor(parseFloat(b));
       } 
     },
-    calculoCuota: function() {
+    calculoCuota: function(paso=true) {
       this.valorfactor = 0;
          this.cuotaaproximada = 0;
       if (
@@ -1015,10 +1253,10 @@ export default {
         !this.errors.any()
       ) { 
         this.cargandocalculo=1;
-         this.generacuota(this);
+         this.generacuota(this,paso);
       }  
        
-    },generacuota:_.debounce((ls) => {
+    },generacuota:_.debounce((ls,paso) => {
     
         var salida = (ls.tasaanual>0)?_pl._fff3512_23622(
           ls.fecha_actual,
@@ -1046,7 +1284,7 @@ export default {
  
         ls.PlandePagosPrint = salida.data;
         ls.cuotaaproximada = (ls.montosolicitado > 0 && ls.plazomeses > 0 && !ls.errors.any())  ? salida["cuota"]  : 0;
-         if (ls.cuotaaproximada) {
+         if (ls.cuotaaproximada&&paso) {
           ls.cambiocuota();
         }
         ls.cargandocalculo=0;
@@ -1084,6 +1322,9 @@ export default {
 
     view() {
        _pl._vvp2521_00001(this.PlandePagosPrint);
+    },
+    view2() {
+       _pl._vvp2521_00001(this.PlandePagosPrint,'planout2');
     },
     async regGarantes(array, id) {
       let responses = true;
@@ -1435,7 +1676,166 @@ export default {
             console.log(error);
           });
       }
+    },sociosListaView(e){ 
+if(_.findIndex(this.listaSocios, function(o) { return o.idsocio == e.idsocio; })<0)
+this.listaSocios.push(e);
+
+      this.agregarlista = 0;
+      setTimeout(() => {
+        this.agregarlista = 1;
+      }, 300);
+    },sociosBeneficiario(e){  
+        this.listacuentabancaria(e.idsocio);
+    },sociosBeneficiarioClear(){
+      this.arrayCuentaSocio = [];
+      this.cuentaBancaria = "";
+    }, agregarSociolista() {
+      this.listaSocios = []; 
     },
+    productoporLista(e) {
+      
+        let me = this; 
+        me.montomaximo = 0;
+        me.montominimo = 0; 
+        me.maxfactor = 0;
+        me.tasaanual = 0;
+        me.montosolicitado = 0;
+        me.cargandocalculo=0;
+        me.cuotaaproximada = 0;
+        me.total_saldo_capital = 0;
+        me.cancelarprestamos = 0; 
+        me.obs = "";
+        me.tipocambio = 0;
+        me.cuentaBancaria = "";
+        me.codigomoneda = ""; 
+        me.plazomeses = 1;
+        me.plazomesesmax = 1;
+        me.factorid = 0;
+        me.valorfactor = 0;
+        me.plazomesesmin = 0; 
+        me.cuotas_vigentes = 0; 
+        me.islineal=0; 
+        me.garantesporproducto = 0;
+        me.arrayFormulasProducto = [];
+        me.garantesseleccionados.clear();
+        me.totalgarantesseleccionados = 0; 
+        var url ="/par_producto/productosidLista?id=" + e ;
+        axios .get(url) .then(function(response) {
+            var respuesta = response.data;
+            me.tasaanual = respuesta.productos[0].tasa;
+            me.tipocambio = respuesta.productos[0].tipocambio;
+            me.codigomoneda = respuesta.productos[0].codmoneda;
+            me.islineal = respuesta.productos[0].linea;
+            me.plazomesesmax = respuesta.productos[0].plazomaximo;
+            me.cancelarprestamos = respuesta.productos[0].cancelarprestamos;
+            me.plazomesesmin = respuesta.productos[0].plazominimo;
+            me.factorid = respuesta.productos[0].idfactor;
+            me.maxfactor = respuesta.productos[0].aprobacion;
+            me.garantesporproducto = respuesta.productos[0].garantes; 
+            me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
+            me.arrayFormulasProducto["desembolso"] = [];
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      
+    },
+    async regPrestamosListaAsync(el,idproducto){
+                let responses = true;
+                try {  
+
+                     for (var element of el.listaSocios){ 
+                     
+                        var idprestamo= await axios.post("/prestamos/regprestamoLista", {
+                          idsocio: element.idsocio,
+                          idproducto: idproducto,
+                          monto: el.montosolicitado,
+                          plazo: el.plazomeses,
+                          factor: 100,
+                          cuenta: el.cuentaBancaria,
+                          obs: el.obs,
+                          lipcom: 0,
+                          lip: 0,
+                          riesgo: 0,
+                          fami: 0,
+                          libro: 0,
+                          fron: 0,
+                          pvig: 0,
+                          cuo_aprox: el.cuotaaproximada,
+                          planPagosMap: JSON.stringify(Array.from(el.PlandePagosPrint)),
+                        });
+                        console.log(idprestamo.data.id)
+                        };
+ 
+                } catch (err) {
+                       responses=false;
+                }
+              return responses;      
+            }
+    ,listacrear(){
+      this.listaSocios=[];
+      this.arrayCuentaSocio=[];
+      this.productoporLista(1);
+      this.classModal.openModal("listaPrestamos"); 
+    },
+    regListaSocios(){
+      
+      let me = this;
+      this.classModal.closeModal('listaPrestamos');
+      swal({
+        title: "Registrando los Datos",
+        allowOutsideClick: () => false,
+        allowEscapeKey: () => false,
+        onOpen: function() {
+          swal.showLoading();
+        }
+      }).catch(error => {
+        swal.showValidationError("Request failed: ${error}");
+      });
+
+      me.regPrestamosListaAsync(me,1).then((responses)=>{
+        console.log(responses);
+          if (responses) {
+             swal(
+                  "¡Se registro los datos correctamente!",
+                  "",
+                  "success"
+                ).then(()=>{
+                  swal({
+              title: "¿Desea realizar el desembolso?",
+              type: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#4dbd74",
+              cancelButtonColor: "#f86c6b",
+              confirmButtonText: "Si",
+              cancelButtonText: "No",
+              buttonsStyling: true,
+              reverseButtons: true
+            }).then(result => {
+              if (result.value) {
+                vue.to(32, );
+              } else {
+                swal(
+                  "¡Se registro los datos correctamente!",
+                  "",
+                  "success"
+                )
+              }
+            });
+                });
+            
+          } else {
+            swal(
+              "¡ocurrio un problema al registrar el dato!",
+              "",
+              "error"
+            );
+          }
+      });
+
+     
+    }
+    ,
     siguientePaso() {
       switch (this.pasoPrestamo) {
         case 0:
@@ -1728,9 +2128,10 @@ export default {
     this.classModal = new _pl.Modals();
     this.classModal.addModal("modalCalificacion");
     this.classModal.addModal("plandepagos");
+    this.classModal.addModal("plandepagos2");
     this.classModal.addModal("factorview");
     this.classModal.addModal("factorviewgarante"); 
- 
+    this.classModal.addModal("listaPrestamos");    
   }
 };
 </script>
@@ -1802,6 +2203,25 @@ export default {
 }
 .selecterror {
   background-image: none !important;
+}
+table.tablelista tbody {
+  display: block;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+table.tablelista thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  text-align: center;
+  background-color: #21a8d8;
+  color: white;
+}
+table.tablelista tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 ::-webkit-scrollbar {

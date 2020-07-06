@@ -49,17 +49,19 @@ class ParPrestamosPlanController extends Controller
         }
         $prestamo->save();
 
-        $cargosin=json_decode($request->cargos,true);
-        $idplann=$prestamo->idplan;
-        foreach ($cargosin as $clave => $val){ 
+ // se quito el registro de cargos, porque se registrara cada ves que se realize una cobranda.
+
+        // $cargosin=json_decode($request->cargos,true);
+        // $idplann=$prestamo->idplan; 
+        // foreach ($cargosin as $clave => $val){ 
    
-            $cargosadicionales = new Par_prestamos_plan_cargo();  
-            $cargosadicionales->idplan=$idplann;
-            $cargosadicionales->idperfilcuentadetalle=$val['id'];
-            $cargosadicionales->cargo=$val['value'];    
-            $cargosadicionales->rev=$val['rev'];
-            $cargosadicionales->save(); 
-        }
+        //     $cargosadicionales = new Par_prestamos_plan_cargo();  
+        //     $cargosadicionales->idplan=$idplann;
+        //     $cargosadicionales->idperfilcuentadetalle=$val['id'];
+        //     $cargosadicionales->cargo=$val['value'];    
+        //     $cargosadicionales->rev=$val['rev'];
+        //     $cargosadicionales->save(); 
+        // }
          
     }
 
@@ -318,7 +320,7 @@ class ParPrestamosPlanController extends Controller
                             if($val['idestado']==3){
                                 Par_Prestamos::where('idprestamo','=',$val['idprestamo'])
                                 ->update(['idestado' => 2]); 
-                               $monto = $this->getMontoSaldoTotal($val['idprestamo']);
+                               $montoVigente = $this->getMontoSaldoTotal($val['idprestamo']);
                                 //acumular el monto del capital del prestamo que esta ntrando a mora para generar su asiento contable
                             } 
                             Socio::where('idsocio','=',$val['idsocio'])
@@ -329,8 +331,9 @@ class ParPrestamosPlanController extends Controller
                         if($val['idestado']==2){
                             Par_Prestamos::where('idprestamo','=',$val['idprestamo'])
                             ->update(['idestado' => 3]); 
-
+                            $montoMora = $this->getMontoSaldoTotal($val['idprestamo']);
                             //acumular el monto del capital del prestamo que esta ntrando a mora para generar su asiento contable
+                            //verificar si tiene registros de cargos en la tabla par_prestamos_plan_cargo por la cuota enviada pero no cobrada....
                         } 
                         Socio::where('idsocio','=',$val['idsocio'])
                         ->update(['idestprestamos' => 1]); 
@@ -395,8 +398,11 @@ class ParPrestamosPlanController extends Controller
      }
 
      function getMontoSaldoTotal($id){
-        return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
-        and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($id)))[0]->ca_an; 
+        return (DB::select("select ROUND(plan.ca_an*mo.tipocambio,2) as ca_an from par__prestamos__plans plan,par__prestamos pp,par__productos pro,par__monedas mo 
+        where mo.idmoneda=pro.moneda and pp.idproducto=pro.idproducto and pp.idprestamo=plan.idprestamo and plan.idprestamo=? 
+                and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($id)))[0]->ca_an; 
+        // return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
+        // and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($id)))[0]->ca_an; 
      }
      function recalcularPrestamos($prestamo)
      {  

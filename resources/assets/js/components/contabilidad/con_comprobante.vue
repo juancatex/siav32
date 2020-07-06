@@ -95,7 +95,8 @@
                                         <strong><label> + </label></strong>
                                     </div>
                                 </div>
-                                <div v-for="(rowcuentas, index) in rowcuentas" :key="index" class="row">
+                                <div id="contenidoValue">
+                                <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
                                     <template v-if="!borrador">
                                         <div class="border ancho44" >
                                         <Ajaxselect v-if="limpiarajax"
@@ -127,17 +128,17 @@
                                     </template>
                                     
                                     <div class="border ancho24" >
-                                        <input 
+                                        <input  id="input1" inputvalued="1"
                                                 v-model="rowcuentas.documento" 
-                                                class="form-control border-0 input-text2" 
+                                                class="inputnext form-control border-0 input-text2" 
                                                 type="text" >
                                     </div>
                                     <template v-if="rowcuentas.idcuenta==lc && acumulado13!=0">
                                         <div class="ancho12 border"  style="text-align:right">
-                                            <vue-numeric  
+                                            <vue-numeric   id="input2" inputvalued="2"
                                                 :disabled="rowcuentas.haber!=0"
                                                 readOnly
-                                                class="form-control input-importe border-0"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -147,9 +148,9 @@
                                     </template>
                                     <template v-else-if="rowcuentas.idcuenta==lc && acumulado13==0">
                                         <div class="ancho12 border" >
-                                            <vue-numeric  
+                                            <vue-numeric   id="input2" inputvalued="2"
                                                 disabled
-                                                class="form-control input-importe border-0"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -159,9 +160,9 @@
                                     </template>
                                     <template v-else>
                                         <div class="ancho12 border" >
-                                            <vue-numeric  
+                                            <vue-numeric  id="input2" inputvalued="2"
                                                 :disabled="rowcuentas.haber!=0"
-                                                class="form-control input-importe border-0"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -170,9 +171,9 @@
                                         </div>
                                     </template>
                                     <div class="ancho12 border" >
-                                        <vue-numeric  
+                                        <vue-numeric  id="input3" inputvalued="3"
                                             :disabled="rowcuentas.debe!=0"
-                                            class="form-control input-importe border-0"
+                                            class="inputnext form-control input-importe border-0"
                                             separator="," 
                                             v-model="rowcuentas.haber"
                                             v-bind:precision="2"
@@ -184,6 +185,7 @@
                                                 Borrar
                                         </button>
                                     </div>
+                                </div>
                                 </div>
                                 <div class="row" style="text-align:right;">
                                     <div class="bg-info text-white ancho68" >
@@ -1614,9 +1616,9 @@ export default {
             value = value.toString()
             return value.toUpperCase(); 
         }
+    } 
     }
-}
-</script>
+</script> 
 <style>
 .ancho30{
         width: 30%;

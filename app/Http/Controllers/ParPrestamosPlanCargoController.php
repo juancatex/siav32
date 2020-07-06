@@ -27,49 +27,5 @@ class ParPrestamosPlanCargoController extends Controller
         $prestamo->cargo=$request->cargo; 
         $prestamo->save(); 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Par_prestamos_plan_cargo  $par_prestamos_plan_cargo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Par_prestamos_plan_cargo $par_prestamos_plan_cargo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Par_prestamos_plan_cargo  $par_prestamos_plan_cargo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Par_prestamos_plan_cargo $par_prestamos_plan_cargo)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Par_prestamos_plan_cargo  $par_prestamos_plan_cargo
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Par_prestamos_plan_cargo $par_prestamos_plan_cargo)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Par_prestamos_plan_cargo  $par_prestamos_plan_cargo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Par_prestamos_plan_cargo $par_prestamos_plan_cargo)
-    {
-        //
-    }
+ 
 }
