@@ -25,7 +25,7 @@ class SerEstablecimientoController extends Controller
         ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
         ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
-        ->join('par_departamentos','par_departamentos.iddepartamento','fil__filials.iddepartamento');
+        ->join('par_departamentos','par_departamentos.iddepartamento','fil__filials.iddepartamento')->where('ser__establecimientos.activo','=','1');
         if($request->iddepartamento)
             $establecimientos=$establecimientos->where('par_departamentos.iddepartamento',$request->iddepartamento);
         if($request->idestablecimiento)
