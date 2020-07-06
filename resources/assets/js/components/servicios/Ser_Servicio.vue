@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 text-right">
-                        <!-- <button class="btn btn-primary" style="margin-top:0px" @click="nuevoServicio()">Nuevo Servicio</button> -->
+                        <button class="btn btn-primary" style="margin-top:0px" @click="nuevoServicio()">Nuevo Servicio</button>
                     </div>
                 </div>                
             </div> 

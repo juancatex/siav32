@@ -492,8 +492,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'con___movimientobancarios.numdocumento',
                                                             'idmovimiento',
                                                             'sidirectorio',
-                                                            'glo__solicitud_cargo_cuentas.created_at',
-                                                            'socios.numpapeleta'
+                                                            'glo__solicitud_cargo_cuentas.created_at' //,
+                                                            //'socios.numpapeleta'
                                                             )
                                             ->where('glo__solicitud_cargo_cuentas.activo',1)
                                             ->whereraw($sqls)
