@@ -119,7 +119,7 @@ class ConMovimientobancarioController extends Controller
                     $fecha,
                     )
         ->where('con___movimientobancarios.tipocargo','h')
-        ->where('glo__solicitud_cargo_cuentas.tipocargo','interno') //TODO: interno debe ser dinamico y buscar en la tabla de externos
+        // ->where('glo__solicitud_cargo_cuentas.tipocargo','interno') //TODO: interno debe ser dinamico y buscar en la tabla de externos
         ->where('estado',0)
         ->where('con___movimientobancarios.idcuenta',$request->idcuenta)
         ->limit(10)
