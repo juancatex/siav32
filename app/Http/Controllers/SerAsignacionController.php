@@ -19,7 +19,7 @@ class SerAsignacionController extends Controller
         //$currfecha=DB::raw('curdate() as currfecha');
         $asignaciones=Ser_Asignacion::
         select('idasignacion','idcliente','tipocliente','ser__asignacions.idambiente',
-        'nrasignacion','fechaentrada','horaentrada','horasalida',$noches,
+        'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
         'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
         ->join('par_grados','par_grados.idgrado','socios.idgrado')
@@ -57,6 +57,7 @@ class SerAsignacionController extends Controller
         $asignacion->iddocumentos=$request->iddocumentos;
         $asignacion->idimplementos=$request->idimplementos;
         $asignacion->fechaentrada=$request->fechaentrada;
+        $asignacion->fechasalida=$request->fechasalida;
         $asignacion->horaentrada=$request->horaentrada;
         $asignacion->horasalida=$request->horasalida;
         $asignacion->fechadefuncion=$request->fechadefuncion;

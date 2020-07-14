@@ -23,7 +23,7 @@ class RrhPermisoController extends Controller
     }
 
     public function storePermiso(Request $request)
-    {
+    { echo 'adf:' .$request->horasalida;
         $permiso=new Rrh_Permiso();
         $permiso->idempleado=$request->idempleado;
         $permiso->idmotivo=$request->idmotivo;
@@ -46,7 +46,7 @@ class RrhPermisoController extends Controller
         $permiso->fechasolicitud=$request->fechasolicitud;
         $permiso->cantidad=$request->cantidad;
         $permiso->fechasalida=$request->fechasalida;
-        $permiso->horasalida=$request->horasalida;
+        $permiso->horasalida=$request->horafin;
         $permiso->obs=$request->obs;
         $permiso->save();
     }
