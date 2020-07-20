@@ -25,10 +25,11 @@ class AlmSuministroController extends Controller
 
     public function listaSuministros(Request $request)
     {
+        $ip=config('app.ip'); 
         $suministros=Alm_Suministro::where('idcuenta','=',$request->idcuenta)
         ->join('alm__medidas','alm__medidas.idmedida','=','alm__suministros.idmedida')
         ->orderBy('codsuministro')->get();
-        return ['suministros'=>$suministros,'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['suministros'=>$suministros,'ipbirt'=>$ip];
     }
 
     public function storeSuministro(Request $request)

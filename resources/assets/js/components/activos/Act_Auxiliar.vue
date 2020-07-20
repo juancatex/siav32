@@ -4,39 +4,40 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+                <div class="row" >
+                    
+                <!-- <button class="btn btn-primary dropdown-toggle" style="margin-top:0px" 
+                    data-toggle="dropdown" aria-expanded="false">
+                    Otra cuenta... <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                    <a href="#" class="dropdown-item" v-for="grupo in arrayGrupos" 
+                    :key="grupo.id" v-text="grupo.nomgrupo" 
+                    @click="listaAuxiliares(grupo.idgrupo,1)"></a>
+                </div> -->
+
+                
+                    <div class="col-sm">GRUPO:
+                        <select class="form-control form-control-sm" size="5" v-model="idgrupo" 
+                            @change="listaAuxiliares(idgrupo,1)">
+                            <option v-for="grupo in arrayGrupos" :key="grupo.idgrupo"
+                                v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row w-25 p-3">
+                    <div class="col-sms">
+                        <button class="btn btn-primary" @click="nuevoAuxiliar()">Nuevo Auxiliar</button>
+                    </div>    
+                        
+                </div>
                 <div class="row">
-                    <div class="col-md-6 titcard">
+                     <div class="col-md-6 titcard">
                         <div class="tablatit">
                             <div class="tcelda">Cuenta: <span v-text="regGrupo.nomgrupo"></span></div>
                         </div>
                     </div>
-                    <div class="col-md-6 text-right ">
-                        <div class="input-group-append" style="display:inline">
-                            <!-- <button class="btn btn-primary dropdown-toggle" style="margin-top:0px" 
-                                data-toggle="dropdown" aria-expanded="false">
-                                Otra cuenta... <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                <a href="#" class="dropdown-item" v-for="grupo in arrayGrupos" 
-                                :key="grupo.id" v-text="grupo.nomgrupo" 
-                                @click="listaAuxiliares(grupo.idgrupo,1)"></a>
-                            </div> -->
-
-                            <div class="tfila">
-                                <div class="tcelda titcampo" style="vertical-align:top">Grupo:</div>
-                                <select class="form-control"  v-model="idgrupo" 
-                                    @change="listaAuxiliares(idgrupo,1)">
-                                    <option v-for="grupo in arrayGrupos" :key="grupo.idgrupo"
-                                        v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <button class="btn btn-primary" style="margin-top:0px" 
-                            @click="nuevoAuxiliar()">Nuevo Auxiliar</button>
-                    </div>
-                </div>
+                </div> 
             </div>
             <div class="card-body">
                 <div class="text-right" style="padding-bottom:10px">
@@ -80,12 +81,12 @@
 
     <!-- MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR -->
     <!-- MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR MODAL AUXILIAR -->
-    <div class="modal" :class="modalAuxiliar?'mostrar':''">
+    <div id='auxiliares' class="modal" :class="modalAuxiliar?'mostrar':''">
         <div class="modal-dialog modal-primary modal-sm">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Auxiliar</h4>
-                    <button class="close" @click="modalAuxiliar=0">x</button>
+                    <button class="close" @click="cerrarmodal('auxiliares')">x</button>
                 </div>
                 <div class="modal-body">
                     <h4 class="titsubrayado">Cuenta:<br><span v-text="regGrupo.nomcuenta"></span></h4>
@@ -101,7 +102,7 @@
                     <p class="txtvalidador" v-if="errors.has('nom')">Dato requerido</p>
                 </div>
                 <div class="modal-footer">                                                            
-                    <button class="btn btn-secondary" @click="modalAuxiliar=0">Cancelar</button>
+                    <button class="btn btn-secondary" @click="cerrarmodal('auxiliares')">Cancelar</button>
                     <button class="btn btn-primary" @click="validarAuxiliar()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
@@ -156,7 +157,10 @@ export default {
         },
 
         nuevoAuxiliar(){
-            this.modalAuxiliar=1;
+            this.classModalAuxiliares=new _pl.Modals();
+            this.classModalAuxiliares.addModal('auxiliares'); 
+            this.classModalAuxiliares.openModal('auxiliares')
+            //this.modalAuxiliar=1;
             this.accion=1;
             this.generarCodigo();
             this.idgrupo=this.regGrupo.idgrupo;
@@ -165,13 +169,20 @@ export default {
         },
 
         editarAuxiliar(auxiliar){
-            window.scroll({top:0,left:0,behavior:'smooth'});
-            this.modalAuxiliar=1;
+            this.classModalAuxiliares=new _pl.Modals();
+            this.classModalAuxiliares.addModal('auxiliares'); 
+            this.classModalAuxiliares.openModal('auxiliares')
+            //window.scroll({top:0,left:0,behavior:'smooth'});
+            //this.modalAuxiliar=1;
             this.accion=2;
             this.idauxiliar=auxiliar.idauxiliar;
             this.codauxiliar=auxiliar.codauxiliar;
             this.idgrupo=auxiliar.idgrupo;
             this.nomauxiliar=auxiliar.nomauxiliar;
+        },
+
+        cerrarmodal(id){ 
+                this.classModalAuxiliares.closeModal(id); 
         },
 
         validarAuxiliar(){
@@ -193,7 +204,7 @@ export default {
                 'nomauxiliar':this.nomauxiliar.toUpperCase()
             }).then(response=>{
                 swal('Adicionado correctamente','','success');
-                this.modalAuxiliar=0;
+                this.cerrarmodal('auxiliares');
                 this.listaAuxiliares(this.idgrupo,1);
             });
         },
@@ -209,7 +220,7 @@ export default {
                 'nomauxiliar':this.nomauxiliar.toUpperCase()
             }).then(response=>{
                 swal('Datos actualizados','','success');
-                this.modalAuxiliar=0;
+                this.cerrarmodal('auxiliares');
                 this.listaAuxiliares(this.idgrupo,1);
             });
         },

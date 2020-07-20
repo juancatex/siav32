@@ -1,5 +1,8 @@
 <template>
 <main>
+    <div>
+        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras(regAsignacion)">nivel atras</button>
+    </div>
     <div class="card" v-if="divAsignaciones">
         <div class="card-header">
             <div class="row">
@@ -29,7 +32,7 @@
                         <th>PIEZA</th>
                         <th>Descripción</th>
                         <th>Tarifas</th>
-                        <th>Ocupantes</th>
+                        <th>Ocupantes - Hora Entrada - Dias Ocupados</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,9 +46,9 @@
                             Externos: <span v-text="ambiente.tarifareal"></span>Bs,
                         </td>
                         <td> 
-                            <div class="tabla100">                               
+                            <div v-if="ambiente.ocupado===1" class="tabla100">                               
                                 <div class="tfila bloquefila" v-for="asignacion in arrayAsignaciones" :key="asignacion.id">
-                                    <template v-if="asignacion.idambiente==ambiente.idambiente"> 
+                                    <template v-if="asignacion.idambiente==ambiente.idambiente">
                                         <div class="tcelda" > {{c++}}.
                                             <span v-text="asignacion.nomgrado+' '+asignacion.nombre+' '+asignacion.apaterno"></span></div>
                                         <div class="tcelda"><span v-text="jsfechas.fechadia(asignacion.fechaentrada)"></span></div>
@@ -60,7 +63,7 @@
                                     </template>
                                 </div>
                             </div> 
-                            <div v-if="c<=ambiente.capacidad" class="bloquefila text-center noprint" style="padding:8px; cursor:pointer">
+                            <div v-if="ambiente.ocupado===0" class="bloquefila text-center noprint" style="padding:8px; cursor:pointer">
                                 <a href="#" @click="nuevaAsignacion(ambiente)"> Agregar Huésped</a>
                             </div>                            
                         </td>
@@ -273,8 +276,8 @@
                             
                         <button v-if="regPago.idpago" class="btn btn-primary" 
                             @click="reporteSalida()">Boleta de Salida</button>
-                        
-                        <button v-if="regPago.idpago" class="btn btn-success">Liberar Ambiente</button>
+                      
+                        <button v-if="regPago.idpago" class="btn btn-success" @click="liberarAmbiente(regAsignacion.idambiente,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
                     </center>
                 </div>
             </div>
@@ -549,6 +552,42 @@ export default {
             });
         },
 
+
+        liberarAmbiente(idambiente, idestablecimiento) {
+            swal({
+                title: "Liberar Ambiente",
+                text: "El ambiente se liberara para nueva asignacion",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, liberara",
+                cancelButtonText: "No liberar",
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.put('/ser_ambiente/liberarAmbiente',{
+                            'idambiente': idambiente,
+                        }).then(function (response) {
+                            swal(
+                            'Ambiente Liberado!',
+                            ''
+                            )   
+                            me.listaAmbientes(idestablecimiento,1);
+                            me.divAsignaciones=1;
+                            
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    } 
+                    else if (result.dismiss === swal.DismissReason.cancel)
+                    {
+                        
+                    }
+                    })
+                
+            
+        },
+
         verPago(idasignacion){
             url='/ser_pago/verPago?idasignacion='+idasignacion;
             axios.get(url).then(response=>{
@@ -650,6 +689,10 @@ export default {
                 this.modalPago=0;
                 this.verPago(this.regAsignacion.idasignacion);
             });
+        },
+
+        atras() {
+            this.divAsignaciones=1;
         },
 
         reporteEntrada(){

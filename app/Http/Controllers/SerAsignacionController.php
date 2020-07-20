@@ -14,6 +14,7 @@ class SerAsignacionController extends Controller
 {
     public function listaAsignaciones(Request $request)
     {
+        $ip=config('app.ip'); 
         $noches=DB::raw('datediff(curdate(),fechaentrada) as noches'); 
         //$currhora=DB::raw('curtime() as currhora');
         //$currfecha=DB::raw('curdate() as currfecha');
@@ -29,7 +30,7 @@ class SerAsignacionController extends Controller
         ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento);
         if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
         if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);
-        return ['asignaciones'=>$asignaciones->get(),'ipbirt'=>$_SERVER['SERVER_ADDR'],
+        return ['asignaciones'=>$asignaciones->get(),'ipbirt'=>$ip,
             'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
     }
 
@@ -57,7 +58,6 @@ class SerAsignacionController extends Controller
         $asignacion->iddocumentos=$request->iddocumentos;
         $asignacion->idimplementos=$request->idimplementos;
         $asignacion->fechaentrada=$request->fechaentrada;
-        $asignacion->fechasalida=$request->fechasalida;
         $asignacion->horaentrada=$request->horaentrada;
         $asignacion->horasalida=$request->horasalida;
         $asignacion->fechadefuncion=$request->fechadefuncion;

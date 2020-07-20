@@ -88,12 +88,12 @@ export default {
             for(var i=0;i<=this.arrayEstablecimientos.length;i++)
                 if(this.arrayEstablecimientos[i].idestablecimiento==idestablecimiento)
                 {    this.regEstablecimiento=this.arrayEstablecimientos[i]; break;    }
-            switch(this.regEstablecimiento.codservicio){
+            switch(this.regEstablecimiento.codservicio){ 
                 case 'VIV': this.vueVivienda=1; break;
                 case 'HTR': this.vueHtransitorio=1; break;
                 case 'HPR': this.vueHpermanente=1; break;
                 case 'MAU': this.vueMausoleo=1; break;
-                case 'REG': this.vueRegular=1; break;
+                case 'PER': this.vueRegular=1; break;
                 case 'EVE': this.vueEventual=1; break;
             }
         },

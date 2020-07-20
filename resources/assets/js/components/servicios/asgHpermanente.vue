@@ -482,7 +482,7 @@ export default {
             }
         },
 
-        vence(idambiente){ 
+        vence(idambiente){  
             for(var i=0; i<this.arrayAsignaciones.length; i++){
                 if(this.arrayAsignaciones[i].idambiente==idambiente) {
 
@@ -490,7 +490,6 @@ export default {
                 var thisMonth = new Date(myDate.getFullYear(), myDate.getMonth(), 1);                
                 var hoy = formatDate(thisMonth);
                 
-
                 function padLeft(n){
                     return ("00" + n).slice(-2);
                 }
@@ -509,7 +508,7 @@ export default {
                 var diff = fechaFin - fechaInicio; 
                 var dias = (diff/(1000*60*60*24) );
 
-                    return dias;
+                return dias;
                 }
             }
         },

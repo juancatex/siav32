@@ -16,7 +16,17 @@
                 </div>                
             </div>
             <div class="card-body">
-
+            
+              <div class="col-md-9 row input-group" style="align-items: center;">
+                <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
+                </p>
+                <input type="text" v-model="buscar" @keyup.enter="listaGrupos(1,buscar)" class="form-control"
+                  placeholder="Grupo" />
+                <button type="submit" @click="listaGrupos(1,buscar)" class="btn btn-primary">
+                  <i class="fa fa-search"></i> Buscar
+                </button>
+              </div>
+            
                 <div class="text-right" style="padding-bottom:10px">
                     <div class="vervigente">Ver: &nbsp;
                         <input type="radio" name="estado" id="r1" @click="listaGrupos(1)">Vigentes &nbsp;
@@ -27,7 +37,7 @@
                         @click="reporteGrupos(regFilial.idfilial)"></button>
                     -->
                 </div>
-
+            
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead class="tcabecera">
@@ -70,12 +80,12 @@
     </div>
     <!-- MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS   -->
     <!-- MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS MODAL GRUPOS   -->
-    <div class="modal" :class="modalGrupos?'mostrar':''">
+    <div id="grupos" class="modal" :class="modalGrupos?'mostrar':''">
         <div class="modal-dialog modal-primary modal-lg">
-            <div class="modal-content animated fadeIn">
+            <div class="modal-content animated fadeIn position-fixed  slideInUp">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Grupo</h4>
-                    <button type="button" class="close" @click="modalGrupos=0">x</button>
+                    <button type="button" class="close" @click="cerrarmodal('grupos')">x</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -136,7 +146,7 @@
                     </div>
                 </div>        
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalGrupos=0">Cerrar</button>
+                    <button class="btn btn-secondary" @click="cerrarmodal('grupos')">Cerrar</button>
                     <button class="btn btn-primary" @click="validarGrupo()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
@@ -149,16 +159,16 @@
 <script>
 export default {
     data(){ return {
-        modalGrupos:0, accion:'', ipbirt:'', jsfechas:'', 
+        modalGrupos:0, accion:'', ipbirt:'', jsfechas:'', buscar:'',
         arrayGrupos:[], arrayCuentas:[], 
         idgrupo:'', codgrupo:'', nomgrupo:'', vida:'', coef:'',
         idcuentaconta:'', idcuentadepre:'', idcuentagasto:'',
     }},
 
     methods:{
-        listaGrupos(activo){
+        listaGrupos(activo,buscar=null){
             $('#r'+activo).prop('checked',true);
-            var url= '/act_grupo/listaGrupos?activo='+activo;
+            var url= '/act_grupo/listaGrupos?activo='+activo+'&buscar='+buscar;
             axios.get(url).then(response=>{
                 this.arrayGrupos=response.data.grupos;
                 this.ipbirt=response.data.ipbirt; 
@@ -181,7 +191,10 @@ export default {
         },
 
         nuevoGrupo(){
-            this.modalGrupos=1;
+            this.classModalGrupos=new _pl.Modals();
+            this.classModalGrupos.addModal('grupos'); 
+            this.classModalGrupos.openModal('grupos')
+            //this.modalGrupos=1;
             this.accion=1;
             this.generarCodigo();
             this.nomgrupo='';
@@ -192,7 +205,10 @@ export default {
         },
 
         editarGrupo(grupo){
-            this.modalGrupos=1;
+            this.classModalGrupos=new _pl.Modals();
+            this.classModalGrupos.addModal('grupos'); 
+            this.classModalGrupos.openModal('grupos');
+            //this.modalGrupos=1;
             this.accion=2;
             this.idgrupo =grupo.idgrupo;
             this.codgrupo=grupo.codgrupo;
@@ -202,6 +218,10 @@ export default {
             this.idcuentaconta=grupo.idcuentaconta;
             this.idcuentadepre=grupo.idcuentadepre;
             this.idcuentagasto=grupo.idcuentagasto;
+        },
+
+        cerrarmodal(id){ 
+                this.classModalGrupos.closeModal(id); 
         },
 
         validarGrupo(){
@@ -227,7 +247,7 @@ export default {
             }).then(response=> {
                 swal('Datos Guardados','','success');
                 this.listaGrupos(1);
-                this.modalGrupos=0;
+                this.cerrarmodal('grupos');
             }); 
         },
       
@@ -247,7 +267,7 @@ export default {
             }).then(response=> {
                 swal('Datos Actualizados','','success');
                 this.listaGrupos(1);
-                this.modalGrupos=0;
+                this.cerrarmodal('grupos');
             }); 
         },
 
@@ -280,3 +300,10 @@ export default {
     }
 }
 </script>
+<style >
+.rojo{
+    color:red;
+
+}
+
+</style>

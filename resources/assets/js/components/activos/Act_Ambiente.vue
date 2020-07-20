@@ -68,12 +68,12 @@
         </div>
     </div>
 
-    <div class="modal" :class="modalAmbiente?'mostrar':''" >
+    <div id="ambientes" class="modal" :class="modalAmbiente?'mostrar':''" >
         <div class="modal-dialog modal-primary">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Ambiente</h4>
-                    <button class="close" @click="modalAmbiente=0">x</button>
+                    <button class="close" @click="cerrarmodal('ambientes')">x</button>
                 </div>
                 <div class="modal-body">
                     <h4 class="titsubrayado">Filial <span v-text="regFilial.nommunicipio"></span></h4>
@@ -91,7 +91,7 @@
                     <div class="txtobligatorio text-right"></div>                    
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalAmbiente=0">Cancelar</button>
+                    <button class="btn btn-secondary" @click="cerrarmodal('ambientes')">Cancelar</button>
                     <button class="btn btn-primary" @click="validarAmbiente()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
@@ -149,19 +149,29 @@ export default {
         },
 
         nuevoAmbiente(){
-            this.modalAmbiente=1;
+            this.classModalAmbientes=new _pl.Modals();
+            this.classModalAmbientes.addModal('ambientes'); 
+            this.classModalAmbientes.openModal('ambientes')
+            //this.modalAmbiente=1;
             this.accion=1;
             this.generarCodigo();
             this.nomambiente='';
             this.$validator.reset();
         },
 
-        editarAmbiente(ambiente){          
-            window.scroll({top:0,left:0,behavior:'smooth'});  
-            this.modalAmbiente=1;
+        editarAmbiente(ambiente){         
+            this.classModalAmbientes=new _pl.Modals();
+            this.classModalAmbientes.addModal('ambientes'); 
+            this.classModalAmbientes.openModal('ambientes') 
+            //window.scroll({top:0,left:0,behavior:'smooth'});  
+            //this.modalAmbiente=1;
             this.accion=2;
             this.idambiente=ambiente.idambiente;
             this.nomambiente=ambiente.nomambiente;
+        },
+
+        cerrarmodal(id){ 
+                this.classModalAmbientes.closeModal(id); 
         },
 
         validarAmbiente(){
@@ -173,12 +183,13 @@ export default {
 
         storeAmbiente(){
             axios.post('act_ambiente/storeAmbiente',{
+                'idfilial':this.idfilial,
                 'codambiente':this.codambiente,
                 'nomambiente':this.nomambiente.toUpperCase(),
             }).then(response=>{
                 swal('Ambiente creado correctamente','','success');
                 this.listaAmbientes(this.idfilial,1);
-                this.modalAmbiente=0;
+                this.cerrarmodal('ambientes');
             });
         },
 
@@ -188,7 +199,7 @@ export default {
                 'nomambiente':this.nomambiente.toUpperCase(),
             }).then(response=>{
                 swal('Datos actualizados','','success');
-                this.modalAmbiente=0;
+                this.cerrarmodal('ambientes');
                 this.listaAmbientes(this.idfilial,1);
             });
         },
@@ -196,7 +207,7 @@ export default {
         estadoAmbiente(ambiente){
             this.idambiente=ambiente.idambiente;
             if(ambiente.activo){
-                swal({title:'Desactivará la Ambiente<br>'+ambiente.nomambiente, type:'warning',
+                swal({title:'Desactivará el Ambiente<br>'+ambiente.nomambiente, type:'warning',
                     html: 'No podrá acceder a la información dependiente', showCancelButton: true,
                     confirmButtonColor:'#f86c6b', confirmButtonText:'Desactivar Ambiente',
                     cancelButtonText:'Cancelar', reverseButtons: true

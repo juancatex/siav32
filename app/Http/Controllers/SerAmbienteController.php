@@ -11,13 +11,14 @@ class SerAmbienteController extends Controller
 {
     public function listaAmbientes(Request $request)
     {
+        $ip=config('app.ip'); 
         $ambientes=Ser_Ambiente::select('*','capacidad as porhora')//canchas
         ->where('idestablecimiento',$request->idestablecimiento);
         if($request->bloque) $ambientes->where('codambiente','like',$request->bloque.'%');
         if($request->piso)   $ambientes->where('piso',$request->piso);
         $ambientes->orderBy('codambiente');
         if($request->idambiente) $ambientes=Ser_Ambiente::where('idambiente',$request->idambiente);
-        return ['ambientes'=>$ambientes->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['ambientes'=>$ambientes->get(),'ipbirt'=>$ip];
     }
 
     public function storeAmbiente(Request $request)
@@ -82,5 +83,12 @@ class SerAmbienteController extends Controller
             ->update(['tarifasocio'=>$request->tarifasocio]);
         exit;
     }
+
+    function liberarAmbiente(Request $request) { echo $request->idambiente;
+        DB::table('ser__ambientes')->where('idambiente',$request->idambiente)         
+        ->update(['ocupado'=>0]);
+        return 1;
+    }
+
 
 }

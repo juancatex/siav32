@@ -56,6 +56,7 @@
                     <div class="tfila">
                         <div class="tcelda titcampo">Responsable:</div>
                         <div class="tcelda">
+                            {{regActivo.nombre}}
                             <!--
                             <span v-if="!verResponsable(regActivo.idactivo)" class="badge badge-danger">Sin Asignar</span>
                             <span v-else v-text="verResponsable(regActivo.idactivo)"></span>
@@ -72,7 +73,7 @@
             <div class="row">
                 <div class="col-md-6 titcard">
                     <div class="tablatit">
-                        <div class="tcelda">Cálculo de Depreciación</div>
+                        <div class="tcelda">Calculo de Depreciacion</div>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -202,8 +203,8 @@ export default {
             for(var ges=gesini; ges<gesfin; ges++){
                 var regDepreciacion=new Object();
                 regDepreciacion.gestion=ges;
-                regDepreciacion.ufvini=this.arrayUfvini[ges-2009].valor;
-                regDepreciacion.ufvfin=this.arrayUfvfin[ges-2009].valor;
+                regDepreciacion.ufvini=this.arrayUfvini[ges-2008].valor;
+                regDepreciacion.ufvfin=this.arrayUfvfin[ges-2008].valor;
                 regDepreciacion.depranual=depranual;
                 if(ges==gesini) {
                     regDepreciacion.ufvini=activo.ufvini;

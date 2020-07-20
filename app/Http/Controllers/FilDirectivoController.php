@@ -10,6 +10,7 @@ class FilDirectivoController extends Controller
     
     public function listaDirectivos(Request $request)
     {
+        $ip=config('app.ip'); 
         $directivos=Fil_Directivo::
         select('iddirectivo','fil__directivos.idunidad','nomcargo','nomgrado','nomespecialidad',
         'socios.idsocio','nombre','apaterno','amaterno','nomfuerza','telcelular',
@@ -21,7 +22,7 @@ class FilDirectivoController extends Controller
         ->leftjoin('par_especialidades','par_especialidades.idespecialidad','socios.idespecialidad')
         ->where('idfilial',$request->idfilial)->where('fil__directivos.activo',$request->activo);;
         $directivos->orderBy('fil__unidads.idunidad');
-        return ['directivos'=>$directivos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['directivos'=>$directivos->get(),'ipbirt'=>$ip];
     }
 
     public function storeDirectivo(Request $request)

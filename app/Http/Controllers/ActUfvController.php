@@ -31,10 +31,11 @@ class ActUfvController extends Controller
 
     public function ufvGestion(Request $request)
     {
+        $ip=config('app.ip'); 
         $ufvgestion=Act_Ufv::select('valor');
         if($request->criterio=="ini") $ufvgestion->where('fecha','like','%-01-01');
         if($request->criterio=="fin") $ufvgestion->where('fecha','like','%-12-31');
-        return ['ufvgestion'=>$ufvgestion->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['ufvgestion'=>$ufvgestion->get(),'ipbirt'=>$ip];
     }
 
     public function cargarExcel(Request $request)
