@@ -456,6 +456,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/ser_ambiente/updateAmbiente','SerAmbienteController@updateAmbiente'); //U
     Route::put ('/ser_ambiente/switchAmbiente','SerAmbienteController@switchAmbiente'); //D
     Route::put ('/ser_ambiente/storeBloque' ,  'SerAmbienteController@storeBloque');    //C
+    Route::put ('/ser_ambiente/liberarAmbiente' ,'SerAmbienteController@liberarAmbiente');    //C
 
     Route::post('/ser_implemento/storeImplemento','SerImplementoController@storeImplemento');    //C
     Route::get ('/ser_implemento/listaImplementos','SerImplementoController@listaImplementos');  //R

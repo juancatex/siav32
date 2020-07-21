@@ -10,13 +10,20 @@ use App\Act_Grupo;
 class ActGrupoController extends Controller
 {
     public function listaGrupos(Request $request)
-    {
+    {   
+        $ip=config('app.ip'); 
+        
         $sql="select idgrupo,codgrupo,nomgrupo,vida,idcuentaconta,idcuentadepre,idcuentagasto,activo,
         (select nomcuenta from con__cuentas where idcuenta=idcuentaconta) as cuentaconta,
         (select nomcuenta from con__cuentas where idcuenta=idcuentadepre) as cuentadepre,
         (select nomcuenta from con__cuentas where idcuenta=idcuentagasto) as cuentagasto
-        from act__grupos where activo=$request->activo order by nomgrupo";
-        return ['grupos'=>DB::select($sql),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        from act__grupos where activo=$request->activo";
+        if ($request->buscar!='null')
+            $sql = $sql . " and nomgrupo like '%$request->buscar%' ";
+
+        $sql = $sql . " order by nomgrupo";
+      
+        return ['grupos'=>DB::select($sql),'ipbirt'=>$ip];
     }
 
     public function listaCuentas(Request $request)

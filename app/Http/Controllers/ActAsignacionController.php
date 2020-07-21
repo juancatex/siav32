@@ -11,6 +11,7 @@ class ActAsignacionController extends Controller
 {
     public function listaAsignaciones(Request $request)
     {   
+        $ip=config('app.ip'); 
         $asignaciones=Act_Asignacion::selectRaw("act__asignacions.*, act__ambientes.nomambiente, par_municipios.nommunicipio,
             if(tiporesponsable='s',
             (select concat(nomgrado,' ',nombre,' ',apaterno) from socios 
@@ -28,7 +29,7 @@ class ActAsignacionController extends Controller
             ->where('act__activos.idgrupo',$request->idgrupo);
             if($request->idauxiliar) $activos->where('act__activos.idauxiliar',$request->idauxiliar);
         }
-        return['asignaciones'=>$asignaciones->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return['asignaciones'=>$asignaciones->get(),'ipbirt'=>$ip];
     }
 
     public function listaResponsables(Request $request)

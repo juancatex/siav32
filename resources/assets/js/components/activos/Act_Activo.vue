@@ -13,9 +13,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-1 text-right" style="padding:0px">
+        <!-- <div class="col-md-4 col-sm-1 text-right" style="padding:0px">
             <button class="btn btn-success cui-options botonnav"></button>
-        </div>
+        </div> -->
                     <!--
                     <a href="#" class="dropdown-item" > Detalle de Depreciaciones</a>
                     <a href="#" class="dropdown-item" > Resumen por cuenta</a>
@@ -48,7 +48,7 @@
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idambiente" 
                                         @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
-                                        <option value="">...TODO</option>
+                                        <option selected="selected" value="">TODO...</option>
                                         <option v-for="ambiente in arrayAmbientes" :key="ambiente.idambiente"
                                             v-text="ambiente.nomambiente" :value="ambiente.idambiente"></option>
                                     </select>
@@ -63,7 +63,7 @@
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idgrupo" 
                                         @change="listaAuxiliares(idgrupo),listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
-                                        <option value="">...TODO</option>
+                                        <option value="">TODO...</option>
                                         <option v-for="grupo in arrayGrupos" :key="grupo.id" 
                                             v-text="grupo.nomgrupo" :value="grupo.idgrupo"></option>
                                     </select>
@@ -78,7 +78,7 @@
                                 <div class="tcelda">
                                     <select class="form-control" v-model="idauxiliar" 
                                         @change="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)">
-                                        <option value="">...TODO</option>
+                                        <option value="">TODO...</option>
                                         <option v-for="auxiliar in arrayAuxiliares" :key="auxiliar.id" 
                                             v-text="auxiliar.nomauxiliar" :value="auxiliar.idauxiliar"></option>
                                     </select>
@@ -89,16 +89,11 @@
                 </div>
                 <br/>
                 <div class="row">                   
-                    <div class="col-md-6">
-                        <div class="tabla100">
-                            <div class="tfila">
-                                <div class="tcelda">
-                                <input type="text" v-model="buscar" @keyup.enter="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="form-control" placeholder="Ingrese codigo activo">
-                                <button type="submit" @click="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>        
+                    <div class="col-md-9 row input-group" style="align-items: center;">
+                    <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Buscar</p>        
+                        <input type="text" v-model="buscar" @keyup.enter="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="form-control" placeholder="Ingrese codigo activo">
+                        <button type="submit" @click="listaActivos(idfilial,idambiente,idgrupo,idauxiliar,buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                    </div>
                 </div>
             </div>
         </div><!-- los filtros -->
@@ -108,16 +103,23 @@
                 <div class="row">
                     <div class="col-md-5 titcard">
                         <div class="tablatit">
-                            <div class="tcelda">
+                            <div v-if="regAmbiente.nomambiente===undefined" class="tcelda">
+                                <span v-text="' Todo - '+regFilial.nommunicipio"></span>
+                            </div>
+                            <div v-else class="tcelda">
                                 <span v-text="regAmbiente.nomambiente+' - '+regFilial.nommunicipio"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-5 titcard">
                         <div class="tablatit">
-                            <div class="tcelda">
+                            <div v-if="idgrupo!=''" class="tcelda">
                                 <span v-text="regGrupo.nomgrupo"></span>
                             </div>
+                            <div v-else class="tcelda">
+                                <span></span>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-md-2 text-right">
@@ -195,12 +197,13 @@
 
     <!-- MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO-->
     <!-- MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO MODAL ACTIVO-->
-    <div class="modal" :class="modalActivo?'mostrar':''" >
+    
+    <div id='activos' class="modal" v-if="ventana_activo===1">
         <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title"><span v-text="accion==1?'Nuevo':'Modificar'"></span> Activo</h4>
-                    <button type="button" class="close" @click="modalActivo=0">×</button>
+                    <button type="button" class="close" @click="cerrarmodal('activos')">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="row" style="overflow-y:scroll; height:400px">
@@ -267,95 +270,99 @@
                         
                         <div class="col-md-4">
                             <h5 class="titazul">Imagen</h5>
+                            <div v-if="image"> 
+                                <div v-if="success">.
+                                        <img :src="image" id="imgC"  class="fotosocio" >		
+                                        <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
+                                        <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
+                                        <div class="formu-tabla" style="display:none"> 
+                                        <input   type="text"  v-model="fotografia"  name="fotografia" >
+                                        </div>
+                                        <!-- <p class="text-error">{{ errors.first('fotografia')}}</p> -->
                             
-                            <div v-if="image">   
-                            <div v-if="success">   
-                                    <img :src="image" id="imgC"  class="fotosocio" >		
-                                    <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
-                                    <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
-                                    <div class="formu-tabla" style="display:none"> 
-                                    <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
-                                    </div>
-                                    <p class="text-error">{{ errors.first('fotografia')}}</p>
-                        
+                                </div>
+                                <div v-else> 
+                                        <img :src="image" id="imgC"  class="fotosocio" v-on:load="cambio"> 
+                                        <div style="padding: 9px;"><button  type="button" class="btn btn-success" @click="saveFoto()">Seleccionar</button> 
+                                        <button  type="button" class="btn btn-danger" @click="cancelSaveFoto()">Cancelar</button></div>	 															
+                                        <div class="formu-tabla" style="display:none"> 
+                                        <input  type="text"  v-model="fotografia"  name="fotografia" >
+                                        </div>
+                                        <!-- <p class="text-error">{{ errors.first('fotografia')}}</p>                                                     -->
+                                </div> 												 
                             </div>
-                            <div v-else> 
-                                    <img :src="image" id="imgC"  class="fotosocio" v-on:load="cambio"> 
-                                    <div style="padding: 9px;"><button  type="button" class="btn btn-success" @click="saveFoto()">Seleccionar</button> 
-                                    <button  type="button" class="btn btn-danger" @click="cancelSaveFoto()">Cancelar</button></div>	 															
-                                    <div class="formu-tabla" style="display:none"> 
-                                    <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
-                                    </div>
-                                    <p class="text-error">{{ errors.first('fotografia')}}</p>                                                    
-                            </div> 												 
-                        </div>
-                        <div v-else> 															 															
-                            <img v-if="imagen" :src="'img/activos/'+imagen"   class="fotosocio">
-                            <img v-else :src="'img/activos/general.jpg'"  class="fotosocio">		
-                            <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
-                            
-                            <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
-                            
-                            <div class="formu-tabla" style="display:none"> 
-                            <!-- <input v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" > -->
-                            <input :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" >
-                            </div>
-                            <p class="text-error">{{ errors.first('fotografia')}}</p>															
-                        </div>  
 
 
+                            <div v-else>..				 															
+                                <img v-if="imagen" :src="'img/activos/'+imagen"   class="fotosocio">
+                                <img v-else :src="'img/activos/general.jpg'"  class="fotosocio">		
+                                <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
+                                
+                                <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
+                                
+                                <div class="formu-tabla" style="display:none"> 
+                                <!-- <input v-validate.initial="'required'" :class="{'input': true, 'is-danger': errors.has('name') }"  type="text"  v-model="fotografia"  name="fotografia" > -->
+                                <input   type="text"  v-model="fotografia"  name="fotografia" >
+                                </div>
+                                <!-- <p class="text-error">{{ errors.first('fotografia')}}</p>															 -->
+                            </div>  
                             
                         </div>
 
                         <div class="col-md-12"><h5 class="titazul">Detalle de la compra</h5></div>
                         <div class="col-md-4">
-                            Fecha de adquisición: <span class="txtasterisco"></span>
-                            <input type="date" class="form-control" v-model="fechaingreso"
-                                name="adq" >
                             
-                            Costo: 
+                            Fecha de adquisición: <span class="txtasterisco"></span>
                             <div class="input-group">
-                                <input type="text" v-model="costo" class="form-control text-right"
-                                    name="cos" >
+                                <input type="date" class="form-control" v-model="fechaingreso" 
+                                    name="fecadqui" :class="{'invalido':errors.has('fecadqui')}" v-validate="'required'">
+                                <span class="text-error">{{ errors.first('fecadqui')}}</span>
+                            </div>
+
+                            Costo: <span class="txtasterisco"></span>
+                            <div class="input-group">
+                                <input type="number" step="any" v-model="costo" class="form-control text-right"
+                                    name="cos" :class="{'invalido':errors.has('cos')}" v-validate="'required'">
+                                    <p class="txtvalidador" v-if="errors.has('cos')">Dato requerido</p>
                                 <div class="input-group-append"><span class="input-group-text">Bs.</span></div>
                             </div>
                             
                         </div>
                         <div class="col-md-4">
-                            Factura:
-                            <input type="text" v-model="idcompra" class="form-control text-right">
-
+                            Factura: <span class="txtasterisco"></span>
+                                <input v-model="idcompra" type="text" class="form-control"
+                                    name="factura" :class="{'invalido':errors.has('factura')}" v-validate="'required'">
+                                <p class="txtvalidador" v-if="errors.has('factura')">Dato requerido</p>   
                         </div>
                         <div class="col-md-4">
                             Observaciones:
                             <textarea rows="3" class="form-control" style="resize:none" v-model="obs" ></textarea>
                         </div>
-
+{{errors.all()}}
                     </div>
                 </div>
                 <div class="modal-footer text-center">
-                    <button class="btn btn-secondary" @click="modalActivo=0">Cerrar</button>
+                    <button class="btn btn-secondary" @click="cerrarmodal('activos')">Cerrar</button>
                     <button class="btn btn-primary" @click="validarActivo()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
             </div>
         </div>
     </div> 
-    
 
     <!-- MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA-->
     <!-- MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA MODAL BAJA-->
-    <div class="modal" :class="modalBaja?'mostrar':''" >
+    <div id="bajas" class="modal" v-if="ventana_baja===1" > 
         <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title">Baja de Activo</h4>
-                    <button type="button" class="close" @click="modalBaja=0">×</button>
+                    <button type="button" class="close" @click="cerrarmodal2('bajas')">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <h5 class="titazul">Información</h5>
+                            <h5 class="titazul">Información</h5> 
                             <div class="tfila">
                                 <div class="tcelda titcampo">Código:</div>
                                 <div class="tcelda" v-text="regActivo.codactivo"></div>
@@ -403,8 +410,9 @@
                             -->
                         </div>
                         <div class="col-md-4">
-                            <h5 class="titazul">Estado físico</h5><br>
-                            <img src="img/activos/general.jpg" :alt="regActivo.nomauxiliar">
+                            <h5 class="titazul">Activo</h5><br> 
+                            <img v-if="regActivo.imagen" :src="'img/activos/'+regActivo.imagen"   class="fotosocio">
+                            <img v-else :src="'img/activos/general.jpg'"  class="fotosocio">
                         </div>
                         <div class="col-md-4">
                             <h5 class="titazul">Registro de Baja</h5>
@@ -430,10 +438,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
+                <!-- {{errors.all()}} -->
                 <div class="modal-footer text-center">
-                    <button class="btn btn-secondary" @click="modalBaja=0">Cerrar</button>
-                    <button class="btn btn-danger" @click="validarBaja(regActivo)">Ejecutar Baja </button>
+                    <button class="btn btn-secondary" @click="cerrarmodal2('bajas')">Cerrar</button>
+                    <!-- <button class="btn btn-danger" @click="validarBaja(regActivo)">Ejecutar Baja </button> -->
+                    <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="validarBaja(regActivo)">Guardar</button>
                 </div>
             </div>
         </div>
@@ -453,12 +463,13 @@ import * as reporte from '../../functions.js';
 export default {
     data(){ return {
         modalActivo:'', jsfechas:'', jsfunc:'', ipbirt:'',       
+        ventana_baja:0, ventana_activo:0,
         modalBaja:0, accion:1, currfecha:'',
         divActivos:1, divKardex:0, divAsignacion:0,
         arrayFiliales:[], arrayAmbientes:[], arrayGrupos:[], arrayAuxiliares:[], 
         arrayActivos:[], arrayEmpleados:[], arrayMotivos:[], arrayAsignaciones:[],  
         regFilial:[], regAmbiente:[], regGrupo:[], regAuxiliar:[], regActivo:[],
-        idfilial:1, idambiente:'', idgrupo:'', idauxiliar:'',
+        idfilial:1, idambiente:'', idgrupo:'', idauxiliar:'', 
         codactivo:'', descripcion:'', marca:'', serie:'', correlativo:'',
         idcompra:'', fechaingreso:'', costo:'', residual:0, obs:'', 
         baja:'', fechabaja:'', nrorden:'', idmotivo:'', obsbaja:'',
@@ -505,69 +516,68 @@ export default {
         },
 
     methods:{
-    cambiarPagina(page){
+        cambiarPagina(page){
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
                 me.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);                                
-            },
+        },
 
         cambio(){ 
-        let vm = this;
-                
-        var canvas = $("#imgC").cropper({
-                    aspectRatio: 1/1,
-                    viewMode: 3,
-                    dragMode: 'move',
-                    autoCropArea: 1,
-                    restore: false, 
-                    guides: false, 
-                    rotatable: false,
-                    multiple: false
-                });            
+            let vm = this;
+            var canvas = $("#imgC").cropper({
+                aspectRatio: 1/1,
+                viewMode: 3,
+                dragMode: 'move',
+                autoCropArea: 1,
+                restore: false, 
+                guides: false, 
+                rotatable: false,
+                multiple: false
+            });            
         },
         
         saveFoto(){
-        let vm = this;
-        vm.success='ok'; 
+            let vm = this;
+            vm.success='ok'; 
                         
-                var canvas = $("#imgC").cropper('getCroppedCanvas').toDataURL(); 
-                vm.image=canvas; 
-                vm.fotografia=canvas; 
-                $('#imgC').cropper('destroy');
+            var canvas = $("#imgC").cropper('getCroppedCanvas').toDataURL(); 
+            vm.image=canvas; 
+            vm.fotografia=canvas; 
+            $('#imgC').cropper('destroy');
         },
         
         cancelSaveFoto(){
             let vm = this;
             vm.success='';
             vm.image='';
-            vm.fotografia=vm.rutafoto;                                
+            vm.fotografia=vm.imagen;                                
         }, 
         
         onFileChange(e) {
                 let files = e.target.files || e.dataTransfer.files;
-                this.createImage(files[0]);
+                this.createImage(files[0]); 
                 // console.log(this.image);                             
             },
 
         createImage(file) { 			
-                if(!file.type.match('image.*')){
+            if(!file.type.match('image.*')){
                 console.log('${file.name} is not an image');
                 alert("Incorrecto...!, debe seleccionar solo Imágen:");
-               return;
-				}else{
+                return;
+            } else {
 				let reader = new FileReader();
-					let vm = this;
-					vm.success=''; 
-					vm.fotografia=vm.rutafoto;
-					
-					reader.onload = (e) => {
-					vm.image = e.target.result; 
-					};
-					reader.readAsDataURL(file);
-			 	}                               
-            }, 
+                let vm = this;
+                vm.success=''; 
+                vm.fotografia=vm.imagen;
+                
+                reader.onload = (e) => {
+                   vm.image = e.target.result;  
+                };
+                reader.readAsDataURL(file);
+            }                               
+        }, 
 
         rep_asignacion(idactivo) { 
             var url=[];            
@@ -697,12 +707,16 @@ export default {
         },
 
         async bajaActivo(activo){
-            this.modalBaja=1;
+            this.ventana_activo=0;
+            this.ventana_baja=1;
+            this.classModalBajas=new _pl.Modals();
+            this.classModalBajas.addModal('bajas'); 
+            this.classModalBajas.openModal('bajas')
             this.accion=1;
             this.listaMotivos();
             var url='/act_activo/verActivo?idactivo='+activo.idactivo;           
             let response=await axios.get(url);
-            this.regActivo=response.data.activo[0];
+            this.regActivo=response.data.activo[0]; 
             this.$validator.reset();
             //this.depreciacionActual(activo,activo.currfecha);            
         },
@@ -729,8 +743,12 @@ export default {
         },
 
         nuevoActivo(){
-            if(!this.idauxiliar) { swal('Especifique Auxiliar','','error'); return; } 
-            this.modalActivo=1;
+            this.ventana_baja=0;
+            this.ventana_activo=1;
+            this.classModalActivos=new _pl.Modals();
+            this.classModalActivos.addModal('activos'); 
+            this.classModalActivos.openModal('activos')
+            if(!this.idauxiliar) { swal('Especifique Auxiliar','','error'); this.cerrarmodal('activos'); return; }  
             this.accion=1;
             this.codactivo='';
             this.descripcion='';
@@ -743,14 +761,42 @@ export default {
             this.$validator.reset();
         },
 
-        async editarActivo(activo){
-            this.modalActivo=1;
+        storeBaja(activo){
+            axios.put('/act_activo/storeBaja',{
+                'idactivo':activo.idactivo,
+                'fechabaja':this.fechabaja,
+                'nrorden':this.nrorden,
+                'idmotivo':this.idmotivo,
+                'obsbaja':this.obsbaja
+            }).then(response=>{ //console.log('da: '+response.data)
+                if(response.data===1) {
+                    swal('Activo aun asignado','Se ha dado de baja este activo','error');
+                }
+                else {
+                    swal('Operación correcta','Se ha dado de baja este activo. Verifique en el módulo Activos -> Bajas','success');
+                }                
+                this.cerrarmodal2('bajas');
+                this.idfilial = activo.idfilial;
+                this.idambiente = activo.idambiente;
+                this.idgrupo = activo.idgrupo;
+                this.idauxiliar = activo.idauxiliar;
+                this.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);
+            });
+        },
+        
+        async editarActivo(activo){ 
+            this.ventana_baja=0; //this.regActivo.idcompra='';
+            this.ventana_activo=1;
+            this.classModalActivos=new _pl.Modals();
+            this.classModalActivos.addModal('activos'); 
+            this.classModalActivos.openModal('activos')
             this.accion=2;
             let response=await axios.get('/act_activo/listaActivos?idactivo='+activo.idactivo);
             this.regActivo=response.data.activos[0];
             this.idactivo=this.regActivo.idactivo;
             this.idfilial=this.regActivo.idfilial;
             this.idambiente=this.regActivo.idambiente;
+            this.imagen = activo.imagen;
             this.regAuxiliar.nomauxiliar=activo.nomauxiliar;
             this.regGrupo.nomgrupo=activo.nomgrupo;
             this.regAmbiente.codambiente=activo.codambiente;
@@ -764,10 +810,24 @@ export default {
             this.obs=this.regActivo.obs;
         },
 
+        cerrarmodal(id){ 
+            this.success='';
+            this.image=''; this.imagen='';
+            this.fotografia=this.imagen;
+            this.classModalActivos.closeModal(id); 
+        },
+
+        cerrarmodal2(id){ 
+            this.success='';
+            this.image=''; this.imagen='';
+            this.fotografia=this.imagen;
+            this.classModalBajas.closeModal(id); 
+        },
+
         validarActivo(){
+            //console.log(this.$validator.validateAll());
             this.$validator.validateAll().then(result=>{
-                //if(!result) { swal('Datos no válidos','Revise los errores','error'); return; }
-                console.log(result);
+                if(!result) { swal('Datos no válidos','Revise los errores','error');  return; }
                 this.accion==1?this.storeActivo():this.updateActivo();
             });
         },
@@ -782,6 +842,7 @@ export default {
                 'codactivo':'ASC'+this.codactivo,
                 'descripcion':this.descripcion?this.descripcion.toUpperCase():'',
                 'marca':this.marca?this.marca.toUpperCase:'',
+                'image': this.image,
                 'serie':this.serie,
                 'fechaingreso':this.fechaingreso,
                 'costo':this.costo,
@@ -792,19 +853,19 @@ export default {
                 'obs':this.obs
             }).then(reponse=>{
                 swal('Activo creado correctamente','Proceda a la asignación de responsable','success');
-                this.modalActivo=0;
+                this.cerrarmodal('activos')
                 this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
         },
 
-        updateActivo(){  console.log(this.imagen, this.fotografia);
+        updateActivo(){  
             let me=this;
             axios.put('/act_activo/updateActivo',{
                 'idactivo':this.idactivo,
                 'idfilial':this.idfilial,
                 'idambiente':this.idambiente,
                 'descripcion':this.descripcion,
-                'imagen':this.imagen,
+                'image':this.image,
                 'marca':this.marca,
                 'serie':this.serie,
                 'fechaingreso':this.fechaingreso,
@@ -812,7 +873,7 @@ export default {
                 'obs':this.obs
             }).then(response=>{
                 swal('Datos Actualizados','','success');
-                this.modalActivo=0;
+                this.cerrarmodal('activos')
                 this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
             });
         },
@@ -823,26 +884,6 @@ export default {
                 this.storeBaja(activo);
             })
         },
-
-        storeBaja(activo){
-            axios.put('/act_activo/storeBaja',{
-                'idactivo':activo.idactivo,
-                'fechabaja':this.fechabaja,
-                'nrorden':this.nrorden,
-                'idmotivo':this.idmotivo,
-                'obsbaja':this.obsbaja
-            }).then(response=>{ console.log('da: '+response.data)
-                if(response.data===1) {
-                    swal('Activo aun asignado','Se ha dado de baja este activo','error');
-                }
-                else {
-                    swal('Operación correcta','Se ha dado de baja este activo. Verifique en el módulo Activos -> Bajas','success');
-                }                
-                this.modalBaja=0;
-                this.listaActivos(activo.idfilial,activo.idambiente,activo.idgrupo,activo.idauxiliar);
-            });
-        },
-
     },
 
     mounted(){
@@ -850,7 +891,7 @@ export default {
         this.listaAmbientes(this.idfilial);
         this.listaGrupos();
         this.listaAuxiliares(this.idgrupo);
-        this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
+        //this.listaActivos(this.idfilial,this.idambiente,this.idgrupo,this.idauxiliar);
         this.jsfechas=jsfechas;
     }
 }

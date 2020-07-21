@@ -4,20 +4,18 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
-            <div class="container-fluid">
+            <div class="container">
                 <!-- Ejemplo de tabla Listado -->
-                <div class="card">
+                <div class="card border-info">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Reportes Activos Fijos.
-                        <br/><br/>
-                        <ul>
-                            <li>
-                                <button class="col-md-3 btn btn-block btn-primary" @click="verPorsocio()">Activos asignados por Socio</button>                            
-                            </li>
-                            <li>
-                                <button class="col-md-3 btn btn-block btn-primary" @click="devPorsocio()">Activos Devueltos por Socio</button>                            
-                            </li>                                                                    
-                        </ul>                                            
+                        Reportes Activos Fijos por Socio
+                        <span class="badge badge-info float-right">Reportes</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-sm-3 mb-15">
+                            <button class="btn btn-block btn-info" type="button" @click="verPorsocio()">Activos Asignados</button> 
+                            <button class="btn btn-block btn-info" type="button" @click="devPorsocio()">Activos Devueltos</button>                            
+                        </div>                                 
                     </div>                    
                 </div>
                 <!-- Fin ejemplo de tabla Listado -->

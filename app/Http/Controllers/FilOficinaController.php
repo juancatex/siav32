@@ -9,6 +9,7 @@ class FilOficinaController extends Controller
 {
     public function listaOficinas(Request $request)
     {      
+        $ip=config('app.ip'); 
         if($request->responsables)
         {
             $oficinas=Fil_Oficina::selectRaw("fil__oficinas.*,nomunidad,
@@ -25,7 +26,7 @@ class FilOficinaController extends Controller
         if($request->idunidad) $oficinas->where('fil__unidads.idunidad',$request->idunidad);
         else $oficinas->where('fil__oficinas.activo',$request->activo);
         if($request->orden) $oficinas->orderBy($request->orden)->orderBy('codoficina');         
-        return ['oficinas'=>$oficinas->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['oficinas'=>$oficinas->get(),'ipbirt'=>$ip];
     }
 
     public function storeOficina(Request $request)

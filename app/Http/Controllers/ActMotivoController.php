@@ -9,9 +9,10 @@ class ActMotivoController extends Controller
 {
     public function listaMotivos(Request $request)
     {
+        $ip=config('app.ip'); 
         $motivos=Act_Motivo::select('*');
         if($request->activo) $motivos=$motivos->where('activo',1);
-        return ['motivos'=>$motivos->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['motivos'=>$motivos->get(),'ipbirt'=>$ip];
     }
 
     public function storeMotivo(Request $request)

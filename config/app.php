@@ -1,6 +1,8 @@
 <?php
-//$ip=$_SERVER['SERVER_ADDR'];
-$ip='192.168.100.59';
+$ip=$_SERVER['SERVER_ADDR'];
+if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
+$ip='127.0.0.1';
+
 return [
 
     /*

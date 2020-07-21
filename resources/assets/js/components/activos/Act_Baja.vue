@@ -22,7 +22,14 @@
                     <button class="btn btn-success icon-printer" style="margin-top:0px" title="Vista de impresión" 
                         @click="reporteBajatotal()"></button>
                 </div> -->
-            </div>                
+            </div>
+            <div class="row p-3">                   
+                    <div class="col-md-9 row input-group" style="align-items: center;">
+                    <p class="text-left" style="width: 4rem;">Buscar: </p>        
+                        <input type="text" v-model="buscar" @keyup.enter="listaBajas(buscar)" class="form-control" placeholder="Ingrese codigo activo">
+                        <button type="submit" @click="listaBajas(buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                    </div>
+                </div>                
             </div>
             <div class="card-body">
                 <table class="table table-sm table-striped">
@@ -66,7 +73,8 @@ export default {
     data(){ return {
         arrayActivos:[],
         regActivo:[],
-        ipbirt:''
+        ipbirt:'',
+        buscar:''
     }},
 
     methods:{
@@ -74,8 +82,8 @@ export default {
 
         },
 
-        listaBajas(){
-            var url='/act_activo/listaBajas';
+        listaBajas(activo=null){
+            var url='/act_activo/listaBajas?buscar='+activo;
             axios.get(url).then(response=>{
                 this.arrayActivos=response.data.activos;
                 this.ipbirt=response.data.ipbirt;

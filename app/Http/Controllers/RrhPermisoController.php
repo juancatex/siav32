@@ -9,7 +9,9 @@ use App\Rrh_Permiso;
 class RrhPermisoController extends Controller
 {
     public function listaPermisos(Request $request)
-    {   $horasalida=DB::raw('substring(horasalida,1,5) as horasalida');
+    {   
+        $ip=config('app.ip'); 
+        $horasalida=DB::raw('substring(horasalida,1,5) as horasalida');
         $permisos=Rrh_Permiso::select('rrh__permisos.*',$horasalida,'nommotivo',)
         ->join('rrh__motivos','rrh__motivos.idmotivo','rrh__permisos.idmotivo')
         ->where('idempleado',$request->idempleado)
@@ -19,7 +21,7 @@ class RrhPermisoController extends Controller
         $acumhoras=DB::select($sql)[0]->acumhoras;
         $sql="select floor(sum(cantidad)/8) as acumdias from rrh__permisos where cantidad>4 and idempleado=$request->idempleado";
         $acumdias =DB::select($sql)[0]->acumdias;
-        return ['permisos'=>$permisos,'acumdias'=>$acumdias,'acumhoras'=>$acumhoras,'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['permisos'=>$permisos,'acumdias'=>$acumdias,'acumhoras'=>$acumhoras,'ipbirt'=>$ip];
     }
 
     public function storePermiso(Request $request)

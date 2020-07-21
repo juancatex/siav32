@@ -12,6 +12,7 @@ class RrhEmpleadoController extends Controller
 {
     public function listaEmpleados(Request $request)
     {
+        $ip=config('app.ip'); 
         $empleados=Rrh_Empleado::
         select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','rrh__empleados.telcelular',
         'foto','codbiom','rrh__empleados.activo','nommunicipio as filial')
@@ -29,7 +30,7 @@ class RrhEmpleadoController extends Controller
         if($request->sedelp!='1') $empleados->where('rrh__empleados.idfilial','>=',1);
         $empleados->where('rrh__empleados.activo','=',1);
         $empleados->orderBy('apaterno')->orderBy('amaterno');
-        return ['empleados'=>$empleados->get(),'currfecha'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['empleados'=>$empleados->get(),'currfecha'=>date('Y-m-d'),'ipbirt'=>$ip];
     }
 
     public function verEmpleado(Request $request)

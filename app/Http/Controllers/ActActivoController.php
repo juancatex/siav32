@@ -4,19 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use App\Act_Activo;
 use App\Act_Depreciacion;
+use App\Act_Asignacion;
 
 class ActActivoController extends Controller
 {
     public function listaActivos(Request $request)
     {   
+        //para obtener el ip de los reportes
+        $ip=config('app.ip'); 
+
         $raw=DB::raw('(select concat(re.nombre," ",re.apaterno," ",re.amaterno) 
                         from act__asignacions aa, rrh__empleados re 
-                        where aa.idactivo = act__activos.idactivo 
+                        where aa.idactivo = act__activos.idactivo
                         and re.idempleado = aa.idresponsable 
                         and aa.activo =1) as nombre');
-        $activos=Act_Activo::select('act__activos.idactivo','act__activos.idfilial',
+        $activos=Act_Activo::select('act__activos.idactivo','act__activos.idfilial','act__activos.imagen',
         'act__activos.codactivo','act__auxiliars.nomauxiliar','act__auxiliars.idauxiliar','act__auxiliars.nomauxiliar',
         'act__grupos.nomgrupo',
         'act__grupos.codgrupo','act__ambientes.codambiente','act__auxiliars.codauxiliar',
@@ -45,39 +53,70 @@ class ActActivoController extends Controller
             ->join('act__ambientes','act__activos.idambiente','act__ambientes.idambiente');            
         }
         
-        return ['activos'=>$activos->get(),'fechahoy'=>date('Y-m-d'),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['activos'=>$activos->get(),'fechahoy'=>date('Y-m-d'),'ipbirt'=>$ip];
     }
 
     public function verActivo(Request $request)
-    {        
+    {   
+        //verificar si se tiene una asignacion
+        $asignacion=Act_Asignacion::select('idasignacion')->where('idactivo','=',$request->idactivo)->get();
+        foreach($asignacion as $asig) {
+            $d_asig = $asig->idasignacion;
+        }
+        if (isset($d_asig)) {
+            $raw=DB::raw('(select concat(re.nombre," ",re.apaterno," ",re.amaterno) 
+            from act__asignacions aa, rrh__empleados re 
+            where aa.idactivo = act__activos.idactivo
+            and re.idempleado = aa.idresponsable 
+            and aa.activo =1) as nombre');
+        }
+        else {
+            $raw='0';
+        }
+
         $activo=Act_Activo::selectRaw("act__activos.*,curdate() as currfecha, fechaingreso,
-        codfilial,nommunicipio,codambiente,nomambiente,codgrupo,nomgrupo,valor as ufvini,
+        $raw,
+        codfilial,nommunicipio,codambiente,nomambiente,imagen,codgrupo,nomgrupo,valor as ufvini,
         vida,round(100/vida,1) as coeficiente,codauxiliar,nomauxiliar")  
         ->join('fil__filials','fil__filials.idfilial','act__activos.idfilial')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
         ->join('act__ambientes','act__ambientes.idambiente','act__activos.idambiente')
         ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
         ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
-        ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso')
-        //->join('act__asignacions','act__asignacions.idactivo','=','act__activos.idactivo')
-        ->where('act__activos.idactivo',$request->idactivo)->get();
+        ->join('act__ufvs','act__ufvs.fecha','act__activos.fechaingreso');
         
-        return ['activo'=>$activo];
+        if (isset($d_asig)) {
+            $activo->join('act__asignacions','act__asignacions.idactivo','=','act__activos.idactivo');
+        }
+        
+        $activo->where('act__activos.idactivo',$request->idactivo);
+        
+        return ['activo'=>$activo->get()];
     }
 
     
     public function listaBajas(Request $request)
     {
+        $ip=config('app.ip'); 
         $activos=Act_Activo::select('act__activos.*','nommotivo','nomauxiliar')
         ->join('act__motivos','act__motivos.idmotivo','act__activos.idmotivo')
         ->join('act__grupos','act__grupos.idgrupo','act__activos.idgrupo')
-        ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar')
-        ->where('act__activos.fechabaja','>',1)->orderBy('codactivo')->get();
-        return ['activos'=>$activos,'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        ->join('act__auxiliars','act__auxiliars.idauxiliar','act__activos.idauxiliar');
+
+        if($request->buscar!='null') $activos->where('act__activos.codactivo', 'like', '%'. $request->buscar . '%');
+
+
+        $activos->where('act__activos.fechabaja','>',1)->orderBy('codactivo');
+        return ['activos'=>$activos->get(),'ipbirt'=>$ip];
     }
 
     public function storeActivo(Request $request)
     {
+        $rutas=config('app.ruta_imagen');
+        $imageData = $request->get('image');      
+        $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+        Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_ACTIVO']).$fileName);
+        
         $activo=new Act_Activo();
         $activo->codactivo=$request->codactivo;
         $activo->idfilial=$request->idfilial;
@@ -85,6 +124,7 @@ class ActActivoController extends Controller
         $activo->idgrupo=$request->idgrupo;
         $activo->idauxiliar=$request->idauxiliar;
         $activo->descripcion=$request->descripcion;
+        $activo->imagen=$fileName;
         $activo->marca=$request->marca;
         $activo->serie=$request->serie;
         $activo->fechaingreso=$request->fechaingreso;
@@ -95,12 +135,21 @@ class ActActivoController extends Controller
 
     public function updateActivo(Request $request)
     {
+        $rutas=config('app.ruta_imagen');
+        $imageData = $request->get('image'); 
+        if (isset($imageData)) {
+            $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+            Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_ACTIVO']).$fileName);
+        }     
+        
         $activo=Act_Activo::findOrFail($request->idactivo);
         $activo->descripcion=$request->descripcion;
         $activo->marca=$request->marca;
         $activo->idfilial=$request->idfilial;
         $activo->idambiente=$request->idambiente;
-        $activo->imagen=$request->imagen;
+        if (isset($imageData)) {
+            $activo->imagen=$fileName;
+        }
         $activo->serie=$request->serie;
         $activo->fechaingreso=$request->fechaingreso;
         $activo->costo=$request->costo;
@@ -114,10 +163,12 @@ class ActActivoController extends Controller
         $verifica=Act_Activo::join('act__asignacions','act__activos.idactivo','act__asignacions.idactivo')
         ->select('act__asignacions.activo')->where('act__activos.idactivo','=',$request->idactivo)->get();
         foreach($verifica as $data) {            
-            if($data->activo==1) {
-                return '1';
-            }                
-            else {
+            $data = $data->activo;           
+        }        
+        if (isset($data) && $data==1) {
+            return 1;
+        }
+        else { 
                 $activo=Act_Activo::findOrFail($request->idactivo);
                 $activo->activo=0;
                 $activo->fechabaja=$request->fechabaja;
@@ -126,7 +177,6 @@ class ActActivoController extends Controller
                 $activo->obsbaja=$request->obsbaja;
                 $activo->save();
             }
-        }                         
     }
 
     public function calcDepreciacion(Request $request)

@@ -9,6 +9,7 @@ class FilFilialController extends Controller
 {
     public function listaFiliales(Request $request)
     {
+        $ip=config('app.ip'); 
         $filiales=Fil_Filial::select('fil__filials.*','nomdepartamento','abrvdep','nommunicipio')
         ->join('par_departamentos','fil__filials.iddepartamento','par_departamentos.iddepartamento')
         ->join('par_municipios','fil__filials.idmunicipio','par_municipios.idmunicipio');
@@ -16,7 +17,7 @@ class FilFilialController extends Controller
         if($request->orden) $filiales->orderBy('codfilial','desc'); 
         else $filiales->where('fil__filials.activo',$request->activo);
         if($request->idfilial) $filiales->where('idfilial',$request->idfilial);
-        return ['filiales'=>$filiales->get(),'ipbirt'=>$_SERVER['SERVER_ADDR']];
+        return ['filiales'=>$filiales->get(),'ipbirt'=>$ip];
     }
 
     public function storeFilial(Request $request)
