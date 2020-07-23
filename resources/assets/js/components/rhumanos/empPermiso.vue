@@ -99,15 +99,16 @@
                 </thead>
                 <tbody>
                     <tr align="center">
-                        <td align="left">CON goce de haberes</td>
-                        <td>4hrs</td>
+                        <td align="left">CON goce de haberes Hrs.</td>
+                        <th v-for="acu in arrayAcumuladoConGoce" :key="acu.mes" v-text="acu.total"></th> 
                     </tr>
                     <tr align="center">
-                        <td align="left">SIN goce de haberes</td>
+                        <td align="left">SIN goce de haberes Hrs.</td>
+                        <th v-for="acu in arrayAcumuladoSinGoce" :key="acu.mes" v-text="acu.total"></th>
                     </tr>
-                    <tr align="center">
+                    <!-- <tr align="center">
                         <td align="left">A cuenta de Vacación</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -239,6 +240,7 @@ export default {
         lapso:'', cantidad:'', fechafin:'', horafin:'', 
         acumhoras:'', acumdias:'', ges:'', per:'',
         arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        arrayAcumuladoConGoce:[],arrayAcumuladoSinGoce:[]
     }},
 
     methods:{
@@ -259,6 +261,20 @@ export default {
             axios.get(url).then(response=>{
                 this.arrayMotivos=response.data.motivos;
             })
+        },
+
+        horasAcumuladasConGoce(idempleado) {
+            var url='/rrh_permiso/horasAcumuladasConGoce?idempleado='+idempleado;
+            axios.get(url).then(response=>{
+                this.arrayAcumuladoConGoce=response.data.acumuladoConGoce;                                
+            });
+        },
+
+        horasAcumuladasSinGoce(idempleado) {
+            var url='/rrh_permiso/horasAcumuladasSinGoce?idempleado='+idempleado;
+            axios.get(url).then(response=>{
+                this.arrayAcumuladoSinGoce=response.data.acumuladoSinGoce;                                
+            });
         },
 
         setHorafin(){
@@ -391,6 +407,8 @@ export default {
         this.ges=this.currfecha.substr(0,4);
         this.per=1*this.currfecha.substr(5,2);
         this.listaPermisos(this.regEmpleado.idempleado,this.ges,this.per);
+        this.horasAcumuladasConGoce(this.regEmpleado.idempleado);
+        this.horasAcumuladasSinGoce(this.regEmpleado.idempleado);
     },
 }
 </script>

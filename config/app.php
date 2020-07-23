@@ -2,6 +2,7 @@
 $ip=$_SERVER['SERVER_ADDR'];
 if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
 $ip='127.0.0.1';
+$ip='192.168.100.60';
 
 return [
 
@@ -339,4 +340,6 @@ return [
     'rutaLiqReportes'=>[
         'REP_GENERAL'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/prestamos/liq_general.rptdesign&__format=pdf',         
     ],
+    
+    'ip'=>[$ip],
 ];
