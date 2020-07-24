@@ -212,7 +212,7 @@
                                         <span v-text="tipogrupos+' '+nrgrupo"></span><span class="caret"></span>
                                     </button>
                                     <div class="dropdown-menu" x-placement="bottom-end">
-                                        <a href="#" class="dropdown-item" v-for="k in regEstablecimiento.cantgrupos" :key="k" 
+                                        <a href="#" class="dropdown-item" v-for="k in regEstablecimiento.cantgrupos*1" :key="k" 
                                             v-text="tipogrupos+' '+k" @click="listaAmbientes(k)"></a>
                                         <a href="#" class="dropdown-item" @click="addGrupo()">Crear  <span v-text="tipogrupos"></span></a>
                                         <a href="#" class="dropdown-item" @click="remGrupo()">Quitar <span v-text="tipogrupos"></span></a>
@@ -303,11 +303,11 @@
                                         <span v-text="tipogrupos+' '+nrgrupo"></span><span class="caret"></span>
                                     </button>
                                     <div class="dropdown-menu" x-placement="bottom-end">
-                                        <a href="#" class="dropdown-item" v-for="k in regEstablecimiento.cantgrupos" :key="k" 
-                                            v-text="tipogrupos+' '+k" @click="listaAmbientes(k)"></a>
+                                        <a href="#" class="dropdown-item" v-for="k1 in regEstablecimiento.cantgrupos*1" :key="k1" 
+                                            v-text="tipogrupos+' '+k1" @click="listaAmbientes(k1)"></a>
                                         <a href="#" class="dropdown-item" @click="addGrupo()">Crear  <span v-text="tipogrupos"></span></a>
                                         <a href="#" class="dropdown-item" @click="remGrupo()">Quitar <span v-text="tipogrupos"></span></a>
-                                    </div>
+                                    </div>                                    
                                 </div>
                                 <button class="btn btn-primary" @click="nuevoAmbiente()">Nueva Pieza</button>
                             </div>

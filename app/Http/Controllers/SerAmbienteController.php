@@ -21,6 +21,44 @@ class SerAmbienteController extends Controller
         return ['ambientes'=>$ambientes->get(),'ipbirt'=>$ip];
     }
 
+    public function listaAmbientesSocio(Request $request)
+    {
+        $ip=config('app.ip'); 
+
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        }         
+        
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }
+                $ambientes=Ser_Ambiente::select('*')//canchas
+                ->join('ser__asignacions','ser__asignacions.idambiente','ser__ambientes.idambiente')
+                ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                ->where('idestablecimiento',$request->idestablecimiento)
+                ->whereraw($sqls);
+                $ambientes->orderBy('codambiente');        
+                return ['ambientes'=>$ambientes->get(),'ipbirt'=>$ip]; 
+            } 
+        }
+        else {
+            $ambientes=Ser_Ambiente::select('*','capacidad as porhora')//canchas
+            ->where('idestablecimiento',$request->idestablecimiento);
+            if($request->bloque) $ambientes->where('codambiente','like',$request->bloque.'%');
+            if($request->piso)   $ambientes->where('piso',$request->piso);
+            $ambientes->orderBy('codambiente');
+            if($request->idambiente) $ambientes=Ser_Ambiente::where('idambiente',$request->idambiente);
+            return ['ambientes'=>$ambientes->get(),'ipbirt'=>$ip];
+        }
+           
+    }
+
     public function storeAmbiente(Request $request)
     {   
         $ambiente=new Ser_Ambiente();
