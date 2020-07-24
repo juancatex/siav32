@@ -16,7 +16,7 @@
                                 data-toggle="dropdown" aria-expanded="false">
                                 Departamento... <span class="caret"></span>
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end"> 
                                 <a href="#" class="dropdown-item" v-for="departamento in arrayDepartamentos" 
                                 :key="departamento.iddepartamento" v-text="departamento.nomdepartamento" 
                                 @click="listaEstablecimientos(departamento.iddepartamento)"></a>
@@ -30,6 +30,7 @@
             <div class="card-body table-responsive">
                 <table class="table table-bordered table-striped table-sm">
                     <thead class="tcabecera">
+
                         <tr>
                             <th><span class="badge badge-success" v-text="arrayEstablecimientos.length+' items'"></span></th>
                             <th>Filial</th>

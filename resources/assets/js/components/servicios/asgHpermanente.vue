@@ -1,11 +1,19 @@
 <template>
 <main>
     <div>
-        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras(regAsignacion)">nivel atras</button>
+        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras()">nivel atras</button>
     </div>
     <div class="card" v-if="divAsignaciones">
-        <div class="card-header">
+        <div class="card-header">                                        
             <div class="row">
+                
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" v-model="buscar" @keyup.enter="listaAmbientesSocio(regEstablecimiento.idestablecimiento,buscar)" class="form-control" placeholder="Ingrese Apellidos, Nombres, CI, o Papeleta">
+                            <button type="submit" @click="listaAmbientesSocio(regEstablecimiento.idestablecimiento,buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                        </div>
+                    </div>
+                
                 <div class="col-md-10 titcard">
                     <div class="tablatit">
                         <div class="tcelda">DEPARTAMENTOS PISO "<span v-text="nrgrupo"></span>"</div>
@@ -307,8 +315,8 @@
                             <p class="txtvalidador" v-if="errors.has('con')">Dato requerido</p>
                             Fecha Final Contrato: <span class="txtasterisco"></span>
                             <input type="date" class="form-control" v-model="fechasalida"
-                                name="con" :class="{'invalido':errors.has('con')}" v-validate="'required'">
-                            <p class="txtvalidador" v-if="errors.has('con')">Dato requerido</p>
+                                name="con" :class="{'invalido':errors.has('con1')}" v-validate="'required'">
+                            <p class="txtvalidador" v-if="errors.has('con1')">Dato requerido</p>
                             Boleta de pago: <span class="txtasterisco"></span>
                             <div class="tabla100">
                                 <div class="tfila">
@@ -422,7 +430,7 @@ export default {
     props: ['regEstablecimiento'],
 
     data(){ return {
-        modalAsignacion:0, modalPago:0, accion:'', jsfechas:'', ipbirt:'',
+        modalAsignacion:0, modalPago:0, accion:'', jsfechas:'', ipbirt:'', buscar:'',
         divAsignaciones:1, divValidado:1, nrgrupo:1, cantgrupos:'',
         regAsignacion:[], regAmbiente:[], regCliente:[],
         arrayAsignaciones:[], arrayAmbientes:[], arrayPagos:[],
@@ -449,6 +457,22 @@ export default {
                 this.arrayAsignaciones=response.data.asignaciones;
             });
         },
+
+        listaAmbientesSocio(idestablecimiento,buscar){ 
+            this.buscar=buscar;
+            var url='/ser_ambiente/listaAmbientesSocio?idestablecimiento='
+                +idestablecimiento+'&buscar='+buscar;
+            axios.get(url).then(response=>{
+                this.arrayAmbientes=response.data.ambientes;
+                this.ipbirt=response.data.ipbirt;
+            });
+            url='/ser_asignacion/listaAsignaciones?idestablecimiento='
+                +idestablecimiento;
+            axios.get(url).then(response=>{
+                this.arrayAsignaciones=response.data.asignaciones;
+            });
+        },
+
 
         listaDocumentos(){
             var url='/par_documento/listaDocumentos?iddocumentos='+this.regEstablecimiento.iddocumentos;
@@ -717,8 +741,9 @@ export default {
             });
         },
 
-        atras() {
+        atras() { 
             this.divAsignaciones=1;
+            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
         },
 
         reporteContrato(asignacion){

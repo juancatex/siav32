@@ -59,6 +59,7 @@ class SerAsignacionController extends Controller
         $asignacion->idimplementos=$request->idimplementos;
         $asignacion->fechaentrada=$request->fechaentrada;
         $asignacion->horaentrada=$request->horaentrada;
+        $asignacion->fechasalida=$request->fechasalida;
         $asignacion->horasalida=$request->horasalida;
         $asignacion->fechadefuncion=$request->fechadefuncion;
         $asignacion->idresponsable=$request->idresponsable;
