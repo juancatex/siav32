@@ -499,6 +499,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/rrh_permiso/storePermiso','RrhPermisoController@storePermiso');   //C
     Route::get ('/rrh_permiso/listaPermisos','RrhPermisoController@listaPermisos'); //R
+    Route::get ('/rrh_permiso/horasAcumuladasConGoce','RrhPermisoController@horasAcumuladasConGoce'); //R
+    Route::get ('/rrh_permiso/horasAcumuladasSinGoce','RrhPermisoController@horasAcumuladasSinGoce'); //R
     Route::put ('/rrh_permiso/updatePermiso','RrhPermisoController@updatePermiso'); //U
 
     Route::post('/rrh_contrato/storeContrato','RrhContratoController@storeContrato');   //C
