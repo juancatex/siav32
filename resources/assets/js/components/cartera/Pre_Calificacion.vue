@@ -316,9 +316,7 @@
                 </div>
               </div>
             </div>
-            <div v-else>
-              <!-- ///////////////////////////////////////////////////////Valoracion del prestamo/////////////////////////////////////////////////////////////////////////// -->
-              <div v-if="pasoPrestamo==1">
+            <div v-if="pasoPrestamo==1">
                 <div class="animated fadeIn " style="padding: 0px 21px 0 29px;">
                   <p style="margin: 0px;" class="col-md-12 titulopaso">Paso 3: Valoracion del prestamo</p>
 
@@ -563,9 +561,7 @@
                   </div>
                 </div>
               </div>
-              <div v-else>
-                <!-- ///////////////////////////////////////////////////////Resgistro de garantes/////////////////////////////////////////////////////////////////////////// -->
-                <div v-if="pasoPrestamo==2">
+              <div v-if="pasoPrestamo==2">
                   <div class="animated fadeIn">
                     <p class="col-md-12 titulopaso">Paso 4: Registro de Garantes ( {{totalgarantesseleccionados}} de
                       {{garantesporproducto}} )</p>
@@ -596,7 +592,7 @@
                   </div>
                 </div>
                 <!-- ///////////////////////////////////////////////////////Resgistro del prestamo/////////////////////////////////////////////////////////////////////////// -->
-                <div v-else-if="pasoPrestamo==3">
+                <div v-if="pasoPrestamo==3">
                   <div class="animated fadeIn">
                     <p class="col-md-12 titulopaso">Paso 5: Registro del Prestamo</p>
                     <div v-html="listagarantesregistrados()"></div>
@@ -685,9 +681,8 @@
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
+                </div> 
+            
 
           </div>
           <div class="modal-footer">
@@ -697,7 +692,7 @@
             
             <div class="tooltipErros">
               <button
-                :disabled="  errors.any()?true:(pasoPrestamo==1?(valorfactor<=maxfactor):(pasoPrestamo==2?(!(totalgarantesseleccionados==parseInt(garantesporproducto))):false))"
+                :disabled="errors.any()?true:(pasoPrestamo==1?(valorfactor<=maxfactor):(pasoPrestamo==2?(!(totalgarantesseleccionados==parseInt(garantesporproducto))):false))"
                 v-if="pasoPrestamo<3" type="button" class="btn btn-success" @click="siguientePaso()"
                 id="btsig">Siguiente</button>
 
@@ -786,7 +781,7 @@
       <div class="modal-dialog modal-primary modal-lg" role="document">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">
-            <h4 class="modal-title" id="modalOneLabel">Factores</h4>
+            <h4 class="modal-title" id="modalOneLabel">Factor determinante</h4>
             <button type="button" class="close" aria-hidden="true" aria-label="Close"
               @click="classModal.openModal('modalCalificacion')">
               <span aria-hidden="true">×</span>
@@ -813,7 +808,7 @@
       <div class="modal-dialog modal-primary modal-lg" role="document">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">
-            <h4 class="modal-title" id="modalOneLabel">Factores (Garantes)</h4>
+            <h4 class="modal-title" id="modalOneLabel">Factor determinante</h4>
             <button type="button" class="close" aria-hidden="true" aria-label="Close"
               @click="classModal.openModal('modalCalificacion')">
               <span aria-hidden="true">×</span>
@@ -832,60 +827,84 @@
       </div>
     </div>
 
-     <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
-      id="listaPrestamos">
-      <div class="modal-dialog modal-primary modal-xl" role="document">
+    <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
+      id="factorviewgaranteLista">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">
-            <h4 class="modal-title" >Registro de Prestamos por Lista</h4>
+            <h4 class="modal-title" >Factor determinante</h4>
             <button type="button" class="close" aria-hidden="true" aria-label="Close"
-              @click="classModal.closeModal('listaPrestamos')">
+              @click="classModal.openModal('listadoSociosLista')">
               <span aria-hidden="true">×</span>
             </button>
           </div>
 
-          <div class="modal-body" style="padding: 30px;">
-           
-            <div class="form-group row">
-             <div class="col-md-12">
-               <label style="text-align: left; align-items: center;font-weight: 500;"
-                    class="form-control-label">Seleccionar socio:</label>
-            <template v-if="agregarlista"  >
-                    <Ajaxselect      
-                        ruta="/pre_listasocio2?buscar=" @found="sociosListaView"
-                        resp_ruta="socios"
-                        labels="rutafoto,numpapeleta,nombre,apaterno,amaterno"
-                        placeholder="Ingrese Nombre, Apellido, CI, Numero de papeleta" 
-                        idtabla="idsocio" >
-                    </Ajaxselect>
-             </template>
-               </div>  
-            </div>
+          <div class="modal-body" style="padding: 8px;">
+            <div id="detallesociolistagraficos"></div>
+          </div>
 
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.openModal('listadoSociosLista')">cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
+      id="listadoSociosLista">
+      <div class="modal-dialog modal-primary modal-lg"  style="max-width: 1367px;" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" >Lista de Socios</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.openModal('listaPrestamos')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
 
-            <div class=" row form-group" v-if="listaSocios.length>0">
-              <div class="col-md-12">
+          <div class="modal-body" style="padding: 24px;">
+               <div class="form-group row" v-if="arrayCuentaSocio.length>0&&socio_id!=''">
+                 <div class="col-md-12">
+                   <label style="text-align: left; align-items: center;font-weight: 500;"
+                     class="form-control-label">Seleccionar socio para la lista:</label>
+                   <template v-if="agregarlista">
+                     <Ajaxselect :ruta="'/pre_listasocio2?idpro=1&id='+socio_id+'&buscar='" @found="sociosListaView" resp_ruta="socios"
+                       labels="rutafoto,numpapeleta,nombre,apaterno,amaterno"
+                       placeholder="Ingrese Nombre, Apellido, CI, Numero de papeleta" idtabla="idsocio">
+                     </Ajaxselect>
+                   </template>
+                 </div>
+               </div>
+
+               <div class=" row form-group" v-if="listaSocios.length>0||listaSociosObservados.length>0">
+             
+              <div class="col-md-12 ">
+              <div  >
                 <label style="text-align: left; align-items: center;font-weight: 500;"
                     class="form-control-label">Lista de socios seleccionados:</label>
-                <table class="tablelista table table-bordered table-striped table-sm">
+                <table class="tablelista table table-bordered table-sm">
                   <thead>
                     <tr>
                       <th style="width: 60px;">Nro</th>
-                      <th>Foto</th>
+                      <th style="width: 66px;">Foto</th>
                       <th>Grado</th>
-                      <th>Nombre Completo</th>
+                      <th style="width: 400px;">Nombre Completo</th>
                       <th>Num Papeleta</th>
                       <th>CI</th>
                       <th>Fuerza</th>
                       <th>Estado</th>
+                      <th>Factor</th>
+                      <th>Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(socio, keyin) in listaSocios" :key="socio.idsocio"
-                      v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
+                    <tr class="table-secondary" v-if="listaSociosObservados.length>0">
+                      <td colspan="9"> <h5> Socios que no cumplen con los requisitos necesarios</h5></td>
+                    </tr>
+                    <tr v-for="(socio, keyin) in listaSociosObservados" :key="socio.idsocio" class="table-danger">
                       <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
-                      <td style=" vertical-align: middle;text-align: center;">
+                      <td style=" vertical-align: middle;text-align: center;width: 66px;">
                         <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
                           class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
                         <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
@@ -893,7 +912,7 @@
                       </td>
 
                       <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
-                      <td :id="getid(socio)" style=" vertical-align: middle;"
+                      <td style="width: 400px; vertical-align: middle;"
                         v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno"></td>
                       <td style=" vertical-align: middle;text-align: center;" v-text="socio.numpapeleta"></td>
                       <td style=" vertical-align: middle;text-align: center;" v-text="socio.ci+' '+ socio.abrvdep"></td>
@@ -907,22 +926,91 @@
                           <span class="badge badge-danger">Desactivado</span>
                         </div>
                       </td>
+                      <td style=" vertical-align: middle;text-align: center;">
+                       <button   type="button" class="btn btn-warning  btn-sm" @click="vergraficoLista(socio)" >{{socio.factor}} %  <i class="icon-close"></i></button>
+                      </td>
+                      <td style=" vertical-align: middle;text-align: center;"> 
+                        <button type="button" style="margin-top: 0.2rem;min-width: 75px;"
+                          class="btn btn-danger btn-sm " @click="borrarlistasocioObservados(socio)">Quitar</button>
+                        <button type="button" style="margin-top: 0.2rem;min-width: 75px;"
+                          class="btn btn-success btn-sm " @click="RegSocioLista(socio)">Agregar</button>
+                      </td>
+                    </tr>
+                    <tr class="table-secondary" v-if="listaSociosObservados.length>0&&listaSocios.length>0">
+                      <td colspan="9"> <h5> Socios registrados correctamente</h5></td>
+                    </tr>
+                    <tr v-for="(socio, keyin) in listaSocios" :key="socio.idsocio"
+                      v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
+                      <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
+                      <td style=" vertical-align: middle;text-align: center;width: 66px;">
+                        <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
+                          class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
+                        <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
+                          alt="Cinque Terre" />
+                      </td>
+
+                      <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
+                      <td style="width: 400px; vertical-align: middle;"
+                        v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.numpapeleta"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.ci+' '+ socio.abrvdep"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.nomfuerza"></td>
+
+                      <td style=" vertical-align: middle;text-align: center;">
+                        <div v-if="socio.activo">
+                          <span class="badge badge-success">Activo</span>
+                        </div>
+                        <div v-else>
+                          <span class="badge badge-danger">Desactivado</span>
+                        </div>
+                        <span  v-if="socio.obs!=''" class="badge badge-warning">Con observaciones</span>
+                      </td>
+                      <td style=" vertical-align: middle;text-align: center;">
+                       <button v-if="socio.factor>0"  type="button" class="btn btn-success  btn-sm" @click="vergraficoLista(socio)" >{{socio.factor}} %  <i class="icon-check"></i></button>
+                       <button  v-else type="button" class="btn btn-warning  btn-sm" @click="vergraficoLista(socio)" >{{socio.factor}} %  <i class="icon-close"></i></button>
+                      </td>
+                      <td style=" vertical-align: middle;text-align: center;"> 
+                        <button type="button" style="margin-top: 0.2rem;min-width: 75px;"
+                          class="btn btn-danger btn-sm " @click="borrarlistasocio(socio)">Quitar</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
-                <button type="button" class="btn btn-warning col-md-2" aria-hidden="true" aria-label="Close"
-                  v-if="listaSocios.length>0" @click="agregarSociolista">Borrar lista</button>
+                <!-- <button type="button" class="btn btn-warning col-md-2" aria-hidden="true" aria-label="Close"
+                  v-if="listaSocios.length>0" @click="borrarlista">Borrar lista</button> -->
+              </div>
               </div>
             </div>
+          </div>
 
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.openModal('listaPrestamos')">Seguir</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-              <div class="row form-group">
-                <div class="col-md-6" v-if="listaSocios.length>0">
+     <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
+      id="listaPrestamos">
+      <div class="modal-dialog modal-primary modal-xl"  role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" >Registro de Prestamos por Lista</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('listaPrestamos')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body" style="padding: 30px;" v-if="validateShow">
+            <div class="row form-group" >
+                <div class="col-md-6">
                   <label style="text-align: left; align-items: center;font-weight: 500;"
                     class="form-control-label">Socio
                     Beneficiario :</label>
                   <template>
-                    <Ajaxselect ruta="/pre_listasocio2?buscar=" @found="sociosBeneficiario"
+                    <Ajaxselect :ruta="'/pre_listasocio2?idpro=1&id='+socio_id+'&buscar='" @found="sociosBeneficiario"
                       @cleaning="sociosBeneficiarioClear" resp_ruta="socios"
                       labels="numpapeleta,nombre,apaterno,amaterno" placeholder="Ingrese texto" idtabla="idsocio"
                       :clearable="true">
@@ -931,7 +1019,7 @@
 
                 </div>
 
-                <div class="col-md-6" v-if="arrayCuentaSocio.length>0">
+                <div class="col-md-6" v-if="arrayCuentaSocio.length>0&&socio_id!=''">
                   <label style="text-align: left; align-items: center;font-weight: 500;"
                     class="form-control-label">Numero
                     de Cuenta :</label>
@@ -951,83 +1039,167 @@
                   </div>
                 </div>
 
-                <div class="row" v-if="listaSocios.length>0&&arrayCuentaSocio.length==0">
+                <div class="row" v-if="arrayCuentaSocio.length==0&&socio_id!=''">
                    <div class="col align-self-center">
                     <span class="text-error">El socio no tiene una cuenta bancaria activa.</span>
                   </div>
                 </div>
               </div>
 
+                  <div class="form-group row" v-if="arrayCuentaSocio.length>0&&cuentaBancaria!=''&&socio_id!=''">
+                    <div class="col-md-12 text-center">
+                      <button v-if="listaSocios.length==0" @click="classModal.openModal('listadoSociosLista')" class="btn btn-primary"> Seleccionar socios </button>
+                      <button type="button" v-else @click="classModal.openModal('listadoSociosLista')" 
+                      class="btn btn-primary">
+                      <span  style="font-size: large;       padding-right: 20px;">Ver lista</span>
+                      <span style="padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;    margin-right: 10px;" class=" badge-success" >( {{listaSocios.length}} socios seleccionados ) </span>
+                      <span v-if="listaSociosObservados.length>0" style="    padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;" class=" badge-warning">{{(listaSociosObservados.length>0)?'( '+listaSociosObservados.length+' socios observados ) ':''}}</span></button>
+                    </div>
+                  </div>
 
-              
+           <!-- <div class="form-group row" v-if="arrayCuentaSocio.length>0&&socio_id!=''">
+             <div class="col-md-12">
+               <label style="text-align: left; align-items: center;font-weight: 500;"
+                    class="form-control-label">Seleccionar socio para la lista:</label>
+            <template v-if="agregarlista"  >
+                    <Ajaxselect      
+                        ruta="/pre_listasocio2?buscar=" @found="sociosListaView"
+                        resp_ruta="socios"
+                        labels="rutafoto,numpapeleta,nombre,apaterno,amaterno"
+                        placeholder="Ingrese Nombre, Apellido, CI, Numero de papeleta" 
+                        idtabla="idsocio" >
+                    </Ajaxselect>
+             </template>
+               </div>  
+            </div> -->
 
 
-              <div class="form-group row" v-if="arrayCuentaSocio.length>0">
-                        <div class="col-md-4">
-                          <label style="text-align: right; align-items: center;font-weight: 500;"
-                            class="form-control-label" for="text-input">Plazo :</label>
-                          <div class="input-group">
-                            <input v-validate.initial="'required|between:1,12'"
-                              style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;"
-                              type="number" v-model.number="plazomeses"
-                              :class="{'form-control': true, 'is-invalid': errors.has('plazo')}"
-                              placeholder="Plazo en meses" name="plazo" autofocus step="any"
-                              @keyup.enter="calculoCuota(false)" />
-                            <div class="input-group-append">
-                              <span style="min-width: 60px;" class="input-group-text">
-                                <i style="font-size: 13px;font-weight: 600;">Meses</i>
-                              </span>
-                            </div>
-                          </div>
-                          <span class="text-error">{{ errors.first('plazo')}}</span>
+
+            <!-- <div class=" row form-group" v-if="listaSocios.length>0">
+               <button class="col-md-4 btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseLista"
+                 aria-expanded="false" aria-controls="collapseLista">
+                  Socios seleccionados  {{listaSocios.length}}.
+               </button>
+              <div class="col-md-12 collapse" id="collapseLista">
+              <div class="card card-body">
+                <label style="text-align: left; align-items: center;font-weight: 500;"
+                    class="form-control-label">Lista de socios seleccionados:</label>
+                <table class="tablelista table table-bordered table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Nro</th>
+                      <th style="width: 66px;">Foto</th>
+                      <th>Grado</th>
+                      <th style="width: 400px;">Nombre Completo</th>
+                      <th>Num Papeleta</th>
+                      <th>CI</th>
+                      <th>Fuerza</th>
+                      <th>Estado</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(socio, keyin) in listaSocios" :key="socio.idsocio"
+                      v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
+                      <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
+                      <td style=" vertical-align: middle;text-align: center;width: 66px;">
+                        <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
+                          class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
+                        <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
+                          alt="Cinque Terre" />
+                      </td>
+
+                      <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
+                      <td :id="getid(socio)" style="width: 400px; vertical-align: middle;"
+                        v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.numpapeleta"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.ci+' '+ socio.abrvdep"></td>
+                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.nomfuerza"></td>
+
+                      <td style=" vertical-align: middle;text-align: center;">
+                        <div v-if="socio.activo">
+                          <span class="badge badge-success">Activo</span>
                         </div>
-                        <div class="col-md-4">
-                          <label style="text-align: right; align-items: center;font-weight: 500;"
-                            class="form-control-label" for="text-input">Monto Solicitado :</label>
-                          <div class="input-group"> 
-                            <input
-                              v-validate.initial="'required|between:1,1000'"
-                              style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;"
-                              type="number" v-model.number="montosolicitado"
-                              :class="{'form-control': true, 'is-invalid': errors.has('monto solicitado')}"
-                              placeholder="Monto solicitado" name="monto solicitado" step="any"
-                              @keyup.enter="calculoCuota(false)" />
-                            <div class="input-group-append">
-                              <span class="input-group-text" style="min-width: 60px;">
-                                <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
-                              </span>
-                            </div>
-                          </div>
-                          <span class="text-error">{{ errors.first('monto solicitado')}}</span>
+                        <div v-else>
+                          <span class="badge badge-danger">Desactivado</span>
                         </div>
-                       <div class="col-md-4">
-                          <label style="text-align: right; align-items: center;font-weight: 500;"
-                            class="form-control-label" for="text-input">Cuota aproximada :</label>
-                          <div class="input-group">
-                            <div class="input-group-append">
-                              <span class="input-group-text" style="min-width: 60px;">
-                                <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
-                              </span>
-                            </div>
-                            <input style="background-color: #f0f3f5;font-weight: bold;font-size: 23px;" type="text"
-                              :value="cuotaaproximada" class="form-control" placeholder="Cuota aproximada"
-                              name="Cuota aproximada" step="any" disabled />
-                            <span v-if="cargandocalculo" class="input-group-append">
-                              <div style="min-width: 60px;    border-radius: 5px;" class="lds-dual-ring-wait"></div>
-                            </span>
-                            <span v-else class="input-group-append" v-bind:class="{'ocultaricono':cuotaaproximada==0}">
-                              <button style="min-width: 60px;" class="btn btn-primary" type="button"
-                                @click="view2();classModal.openModal('plandepagos2');">
-                                <i class="fa fa-file-pdf-o"></i>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
+                      </td>
+                      <td style=" vertical-align: middle;text-align: center;"> 
+                        <button type="button" style="margin-top: 0.2rem;min-width: 75px;"
+                          class="btn btn-danger btn-sm " @click="borrarlistasocio(socio)">Quitar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button type="button" class="btn btn-warning col-md-2" aria-hidden="true" aria-label="Close"
+                  v-if="listaSocios.length>0" @click="borrarlista">Borrar lista</button>
+              </div>
+              </div>
+            </div> -->
+ 
 
+              <div class="form-group row" v-if="listaSociosObservados.length==0&&listaSocios.length>0&&cuentaBancaria!=''">
+                <div class="col-md-4">
+                  <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
+                    for="text-input">Plazo :</label>
+                  <div class="input-group">
+                    <input v-validate.initial="'required|between:1,12'"
+                      style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;" type="number"
+                      v-model.number="plazomeses" :class="{'form-control': true, 'is-invalid': errors.has('plazo')}"
+                      placeholder="Plazo en meses" name="plazo" autofocus step="any"
+                      @keyup.enter="calculoCuota(false)" />
+                    <div class="input-group-append">
+                      <span style="min-width: 60px;" class="input-group-text">
+                        <i style="font-size: 13px;font-weight: 600;">Meses</i>
+                      </span>
+                    </div>
+                  </div>
+                  <span class="text-error">{{ errors.first('plazo')}}</span>
+                </div>
+                <div class="col-md-4">
+                  <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
+                    for="text-input">Monto Solicitado :</label>
+                  <div class="input-group">
+                    <input v-validate.initial="'required|between:1,1000'"
+                      style="background-color: white;font-weight: bold;font-size: 20px;text-align: right;" type="number"
+                      v-model.number="montosolicitado"
+                      :class="{'form-control': true, 'is-invalid': errors.has('monto solicitado')}"
+                      placeholder="Monto solicitado" name="monto solicitado" step="any"
+                      @keyup.enter="calculoCuota(false)" />
+                    <div class="input-group-append">
+                      <span class="input-group-text" style="min-width: 60px;">
+                        <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <span class="text-error">{{ errors.first('monto solicitado')}}</span>
+                </div>
+                <div class="col-md-4">
+                  <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
+                    for="text-input">Cuota aproximada :</label>
+                  <div class="input-group">
+                    <div class="input-group-append">
+                      <span class="input-group-text" style="min-width: 60px;">
+                        <i style="font-size: 13px;font-weight: 600;" v-text="codigomoneda"></i>
+                      </span>
+                    </div>
+                    <input style="background-color: #f0f3f5;font-weight: bold;font-size: 23px;" type="text"
+                      :value="cuotaaproximada" class="form-control" placeholder="Cuota aproximada"
+                      name="Cuota aproximada" step="any" disabled />
+                    <span v-if="cargandocalculo" class="input-group-append">
+                      <div style="min-width: 60px;    border-radius: 5px;" class="lds-dual-ring-wait"></div>
+                    </span>
+                    <span v-else class="input-group-append" v-bind:class="{'ocultaricono':cuotaaproximada==0}">
+                      <button style="min-width: 60px;" class="btn btn-primary" type="button"
+                        @click="view2();classModal.openModal('plandepagos2');">
+                        <i class="fa fa-file-pdf-o"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div> 
+              </div>
 
-                      </div>
-
-                     <div class="form-group row" v-if="arrayCuentaSocio.length>0">
+                     <div class="form-group row" v-if="listaSociosObservados.length==0&&listaSocios.length>0&&cuentaBancaria!=''">
                       <label style="text-align: right; align-items: center;" class="col-md-2 form-control-label"
                         for="text-input">Observaciones :</label>
                       <div class="col-md-9">
@@ -1039,11 +1211,11 @@
           </div>
 
           <div class="modal-footer">
-            <button v-if="listaSocios.length>0&&cuotaaproximada>0&&cuentaBancaria!=''"  type="button" class="btn btn-success"
+            <button v-if="listaSociosObservados.length==0&&listaSocios.length>0&&cuotaaproximada>0&&cuentaBancaria!=''"  type="button" class="btn btn-success"
               @click="regListaSocios()">Registrar</button>
 
             <button class="btn btn-secondary" type="button"
-              @click="classModal.closeModal('listaPrestamos')">cerrar</button>
+              @click="closemodallist">cerrar</button>
           </div>
         </div>
       </div>
@@ -1083,6 +1255,7 @@ export default {
       fechasjson: "",
       fotosocio: "",
       reporte1: "",
+      idescala: "",
 
       producto: "",
       obs: "",
@@ -1093,6 +1266,7 @@ export default {
       riesgo: 0,
       familiar: 0,
       prolibro: 0,
+      validateShow:0,
 
       tasaanual: 0,
       fechacorte: 0,
@@ -1134,6 +1308,7 @@ export default {
       errorsocio: 0,
       errorMostrarMsjsocio: [],
       listaSocios:[],
+      listaSociosObservados:[],
       agregarlista:1,
       pagination: {
         total: 0,
@@ -1161,8 +1336,7 @@ export default {
     validateAfterChanged: true
   },
 
-  computed: {
-    
+  computed: { 
     liquidopagablecomputable: function() {
       let sum =
         parseFloat(this.liqpagable) -
@@ -1555,6 +1729,49 @@ export default {
       });
       $(".swal2-modal").css("z-index", "2000");
       $(".swal2-container").css("z-index", "2000");
+    },RegSocioLista(socio) {
+      let me = this;
+      swal({
+        title: "Registro del socio observado",
+        html:   '<div class="form-group row "> <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Obs.: </label>' +
+                        '<div class="col-md-9"> <div class="input-group"> <textarea  id="observacionswallista" class="form-control"  placeholder="Observaciones" autofocus step="any"></textarea></div> </div></div>',
+        showConfirmButton: true,
+        allowOutsideClick: () => false,
+        allowEscapeKey: () => false,
+        showCancelButton: true,
+        confirmButtonText: "Registrar",
+        cancelButtonText: "Cancelar",
+        showLoaderOnConfirm: true,
+        confirmButtonColor: "#4dbd74",
+        cancelButtonColor: "#f86c6b",
+        buttonsStyling: true,
+        reverseButtons: true,
+        onOpen: function() {
+          me.classModal.closeModal("listadoSociosLista");
+          swal.disableConfirmButton();
+                    $('#observacionswallista').on("input",function(){
+                        var oInput = this.value;
+                        if(oInput!='')
+                        {
+                            swal.enableConfirmButton(); 
+                        }
+                        else swal.disableConfirmButton();
+                    });
+        },
+        onClose: function() {
+          me.classModal.openModal("listadoSociosLista");
+        },
+        preConfirm: function() {
+          socio.obs = $("#observacionswallista").val(); 
+          me.borrarlistasocioObservados(socio);
+          me.listaSocios.push(socio);
+          me.classModal.openModal("listadoSociosLista"); 
+        }
+      }).catch(error => {
+        swal.showValidationError("Request failed: ${error}");
+      });
+      $(".swal2-modal").css("z-index", "2000");
+      $(".swal2-container").css("z-index", "2000");
     },
 
     getTotalcapital(idproducto,cancelaprestamos){  
@@ -1696,21 +1913,50 @@ export default {
             console.log(error);
           });
       }
-    },sociosListaView(e){ 
-if(_.findIndex(this.listaSocios, function(o) { return o.idsocio == e.idsocio; })<0)
-this.listaSocios.push(e);
-
-      this.agregarlista = 0;
-      setTimeout(() => {
-        this.agregarlista = 1;
-      }, 300);
-    },sociosBeneficiario(e){  
+    }, sociosListaView(e) { 
+        if (_.findIndex(this.listaSocios, function (o) {
+            return o.idsocio == e.idsocio;
+          }) < 0&&_.findIndex(this.listaSociosObservados, function (o) {
+            return o.idsocio == e.idsocio;
+          }) < 0){
+            e.obs='';
+            _pl.getcriterioGarantesLista(this,e);
+          }
+            
+          this.agregarlista = 0;
+        setTimeout(() => {
+          this.agregarlista = 1;
+        }, 300);
+      },setlistasocio(e){ 
+       if (e.factor > this.maxfactor){
+         this.listaSocios.push(e);
+       }else{
+         this.listaSociosObservados.push(e);
+       }
+          
+      }, sociosBeneficiario(e) {
         this.listacuentabancaria(e.idsocio);
+        this.socio_id=e.idsocio;
     },sociosBeneficiarioClear(){
       this.arrayCuentaSocio = [];
+      this.listaSocios = [];
+      this.listaSociosObservados = [];
       this.cuentaBancaria = "";
-    }, agregarSociolista() {
+      this.socio_id="";
+    },vergraficoLista(socio){
+      _pl.setgraficoLista(socio,this);
+    }
+    , borrarlista() {
       this.listaSocios = []; 
+      this.listaSociosObservados = []; 
+    }, borrarlistasocio(socioo) { 
+     this.listaSocios=this.listaSocios.filter( function( e ) {
+      return e.idsocio !== socioo.idsocio;
+    } ); 
+    },borrarlistasocioObservados(socioo) { 
+     this.listaSociosObservados=this.listaSociosObservados.filter( function( e ) {
+      return e.idsocio !== socioo.idsocio;
+    } ); 
     },
     productoporLista(e) {
       
@@ -1739,6 +1985,7 @@ this.listaSocios.push(e);
         me.arrayFormulasProducto = [];
         me.garantesseleccionados.clear();
         me.totalgarantesseleccionados = 0; 
+        me.idescala="";
         var url ="/par_producto/productosidLista?id=" + e ;
         axios .get(url) .then(function(response) {
             var respuesta = response.data;
@@ -1752,6 +1999,7 @@ this.listaSocios.push(e);
             me.factorid = respuesta.productos[0].idfactor;
             me.maxfactor = respuesta.productos[0].aprobacion;
             me.garantesporproducto = respuesta.productos[0].garantes; 
+            me.idescala = respuesta.productos[0].idescala; 
             me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
             me.arrayFormulasProducto["desembolso"] = [];
           })
@@ -1760,7 +2008,7 @@ this.listaSocios.push(e);
           });
       
     },
-    async regPrestamosListaAsync(el,idproducto){
+    async regPrestamosListaAsync(el){
                 let responses = true;
                 try {  
 
@@ -1768,7 +2016,7 @@ this.listaSocios.push(e);
                      
                         var idprestamo= await axios.post("/prestamos/regprestamoLista", {
                           idsocio: element.idsocio,
-                          idproducto: idproducto,
+                          idproducto: el.producto,
                           monto: el.montosolicitado,
                           plazo: el.plazomeses,
                           factor: 100,
@@ -1794,9 +2042,19 @@ this.listaSocios.push(e);
             }
     ,listacrear(){
       this.listaSocios=[];
+      this.listaSociosObservados=[];
       this.arrayCuentaSocio=[];
-      this.productoporLista(1);
+      this.socio_id="";
+      this.producto=1;// 1= es el id del producto de emergencia
+      this.productoporLista(this.producto);
       this.classModal.openModal("listaPrestamos"); 
+    }
+    ,closemodallist(){
+      this.classModal.closeModal('listaPrestamos');
+      this.listaSocios=[];
+      this.listaSociosObservados=[];
+      this.socio_id="";
+      this.producto="";
     },
     regListaSocios(){
       
@@ -1813,7 +2071,7 @@ this.listaSocios.push(e);
         swal.showValidationError("Request failed: ${error}");
       });
 
-      me.regPrestamosListaAsync(me,1).then((responses)=>{
+      me.regPrestamosListaAsync(me).then((responses)=>{
         console.log(responses);
           if (responses) {
              swal(
@@ -2137,6 +2395,12 @@ this.listaSocios.push(e);
           break;
         }
       }
+    },
+    openlist(){
+      this.validateShow=1; 
+    },
+    closelist(){
+      this.validateShow=0; 
     }
   },
   mounted() {
@@ -2151,7 +2415,9 @@ this.listaSocios.push(e);
     this.classModal.addModal("plandepagos2");
     this.classModal.addModal("factorview");
     this.classModal.addModal("factorviewgarante"); 
-    this.classModal.addModal("listaPrestamos");    
+    this.classModal.addModal("factorviewgaranteLista"); 
+    this.classModal.addModal("listadoSociosLista"); 
+    this.classModal.addModal("listaPrestamos",this.openlist,this.closelist);     
   }
 };
 </script>

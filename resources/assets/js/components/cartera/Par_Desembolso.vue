@@ -644,11 +644,11 @@
                   let me = this; 
                  axios.get('/statusLote').then(function (response) {
                          me.statusLote = response.data.lote;  
-                         console.log(response.data)
-                         console.log('idlote',me.statusLote.idlote);
-                          console.log('min',me.statusLote.min);
-                          console.log('max',me.statusLote.max);
-                             console.log('tam', _.size(me.statusLote));
+                        //  console.log(response.data)
+                        //  console.log('idlote',me.statusLote.idlote);
+                        //   console.log('min',me.statusLote.min);
+                        //   console.log('max',me.statusLote.max);
+                        //      console.log('tam', _.size(me.statusLote));
                      })
                      .catch(function (response) {
                          console.log(response);
@@ -915,7 +915,8 @@
                 let me = this; 
                 axios.get(url).then(function (response) {
                     var respuesta = response.data.datapermiso[0].permisos;  
-                    me.arrayPermisosIn = JSON.parse((respuesta)); console.log('permisos:',me.arrayPermisosIn);
+                    me.arrayPermisosIn = JSON.parse((respuesta)); 
+                    
                 })
                 .catch(function (error) {
                     console.log(error);

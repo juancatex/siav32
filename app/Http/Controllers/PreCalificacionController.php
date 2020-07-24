@@ -5,6 +5,7 @@ use App\Payment_plans\PaymentPlansClass;
 use App\Par_productos_perfilcuenta;
 use App\Pre_Calificacion;
 use App\Socio;
+use App\Par_Escala;
 use App\Par_Producto;
 use App\Con_Cuentasocio;
 use Illuminate\Http\Request;
@@ -185,7 +186,8 @@ if(!empty($request->buscar)){
         // $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
         // $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
         $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
-        
+        $someVariable=$request->idpro;
+        $sum = DB::raw("getPrestamos(socios.idsocio,$someVariable,0) as totalcuotas"); 
          
         
         if (sizeof($buscararray)>0){
@@ -201,8 +203,9 @@ if(!empty($request->buscar)){
             ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
             ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
             ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
-            ->select($raw3,$raw,$raw2,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->select($raw3,$raw,$raw2,$sum,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
             ->whereraw($sqls)
+            ->where('socios.idsocio','!=',$request->id)
             ->orderBy('socios.nombre', 'asc')->get();
            
         }else{
@@ -210,12 +213,13 @@ if(!empty($request->buscar)){
             ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
             ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
             ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
-            ->select($raw3,$raw,$raw2,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
-            ->orderBy('socios.nombre', 'asc')->get();
+            ->select($raw3,$raw,$raw2,$sum,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->where('socios.idsocio','!=',$request->id)
+            ->orderBy('socios.nombre', 'asc')->limit(10)->get();
 
         } 
-        
-        return ['socios' => $socios ];
+ 
+        return ['socios' => $socios];
         
 
     }
@@ -229,8 +233,11 @@ if(!empty($request->buscar)){
 if(!empty($request->buscar)){
     $buscararray = explode(" ",$request->buscar);
 } 
-        $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
-        $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
+        $raw = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.cantobligados+apo__total_aportes.cantjubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion)) as cantaportes");
+        $raw2 = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.totalobligados+apo__total_aportes.totaljubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion)) as totalaportes");
+     // $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
+     // $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
+       
         $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
         
          
@@ -282,8 +289,12 @@ if(!empty($request->buscar)){
 if(!empty($request->buscar)){
     $buscararray = explode(" ",$request->buscar);
 } 
-        $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
-        $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
+         
+        $raw = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.cantobligados+apo__total_aportes.cantjubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion)) as cantaportes");
+        $raw2 = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.totalobligados+apo__total_aportes.totaljubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion)) as totalaportes");
+        // $raw = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion) as cantaportes");
+        // $raw2 = DB::raw("if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion) as totalaportes");
+       
         $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
         $someVariable=$request->idpro;
         $sum = DB::raw("getPrestamos(socios.idsocio,$someVariable,0) as totalcuotas"); 
