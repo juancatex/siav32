@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Par_Escala;
+use App\Par_Producto;
 
 class ProceduresController extends Controller
 { 
@@ -90,11 +92,23 @@ return $request->ip();
     {
      if (!$request->ajax()) return redirect('/');
       $suma=0;
-      $reportcabeza=' <ul class="nav nav-tabs" role="tablist">';
-      $reportcuerpo='<div class="tab-content">';
+      $reportcabeza ='<ul class="nav nav-tabs" role="tablist">';
+      $reportcuerpo ='<div class="tab-content">';
       $htmls = array();
       $pos = array();
 
+/////////////////////////////////////////////////////////////
+          $productosescala = Par_Producto::where('idproducto','=',$request->idpro)->get();
+              
+          $escala = Par_Escala::select('maxmonto','minmonto')
+          ->where('idescala','=',$productosescala[0]->idescala) 
+          ->where('minanios','<=',$request->socioAportes) 
+          ->where('maxanios','>=',$request->socioAportes) 
+          ->get();
+/////////////////////////////////////////////////////////////
+
+if(count($escala)>0){
+ 
        $valorfactor=DB::select("SELECT pf.nomfactor, ppp.idf FROM par__productos__parametros ppp,par__factors pf where ppp.idf=pf.idf and ppp.idfactor=?", array($request->factor));
        foreach ($valorfactor as $val){ 
           
@@ -162,6 +176,17 @@ return $request->ip();
       }
 
     }  
+}else{
+  $reportcabeza.='<li class="nav-item">
+  <a class="nav-link active" data-toggle="tab" href="#moneyprestamog" role="tab" style="font-weight: 600; font-size: 16px;" aria-controls="moneyprestamog">
+  Aportes  
+  </a>
+ </li>';
+
+ $reportcuerpo.='<div class="tab-pane active" id="moneyprestamog" role="tabpanel">
+ <h5>El socio no cumple con la cantidad minima de aportes requeridos por el producto seleccionado</h5></div>';
+  
+}
     $reportcabeza.='</ul>';
     $reportcuerpo.='</div>';
     $reportcabeza.=$reportcuerpo;

@@ -78,7 +78,7 @@ class ParProductoController extends Controller
     }
     public function getproductosidLista(Request $request)
     {
-       if (!$request->ajax()) return redirect('/');
+     if (!$request->ajax()) return redirect('/');
  
             $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
             ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
