@@ -84,7 +84,8 @@ class ParPrestamosController extends Controller
         $prestamo->b_riesgo=$request->riesgo; 
         $prestamo->cuota_aprox=$request->cuo_aprox; 
         $prestamo->planPagosMap=$request->planPagosMap; 
- 
+        $prestamo->idprestamo_lista=$request->idlista; 
+        $prestamo->obs_lista=$request->obslista; 
 
         $prestamo->save(); 
         $prestamo->idref =$prestamo->idprestamo;

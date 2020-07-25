@@ -58,7 +58,8 @@ class CreateParPrestamosTable extends Migration
             $table->float('b_riesgo')->default(0); 
             $table->float('cuota_aprox')->default(0); 
             $table->text('planPagosMap')->default('[]'); 
-            
+            $table->bigInteger('idprestamo_lista')->nullable()->index();
+            $table->string('obs_lista')->nullable()->comment('observaciones para el registro del socio en la lista, ejemplo: que le falte liquido pagable, que tenga varias deudas y aun asi sea autorizado');  
             $table->timestamps();
 
             $table->foreign('idproducto')->references('idproducto')->on('par__productos');

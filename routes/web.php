@@ -763,6 +763,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/daa_listaescalafon/selectEscalafon', 'DaaListaescalafonController@selectEscalafon');
         
 
+        Route::post('/registrarlista','ParPrestamosListaController@registrarlista');
+
         Route::get('/prestamos/getprestamosperiodo','ParPrestamosController@getprestamosperiodo');
         Route::get('/prestamos/getprestamostotal','ParPrestamosController@getprestamostotal');
         Route::get('/prestamos/desembolso','ParPrestamosController@prestamosDesembolso');

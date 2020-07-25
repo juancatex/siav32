@@ -1,21 +1,35 @@
 <template>
   <main class="main">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item">
+      <li class="breadcrumb-item container">
         <a href="/">Escritorio</a>
+        <div v-if="statusLote" class="row justify-content-end" style="  float: right; ">
+                        <div   style=" text-align: center;margin: 4px">
+                            <div ><h5 style="margin: 0;">Lote <b>{{statusLote.idlote}}</b></h5> </div>
+                            <div class="my-auto"><h6 style="margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
+                         </div> 
+                    </div>
       </li>
     </ol> 
     <div class="container-fluid">
+
+    <div class="card animated fadeIn">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i>
+        Registro de prestamo por lista
+      </div>
+
+      <div class="card-body row justify-content-center">
+                <button type="submit" @click="listacrear" class="btn btn-success">
+                    Registrar prestamo
+                </button>
+      </div>
+    </div>
+
       <div class="card animated fadeIn">
         <div class="card-header">
           <i class="fa fa-align-justify"></i>
-          Calificacion del Prestamo
-          <div v-if="statusLote" style="  float: right; text-align: center;border: solid 1.5px gray;">
-                        <div class="row" style=" text-align: center;margin: 4px">
-                            <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
-                            <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
-                         </div> 
-                    </div>
+          Calificacion del Prestamo 
         </div>
         <div class="card-body">
           <!-- <div class="form-group row">
@@ -35,7 +49,7 @@
           </div>   -->
            
           <div class="form-group row" style="justify-content: flex-end;">
-            <div class="col-md-7">
+            <div class="col-md-10">
               <div class="input-group" style="align-items: center;">
                 <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
                 </p>
@@ -43,10 +57,7 @@
                   placeholder="Ingresar  Nombres , Apellidos , Ci , Numero de Papeleta" />
                 <button type="submit" @click="listarSocio(1,buscar)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
-                </button>
-                <button type="submit" @click="listacrear" class="btn btn-success">
-                    Registro lista
-                </button>
+                </button> 
               </div>
             </div>
           </div>
@@ -2011,7 +2022,10 @@ export default {
     async regPrestamosListaAsync(el){
                 let responses = true;
                 try {  
-
+                    var idprestamolista= await axios.post("/registrarlista", {
+                                              idsocio: el.socio_id,
+                                              cuenta: el.cuentaBancaria,
+                                              });
                      for (var element of el.listaSocios){ 
                      
                         var idprestamo= await axios.post("/prestamos/regprestamoLista", {
@@ -2019,9 +2033,10 @@ export default {
                           idproducto: el.producto,
                           monto: el.montosolicitado,
                           plazo: el.plazomeses,
-                          factor: 100,
+                          factor: element.factor,
                           cuenta: el.cuentaBancaria,
                           obs: el.obs,
+                          obslista: element.obs,
                           lipcom: 0,
                           lip: 0,
                           riesgo: 0,
@@ -2029,10 +2044,11 @@ export default {
                           libro: 0,
                           fron: 0,
                           pvig: 0,
+                          idlista: idprestamolista.data.id,
                           cuo_aprox: el.cuotaaproximada,
                           planPagosMap: JSON.stringify(Array.from(el.PlandePagosPrint)),
                         });
-                        console.log(idprestamo.data.id)
+                        
                         };
  
                 } catch (err) {
