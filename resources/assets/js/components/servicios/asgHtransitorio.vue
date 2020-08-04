@@ -234,9 +234,9 @@
                                 </div>
                             </div>
                             <div class="tfila">
-                                <div class="tcelda titcampo">A cancelar:</div>
-                                <div class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs
-                                </div>
+                                <div class="tcelda titcampo">A cancelar:</div>                                
+                                <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1"></span>Bs</div>
+                                <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs</div>
                             </div>
                         </div><br>
                     </div>
@@ -314,6 +314,51 @@
                             </div>
                         </div>
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
+                        <div v-if="nosocio" >
+                                <a class="btn btn-primary" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Nuevo Huesped</a>
+                                    
+                                    <div class="collapse multi-collapse" id="rolpadre">
+                                        <div class="form-group row">
+                                            <table border="0" align="center">
+                                                <tr>
+                                                    <td colspan="3" align="center"><b>REGISTRAR NUEVO HUÉSPED</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nombre</td>
+                                                    <td colspan="2"><input type="text" class="form-control" v-model="nombre"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Paterno</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="apaterno"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Materno</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="amaterno"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Número CI</td>
+                                                    <td><input type="text" class="form-control" v-model="ci"> </td>
+                                                    <td><select class="form-control" v-model="iddepartamento">
+                                                            <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
+                                                            :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Celular</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="telcelular"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" align="center">
+                                                        <button class="btn btn-secondary" @click="resApellidos=0,formuCivil=0">Cancelar</button>
+                                                        <button class="btn btn-primary" @click="registrarHuesped()">Guardar</button>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                            </div>
                     </div>
                     <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
@@ -387,8 +432,11 @@
                         @input="razon=''" @blur="verRazon(nit)">
                     Razón Social:                                   
                     <input type="text" class="form-control" v-model="razon">
-                    <br>Concepto:
-                    <br>Importe:
+                    <!-- Concepto:                                   
+                    <input type="text" class="form-control" v-model="importe"> -->
+                    Importe:                                   
+                    <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1"></span>Bs</div>
+                    <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs</div>
                     <center class="taltura"><input type="checkbox" v-model="descuento"> Pago con descuento</center>
                 </div>
                 <div class="modal-footer">
@@ -412,7 +460,7 @@ export default {
     props:["regEstablecimiento"],
 
     data(){ return { 
-        modalAsignacion:0, modalPago:0, titModal:'', accion:'', jsfechas:'', nosocio:'', 
+        modalAsignacion:0, modalPago:0, titModal:'', accion:'', jsfechas:'', nosocio:'', formuCivil:'0',
         ipbirt:'', currfecha:'', currhora:'',
         divAsignaciones:1, nrgrupo:1, cantgrupos:'', tarifa:'',
         idpago:'',concepto:'', periodo:'', modopago:'', 
@@ -447,9 +495,9 @@ export default {
             })
         },
 
-        verIDcliente(idcliente){ this.idcliente=idcliente; },
+        verIDcliente(idcliente){console.log(idcliente); this.idcliente=idcliente; },
 
-        async verAsignacion(asignacion){
+        async verAsignacion(asignacion){ 
             let response=await axios.get('/ser_asignacion/verAsignacion?idasignacion='+asignacion.idasignacion);
             this.regAsignacion=response.data.asignacion[0];
             response=await axios.get('/ser_ambiente/listaAmbientes?idambiente='+asignacion.idambiente);
@@ -613,7 +661,10 @@ export default {
             this.razon=this.regCliente.apaterno;
             if(this.regCliente.currhora>'12:30') this.regAsignacion.noches++;
             this.regPago.concepto='Hospedaje '+this.regAsignacion.noches+' noches';
-            this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
+            if (this.regAsignacion.noches==0)
+                this.regPago.importe=this.regAsignacion.tarifa*1;
+            else
+                this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
         },
 
@@ -653,7 +704,7 @@ export default {
                 'razon':this.razon,
                 'nrdocumento':this.nrdocumento,
                 'modopago':this.descuento?3:1,
-                'idperfilcuentamaestro':this.descuento?8:9,
+                'idperfilcuentamaestro':this.descuento?3:4,
                 'fecha':this.fecha,
                 'importe':this.regPago.importe,
                 'glosa':glosa,
@@ -711,7 +762,7 @@ export default {
             url.push('/birt-viewer/frameset?__report=reportes/servicios');
             url.push('/ser_casacomsalida.rptdesign'); 
             url.push('&idasignacion='+this.regAsignacion.idasignacion); 
-            url.push('&__format=pdf'); 
+            url.push('&__format=pdf');  console.log(url);
             reporte.viewPDF(url.join(''),'Boleta de Salida');
         },
 

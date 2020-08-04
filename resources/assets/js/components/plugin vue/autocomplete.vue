@@ -9,7 +9,7 @@
         <ul class="autocomplete-list" v-show="desplegar">
             <li v-if="cargando" class="loading" >Buscando...</li>
             <li v-else v-for="(socio,i) in arraySocios" :key="i" class="autocomplete-result"
-                @click="devolver(socio.idsocio)" :class="pulsado==i?'is-active':''">
+                @click="devolver(socio.idsocio, socio.tipo)" :class="pulsado==i?'is-active':''">
                     <span v-text="socio.nomgrado"></span>
                     <span v-text="socio.nombre"></span>
                     <span v-text="socio.apaterno"></span>
@@ -37,7 +37,7 @@ export default {
     methods: {
         async buscarCadena(){
             if(this.cadena.length>3){
-                var url='/socio/listaSocios?cadena='+this.cadena;
+                var url='/socio/listaSociosCivil?cadena='+this.cadena;
                 let response=await axios.get(url);
                 this.arraySocios=response.data.socios;
                 this.desplegar=1; 
@@ -56,11 +56,11 @@ export default {
             }
         },
 
-        devolver(idsocio){
+        devolver(idsocio, tipo){
             this.$emit('encontrado',idsocio);
             this.desplegar=0;
             var regSocio=[];
-            axios.get('/socio/listaSocios?idsocio='+idsocio).then(response=>{
+            axios.get('/socio/listaSociosCivil?idsocio='+idsocio+'&tipo='+tipo).then(response=>{
                 regSocio=response.data.socios[0];
                 this.cadena=regSocio.nomgrado+' '+regSocio.nombre.trim()+' '+regSocio.apaterno+' '+regSocio.amaterno;
             });

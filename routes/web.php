@@ -294,6 +294,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put ('/socio/activar', 'SocioController@activar');
         Route::post('/socio/updateliquido', 'SocioController@updateliquido');
         Route::get ('/socio/listaSocios','SocioController@listaSocios');
+        Route::get ('/socio/listaSociosCivil','SocioController@listaSociosCivil');
         Route::get ('/socio/verSocio','SocioController@verSocio');
 
 

@@ -36,6 +36,8 @@ setvue(1, 'ser_servicio', './components/servicios/Ser_Servicio.vue');
 setvue(1, 'ser_establecimiento', './components/servicios/Ser_Establecimiento.vue');
 setvue(1, 'ser_asignacion', './components/servicios/Ser_Asignacion.vue');
 
+setvue(1, 'ser_ambiente', './components/servicios/Ser_Ambiente.vue');
+
 //filiales
 setvue(1, 'fil_unidad', './components/filiales/Fil_Unidad.vue');
 setvue(1, 'fil_filial', './components/filiales/Fil_Filial.vue');
