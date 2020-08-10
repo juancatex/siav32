@@ -1,19 +1,25 @@
 <template>
     <main class="main">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
-        </ol>
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item container">
+                  <a href="/">Escritorio</a>
+                  <div v-if="statusLote" class="row justify-content-end" style="  float: right; ">
+                      <div style=" text-align: center;margin: 4px">
+                          <div>
+                              <h5 style="margin: 0;">Lote <b>{{statusLote.idlote}}</b></h5>
+                          </div>
+                          <div class="my-auto">
+                              <h6 style="margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6>
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          </ol>
         <div class="container-fluid">
 
             <div class="card animated fadeIn">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Estado de Prestamos
-                    <div v-if="statusLote" style="  float: right; text-align: center;border: solid 1.5px gray;">
-                        <div class="row" style=" text-align: center;margin: 4px">
-                            <div style="margin-right: 15px;"><h4 style="margin: 0;">Lote <b style="font-size: 30px;">{{statusLote.idlote}}</b></h4> </div>
-                            <div class="my-auto"><h6 style="font-size: 16px;margin: 0;"> ({{statusLote.min}} de {{statusLote.max}})</h6></div> 
-                         </div> 
-                    </div>
+                    <i class="fa fa-align-justify"></i> Estado de Prestamos 
                 </div>
                 <div class="card-body">
                     <div class="form-group row" style="justify-content: flex-end;">
