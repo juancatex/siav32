@@ -41,7 +41,7 @@ class SerPagoController extends Controller
             $request->glosa,
             $request->importe,4,
             $request->fecha,
-            $request->idfililal,
+            $request->idfilial,
             $request->numpapeleta);
 
         $pago=new Ser_Pago();

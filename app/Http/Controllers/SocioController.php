@@ -221,10 +221,6 @@ class SocioController extends Controller
     }
 
   
-    
-
-
-
     public function listaSocios(Request $request) //pal autocomplete
     {
         $arrayCadena=explode(" ",$request->cadena);
@@ -243,7 +239,67 @@ class SocioController extends Controller
         return ['socios'=>$socios];
     }
 
+    public function listaSociosCivil(Request $request) //pal autocomplete
+    { 
+        if($request->idsocio) { 
+            if ($request->tipo=='socio') {
+                $filtro="idsocio=$request->idsocio";
+                $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
+                concat(nomgrado,' ',nombre,' ',apaterno,' ',amaterno) as nomcompleto, 'socio' as tipo 
+                from socios 
+                join par_grados on par_grados.idgrado=socios.idgrado where $filtro                
+                ";
+                $socios=DB::select($sql);
+                return ['socios'=>$socios];
+            }
+                
+            else {
+                $filtro1="idcivil=$request->idsocio";
+                $sql="select sc.idcivil as idsocio, '' as grado, sc.nombre, sc.apaterno, sc.amaterno, sc.ci, 0 as numpapeleta,
+                concat(sc.nombre,' ',sc.apaterno,' ',sc.amaterno) as nomcompleto, 'civil' as tipo
+                from ser__civils sc 
+                where $filtro1
+                ";
+                $socios=DB::select($sql);
+                return ['socios'=>$socios];
+            }
+                
+        } 
 
+        else {
+            $arrayCadena=explode(" ",$request->cadena); 
+            for($i=0; $i<count($arrayCadena); $i++)
+            {   $valor=$arrayCadena[$i];
+                $criterio="(apaterno like '$valor%' or amaterno like '$valor%' or nombre like '$valor%' 
+                or ci like '$valor%' or numpapeleta like '%$valor%') ";
+                $criterio1="(sc.apaterno like '$valor%' or sc.amaterno like '$valor%' or sc.nombre like '$valor%' 
+                or ci like '$valor%') ";
+                
+                if($i==0) {
+                    $filtro=$criterio;
+                    $filtro1=$criterio1;
+                }
+                    
+                else {
+                    $filtro.=" and ".$criterio;
+                    $filtro1.=" and ".$criterio1;
+                } 
+            }
+
+            $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
+                    concat(nomgrado,' ',nombre,' ',apaterno,' ',amaterno) as nomcompleto, 'socio' as tipo 
+                    from socios 
+                    join par_grados on par_grados.idgrado=socios.idgrado where $filtro       
+                    union 
+                    select sc.idcivil as idsocio, '' as grado, sc.nombre, sc.apaterno, sc.amaterno, sc.ci, 0 as numpapeleta,
+                    concat(sc.nombre,' ',sc.apaterno,' ',sc.amaterno) as nomcompleto, 'civil' as tipo
+                    from ser__civils sc 
+                    where $filtro1         
+                    ";
+            $socios=DB::select($sql);
+            return ['socios'=>$socios];
+        }                           
+    }
 
     public function verSocio(Request $request)
     {   

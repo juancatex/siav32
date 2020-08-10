@@ -396,7 +396,7 @@
                                     <td><select class="form-control" v-model="concepto" @change="validarPago()">
                                         <option value="Garantía">Garantía</option>
                                         <option value="Alquiler">Alquiler</option>
-                                        <option value="Serv.Agua">Serv.Agua</option>
+                                        <option value="Serv.Agua">Servicios Basicos Gral.</option>
                                         </select></td>
                                 </tr>
                                 <tr><td>Periodo:</td>
