@@ -858,5 +858,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/con_factura/actualizar', 'ConFacturaController@update');
         Route::put('/con_factura/desactivar', 'ConFacturaController@desactivar');
         Route::put('/con_factura/activar', 'ConFacturaController@activar');
+        Route::get('/con_contabilidad/proceso', 'ConFacturaController@proceso');
 
 });

@@ -123,4 +123,37 @@ class ConFacturaController extends Controller
         $maxfactura = Con_Factura::orderBy('idfactura', 'desc')->where('activo','=','1')->max('numerofactura');         
         return ['maxfactura' => $maxfactura];
     }   
-}
+
+    public function proceso(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+                
+        //variables
+        $comprobante = $_POST["num_comprobante"];
+        $cuenta_pre_reg = '41101101';
+        $porcentaje_pre_reg = 0.20; 
+        $porcentaje_aportes = 0.80;
+        $porcentaje_87 = 0.87;
+        $porcentaje_deb_fis = 0.13;
+        $porcentaje_imp_tra = 0.03;
+        $tipo = 'SEC_CON_COM_TRASPASO';
+        $cuenta_aporte='22501101';
+        $subcuenta='20000000000';
+        $cuenta_deb_fis = '21301102';
+        $cuenta_imp_tra = '21301103';
+        $cuenta_imp_tra_debe = '51301106';
+        $ok = "Query Ok";
+        $nook = "Query Error";
+
+        $productos=DB::connection('pgsql')->select("SELECT usuario_reg,id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
+        id_estado, par_estado_prestamo, par_estado,eliminado, fecha_reg,numero_cuenta_abono
+        FROM finanzas.ptm_prestamos where fecha_desembolso='$request->fecha' and id_producto ='G' order by id_prestamo"); 
+
+
+    }
+
+        return ['maxfactura' => $maxfactura];
+    }
+
+
+

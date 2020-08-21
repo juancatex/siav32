@@ -113,6 +113,7 @@ setvue(1, 'con_facturaparametro', './components/contabilidad/Con__Facturaparamet
 setvue(1, 'con_factura', './components/contabilidad/Con__Factura.vue');
 setvue(0, 'con_tesoreria', './components/contabilidad/Con__Tesoreria.vue');
 setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
+setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
 
 // global
 setvue(1, 'glo_solicitudcargocuenta', './components/global/Glo_SolicitudCargoCuenta.vue');
