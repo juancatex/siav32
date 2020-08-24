@@ -7,15 +7,18 @@
                     <div class="col-12">
                         <h1>Actualizacion Datos Porcentajes Cargas Ascii</h1>
                         <label>Servidor: {{host}}</label><br>
-                        <label>Base Datos: </label><br>
-                        <label>Estado: </label>
-                        <!-- <a href="//parzibyte.me/blog" target="_blank">By Parzibyte</a> -->
+                        <label>Base Datos: {{asdf}}</label><br>
+                        <!-- <label>Estado: <div v-if="flag=='0'"><font color='green'>Pruebas</font></div><div v-else><font color='red'>Produccion</font></div></label> -->
+                        <label>Estado:
+                            <select v-model="flag"><option value=0>Pruebas</option><option value=1>Produccion</option></select>
+                        </label>
+                        
                     </div>
                     <div class="col-6">
                         <form action="pos.php" method="POST" id="formu">
                             <div class="form-group">
                                 <label for="num_comprobante"><b>Comprobante:</b></label>
-                                <input name="num_comprobante" required type="number" id="num_comprobante"
+                                <input name="num_comprobante" required type="number" v-model="num_comprobante"
                                     class="form-control" placeholder="Num Comprobante">
                             </div>
                             <div class="form-group">
@@ -46,41 +49,59 @@
                 </div>
              </div>
         </div>
+
+        <!-- MODAL  MODAL  MODAL  MODAL  -->
+        <div class="modal" :class="modal?'mostrar':''" >
+            <div class="modal-dialog modal-primary modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModal"></h4>
+                        <button class="close" @click="cerrarModal()">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Resultados</label>
+                            <div class="col-md-9">
+                                <label>Resultados:</label> <br>
+                            </div>
+                            <div class="col-md-9">
+                                {{mensaje}}
+                                <div v-if="arrayProceso">
+                                    Se realizo el registro a la cuenta: {{arrayDatos.cuenta_aporte}} por el monto de Bs.: {{arrayProceso.sumabol80}} <br>
+                                    Se realizo el registro a la cuenta: {{arrayDatos.cuenta_deb_fis}} por el monto de Bs.: {{arrayProceso.sumabol13}} <br>
+                                    Se realizo el registro a la cuenta: {{arrayDatos.cuenta_imp_tra}} por el monto de Bs.: {{arrayProceso.sumabol03}} <br>
+                                    Se realizo el registro a la cuenta: {{arrayDatos.cuenta_imp_tra_debe}} por el monto de Bs.: {{arrayProceso.sumabol03}} <br>
+                                    Finalizado
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>                        
+                    </div>
+                </div>           
+            </div>
+        </div>
     </main>
 </template>
 
 
 <script>        
-    // import * as pdf from '../../pdf.js';
-    import * as factura from '../../factura.js';
-
+    
     export default {
         data (){
             return {
-                host:process.env.DB_HOST,
-                num_comprobante:'980',
-
-               
-                invoice_products: [{
-                    product_no: '',
-                    product_name: '',
-                    product_price: '',
-                    product_qty: '',
-                    line_total: 0
-                }],
-                
+                host:process.env.MIX_JES,
+                asdf : process.env.DB_DATABASE_P,
+                num_comprobante:'',
+                modal: 0,
+                mensaje: '',
+                tituloModal:'Resultado',      
                 arrayProceso : [],
-                pagination : {
-                    'total' : 0,
-                    'current_page' : 0,
-                    'per_page' : 0,
-                    'last_page' : 0,
-                    'from' : 0,
-                    'to' : 0,
-                },
-                offset : 10,
-                criterio : 'nombreinstitucion',
-                buscar : ''
+                arrayDatos : [],
+                buscar : '',
+                flag : 0,  //por defectio en pruebas
             }
         },
        
@@ -120,97 +141,65 @@
         },
 
         methods : {
+            proceso(num_comprobante) { console.log(process.env);
+                if (this.flag==0) {
+                    var t='Pruebas'; var text='Se muestran resultados, no se actualizaran los datos';} 
+                    else {var t='Produccion'; var text='Se actualizaran datos, desea proceder?';}
+                swal({
+                    title: text + '\n Comprobante:'+this.num_comprobante+' \n Estado: '+t+'.',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar!',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then(result => {
+                    if (result.value) { 
 
-            proceso(num_comprobante) {
-                //alert(num_comprobante); 
-                let me=this;
-                var url= '/con_contabilidad/proceso';
-                axios.post(url,{'com':this.num_comprobante}).then(function (response) {
-                    var respuesta= response.data; console.log(respuesta);       
-                    //me.arrayProceso = respuesta.proceso.data;    console.log(me.arrayProceso);           
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                        swal({
+                            title: "Actualizando datos...",
+                            text: "Actualizacion de datos",
+                            type: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: false,                    
+                            closeOnConfirm: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+
+                        let me=this;
+                        var url= '/con_contabilidad/proceso';
+                        axios.post(url,{'com':num_comprobante, 'flag':this.flag}).then(function (response) {
+                            swal("¡Proceso Terminado!", "", "success").then((result) => {
+                                var respuesta= response.data; console.log(respuesta.proceso);       
+                                me.arrayProceso = respuesta.proceso;   
+                                me.arrayDatos = respuesta.datos;   
+                                me.mensaje = respuesta.mensaje;
+                                me.modal=1;    
+                            })                            
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    }                
+                })                
             },
             
             cerrarModal(){
                 this.modal=0;
-                this.tituloModal='';                
-                this.numerofactura='';
-                this.codigocontrol='';
-                this.razonsocial='';               
-                this.nit='';
-                //this.invoice_products='';
-                this.invoice_subtotal='';
-                this.invoice_subtotal='';
-            },
-
-            abrirModal(modelo, accion, data = []){ //console.log('ja' + this.maxfacturavalor);
-                switch(modelo){
-                    case "factura":
-                    {
-                        switch(accion){
-                            case 'registrar':
-                            {                                                                
-                                this.invoice_products = [];
-                                this.modal = 1;
-                                this.tituloModal = 'Registrar Factura';
-                                this.numerofactura=this.maxfacturavalor+1;
-                                this.codigocontrol='',
-                                this.razonsocial='',               
-                                this.nit='',
-                                this.detalle='',
-                                this.importeparcial='',
-                                this.importetotal='',
-                                this.importecf='',                         
-                                this.tipoAccion = 1;
-                                break;
-                            }
-                            case 'actualizar':
-                            { 
-                                this.invoice_products = [];
-                                var detalle0 = [];
-                                var detalle1 = [];
-                                detalle0 = data['detalle'].split(','); //console.log(detalle0[0]);
-                                //var array1 = JSON.parse("[" + data['reparticiones'] + "]"); 
-                                
-                                for (var i=0; i < detalle0.length; i++){
-                                    //console.log(detalle1[i]);         
-                                    detalle1 = detalle0[i].split('|'); //console.log(detalle0[0]);
-                                    this.invoice_products.push({
-                                        product_name:detalle1[0],
-                                        product_price:detalle1[1],
-                                        product_qty:detalle1[2],
-                                        line_total:detalle1[3]}) 
-                                }
-                                                                                                
-                                //console.log(this.invoice_products);
-
-                                //console.log(data);
-                                this.modal=1;
-                                this.tituloModal='Actualizar Factura';
-                                this.tipoAccion=2;
-                                this.factura_id=data['idfactura'];
-                                this.numerofactura = data['numerofactura'];
-                                this.codigocontrol = data['codigocontrol'];
-                                this.razonsocial = data['razonsocial'];
-                                this.nit = data['nit'];
-                                this.detalle = data['detalle'];
-                                
-                                this.importetotal = data['importetotal'];
-                                this.importecf = data['importecf'];
-                                this.calculateTotal();
-                                break;
-                            }
-                        }
-                    }
-                }
+                this.tituloModal='';                                
             },
 
         },
-        mounted() {
-                
+        mounted() {                
         }
     }
 </script>
