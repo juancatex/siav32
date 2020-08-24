@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <!-- <input class="btn-success btn" type="submit" name="submit"></input> -->
-                                <button class="btn-success" type="button" id="boton" @click="proceso()">Procesar</button>                            
+                                <button class="btn-success" type="button" id="boton" @click="proceso(num_comprobante)">Procesar</button>                            
                             </div>
                         </form>
                     </div>
@@ -58,6 +58,7 @@
         data (){
             return {
                 host:process.env.DB_HOST,
+                num_comprobante:'980',
 
                
                 invoice_products: [{
@@ -120,114 +121,18 @@
 
         methods : {
 
-            proceso() {
-                alert('adsf');
+            proceso(num_comprobante) {
+                //alert(num_comprobante); 
                 let me=this;
                 var url= '/con_contabilidad/proceso';
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    me.arrayProceso = respuesta.proceso.data;         //console.log(me.arrayFacturaParametro[0].numeroautorizacion);           
+                axios.post(url,{'com':this.num_comprobante}).then(function (response) {
+                    var respuesta= response.data; console.log(respuesta);       
+                    //me.arrayProceso = respuesta.proceso.data;    console.log(me.arrayProceso);           
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
-            
-            maxfactura (){
-                let me=this;
-                var url= '/con_factura/maxfactura';
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    me.maxfacturavalor = respuesta['maxfactura'];     //console.log(me.maxfacturavalor);    
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
-            
-            listarFactura (page,buscar,criterio){
-                let me=this;
-                var url= '/con_factura?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    me.arrayFactura = respuesta.factura.data;
-                    me.pagination= respuesta.pagination;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
-
-            
-            registrarFactura(){ 
-               let me = this;
-                axios.post('/con_factura/registrar',{
-                    'numerofactura': this.numerofactura,
-                    'codigocontrol': this.codigocontrol,
-                    'razonsocial': this.razonsocial,                    
-                    'nit': this.nit,
-                    'detalle': this. invoice_products,
-                    'importetotal': this.invoice_subtotal,
-                    'importecf': this.invoice_subtotal                    
-                }).then(function (response) {                    
-                    
-                    if (response.data.length) {                        
-                        swal(
-                            // response.data,
-                            'El valor ya existe',
-                            'Ingresar una dato diferente',
-                            'error')
-                    }
-                    else {
-                        //para imprimir la factura
-                        //console.log(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_product,me.importetotal);                       
-                        
-                        _pdf.imgToBase64('logo1.jpg', function (base) {
-                            _pdf.openRecibo(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_products,me.importetotal,base); 
-                        });
-                        
-                        me.cerrarModal();                        
-                        me.listarFactura(1,'','nombreinstitucion');
-                    }
-                    
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-
-            actualizarFactura(){  
-                let me = this;
-                axios.put('/con_factura/actualizar',{
-                    'idfactura': this.factura_id, 
-                    'numerofactura': this.numerofactura,
-                    'codigocontrol': this.codigocontrol,
-                    'razonsocial': this.razonsocial,                    
-                    'nit': this.nit,
-                    'detalle': this. invoice_products,
-                    'importetotal': this.invoice_subtotal,
-                    'importecf': this.invoice_subtotal
-                }).then(async function (response) {
-                    if(response.data.length){
-                        swal(
-                            'El Valor ya Existe',
-                            'Ingresa un dato Diferente',
-                            'error'
-                        )
-                    }
-                    else{                                                
-                        //campo detalle: detalle|importe|cantidad|total
-                        //factura.genera(nit,nombre,detalle,monto)                                                
-                        // var resultado = await factura.genera('123123123','nombre','121231231|23.2|1|23.3,84846548|11.23|1|11.23',23.36);                         
-                        // console.log('dev: ' + resultado['nrofactura']);   
-                        me.cerrarModal();
-                        me.listarFactura(1,'','nombreinstitucion');
-                    }
-                }).catch(function (error) {
-                    console.log(error);
-                });                 
-            },
-
-           
             
             cerrarModal(){
                 this.modal=0;
@@ -305,9 +210,7 @@
 
         },
         mounted() {
-            this.listarFactura(1,this.buscar,this.criterio);
-            this.dataparametro();
-            this.maxfactura();                    
+                
         }
     }
 </script>

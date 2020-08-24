@@ -7,6 +7,7 @@ use App\Con_FacturaParametro;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\AsinalssClass\FacturaClass;
+use Illuminate\Support\Facades\DB;
 
 class ConFacturaController extends Controller
 {
@@ -100,7 +101,7 @@ class ConFacturaController extends Controller
         $factura->nit = $request->nit;
         $factura->detalle = $detalle_t;
         $factura->importetotal = $request->importetotal;
-        $factura->importecf = $request->importetotal;        
+        $factura->importecf = $request->importetotal;           
         $factura->activo = '1';
         $factura->save();
     }
@@ -126,10 +127,10 @@ class ConFacturaController extends Controller
 
     public function proceso(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        //if (!$request->ajax()) return redirect('/');
                 
         //variables
-        $comprobante = $_POST["num_comprobante"];
+        $comprobante = $request->com;
         $cuenta_pre_reg = '41101101';
         $porcentaje_pre_reg = 0.20; 
         $porcentaje_aportes = 0.80;
@@ -145,15 +146,72 @@ class ConFacturaController extends Controller
         $ok = "Query Ok";
         $nook = "Query Error";
 
-        $productos=DB::connection('pgsql')->select("SELECT usuario_reg,id_prestamo,id_persona,imp_desembolsado, fecha_desembolso,plazo,detalle_desembolso,
-        id_estado, par_estado_prestamo, par_estado,eliminado, fecha_reg,numero_cuenta_abono
-        FROM finanzas.ptm_prestamos where fecha_desembolso='$request->fecha' and id_producto ='G' order by id_prestamo"); 
 
+        $productos=DB::connection('pgsql')->select("SELECT 
+        round(importe_moneda_local*$porcentaje_pre_reg,2) as bol20, round(importe_moneda_origen*$porcentaje_pre_reg,2) as dol20,
+        round(importe_moneda_local*$porcentaje_aportes,2) as bol80, round(importe_moneda_origen*$porcentaje_aportes,2) as dol80,
+        importe_moneda_local, importe_moneda_origen, fecha_transaccion, glosa,
+        round((importe_moneda_local*$porcentaje_pre_reg*$porcentaje_87),2) as bol87, round((importe_moneda_origen*$porcentaje_pre_reg*$porcentaje_87),2) as dol87,
+        round((importe_moneda_local*$porcentaje_pre_reg*$porcentaje_deb_fis),2) as bol13, round((importe_moneda_origen*$porcentaje_pre_reg*$porcentaje_deb_fis),2) as dol13,
+        round((importe_moneda_local*$porcentaje_pre_reg*$porcentaje_imp_tra),2) as bol03, round((importe_moneda_origen*$porcentaje_pre_reg*$porcentaje_imp_tra),2) as dol03
+        FROM finanzas.con_tr_detalles ctd 
+        where id_transaccion = '$comprobante' 
+        and id_tipo = '$tipo'
+        and cuenta = '$cuenta_pre_reg'
+        order by item");    
+
+        $sumabol20=0;
+        $sumausd20=0;
+        $sumabol80=0;
+        $sumausd80=0;
+        $sumabol87=0;
+        $sumausd87=0;
+        $sumabol13=0;
+        $sumausd13=0;
+        $sumabol03=0;
+        $sumausd03=0;
+        $sumabol=0;
+        $sumausd=0;
+        $fecha_transaccion='';
+        $glosa='';
+        $array_out=[];
+
+        foreach($productos as $rowpsql){  
+            $sumabol20 = $rowpsql->bol20 + $sumabol20;
+            $sumausd20 = $rowpsql->dol20 + $sumausd20;
+            $sumabol80 = $rowpsql->bol80 + $sumabol80;
+            $sumausd80 = $rowpsql->dol80 + $sumausd80;
+            $sumabol = $rowpsql->importe_moneda_local + $sumabol;
+            $sumausd = $rowpsql->importe_moneda_origen + $sumausd;
+            $fecha_transaccion = $rowpsql->fecha_transaccion;
+            $glosa = $rowpsql->glosa;
+            $sumabol87 = $rowpsql->bol87 + $sumabol87;
+            $sumausd87 = $rowpsql->dol87 + $sumausd87;
+            $sumabol13 = $rowpsql->bol13 + $sumabol13;
+            $sumausd13 = $rowpsql->dol13 + $sumausd13;
+            $sumabol03 = $rowpsql->bol03 + $sumabol03;
+            $sumausd03 = $rowpsql->dol03 + $sumausd03;
+        }
+
+        $array_out['sumabol20']=$sumabol20;
+
+        echo 'total BOL 20%: ', $sumabol20, '<br>';
+        echo 'total BOL 80%: ', $sumabol80, '<br>';
+        echo 'total BOL 87%: ', $sumabol87, '<br>';
+        echo 'total BOL 13%: ', $sumabol13, '<br>';
+        echo 'total BOL 03%: ', $sumabol03, '<br>';
+
+        echo 'total BOL 100%: ', $sumabol, '<br><br>';
+        echo 'total USD 20%: ', $sumausd20, '<br>';
+        echo 'total USD 80%: ', $sumausd80, '<br>';
+        echo 'total USD 87%: ', $sumausd87, '<br>';
+        echo 'total USD 13%: ', $sumausd13, '<br>';
+        echo 'total USD 03%: ', $sumausd03, '<br>';
+        echo 'total USD 100%: ', $sumausd, '<br>';
+
+
+        return ['proceso'=>$array_out,'pgsql'=>count($productos)];
 
     }
-
-        return ['maxfactura' => $maxfactura];
-    }
-
-
+}
 
