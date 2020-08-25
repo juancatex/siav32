@@ -216,7 +216,8 @@
                                 <div class="tcelda">Gestión de Pagos</div>
                             </div>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-6 text-right">                        
+                            <button class="btn btn-success" style="margin-top:0px" @click="liberarAmbiente(regAsignacion.idambiente,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
                             <button class="btn btn-primary" style="margin-top:0px" @click="nuevoPago()">Registrar Pago</button>
                         </div>
                     </div>
@@ -473,6 +474,36 @@ export default {
             });
         },
 
+        liberarAmbiente(idambiente, idestablecimiento) {
+            swal({
+                title: "Liberar Ambiente",
+                text: "El ambiente se liberara para nueva asignacion",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, liberara",
+                cancelButtonText: "No liberar",
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.put('/ser_ambiente/liberarAmbiente',{
+                            'idambiente': idambiente,
+                        }).then(function (response) {
+                            swal(
+                            'Ambiente Liberado!',
+                            ''
+                            )   
+                            me.listaAmbientes(idestablecimiento,1);
+                            me.divAsignaciones=1;
+                            
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    } 
+                    else if (result.dismiss === swal.DismissReason.cancel) {                        
+                    }
+                })
+        },
 
         listaDocumentos(){
             var url='/par_documento/listaDocumentos?iddocumentos='+this.regEstablecimiento.iddocumentos;
