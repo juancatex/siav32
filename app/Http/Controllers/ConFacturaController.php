@@ -128,10 +128,12 @@ class ConFacturaController extends Controller
     public function proceso(Request $request)
     {
         if (!$request->ajax()) return redirect('/');        
-        
+                
         //variables
         $datos[]='';
         $flag=$request->flag;
+        $host=$request->host;
+        $tipo=$request->tipo;
 
         $comprobante = $request->com;
         $cuenta_pre_reg = '41101101';
@@ -140,7 +142,7 @@ class ConFacturaController extends Controller
         $porcentaje_87 = 0.87;
         $porcentaje_deb_fis = 0.13;
         $porcentaje_imp_tra = 0.03;
-        $tipo = 'SEC_CON_COM_TRASPASO';            
+        
         $subcuenta='20000000000';
         $datos['cuenta_aporte']=$cuenta_aporte='22501101';
         $datos['cuenta_deb_fis']=$cuenta_deb_fis = '21301102';
@@ -149,21 +151,27 @@ class ConFacturaController extends Controller
         $ok = "Query Ok";
         $nook = "Query Error";
 
+        if ($host==0) $server='pgsql_desarrollo'; if ($host==1) $server='pgsql';
 
         //verificamos que  no se hice ya el procedimiento,
         //verificando si existen las cuentas:22501101,21301102,21301103
         //si existen en el coprobante => no se hace nada
 
-        $valida_1=DB::connection('pgsql')->select("select * from finanzas.con_tr_detalles ctd 
+        $valida_1=DB::connection($server)->select("select cuenta, importe_moneda_local from finanzas.con_tr_detalles ctd 
         where id_transaccion ='$comprobante' 
         and id_tipo ='$tipo'
         and (cuenta = '$cuenta_aporte' or cuenta = '$cuenta_deb_fis' or cuenta = '$cuenta_imp_tra' or cuenta = '$cuenta_imp_tra_debe')");
         
         if (count($valida_1)>0) {
-            //return ['mensaje'=>'Proceso ya realizado'];
+            foreach ($valida_1 as $va1) {
+                $ex['cuenta']=$va1->cuenta;
+                $ex['importe']=$va1->importe_moneda_local;                
+            }
+            
+            return ['mensaje'=>'Cuentas con importes ', 'existe'=>$ex];
         }
         
-        $productos=DB::connection('pgsql')->select("SELECT 
+        $productos=DB::connection($server)->select("SELECT 
         round(importe_moneda_local*$porcentaje_pre_reg,2) as bol20, round(importe_moneda_origen*$porcentaje_pre_reg,2) as dol20,
         round(importe_moneda_local*$porcentaje_aportes,2) as bol80, round(importe_moneda_origen*$porcentaje_aportes,2) as dol80,
         importe_moneda_local, importe_moneda_origen, fecha_transaccion, glosa,
@@ -229,7 +237,7 @@ class ConFacturaController extends Controller
 
         //actualizacion de los porcentajes
         if ($flag==1) {
-            DB::connection('pgsql')->update("update finanzas.con_tr_detalles 
+            DB::connection($server)->update("update finanzas.con_tr_detalles 
             set importe_moneda_local=round((importe_moneda_local*$porcentaje_pre_reg*$porcentaje_87),2), 
             importe_moneda_origen =round((importe_moneda_origen*$porcentaje_pre_reg*$porcentaje_87),2)
             where id_transaccion = '$comprobante'
@@ -238,19 +246,19 @@ class ConFacturaController extends Controller
         }
                 
 
-        $sql_max_item=DB::connection('pgsql')->select("select max(item)+1 as max from finanzas.con_tr_detalles 
+        $sql_max_item=DB::connection($server)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
         where id_transaccion = '$comprobante'
         and id_tipo = '$tipo'
         and cuenta = '$cuenta_pre_reg'");        
         $max_item = $sql_max_item[0]->max;
 
-        $sql_max_reg=DB::connection('pgsql')->select("select max(id_reg)+1 as max_reg from finanzas.con_tr_detalles");
+        $sql_max_reg=DB::connection($server)->select("select max(id_reg)+1 as max_reg from finanzas.con_tr_detalles");
         $max_reg = $sql_max_reg[0]->max_reg;
 
         if ($flag==1) {
 
             //insertar registro el 87% a la cuenta de prestamos regualres
-            DB::connection('pgsql')->insert("INSERT INTO finanzas.con_tr_detalles
+            DB::connection($server)->insert("INSERT INTO finanzas.con_tr_detalles
             (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento, importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
             VALUES(
             '$comprobante', 
@@ -279,7 +287,7 @@ class ConFacturaController extends Controller
             //insertar registro el 13% a la cuenta de debito fiscal
             $max_item++;
             $max_reg++;
-            DB::connection('pgsql')->insert("INSERT INTO finanzas.con_tr_detalles
+            DB::connection($server)->insert("INSERT INTO finanzas.con_tr_detalles
             (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento, importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
             VALUES(
             '$comprobante', 
@@ -308,7 +316,7 @@ class ConFacturaController extends Controller
             //insertar registro el 3% a la cuenta de impuestos transacciones haber
             $max_item++;
             $max_reg++;
-            DB::connection('pgsql')->insert("INSERT INTO finanzas.con_tr_detalles
+            DB::connection($server)->insert("INSERT INTO finanzas.con_tr_detalles
             (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento, importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
             VALUES(
             '$comprobante', 
@@ -339,7 +347,7 @@ class ConFacturaController extends Controller
             $max_reg++;
             $sumabol03 = $sumabol03*-1;
             $sumausd03 = $sumausd03*-1;
-            DB::connection('pgsql')->insert("INSERT INTO finanzas.con_tr_detalles
+            DB::connection($server)->insert("INSERT INTO finanzas.con_tr_detalles
             (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento, importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
             VALUES(
             '$comprobante', 
