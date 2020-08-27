@@ -5,10 +5,45 @@
              <div class="container-fluid">
                 <div class="card">
                     <div class="col-12">
-                        <h1>Actualizacion Comprobantes de Datos y Porcentajes</h1>
-                        <label>Servidor: 
-                            <select v-model="host"><option selected='selected' value=0>Desarrollo</option><option value=1>Produccion</option></select>
-                        </label><br>
+                        <h1>Actualizacion Comprobantes de Datos y Porcentajes</h1>                         
+                        <div v-if="check('desarrollo') && check('produccion')?true:false">
+                            <label>Servidor: 
+                                <select  name="server" v-model="host" v-validate.initial="'required'">
+                                    <option value=''>--elegir--</option>
+                                    <option value=1>Desarrollo</option>
+                                    <option value=2>Produccion</option>                                     
+                                </select>
+                                <span class="text-error">{{ errors.first('server')}}</span>
+                            </label><br>    
+                        </div>                        
+                        <div v-if="check('desarrollo')==0 && check('produccion')==0?true:false">
+                            <label>Servidor: 
+                                <select  name="server" v-model="host" v-validate.initial="'required'">
+                                    <option value=''>--elegir--</option>
+                                    <option value='99'>Sin valor</option>
+                                </select>
+                                <span class="text-error">{{ errors.first('server')}}</span>
+                            </label><br>    
+                        </div>
+                        <div v-if="check('desarrollo')==1 && check('produccion')==0?true:false">
+                            <label>Servidor: 
+                                <select  name="server" v-model="host" v-validate.initial="'required'">
+                                    <option value=''>--elegir--</option>
+                                    <option value=1>Desarrollo</option>
+                                </select>
+                                <span class="text-error">{{ errors.first('server')}}</span>
+                            </label><br>    
+                        </div>
+                        <div v-if="check('desarrollo')==0 && check('produccion')==1?true:false">
+                            <label>Servidor: 
+                                <select name="server" v-model="host" v-validate.initial="'required'">
+                                    <option value=''>--elegir--</option>
+                                    <option value=2>Produccion</option>
+                                </select>
+                                <span class="text-error">{{ errors.first('server')}}</span>
+                            </label><br>    
+                        </div>                        
+
                         <!-- <label>Base Datos: {{asdf}}</label><br> -->
                         <!-- <label>Estado: <div v-if="flag=='0'"><font color='green'>Pruebas</font></div><div v-else><font color='red'>Produccion</font></div></label> -->
                         <label>Proceso:
@@ -20,8 +55,9 @@
                         
                             <div class="form-group">
                                 <label for="num_comprobante"><b>Comprobante:</b></label>
-                                <input name="num_comprobante" required type="number" v-model="num_comprobante"
+                                <input name="num_comprobante"  type="number" v-model="num_comprobante"   v-validate.initial="'required'"
                                     class="form-control" placeholder="Num Comprobante">
+                                    <span class="text-error">{{ errors.first('num_comprobante')}}</span>
                             </div>
                             <div class="form-group">
                                 <label for="cuenta1">Cuenta Prestamo Regular: 41101101</label> <br>                                                   
@@ -50,7 +86,7 @@
                             </div>
                             <div class="form-group">
                                 <!-- <input class="btn-success btn" type="submit" name="submit"></input> -->
-                                <button class="btn-success" type="button" id="boton" @click="proceso(num_comprobante)">Procesar</button>                            
+                                <button :disabled = "errors.any()" class="btn btn-success" type="button" id="boton" @click="proceso(num_comprobante)">Procesar</button>                            
                             </div>
                         
                     </div>
@@ -100,11 +136,19 @@
 
 
 <script>        
+import VeeValidate from 'vee-validate';
+const VueValidationEs = require('vee-validate/dist/locale/es');
+Vue.use(VeeValidate, 
+{   locale: 'es',
+    dictionary: { es: VueValidationEs }
+});
     
+Vue.use(VeeValidate);    
     export default {
+        props:['idmodulo','idventanamodulo'],
         data (){
             return {
-                host: 0,                
+                host: '',                
                 num_comprobante:'',
                 modal: 0,
                 mensaje: '',
@@ -114,7 +158,11 @@
                 arrayDatos : [],
                 buscar : '',
                 flag : 0,  //por defectio en pruebas
-                tipo: 'SEC_CON_COM_INGRESO'
+                tipo: 'SEC_CON_COM_INGRESO',
+                arrayPermisos : {desarrollo:0,produccion:0},  
+                arrayPermisosIn:[],
+                desarrollo:'',
+                produccion:'',
             }
         },
        
@@ -154,13 +202,16 @@
         },
 
         methods : {
-            proceso(num_comprobante) { console.log(process.env);
+            proceso(num_comprobante) { 
+
                 if (this.flag==0) {
                     var t='Mostrar'; var text='Mostrar resultados, no se actualizaran los datos'; var color1='green';} 
-                    else {var t='Actualizar'; var text='Se actualizaran datos, seguro desea proceder?'; var color1='red';}
-                if (this.host==0) {
+                else if (this.flag==1){
+                    var t='Actualizar'; var text='Se actualizaran datos, seguro desea proceder?'; var color1='red';}
+                if (this.host==1) {
                     var h='Desarrollo'; var tipo='info'; var color='green';} 
-                    else {var h='PRODUCCION'; var tipo='error'; var color='red';}
+                else if (this.host==2)
+                    {var h='PRODUCCION'; var tipo='error'; var color='red';}
                 swal({
                     title: text + '\n Comprobante:'+this.num_comprobante+' \n Accion:<b><font color='+color1+'>'+t+'</font></b>\n Servidor:<b><font color='+color+'>'+h+'</font></b>',
                     type: tipo,
@@ -213,13 +264,32 @@
                 })                
             },
             
+            getPermisos() { 
+                //permisoId poner axios para obtener los permisos                
+                var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data.datapermiso[0].permisos;  
+                    me.arrayPermisosIn = JSON.parse((respuesta)); //console.log(me.arrayPermisosIn);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+
+            check(n){ 
+                return _pl.validatePermission(this.arrayPermisosIn,n);
+            },
+
             cerrarModal(){
                 this.modal=0;
                 this.tituloModal='';                                
             },
 
         },
-        mounted() {                
+        mounted() {       
+            this.getPermisos();         
+
         }
     }
 </script>

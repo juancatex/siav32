@@ -151,7 +151,7 @@ class ConFacturaController extends Controller
         $ok = "Query Ok";
         $nook = "Query Error";
 
-        if ($host==0) $server='pgsql_desarrollo'; if ($host==1) $server='pgsql';
+        if ($host==1) $server='pgsql_desarrollo'; else if ($host==2) $server='pgsql'; else {return ['mensaje'=>'No se eligio un servidor'];}
 
         //verificamos que  no se hice ya el procedimiento,
         //verificando si existen las cuentas:22501101,21301102,21301103
