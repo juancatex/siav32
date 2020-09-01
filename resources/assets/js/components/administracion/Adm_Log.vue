@@ -12,16 +12,20 @@
                         
                     </div>
                     <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <div>                                    
-                                    Operacion: <input type="text" v-model="buscar" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" placeholder="operacion">
-                                    Usuario: <input type="text" v-model="buscar1" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" placeholder="usuario">
-                                    Fecha Inicio: <input type="text" v-model="buscar2" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" placeholder="2019-01-01 00:00:00.000">
-                                    Fecha Fin: <input type="text" v-model="buscar3" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" placeholder="2019-01-01 00:00:00.000">                                    
-                                    <button type="submit" @click="listarLog(1,buscar,buscar1,buscar2,buscar3)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                                                            
+                                    Accion:
+                                    <select class="form-control col-4" v-model="buscar" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)">
+                                        <option value='select'>Consulta</option>
+                                        <option value='update'>Actualizacion</option>
+                                        <option value='delete'>Borrado</option>
+                                    </select>                                    
+                                
+                                    Usuario:<input type="text" v-model="buscar1" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" placeholder="usuario">
+                                    Fecha Inicio: <input type="datetime-local" v-model="buscar2" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" >
+                                    Fecha Fin: <input type="datetime-local" v-model="buscar3" @keyup.enter="listarLog(1,buscar,buscar1,buscar2,buscar3)" >
+                                    <button type="submit" @click="listarLog(1,buscar,buscar1,buscar2,buscar3)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>                                
+                            
                         </div>
                         <table class="table table-bordered table-striped table-sm">
                             <thead>
@@ -41,7 +45,7 @@
                                     <td v-text="log.type"></td>
                                     <td>{{leercontenido1(log.content)}}</td>
                             
-                                    <td><a :href="'telescope/queries/' + log.uuid">Ver</a></td>
+                                    <td><a :href="'telescope/queries/' + log.uuid" target="_blank"><b>Ver</b></a></td>
                                     <td v-text="log.created_at"></td>
                                 </tr>                                
                             </tbody>
@@ -96,7 +100,7 @@
                     'to' : 0,
                 },
                 offset : 3,
-                buscar : '',                
+                buscar : 'select',                
                 buscar1 : '',
                 buscar2 : '',
                 buscar3 : ''
@@ -170,9 +174,18 @@
             },
             leercontenido1(dato) {
                 var obj = JSON.parse(dato);                
-                    if(2)
-                    return 1;                
-                    else return 2;
+                    //console.log(obj);
+                    var xx = obj['user'];
+                    
+                    for (var key in xx) {
+                        //console.log("Key: " + key);
+                        var valor = xx[key];                        
+                    }
+                    
+                    if (valor)
+                        return(xx.name);                                                        
+                    else
+                        return('system');
             },
             leercontenido2(dato) {
                 var obj = JSON.parse(dato);
