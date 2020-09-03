@@ -277,7 +277,7 @@
                         <button v-if="regPago.idpago" class="btn btn-primary" 
                             @click="reporteSalida()">Boleta de Salida</button>
                       
-                        <button v-if="regPago.idpago" class="btn btn-success" @click="liberarAmbiente(regAsignacion.idambiente,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
+                        <button v-if="regPago.idpago" class="btn btn-success" @click="liberarAmbiente(regAsignacion.idambiente,regAsignacion.idasignacion,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
                     </center>
                 </div>
             </div>
@@ -514,6 +514,8 @@ export default {
         nuevaAsignacion(ambiente){
             this.regAmbiente=ambiente;
             this.arrayIDimplementos=[1,2,3,4,5,6,7,8,9];
+            this.regAsignacion.idasignacion='';
+            this.regAsignacion.idcliente='';
             this.fecha=this.currfecha;
             this.hora=this.currhora;
             this.idcliente='';
@@ -601,7 +603,7 @@ export default {
         },
 
 
-        liberarAmbiente(idambiente, idestablecimiento) {
+        liberarAmbiente(idambiente, idasignacion, idestablecimiento) { 
             swal({
                 title: "Liberar Ambiente",
                 text: "El ambiente se liberara para nueva asignacion",
@@ -615,13 +617,15 @@ export default {
                         let me = this;
                         axios.put('/ser_ambiente/liberarAmbiente',{
                             'idambiente': idambiente,
+                            'idasignacion': idasignacion,
                         }).then(function (response) {
                             swal(
                             'Ambiente Liberado!',
                             ''
                             )   
-                            me.listaAmbientes(idestablecimiento,1);
+                            me.listaAmbientes(idestablecimiento,me.regAmbiente.piso);
                             me.divAsignaciones=1;
+                            me.idcliente='';
                             
                         }).catch(function (error) {
                             console.log(error);

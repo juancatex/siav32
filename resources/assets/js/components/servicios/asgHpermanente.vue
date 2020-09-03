@@ -476,7 +476,7 @@ export default {
             });
         },
 
-        liberarAmbiente(idambiente, idasignacion, idestablecimiento) { console.log(idambiente, idasignacion);
+        liberarAmbiente(idambiente, idasignacion, idestablecimiento) { 
             swal({
                 title: "Liberar Ambiente",
                 text: "El ambiente se liberara para nueva asignacion",
@@ -496,7 +496,7 @@ export default {
                             'Ambiente Liberado!',
                             ''
                             )   
-                            me.listaAmbientes(idestablecimiento,1);
+                            me.listaAmbientes(idestablecimiento,me.regAmbiente.piso);
                             me.divAsignaciones=1;                            
                             me.idcliente='';
                         }).catch(function (error) {
