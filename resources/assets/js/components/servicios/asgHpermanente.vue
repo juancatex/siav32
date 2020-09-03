@@ -217,7 +217,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">                        
-                            <button class="btn btn-success" style="margin-top:0px" @click="liberarAmbiente(regAsignacion.idambiente,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
+                            <button class="btn btn-success" style="margin-top:0px" @click="liberarAmbiente(regAsignacion.idambiente,regAsignacion.idasignacion,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
                             <button class="btn btn-primary" style="margin-top:0px" @click="nuevoPago()">Registrar Pago</button>
                         </div>
                     </div>
@@ -332,6 +332,8 @@
                                     <div class="tcelda" >
                                         <select class="form-control" v-model="ges"
                                             name="ges" :class="{'invalido':errors.has('ges')}" v-validate="'required'">
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option><option value="2018">2018</option>
                                             <option value="2019">2019</option><option value="2020">2020</option>
                                         </select>
                                         <p class="txtvalidador" v-if="errors.has('ges')">Seleccione un año</p>
@@ -474,7 +476,7 @@ export default {
             });
         },
 
-        liberarAmbiente(idambiente, idestablecimiento) {
+        liberarAmbiente(idambiente, idasignacion, idestablecimiento) { console.log(idambiente, idasignacion);
             swal({
                 title: "Liberar Ambiente",
                 text: "El ambiente se liberara para nueva asignacion",
@@ -488,14 +490,15 @@ export default {
                         let me = this;
                         axios.put('/ser_ambiente/liberarAmbiente',{
                             'idambiente': idambiente,
+                            'idasignacion': idasignacion,
                         }).then(function (response) {
                             swal(
                             'Ambiente Liberado!',
                             ''
                             )   
                             me.listaAmbientes(idestablecimiento,1);
-                            me.divAsignaciones=1;
-                            
+                            me.divAsignaciones=1;                            
+                            me.idcliente='';
                         }).catch(function (error) {
                             console.log(error);
                         });
@@ -600,7 +603,7 @@ export default {
         nuevaAsignacion(ambiente){
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.regAmbiente=ambiente;
-            this.modalAsignacion=1;
+            this.modalAsignacion=1; this.regAsignacion.idasignacion='';
             this.accion=1;
             this.divValidado=1;
             this.listaDocumentos();
@@ -611,7 +614,9 @@ export default {
             this.fechasalida='';
             this.ges=''; this.per='';
             this.ocupantes='';
-            this.obs1='';
+            this.obs1=''; 
+            this.regAsignacion.idcliente='';
+            this.arrayIDdocumentos=[];
             this.$validator.reset();
         },
 

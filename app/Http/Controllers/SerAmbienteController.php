@@ -122,9 +122,11 @@ class SerAmbienteController extends Controller
         exit;
     }
 
-    function liberarAmbiente(Request $request) { echo $request->idambiente;
+    function liberarAmbiente(Request $request) { 
         DB::table('ser__ambientes')->where('idambiente',$request->idambiente)         
         ->update(['ocupado'=>0]);
+        DB::table('ser__asignacions')->where('idasignacion',$request->idasignacion)         
+        ->update(['vigente'=>0]);
         return 1;
     }
 

@@ -27,7 +27,8 @@ class SerAsignacionController extends Controller
         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
         ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
-        ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento);
+        ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+        ->where('ser__asignacions.vigente',1);
         if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
         if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);
         return ['asignaciones'=>$asignaciones->get(),'ipbirt'=>$ip,
@@ -50,6 +51,7 @@ class SerAsignacionController extends Controller
         $asignacion=new Ser_Asignacion();
         $asignacion->idcliente=$request->idcliente;
         $asignacion->tipocliente=$request->tipocliente;
+        $asignacion->vigente=1;
         $asignacion->idambiente=$request->idambiente;
         $asignacion->nrasignacion=$request->nrasignacion;
         $asignacion->fechasolicitud=$request->fechasolicitud;
