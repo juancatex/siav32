@@ -779,7 +779,7 @@ export default {
 
         atras() { 
             this.divAsignaciones=1;
-            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
+            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,this.regAmbiente.piso);
         },
 
         reporteContrato(asignacion){
