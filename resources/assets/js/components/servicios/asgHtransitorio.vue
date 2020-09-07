@@ -1,7 +1,7 @@
 <template>
 <main>
     <div>
-        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras(regAsignacion)">nivel atras</button>
+        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras()">nivel atras</button>
     </div>
     <div class="card" v-if="divAsignaciones">
         <div class="card-header">
@@ -38,7 +38,7 @@
                 <tbody>
                     <tr v-for="ambiente in arrayAmbientes" :key="ambiente.id">
                         <td class="card-header titcard" v-text="ambiente.codambiente" align="center"></td>
-                        <td><span style="display:none"> {{c=1}}</span>
+                        <td><span style="display:none"> {{c=0}}</span>
                             <span v-text="ambiente.tipo"></span><br>
                             <span v-text="ambiente.capacidad"></span> personas
                         </td>
@@ -46,7 +46,36 @@
                             Externos: <span v-text="ambiente.tarifareal"></span>Bs,
                         </td>
                         <td> 
-                            <div v-if="ambiente.ocupado===1" class="tabla100">                               
+
+
+                            <div class="tabla100"> 
+
+                                <div class="tfila bloquefila" v-for="asignacion in arrayAsignaciones" :key="asignacion.id">
+                                    
+                                        <template v-if="asignacion.idambiente==ambiente.idambiente && asignacion.vigente===1" >
+                                        <div class="tcelda" > {{++c}}.
+                                            <span v-text="asignacion.nomgrado+' '+asignacion.nombre+' '+asignacion.apaterno"></span></div>
+                                        <div class="tcelda"><span v-text="jsfechas.fechadia(asignacion.fechaentrada)"></span></div>
+                                        <div class="tcelda"><span v-text="asignacion.horaentrada"></span></div>
+                                        <div class="tcelda text-right">
+                                            <span v-text="asignacion.currhora<'12:31:00'?(asignacion.noches):(asignacion.noches)"></span> noches
+                                        </div>
+                                        <div class="tcelda text-right" style="padding:5px 0px">
+                                            <button class="btn btn-warning btn-sm icon-book-open" title="Ficha de ocupación"
+                                                @click="verAsignacion(asignacion)"></button> 
+                                        </div>
+                                        </template>
+                                                                                                                                                            
+                                </div>
+                                <div v-if="ambiente.capacidad!==c">                                      
+                                    <button class="btn btn-success icon-user-follow" title="Asignar cama"
+                                    @click="nuevaAsignacion(ambiente)"></button>
+                                </div>                                
+                                
+                            </div> 
+                            
+
+                            <!-- <div v-if="ambiente.ocupado===1" class="tabla100"> 
                                 <div class="tfila bloquefila" v-for="asignacion in arrayAsignaciones" :key="asignacion.id">
                                     <template v-if="asignacion.idambiente==ambiente.idambiente">
                                         <div class="tcelda" > {{c++}}.
@@ -64,8 +93,10 @@
                                 </div>
                             </div> 
                             <div v-if="ambiente.ocupado===0" class="bloquefila text-center noprint" style="padding:8px; cursor:pointer">
-                                <a href="#" @click="nuevaAsignacion(ambiente)"> Agregar Huésped</a>
-                            </div>                            
+                                <div v-for="capacidad in ambiente.capacidad" :key="capacidad">
+                                    <a href="#" @click="nuevaAsignacion(ambiente)">Agregar Huésped - Cama {{capacidad}}</a> 
+                                </div>                                
+                            </div>                             -->
                         </td>
                     </tr>
                 </tbody>
@@ -95,7 +126,7 @@
                             <span class="titcampo">CI:</span>
                             <span v-text="regCliente.ci+regCliente.abrvdep"></span>
                         </div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-3 col-sm-3">
                             <span class="titcampo">Celular:</span>
                             <span v-text="regCliente.telcelular"></span>
                         </div>
@@ -270,7 +301,7 @@
                     
                     <center>
                         <button v-if="regAsignacion.fechasalida" class="btn btn-primary" 
-                            @click="regPago.idpago?editarPago():nuevoPago()">
+                            @click="regPago.idpago?editarPago():nuevoPago(regAsignacion.noches,regAsignacion.tarifa)">
                             <span v-text="regPago.idpago?'Editar':'Registrar'"></span> Pago</button>
 
                             
@@ -309,9 +340,9 @@
                     <div v-if="!regAsignacion.idasignacion" style="padding:5px 0px 10px 0px;">
                         <div class="tfila">
                             <div class="tcelda">Cliente:</div>
-                            <div class="tcelda tinput text-right nowrap">
+                            <!-- <div class="tcelda tinput text-right nowrap">
                                 <input type="checkbox" v-model="nosocio">Cliente particular
-                            </div>
+                            </div> -->
                         </div>
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
                         <div v-if="nosocio" >
@@ -654,7 +685,7 @@ export default {
             });
         },
 
-        nuevoPago(){
+        nuevoPago(noche,tarifa){
             this.modalPago=1;
             this.accion=1;
             this.nrdocumento='';            
@@ -666,8 +697,10 @@ export default {
             if(this.regCliente.currhora>'12:30') this.regAsignacion.noches++;
             this.regPago.concepto='Hospedaje '+this.regAsignacion.noches+' noches';
             if (this.regAsignacion.noches==0)
-                this.regPago.importe=this.regAsignacion.tarifa*1;
+                //this.regPago.importe=this.regAsignacion.tarifa*1;
+                this.regPago.importe=tarifas*1;
             else
+                //this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
                 this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
         },
@@ -748,6 +781,7 @@ export default {
 
         atras() {
             this.divAsignaciones=1;
+            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,this.regAmbiente.piso);
         },
 
         reporteEntrada(){

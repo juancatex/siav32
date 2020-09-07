@@ -19,7 +19,7 @@ class SerAsignacionController extends Controller
         //$currhora=DB::raw('curtime() as currhora');
         //$currfecha=DB::raw('curdate() as currfecha');
         $asignaciones=Ser_Asignacion::
-        select('idasignacion','idcliente','tipocliente','ser__asignacions.idambiente',
+        select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
         'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
         'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
@@ -48,6 +48,12 @@ class SerAsignacionController extends Controller
 
     public function storeAsignacion(Request $request)
     {
+
+        //capccidad del amebiente
+        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
+        //total de asignados a ese ambiebte
+        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
+
         $asignacion=new Ser_Asignacion();
         $asignacion->idcliente=$request->idcliente;
         $asignacion->tipocliente=$request->tipocliente;
@@ -68,7 +74,13 @@ class SerAsignacionController extends Controller
         $asignacion->idrepresentante=$request->idrepresentante;
         $asignacion->obs1=$request->obs1;
         $asignacion->save();
-        DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+
+        if ($capacidad->capacidad == $vigentes) {
+            DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+        }            
+        else    
+            {};
+        
     }
 
     public function updateAsignacion(Request $request)
