@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Ser_Asignacion;
+use App\Ser_Ambiente;
 use App\Ser_Civil;
 use App\Socio;
 
@@ -76,7 +77,10 @@ class SerAsignacionController extends Controller
         $asignacion->save();
 
         if ($capacidad->capacidad == $vigentes) {
-            DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+            //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+            $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
+            $ambiente->ocupado=1;
+            $ambiente->save();
         }            
         else    
             {};
