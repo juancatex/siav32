@@ -40,7 +40,7 @@
                         <td class="card-header titcard" v-text="ambiente.codambiente" align="center"></td>
                         <td><span style="display:none"> {{c=0}}</span>
                             <span v-text="ambiente.tipo"></span><br>
-                            <span v-text="ambiente.capacidad"></span> personas
+                            <span v-text="ambiente.capacidad"></span> camas
                         </td>
                         <td>Socios: <span v-text="ambiente.tarifasocio"></span>Bs,<br>
                             Externos: <span v-text="ambiente.tarifareal"></span>Bs,
@@ -324,7 +324,7 @@
                     <h4 class="modal-title" v-text="titModal.toUpperCase()"></h4>
                     <button class="close" @click="modalAsignacion=0">x</button>
                 </div>
-                <div class="modal-body" style="overflow-y:scroll; height:420px;">
+                <div class="modal-body" style="overflow-y:scroll; height:450px;">
                     <h4 class="titsubrayado" v-text="regEstablecimiento.nomestablecimiento"></h4>
                     <div class="row">
                         <div class="col-md-6">
@@ -340,49 +340,58 @@
                     <div v-if="!regAsignacion.idasignacion" style="padding:5px 0px 10px 0px;">
                         <div class="tfila">
                             <div class="tcelda">Cliente:</div>
-                            <!-- <div class="tcelda tinput text-right nowrap">
+                            <div class="tcelda tinput text-right nowrap">
                                 <input type="checkbox" v-model="nosocio">Cliente particular
-                            </div> -->
+                            </div>
                         </div>
-                        <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
+                        <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>                        
                         <div v-if="nosocio" >
-                                <a class="btn btn-primary" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Nuevo Huesped</a>
+                                <a class="btn btn-success" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Registrar Huesped</a>
                                     
                                     <div class="collapse multi-collapse" id="rolpadre">
                                         <div class="form-group row">
-                                            <table border="0" align="center">
+                                            <table border="2" align="center">
                                                 <tr>
-                                                    <td colspan="3" align="center"><b>REGISTRAR NUEVO HUÉSPED</b></td>
+                                                    <td colspan="12" align="center"><b>REGISTRAR HUESPED (CIVIL)</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Nombre</td>
-                                                    <td colspan="2"><input type="text" class="form-control" v-model="nombre"> </td>
-                                                </tr>
-                                                <tr>
+                                                    <td><input type="text" class="form-control" v-model="nombre"> </td>                                                
                                                     <td>Paterno</td>
-                                                    <td colspan="2"> <input type="text" class="form-control" v-model="apaterno"> </td>
-                                                </tr>
-                                                <tr>
+                                                    <td><input type="text" class="form-control" v-model="apaterno"> </td>
                                                     <td>Materno</td>
-                                                    <td colspan="2"> <input type="text" class="form-control" v-model="amaterno"> </td>
+                                                    <td><input type="text" class="form-control" v-model="amaterno"> </td>
                                                 </tr>
+                                            </table>
+                                            <table border="2" align="center">
                                                 <tr>
-                                                    <td>Número CI</td>
+                                                    <td>CI</td>
                                                     <td><input type="text" class="form-control" v-model="ci"> </td>
                                                     <td><select class="form-control" v-model="iddepartamento">
                                                             <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
                                                             :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
                                                         </select>
                                                     </td>
-                                                </tr>
-                                                <tr>
                                                     <td>Celular</td>
-                                                    <td colspan="2"> <input type="text" class="form-control" v-model="telcelular"> </td>
+                                                    <td><input type="text" class="form-control" v-model="telcelular"> </td>
+                                                </tr>
+                                            </table>
+                                            <table border="2" align="center">
+                                                <tr>
+                                                    <td>Fecha Nac.</td>
+                                                    <td > <input type="date" class="form-control" v-model="fechanac"> </td>
+                                                    <td>Sexo</td>
+                                                    <td > 
+                                                        <input type="radio" value="m" v-model="sexo">
+                                                        <label for="male">Masculino</label><br>
+                                                        <input type="radio" value="f" v-model="sexo">
+                                                        <label for="female">Femenino</label>
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3" align="center">
-                                                        <button class="btn btn-secondary" @click="resApellidos=0,formuCivil=0">Cancelar</button>
-                                                        <button class="btn btn-primary" @click="registrarHuesped()">Guardar</button>
+                                                    <td colspan="6" align="center">
+                                                        <button class="btn btn-warning" @click="formuCivil=0">Cancelar</button>
+                                                        <button class="btn btn-success" @click="registrarHuesped()">Guardar</button>
                                                     </td>
                                                 </tr>
 
@@ -453,9 +462,15 @@
                 </div>
                 <div class="modal-body">                            
                     Nro Factura:
-                    <input type="text" class="form-control" v-model="nrdocumento"
+                    <div v-if="descuento===2">
+                        <input type="text" class="form-control" v-model="nrdocumento"
                         name="nrf" :clas="{'invalido':errors.has('nrf')}" v-validate="'required'">
                     <p class="txtvalidador" v-if="errors.has('nrf')">Dato obligatorio</p>
+                    </div>
+                    <div v-else>
+                        <input type="text" class="form-control" v-model="nrdocumento">
+                    </div>
+                                        
                     Fecha:                                    
                     <input type="date" class="form-control" v-model="fecha">
                     NIT/CI:
@@ -468,7 +483,12 @@
                     Importe:                                   
                     <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1"></span>Bs</div>
                     <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs</div>
-                    <center class="taltura"><input type="checkbox" v-model="descuento"> Pago con descuento</center>
+                    <!-- <center class="taltura"><input type="checkbox" v-model="descuento"> Pago en </center> -->
+                    Tipo de Pago:
+                    <select class="form-control" v-model="descuento" name="tipopago" :class="{'invalido':errors.has('tipopago')}" v-validate="'required'">>
+                        <option v-for="ti in arrayTipoPago" :key="ti.tip" :value="ti.value" v-text="ti.text"></option>                      
+                    </select>
+                    <p class="txtvalidador" v-if="errors.has('tipopago')">Dato obligatorio</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="modalPago=0">Cerrar</button>
@@ -496,14 +516,43 @@ export default {
         divAsignaciones:1, nrgrupo:1, cantgrupos:'', tarifa:'',
         idpago:'',concepto:'', periodo:'', modopago:'', 
         idasignacion:'', idcliente:'', tipocliente:'', fecha:'', hora:'', obs:'',
-        idpago:'', nrdocumento:'', nit:'', razon:'', fecha:'', importe:'', descuento:'',
+        idpago:'', nrdocumento:'', nit:'', razon:'', fecha:'', importe:'', descuento:'1',
         arrayAmbientes:[], arrayOcupantes:[], arrayAsignaciones:[],
         arrayImplementos:[],  arrayIDimplementos:[], 
         regAmbiente:[], regCliente:[], regAsignacion:[], regPago:[], 
         arrayOrdinal:['','Primer','Segundo','Tercer','Cuarto','Quinto','Sexto','Séptimo'],
+        arrayTipoPago:[{text:'Efectivo',value:1},{text:'Deposito',value:2},{text:'Descuento',value:3}],
+        //datos nuevo cliente
+        nombre:'', apaterno:'',amaterno:'',telcelular:'',ci:'',iddepartamento:'',fechanac:'',sexo:'',
+        arrayDepartamentos:[]
     }},
 
     methods:{
+
+        registrarHuesped(){
+            let me=this;
+            var url='/ser_civil/store';
+            axios.post(url,{
+                'nombre': this.nombre.toUpperCase(),
+                'apaterno':this.apaterno.toUpperCase(),
+                'amaterno':this.amaterno.toUpperCase(),
+                'ci':this.ci,
+                'iddepartamento':this.iddepartamento,
+                'telcelular':this.telcelular,
+                'fechanac':this.fechanac,
+                'sexo':this.sexo,
+            }).then(function(response){
+                swal({title:'Registro correcto',
+                    html:'Se han guardado los datos del nuevo huésped.<br>Proceda al registro de entrada.',
+                    type:'success'});
+                axios.get('/ser_civil/ultimo').then(function(response){
+                    console.log(response.data);
+                    me.idcliente=response.data.civil[0]; console.log(response.data.civil[0]);
+                    // me.asignarAmbiente(me.regCivil);
+                });
+            });
+        },
+
         listaAmbientes(idestablecimiento,nrgrupo){
             this.nrgrupo=nrgrupo;
             var url='/ser_ambiente/listaAmbientes?idestablecimiento='+idestablecimiento+'&piso='+nrgrupo;
@@ -512,11 +561,11 @@ export default {
             });
             url='/ser_asignacion/listaAsignaciones?idestablecimiento='+idestablecimiento+'&piso='+nrgrupo;
             axios.get(url).then(response=>{
-                this.arrayAsignaciones=response.data.asignaciones;
+                this.arrayAsignaciones=response.data.asignaciones; 
                 this.ipbirt=response.data.ipbirt;
                 this.currfecha=response.data.currfecha;
                 this.currhora=response.data.currhora;
-            });
+            }); 
         },
 
         listaImplementos(){
@@ -526,7 +575,7 @@ export default {
             })
         },
 
-        verIDcliente(idcliente){console.log(idcliente); this.idcliente=idcliente; },
+        verIDcliente(idcliente){ this.idcliente=idcliente; },
 
         async verAsignacion(asignacion){ 
             let response=await axios.get('/ser_asignacion/verAsignacion?idasignacion='+asignacion.idasignacion);
@@ -666,9 +715,7 @@ export default {
                     {
                         
                     }
-                    })
-                
-            
+                    })                            
         },
 
         verPago(idasignacion){
@@ -713,7 +760,8 @@ export default {
             this.fecha=this.regPago.fecha;
             this.nit=this.regPago.nit;
             this.razon=this.regPago.razon;
-            this.descuento=this.regPago.modopago==3?true:false;
+            //this.descuento=this.regPago.modopago==3?true:false;
+            this.descuento=this.regPago.modopago;
             this.regAsignacion.fecha1=jsfechas.fechadia(this.regAsignacion.fechaentrada);
             this.regAsignacion.fecha2=jsfechas.fechadia(this.regAsignacion.fechasalida);
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
@@ -740,7 +788,8 @@ export default {
                 'nit':this.nit,
                 'razon':this.razon,
                 'nrdocumento':this.nrdocumento,
-                'modopago':this.descuento?3:1,
+                //'modopago':this.descuento?3:1,
+                'modopago':this.descuento,
                 'idperfilcuentamaestro':this.descuento?3:4,
                 'fecha':this.fecha,
                 'importe':this.regPago.importe,
@@ -766,7 +815,7 @@ export default {
                 'nit':this.nit,
                 'razon':this.razon,
                 'nrdocumento':this.nrdocumento,
-                'modopago':this.descuento?3:1,
+                'modopago':this.descuento,
                 'idperfilcuentamaestro':this.descuento?8:9,
                 'fecha':this.fecha,
                 'importe':this.regPago.importe,
@@ -804,13 +853,23 @@ export default {
             reporte.viewPDF(url.join(''),'Boleta de Salida');
         },
 
+        departamentos() {
+            let me=this;
+            var url='/par_departamento/selectDepartamento';
+            axios.get(url).then(function(response){
+                me.arrayDepartamentos=response.data.departamentos;
+            })
+        }
+
     },
+
 
     mounted(){
         this.jsfechas=jsfechas;
         this.cantgrupos=this.regEstablecimiento.cantgrupos*1;
         this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
         this.listaImplementos();        
+        this.departamentos();
     }
 }
 </script>

@@ -206,6 +206,51 @@
                             </div>
                         </div>
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
+                        <div v-if="nosocio" >
+                                <a class="btn btn-primary" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Nuevo Huesped</a>
+                                    
+                                    <div class="collapse multi-collapse" id="rolpadre">
+                                        <div class="form-group row">
+                                            <table border="0" align="center">
+                                                <tr>
+                                                    <td colspan="3" align="center"><b>REGISTRAR NUEVO HUÉSPED</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nombre</td>
+                                                    <td colspan="2"><input type="text" class="form-control" v-model="nombre"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Paterno</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="apaterno"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Materno</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="amaterno"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Número CI</td>
+                                                    <td><input type="text" class="form-control" v-model="ci"> </td>
+                                                    <td><select class="form-control" v-model="iddepartamento">
+                                                            <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
+                                                            :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Celular</td>
+                                                    <td colspan="2"> <input type="text" class="form-control" v-model="telcelular"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" align="center">
+                                                        <button class="btn btn-secondary" @click="resApellidos=0,formuCivil=0">Cancelar</button>
+                                                        <button class="btn btn-primary" @click="registrarHuesped()">Guardar</button>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                            </div>
                     </div>
                     <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
