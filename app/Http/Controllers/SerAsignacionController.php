@@ -67,15 +67,18 @@ class SerAsignacionController extends Controller
             }
             
         } 
+                                
+        if (count($x)==0) {
+            return ['asignaciones'=>'','ipbirt'=>$ip, 'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
+        }            
+        else {
+            $asigna=$x[0];
+            for ($a=1; $a<count($x); $a++) {            
+                $asigna = $asigna->union($x[$a]);
+            }
+            return ['asignaciones'=>$asigna->get(),'ipbirt'=>$ip, 'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
+        }
         
-        $asigna=$x[0];
-        for ($a=1; $a<count($x); $a++) {            
-            $asigna = $asigna->union($x[$a]);
-        }         
-        
-
-        return ['asignaciones'=>$asigna->get(),'ipbirt'=>$ip, 'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
-
         // $asignaciones=Ser_Asignacion::
         // select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
         // 'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,

@@ -732,7 +732,7 @@ export default {
             });
         },
 
-        nuevoPago(noche,tarifa){
+        nuevoPago(noche,tarifa){ 
             this.modalPago=1;
             this.accion=1;
             this.nrdocumento='';            
@@ -745,7 +745,7 @@ export default {
             this.regPago.concepto='Hospedaje '+this.regAsignacion.noches+' noches';
             if (this.regAsignacion.noches==0)
                 //this.regPago.importe=this.regAsignacion.tarifa*1;
-                this.regPago.importe=tarifas*1;
+                this.regPago.importe=tarifa*1;
             else
                 //this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
                 this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
