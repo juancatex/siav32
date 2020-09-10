@@ -257,6 +257,60 @@
                             </div>
                     </div>
                     <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
+                    <div v-if="nosocio" >
+                        <a class="btn btn-success" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Registrar Huesped</a>
+                            
+                            <div class="collapse multi-collapse" id="rolpadre">
+                                <div class="form-group row">
+                                    <table border="2" align="center">
+                                        <tr>
+                                            <td colspan="12" align="center"><b>REGISTRAR HUESPED (CIVIL)</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td><input type="text" class="form-control" v-model="nombre"> </td>                                                
+                                            <td>Paterno</td>
+                                            <td><input type="text" class="form-control" v-model="apaterno"> </td>
+                                            <td>Materno</td>
+                                            <td><input type="text" class="form-control" v-model="amaterno"> </td>
+                                        </tr>
+                                    </table>
+                                    <table border="2" align="center">
+                                        <tr>
+                                            <td>CI</td>
+                                            <td><input type="text" class="form-control" v-model="ci"> </td>
+                                            <td><select class="form-control" v-model="iddepartamento">
+                                                    <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
+                                                    :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
+                                                </select>
+                                            </td>
+                                            <td>Celular</td>
+                                            <td><input type="text" class="form-control" v-model="telcelular"> </td>
+                                        </tr>
+                                    </table>
+                                    <table border="2" align="center">
+                                        <tr>
+                                            <td>Fecha Nac.</td>
+                                            <td > <input type="date" class="form-control" v-model="fechanac"> </td>
+                                            <td>Sexo</td>
+                                            <td > 
+                                                <input type="radio" value="m" v-model="sexo">
+                                                <label for="male">Masculino</label><br>
+                                                <input type="radio" value="f" v-model="sexo">
+                                                <label for="female">Femenino</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" align="center">
+                                                <button class="btn btn-warning" @click="formuCivil=0">Cancelar</button>
+                                                <button class="btn btn-success" @click="registrarHuesped()">Guardar</button>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
                     <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
                         <span v-text="regCliente.apaterno"></span> <span v-text="regCliente.amaterno"></span>
@@ -345,9 +399,9 @@
                             </div>
                         </div>
                     </div>
-                    <center class="taltura">
+                    <!-- <center class="taltura">
                         <input type="checkbox" v-model="chkdescuento"> Pago al descuento
-                    </center>
+                    </center> -->
                     <span v-if="!chkdescuento">Nro Operación: </span>
                     <input v-if="!chkdescuento" type="text" class="form-control" v-model="nrdocumento">
                     Fecha: <span class="txtasterisco"></span>
@@ -387,10 +441,37 @@ export default {
         idpago:'', concepto:'', periodo:'', nrdocumento:'', fecha:'', importe:'', chkdescuento:0,
         arrayOrdinal:['','Primer','Segundo','Tercer','Cuarto','Quinto','Sexto','Séptimo'],
         arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-        nosocio:''
+        nosocio:'',
+        nombre:'', apaterno:'',amaterno:'',telcelular:'',ci:'',iddepartamento:'',fechanac:'',sexo:'',
+        arrayDepartamentos:[]
     }},
 
     methods:{
+
+        registrarHuesped(){
+            let me=this;
+            var url='/ser_civil/store';
+            axios.post(url,{
+                'nombre': this.nombre.toUpperCase(),
+                'apaterno':this.apaterno.toUpperCase(),
+                'amaterno':this.amaterno.toUpperCase(),
+                'ci':this.ci,
+                'iddepartamento':this.iddepartamento,
+                'telcelular':this.telcelular,
+                'fechanac':this.fechanac,
+                'sexo':this.sexo,
+            }).then(function(response){
+                swal({title:'Registro correcto',
+                    html:'Se han guardado los datos del nuevo huésped.<br>Proceda al registro de entrada.',
+                    type:'success'});
+                axios.get('/ser_civil/ultimo').then(function(response){
+                    console.log(response.data);
+                    me.idcliente=response.data.civil[0]; console.log(response.data.civil[0]);
+                    // me.asignarAmbiente(me.regCivil);
+                });
+            });
+        },
+
         listaAmbientes(idestablecimiento,nrgrupo){ 
             this.nrgrupo=nrgrupo;
             var url='/ser_ambiente/listaAmbientes?idestablecimiento='
@@ -536,6 +617,7 @@ export default {
         nuevaAsignacion(ambiente){
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.regAmbiente=ambiente;
+            this.regAsignacion.idasignacion='';
             this.modalAsignacion=1;
             this.accion=1;
             this.divValidado=1;
@@ -584,7 +666,7 @@ export default {
             });            
             axios.post('/ser_asignacion/storeAsignacion',{
                 'idcliente':this.idcliente,
-                'tipocliente':'s',
+                'tipocliente':this.nosocio?'c':'s',
                 'idambiente':this.regAmbiente.idambiente,
                 'nrasignacion':this.nrasignacion,
                 'fechasolicitud':this.fechasolicitud,
@@ -630,7 +712,7 @@ export default {
             });
         },
 
-        nuevoPago(){
+        nuevoPago(){ console.log();
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalPago=1;
             this.accion=1;
@@ -673,7 +755,7 @@ export default {
                 'periodo':this.per+'/'+this.ges,
                 'nrdocumento':this.nrdocumento,
                 'modopago':this.chkdescuento?3:2,
-                'idperfilcuentamaestro':this.chkdescuento?10:9, 
+                'idperfilcuentamaestro':this.chkdescuento?30:30, 
                 'fecha':this.fecha,
                 'importe':this.importe,
                 'idresponsable':0,
@@ -732,14 +814,23 @@ export default {
             url.push('&__format=pdf');
             reporte.viewPDF(url.join(''),'Credencial');
         },
+        
+        departamentos() {
+            let me=this;
+            var url='/par_departamento/selectDepartamento';
+            axios.get(url).then(function(response){
+                me.arrayDepartamentos=response.data.departamentos;
+            })
+        }
 
     },
 
-    mounted(){
+    mounted(){ var piso=1;
         this.jsfechas=jsfechas;
         this.cantgrupos=this.regEstablecimiento.cantgrupos*1;
-        this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
+        this.listaAmbientes(this.regEstablecimiento.idestablecimiento, piso);
         this.listaDocumentos();
+        this.departamentos();
     }
 }
 </script>
