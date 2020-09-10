@@ -9,10 +9,11 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Reportes Hospedaje Filiales         
-                    <ul>                        
-                        <!-- <li><a class="nav-link" v-bind:href="''+resumen+''" target="_blank"><i class="icon-link"></i> resumen Personal</a></li>                             -->
+                    <ul>                                                
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro()">Hospedaje Transitorio CBBA</button>                            
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro()">Hospedaje Transitorio CBBA</button>
+                        <li> --- </li>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente()">Hospedaje Permanente CBBA</button>                            
                     </ul>                                            
                 </div>                    
             </div>
@@ -94,6 +95,7 @@
                 modal : 0,                
                 tituloModalK : 'Resumen',                
                 resumen : '',
+                resumen1: '',
                 fechaOut : '',
                 fechaIn : '',
                 tipoAccion : 0,
@@ -134,6 +136,7 @@
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; ;                    
                     me.resumen = respuesta.REP_REGISTRO;
+                    me.resumen1 = respuesta.REP_PERMANENTE;
                 })
                 .catch(function (error) {
                     console.log(error); 
@@ -156,6 +159,11 @@
                     var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=2&idestablecimiento=11';
                     this.reporte_resumen(url,'Resumen');
                 }                
+            },
+
+            mostrarPermanente(){               
+                var url=this.resumen1;
+                this.reporte_resumen(url,'Resumen');                
             },
 
             reporte_resumen(url,title) {

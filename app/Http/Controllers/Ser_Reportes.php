@@ -12,6 +12,7 @@ class Ser_Reportes extends Controller
          $rutas=config('app.rutaServicios');  
         return [ 	
         'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->id.'&id=',        
+        'REP_PERMANENTE' => $rutas['REP_PERMANENTE'].'&user='.Auth::user()->id.'&id=',        
         ];
     }
 }

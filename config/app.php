@@ -319,6 +319,7 @@ return [
         'REP_ENTRADACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomentrada.rptdesign&__format=pdf&idasignacion=', 
         'REP_SALIDACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomsalida.rptdesign&__format=pdf&idasignacion=',
         'REP_REGISTRO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
+        'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
     ],
 
     'rutaDaaros'=>[
