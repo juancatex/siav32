@@ -11,8 +11,8 @@ class Ser_Reportes extends Controller
         if (!$request->ajax()) return redirect('/'); 
          $rutas=config('app.rutaServicios');  
         return [ 	
-        'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->id.'&id=',        
-        'REP_PERMANENTE' => $rutas['REP_PERMANENTE'].'&user='.Auth::user()->id.'&id=',        
+        'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->username.'&id=',        
+        'REP_PERMANENTE' => $rutas['REP_PERMANENTE'].'&user='.Auth::user()->username.'&id=',        
         ];
     }
 }

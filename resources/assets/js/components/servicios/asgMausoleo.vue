@@ -1,5 +1,8 @@
 <template>
 <main>
+    <div>
+        <button v-if="divAsignaciones===0" class="btn btn-primary" @click="atras()">nivel atras</button>
+    </div>
     <div class="card" v-if="divAsignaciones">
         <div class="card-header">
             <div class="row">
@@ -322,6 +325,11 @@ export default {
         verIDcliente(idcliente){
             this.idcliente=idcliente;
             this.listaBeneficiarios(idcliente);
+        },
+
+        atras() {
+            this.divAsignaciones=1;
+            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
         },
 
         listaAsignaciones(idestablecimiento,nrgrupo){
