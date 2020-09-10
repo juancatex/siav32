@@ -138,6 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/con_cuentas/selectcuentapto', 'ConCuentasController@selectCuentaspto');
 
         Route::get('/con_perfilcuentamaestro','ConPerfilcuentamaestroController@index');
+        Route::get('/con_perfilcuentamaestro/reporte','ConPerfilcuentamaestroController@reporte');
         Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro');
         Route::get('/con_perfilcuentamaestro/selectPerfilcuentamaestro_contable', 'ConPerfilcuentamaestroController@selectPerfilcuentamaestro_contable');
         Route::get('/con_perfilcuentamaestro/selectmaestrofinalizado', 'ConPerfilcuentamaestroController@selectmaestrofinalizado');
@@ -571,6 +572,7 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/con_perfilcuentadetalle/selectPerfilcuentadetalle', 'ConPerfilcuentadetalleController@selectPerfilcuentadetalle');
        Route::get ('/con_perfilcuentadetalle/selectPerfilcuentadetalleProducto', 'ConPerfilcuentadetalleController@selectPerfilcuentadetalleProducto');
        Route::post('/con_perfilcuentadetalle/registrar','ConPerfilcuentadetalleController@store');
+      
 
        Route::get ('/apo_aporte','ApoAporteController@index');
        Route::post('/apo_aporte/registrar','ApoAporteController@store');

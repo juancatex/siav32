@@ -215,4 +215,12 @@ class ConPerfilcuentamaestroController extends Controller
         $perfilcuentamaestro->activo = '1';
         $perfilcuentamaestro->save();
     }
+
+    public function reporte(Request $request){
+        $ree = DB::select('SELECT cm.idperfilcuentamaestro,cm.nomperfil ,ct.nomtipocomprobante,m.nommodulo,cd.tipocargo,cu.nomcuenta,cu.codcuenta 
+        FROM con__perfilcuentamaestros cm , con__tipocomprobantes ct, par__modulos m, con__perfilcuentadetalles cd,con__cuentas cu 
+        WHERE cm.idtipocomprobante=ct.idtipocomprobante and m.idmodulo=cm.idmodulo and cd.idperfilcuentamaestro=cm.idperfilcuentamaestro and cd.idcuenta=cu.idcuenta 
+        and cm.activo=1 and cm.completo=1 and cm.idusuario=? ORDER by cm.idperfilcuentamaestro,cd.tipocargo,cm.idmodulo,cm.idtipocomprobante',array(Auth::id()));
+        return ['reporte' => $ree,'user'=>Auth::user()->username];
+    }
 }

@@ -12,6 +12,9 @@
                 <button v-if="check('perfil_agregar')" type="button" @click="abrirModal('perfilcuentamaestro','registrar')" class="btn btn-secondary">
                     <i class="icon-plus"></i>&nbsp;Nuevo
                 </button>
+                <button   type="button" @click="getReporte()" class="btn btn-danger" style="float: right;">
+                     Reporte
+                </button>
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped table-sm">
@@ -504,6 +507,32 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="reporteview">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Reporte de la configuración de perfiles de cuentas</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('reporteview')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body-plandepagos">
+            <!--  <div style="display:none" v-html="plandepagosSimulacion"></div>-->
+            <iframe name="viewreporte" id="viewreporte" style="width:100%;height:100%;"></iframe>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('reporteview')">cerrar</button>
+            <!--  <button class="btn btn-primary" type="button" @click="print()">Imprimir</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     </main>
 </template>
 
@@ -870,6 +899,33 @@ export default {
                 }).catch(function (error) {
                     console.log(error);
                 });
+        },getReporte(){
+            let me=this;
+            axios.get('/con_perfilcuentamaestro/reporte').then((value)=>{ 
+                var outdata = new Map();
+                for (let datain of value.data.reporte){  
+                      if(outdata.has(datain.idperfilcuentamaestro)){
+                          var arr=outdata.get(datain.idperfilcuentamaestro);
+                          var valuein=arr.data;
+                          valuein.push(datain);
+                          arr.data=valuein;
+                          outdata.set(datain.idperfilcuentamaestro,arr);
+                      }else{
+                          var vaa = new Array();
+                          vaa.push(datain);
+                          outdata.set(datain.idperfilcuentamaestro,{nombre:datain.nomperfil,tipo:datain.nomtipocomprobante,modulo:datain.nommodulo,data:vaa});
+                      } 
+                } 
+                //  for (var valor of outdata.values()) {
+                //    console.log(valor)
+                //  }
+
+               _pl._vvp2521_00004(outdata,value.data.user,'viewreporte');
+ 
+                 me.classModal.openModal('reporteview');
+            }).catch((e)=>{
+                console.log(e)
+            })
         },
         /* actualizarPerfilcuentamaestro(){
             let me = this;
@@ -1161,6 +1217,7 @@ export default {
         this.classModal.addModal('perfilcuentamaestro');
         this.classModal.addModal('siporcentaje');
         this.classModal.addModal('noporcentaje');
+        this.classModal.addModal('reporteview');
     }
 }
 </script>
