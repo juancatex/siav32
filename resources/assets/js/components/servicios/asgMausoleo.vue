@@ -541,7 +541,7 @@ export default {
                 'periodo':'',
                 'nrdocumento':this.nrdocumento,
                 'modopago':2,
-                'idperfilcuentamaestro':9, 
+                'idperfilcuentamaestro':30, 
                 'fecha':this.fecha,
                 'importe':this.importe,
                 'idresponsable':this.idresponsable,
