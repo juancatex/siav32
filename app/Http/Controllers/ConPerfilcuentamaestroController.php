@@ -7,10 +7,15 @@ use App\Con_Perfilcuentamaestro;
 use App\Con_Asientomaestro;
 use App\Con_Tipocomprobante;
 use App\Par_Modulo;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
 
 class ConPerfilcuentamaestroController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
        // if (!$request->ajax()) return redirect('/');
@@ -159,6 +164,7 @@ class ConPerfilcuentamaestroController extends Controller
         $perfilcuentamaestro->idmodulo = $request->idmodulo;
         $perfilcuentamaestro->idtipocomprobante = $request->idtipocomprobante;
         $perfilcuentamaestro->siporcentaje=$request->siporcentaje;
+        $perfilcuentamaestro->idusuario=Auth::id();  
         $perfilcuentamaestro->save();
     }
     public function desactivar(Request $request)
