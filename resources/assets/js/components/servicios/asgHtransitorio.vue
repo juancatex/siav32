@@ -816,7 +816,7 @@ export default {
                 'razon':this.razon,
                 'nrdocumento':this.nrdocumento,
                 'modopago':this.descuento,
-                'idperfilcuentamaestro':this.descuento?8:9,
+                'idperfilcuentamaestro':this.descuento?30:30,
                 'fecha':this.fecha,
                 'importe':this.regPago.importe,
                 'idresponsable':'',
