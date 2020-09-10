@@ -22,26 +22,20 @@ class AdmLogController extends Controller
         $buscar1 = $request->buscar1;
         $buscar2 = $request->buscar2;
         $buscar3 = $request->buscar3;
-
+       
+        $logs = DB::table('db_sia_logs.telescope_entries as log')->select('log.*');
         
-        if ($buscar2 == '' && $buscar3 == '') {
-            $logs = DB::table('db_sia_logs.telescope_entries as log')
-            ->select('log.*')        
-            ->where ('content', 'like', '%sql":"'. $buscar . '%')
-            // ->orwhere ('content', 'like', '%"name":"'. $buscar1 . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        }
-        else {
-            $logs = DB::table('db_sia_logs.telescope_entries as log')
-            ->select('log.*')        
-            ->where ('content', 'like', '%sql":"'. $buscar . '%')
-            ->where ('content', 'like', '%"name":"'. $buscar1 . '%')
-            ->whereBetween('created_at', [$buscar2, $buscar3])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        }        
-                                 
+        if ($buscar!='')
+            $logs = $logs->where ('content', 'like', "%sql\":\"". $buscar . '%');
+        if ($buscar1!='')
+             $logs = $logs->where ('content', 'like', "%name\":\"". $buscar1 . '%');     
+        if ($buscar2!='' && $buscar3!='')
+            $logs = $logs->whereBetween('created_at', [$buscar2, $buscar3]);
+        else 
+            $logs = $logs->where ('content', 'like', "%sql\":\"%");
+
+        $logs = $logs->orderBy('created_at', 'desc')->paginate(10);
+
         return [
             'pagination' => [
                  'total'        => $logs->total(),

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Ser_Ambiente;
+use App\Ser_Asignacion;
 
 class SerAmbienteController extends Controller
 {
@@ -122,9 +123,20 @@ class SerAmbienteController extends Controller
         exit;
     }
 
-    function liberarAmbiente(Request $request) { echo $request->idambiente;
-        DB::table('ser__ambientes')->where('idambiente',$request->idambiente)         
-        ->update(['ocupado'=>0]);
+    function liberarAmbiente(Request $request) { 
+        
+        //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>0]);
+
+        $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
+        $ambiente->ocupado=0;
+        $ambiente->save();
+                
+        //DB::table('ser__asignacions')->where('idasignacion',$request->idasignacion)->update(['vigente'=>0]);
+
+        $asignacion=Ser_Asignacion::findOrFail($request->idasignacion);
+        $asignacion->vigente=0;
+        $asignacion->save();
+
         return 1;
     }
 

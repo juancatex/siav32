@@ -39,7 +39,7 @@
                         <td align="center">
                             <button v-if="ambiente.ocupado" class="btn btn-warning icon-book-open" title="Ver asignación"
                                 @click="cualAsignacion(ambiente.idambiente)"></button>
-                            <button v-else class="btn btn-success icon-user-follow" title="Asignar departamento"
+                            <button v-else class="btn btn-success icon-user-follow" title="Asignar tienda"
                                 @click="nuevaAsignacion(ambiente)"></button>                            
                         </td>
                     </tr>
@@ -187,6 +187,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">
+                            <button class="btn btn-success" @click="liberarAmbiente(regAsignacion.idambiente,regAsignacion.idasignacion,regAmbiente.idestablecimiento)">Liberar Ambiente</button>
                             <button class="btn btn-primary" style="margin-top:0px" @click="nuevoPago()">Registrar Pago</button>
                         </div>
                     </div>
@@ -251,8 +252,11 @@
                     </div>
                     <div v-if="!regAsignacion.idasignacion" style="padding:5px 0px 10px 0px;">
                         Socio: (Digite nombres, apellidos, CI o papeleta)
-                        <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
+                            <div class="tcelda tinput text-right nowrap">
+                                <input type="checkbox" v-model="nosocio">Cliente particular
+                            </div>
                     </div>
+                    <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>
                     <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
                         <span v-text="regCliente.nomgrado"></span> <span v-text="regCliente.nombre"></span>
                         <span v-text="regCliente.apaterno"></span> <span v-text="regCliente.amaterno"></span>
@@ -383,6 +387,7 @@ export default {
         idpago:'', concepto:'', periodo:'', nrdocumento:'', fecha:'', importe:'', chkdescuento:0,
         arrayOrdinal:['','Primer','Segundo','Tercer','Cuarto','Quinto','Sexto','Séptimo'],
         arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        nosocio:''
     }},
 
     methods:{
@@ -413,6 +418,41 @@ export default {
             axios.get(url).then(response=>{
                 this.arrayPagos=response.data.pagos;
             });
+        },
+
+        liberarAmbiente(idambiente, idasignacion, idestablecimiento) { 
+            swal({
+                title: "Liberar Ambiente",
+                text: "El ambiente se liberara para nueva asignacion",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, liberara",
+                cancelButtonText: "No liberar",
+                }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.put('/ser_ambiente/liberarAmbiente',{
+                            'idambiente': idambiente,
+                            'idasignacion': idasignacion,
+                        }).then(function (response) {
+                            swal(
+                            'Ambiente Liberado!',
+                            ''
+                            )   
+                            me.listaAmbientes(idestablecimiento,me.regAmbiente.piso);
+                            me.divAsignaciones=1;
+                            me.idcliente='';
+                            
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    } 
+                    else if (result.dismiss === swal.DismissReason.cancel)
+                    {
+                        
+                    }
+                    })                            
         },
 
         quienOcupa(idambiente){
@@ -501,6 +541,7 @@ export default {
             this.divValidado=1;
             this.listaDocumentos();
             this.idcliente='';
+            this.regAsignacion.idcliente='';
             this.fechasolicitud='';
             this.nrasignacion='';
             this.fechaentrada='';

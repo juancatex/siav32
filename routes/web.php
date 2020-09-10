@@ -299,6 +299,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         Route::get('/afi_reportes', 'Afi_Reportes@rutas');
+        Route::get('/ser_reportes', 'Ser_Reportes@rutas');
         
         Route::get('/par_estadomodulo', 'Par_EstadomoduloController@index');
         Route::post('/par_estadomodulo/registrar', 'Par_EstadomoduloController@store');
@@ -858,5 +859,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/con_factura/actualizar', 'ConFacturaController@update');
         Route::put('/con_factura/desactivar', 'ConFacturaController@desactivar');
         Route::put('/con_factura/activar', 'ConFacturaController@activar');
+        Route::post('/con_contabilidad/proceso', 'ConFacturaController@proceso');
 
 });

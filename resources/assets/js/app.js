@@ -35,8 +35,8 @@ setvue(1, 'par_tiposocio', './components/Par_Tiposocio.vue');
 setvue(1, 'ser_servicio', './components/servicios/Ser_Servicio.vue');
 setvue(1, 'ser_establecimiento', './components/servicios/Ser_Establecimiento.vue');
 setvue(1, 'ser_asignacion', './components/servicios/Ser_Asignacion.vue');
-
 setvue(1, 'ser_ambiente', './components/servicios/Ser_Ambiente.vue');
+setvue(1, 'ser_servicios', './components/servicios/Ser_reportes.vue');
 
 //filiales
 setvue(1, 'fil_unidad', './components/filiales/Fil_Unidad.vue');
@@ -113,6 +113,7 @@ setvue(1, 'con_facturaparametro', './components/contabilidad/Con__Facturaparamet
 setvue(1, 'con_factura', './components/contabilidad/Con__Factura.vue');
 setvue(0, 'con_tesoreria', './components/contabilidad/Con__Tesoreria.vue');
 setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
+setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
 
 // global
 setvue(1, 'glo_solicitudcargocuenta', './components/global/Glo_SolicitudCargoCuenta.vue');

@@ -18,7 +18,7 @@ class SerCivilController extends Controller
         $civil->apaterno=$request->apaterno;
         $civil->amaterno=$request->amaterno;
         $civil->ci=$request->ci;
-        $civil->iddepartamentoexpedido=$request->iddepartamentoexpedido;
+        $civil->iddepartamento=$request->iddepartamento;
         $civil->fechanac=$request->fechanac;
         $civil->sexo=$request->sexo;
         $civil->telcelular=$request->telcelular;
@@ -28,7 +28,7 @@ class SerCivilController extends Controller
     public function ultimo(Request $request)
     {   
         $civil=Ser_Civil::select('idcivil as idcliente','sexo as nomgrado',
-        'apaterno','amaterno','nombre','telcelular','ci','iddepartamentoexpedido','fechanac')
+        'apaterno','amaterno','nombre','telcelular','ci','iddepartamento','fechanac')
         ->orderBy('idcivil','desc')->limit(1)->get();
         return ['civil'=>$civil];
     }

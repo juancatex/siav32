@@ -264,13 +264,15 @@
                                 </div>
                                 Tipo: <span class="txtasterisco"></span>
                                 <select class="form-control" v-model="tipo">
-                                    <option >Individual</option>
+                                    <option v-for="tipo in arrayTipo" :key="tipo.tip" :value="tipo.tip" v-text="tipo.tip"></option>
+                                    <!-- <option >Individual</option>
                                     <option >Matrimonial</option>
-                                    <option >Familiar</option>
+                                    <option >Familiar</option> -->
                                 </select>
                                 Capacidad: <span class="txtasterisco"></span>
                                 <select class="form-control text-right" v-model="capacidad">
-                                    <option v-for="i in 5" :key="i" :value="i" v-text="i"></option>
+                                    <option v-for="capa in arrayCapacidad" :key="capa.num" :value="capa.num" v-text="capa.num"></option>
+                                    <!-- <option v-for="i in 5" :key="i" :value="i" v-text="i"></option> -->
                                 </select>
                             </div>
                             <div class="col-md-6 col-sm-6">
@@ -361,8 +363,9 @@
                                 </select>
                                 Tipo: <span class="txtasterisco"></span>
                                 <select class="form-control" v-model="tipo">
-                                    <option>B/privado</option>
-                                    <option>B/compartido</option>
+                                    <option v-for="tipo1 in arrayTipoPer" :key="tipo1.tip1" :value="tipo1.tip1" v-text="tipo1.tip1"></option>
+                                    <!-- <option>B/privado</option>
+                                    <option>B/compartido</option> -->
                                 </select>
                             </div>
                             <div class="col-md-6 col-sm-6">
@@ -548,6 +551,9 @@ export default {
         arrayAmbientes:[], arrayCantgrupos:[],
         idambiente:'',codambiente:'', piso:'',capacidad:'', tipo:'',
         garantia:'', tarifasocio:'',tarifareal:'', fil:'', col:'',
+        arrayTipo:[{tip:'MATRIMONIAL'},{tip:'INDIVIDUAL'},{tip:'FAMILIAR'}],
+        arrayTipoPer:[{tip1:'B/PRIVADO'},{tip1:'B/COMPARTIDO'}],
+        arrayCapacidad:[{num:1},{num:2},{num:3},{num:4},{num:5}],
     }},
 
     methods:{
@@ -594,7 +600,7 @@ export default {
             this.resetAmbiente();
         },
 
-        editarAmbiente(ambiente){
+        editarAmbiente(ambiente){ console.log(ambiente.tipo);
             this.accion=2;
             this.txtBoton ='Guardar modificaciones';
             this.divFormulario=1;

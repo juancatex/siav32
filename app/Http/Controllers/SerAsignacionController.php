@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Ser_Asignacion;
+use App\Ser_Ambiente;
 use App\Ser_Civil;
 use App\Socio;
 
@@ -18,20 +19,81 @@ class SerAsignacionController extends Controller
         $noches=DB::raw('datediff(curdate(),fechaentrada) as noches'); 
         //$currhora=DB::raw('curtime() as currhora');
         //$currfecha=DB::raw('curdate() as currfecha');
-        $asignaciones=Ser_Asignacion::
-        select('idasignacion','idcliente','tipocliente','ser__asignacions.idambiente',
-        'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
-        'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
-        ->join('socios','socios.idsocio','ser__asignacions.idcliente')
-        ->join('par_grados','par_grados.idgrado','socios.idgrado')
-        ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
-        ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-        ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
-        ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento);
-        if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
-        if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);
-        return ['asignaciones'=>$asignaciones->get(),'ipbirt'=>$ip,
-            'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
+        
+        $asignaciones_all=Ser_Asignacion::
+        select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
+            'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida','tipocliente')            
+            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+            ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+            ->where('ser__asignacions.vigente',1);
+            if($request->bloque) $asignaciones_all=$asignaciones_all->where('codambiente','like',$request->bloque.'%');
+            if($request->piso)   $asignaciones_all=$asignaciones_all->where('piso',$request->piso);
+        $asignaciones_all=$asignaciones_all->get();
+
+        $x=[]; $i=0; 
+        foreach($asignaciones_all as $asi){             
+            if ($asi->tipocliente=='s') {
+                $asignaciones=Ser_Asignacion::
+                select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
+                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
+                ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                ->join('par_grados','par_grados.idgrado','socios.idgrado')
+                ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+                ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+                ->where('ser__asignacions.vigente',1)
+                ->where('ser__asignacions.idasignacion',$asi->idasignacion);
+                if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
+                if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);                
+                $x[$i]=$asignaciones; $i++;
+            }
+            if ($asi->tipocliente=='c') {
+                $asignaciones=Ser_Asignacion::
+                select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
+                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'idcivil','nombre', 'apaterno','amaterno','idcivil')
+                ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')                
+                ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+                ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+                ->where('ser__asignacions.vigente',1)
+                ->where('ser__asignacions.idasignacion',$asi->idasignacion);
+                if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
+                if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);                
+                $x[$i]=$asignaciones; $i++;
+            }
+            
+        } 
+                                
+        if (count($x)==0) {
+            return ['asignaciones'=>'','ipbirt'=>$ip, 'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
+        }            
+        else {
+            $asigna=$x[0];
+            for ($a=1; $a<count($x); $a++) {            
+                $asigna = $asigna->union($x[$a]);
+            }
+            return ['asignaciones'=>$asigna->get(),'ipbirt'=>$ip, 'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
+        }
+        
+        // $asignaciones=Ser_Asignacion::
+        // select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
+        // 'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+        // 'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
+        // ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+        // ->join('par_grados','par_grados.idgrado','socios.idgrado')
+        // ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+        // ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+        // ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+        // ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+        // ->where('ser__asignacions.vigente',1);
+        // if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
+        // if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);
+        // return ['asignaciones'=>$asignaciones->get(),'ipbirt'=>$ip,
+        //     'currfecha'=>date('Y-m-d'),'currhora'=>date('H:i')];
     }
 
     public function verAsignacion(Request $request)
@@ -47,9 +109,16 @@ class SerAsignacionController extends Controller
 
     public function storeAsignacion(Request $request)
     {
+
+        //capccidad del amebiente
+        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
+        //total de asignados a ese ambiebte
+        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
+
         $asignacion=new Ser_Asignacion();
         $asignacion->idcliente=$request->idcliente;
         $asignacion->tipocliente=$request->tipocliente;
+        $asignacion->vigente=1;
         $asignacion->idambiente=$request->idambiente;
         $asignacion->nrasignacion=$request->nrasignacion;
         $asignacion->fechasolicitud=$request->fechasolicitud;
@@ -66,7 +135,16 @@ class SerAsignacionController extends Controller
         $asignacion->idrepresentante=$request->idrepresentante;
         $asignacion->obs1=$request->obs1;
         $asignacion->save();
-        DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+
+        if ($capacidad->capacidad == $vigentes) {
+            //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
+            $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
+            $ambiente->ocupado=1;
+            $ambiente->save();
+        }            
+        else    
+            {};
+        
     }
 
     public function updateAsignacion(Request $request)
@@ -111,7 +189,7 @@ class SerAsignacionController extends Controller
             $cliente=Ser_Civil::
             select('idcivil as idcliente','nombre','apaterno','amaterno','ci','abrvdep','telcelular',
             'fechanac','sexo',$fecha,$hora)
-            ->join('par_departamentos','par_departamentos.iddepartamento','=','ser__civils.iddepartamentoexpedido')
+            ->join('par_departamentos','par_departamentos.iddepartamento','=','ser__civils.iddepartamento')
             ->where('ser__civils.idcivil','=',$request->idcliente)->get();
         return ['cliente'=>$cliente];
     }
