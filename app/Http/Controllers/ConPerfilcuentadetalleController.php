@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use App\Con_Perfilcuentadetalle;
 use Illuminate\Support\Facades\DB;
 use App\Con_Perfilcuentamaestro;
+use Illuminate\Support\Facades\Auth; 
 
 class ConPerfilcuentadetalleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
         //if (!$request->ajax()) return redirect('/');
@@ -84,6 +89,7 @@ class ConPerfilcuentadetalleController extends Controller
         foreach ($arraydebe as $key => $valor) {
             $perfildetalle = new Con_Perfilcuentadetalle();
             $perfildetalle->idperfilcuentamaestro=$idmaestro;
+            $perfildetalle->idusuario=Auth::id(); 
             $perfildetalle->tipocargo='d';
             foreach ($valor as $i => $v) {
                 if($i=='idcuenta')
@@ -98,6 +104,7 @@ class ConPerfilcuentadetalleController extends Controller
         foreach ($arrayhaber as $key => $valor) {
             $perfildetalle = new Con_Perfilcuentadetalle();
             $perfildetalle->idperfilcuentamaestro=$idmaestro;
+            $perfildetalle->idusuario=Auth::id(); 
             $perfildetalle->tipocargo='h';
             foreach ($valor as $i => $v) {
                 if($i=='idcuenta')

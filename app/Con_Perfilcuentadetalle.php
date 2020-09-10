@@ -8,5 +8,5 @@ class Con_Perfilcuentadetalle extends Model
 {
     protected $table = 'con__perfilcuentadetalles';
     protected $primaryKey = 'idperfilcuentadetalle';
-    protected $fillable = ['idperfilcuentamaestro','idcuenta','tipocargo','porcentaje'];
+    protected $fillable = ['idperfilcuentamaestro','idcuenta','tipocargo','porcentaje','idusuario'];
 }

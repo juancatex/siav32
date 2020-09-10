@@ -23,6 +23,7 @@ class CreateConPerfilcuentamaestrosTable extends Migration
             $table->boolean('siporcentaje')->default(1);
             $table->tinyInteger('idmodulo')->unsigned();
             $table->boolean('actualizado')->default(0);
+            $table->integer('idusuario')->nullable(); 
             $table->timestamps();
             
             
