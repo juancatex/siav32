@@ -16,8 +16,8 @@ class CreateSerCivilsTable extends Migration
         Schema::create('ser__civils', function (Blueprint $table) {
             $table->increments('idcivil');
             $table->string('nombre',20);
-            $table->string('apaterno',20);
-            $table->string('amaterno',20);
+            $table->string('apaterno',20)->nullable();
+            $table->string('amaterno',20)->nullable();
             $table->date('fechanac')->nullable();
             $table->string('sexo',1)->nullable();
             $table->string('ci',10);
