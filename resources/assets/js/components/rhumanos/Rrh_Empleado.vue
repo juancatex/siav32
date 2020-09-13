@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-7 titcard">
                         <div class="tablatit">
-                            <div class="tcelda">Empleados <span v-text="sedelp?'Sede La Paz':'en Filiales'"></span></div>
+                            <div class="tcelda">Empleados <span v-text="sedelp=='1'?'Sede La Paz':'en Filiales'"></span></div>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -48,22 +48,26 @@
             <div class="card-body">
                 <div class="text-right" style="padding-bottom:10px">
                     <div class="vervigente">Filtrar: &nbsp;
-                        <input type="radio" id="lp1" name="sede" @click="sedelp=1, listaEmpleados(sedelp,activo)">Sede La Paz &nbsp;
-                        <input type="radio" id="lp0" name="sede" @click="sedelp=0, listaEmpleados(sedelp,activo)">Filiales &nbsp;
+                        <input type="radio" id="lp1" name="sede" @change="listaEmpleados()" value="1" v-model="sedelp"> 
+                        <label for="lp1">Sede La Paz</label> &nbsp;
+                        <input type="radio" id="lp0" name="sede" @change="listaEmpleados()" value="0" v-model="sedelp"> 
+                        <label for="lp0">Filiales</label> &nbsp; 
                     </div>
                     <div class="vervigente" style="margin-left:10px">Ver: &nbsp;
-                        <input type="radio" id="r1" name="estado" @click="activo=1, listaEmpleados(sedelp,activo)">Vigentes &nbsp;
-                        <input type="radio" id="r0" name="estado" @click="activo=0, listaEmpleados(sedelp,activo)">Inactivos &nbsp;
+                        <input type="radio" id="r1" name="estado" @change="listaEmpleados()" value="1" v-model="activo">
+                        <label for="r1">Vigentes</label> &nbsp;
+                        <input type="radio" id="r0" name="estado" @change="listaEmpleados()" value="0" v-model="activo">
+                        <label for="r0">Inactivos</label> &nbsp;
                     </div>
                     <button class="btn btn-success btn-sm icon-printer" title="Vista de impresión" style="margin-left:10px"
-                        @click="reporteLista(sedelp,activo)"></button>
+                        @click="reporteLista()"></button>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead class="tcabecera">
                             <tr>
                                 <th align="center"><span class="badge badge-success" v-text="arrayEmpleados.length+' items'"></span></th>
-                                <th v-if="!sedelp">Filial</th>
+                                <th v-if="sedelp=='0'">Filial</th>
                                 <th></th>
                                 <th>Paterno</th>
                                 <th>Materno</th>
@@ -101,7 +105,7 @@
                                     <button class="btn btn-warning btn-sm icon-action-redo" title="Restaurar" 
                                         @click="estadoEmpleado(empleado)"></button>
                                 </td>
-                                <td v-if="!sedelp" v-text="empleado.filial"></td>
+                                <td v-if="sedelp=='0'" v-text="empleado.filial"></td>
                                 <td><img v-if="empleado.foto" :src="'img/empleados/'+empleado.foto"  class="rounded-circle fotosociomini">
                                     <img v-else :src="'img/empleados/avatar.png'"  class="rounded-circle fotosociomini" >
                                 </td>
@@ -127,20 +131,20 @@
 
     <!-- MODAL EMPLEADO  MODAL EMPLEADO MODAL EMPLEADO MODAL EMPLEADO MODAL EMPLEADO  MODAL EMPLEADO -->
     <!-- MODAL EMPLEADO  MODAL EMPLEADO MODAL EMPLEADO MODAL EMPLEADO MODAL EMPLEADO  MODAL EMPLEADO -->
-    <div class="modal" :class="modalEmpleado?'mostrar':''">
+     <div class="modal fade" tabindex="-1"  role="dialog"  style="z-index: 1600;" aria-hidden="true" id="modalnewEmpleado" >   
         <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="accion==1?'Nuevo Empleado':'Modificar Datos'"></h4>
-                    <button class="close" @click="modalEmpleado=0">x</button>
+                    <button class="close" @click="cerrarModal()">x</button>
                 </div>
-                <div class="modal-body" style="height:400px; overflow-y:scroll">
+                <div class="modal-body" style="height:400px; overflow-y:scroll;">
                     <h4 class="titazul">Identidad</h4>
                     <div class="row">
                         <div class="col-md-4">
                             <table width="100%">
                                 <tr><td>Nombres: <span class="txtasterisco"></span></td>
-                                    <td><input type="text" class="form-control" autofocus v-model="nombre" @keyup="generarCodigo()" @keyup.esc="modalEmpleado=0"
+                                    <td><input type="text" class="form-control" autofocus v-model="nombre" @keyup="generarCodigo()"  
                                         name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required|alpha_spaces'">
                                     </td>
                                 </tr>
@@ -386,7 +390,7 @@
                     <!-- </form> -->
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalEmpleado=0">Cerrar</button>
+                    <button class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                     <button class="btn btn-primary" @click="validarEmpleado()">
                         Guardar <span v-if="accion==2">Modificaciones</span></button>
                 </div>
@@ -404,13 +408,11 @@ Vue.component('empContrato'  ,require('./empContrato.vue').default);
 Vue.component('empPermiso'   ,require('./empPermiso.vue').default);
 Vue.component('empAsistencia',require('./empAsistencia.vue').default);
 Vue.component('empReferencia',require('./empReferencia.vue').default);
-
-import * as reporte from '../../functions.js';
   
 export default {     
     data (){ return {
-        modalEmpleado:0, accion:1,  ipbirt:'', currfecha:'',
-        buscado:'', regEmpleado:[], sedelp:1, activo:1,
+        accion:1,  ipbirt:'', currfecha:'',
+        buscado:'', regEmpleado:[], sedelp:'1', activo:'1',
         arrayEmpleados:[], arrayDepartamentos:[], arrayFormaciones:[], arrayProfesiones:[],
         arrayFiliales:[], arrayOficinas:[], arrayCargos:[], arrayBancos:[], arraySeguros:[],
         idempleado:'', codempleado:'', nombre:'', apaterno:'', amaterno:'', sexo:'', ci:'', iddepartamento:'',
@@ -427,15 +429,14 @@ export default {
 
 directives: { focus },
 
-    methods: {
-        listaEmpleados(sedelp,activo){
-            $('#r'+activo).prop('checked',true);
-            $('#lp'+sedelp).prop('checked',true);
-            var url='/rrh_empleado/listaEmpleados?sedelp='+sedelp+'&activo='+activo+'&buscado='+this.buscado;
-            axios.get(url).then(response=>{
+    methods: { 
+        listaEmpleados(){ 
+            var url='/rrh_empleado/listaEmpleados?sedelp='+this.sedelp+'&activou='+this.activo+'&buscado='+this.buscado;
+          
+           axios.get(url).then(response=>{
                 this.arrayEmpleados=response.data.empleados;
                 this.ipbirt=response.data.ipbirt;
-                this.currfecha=response.data.currfecha;
+                this.currfecha=response.data.currfecha; 
             });
         },
 
@@ -519,7 +520,7 @@ directives: { focus },
         },
 
         nuevoEmpleado(){            
-            this.modalEmpleado=1;                        
+            this.classModal.openModal('modalnewEmpleado');                        
             this.accion=1;
             this.listaDepartamentos();
             this.listaFiliales();
@@ -542,8 +543,8 @@ directives: { focus },
         },
 
         async editarEmpleado(empleado){
-            window.scroll({top:0,left:0,behavior:'smooth'});
-            this.modalEmpleado=1;       this.nuevafoto=0;
+            // window.scroll({top:0,left:0,behavior:'smooth'});
+              this.nuevafoto=0;
             this.accion=2;
             this.listaDepartamentos();
             this.listaFiliales();
@@ -585,6 +586,7 @@ directives: { focus },
             this.codssocial=this.regEmpleado.codssocial;
             this.ssalud=this.regEmpleado.ssalud;
             this.codssalud=this.regEmpleado.codssalud;
+            this.classModal.openModal('modalnewEmpleado'); 
         },
 
         nivelPrevio(){
@@ -648,7 +650,13 @@ directives: { focus },
 
         validarEmpleado(){
             this.$validator.validateAll().then(result=>{
-                if(!result){ swal('Datos incorrectos','Revise los errores','error'); return; }
+                this.cerrarModal();
+                if(!result){  
+                     swal('Datos incorrectos','Revise los errores','error').then(()=>{
+                         this.classModal.openModal('modalnewEmpleado'); 
+                     });
+                     return;
+                 }
                 this.accion==1?this.storeEmpleado():this.updateEmpleado();
             });
         },
@@ -690,13 +698,17 @@ directives: { focus },
                 'codssalud':this.codssalud,
             }).then(response=>{
                 swal('Registro creado correctamente','','success');
-                this.buscado=this.apaterno;
-                this.modalEmpleado=0;
-                this.listaEmpleados(this.sedelp,1);
+                this.buscado=this.apaterno; 
+                this.listaEmpleados();
             });
         },
 
         updateEmpleado(){
+            swal({ title:'Procesando...',text:'Un momento por favor', type:'warning',
+                showCancelButton:false, showConfirmButton:false, 
+                allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,
+                onOpen:() => { swal.showLoading() }
+            }); 
             axios.put('/rrh_empleado/updateEmpleado',{
                 'idempleado':this.idempleado,
                 'nombre':this.nombre.toUpperCase(),
@@ -730,12 +742,13 @@ directives: { focus },
                 'fecharetiro':this.fecharetiro,
                 'obs':this.obs,
             }).then(response=>{
-                swal('Datos Actualizados','','success');
-                this.modalEmpleado=0;
-                this.listaEmpleados(this.sedelp,1);
+                swal('Datos Actualizados','','success'); 
+                this.listaEmpleados();
             });
         },
-
+        cerrarModal(){
+            this.classModal.closeModal('modalnewEmpleado');
+        },
         estadoEmpleado(empleado){
             this.idempleado=empleado.idempleado;
             if(empleado.activo){
@@ -752,41 +765,20 @@ directives: { focus },
             var url='/rrh_empleado/switchEmpleado?idempleado='+this.idempleado;
             axios.put(url).then(function(){
                 swal(activo?'Activado correctamente':'Desactivado correctamente','','success');
-                this.listaEmpleados(this.sedelp,activo);
+                this.listaEmpleados();
             });
         },
 
-        reporteLista(sedelp,activo){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/rhumanos');
-            url.push('/rrh_lista.rptdesign'); //archivo
-            url.push('&sedelp='+sedelp); 
-            url.push('&activo='+activo); 
-            url.push('&__format=pdf'); //formato
-            reporte.viewPDF(url.join(''),'Kardex Personal');
+        reporteLista(){ 
+             _pl._vm2154_12186_135(this.ipbirt['REP_LISTA']+'&sedelp='+this.sedelp+'&activo='+this.activo,'Kardex Personal');
         },
 
-        reporteKardex(empleado){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/rhumanos');
-            url.push('/rrh_kardex.rptdesign'); //archivo
-            url.push('&idempleado='+empleado.idempleado); //idempleado
-            url.push('&__format=pdf'); //formato
-            url.push('&ip='+this.ipbirt);//pa la foto
-            reporte.viewPDF(url.join(''),'Kardex Personal');
+        reporteKardex(empleado){  
+            _pl._vm2154_12186_135(this.ipbirt['REP_KARDEX']+'&idempleado='+empleado.idempleado,'Kardex Personal');
         },       
 
-        reporteCredencial(empleado){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/rhumanos');
-            url.push('/rrh_credencial.rptdesign'); //archivo
-            url.push('&idempleado='+empleado.idempleado); //idempleado
-            url.push('&__format=pdf'); //formato
-            url.push('&ip='+this.ipbirt);//pa la foto
-            reporte.viewPDF(url.join(''),'Credencial');
+        reporteCredencial(empleado){ 
+            _pl._vm2154_12186_135(this.ipbirt['REP_CREDENCIAL']+'&idempleado='+empleado.idempleado,'Credencial');
         },
 
 
@@ -794,7 +786,9 @@ directives: { focus },
     },
         
     mounted() {
-        this.listaEmpleados(1,1);
+        this.listaEmpleados();
+        this.classModal=new _pl.Modals();
+        this.classModal.addModal('modalnewEmpleado');
     }
 }
 </script>

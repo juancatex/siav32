@@ -609,6 +609,7 @@ Route::group(['middleware' => 'auth'], function () {
        
        Route::get ('/pre_listasocio','PreCalificacionController@pre_listasocio'); 
        Route::get ('/pre_listasocio2','PreCalificacionController@pre_listasocio_lista'); 
+       Route::get ('/pre_listasocio_beneficiario','PreCalificacionController@pre_listasocio_lista_beneficiario'); 
        Route::get ('/pre_listasocio_prueba','PreCalificacionController@pre_listasocio_prueba'); 
        Route::get ('/datos_aportes','PreCalificacionController@datos_aportes');
        Route::get ('/par_producto/selectProducto', 'PreCalificacionController@selectProducto');

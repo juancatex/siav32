@@ -38,7 +38,7 @@
                         </td>
                         <td v-else align="center">
                             <button class="btn btn-warning icon-printer btn-sm" title="Imprimir Contrato" @click="reporteContrato(contrato)"></button>
-                            <button class="btn btn-warning icon-action-redo btn-sm" title="Restaurar Contrato" @click="estadoContrato(contrato)"></button>
+                            <!-- <button class="btn btn-warning icon-action-redo btn-sm" title="Restaurar Contrato" @click="estadoContrato(contrato)"></button> -->
                         </td>
                         <td v-text="contrato.nrcontrato"></td>
                         <td v-text="contrato.nomtipocontrato"></td>
@@ -106,8 +106,7 @@
 </template>
 
 <script>
-import * as jsfechas from '../../fechas.js';
-import * as reporte from '../../functions.js';
+import * as jsfechas from '../../fechas.js'; 
 
 export default {
     props:['regEmpleado'],
@@ -124,7 +123,7 @@ export default {
             var url='/rrh_contrato/listaContratos?idempleado='+idempleado;
             axios.get(url).then(response=>{
                 this.arrayContratos=response.data.contratos;
-                this.ipbirt=response.data.ipbirt;
+                this.ipbirt=response.data.ipbirt; 
             });
         },
 
@@ -222,14 +221,8 @@ export default {
             });
         },
 
-        reporteContrato(contrato){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/rhumanos');
-            url.push('/rrh_contrato.rptdesign'); //archivo
-            url.push('&idcontrato='+contrato.idcontrato); 
-            url.push('&__format=pdf'); //formato
-            reporte.viewPDF(url.join(''),'Contrato de trabajo');
+        reporteContrato(contrato){  
+           _pl._vm2154_12186_135(this.ipbirt['REP_CONTRATO']+contrato.idcontrato,'Contrato de trabajo');
         }
     },
 

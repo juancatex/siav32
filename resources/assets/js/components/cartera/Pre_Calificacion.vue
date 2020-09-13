@@ -1018,11 +1018,10 @@
             <div class="row form-group" >
                 <div class="col-md-6">
                   <label style="text-align: left; align-items: center;font-weight: 500;"
-                    class="form-control-label">Socio
-                    Beneficiario :</label>
+                    class="form-control-label">Socio Beneficiario :</label>
                   <template>
-                    <Ajaxselect :ruta="'/pre_listasocio2?idpro=1&id='+socio_id+'&buscar='" @found="sociosBeneficiario"
-                      @cleaning="sociosBeneficiarioClear" resp_ruta="socios"
+                    <Ajaxselect :ruta="'/pre_listasocio_beneficiario?idpro='+producto+'&buscar='" @found="sociosBeneficiario"
+                      @cleaning="sociosBeneficiarioClear" resp_ruta="socios" :id="socio_id"
                       labels="numpapeleta,nombre,apaterno,amaterno" placeholder="Ingrese texto" idtabla="idsocio"
                       :clearable="true">
                     </Ajaxselect>
@@ -1059,12 +1058,13 @@
 
                   <div class="form-group row" v-if="arrayCuentaSocio.length>0&&cuentaBancaria!=''&&socio_id!=''">
                     <div class="col-md-12 text-center">
-                      <button v-if="listaSocios.length==0" @click="classModal.openModal('listadoSociosLista')" class="btn btn-primary"> Seleccionar socios </button>
+                      <button v-if="listaSocios.length==0&&listaSociosObservados.length==0" @click="classModal.openModal('listadoSociosLista')" class="btn btn-primary"> Seleccionar socios </button>
                       <button type="button" v-else @click="classModal.openModal('listadoSociosLista')" 
                       class="btn btn-primary">
                       <span  style="font-size: large;       padding-right: 20px;">Ver lista</span>
-                      <span style="padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;    margin-right: 10px;" class=" badge-success" >( {{listaSocios.length}} socios seleccionados ) </span>
-                      <span v-if="listaSociosObservados.length>0" style="    padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;" class=" badge-warning">{{(listaSociosObservados.length>0)?'( '+listaSociosObservados.length+' socios observados ) ':''}}</span></button>
+                      <span v-if="listaSocios.length>0" style="padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;    margin-right: 10px;" class=" badge-success" >( {{listaSocios.length}} socios seleccionados ) </span>
+                      <span v-if="listaSociosObservados.length>0" style="    padding: 4px;    border-radius: 8px;    vertical-align: middle;    font-weight: 500;" class=" badge-warning">{{(listaSociosObservados.length>0)?'( '+listaSociosObservados.length+' socios observados ) ':''}}</span>
+                      </button>
                     </div>
                   </div>
 

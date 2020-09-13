@@ -309,7 +309,12 @@ return [
         'REP_COBRANZA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/pre_calificacion/cobranza.rptdesign&__format=pdf&presamo=', 
         'REP_DESEMBOLSO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/pre_calificacion/desembolso.rptdesign&__format=pdf&presamo=', 
     ],
-
+    'rutaRrhh' => [
+        'REP_CONTRATO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/rhumanos/rrh_contrato.rptdesign&__format=pdf&idcontrato=',
+        'REP_LISTA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/rhumanos/rrh_lista.rptdesign&__format=pdf',
+        'REP_CREDENCIAL'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/rhumanos/rrh_credencial.rptdesign&__format=pdf&ip='.$ip ,
+        'REP_KARDEX'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/rhumanos/rrh_kardex.rptdesign&__format=pdf&ip='.$ip 
+     ], 
     'rutaDaaros'=>[
         'REP_DEV_SOCIOS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/daaro/dev_individual.rptdesign&__format=pdf',         
     ],

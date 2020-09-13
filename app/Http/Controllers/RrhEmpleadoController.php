@@ -11,26 +11,34 @@ use App\Socio;
 class RrhEmpleadoController extends Controller
 {
     public function listaEmpleados(Request $request)
-    {
-        $ip=config('app.ip'); 
-        $empleados=Rrh_Empleado::
-        select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','rrh__empleados.telcelular',
-        'foto','codbiom','rrh__empleados.activo','nommunicipio as filial')
-        ->join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento')
+    {if (!$request->ajax()) return redirect('/'); 
+        $ip=config('app.rutaRrhh'); 
+        $value=($request->activou=='1')?1:0;
+        $empleados=Rrh_Empleado:: join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento')
         ->join('fil__filials','fil__filials.idfilial','rrh__empleados.idfilial')
-        ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio');
-        if($request->buscado)
-        {
-            if(is_numeric($request->buscado)) $empleados=$empleados->where('ci','like',$request->buscado.'%');
-            else $empleados=$empleados->where('apaterno','like','%'.$request->buscado.'%')
-                ->orWhere('amaterno','like','%'.$request->buscado.'%')
-                ->orWhere('nombre','like','%'.$request->buscado.'%');
-        }       
-        
-        if($request->sedelp!='1') $empleados->where('rrh__empleados.idfilial','>=',1);
-        $empleados->where('rrh__empleados.activo','=',1);
-        $empleados->orderBy('apaterno')->orderBy('amaterno');
-        return ['empleados'=>$empleados->get(),'currfecha'=>date('Y-m-d'),'ipbirt'=>$ip];
+        ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
+        ->select('idempleado','nombre','apaterno','amaterno','ci','abrvdep','rrh__empleados.telcelular',
+        'foto','codbiom','rrh__empleados.activo','nommunicipio as filial')
+        ->where('rrh__empleados.activo','=',$value)
+        ->where('rrh__empleados.idfilial',($request->sedelp=='1'?'=':'>='),1); 
+        $buscararray = array();  
+        if(!empty($request->buscado)){
+            $buscararray = explode(" ",$request->buscado);
+        } 
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                         $sqls="(rrh__empleados.apaterno like '%".$valor."%' or rrh__empleados.amaterno like '%".$valor."%' or rrh__empleados.nombre like '%".$valor."%' or rrh__empleados.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" or (rrh__empleados.apaterno like '%".$valor."%' or rrh__empleados.amaterno like '%".$valor."%' or rrh__empleados.nombre like '%".$valor."%' or rrh__empleados.ci like '%".$valor."%')";
+                } 
+            } 
+            $empleados=$empleados->whereraw($sqls);
+        }
+ 
+        $empleados=$empleados->orderBy('apaterno')->orderBy('amaterno')->get();
+        return ['empleados'=>$empleados,'currfecha'=>date('Y-m-d'),'ipbirt'=>$ip];
     }
 
     public function verEmpleado(Request $request)

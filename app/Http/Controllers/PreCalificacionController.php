@@ -104,7 +104,7 @@ class PreCalificacionController extends Controller
 
     public function pre_listasocio(Request $request)
     {  
-      //if (!$request->ajax()) return redirect('/');
+      if (!$request->ajax()) return redirect('/');
 
         
        $buscararray = array();  
@@ -174,7 +174,7 @@ if(!empty($request->buscar)){
     }
     public function pre_listasocio_lista(Request $request)
     {  
-      //if (!$request->ajax()) return redirect('/');
+      if (!$request->ajax()) return redirect('/');
 
         
        $buscararray = array();  
@@ -223,6 +223,62 @@ if(!empty($request->buscar)){
         
 
     }
+
+
+    public function pre_listasocio_lista_beneficiario(Request $request)
+    {  
+    if (!$request->ajax()) return redirect('/');
+
+        
+       $buscararray = array();  
+if(!empty($request->buscar)){
+    $buscararray = explode(" ",$request->buscar);
+} 
+         $raw = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.cantobligados+apo__total_aportes.cantjubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion)) as cantaportes");
+        $raw2 = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.totalobligados+apo__total_aportes.totaljubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion)) as totalaportes");
+        $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
+        $someVariable=$request->idpro;
+        $sum = DB::raw("getPrestamos(socios.idsocio,$someVariable,0) as totalcuotas"); 
+         
+        
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                } 
+            } 
+            $socios=Socio::join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
+            ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
+            ->select($raw3,$raw,$raw2,$sum,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->whereraw($sqls) 
+            ->orderBy('socios.nombre', 'asc')->get();
+           
+        }elseif(empty($request->id)){
+            $socios=Socio::join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
+            ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
+            ->select($raw3,$raw,$raw2,$sum,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->orderBy('socios.nombre', 'asc')->limit(10)->get();
+
+        }else{
+            $socios=Socio::join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
+            ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
+            ->select($raw3,$raw,$raw2,$sum,'socios.idestprestamos','par_departamentos.abrvdep','socios.liquidopagable_papeleta','socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->where('socios.idsocio','=',$request->id)
+            ->orderBy('socios.nombre', 'asc')->limit(10)->get(); 
+        }
+ 
+        return ['socios' => $socios]; 
+    }
+
 
     public function pre_listasocio_prueba(Request $request)
     {  
