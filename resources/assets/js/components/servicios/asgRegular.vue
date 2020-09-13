@@ -825,10 +825,10 @@ export default {
 
     },
 
-    mounted(){ var piso=1;
+    mounted(){ 
         this.jsfechas=jsfechas;
         this.cantgrupos=this.regEstablecimiento.cantgrupos*1;
-        this.listaAmbientes(this.regEstablecimiento.idestablecimiento, piso);
+        this.listaAmbientes(this.regEstablecimiento.idestablecimiento, 1);
         this.listaDocumentos();
         this.departamentos();
     }

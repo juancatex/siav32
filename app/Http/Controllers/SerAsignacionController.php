@@ -64,8 +64,7 @@ class SerAsignacionController extends Controller
                 if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
                 if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);                
                 $x[$i]=$asignaciones; $i++;
-            }
-            
+            }            
         } 
                                 
         if (count($x)==0) {
@@ -173,15 +172,19 @@ class SerAsignacionController extends Controller
         if($request->tipocliente=="s")
             $cliente=Socio::
             select('socios.idsocio as idcliente','nombre','apaterno','amaterno','ci','abrvdep',
-            'numpapeleta','nomgrado','nomfuerza','telcelular','nomdestino','idestservicios',
-            'par_municipios.idmunicipio','nommunicipio','socios.idestadocivil','nomestadocivil',
-            'rutafoto','nomestado',$fecha,$hora)
+            'numpapeleta','nomgrado','nomfuerza','telcelular','idestservicios', 
+            //'nomdestino',
+            //'par_municipios.idmunicipio','nommunicipio',
+            'socios.idestadocivil','nomestadocivil',
+            'rutafoto',
+            'nomestado',
+            $fecha,$hora)
             ->join('par_grados','par_grados.idgrado','=','socios.idgrado')
             ->join('par_fuerzas','par_fuerzas.idfuerza','=','socios.idfuerza')
             ->join('par_departamentos','par_departamentos.iddepartamento','=','iddepartamentoexpedido')
             ->join('par_estadocivil','par_estadocivil.idestadocivil','=','socios.idestadocivil')
-            ->join('par__destinos','par__destinos.iddestino','=','socios.iddestino')
-            ->join('par_municipios','par_municipios.idmunicipio','=','par__destinos.idmunicipio')
+            //->join('par__destinos','par__destinos.iddestino','=','socios.iddestino')
+            //->join('par_municipios','par_municipios.idmunicipio','=','par__destinos.idmunicipio')
             ->join('par_estadomodulos','par_estadomodulos.idestado','=','socios.idestservicios')
             ->where('par_estadomodulos.idmodulo','=',4)
             ->where('socios.idsocio','=',$request->idcliente)->get();

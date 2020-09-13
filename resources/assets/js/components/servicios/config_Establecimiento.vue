@@ -406,6 +406,7 @@
                                     <th>Garantía</th>
                                     <th>Tarifa Socios</th>
                                     <th>Tarifa Externa</th>
+                                    <th>Piso</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -415,6 +416,7 @@
                                     <td v-text="ambiente.garantia"></td>
                                     <td v-text="ambiente.tarifasocio"></td>
                                     <td v-text="ambiente.tarifareal"></td>
+                                    <td v-text="ambiente.piso"></td>
                                     <td v-if="ambiente.activo" align="center">
                                         <button class="btn btn-warning icon-pencil" title="Editar tarifa" @click="editarAmbiente(ambiente)"></button>
                                         <button class="btn btn-danger icon-trash" title="Desactivar tarifa" @click="estadoAmbiente(ambiente)"></button>
@@ -437,6 +439,8 @@
                                     <input type="text" class="form-control text-right" v-model="garantia">
                                     <div class="input-group-append"><span class="input-group-text">Bs.</span></div>
                                 </div>
+                                <br>Piso: <span class="txtasterisco"></span>
+                                <input type="text" class="form-control" v-model="piso">
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 Tarifa Socios: <span class="txtasterisco"></span>

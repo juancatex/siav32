@@ -11,10 +11,14 @@
                     <i class="fa fa-align-justify"></i> Reportes Hospedaje Filiales         
                     <ul>                                                
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro()">Hospedaje Transitorio CBBA</button>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">Hospedaje Transitorio CBBA</button>
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente()">Hospedaje Permanente CBBA</button>                            
-                    </ul>                                            
+                    </ul>
+                    <ul>                                                
+                        <li> --- </li>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">Hospedaje Transitorio LPZ</button>                    
+                    </ul>
                 </div>                    
             </div>
             <!-- Fin ejemplo de tabla Listado -->
@@ -55,7 +59,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,fechaIn,fechaOut)">Reporte</button>                            
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,fechaIn,fechaOut,filial)">Reporte</button>                            
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -113,7 +117,8 @@
                 criterio : 'nomestado',
                 buscar : '',
                 arrayPermisos : {resumen:0},
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                filial:'',
             }
         },
 
@@ -148,15 +153,19 @@
                 this.fechaIn='',
                 this.op1='';this.op2='';this.op3='';this.op4='';
             },
-            verRegistro(){ 
+            verRegistro(filial){ 
+                this.filial=filial;
                 this.Modalview='K';  
                 this.setear();
                 this.modal=1;                 
             },
                         
-            mostrarReporte(modal,fechaIn, fechaOut){
+            mostrarReporte(modal,fechaIn, fechaOut, filial){
                 if (modal === 'K') {
-                    var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=2&idestablecimiento=11';
+                    if (filial=='LPZ')
+                        var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=1&idestablecimiento=2';
+                    if (filial=='CBBA')
+                        var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=2&idestablecimiento=11';
                     this.reporte_resumen(url,'Resumen');
                 }                
             },

@@ -31,9 +31,10 @@ class CreateSerAsignacionsTable extends Migration
             $table->time('horasalida')->nullable();
             $table->date('fechadefuncion')->nullable();
             $table->integer('idresponsable')->nullable();
-            $table->string('obs1',100)->nullable();
+            $table->string('obs1',100)->nullable();            
             //$table->string('obs2',100)->nullable();
             $table->integer('idrepresentante')->nullable();
+            $table->integer('activo')->default(0);
             $table->timestamps();
         });
     }
