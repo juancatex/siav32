@@ -432,8 +432,7 @@ directives: { focus },
     methods: { 
         listaEmpleados(){ 
             var url='/rrh_empleado/listaEmpleados?sedelp='+this.sedelp+'&activou='+this.activo+'&buscado='+this.buscado;
-          
-           axios.get(url).then(response=>{
+            axios.get(url).then(response=>{
                 this.arrayEmpleados=response.data.empleados;
                 this.ipbirt=response.data.ipbirt;
                 this.currfecha=response.data.currfecha; 
@@ -779,10 +778,7 @@ directives: { focus },
 
         reporteCredencial(empleado){ 
             _pl._vm2154_12186_135(this.ipbirt['REP_CREDENCIAL']+'&idempleado='+empleado.idempleado,'Credencial');
-        },
-
-
-
+        }
     },
         
     mounted() {
