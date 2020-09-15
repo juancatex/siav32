@@ -48,10 +48,13 @@ class RrhEmpleadoController extends Controller
     }
 
     public function storeEmpleado(Request $request)
-    {
+    {   $rutas=config('app.ruta_imagen'); 
         $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codempleado.=str_replace("-","",$request->fechanacimiento);
-        if($request->foto) Image::make($request->foto)->save(public_path("/img/empleados/").$codempleado.".jpg");
+        $codempleado.=str_replace("-","",$request->ci);
+        if($request->foto) {
+            Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
+            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SOCIO_REPORTES_EMPLEDO']).$codempleado.".jpg");
+        }
         $empleado=new Rrh_Empleado();
         $empleado->codempleado=$codempleado;
         $empleado->nombre=$request->nombre;
@@ -82,10 +85,13 @@ class RrhEmpleadoController extends Controller
     }
 
     public function updateEmpleado(Request $request)
-    {
+    {   $rutas=config('app.ruta_imagen'); 
         $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codempleado.=str_replace("-","",$request->fechanacimiento);
-        if($request->foto) Image::make($request->foto)->save(public_path("/img/empleados/").$codempleado.".jpg");
+        $codempleado.=str_replace("-","",$request->ci);
+        if($request->foto) {
+            Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
+            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SOCIO_REPORTES_EMPLEDO']).$codempleado.".jpg");
+        }
         $empleado=Rrh_Empleado::findOrFail($request->idempleado);
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;

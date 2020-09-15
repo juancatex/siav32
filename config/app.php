@@ -260,7 +260,9 @@ return [
 
     'ruta_imagen' =>[
         'DIRE_FOTO_SOCIO'=>'img/socios/', 
-        'DIRE_FOTO_SOCIO_REPORTES'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotos/'
+        'DIRE_FOTO_EMPLEADO'=>'img/empleados/', 
+        'DIRE_FOTO_SOCIO_REPORTES'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotos/',
+        'DIRE_FOTO_SOCIO_REPORTES_EMPLEDO'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotose/'
     ],    
     
 

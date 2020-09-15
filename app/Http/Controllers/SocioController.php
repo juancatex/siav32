@@ -86,7 +86,7 @@ class SocioController extends Controller
         $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
         Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
         //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-        //Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+        Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
         $socio = new Socio();
         $socio->numpapeleta=$request->numpapeleta; 
         $socio->rutafoto = $fileName;
@@ -132,7 +132,7 @@ class SocioController extends Controller
         $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
         Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
         //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-        //Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+        Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
         $socio = Socio::findOrFail($request->idsocio);
         $socio->rutafoto = $fileName;
         $socio->activo = '1';
