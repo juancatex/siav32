@@ -920,9 +920,11 @@
                  var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
                 let me = this; 
                 axios.get(url).then(function (response) {
-                    var respuesta = response.data.datapermiso[0].permisos;  
-                    me.arrayPermisosIn = JSON.parse((respuesta)); 
-                    
+                    me.arrayPermisosIn=[];
+                    if(response.data.datapermiso.length>0){
+                        var respuesta=response.data.datapermiso[0].permisos; 
+                        me.arrayPermisosIn = JSON.parse((respuesta));
+                    } 
                 })
                 .catch(function (error) {
                     console.log(error);
