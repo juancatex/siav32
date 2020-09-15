@@ -26,23 +26,21 @@
                             <th>Opciones</th>
                             <th>Nombre Huesped</th>                                    
                             <th>Fecha Entrada</th>
+                            <th>Servicio</th>
                             <th>Filial</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="registrados in arrayRegistrados" :key="registrados.id">
-                            <td>
+                            <td v-if="registrados.codservicio==='HTR'">
                                 <button type="button" @click="mostrarReporte(registrados.idasignacion)" class="btn btn-warning btn-sm">
                                     <i class="icon-book-open"> Boleta Entrada</i>
                                 </button> &nbsp;
-                                
-                                <!-- <button type="button" @click="mostrarReporte(registrados.idasignacion)" class="btn btn-warning btn-sm">
-                                    <i class="icon-book-open"></i>
-                                </button> -->
-                            
                             </td>
+                            <td v-else></td>
                             <td v-text="registrados.nomgrado+' '+registrados.nombre+' '+registrados.apaterno+' '+registrados.amaterno"></td>                            
-                            <td v-text="registrados.fechaentrada"></td>                            
+                            <td v-text="registrados.fechaentrada"></td>  
+                            <td v-text="registrados.codservicio"></td>                            
                             <td v-text="registrados.sigla"></td>                            
                         </tr>                                
                     </tbody>
