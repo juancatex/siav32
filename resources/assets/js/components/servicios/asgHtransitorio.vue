@@ -741,14 +741,14 @@ export default {
             this.fecha=this.regCliente.currfecha;
             this.nit=this.regCliente.ci;
             this.razon=this.regCliente.apaterno;
-            if(this.regCliente.currhora>'12:30') this.regAsignacion.noches++;
+            if(this.regCliente.currhora>'14:00') noche++;
             this.regPago.concepto='Hospedaje '+this.regAsignacion.noches+' noches';
             if (this.regAsignacion.noches==0)
                 //this.regPago.importe=this.regAsignacion.tarifa*1;
                 this.regPago.importe=tarifa*1;
             else
                 //this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
-                this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
+                this.regPago.importe=tarifa*noche;
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
         },
 

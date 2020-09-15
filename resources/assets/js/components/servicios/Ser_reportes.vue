@@ -13,7 +13,7 @@
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">Hospedaje Transitorio CBBA</button>
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente()">Hospedaje Permanente CBBA</button>                            
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente('CBBA')">Hospedaje Permanente CBBA</button>                            
                     </ul>
                     <ul>                                                
                         <li> --- </li>
@@ -69,6 +69,58 @@
         <!--Fin del modal-->            
         </div>            
 
+
+        <div v-if="Modalview === 'P'">
+        <!--Inicio del modal agregar/actualizar-->
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModalK"></h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">                                                                                            
+                            <div class="form-group row">
+                                Elija el periodo: <span class="txtasterisco"></span>
+                                <div class="tabla100">
+                                    <div class="tfila">
+                                        <div class="tcelda ">
+                                            <select class="form-control" v-model="per"
+                                                name="per" :class="{'invalido':errors.has('per')}" v-validate="'required'">
+                                                <option v-for="mes in arrayMeses" :key="mes" :value="mes" v-text="mes"></option>
+                                            </select>
+                                            <p class="txtvalidador" v-if="errors.has('per')">Seleccione un Mes</p>
+                                        </div>
+                                        <div class="tcelda" style="width:10px"></div>
+                                        <div class="tcelda" >
+                                            <select class="form-control" v-model="ges"
+                                                name="ges" :class="{'invalido':errors.has('ges')}" v-validate="'required'">
+                                                <option value="2016">2016</option>
+                                                <option value="2017">2017</option><option value="2018">2018</option>
+                                                <option value="2019">2019</option><option value="2020">2020</option>
+                                            </select>
+                                            <p class="txtvalidador" v-if="errors.has('ges')">Seleccione un año</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,fechaIn,fechaOut,'CBBA',ges,per)">Reporte</button>                            
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--Fin del modal-->            
+        </div>  
+
     </main>
 </template>
 
@@ -96,7 +148,7 @@
         data (){
             return {                                
                 Modalview: '',
-                modal : 0,                
+                modal : 0, modal : 1,
                 tituloModalK : 'Resumen',                
                 resumen : '',
                 resumen1: '',
@@ -119,6 +171,8 @@
                 arrayPermisos : {resumen:0},
                 arrayPermisosIn:[],
                 filial:'',
+                arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                per:'', ges:'',
             }
         },
 
@@ -153,6 +207,14 @@
                 this.fechaIn='',
                 this.op1='';this.op2='';this.op3='';this.op4='';
             },
+
+            mostrarPermanente(filial){               
+                this.filial=filial;
+                this.Modalview='P';  
+                this.setear();
+                this.modal=1;                 
+            },
+
             verRegistro(filial){ 
                 this.filial=filial;
                 this.Modalview='K';  
@@ -160,19 +222,21 @@
                 this.modal=1;                 
             },
                         
-            mostrarReporte(modal,fechaIn, fechaOut, filial){
+            mostrarReporte(modal,fechaIn, fechaOut, filial, ges, per){
                 if (modal === 'K') {
                     if (filial=='LPZ')
                         var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=1&idestablecimiento=2';
                     if (filial=='CBBA')
                         var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=2&idestablecimiento=11';
                     this.reporte_resumen(url,'Resumen');
+                }
+                if (modal === 'P') {                    
+                    if (filial=='CBBA') {
+                        var periodo = per+'/'+ges;
+                        var url=this.resumen1 + '&periodo='+periodo;
+                    }                        
+                    this.reporte_resumen(url,'Resumen');
                 }                
-            },
-
-            mostrarPermanente(){               
-                var url=this.resumen1;
-                this.reporte_resumen(url,'Resumen');                
             },
 
             reporte_resumen(url,title) {
@@ -183,7 +247,7 @@
             cerrarModal() {
                 this.Modalview='G';  
                 this.modal=0;
-            },
+            },            
  
             getPermisos() { 
                 //permisoId poner axios para obtener los permisos                
