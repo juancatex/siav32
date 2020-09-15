@@ -245,56 +245,82 @@ class SocioController extends Controller
             if ($request->tipo=='socio') {
                 $filtro="idsocio=$request->idsocio";
                 $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
-                concat(nomgrado,' ',nombre,' ',apaterno,' ',amaterno) as nomcompleto, 'socio' as tipo 
+                concat(nombre,' ',apaterno,' ',amaterno) as nomcompleto, 'socio' as tipo 
                 from socios 
                 join par_grados on par_grados.idgrado=socios.idgrado where $filtro                
                 ";
                 $socios=DB::select($sql);
                 return ['socios'=>$socios];
             }
+
+            else if ($request->tipo=='beneficiario') {
+                $filtro2="idbeneficiario=$request->idsocio";
+                $sql="select be.idbeneficiario as idsocio, be.idsocio as temp, 'Sr(a).' as nomgrado, be.nombre,
+                (case when be.apaterno!='' then be.apaterno else '' end) as apaterno, 
+                (case when be.amaterno!='' then be.amaterno else '' end) as amaterno,                 
+                be.ci, 
+                concat(COALESCE(be.nombre,''),' ',COALESCE(be.apaterno,''),' ',COALESCE(be.amaterno,''),'(',COALESCE(be.parentesco,''),') del Socio: SOF: ',COALESCE(ss.nombre,''), ' ',COALESCE(ss.apaterno,'') ) as nomcompleto, 'beneficiario' as tipo
+                from afi__beneficiarios be, socios ss 
+                where $filtro2
+                and ss.idsocio = be.idsocio
+                ";
+                $socios=DB::select($sql);
+                return ['socios'=>$socios];
+            }
                 
-            else {
+            else if ($request->tipo=='civil') {
                 $filtro1="idcivil=$request->idsocio";
-                $sql="select sc.idcivil as idsocio, '' as grado, sc.nombre, sc.apaterno, sc.amaterno, sc.ci, 0 as numpapeleta,
+                $sql="select sc.idcivil as idsocio, 'Sr(a).' as nomgrado, sc.nombre, 
+                (case when sc.apaterno!='' then sc.apaterno else '' end) as apaterno, 
+                (case when sc.amaterno!='' then sc.amaterno else '' end) as amaterno,                  
+                sc.ci, 
                 concat(sc.nombre,' ',sc.apaterno,' ',sc.amaterno) as nomcompleto, 'civil' as tipo
                 from ser__civils sc 
                 where $filtro1
                 ";
                 $socios=DB::select($sql);
                 return ['socios'=>$socios];
-            }
-                
+            }      
         } 
 
-        else {
+        else {  //busca a la persona dentro de la tabla socios, civil o beneficiarios
             $arrayCadena=explode(" ",$request->cadena); 
             for($i=0; $i<count($arrayCadena); $i++)
             {   $valor=$arrayCadena[$i];
                 $criterio="(apaterno like '$valor%' or amaterno like '$valor%' or nombre like '$valor%' 
                 or ci like '$valor%' or numpapeleta like '%$valor%') ";
                 $criterio1="(sc.apaterno like '$valor%' or sc.amaterno like '$valor%' or sc.nombre like '$valor%' 
-                or ci like '$valor%') ";
+                or sc.ci like '$valor%') ";
+                $criterio2="(be.apaterno like '$valor%' or be.amaterno like '$valor%' or be.nombre like '$valor%' 
+                or be.ci like '$valor%') ";
                 
                 if($i==0) {
                     $filtro=$criterio;
                     $filtro1=$criterio1;
+                    $filtro2=$criterio2;
                 }
                     
                 else {
                     $filtro.=" and ".$criterio;
                     $filtro1.=" and ".$criterio1;
+                    $filtro2.=" and ".$criterio2;
                 } 
             }
 
-            $sql="select idsocio,nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
+            $sql="select idsocio, '' as temp, nomgrado,nombre,apaterno,amaterno,ci,numpapeleta, 
                     concat(nomgrado,' ',nombre,' ',apaterno,' ',amaterno) as nomcompleto, 'socio' as tipo 
                     from socios 
                     join par_grados on par_grados.idgrado=socios.idgrado where $filtro       
                     union 
-                    select sc.idcivil as idsocio, '' as grado, sc.nombre, sc.apaterno, sc.amaterno, sc.ci, 0 as numpapeleta,
+                    select sc.idcivil as idsocio, '' as temp, 'Sr(a).' as nomgrado, sc.nombre, sc.apaterno, sc.amaterno, sc.ci, 0 as numpapeleta,
                     concat(sc.nombre,' ',sc.apaterno,' ',sc.amaterno) as nomcompleto, 'civil' as tipo
                     from ser__civils sc 
-                    where $filtro1         
+                    where $filtro1
+                    union 
+                    select be.idbeneficiario as idsocio, be.idsocio as temp, 'Sr(a).' as nomgrado, be.nombre, be.apaterno, be.amaterno, be.ci, 0 as numpapeleta,
+                    concat(be.nombre,' ',be.apaterno,' ',be.amaterno) as nomcompleto, 'beneficiario' as tipo
+                    from afi__beneficiarios be 
+                    where $filtro2
                     ";
             $socios=DB::select($sql);
             return ['socios'=>$socios];

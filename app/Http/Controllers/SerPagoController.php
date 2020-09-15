@@ -13,17 +13,32 @@ class SerPagoController extends Controller
 {
     public function listaPagos(Request $request)
     {
+        if ($request->tipo=='b') {
+            $pagos=Ser_Pago:: select('ser__pagos.*','nombre','apaterno','idestado')
+            ->leftjoin('socios','socios.idsocio','=','ser__pagos.idresponsable')
+            ->leftjoin('par__prestamos','par__prestamos.no_prestamo','=','ser__pagos.nrdocumento')
+            ->where('ser__pagos.idasignacion','=',$request->idasignacion);//mausoleo
+            
+            // $pagos=Ser_Pago::
+            // where('idasignacion',$request->idasignacion);
+            // if($request->nit) $pagos=Ser_Pago::select('razon')->where('nit',$request->nit);
+            // if($request->periodo) $pagos=Ser_Pago::where('fecha','like',$request->periodo.'%');
+            return ['pagos'=>$pagos->get()];
+        }
         
-        $pagos=Ser_Pago:: select('ser__pagos.*','nombre','apaterno','idestado')
-        ->leftjoin('afi__beneficiarios','afi__beneficiarios.idbeneficiario','=','ser__pagos.idresponsable')
-        ->leftjoin('par__prestamos','par__prestamos.no_prestamo','=','ser__pagos.nrdocumento')
-        ->where('ser__pagos.idasignacion','=',$request->idasignacion);//mausoleo
+        else {
+            $pagos=Ser_Pago:: select('ser__pagos.*','nombre','apaterno','idestado')
+            ->leftjoin('afi__beneficiarios','afi__beneficiarios.idbeneficiario','=','ser__pagos.idresponsable')
+            ->leftjoin('par__prestamos','par__prestamos.no_prestamo','=','ser__pagos.nrdocumento')
+            ->where('ser__pagos.idasignacion','=',$request->idasignacion);//mausoleo
+            
+            // $pagos=Ser_Pago::
+            // where('idasignacion',$request->idasignacion);
+            // if($request->nit) $pagos=Ser_Pago::select('razon')->where('nit',$request->nit);
+            // if($request->periodo) $pagos=Ser_Pago::where('fecha','like',$request->periodo.'%');
+            return ['pagos'=>$pagos->get()];
+        }
         
-        // $pagos=Ser_Pago::
-        // where('idasignacion',$request->idasignacion);
-        // if($request->nit) $pagos=Ser_Pago::select('razon')->where('nit',$request->nit);
-        // if($request->periodo) $pagos=Ser_Pago::where('fecha','like',$request->periodo.'%');
-        return ['pagos'=>$pagos->get()];
     }
     
     public function verPago(Request $request)

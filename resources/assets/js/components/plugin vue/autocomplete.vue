@@ -7,16 +7,26 @@
             @keydown.enter="teclaEnter()"
             @keydown.esc="desplegar=0">
         <ul class="autocomplete-list" v-show="desplegar">
-            <li v-if="cargando" class="loading" >Buscando...</li>
-            <li v-else v-for="(socio,i) in arraySocios" :key="i" class="autocomplete-result"
-                @click="devolver(socio.idsocio, socio.tipo)" :class="pulsado==i?'is-active':''">
-                    <span v-text="socio.nomgrado"></span>
-                    <span v-text="socio.nombre"></span>
-                    <span v-text="socio.apaterno"></span>
-                    <span v-text="socio.amaterno"></span> <i class="fa fa-angle-right"></i>
-                    CI: <span v-text="socio.ci"></span> <i class="fa fa-angle-right"></i>
-                    PAP: <span v-text="socio.numpapeleta"></span>
-            </li>
+            
+                <li v-if="cargando" class="loading" >Buscando...</li>                        
+                <li v-else v-for="(socio,i) in arraySocios" :key="i" class="autocomplete-result"
+                    
+                    @click="devolver(socio.idsocio, socio.tipo, socio.temp)" :class="pulsado==i?'is-active':''"> 
+                        <span v-text="socio.nomgrado"></span> 
+                        <span v-text="socio.nombre"></span>
+                        <span v-text="socio.apaterno"></span>
+                        <span v-text="socio.amaterno"></span>                         
+                        <i class="fa fa-angle-right"></i>
+                        CI: <span v-text="socio.ci"></span> 
+                        <i class="fa fa-angle-right"></i>
+                        <template v-if="socio.numpapeleta!=0">
+                            PAP: <span v-text="socio.numpapeleta"></span>
+                        </template>
+                        <template v-else>
+                        </template>
+                        
+                </li>
+
         </ul>
     </div>
     <!-- https://alligator.io/vuejs/vue-autocomplete-component/ -->
@@ -32,6 +42,7 @@ export default {
         pulsado: 0,
         cadena:'', 
         arraySocios:[],
+        valores:'',
     }},
 
     methods: {
@@ -56,13 +67,15 @@ export default {
             }
         },
 
-        devolver(idsocio, tipo){
-            this.$emit('encontrado',idsocio);
+        devolver(idsocio, tipo, temp){  console.log(tipo);
+
+            this.valores = idsocio +'-' + tipo+'-' + temp;
+            this.$emit('encontrado',this.valores); 
             this.desplegar=0;
             var regSocio=[];
             axios.get('/socio/listaSociosCivil?idsocio='+idsocio+'&tipo='+tipo).then(response=>{
                 regSocio=response.data.socios[0];
-                this.cadena=regSocio.nomgrado+' '+regSocio.nombre.trim()+' '+regSocio.apaterno+' '+regSocio.amaterno;
+                this.cadena=regSocio.nomgrado+' '+regSocio.nomcompleto;
             });
         },
 

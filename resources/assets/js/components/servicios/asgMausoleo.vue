@@ -229,13 +229,18 @@
                             <div v-if="idresponsable" class="tabla100">
                                 <div class="tfila">
                                     <div class="tcelda titcampo">Relación:</div>
-                                    <div class="tcelda" v-text="regResponsable.parentesco"></div>
+                                    <div v-if="regResponsable.resp" class="tcelda">Socio Institucion</div>
+                                    <div v-else class="tcelda" v-text="regResponsable.parentesco"></div>
                                 </div>
                                 <div class="tfila">
                                     <div class="tcelda titcampo">Nro C.I.:</div>
                                     <div class="tcelda" v-text="regResponsable.ci+' '+regResponsable.abrvdep"></div>
                                 </div>
-                                <div class="tfila">
+                                <div v-if="regResponsable.resp" class="tfila">
+                                    <div class="tcelda titcampo">Papeleta:</div>
+                                    <div class="tcelda" v-text="regResponsable.resp"></div>
+                                </div>
+                                <div v-else class="tfila">
                                     <div class="tcelda titcampo">Celular:</div>
                                     <div class="tcelda" v-text="regResponsable.telcelular"></div>
                                 </div>                                
@@ -319,12 +324,22 @@ export default {
         regCantgrupos:[], regAmbiente:[], regAsignacion:[], regCliente:[], regResponsable:[],
         idasignacion:'', idresponsable:'', nrasignacion:'', fechadefuncion:'', fechaentrada:'', obs1:'',
         idpago:'', concepto:'', periodo:'', nrdocumento:'', fecha:'', importe:'',
+        tipo:'',
     }},
 
     methods:{
-        verIDcliente(idcliente){
-            this.idcliente=idcliente;
-            this.listaBeneficiarios(idcliente);
+        verIDcliente(valores){ //console.log(valores);
+            var x = valores.split("-"); // separamos tipo de id
+            this.idcliente=x[0];
+            this.tipo=x[1]; //asignamos el tipo de socio
+            if (x[1]=='beneficiario'){
+                this.tipo='b'; //asignamos el tipo de socio
+                this.socioResponsable(x[2]); //buscamos al responsable que wseria el socio
+            }
+            else {
+                this.listaBeneficiarios(x[0]);
+            }
+            
         },
 
         atras() {
@@ -370,14 +385,21 @@ export default {
             });
         },
 
-        listaPagos(idasignacion){
-            var url='/ser_pago/listaPagos?idasignacion='+idasignacion;
+        socioResponsable(idsocio){
+            var url='/afi_beneficiario/socioResponsable?idsocio='+idsocio+'&activo=1';
+            axios.get(url).then(response=>{
+                this.arrayBeneficiarios=response.data.beneficiarios; 
+            });
+        },
+
+        listaPagos(idasignacion,tipo){
+            var url='/ser_pago/listaPagos?idasignacion='+idasignacion+'&tipo='+tipo;
             axios.get(url).then(response=>{
                 this.arrayPagos=response.data.pagos;
             });
         },
 
-        verResponsable(idbeneficiario){
+        verResponsable(idbeneficiario){ //console.log(idbeneficiario);
             for(var i=0;i<this.arrayBeneficiarios.length;i++)
                 if(this.arrayBeneficiarios[i].idbeneficiario==idbeneficiario) {
                     this.regResponsable=this.arrayBeneficiarios[i]; return;  }
@@ -387,33 +409,40 @@ export default {
             if(col==3) return true; //funciona
         },
 
-        cualAsignacion(idambiente){ 
+        cualAsignacion(idambiente){ console.log('s'+idambiente);
             for(var i=0; i<this.arrayAsignaciones.length; i++)
                 if(this.arrayAsignaciones[i].idambiente==idambiente) {
                    this.verAsignacion(this.arrayAsignaciones[i]); return;
                 }
         },
 
-        async verAsignacion(asignacion){
+        async verAsignacion(asignacion){ 
             let response=await axios.get('/ser_asignacion/verAsignacion?idasignacion='+asignacion.idasignacion);
-            this.regAsignacion=response.data.asignacion[0];
-            response=await axios.get('/afi_beneficiario/listaBeneficiarios?idbeneficiario='+this.regAsignacion.idresponsable);
+            this.regAsignacion=response.data.asignacion[0]; 
+
+            if (asignacion.tipocliente=='b')
+                response=await axios.get('/afi_beneficiario/socioResponsable?idsocio='+this.regAsignacion.idresponsable);
+            else
+                response=await axios.get('/afi_beneficiario/listaBeneficiarios?idbeneficiario='+this.regAsignacion.idresponsable);
+        
             this.regResponsable=response.data.beneficiarios[0];
+            
             response=await axios.get('/ser_ambiente/listaAmbientes?idambiente='+asignacion.idambiente);
             this.regAmbiente=response.data.ambientes[0];
             response=await axios.get('/ser_asignacion/verCliente?idcliente='+asignacion.idcliente+'&tipocliente='+asignacion.tipocliente);
             this.regCliente=response.data.cliente[0];
             this.arrayIDdocumentos=JSON.parse('['+this.regAsignacion.iddocumentos+']');
-            this.listaPagos(asignacion.idasignacion);
+            this.listaPagos(asignacion.idasignacion,asignacion.tipocliente);
             this.divAsignaciones=0;
         },
 
         nuevaAsignacion(ambiente){
             this.regAmbiente=ambiente;
-            this.modalAsignacion=1;
+            this.modalAsignacion=1; this.regAsignacion.idasignacion='';
             this.accion=1;
             this.listaDocumentos();
             this.idcliente='';
+            this.regAsignacion.idcliente='';
             this.fechadefuncion='';
             this.fechaentrada='';
             this.nrasignacion='';
@@ -421,12 +450,15 @@ export default {
             this.$validator.reset();
         },
 
-        editarAsignacion(asignacion){
+        editarAsignacion(asignacion){ console.log(asignacion.idcliente);
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalAsignacion=1;
             this.accion=2;
             this.listaDocumentos();
-            this.listaBeneficiarios(asignacion.idcliente);
+            if (asignacion.tipocliente=='b')
+                this.socioResponsable(asignacion.idresponsable);
+            else
+                this.listaBeneficiarios(asignacion.idcliente);
             this.idasignacion=asignacion.idasignacion;
             this.nrasignacion=asignacion.nrasignacion;
             this.fechadefuncion=asignacion.fechadefuncion;
@@ -451,7 +483,7 @@ export default {
             });            
             axios.post('/ser_asignacion/storeAsignacion',{
                 'idcliente':this.idcliente,
-                'tipocliente':'s',
+                'tipocliente':this.tipo,
                 'idambiente':this.regAmbiente.idambiente,
                 'nrasignacion':this.nrasignacion,
                 'fechasolicitud':'',
@@ -507,7 +539,10 @@ export default {
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalPago=1;
             this.accion=1;
-            this.listaBeneficiarios(this.regAsignacion.idcliente);
+            if (this.regAsignacion.tipocliente=='b')
+                this.socioResponsable(this.regAsignacion.idresponsable);
+            else
+                this.listaBeneficiarios(this.regAsignacion.idcliente);
             this.concepto='';
             this.nrdocumento='';
             this.fecha='';
@@ -551,7 +586,7 @@ export default {
             }).then(response=>{
                 swal('Pago registrado correctamente','','success');
                 this.modalPago=0;
-                this.listaPagos(this.regAsignacion.idasignacion);
+                this.listaPagos(this.regAsignacion.idasignacion,this.regAsignacion.tipocliente);
             });
         },
 
@@ -572,7 +607,7 @@ export default {
             }).then(response=>{
                 swal('Datos actualizados','','success');
                 this.modalPago=0;
-                this.listaPagos(this.regAsignacion.idasignacion);
+                this.listaPagos(this.regAsignacion.idasignacion,this.regAsignacion.tipocliente);
             });
         },
 
