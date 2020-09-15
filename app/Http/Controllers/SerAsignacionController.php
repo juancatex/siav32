@@ -218,5 +218,62 @@ class SerAsignacionController extends Controller
             ->where('afi__beneficiarios.idbeneficiario','=',$request->idcliente)->get();
         return ['cliente'=>$cliente];
     }
+
+    public function listarRegistrados(Request $request)
+    { 
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        }
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                } 
+            }            
+            $registrados=Ser_Asignacion::
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla')
+            ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+            ->join('par_grados','par_grados.idgrado','socios.idgrado')                
+            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
+            ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
+            ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
+            ->where('ser__servicios.codservicio','=','HTR')
+            ->whereraw($sqls)                        
+            ->orderBy('socios.nombre', 'asc')
+            ->paginate(10);
+        }
+        else{
+            $registrados=Ser_Asignacion::
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla')
+            ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+            ->join('par_grados','par_grados.idgrado','socios.idgrado')                
+            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
+            ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
+            ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
+            ->where('ser__servicios.codservicio','=','HTR')
+            ->where('idasignacion','=',9999999)->paginate(10);    
+        }                        
+            
+        return [
+            'pagination' => [
+                'total'        => $registrados->total(),
+                'current_page' => $registrados->currentPage(),
+                'per_page'     => $registrados->perPage(),
+                'last_page'    => $registrados->lastPage(),
+                'from'         => $registrados->firstItem(),
+                'to'           => $registrados->lastItem(),
+            ],
+            'registrados' => $registrados
+        ];
+            
+    }
+
+
     
 }

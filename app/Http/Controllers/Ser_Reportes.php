@@ -13,6 +13,7 @@ class Ser_Reportes extends Controller
         return [ 	
         'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->username.'&id=',        
         'REP_PERMANENTE' => $rutas['REP_PERMANENTE'].'&user='.Auth::user()->username.'&id=',        
+        'REP_ENTRADACC' => $rutas['REP_ENTRADACC'],        
         ];
     }
 }
