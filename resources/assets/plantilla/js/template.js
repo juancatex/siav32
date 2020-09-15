@@ -1,9 +1,10 @@
 $(window).on('keydown', function (e) {
 
   if (e.keyCode == 39) {
-    e.preventDefault();
+    
 
     if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
+      e.preventDefault();
       var numero = parseInt($(document.activeElement).attr("inputvalued"));
       numero = numero + 1;
       if ($(document.activeElement).parents(".filacontable").find('#input' + numero).attr("disabled") == 'disabled') {
@@ -13,9 +14,10 @@ $(window).on('keydown', function (e) {
       out.focus();
     }
   } else if (e.keyCode == 37) {
-    e.preventDefault();
+    
 
     if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
+      e.preventDefault();
       var numero = parseInt($(document.activeElement).attr("inputvalued"));
       numero = numero - 1;
 
@@ -26,9 +28,10 @@ $(window).on('keydown', function (e) {
       out.focus();
     }
   }else if (e.keyCode == 40) {
-    e.preventDefault();
+    
 
     if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
+      e.preventDefault();
      var numero= parseInt($(document.activeElement).parents(".filacontable").attr("filaindex"));
      numero = numero + 1;
 
@@ -38,9 +41,10 @@ $(window).on('keydown', function (e) {
      $('#filaRow' + numero).find('#'+$(document.activeElement).attr('id')).focus();
     }
   }else if (e.keyCode == 38) {
-    e.preventDefault();
+   
 
     if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
+      e.preventDefault();
      var numero= parseInt($(document.activeElement).parents(".filacontable").attr("filaindex"));
      numero = numero - 1;
 
