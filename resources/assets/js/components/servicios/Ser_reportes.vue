@@ -11,7 +11,7 @@
                     <i class="fa fa-align-justify"></i> Reportes Hospedaje Filiales         
                     <ul>                                                
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">Hospedaje Transitorio CBBA</button>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">Hospedaje Transitorio CBBA.</button>
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente('CBBA')">Hospedaje Permanente CBBA.</button>                            
                     </ul>
