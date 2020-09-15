@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get ('/afi_beneficiario', 'AfiBeneficiarioController@index');
         Route::post('/afi_beneficiario/registrar', 'AfiBeneficiarioController@store');
         Route::get ('/afi_beneficiario/listaBeneficiarios','AfiBeneficiarioController@listaBeneficiarios');
+        Route::get ('/afi_beneficiario/socioResponsable','AfiBeneficiarioController@socioResponsable');
         Route::get ('/afi_beneficiario/verEsposa', 'AfiBeneficiarioController@verEsposa');
         Route::put ('/afi_beneficiario/actualizar', 'AfiBeneficiarioController@update');
         Route::put ('/afi_beneficiario/desactivar', 'AfiBeneficiarioController@desactivar');

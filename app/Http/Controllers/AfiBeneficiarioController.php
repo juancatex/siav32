@@ -19,7 +19,7 @@ class AfiBeneficiarioController extends Controller
     }
 
     public function listaBeneficiarios(Request $request)
-    {
+    { 
         $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*','abrvdep')
         ->join('par_departamentos','par_departamentos.iddepartamento','afi__beneficiarios.iddepartamento')
         ->join('socios','afi__beneficiarios.idsocio','socios.idsocio')
@@ -28,6 +28,15 @@ class AfiBeneficiarioController extends Controller
         if($request->idbeneficiario) 
             $beneficiarios=Afi_Beneficiario::where('idbeneficiario',$request->idbeneficiario);
         return ['beneficiarios'=>$beneficiarios->get()];
+    }
+
+    public function socioResponsable(Request $request)
+    { // en caso de que el responsable es el socios
+        $socios=Socio::select('socios.idsocio as idbeneficiario','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.telcelular','numpapeleta as resp', 'abrvdep')
+        ->join('par_departamentos','par_departamentos.iddepartamento','socios.iddepartamentoexpedido')
+        ->where('socios.idsocio',$request->idsocio);
+        if($request->idactivo) $socios->where('socios.activo',1);        
+        return ['beneficiarios'=>$socios->get()];
     }
 
     public function store(Request $request)

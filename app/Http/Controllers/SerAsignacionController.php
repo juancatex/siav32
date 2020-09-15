@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Ser_Asignacion;
 use App\Ser_Ambiente;
 use App\Ser_Civil;
+use App\Afi_Beneficiario;
 use App\Socio;
 
 
@@ -56,6 +57,21 @@ class SerAsignacionController extends Controller
                 'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'idcivil','nombre', 'apaterno','amaterno','idcivil')
                 ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')                
+                ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+                ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
+                ->where('ser__asignacions.vigente',1)
+                ->where('ser__asignacions.idasignacion',$asi->idasignacion);
+                if($request->bloque) $asignaciones=$asignaciones->where('codambiente','like',$request->bloque.'%');
+                if($request->piso)   $asignaciones=$asignaciones->where('piso',$request->piso);                
+                $x[$i]=$asignaciones; $i++;
+            }
+            if ($asi->tipocliente=='b') {
+                $asignaciones=Ser_Asignacion::
+                select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
+                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'idbeneficiario','nombre', 'apaterno','amaterno','idbeneficiario')
+                ->join('afi__beneficiarios','afi__beneficiarios.idbeneficiario','ser__asignacions.idcliente')                
                 ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
                 ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
                 ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
@@ -194,6 +210,12 @@ class SerAsignacionController extends Controller
             'fechanac','sexo',$fecha,$hora)
             ->join('par_departamentos','par_departamentos.iddepartamento','=','ser__civils.iddepartamento')
             ->where('ser__civils.idcivil','=',$request->idcliente)->get();
+        if($request->tipocliente=="b")
+            $cliente=Afi_Beneficiario::
+            select('idbeneficiario as idcliente','nombre','apaterno','amaterno','ci','abrvdep','telcelular',
+            'fechanac','sexo',$fecha,$hora)
+            ->join('par_departamentos','par_departamentos.iddepartamento','=','afi__beneficiarios.iddepartamento')
+            ->where('afi__beneficiarios.idbeneficiario','=',$request->idcliente)->get();
         return ['cliente'=>$cliente];
     }
     
