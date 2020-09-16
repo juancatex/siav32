@@ -89,7 +89,7 @@
                         </div>
                         <div class="tfila">
                             <div class="tcelda titcampo">Responsable:</div>
-                            <div class="tcelda" v-text="regResponsable.nombre+' '+regResponsable.apaterno"></div>
+                            <div class="tcelda" v-text="regResponsable.nombre+' '+regResponsable.apaterno+' '+regResponsable.amaterno"></div>
                         </div>
                         <div class="tfila">
                             <div class="tcelda titcampo">Nro CI:</div>
@@ -281,7 +281,7 @@
                 </div>
                 <div class="modal-body">
                     Concepto: <span class="txtasterisco"></span>
-                    <input type="text" class="form-control" v-model="concepto">
+                    <textarea class="form-control" v-model="concepto"></textarea>
                     Nro Operación: <span class="txtasterisco"></span>
                     <input type="text" class="form-control" v-model="nrdocumento">
                     Fecha: <span class="txtasterisco"></span>
