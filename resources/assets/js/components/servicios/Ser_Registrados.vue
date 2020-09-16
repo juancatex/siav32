@@ -15,7 +15,7 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <div class="input-group">                            
-                            <input type="text" v-model="buscar" @keyup.enter="listarRegistrados(1,buscar)" class="form-control" placeholder="Texto a buscar">
+                            <input type="text" v-model="buscar" @keyup.enter="listarRegistrados(1,buscar)" class="form-control" placeholder="Buscar por Nombre, apellidos, ci, numpapeleta">
                             <button type="submit" @click="listarRegistrados(1,buscar)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
             },
 
             mostrarReporte(id){ 
-                var url=this.resumen + id;
+                var url=this.resumen + '&idasignacion='+id;
                 this.reporte_resumen(url,'Resumen');
                 
             },
@@ -149,18 +149,7 @@
                 repo.viewPDF(url,title);
             },
             
-            
-            reporteEntrada(){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/servicios');
-            url.push('/ser_casacomentrada.rptdesign'); 
-            url.push('&idasignacion='+this.regAsignacion.idasignacion); 
-            url.push('&__format=pdf'); 
-            reporte.viewPDF(url.join(''),'Boleta de Entrada');
-            },
-
-            listarRegistrados (page,buscar){
+             listarRegistrados (page,buscar){
                 let me=this;
                 var url= '/ser_asignacion/listarRegistrados?page=' + page + '&buscar='+ buscar;
                 axios.get(url).then(function (response) {

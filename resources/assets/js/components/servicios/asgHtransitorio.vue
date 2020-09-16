@@ -507,6 +507,7 @@ import * as literal from '../../literal.js';
 import * as factura from '../../factura.js';
 import * as reporte from '../../functions.js';
 
+
 export default {
     props:["regEstablecimiento"],
 
@@ -524,10 +525,24 @@ export default {
         arrayTipoPago:[{text:'Efectivo',value:1},{text:'Deposito',value:2},{text:'Descuento',value:3}],
         //datos nuevo cliente
         nombre:'', apaterno:'',amaterno:'',telcelular:'',ci:'',iddepartamento:'',fechanac:'',sexo:'',
-        arrayDepartamentos:[]
+        arrayDepartamentos:[],
+        entrada: '', salida:'',
     }},
 
     methods:{
+
+        getRutasReports (){ 
+            let me=this;
+            var url= '/ser_reportes';
+            axios.get(url).then(function (response) {
+                var respuesta= response.data; ;                    
+                me.entrada = respuesta.REP_ENTRADACC;
+                me.salida = respuesta.REP_SALIDACC;
+            })
+            .catch(function (error) {
+                console.log(error); 
+            });
+        },
 
         registrarHuesped(){
             let me=this;
@@ -833,24 +848,21 @@ export default {
             this.listaAmbientes(this.regEstablecimiento.idestablecimiento,this.regAmbiente.piso);
         },
 
-        reporteEntrada(){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/servicios');
-            url.push('/ser_casacomentrada.rptdesign'); 
-            url.push('&idasignacion='+this.regAsignacion.idasignacion); 
-            url.push('&__format=pdf'); 
-            reporte.viewPDF(url.join(''),'Boleta de Entrada');
+        reporteEntrada(){ 
+            var url=this.entrada + '&idasignacion='+this.regAsignacion.idasignacion;
+            this.reporte_resumen(url,'Boleta Entrada');
+                
         },
 
-        reporteSalida(){
-            var url=[];
-            url.push('http://'+this.ipbirt+':8080');
-            url.push('/birt-viewer/frameset?__report=reportes/servicios');
-            url.push('/ser_casacomsalida.rptdesign'); 
-            url.push('&idasignacion='+this.regAsignacion.idasignacion); 
-            url.push('&__format=pdf');  console.log(url);
-            reporte.viewPDF(url.join(''),'Boleta de Salida');
+        reporteSalida(){ 
+            var url=this.salida + '&idasignacion='+this.regAsignacion.idasignacion;
+            this.reporte_resumen(url,'Boleta Salida');
+                
+        },
+
+        reporte_resumen(url,title) {
+            console.log(url);
+            reporte.viewPDF(url,title);
         },
 
         departamentos() {
@@ -870,6 +882,7 @@ export default {
         this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
         this.listaImplementos();        
         this.departamentos();
+        this.getRutasReports();
     }
 }
 </script>
