@@ -360,7 +360,7 @@
                     <select class="form-control" v-model="concepto">
                         <option value="Garantía">Garantía</option>
                         <option value="Alquiler">Alquiler</option>
-                        <option value="Serv.Agua">Servicios Basicos Gral.</option>
+                        <option value="Serv.Basicos">Servicios Basicos Gral.</option>
                     </select>
                     <span v-if="concepto!='Garantía'">Periodo: <span class="txtasterisco"></span> </span>
                     <div v-if="concepto!='Garantía'" class="tabla100">

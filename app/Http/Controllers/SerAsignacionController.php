@@ -235,7 +235,7 @@ class SerAsignacionController extends Controller
                 } 
             }            
             $registrados=Ser_Asignacion::
-            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.idsocio','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
             ->join('socios','socios.idsocio','ser__asignacions.idcliente')
             ->join('par_grados','par_grados.idgrado','socios.idgrado')                
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
@@ -248,7 +248,7 @@ class SerAsignacionController extends Controller
         }
         else{
             $registrados=Ser_Asignacion::
-            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.idsocio','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
             ->join('socios','socios.idsocio','ser__asignacions.idcliente')
             ->join('par_grados','par_grados.idgrado','socios.idgrado')                
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')

@@ -33,12 +33,15 @@
                     <tbody>
                         <tr v-for="registrados in arrayRegistrados" :key="registrados.id">
                             <td v-if="registrados.codservicio==='HTR'">
-                                <button type="button" @click="mostrarReporte(registrados.idasignacion)" class="btn btn-warning btn-sm">
-                                    <i class="icon-book-open"> Boleta Entrada</i>
+                                <button type="button" @click="mostrarReporteIn(registrados.idasignacion)" class="btn btn-warning btn-sm">
+                                    <i class="icon-book-open"> B. Entrada</i>
+                                </button> &nbsp;
+                                <button type="button" @click="mostrarReporteOut(registrados.idasignacion)" class="btn btn-warning btn-sm">
+                                    <i class="icon-book-open"> B. Salida</i>
                                 </button> &nbsp;
                             </td>
                             <td v-else></td>
-                            <td v-text="registrados.nomgrado+' '+registrados.nombre+' '+registrados.apaterno+' '+registrados.amaterno"></td>                            
+                            <td v-text="registrados.nomgrado+' '+registrados.nombre+' '+registrados.apaterno+' '+registrados.amaterno+' (Id: '+registrados.idsocio+')'"></td>
                             <td v-text="registrados.fechaentrada"></td>  
                             <td v-text="registrados.codservicio"></td>                            
                             <td v-text="registrados.sigla"></td>                            
@@ -129,17 +132,22 @@
                 var url= '/ser_reportes';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; ;                    
-                    me.resumen = respuesta.REP_ENTRADACC;                    
+                    me.entrada = respuesta.REP_ENTRADACC;
+                    me.salida = respuesta.REP_SALIDACC;
                 })
                 .catch(function (error) {
                     console.log(error); 
                 });
             },
 
-            mostrarReporte(id){ 
-                var url=this.resumen + '&idasignacion='+id;
-                this.reporte_resumen(url,'Resumen');
-                
+            mostrarReporteIn(id){ 
+                var url=this.entrada + '&idasignacion='+id;
+                this.reporte_resumen(url,'Boleta Entrada');                
+            },
+
+            mostrarReporteOut(id){ 
+                var url=this.salida + '&idasignacion='+id;
+                this.reporte_resumen(url,'Boleta Salida');                
             },
 
             reporte_resumen(url,title) {
