@@ -42,24 +42,44 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">                                                                                            
                             <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Tipo:</label>
+                                <div class="col-md-3">
+                                    <input type="radio" value="in"  v-model="tipo">Entradas
+                                    <input type="radio" value="out" v-model="tipo">Salidas
+                            </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Fecha Inicio:</label>                                                                    
                                 <div class="col-md-3">
                                     <input type="date" v-validate.initial="'required'" name="fechaIn" v-model="fechaIn">
-                                <span class="text-error">{{ errors.first('fechaIn')}}</span>
+                                <span class="text-error">{{ errors.first('Fecha valida')}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Fecha Final:</label>
                                 <div class="col-md-3">
                                     <input type="date" v-validate.initial="'required'" name="fechaOut" v-model="fechaOut">
-                                <span class="text-error">{{ errors.first('fechaOut')}}</span>
+                                <span class="text-error">{{ errors.first('fecha valida')}}</span>
                                 </div>
                             </div>
+                            <div v-if="tipo==='in'">
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Estado:</label>
+                                    <div class="col-md-3">
+                                        <select class="form-control" name='estado' v-model='estado'>
+                                            <option value="">Todos</option>
+                                            <option value="1">Ocupados</option>
+                                            <option value="0">Desocupados</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,fechaIn,fechaOut,filial)">Reporte</button>                            
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,tipo,fechaIn,fechaOut,estado,filial,0,0)">Reporte</button>                            
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -111,7 +131,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,fechaIn,fechaOut,'CBBA',ges,per)">Reporte</button>                            
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,tipo,fechaIn,fechaOut,0,'CBBA',ges,per)">Reporte</button>                            
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -149,9 +169,11 @@
             return {                                
                 Modalview: '',
                 modal : 0, modal : 1,
-                tituloModalK : 'Resumen',                
-                resumen : '',
-                resumen1: '',
+                tituloModalK : 'Reportes HTR',                
+                transitorio : '',
+                transitorio_todo : '',
+                transitorio_salida : '',
+                permanente: '',
                 fechaOut : '',
                 fechaIn : '',
                 tipoAccion : 0,
@@ -172,7 +194,10 @@
                 arrayPermisosIn:[],
                 filial:'',
                 arrayMeses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-                per:'', ges:'',
+                per:'', 
+                ges:'',
+                estado:'', 
+                tipo:'in',
             }
         },
 
@@ -194,8 +219,10 @@
                 var url= '/ser_reportes';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; ;                    
-                    me.resumen = respuesta.REP_REGISTRO;
-                    me.resumen1 = respuesta.REP_PERMANENTE;
+                    me.transitorio = respuesta.REP_REGISTRO;
+                    me.transitorio_todo = respuesta.REP_REGISTRO_TODO;
+                    me.transitorio_salida = respuesta.REP_REGISTRO_SALIDA;
+                    me.permanente = respuesta.REP_PERMANENTE;
                 })
                 .catch(function (error) {
                     console.log(error); 
@@ -222,18 +249,34 @@
                 this.modal=1;                 
             },
                         
-            mostrarReporte(modal,fechaIn, fechaOut, filial, ges, per){
+            mostrarReporte(modal, tipo, fechaIn, fechaOut, estado, filial, ges, per){
                 if (modal === 'K') {
-                    if (filial=='LPZ')
-                        var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=1&idestablecimiento=2';
-                    if (filial=='CBBA')
-                        var url=this.resumen + '&fechaIn='+fechaIn+ '&fechaOut='+fechaOut+ '&idfilial=2&idestablecimiento=11';
+                    if (filial=='LPZ') {
+                        if (tipo=='in')
+                            if (estado=="") //todos
+                                var url=this.transitorio_todo +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=1&idestablecimiento=2';
+                            else    
+                                var url=this.transitorio +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=1&idestablecimiento=2&vigente='+estado;
+                        if (tipo=='out')
+                            var url=this.transitorio_salida +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=1&idestablecimiento=2';
+                    }
+                        
+                    if (filial=='CBBA') {
+                        if (tipo=='in')
+                            if (estado=="") //todos
+                                var url=this.transitorio_todo +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=2&idestablecimiento=11';
+                            else
+                                var url=this.transitorio +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=2&idestablecimiento=11&vigente='+estado;
+                        if (tipo=='out')
+                            var url=this.transitorio_salida +'&fechaIn='+fechaIn+'&fechaOut='+fechaOut+'&idfilial=2&idestablecimiento=11';
+                    }                                            
                     this.reporte_resumen(url,'Resumen');
+
                 }
-                if (modal === 'P') {                    
+                if (modal === 'P') { // reporte permanente
                     if (filial=='CBBA') {
                         var periodo = per+'/'+ges;
-                        var url=this.resumen1 + '&periodo='+periodo;
+                        var url=this.permanente + '&periodo='+periodo;
                     }                        
                     this.reporte_resumen(url,'Resumen');
                 }                
