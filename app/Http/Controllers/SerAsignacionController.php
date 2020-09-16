@@ -235,28 +235,26 @@ class SerAsignacionController extends Controller
                 } 
             }            
             $registrados=Ser_Asignacion::
-            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla')
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
             ->join('socios','socios.idsocio','ser__asignacions.idcliente')
             ->join('par_grados','par_grados.idgrado','socios.idgrado')                
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
             ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
             ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
-            ->where('ser__servicios.codservicio','=','HTR')
             ->whereraw($sqls)                        
             ->orderBy('socios.nombre', 'asc')
             ->paginate(10);
         }
         else{
             $registrados=Ser_Asignacion::
-            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla')
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
             ->join('socios','socios.idsocio','ser__asignacions.idcliente')
             ->join('par_grados','par_grados.idgrado','socios.idgrado')                
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
             ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
             ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
-            ->where('ser__servicios.codservicio','=','HTR')
             ->where('idasignacion','=',9999999)->paginate(10);    
         }                        
             
