@@ -474,8 +474,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/ser_asignacion/listaAsignaciones','SerAsignacionController@listaAsignaciones');   //R
     Route::get ('/ser_asignacion/verAsignacion','SerAsignacionController@verAsignacion');           //R
     Route::put ('/ser_asignacion/updateAsignacion','SerAsignacionController@updateAsignacion');     //U   
+    Route::put ('/ser_asignacion/confirmaTraspaso','SerAsignacionController@confirmaTraspaso');     
     Route::get ('/ser_asignacion/verCliente','SerAsignacionController@verCliente');
     Route::get ('/ser_asignacion/listarRegistrados','SerAsignacionController@listarRegistrados');
+    Route::get ('/ser_asignacion/traspasoSocio','SerAsignacionController@traspasoSocio');
     Route::get ('/ser_asignacion/verifica','SerAsignacionController@verifica');
 
     Route::post('ser_civil/store','SerCivilController@store');
