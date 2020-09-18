@@ -124,12 +124,7 @@ class SerAsignacionController extends Controller
 
     public function storeAsignacion(Request $request)
     {
-
-        //capccidad del amebiente
-        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
-        //total de asignados a ese ambiebte
-        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
-
+                
         $asignacion=new Ser_Asignacion();
         $asignacion->idcliente=$request->idcliente;
         $asignacion->tipocliente=$request->tipocliente;
@@ -150,6 +145,12 @@ class SerAsignacionController extends Controller
         $asignacion->idrepresentante=$request->idrepresentante;
         $asignacion->obs1=$request->obs1;
         $asignacion->save();
+
+        //capacidad del ambiente
+        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
+        //total de asignados a ese ambiente
+        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
+
 
         if ($capacidad->capacidad == $vigentes) {
             //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
