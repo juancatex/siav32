@@ -329,6 +329,7 @@ return [
         'REP_REGISTRO_TODO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_todo.rptdesign&__format=pdf',          
         'REP_REGISTRO_SALIDA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
         'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
+        'REP_PERMANENTE_SOCIO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente_socio.rptdesign&__format=pdf',          
     ],
 
     'rutaDaaros'=>[

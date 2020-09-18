@@ -23,7 +23,7 @@ class SerAsignacionController extends Controller
         
         $asignaciones_all=Ser_Asignacion::
         select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-            'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida','tipocliente')            
+            'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida','tipocliente')            
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
             ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
@@ -37,7 +37,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='s') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
                 ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                 ->join('par_grados','par_grados.idgrado','socios.idgrado')
@@ -54,7 +54,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='c') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'idcivil','nombre', 'apaterno','amaterno','idcivil')
                 ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')                
                 ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
@@ -69,7 +69,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='b') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'idbeneficiario','nombre', 'apaterno','amaterno','idbeneficiario')
                 ->join('afi__beneficiarios','afi__beneficiarios.idbeneficiario','ser__asignacions.idcliente')                
                 ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
@@ -272,6 +272,14 @@ class SerAsignacionController extends Controller
             
     }
 
+    public function verifica(Request $request) {
 
+
+        $capacidad=Ser_Ambiente::select('capacidad')->where('idambiente',$request->idambiente)->first();
+        $verifica=Ser_Asignacion::where('idambiente',$request->idambiente)->where('vigente','1')->sum('ocupantes');
+
+        $total =  $capacidad->capacidad - $verifica;
+        return $total;        
+    }
     
 }

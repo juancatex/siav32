@@ -9,15 +9,17 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Reportes Hospedaje Filiales         
-                    <ul>                                                
+                    <ul> FILIAL CBBA                                                
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">Hospedaje Transitorio CBBA.</button>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">H. Transitorio CBBA.</button>
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente('CBBA')">Hospedaje Permanente CBBA.</button>                            
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente('CBBA')">H. Permanente CBBA.</button>
+                        <li> --- </li>
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanenteSocio('CBBA')">H. Permanente CBBA - Por Socio.</button>
                     </ul>
-                    <ul>                                                
+                    <ul> FILIAL LPZ                                    
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">Hospedaje Transitorio LPZ</button>                    
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">H. Transitorio LPZ</button>                    
                     </ul>
                 </div>                    
             </div>
@@ -89,6 +91,46 @@
         <!--Fin del modal-->            
         </div>            
 
+        <div v-if="Modalview === 'S'">  
+        <!--Inicio del modal agregar/actualizar-->
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModalS"></h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>                    
+
+                    <div class="form-group row">
+                        <label class="col-md-3 form-control-label">Buscar Socio:</label>
+                    <div class="col-sm-6">
+                        <Ajaxselect v-if="clearSelected"
+                        ruta="/socio/listaSocios?cadena=" 
+                        @found="listaSocios" 
+                        resp_ruta="socios" 
+                        labels="nomcompleto" 
+                        placeholder="Ingrese Texto..." 
+                        idtabla="idsocio" 
+                        :id="idsocio" 
+                        :clearable="true">
+                    </Ajaxselect>
+                    </div>                                                                                       
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporteSocio(idsocio)">Reporte</button>                            
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--Fin del modal-->            
+        </div>
+
 
         <div v-if="Modalview === 'P'">
         <!--Inicio del modal agregar/actualizar-->
@@ -104,9 +146,9 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">                                                                                            
                             <div class="form-group row">
-                                Elija el periodo: <span class="txtasterisco"></span>
-                                <div class="tabla100">
-                                    <div class="tfila">
+                                Elija el periodo: 
+                                
+                                    <div class="tfila col-sm-6">
                                         <div class="tcelda ">
                                             <select class="form-control" v-model="per"
                                                 name="per" :class="{'invalido':errors.has('per')}" v-validate="'required'">
@@ -114,7 +156,7 @@
                                             </select>
                                             <p class="txtvalidador" v-if="errors.has('per')">Seleccione un Mes</p>
                                         </div>
-                                        <div class="tcelda" style="width:10px"></div>
+                                        <div class="tcelda" style="width:20px"></div>
                                         <div class="tcelda" >
                                             <select class="form-control" v-model="ges"
                                                 name="ges" :class="{'invalido':errors.has('ges')}" v-validate="'required'">
@@ -125,7 +167,7 @@
                                             <p class="txtvalidador" v-if="errors.has('ges')">Seleccione un año</p>
                                         </div>
                                     </div>
-                                </div>
+                                
                             </div>                            
                         </form>
                     </div>
@@ -170,6 +212,7 @@
                 Modalview: '',
                 modal : 0, modal : 1,
                 tituloModalK : 'Reportes HTR',                
+                tituloModalS : 'Reportes HTR por SOCIO',                
                 transitorio : '',
                 transitorio_todo : '',
                 transitorio_salida : '',
@@ -198,6 +241,9 @@
                 ges:'',
                 estado:'', 
                 tipo:'in',
+                idsocio:'',
+                clearSelected:1,
+                idempleado1 :'',
             }
         },
 
@@ -223,10 +269,20 @@
                     me.transitorio_todo = respuesta.REP_REGISTRO_TODO;
                     me.transitorio_salida = respuesta.REP_REGISTRO_SALIDA;
                     me.permanente = respuesta.REP_PERMANENTE;
+                    me.permanenteSocio = respuesta.REP_PERMANENTE_SOCIO;
                 })
                 .catch(function (error) {
                     console.log(error); 
                 });
+            },
+
+            cleanempleados(){
+                this.idempleado='';            
+            },
+
+            listaSocios(ads) { console.log(ads);           
+                this.idsocio= ads.idsocio;
+                //console.log(ads.idempleado);
             },
 
             setear (){
@@ -242,6 +298,14 @@
                 this.modal=1;                 
             },
 
+            mostrarPermanenteSocio(filial){
+                this.filial=filial;
+                this.Modalview='S';  
+                this.setear();
+                this.clearSelected=1;
+                this.modal=1;                 
+            },
+
             verRegistro(filial){ 
                 this.filial=filial;
                 this.Modalview='K';  
@@ -249,6 +313,11 @@
                 this.modal=1;                 
             },
                         
+            mostrarReporteSocio(idsocio){
+                var url=this.permanenteSocio +'&idsocio='+idsocio;
+                this.reporte_resumen(url,'Resumen por Socio');
+            },
+            
             mostrarReporte(modal, tipo, fechaIn, fechaOut, estado, filial, ges, per){
                 if (modal === 'K') {
                     if (filial=='LPZ') {
@@ -288,8 +357,9 @@
             },
 
             cerrarModal() {
-                this.Modalview='G';  
+                this.Modalview='S';  
                 this.modal=0;
+                this.clearSelected=0;
             },            
  
             getPermisos() { 

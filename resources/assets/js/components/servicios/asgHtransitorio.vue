@@ -46,31 +46,27 @@
                             Externos: <span v-text="ambiente.tarifareal"></span>Bs,
                         </td>
                         <td> 
-
-
                             <div class="tabla100"> 
-
                                 <div class="tfila bloquefila" v-for="asignacion in arrayAsignaciones" :key="asignacion.id">
                                     
-                                        <template v-if="asignacion.idambiente==ambiente.idambiente && asignacion.vigente===1" >
+                                    <template v-if="asignacion.idambiente==ambiente.idambiente && asignacion.vigente===1" >
                                         <div class="tcelda" > {{++c}}.
                                             <span v-text="asignacion.nomgrado+' '+asignacion.nombre+' '+asignacion.apaterno"></span></div>
                                         <div class="tcelda"><span v-text="jsfechas.fechadia(asignacion.fechaentrada)"></span></div>
                                         <div class="tcelda"><span v-text="asignacion.horaentrada"></span></div>
+                                        <div class="tcelda"><span v-text="asignacion.ocupantes"></span> Cama(s)</div> 
                                         <div class="tcelda text-right">
                                             <span v-text="asignacion.currhora<'12:31:00'?(asignacion.noches):(asignacion.noches)"></span> noches
                                         </div>
                                         <div class="tcelda text-right" style="padding:5px 0px">
                                             <button class="btn btn-warning btn-sm icon-book-open" title="Ficha de ocupación"
                                                 @click="verAsignacion(asignacion)"></button> 
-                                        </div>
-                                        </template>
-                                                                                                                                                            
+                                        </div>                                        
+                                    </template>                                    
                                 </div>
-                                <div v-if="ambiente.capacidad!==c">                                      
-                                    <button class="btn btn-success icon-user-follow" title="Asignar cama"
-                                    @click="nuevaAsignacion(ambiente)"></button>
-                                </div>                                
+                                
+                                <button class="btn btn-success icon-user-follow" title="Asignar cama"
+                                @click="nuevaAsignacion(ambiente)"></button>                                
                                 
                             </div> 
                             
@@ -151,8 +147,14 @@
                         <div class="tfila">
                             <div class="tcelda titcampo">Tarifa:</div>
                             <div class="tcelda"> 
-                                <span v-text="regAsignacion.tarifa"></span>Bs/Noche
+                                <span v-text="regAsignacion.tarifa"></span>Bs/Noche/Cama
                                 (<span v-text="regAsignacion.cliente"></span>)
+                            </div>
+                        </div>
+                        <div class="tfila">
+                            <div class="tcelda titcampo">Camas: </div>
+                            <div class="tcelda"> 
+                                <span v-text="regAsignacion.ocupantes"></span> Ocupada(s)
                             </div>
                         </div>
                     </div>
@@ -259,6 +261,10 @@
                                 <div class="tcelda" v-text="regAsignacion.noches+' noches'"></div>
                             </div>
                             <div class="tfila">
+                                <div class="tcelda titcampo">Camas:</div>
+                                <div class="tcelda" v-text="regAsignacion.ocupantes+' ocupada(s)'"></div>
+                            </div>
+                            <div class="tfila">
                                 <div class="tcelda titcampo">Tarifa:</div>
                                 <div class="tcelda"><span v-text="regAsignacion.tarifa"></span>Bs/noche
                                 (<span v-text="regAsignacion.cliente"></span>)
@@ -266,8 +272,8 @@
                             </div>
                             <div class="tfila">
                                 <div class="tcelda titcampo">A cancelar:</div>                                
-                                <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1"></span>Bs</div>
-                                <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs</div>
+                                <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1*regAsignacion.ocupantes"></span>Bs</div>
+                                <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches*regAsignacion.ocupantes"></span>Bs</div>
                             </div>
                         </div><br>
                     </div>
@@ -301,7 +307,7 @@
                     
                     <center>
                         <button v-if="regAsignacion.fechasalida" class="btn btn-primary" 
-                            @click="regPago.idpago?editarPago():nuevoPago(regAsignacion.noches,regAsignacion.tarifa)">
+                            @click="regPago.idpago?editarPago():nuevoPago(regAsignacion.noches,regAsignacion.tarifa,regAsignacion.ocupantes)">
                             <span v-text="regPago.idpago?'Editar':'Registrar'"></span> Pago</button>
 
                             
@@ -407,8 +413,14 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h4 class="titazul" v-text="titModal"></h4>
-                            Fecha <input type="date" class="form-control" v-model="fecha">
-                            Hora <input type="time" class="form-control" v-model="hora">
+                            Fecha: <input type="date" class="form-control" v-model="fecha">
+                            Hora: <input type="time"  v-model="hora">
+                            <template v-if="titModal==='Salida'">
+                                Camas: <select class="form-control" v-model="camas" disabled><option v-for="k in regAmbiente.capacidad" :key="k" v-text="k"></option></select>     
+                            </template>
+                            <template v-else>
+                                Camas: <select class="form-control" v-model="camas"><option v-for="k in regAmbiente.capacidad" :key="k" v-text="k"></option></select>     
+                            </template>                            
                         </div>
                         <div class="col-md-8"> 
                             <h4 class="titazul">Prendas</h4>
@@ -481,8 +493,8 @@
                     <!-- Concepto:                                   
                     <input type="text" class="form-control" v-model="importe"> -->
                     Importe:                                   
-                    <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1"></span>Bs</div>
-                    <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches"></span>Bs</div>
+                    <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1*regAsignacion.ocupantes"></span>Bs</div>
+                    <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches*regAsignacion.ocupantes"></span>Bs</div>
                     <!-- <center class="taltura"><input type="checkbox" v-model="descuento"> Pago en </center> -->
                     Tipo de Pago:
                     <select class="form-control" v-model="descuento" name="tipopago" :class="{'invalido':errors.has('tipopago')}" v-validate="'required'">>
@@ -527,6 +539,8 @@ export default {
         nombre:'', apaterno:'',amaterno:'',telcelular:'',ci:'',iddepartamento:'',fechanac:'',sexo:'',
         arrayDepartamentos:[],
         entrada: '', salida:'',
+        camas: '',
+        respuesta:0,
     }},
 
     methods:{
@@ -562,7 +576,7 @@ export default {
                     type:'success'});
                 axios.get('/ser_civil/ultimo').then(function(response){
                     console.log(response.data);
-                    me.idcliente=response.data.civil[0]; console.log(response.data.civil[0]);
+                    me.idcliente=response.data.civil[0]; //console.log(response.data.civil[0]);
                     // me.asignarAmbiente(me.regCivil);
                 });
             });
@@ -607,32 +621,50 @@ export default {
         },
 
         nuevaAsignacion(ambiente){
-            this.regAmbiente=ambiente;
-            this.arrayIDimplementos=[1,2,3,4,5,6,7,8,9];
-            this.regAsignacion.idasignacion='';
-            this.regAsignacion.idcliente='';
-            this.fecha=this.currfecha;
-            this.hora=this.currhora;
-            this.idcliente='';
-            this.obs='';
-            this.modalAsignacion=1;
-            this.titModal='Entrada';
-            this.accion=1;
+            let me=this;
+            var url= '/ser_asignacion/verifica?idambiente='+ambiente.idambiente;
+            axios.get(url).then(function (response) {
+                me.respuesta= response.data; 
+                if (me.respuesta==0) {
+                    swal('Todas las camas ocupadas');
+                    me.modalAsignacion=0;
+                }                
+            })
+            .catch(function (error) {
+                console.log(error); 
+            });                  
+
+                this.regAmbiente=ambiente; 
+                this.arrayIDimplementos=[1,2,3,4,5,6,7,8,9];
+                this.regAsignacion.idasignacion='';
+                this.regAsignacion.idcliente='';
+                this.fecha=this.currfecha;
+                this.hora=this.currhora;
+                this.idcliente='';
+                this.obs='';
+                this.modalAsignacion=1;
+                this.titModal='Entrada';
+                this.camas=1;
+                this.accion=1;
+                this.nosocio=false;
         },
 
-        editarAsignacion(op){            
+        editarAsignacion(op){  
             switch(op){
                 case 1: //regsalida
                     this.fecha=this.regCliente.currfecha;
                     this.hora=this.regCliente.currhora;
+                    this.camas=this.regAsignacion.ocupantes;
                     break;
                 case 2: //editsalida
                     this.fecha=this.regAsignacion.fechasalida;
                     this.hora=this.regAsignacion.horasalida;
+                    this.camas=this.regAsignacion.ocupantes;
                     break;
                 default: //editentrada
                     this.fecha=this.regAsignacion.fechaentrada;
                     this.hora=this.regAsignacion.horaentrada;
+                    this.camas=this.regAsignacion.ocupantes;
                     break;
             }
             this.titModal=op?'Salida':'Entrada';
@@ -656,7 +688,7 @@ export default {
                 'nrasignacion':'',
                 'fechasolicitud':'',
                 'mesboleta':'',
-                'ocupantes':'',
+                'ocupantes':this.camas,     // para el caso de transitorio se registra el numero de camas que ocupa el socio
                 'iddocumentos':'',
                 'idimplementos':this.arrayIDimplementos.join(),
                 'fechaentrada':this.fecha,
@@ -679,7 +711,7 @@ export default {
                 'nrasignacion':this.regAsignacion.nrasignacion,
                 'fechasolicitud':'',
                 'mesboleta':'',
-                'ocupantes':'',
+                'ocupantes':this.camas,
                 'iddocumentos':'',
                 'idimplementos':this.arrayIDimplementos.join(),
                 'fechaentrada':(this.titModal=='Entrada'?this.fecha:this.regAsignacion.fechaentrada),
@@ -747,7 +779,7 @@ export default {
             });
         },
 
-        nuevoPago(noche,tarifa){ 
+        nuevoPago(noche,tarifa,ocupantes){ 
             this.modalPago=1;
             this.accion=1;
             this.nrdocumento='';            
@@ -760,10 +792,10 @@ export default {
             this.regPago.concepto='Hospedaje '+this.regAsignacion.noches+' noches';
             if (this.regAsignacion.noches==0)
                 //this.regPago.importe=this.regAsignacion.tarifa*1;
-                this.regPago.importe=tarifa*1;
+                this.regPago.importe=tarifa*1*ocupantes;
             else
                 //this.regPago.importe=this.regAsignacion.tarifa*this.regAsignacion.noches;
-                this.regPago.importe=tarifa*noche;
+                this.regPago.importe=tarifa*noche*ocupantes;
             this.regPago.literal=literal.numero_a_literal(this.regPago.importe);
         },
 
