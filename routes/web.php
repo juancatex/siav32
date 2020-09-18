@@ -475,6 +475,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/ser_asignacion/verAsignacion','SerAsignacionController@verAsignacion');           //R
     Route::put ('/ser_asignacion/updateAsignacion','SerAsignacionController@updateAsignacion');     //U   
     Route::get ('/ser_asignacion/verCliente','SerAsignacionController@verCliente');
+    Route::get ('/ser_asignacion/listarRegistrados','SerAsignacionController@listarRegistrados');
+    Route::get ('/ser_asignacion/verifica','SerAsignacionController@verifica');
 
     Route::post('ser_civil/store','SerCivilController@store');
     Route::put ('ser_civil/update','SerCivilController@update');

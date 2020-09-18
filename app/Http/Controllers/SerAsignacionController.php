@@ -23,7 +23,7 @@ class SerAsignacionController extends Controller
         
         $asignaciones_all=Ser_Asignacion::
         select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-            'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida','tipocliente')            
+            'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida','tipocliente')            
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
             ->where('ser__establecimientos.idestablecimiento',$request->idestablecimiento)
@@ -37,7 +37,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='s') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'nomgrado','nombre', 'apaterno','amaterno','nomfuerza')
                 ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                 ->join('par_grados','par_grados.idgrado','socios.idgrado')
@@ -54,7 +54,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='c') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'idcivil','nombre', 'apaterno','amaterno','idcivil')
                 ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')                
                 ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
@@ -69,7 +69,7 @@ class SerAsignacionController extends Controller
             if ($asi->tipocliente=='b') {
                 $asignaciones=Ser_Asignacion::
                 select('idasignacion','idcliente','vigente','tipocliente','ser__asignacions.idambiente',
-                'nrasignacion','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
+                'nrasignacion','ocupantes','fechaentrada','fechasalida','horaentrada','horasalida',$noches,
                 'idbeneficiario','nombre', 'apaterno','amaterno','idbeneficiario')
                 ->join('afi__beneficiarios','afi__beneficiarios.idbeneficiario','ser__asignacions.idcliente')                
                 ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
@@ -124,12 +124,7 @@ class SerAsignacionController extends Controller
 
     public function storeAsignacion(Request $request)
     {
-
-        //capccidad del amebiente
-        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
-        //total de asignados a ese ambiebte
-        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
-
+                
         $asignacion=new Ser_Asignacion();
         $asignacion->idcliente=$request->idcliente;
         $asignacion->tipocliente=$request->tipocliente;
@@ -150,6 +145,12 @@ class SerAsignacionController extends Controller
         $asignacion->idrepresentante=$request->idrepresentante;
         $asignacion->obs1=$request->obs1;
         $asignacion->save();
+
+        //capacidad del ambiente
+        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
+        //total de asignados a ese ambiente
+        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
+
 
         if ($capacidad->capacidad == $vigentes) {
             //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
@@ -217,6 +218,69 @@ class SerAsignacionController extends Controller
             ->join('par_departamentos','par_departamentos.iddepartamento','=','afi__beneficiarios.iddepartamento')
             ->where('afi__beneficiarios.idbeneficiario','=',$request->idcliente)->get();
         return ['cliente'=>$cliente];
+    }
+
+    public function listarRegistrados(Request $request)
+    { 
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        }
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                } 
+            }            
+            $registrados=Ser_Asignacion::
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.idsocio','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
+            ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+            ->join('par_grados','par_grados.idgrado','socios.idgrado')                
+            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
+            ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
+            ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
+            ->whereraw($sqls)                        
+            ->orderBy('socios.nombre', 'asc')
+            ->paginate(10);
+        }
+        else{
+            $registrados=Ser_Asignacion::
+            select('idasignacion','par_grados.nomgrado', 'socios.apaterno','socios.amaterno','socios.nombre','socios.idsocio','socios.numpapeleta','fechaentrada','horaentrada','fil__filials.sigla','ser__servicios.codservicio')
+            ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+            ->join('par_grados','par_grados.idgrado','socios.idgrado')                
+            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
+            ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
+            ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
+            ->where('idasignacion','=',9999999)->paginate(10);    
+        }                        
+            
+        return [
+            'pagination' => [
+                'total'        => $registrados->total(),
+                'current_page' => $registrados->currentPage(),
+                'per_page'     => $registrados->perPage(),
+                'last_page'    => $registrados->lastPage(),
+                'from'         => $registrados->firstItem(),
+                'to'           => $registrados->lastItem(),
+            ],
+            'registrados' => $registrados
+        ];
+            
+    }
+
+    public function verifica(Request $request) {
+
+
+        $capacidad=Ser_Ambiente::select('capacidad')->where('idambiente',$request->idambiente)->first();
+        $verifica=Ser_Asignacion::where('idambiente',$request->idambiente)->where('vigente','1')->sum('ocupantes');
+
+        $total =  $capacidad->capacidad - $verifica;
+        return $total;        
     }
     
 }

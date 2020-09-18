@@ -16,7 +16,7 @@ class CreateSerPagosTable extends Migration
         Schema::create('ser__pagos', function (Blueprint $table) {
             $table->increments('idpago');
             $table->integer('idasignacion');
-            $table->string('concepto',20)->nullable();
+            $table->string('concepto',500)->nullable();
             $table->string('periodo',20)->nullable();
             $table->tinyInteger('modopago')->comment('1-efectivo,2-deposito,3-descuento');
             $table->string('nrdocumento',20)->nullable();
