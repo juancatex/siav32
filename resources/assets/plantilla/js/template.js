@@ -53,6 +53,14 @@ $(window).on('keydown', function (e) {
      }
      $('#filaRow' + numero).find('#'+$(document.activeElement).attr('id')).focus();
     }
+  }else if (e.keyCode == 13) {
+   
+
+    if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
+      
+      $(document.activeElement).parents("#contenglobalButton").find('#botonAddAjax').click();
+       
+    }
   }
 });
 /*****

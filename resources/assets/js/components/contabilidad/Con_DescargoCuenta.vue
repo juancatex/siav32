@@ -105,7 +105,7 @@
                                 </button> 
                             </div>
                         </div>
-                            <div class="" >
+                            <div id="contenglobalButton" >
                                 <div class="row">
                                     <div class="bg-info text-white border border-white col-md-6" >
                                         <strong style="padding-left: 20px;">CUENTA</strong>
@@ -120,12 +120,13 @@
                                         <strong> + </strong>
                                     </div>
                                 </div>
-                                <div v-for="(rowcuentas, index) in rowcuentas" :key="index" class="row">
+                                <div id="contenidoValue">
+                                <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
                                     <template v-if="!borrador">
                                         <div class="border col-md-6" >
-                                        <Ajaxselect v-if="limpiarajax"
-                                            class="border-0"  
-                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
+                                        <Ajaxselect v-if="limpiarajax" :ref="'ajaxselect'+index"
+                                            class="border-0 "  
+                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
                                             placeholder="Ingrese texto" 
@@ -137,9 +138,9 @@
                                     </template>
                                     <template v-else>
                                         <div class="border col-md-6" >
-                                        <Ajaxselect
-                                            class="border-0"  
-                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
+                                        <Ajaxselect :ref="'ajaxselect'+index"
+                                            class="border-0 "  
+                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
                                             placeholder="Ingrese texto" 
@@ -152,16 +153,16 @@
                                     </template>
                                     
                                     <div class="border col-md-3" >
-                                        <input 
+                                        <input  id="input1" inputvalued="1"
                                                 v-model="rowcuentas.documento" 
-                                                class="form-control border-0 input-text2" 
+                                                class="inputnext form-control border-0 input-text2" 
                                                 type="text" >
                                     </div>
                                     <template v-if="rowcuentas.idcuenta==lc && acumulado13!=0">
                                         <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
-                                            <vue-numeric  
+                                            <vue-numeric  id="input2" inputvalued="2"
                                                 disabled
-                                                class="form-control input-importe border-0"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -171,9 +172,9 @@
                                     </template>
                                     <template v-else-if="rowcuentas.idcuenta==lc && acumulado13==0">
                                         <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
-                                            <vue-numeric  
+                                            <vue-numeric  id="input2" inputvalued="2"
                                                 disabled
-                                                class="form-control input-importe border-0"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -183,8 +184,8 @@
                                     </template>
                                     <template v-else>
                                         <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
-                                            <vue-numeric  
-                                                class="form-control input-importe border-0"
+                                            <vue-numeric  id="input2" inputvalued="2"
+                                                class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
@@ -198,6 +199,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                </div>
                                 <div class="row" style="text-align:right;">
                                     <div class="bg-info text-white col-md-9" >
                                         <strong><label >Total es:</label></strong>
@@ -206,7 +208,7 @@
                                         <strong for="debe" >{{debe | currency }}</strong>
                                     </div>
                                     <div class="border col-md-1" style="text-align:center">
-                                        <button  @click="addrowcuentas" class="btn btn-success botonpadding">
+                                        <button id='botonAddAjax' @click="addrowcuentas" class="btn btn-success botonpadding">
                                             Nuevo
                                         </button>
                                     </div>
@@ -740,7 +742,7 @@ export default {
         },
        
     },
-    methods:{
+    methods:{ 
          verchecked(id){
             // console.log(id);
             let me=this;
@@ -905,6 +907,7 @@ export default {
                 this.addrowcuentas();
         },
         addrowcuentas() {
+            var ajax='ajaxselect'+this.rowcuentas.length;
             this.rowcuentas.push({   idcuenta:'',
                             idsubcuenta: this.subcuenta,
                             moneda:'bs',
@@ -912,6 +915,10 @@ export default {
                             debe:0,
                             haber:0
                              });
+                            
+               setTimeout(() => {
+                   this.$refs[ajax][0].ifocus();
+               }, 50); 
         },
         tiempo(){
         this.clearSelected=1;

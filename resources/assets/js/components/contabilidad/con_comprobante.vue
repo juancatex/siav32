@@ -77,7 +77,7 @@
                                 </button> 
                             </div>
                         </div>
-                            <div class="" >
+                            <div id="contenglobalButton" >
                                 <div class="row">
                                     <div class="bg-info text-white border border-white ancho44c" >
                                         <strong style="padding-left: 20px;"><label>CUENTA</label></strong>
@@ -99,9 +99,9 @@
                                 <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
                                     <template v-if="!borrador">
                                         <div class="border ancho44" >
-                                        <Ajaxselect v-if="limpiarajax"
+                                        <Ajaxselect v-if="limpiarajax" :ref="'ajaxselect'+index"
                                             class="border-0"  
-                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
+                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
                                             placeholder="Ingrese texto" 
@@ -113,9 +113,9 @@
                                     </template>
                                     <template v-else>
                                         <div class="border ancho44" >
-                                        <Ajaxselect
+                                        <Ajaxselect  :ref="'ajaxselect'+index"
                                             class="border-0"  
-                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean"
+                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
                                             placeholder="Ingrese texto" 
@@ -198,7 +198,7 @@
                                         <strong for="haber" >{{haber |currency}}</strong>
                                     </div>
                                     <div class="ancho8 border" style="text-align:center">
-                                        <button  @click="addrowcuentas" class="btn btn-success botonpadding">
+                                        <button id='botonAddAjax' @click="addrowcuentas" class="btn btn-success botonpadding">
                                             Nuevo
                                         </button>
                                     </div>
@@ -1097,14 +1097,18 @@ export default {
             if(index===0)
                 this.addrowcuentas();
         },
-        addrowcuentas() {
+        addrowcuentas() { 
+            var ajax='ajaxselect'+this.rowcuentas.length;
             this.rowcuentas.push({   idcuenta:'',
                             idsubcuenta: '',
                             moneda:'bs',
                             documento:'',
                             debe:0,
                             haber:0
-                             });
+                             }); 
+             setTimeout(() => {
+                   this.$refs[ajax][0].ifocus();
+               }, 50);              
         },
         tiempo(){
         this.clearSelected=1;
