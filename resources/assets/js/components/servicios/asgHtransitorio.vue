@@ -61,6 +61,8 @@
                                         <div class="tcelda text-right" style="padding:5px 0px">
                                             <button class="btn btn-warning btn-sm icon-book-open" title="Ficha de ocupación"
                                                 @click="verAsignacion(asignacion)"></button> 
+                                            <button class="btn btn-warning btn-sm icon-share" title="Traspaso"
+                                                @click="traspasoSocio(asignacion)"></button> 
                                         </div>                                        
                                     </template>                                    
                                 </div>
@@ -510,6 +512,55 @@
             </div>
         </div>
     </div>
+
+
+    <!-- MODAL DISPONIBLES  MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES -->
+    <!-- MODAL DISPONIBLES  MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES -->
+    <div class="modal" :class="modalTraspaso?'mostrar':''">
+        <div class="modal-dialog modal-primary">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista de Disponbles</h4>
+                    <button class="close" @click="modalTraspaso=0">x</button>
+                </div>
+                <div class="modal-body" style="overflow-y: scroll;max-height: 400px;">          
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Traspaso {{asig}}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Ambiente</th>
+                                    <th>Tipo</th>                                    
+                                    <th>Cap.</th>
+                                    <th>Ocupados</th>
+                                    <th>Libres</th>
+                                    <th>Elegir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="libres in arrayLibres" :key="libres.id">                                                
+                                    <td v-text="libres.codambiente"></td>
+                                    <td v-text="libres.tipo"></td>
+                                    <td align="center" v-text="libres.capacidad"></td>
+                                    <td align="center" v-text="libres.ocupados"></td>
+                                    <td align="center" v-text="libres.disponibles"></td>
+                                    <td><input type="radio" v-model='traspaso' :value=libres.idambiente></td>
+                                </tr>                                
+                            </tbody>
+                        </table>                
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @click="modalTraspaso=0">Cerrar</button>
+                    <button class="btn btn-primary" @click="confirmaTraspaso(traspaso, asig)"> Guardar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 </template>
 
@@ -532,6 +583,7 @@ export default {
         idpago:'', nrdocumento:'', nit:'', razon:'', fecha:'', importe:'', descuento:'1',
         arrayAmbientes:[], arrayOcupantes:[], arrayAsignaciones:[],
         arrayImplementos:[],  arrayIDimplementos:[], 
+        arrayLibres:[],
         regAmbiente:[], regCliente:[], regAsignacion:[], regPago:[], 
         arrayOrdinal:['','Primer','Segundo','Tercer','Cuarto','Quinto','Sexto','Séptimo'],
         arrayTipoPago:[{text:'Efectivo',value:1},{text:'Deposito',value:2},{text:'Descuento',value:3}],
@@ -541,6 +593,8 @@ export default {
         entrada: '', salida:'',
         camas: '',
         respuesta:0,
+        modalTraspaso:'',
+        traspaso:'', asig:'',
     }},
 
     methods:{
@@ -556,6 +610,24 @@ export default {
             .catch(function (error) {
                 console.log(error); 
             });
+        },
+
+        confirmaTraspaso(newidambiente, idasignacion) { console.log(newidambiente, idasignacion);
+            let me=this;
+            var url='/ser_asignacion/confirmaTraspaso';
+            axios.put(url,{
+                'newidambiente': newidambiente,
+                'idasignacion':idasignacion,                
+            }).then(function(response){
+                swal({title:'Registro correcto',
+                    html:'Traspaso Realizado.<br>Se realizo el Traspaso.',
+                    type:'success'});
+                    me.cantgrupos=me.regEstablecimiento.cantgrupos*1;
+                    me.listaAmbientes(me.regEstablecimiento.idestablecimiento,1);
+                    me.listaImplementos();
+                    me.modalTraspaso=0;                
+            });
+
         },
 
         registrarHuesped(){
@@ -618,6 +690,20 @@ export default {
             this.arrayIDimplementos=JSON.parse('['+this.regAsignacion.idimplementos+']');
             this.verPago(asignacion.idasignacion);
             this.divAsignaciones=0;
+        },
+
+        traspasoSocio(asignacion) {
+            this.modalTraspaso=1;
+            let me = this;
+            url='/ser_asignacion/traspasoSocio?idambiente='+asignacion.idambiente+'&camas='+asignacion.ocupantes;
+            axios.get(url).then(function (response) {
+                var respuesta= response.data;
+                me.arrayLibres = respuesta.libres;
+                me.asig =  asignacion.idasignacion;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         },
 
         nuevaAsignacion(ambiente){

@@ -275,12 +275,39 @@ class SerAsignacionController extends Controller
 
     public function verifica(Request $request) {
 
-
         $capacidad=Ser_Ambiente::select('capacidad')->where('idambiente',$request->idambiente)->first();
         $verifica=Ser_Asignacion::where('idambiente',$request->idambiente)->where('vigente','1')->sum('ocupantes');
 
         $total =  $capacidad->capacidad - $verifica;
         return $total;        
     }
+
+    public function traspasoSocio(Request $request) {
+        
+        // buscamos el establecimiento        
+        $estable = Ser_Ambiente::select('idestablecimiento')->where('idambiente',$request->idambiente)->first(); 
+        
+
+        $sql1=DB::raw('(select sum(sa2.ocupantes) from ser__asignacions sa2 
+                where sa2.idambiente = ser__ambientes.idambiente
+                and sa2.vigente =1) as ocupados');
+        $sql2=DB::raw('(case when (ser__ambientes.capacidad - (select sum(sa4.ocupantes) from ser__asignacions sa4 where sa4.idambiente = ser__ambientes.idambiente and sa4.vigente =1)) is NULL
+                        then ser__ambientes.capacidad else 
+                        ser__ambientes.capacidad - (select sum(sa4.ocupantes) from ser__asignacions sa4 where sa4.idambiente = ser__ambientes.idambiente and sa4.vigente =1) end) as disponibles');
+
+        $libres = Ser_Ambiente::select('idambiente','codambiente','tipo','ocupado','capacidad', $sql1, $sql2)
+            ->where('ocupado','0')
+            ->where('capacidad','>=',$request->camas)
+            ->where('idestablecimiento',$estable->idestablecimiento)->get();
+
+        return ['libres'=>$libres];
+    }
     
+    public function confirmaTraspaso(Request $request) { 
+
+         DB::table('ser__asignacions')
+                ->where('idasignacion', $request->idasignacion)
+                ->update(['idambiente' => $request->newidambiente]);
+    }
+
 }
