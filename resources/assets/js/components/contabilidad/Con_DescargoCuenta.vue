@@ -1284,8 +1284,7 @@ export default {
             //console.log(url);
             
             axios.get(url).then(function (response) {
-                var respuesta= response.data;
-                //console.log(respuesta);
+                var respuesta= response.data; 
                 me.arrayLibrocompras = respuesta.librocompras;
                 me.cierremes=respuesta.cierremes;
             })
@@ -1359,8 +1358,7 @@ export default {
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
                 sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
-                suma87=parseFloat(suma87)+parseFloat(resultado.importe);
-                //me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
+                suma87=parseFloat(suma87)+parseFloat(resultado.importe); 
                 
             });
             me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
