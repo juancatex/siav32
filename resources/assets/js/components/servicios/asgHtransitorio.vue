@@ -523,7 +523,7 @@
                     <h4 class="modal-title">Lista de Disponbles</h4>
                     <button class="close" @click="modalTraspaso=0">x</button>
                 </div>
-                <div class="modal-body" style="overflow-y: scroll;max-height: 600px;">          
+                <div class="modal-body" style="overflow-y: scroll;max-height: 400px;">          
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Traspaso {{asig}}
                     </div>
@@ -533,9 +533,9 @@
                                 <tr>
                                     <th>Ambiente</th>
                                     <th>Tipo</th>                                    
-                                    <th>Capacidad</th>
+                                    <th>Cap.</th>
                                     <th>Ocupados</th>
-                                    <th>Disponibles</th>
+                                    <th>Libres</th>
                                     <th>Elegir</th>
                                 </tr>
                             </thead>
@@ -543,9 +543,9 @@
                                 <tr v-for="libres in arrayLibres" :key="libres.id">                                                
                                     <td v-text="libres.codambiente"></td>
                                     <td v-text="libres.tipo"></td>
-                                    <td v-text="libres.capacidad"></td>
-                                    <td v-text="libres.ocupados"></td>
-                                    <td v-text="libres.disponibles"></td>
+                                    <td align="center" v-text="libres.capacidad"></td>
+                                    <td align="center" v-text="libres.ocupados"></td>
+                                    <td align="center" v-text="libres.disponibles"></td>
                                     <td><input type="radio" v-model='traspaso' :value=libres.idambiente></td>
                                 </tr>                                
                             </tbody>
@@ -622,6 +622,9 @@ export default {
                 swal({title:'Registro correcto',
                     html:'Traspaso Realizado.<br>Se realizo el Traspaso.',
                     type:'success'});
+                    me.cantgrupos=me.regEstablecimiento.cantgrupos*1;
+                    me.listaAmbientes(me.regEstablecimiento.idestablecimiento,1);
+                    me.listaImplementos();
                     me.modalTraspaso=0;                
             });
 
