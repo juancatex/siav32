@@ -61,7 +61,7 @@
                                         <div class="tcelda text-right" style="padding:5px 0px">
                                             <button class="btn btn-warning btn-sm icon-book-open" title="Ficha de ocupación"
                                                 @click="verAsignacion(asignacion)"></button> 
-                                            <button class="btn btn-warning btn-sm icon-user-follow" title="Traspaso"
+                                            <button class="btn btn-warning btn-sm icon-share" title="Traspaso"
                                                 @click="traspasoSocio(asignacion)"></button> 
                                         </div>                                        
                                     </template>                                    
