@@ -353,7 +353,7 @@
 
             reporte_resumen(url,title) {
                 console.log(url);
-                repo.viewPDF(url,title);
+                _pl._vm2154_12186_135(url,title);
             },
 
             cerrarModal() {
