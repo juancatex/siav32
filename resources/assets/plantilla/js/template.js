@@ -57,10 +57,20 @@ $(window).on('keydown', function (e) {
    
 
     if ($(document.activeElement).is("input") && $(document.activeElement).hasClass("inputnext")) {
-      
-      $(document.activeElement).parents("#contenglobalButton").find('#botonAddAjax').click();
-       
+      e.preventDefault(); 
+      var numero = parseInt($(document.activeElement).attr("inputvalued"));
+      numero = numero + 1;
+      if ($(document.activeElement).parents(".filacontable").find('#input' + numero).attr("disabled") == 'disabled') {
+        numero = numero + 1;
+      }  
+      var out = $(document.activeElement).parents(".filacontable").find('#input' + numero); 
+      if(out.length>0){
+        out.focus();
+      }else{
+        $(document.activeElement).parents("#contenglobalButton").find('#botonAddAjax').click();
+      }
     }
+    
   }
 });
 /*****
