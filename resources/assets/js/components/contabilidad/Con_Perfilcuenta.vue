@@ -920,7 +920,7 @@ export default {
                 //    console.log(valor)
                 //  }
 
-               _pl._vvp2521_00004(outdata,value.data.user,'viewreporte');
+               _pl._vvp2521_00004(outdata,value.data.user,value.data.date,'viewreporte');
  
                  me.classModal.openModal('reporteview');
             }).catch((e)=>{

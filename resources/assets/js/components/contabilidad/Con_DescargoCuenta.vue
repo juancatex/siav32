@@ -853,7 +853,7 @@ export default {
                         }
                         else
                         {
-                            me.addrowcuentas();
+                            me.addrowcuentas(false);
                             me.rowcuentas[index].idcuenta=element.idcuenta;              
                             me.rowcuentas[index].idsubcuenta=this.subcuenta;
                             me.rowcuentas[index].moneda=element.moneda;
@@ -883,7 +883,7 @@ export default {
                             }
                             else
                             {
-                                me.addrowcuentas();
+                                me.addrowcuentas(false);
                                 me.rowcuentas[index].idcuenta=element.idcuenta;              
                                 me.rowcuentas[index].idsubcuenta=this.subcuenta;
                                 me.rowcuentas[index].moneda=element.moneda;
@@ -904,9 +904,9 @@ export default {
         deleterowcuentas:function(index) {
             this.rowcuentas.splice(index, 1);
             if(index===0)
-                this.addrowcuentas();
+                this.addrowcuentas(false);
         },
-        addrowcuentas() {
+        addrowcuentas(focusin=true) {
             var ajax='ajaxselect'+this.rowcuentas.length;
             this.rowcuentas.push({   idcuenta:'',
                             idsubcuenta: this.subcuenta,
@@ -916,9 +916,9 @@ export default {
                             haber:0
                              });
                             
-               setTimeout(() => {
+           if(focusin){    setTimeout(() => {
                    this.$refs[ajax][0].ifocus();
-               }, 50); 
+               }, 50); }
         },
         tiempo(){
         this.clearSelected=1;
@@ -1035,7 +1035,7 @@ export default {
                 me.rowcuentas[me.indice].debe=me.acumulado13;
             else
             {
-                me.addrowcuentas();
+                me.addrowcuentas(false);
                 me.indice=me.rowcuentas.length-1;
                 me.rowcuentas[me.indice].idcuenta=me.lc;
                 me.rowcuentas[me.indice].debe=me.acumulado13;
