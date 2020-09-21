@@ -1,12 +1,12 @@
 <template> 
-   <v-select  v-if="mostrarselect==1" label="nombre" v-model="idsocio"   
+   <v-select  v-if="mostrarselect==1" label="nombre" v-model="idsocio" ref='vueselect'  
      :placeholder="textoplace" 
      :options="options"
      :searchable="validador"
      :filterable="false"
      :clearable="clearSelection"
       
-   @input="inputclear"   @search="buscarajax">
+   @input="inputclear"   @search="buscarajax" @search:blur='blur'>
     <template slot="no-options">
       No se encontraron datos
     </template>
@@ -30,7 +30,7 @@ Vue.component("v-select", vSelect);
   export default {
       props: ["ruta","id","idtabla","placeholder","labels","resp_ruta","clearable","keyIn","selectedStyle"],
       data() {
-    return {
+    return {dataout:'',
       options: [],styleselected:this.selectedStyle, idsocio:this.id,idtablainto:null,keyI:this.keyIn, textoplace:this.placeholder, mostrarselect:0,  validador:true,clearSelection:false,
       valueslabels:this.labels.split(",")
       }; 
@@ -55,8 +55,17 @@ Vue.component("v-select", vSelect);
 
     });
     return outs;
+  },blur(){ 
+   if (this.dataout != null) this.$emit('next',this.nextF); 
+  },
+  nextF(){
+    $(this.$refs.vueselect.$el).parents(".filacontable").find('#input1').focus();
+     this.$refs.vueselect.searchEl.blur(); 
+  },ifocus(){
+     this.$refs.vueselect.searchEl.focus(); 
   },
   inputclear(varrr) {
+     this.dataout=varrr;
       this.valueslabels = this.labels.split(",");
       if (varrr == null) {
         this.options = [];
@@ -64,14 +73,16 @@ Vue.component("v-select", vSelect);
         this.validador = true;
         this.idsocio = 0;
         this.$emit('cleaning', this.keyI);
+        this.ifocus(); 
       } else {
         this.validador = false;
-        this.$emit('found', varrr, this.keyI);
+        this.$emit('found', varrr, this.keyI);  
         this.options = [];
       }
     },
     buscarajax(search, loading) {
       loading(true);
+      this.dataout=null;
       this.busqueda(loading, search, this);
     },
     busqueda: _.debounce((loading, wordsearch, bodythis) => {
@@ -87,6 +98,7 @@ Vue.component("v-select", vSelect);
     }, 350),
   },
   mounted() {
+    this.dataout=null;
     this.mostrarselect = 0;
     this.valueslabels = this.labels.split(",");
 
