@@ -99,9 +99,9 @@
 
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
-                            <div class="col-md-4" ><!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar el boton  -->
-                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir Libro Compras">
-                                    <i class="icon-basket"></i>
+                            <div class="col-md-12" ><!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar el boton  -->
+                                <button type="button" @click="abrirmodalCompras()" style="float: right;" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir Libro Compras">
+                                    <i class="icon-basket"></i> Libro de compras
                                 </button> 
                             </div>
                         </div>
@@ -1035,19 +1035,17 @@ export default {
                 me.rowcuentas[me.indice].debe=me.acumulado13;
             else
             {
-                me.addrowcuentas(false);
+                
+                if(me.sifacturas){
+                    me.addrowcuentas(false);
                 me.indice=me.rowcuentas.length-1;
-                me.rowcuentas[me.indice].idcuenta=me.lc;
-                me.rowcuentas[me.indice].debe=me.acumulado13;
+                me.rowcuentas[me.indice].idcuenta=me.lc; 
+                me.rowcuentas[me.indice].debe=me.acumulado13;}
             }
-          
-               // me.rowcuentas[me.indice].debe=me.acumulado13;
-            
-
+           
             me.classModal.closeModal('librocompras'); 
             me.classModal.openModal('comprobantecontable')
-            me.sifacturas=false;
-            //me.indice='';
+            me.sifacturas=false; 
         },
         diaminmax(){
             var primerDiaMes = new Date(this.anioselected, this.messelected - 1  , 1);
