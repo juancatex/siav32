@@ -20,6 +20,7 @@
                     <ul> FILIAL LPZ                                    
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">H. Transitorio LPZ</button>                    
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verExtracto('LPZ')">Extracto Masuloeo LPZ </button>                    
                     </ul>
                 </div>                    
             </div>
@@ -131,6 +132,45 @@
         <!--Fin del modal-->            
         </div>
 
+        <div v-if="Modalview === 'M'">  
+        <!--Inicio del modal agregar/actualizar-->
+        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModalS"></h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>                    
+
+                    <div class="form-group row">
+                        <label class="col-md-3 form-control-label">Buscar Socio:</label>
+                    <div class="col-sm-6">
+                        <Ajaxselect v-if="clearSelected"
+                        ruta="/socio/listaSocios?cadena=" 
+                        @found="listaSocios" 
+                        resp_ruta="socios" 
+                        labels="nomcompleto" 
+                        placeholder="Ingrese Texto..." 
+                        idtabla="idsocio" 
+                        :id="idsocio" 
+                        :clearable="true">
+                    </Ajaxselect>
+                    </div>                                                                                       
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="verExtractoM(idsocio)">Reporte</button>                            
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--Fin del modal-->            
+        </div>
 
         <div v-if="Modalview === 'P'">
         <!--Inicio del modal agregar/actualizar-->
@@ -216,6 +256,7 @@
                 transitorio : '',
                 transitorio_todo : '',
                 transitorio_salida : '',
+                mostrarExtracto : '',
                 permanente: '',
                 fechaOut : '',
                 fechaIn : '',
@@ -270,6 +311,7 @@
                     me.transitorio_salida = respuesta.REP_REGISTRO_SALIDA;
                     me.permanente = respuesta.REP_PERMANENTE;
                     me.permanenteSocio = respuesta.REP_PERMANENTE_SOCIO;
+                    me.pagoM = respuesta.REP_PAGOMAUSOLEO;
                 })
                 .catch(function (error) {
                     console.log(error); 
@@ -306,6 +348,14 @@
                 this.modal=1;                 
             },
 
+            verExtracto(filial){
+                this.filial=filial;
+                this.Modalview='M';  
+                this.setear();
+                this.clearSelected=1;
+                this.modal=1;                 
+            },
+
             verRegistro(filial){ 
                 this.filial=filial;
                 this.Modalview='K';  
@@ -316,6 +366,11 @@
             mostrarReporteSocio(idsocio){
                 var url=this.permanenteSocio +'&idsocio='+idsocio;
                 this.reporte_resumen(url,'Resumen por Socio');
+            },
+
+            verExtractoM(idsocio){
+                var url=this.pagoM +'&idcliente='+idsocio;
+                this.reporte_resumen(url,'Extracto pago mausoleo');
             },
             
             mostrarReporte(modal, tipo, fechaIn, fechaOut, estado, filial, ges, per){

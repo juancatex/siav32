@@ -151,6 +151,12 @@ class SerAsignacionController extends Controller
         //total de asignados a ese ambiente
         $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
 
+        //para el caso de los mausoleo tiene que ser ocupado 1
+        if ($request->idresponsable!='') {
+            $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
+            $ambiente->ocupado=1;
+            $ambiente->save();
+        }
 
         if ($capacidad->capacidad == $vigentes) {
             //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
