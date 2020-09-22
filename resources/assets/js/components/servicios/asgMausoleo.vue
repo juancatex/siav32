@@ -573,7 +573,7 @@ export default {
             this.idresponsable='';
         },
 
-        editarPago(pago){
+        editarPago(pago){ 
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalPago=1;
             this.accion=2;
@@ -583,6 +583,7 @@ export default {
             this.fecha=pago.fecha;
             this.importe=pago.importe;
             this.idresponsable=pago.idresponsable;
+            this.listaBeneficiarios(this.regAsignacion.idcliente);
         },
 
         storePago(){
