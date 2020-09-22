@@ -330,7 +330,8 @@ return [
         'REP_REGISTRO_SALIDA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
         'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
         'REP_PERMANENTE_SOCIO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente_socio.rptdesign&__format=pdf',          
-        'REP_PAGOMAUSOLEO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_extracto.rptdesign&__format=pdf',          
+        'REP_PAGOMAUSOLEO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_mausoleo.rptdesign&__format=pdf',          
+        'REP_EXTRACTO_MAUSOLEO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_extracto.rptdesign&__format=pdf',          
     ],
 
     'rutaDaaros'=>[

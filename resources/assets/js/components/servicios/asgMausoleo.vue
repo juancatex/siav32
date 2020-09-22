@@ -133,6 +133,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">
+                            <button class="btn btn-primary" style="margin-top:0px" @click="extractoPagos(regAsignacion.idcliente)">Extracto Pagos</button>
                             <button class="btn btn-primary" style="margin-top:0px" @click="nuevoPago()">Registrar Pago</button>
                         </div>
                     </div>
@@ -334,7 +335,8 @@ export default {
             var url= '/ser_reportes';
             axios.get(url).then(function (response) {
                 var respuesta= response.data; ;                                    
-                me.pagoMausoleo = respuesta.REP_PAGOMAUSOLEO;
+                me.pagoMausoleo = respuesta.REP_PAGOMAUSOLEO;                
+                me.pagoExtracto = respuesta.REP_EXTRACTO_MAUSOLEO;                
             })
             .catch(function (error) {
                 console.log(error); 
@@ -358,7 +360,12 @@ export default {
         reporteMausoleo(pago){ console.log(pago);
                 var url=this.pagoMausoleo +'&idpago='+pago.idpago;
                 this.reporte_resumen(url,'Pago Mausoleo');
-            },
+        },
+
+        extractoPagos(idsocio){
+            var url=this.pagoExtracto +'&idcliente='+idsocio;
+            this.reporte_resumen(url,'Extracto pago mausoleo');
+        },
 
         reporte_resumen(url,title) {
             console.log(url);
@@ -554,10 +561,9 @@ export default {
                 swal('Actualizado','Se han guardado los cambios realizados','success');
                 this.cualAsignacion(this.regAmbiente.idambiente)
                 this.modalAsignacion=0;
-            });
-            
+            });            
         },
-
+                
         nuevoPago(){
             window.scroll({top:0,left:0,behavior:'smooth'});
             this.modalPago=1;
