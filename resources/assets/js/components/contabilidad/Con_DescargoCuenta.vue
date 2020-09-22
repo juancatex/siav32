@@ -99,9 +99,9 @@
 
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
-                            <div class="col-md-4" ><!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar el boton  -->
-                                <button type="button" @click="abrirmodalCompras()" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir Libro Compras">
-                                    <i class="icon-basket"></i>
+                            <div class="col-md-12" ><!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar el boton  -->
+                                <button type="button" @click="abrirmodalCompras()" style="float: right;" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir Libro Compras">
+                                    <i class="icon-basket"></i> Libro de compras
                                 </button> 
                             </div>
                         </div>
@@ -853,7 +853,7 @@ export default {
                         }
                         else
                         {
-                            me.addrowcuentas();
+                            me.addrowcuentas(false);
                             me.rowcuentas[index].idcuenta=element.idcuenta;              
                             me.rowcuentas[index].idsubcuenta=this.subcuenta;
                             me.rowcuentas[index].moneda=element.moneda;
@@ -883,7 +883,7 @@ export default {
                             }
                             else
                             {
-                                me.addrowcuentas();
+                                me.addrowcuentas(false);
                                 me.rowcuentas[index].idcuenta=element.idcuenta;              
                                 me.rowcuentas[index].idsubcuenta=this.subcuenta;
                                 me.rowcuentas[index].moneda=element.moneda;
@@ -904,9 +904,9 @@ export default {
         deleterowcuentas:function(index) {
             this.rowcuentas.splice(index, 1);
             if(index===0)
-                this.addrowcuentas();
+                this.addrowcuentas(false);
         },
-        addrowcuentas() {
+        addrowcuentas(focusin=true) {
             var ajax='ajaxselect'+this.rowcuentas.length;
             this.rowcuentas.push({   idcuenta:'',
                             idsubcuenta: this.subcuenta,
@@ -916,9 +916,9 @@ export default {
                             haber:0
                              });
                             
-               setTimeout(() => {
+           if(focusin){    setTimeout(() => {
                    this.$refs[ajax][0].ifocus();
-               }, 50); 
+               }, 50); }
         },
         tiempo(){
         this.clearSelected=1;
@@ -1035,19 +1035,17 @@ export default {
                 me.rowcuentas[me.indice].debe=me.acumulado13;
             else
             {
-                me.addrowcuentas();
+                
+                if(me.sifacturas){
+                    me.addrowcuentas(false);
                 me.indice=me.rowcuentas.length-1;
-                me.rowcuentas[me.indice].idcuenta=me.lc;
-                me.rowcuentas[me.indice].debe=me.acumulado13;
+                me.rowcuentas[me.indice].idcuenta=me.lc; 
+                me.rowcuentas[me.indice].debe=me.acumulado13;}
             }
-          
-               // me.rowcuentas[me.indice].debe=me.acumulado13;
-            
-
+           
             me.classModal.closeModal('librocompras'); 
             me.classModal.openModal('comprobantecontable')
-            me.sifacturas=false;
-            //me.indice='';
+            me.sifacturas=false; 
         },
         diaminmax(){
             var primerDiaMes = new Date(this.anioselected, this.messelected - 1  , 1);
@@ -1284,8 +1282,7 @@ export default {
             //console.log(url);
             
             axios.get(url).then(function (response) {
-                var respuesta= response.data;
-                //console.log(respuesta);
+                var respuesta= response.data; 
                 me.arrayLibrocompras = respuesta.librocompras;
                 me.cierremes=respuesta.cierremes;
             })
@@ -1359,8 +1356,7 @@ export default {
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
                 sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
-                suma87=parseFloat(suma87)+parseFloat(resultado.importe);
-                //me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
+                suma87=parseFloat(suma87)+parseFloat(resultado.importe); 
                 
             });
             me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));

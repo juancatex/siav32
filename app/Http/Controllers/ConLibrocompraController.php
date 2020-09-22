@@ -49,6 +49,7 @@ class ConLibrocompraController extends Controller
                                                      'con__librocompras.idfilial',
                                                      'con__asientomaestros.estado')
                                             ->where('con__librocompras.activo',1)
+                                            ->where('con__librocompras.registrado_por',Auth::id())
                                             ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                             ->whereYear('con__librocompras.fecha_factura','=',$anio)
                                             ->where('con__librocompras.idfilial',$request->idfilial)
