@@ -18,6 +18,7 @@ class Ser_Reportes extends Controller
         'REP_PERMANENTE_SOCIO' => $rutas['REP_PERMANENTE_SOCIO'].'&user='.Auth::user()->username,        
         'REP_ENTRADACC' => $rutas['REP_ENTRADACC'].'&user='.Auth::user()->username,        
         'REP_SALIDACC' => $rutas['REP_SALIDACC'].'&user='.Auth::user()->username,        
+        'REP_PAGOMAUSOLEO' => $rutas['REP_PAGOMAUSOLEO'].'&user='.Auth::user()->username,        
         ];
     }
 }

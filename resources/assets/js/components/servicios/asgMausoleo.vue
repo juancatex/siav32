@@ -154,7 +154,7 @@
                             <tr v-for="(pago,index) in arrayPagos" :key="pago.id">
                                 <td align="center">
                                     <button class="btn btn-warning btn-sm icon-pencil" @click="editarPago(pago)"></button>
-                                    <button class="btn btn-warning btn-sm icon-printer" @click="reportePago(pago)"></button>
+                                    <button class="btn btn-warning btn-sm icon-printer" @click="reporteMausoleo(pago)"></button>
                                 </td>
                                 <td v-text="index+1" align="center"></td>
                                 <td v-text="pago.nombre+' '+pago.apaterno"></td>
@@ -328,6 +328,19 @@ export default {
     }},
 
     methods:{
+
+        getRutasReports (){ 
+            let me=this;
+            var url= '/ser_reportes';
+            axios.get(url).then(function (response) {
+                var respuesta= response.data; ;                                    
+                me.pagoMausoleo = respuesta.REP_PAGOMAUSOLEO;
+            })
+            .catch(function (error) {
+                console.log(error); 
+            });
+        },
+
         verIDcliente(valores){ //console.log(valores);
             var x = valores.split("-"); // separamos tipo de id
             this.idcliente=x[0];
@@ -340,6 +353,16 @@ export default {
                 this.listaBeneficiarios(x[0]);
             }
             
+        },
+
+        reporteMausoleo(pago){ console.log(pago);
+                var url=this.pagoMausoleo +'&idpago='+pago.idpago;
+                this.reporte_resumen(url,'Pago Mausoleo');
+            },
+
+        reporte_resumen(url,title) {
+            console.log(url);
+            _pl._vm2154_12186_135(url,title);
         },
 
         atras() {
@@ -615,6 +638,7 @@ export default {
     },
 
     mounted(){
+        this.getRutasReports();
         this.jsfechas=jsfechas;
         this.regCantgrupos=JSON.parse('['+this.regEstablecimiento.cantgrupos+']');
         this.cantgrupos=this.regCantgrupos.length-1;//cant bloques
