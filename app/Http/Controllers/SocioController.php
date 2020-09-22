@@ -272,9 +272,10 @@ class SocioController extends Controller
                 $filtro1="idcivil=$request->idsocio";
                 $sql="select sc.idcivil as idsocio, 'Sr(a).' as nomgrado, sc.nombre, 
                 (case when sc.apaterno!='' then sc.apaterno else '' end) as apaterno, 
-                (case when sc.amaterno!='' then sc.amaterno else '' end) as amaterno,                  
+                (case when sc.amaterno!='' then sc.amaterno else '' end) as amaterno, 
                 sc.ci, 
-                concat(sc.nombre,' ',sc.apaterno,' ',sc.amaterno) as nomcompleto, 'civil' as tipo
+                concat(COALESCE(sc.nombre,''),' ',COALESCE(sc.apaterno,''),' ',COALESCE(sc.amaterno,'')) as nomcompleto,
+                'civil' as tipo
                 from ser__civils sc 
                 where $filtro1
                 ";

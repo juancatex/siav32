@@ -791,7 +791,7 @@ export default {
             url.push('/ser_jpintocontrato.rptdesign'); 
             url.push('&idasignacion='+asignacion.idasignacion); 
             url.push('&__format=pdf'); 
-            reporte.viewPDF(url.join(''),'Contrato');
+            _pl._vm2154_12186_135(url.join(''),'Contrato');
         },
 
         reportePago(pago){
@@ -801,7 +801,7 @@ export default {
             url.push('/ser_pago.rptdesign'); 
             url.push('&idpago='+pago.idpago); 
             url.push('&__format=pdf');
-            reporte.viewPDF(url.join(''),'Credencial');
+            _pl._vm2154_12186_135(url.join(''),'Credencial');
         },
 
     },

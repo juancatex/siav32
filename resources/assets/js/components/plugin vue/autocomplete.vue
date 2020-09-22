@@ -67,7 +67,7 @@ export default {
             }
         },
 
-        devolver(idsocio, tipo, temp){  console.log(tipo);
+        devolver(idsocio, tipo, temp){  //console.log(tipo);
 
             this.valores = idsocio +'-' + tipo+'-' + temp;
             this.$emit('encontrado',this.valores); 

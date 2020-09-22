@@ -38,6 +38,8 @@ setvue(1, 'ser_asignacion', './components/servicios/Ser_Asignacion.vue');
 setvue(1, 'ser_ambiente', './components/servicios/Ser_Ambiente.vue');
 setvue(1, 'ser_servicios', './components/servicios/Ser_reportes.vue');
 setvue(1, 'ser_registrados', './components/servicios/Ser_Registrados.vue');
+setvue(0, 'modalTraspaso', './components/servicios/modal_traspaso.vue');
+setvue(0, 'modalNuevocivil', './components/servicios/modal_civil.vue');
 
 //filiales
 setvue(1, 'fil_unidad', './components/filiales/Fil_Unidad.vue');

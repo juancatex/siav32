@@ -325,12 +325,12 @@
 
     <!-- MODAL ASIGNACION  MODAL ASIGNACION MODAL ASIGNACION MODAL ASIGNACION MODAL ASIGNACION -->
     <!-- MODAL ASIGNACION  MODAL ASIGNACION MODAL ASIGNACION MODAL ASIGNACION MODAL ASIGNACION -->
-    <div class="modal" :class="modalAsignacion?'mostrar':''">
+    <div id="asignaNuevo" class="modal" :class="modalAsignacion?'mostrar':''">
         <div class="modal-dialog modal-primary">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="titModal.toUpperCase()"></h4>
-                    <button class="close" @click="modalAsignacion=0">x</button>
+                    <button class="close" @click="cerrarmodal('asignaNuevo')">x</button>
                 </div>
                 <div class="modal-body" style="overflow-y:scroll; height:450px;">
                     <h4 class="titsubrayado" v-text="regEstablecimiento.nomestablecimiento"></h4>
@@ -352,60 +352,15 @@
                                 <input type="checkbox" v-model="nosocio">Cliente particular
                             </div>
                         </div>
+                        
                         <autocomplete @encontrado="verIDcliente($event)" ></autocomplete>                        
+                        
                         <div v-if="nosocio" >
-                                <a class="btn btn-success" data-toggle="collapse" href="#rolpadre" aria-expanded="false" aria-controls="rolpadre">Registrar Huesped</a>
-                                    
-                                    <div class="collapse multi-collapse" id="rolpadre">
-                                        <div class="form-group row">
-                                            <table border="2" align="center">
-                                                <tr>
-                                                    <td colspan="12" align="center"><b>REGISTRAR HUESPED (CIVIL)</b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Nombre</td>
-                                                    <td><input type="text" class="form-control" v-model="nombre"> </td>                                                
-                                                    <td>Paterno</td>
-                                                    <td><input type="text" class="form-control" v-model="apaterno"> </td>
-                                                    <td>Materno</td>
-                                                    <td><input type="text" class="form-control" v-model="amaterno"> </td>
-                                                </tr>
-                                            </table>
-                                            <table border="2" align="center">
-                                                <tr>
-                                                    <td>CI</td>
-                                                    <td><input type="text" class="form-control" v-model="ci"> </td>
-                                                    <td><select class="form-control" v-model="iddepartamento">
-                                                            <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento"
-                                                            :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
-                                                        </select>
-                                                    </td>
-                                                    <td>Celular</td>
-                                                    <td><input type="text" class="form-control" v-model="telcelular"> </td>
-                                                </tr>
-                                            </table>
-                                            <table border="2" align="center">
-                                                <tr>
-                                                    <td>Fecha Nac.</td>
-                                                    <td > <input type="date" class="form-control" v-model="fechanac"> </td>
-                                                    <td>Sexo</td>
-                                                    <td > 
-                                                        <input type="radio" value="m" v-model="sexo">
-                                                        <label for="male">Masculino</label><br>
-                                                        <input type="radio" value="f" v-model="sexo">
-                                                        <label for="female">Femenino</label>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="6" align="center">
-                                                        <button class="btn btn-warning" @click="formuCivil=0">Cancelar</button>
-                                                        <button class="btn btn-success" @click="registrarHuesped()">Guardar</button>
-                                                    </td>
-                                                </tr>
 
-                                            </table>
-                                        </div>
-                                    </div>
+                            <button class="btn btn-warning btn-sm icon-share" title="Traspaso" @click="nuevoCivil()"></button> 
+                            
+                                <modalNuevocivil @cerrarvuecivil="cerrarModalvuecivil" ref="modalNuevocivil"></modalNuevocivil>
+                               
                             </div>
                     </div>
                     <h4 v-if="regAsignacion.idcliente" class="titsubrayado" style="margin:15px 0px;">
@@ -457,7 +412,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalAsignacion=0">Cerrar</button>
+                    <button class="btn btn-secondary" @click="cerrarmodal('asignaNuevo')">Cerrar</button>
                     <button class="btn btn-primary" @click="accion==1?storeAsignacion():updateAsignacion()">
                         Guardar <span v-text="titModal"></span></button>
                 </div>
@@ -516,50 +471,8 @@
 
     <!-- MODAL DISPONIBLES  MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES -->
     <!-- MODAL DISPONIBLES  MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES MODAL DISPONIBLES -->
-    <div class="modal" :class="modalTraspaso?'mostrar':''">
-        <div class="modal-dialog modal-primary">
-            <div class="modal-content animated fadeIn">
-                <div class="modal-header">
-                    <h4 class="modal-title">Lista de Disponbles</h4>
-                    <button class="close" @click="modalTraspaso=0">x</button>
-                </div>
-                <div class="modal-body" style="overflow-y: scroll;max-height: 400px;">          
-                    <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Traspaso {{asig}}
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Ambiente</th>
-                                    <th>Tipo</th>                                    
-                                    <th>Cap.</th>
-                                    <th>Ocupados</th>
-                                    <th>Libres</th>
-                                    <th>Elegir</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="libres in arrayLibres" :key="libres.id">                                                
-                                    <td v-text="libres.codambiente"></td>
-                                    <td v-text="libres.tipo"></td>
-                                    <td align="center" v-text="libres.capacidad"></td>
-                                    <td align="center" v-text="libres.ocupados"></td>
-                                    <td align="center" v-text="libres.disponibles"></td>
-                                    <td><input type="radio" v-model='traspaso' :value=libres.idambiente></td>
-                                </tr>                                
-                            </tbody>
-                        </table>                
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @click="modalTraspaso=0">Cerrar</button>
-                    <button class="btn btn-primary" @click="confirmaTraspaso(traspaso, asig)"> Guardar </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
+    <modalTraspaso @cerrarvue="cerrarModalvue" ref="modalTraspaso"></modalTraspaso>
 
 </main>
 </template>
@@ -583,18 +496,12 @@ export default {
         idpago:'', nrdocumento:'', nit:'', razon:'', fecha:'', importe:'', descuento:'1',
         arrayAmbientes:[], arrayOcupantes:[], arrayAsignaciones:[],
         arrayImplementos:[],  arrayIDimplementos:[], 
-        arrayLibres:[],
         regAmbiente:[], regCliente:[], regAsignacion:[], regPago:[], 
         arrayOrdinal:['','Primer','Segundo','Tercer','Cuarto','Quinto','Sexto','Séptimo'],
         arrayTipoPago:[{text:'Efectivo',value:1},{text:'Deposito',value:2},{text:'Descuento',value:3}],
-        //datos nuevo cliente
-        nombre:'', apaterno:'',amaterno:'',telcelular:'',ci:'',iddepartamento:'',fechanac:'',sexo:'',
-        arrayDepartamentos:[],
         entrada: '', salida:'',
         camas: '',
         respuesta:0,
-        modalTraspaso:'',
-        traspaso:'', asig:'',
     }},
 
     methods:{
@@ -612,47 +519,6 @@ export default {
             });
         },
 
-        confirmaTraspaso(newidambiente, idasignacion) { console.log(newidambiente, idasignacion);
-            let me=this;
-            var url='/ser_asignacion/confirmaTraspaso';
-            axios.put(url,{
-                'newidambiente': newidambiente,
-                'idasignacion':idasignacion,                
-            }).then(function(response){
-                swal({title:'Registro correcto',
-                    html:'Traspaso Realizado.<br>Se realizo el Traspaso.',
-                    type:'success'});
-                    me.cantgrupos=me.regEstablecimiento.cantgrupos*1;
-                    me.listaAmbientes(me.regEstablecimiento.idestablecimiento,1);
-                    me.listaImplementos();
-                    me.modalTraspaso=0;                
-            });
-
-        },
-
-        registrarHuesped(){
-            let me=this;
-            var url='/ser_civil/store';
-            axios.post(url,{
-                'nombre': this.nombre.toUpperCase(),
-                'apaterno':this.apaterno.toUpperCase(),
-                'amaterno':this.amaterno.toUpperCase(),
-                'ci':this.ci,
-                'iddepartamento':this.iddepartamento,
-                'telcelular':this.telcelular,
-                'fechanac':this.fechanac,
-                'sexo':this.sexo,
-            }).then(function(response){
-                swal({title:'Registro correcto',
-                    html:'Se han guardado los datos del nuevo huésped.<br>Proceda al registro de entrada.',
-                    type:'success'});
-                axios.get('/ser_civil/ultimo').then(function(response){
-                    console.log(response.data);
-                    me.idcliente=response.data.civil[0]; //console.log(response.data.civil[0]);
-                    // me.asignarAmbiente(me.regCivil);
-                });
-            });
-        },
 
         listaAmbientes(idestablecimiento,nrgrupo){
             this.nrgrupo=nrgrupo;
@@ -676,7 +542,15 @@ export default {
             })
         },
 
-        verIDcliente(idcliente){ this.idcliente=idcliente; },
+        verIDcliente(valores){ //console.log(valores);
+            var va = valores.split("-");
+            //console.log(va[0], va[1]);
+            this.idcliente=va[0]; 
+            if (va[1]==='civil')
+                this.nosocio=true;
+            else 
+                this.nosocio=false;
+        },
 
         async verAsignacion(asignacion){ 
             let response=await axios.get('/ser_asignacion/verAsignacion?idasignacion='+asignacion.idasignacion);
@@ -692,18 +566,30 @@ export default {
             this.divAsignaciones=0;
         },
 
+
+        cerrarModalvuecivil(data){ console.log('Id: ' + data.idcliente);
+            this.idcliente=data.idcliente
+            this.regAsignacion.idcliente='';
+        },
+
+        cerrarModalvue(){
+            this.cantgrupos=this.regEstablecimiento.cantgrupos*1;
+            this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
+            this.listaImplementos();
+        },
+
         traspasoSocio(asignacion) {
-            this.modalTraspaso=1;
-            let me = this;
-            url='/ser_asignacion/traspasoSocio?idambiente='+asignacion.idambiente+'&camas='+asignacion.ocupantes;
-            axios.get(url).then(function (response) {
-                var respuesta= response.data;
-                me.arrayLibres = respuesta.libres;
-                me.asig =  asignacion.idasignacion;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+            this.$refs.modalTraspaso.showVue(asignacion);   
+        },
+
+        nuevoCivil() {
+
+            this.$refs.modalNuevocivil.showVue();   
+        },
+        
+        cerrarmodal(id){ 
+                this.classModalAsignacion.closeModal(id); 
         },
 
         nuevaAsignacion(ambiente){
@@ -713,26 +599,30 @@ export default {
                 me.respuesta= response.data; 
                 if (me.respuesta==0) {
                     swal('Todas las camas ocupadas');
-                    me.modalAsignacion=0;
+                    //me.modalAsignacion=0;
+                    me.cerrarmodal('asignaNuevo');
                 }                
             })
             .catch(function (error) {
                 console.log(error); 
             });                  
 
-                this.regAmbiente=ambiente; 
-                this.arrayIDimplementos=[1,2,3,4,5,6,7,8,9];
-                this.regAsignacion.idasignacion='';
-                this.regAsignacion.idcliente='';
-                this.fecha=this.currfecha;
-                this.hora=this.currhora;
-                this.idcliente='';
-                this.obs='';
-                this.modalAsignacion=1;
-                this.titModal='Entrada';
-                this.camas=1;
-                this.accion=1;
-                this.nosocio=false;
+            this.classModalAsignacion=new _pl.Modals();
+            this.classModalAsignacion.addModal('asignaNuevo'); 
+            this.classModalAsignacion.openModal('asignaNuevo')
+            this.regAmbiente=ambiente; 
+            this.arrayIDimplementos=[1,2,3,4,5,6,7,8,9];
+            this.regAsignacion.idasignacion='';
+            this.regAsignacion.idcliente='';
+            this.fecha=this.currfecha;
+            this.hora=this.currhora;
+            this.idcliente='';
+            this.obs='';
+            //this.modalAsignacion=1;
+            this.titModal='Entrada';
+            this.camas=1;
+            this.accion=1;
+            this.nosocio=false;
         },
 
         editarAsignacion(op){  
@@ -757,7 +647,10 @@ export default {
             this.idasignacion=this.regAsignacion.idasignacion;
             this.arrayIDimplementos=JSON.parse('['+this.regAsignacion.idimplementos+']');
             this.obs=this.regAsignacion.obs1;
-            this.modalAsignacion=1;
+            //this.modalAsignacion=1;
+            this.classModalAsignacion=new _pl.Modals();
+            this.classModalAsignacion.addModal('asignaNuevo'); 
+            this.classModalAsignacion.openModal('asignaNuevo')
             this.accion=2;
         },
 
@@ -787,7 +680,8 @@ export default {
             }).then(response=>{
                 swal('Asignación creada','Proceda a la verificación de pagos','success');
                 this.listaAmbientes(this.regAmbiente.idestablecimiento,this.nrgrupo);
-                this.modalAsignacion=0;
+                //this.modalAsignacion=0;
+                this.cerrarmodal('asignaNuevo');
             });
         },
 
@@ -811,7 +705,8 @@ export default {
                 swal('Datos actualizados','','success');
                 //this.verAsignacion(this.idasignacion,this.regAmbiente);
                 this.verAsignacion(this.regAsignacion);
-                this.modalAsignacion=0;
+                //this.modalAsignacion=0;
+                this.cerrarmodal('asignaNuevo');
             });
         },
 
@@ -980,16 +875,8 @@ export default {
 
         reporte_resumen(url,title) {
             console.log(url);
-            reporte.viewPDF(url,title);
+            _pl._vm2154_12186_135(url,title);
         },
-
-        departamentos() {
-            let me=this;
-            var url='/par_departamento/selectDepartamento';
-            axios.get(url).then(function(response){
-                me.arrayDepartamentos=response.data.departamentos;
-            })
-        }
 
     },
 
@@ -999,7 +886,6 @@ export default {
         this.cantgrupos=this.regEstablecimiento.cantgrupos*1;
         this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
         this.listaImplementos();        
-        this.departamentos();
         this.getRutasReports();
     }
 }
