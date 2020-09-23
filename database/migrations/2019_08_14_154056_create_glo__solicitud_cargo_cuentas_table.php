@@ -25,7 +25,7 @@ class CreateGloSolicitudCargoCuentasTable extends Migration
             $table->tinyInteger('estado_aprobado')->unsigned()->comment('0->no aprobada,1->aprobada-validada por conta,2->observado por contabilidad,3->desembolsada por tesoreria');
             $table->smallInteger('idcuentadesembolso')->unsigned()->nullable()->comment('id de la cuenta contable por la que ha sido desembolsado'); //TODO:ALTER TABLE `glo__solicitud_cargo_cuentas` ADD `idcuentadesembolso` SMALLINT UNSIGNED NULL COMMENT 'id de la cuenta contable por la que ha sido desembolsado' AFTER `estado_aprobado`;
             $table->dateTime('fecha_desembolso')->nullable()->comment('fecha del desembolso por tesoreria');
-            $table->dateTime('fecha_apertura_cuenta')->nullable()->comment('fecha de apertura de cuenta');
+            $table->date('fecha_apertura_cuenta')->nullable()->comment('fecha de apertura de cuenta');
             $table->string('tipo_desembolso',100)->nullable()->comment('se registra el tipo de desembolso ya sea web o cheque u otro');
             $table->integer('idmovbancario')->unsigned()->nullable()->comment('se registra el id de movimiento bancario para asociarlo al numero de cheque'); //TODO:ALTER TABLE `glo__solicitud_cargo_cuentas` CHANGE `num_desembolso` `idmovbancario` INT UNSIGNED NULL DEFAULT NULL COMMENT 'se registra el id de movimiento bancario para asociarlo al numero de cheque';
             $table->integer('idasientomaestro')->unisigned()->nullable()->comment('idasientomaestro del cargo de cuenta aprobado');

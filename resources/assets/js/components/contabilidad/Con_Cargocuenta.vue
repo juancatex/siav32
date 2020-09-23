@@ -52,6 +52,7 @@
                             <tr>
                                 <th style="width:90px">Opciones</th>
                                 <th style="width:90px">Fecha Solcitud</th>
+                                <th style="width:90px">Fecha Apertura</th>
                                 <th style="width:80px"># Compr. Aprob.</th>
                                 <th>a nombre de:</th>
                                 <th>Filial</th>
@@ -104,6 +105,7 @@
                                     </template>
                                 </td>
                                 <td v-text="cargocuenta.fecha_solicitud"></td>
+                                <td v-text="cargocuenta.fecha_apertura"></td>
                                 <td v-text="cargocuenta.cod_comprobante"></td>
                                 <td v-text="cargocuenta.nombres"></td>
                                 <td v-text="cargocuenta.sigla"></td>
@@ -525,7 +527,7 @@
                 arrayValores['cargo']=cargocuenta['nomrol'];
                 arrayValores['idasientomaestro']=cargocuenta['idasientomaestro'];
                 arrayValores['titulomodal']='Descargo de Asignacion';
-                arrayValores['fechamin']=cargocuenta['fecha_solicitud'];
+                arrayValores['fechamin']=cargocuenta['fecha_apertura'];
                 arrayValores['idsolccuenta']=cargocuenta['idsolccuenta'];
                 arrayValores['idfilial']=cargocuenta['idfilial'];
                 arrayValores['nommunicipio']=cargocuenta['nommunicipio'];
