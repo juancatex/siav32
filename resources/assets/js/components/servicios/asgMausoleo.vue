@@ -359,7 +359,7 @@ export default {
             
         },
 
-        reporteMausoleo(pago,tipo){ 
+        reporteMausoleo(pago,tipo){ console.log(tipo);
             if (tipo=='s') {
                 var url=this.pagoMausoleo +'&idpago='+pago.idpago;          
                 this.reporte_resumen(url,'Pago Mausoleo');
@@ -371,7 +371,7 @@ export default {
                 
         },
 
-        extractoPagos(idsocio,tipo){
+        extractoPagos(idsocio,tipo){console.log(tipo);
             if (tipo=='s') {
                 var url=this.pagoExtracto +'&idcliente='+idsocio;
                 this.reporte_resumen(url,'Extracto pago mausoleo');
