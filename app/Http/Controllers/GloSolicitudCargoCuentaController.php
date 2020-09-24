@@ -236,6 +236,7 @@ class GloSolicitudCargoCuentaController extends Controller
        //$tipocargo = $request->tipocargo;
         $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
         $raw2=DB::raw('DATE(glo__solicitud_cargo_cuentas.created_at) as fecha_solicitud');
+        $raw3=DB::raw('DATE(glo__solicitud_cargo_cuentas.fecha_apertura_cuenta) as fecha_apertura');
         
         if (!$buscar){
                 $first = Glo_SolicitudCargoCuenta::join('rrh__empleados','rrh__empleados.idempleado','=','glo__solicitud_cargo_cuentas.subcuenta')
@@ -253,6 +254,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'sigla',
                                                                     $raw,
                                                                     $raw2,
+                                                                    $raw3,
                                                                     'adm__roles.idrole',
                                                                     'adm__users.id',
                                                                     'glo__solicitud_cargo_cuentas.glosa',
@@ -321,6 +323,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'sigla',
                                                                 DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                                 $raw2,
+                                                                $raw3,
                                                                 'adm__roles.idrole',
                                                                 'adm__users.id',
                                                                 'glo__solicitud_cargo_cuentas.glosa',
@@ -405,6 +408,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         'sigla',
                                                         $raw,
                                                         $raw2,
+                                                        $raw3,
                                                         'adm__roles.idrole',
                                                         'adm__users.id',
                                                         'glo__solicitud_cargo_cuentas.glosa',
@@ -474,6 +478,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'sigla',
                                                             DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'),
                                                             $raw2,
+                                                            $raw3,
                                                             'adm__roles.idrole',
                                                             'adm__users.id',
                                                             'glo__solicitud_cargo_cuentas.glosa',

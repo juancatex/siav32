@@ -1151,6 +1151,7 @@ class ConAsientomaestroController extends Controller
             
             Glo_SolicitudCargoCuenta::where('idsolccuenta', $idsolccuenta)->update(['estado_aprobado' => 1,
                                                                                                         'idasientomaestro'=>$respuesta,
+                                                                                                        'fecha_apertura_cuenta'=>$fechatransaccion,
                                                                                                         'numdocobligacion'=>$numdocobligacion,
                                                                                                         'glosa'=>$glosa]);    
             if($request->idmovimiento)
