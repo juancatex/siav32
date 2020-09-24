@@ -29,21 +29,22 @@ class ConPerfilcuentamaestroController extends Controller
         $criterio = $request->criterio;
         if ($buscar==''){
             $perfilcuentamaestros = Con_Perfilcuentamaestro::join('par__modulos','par__modulos.idmodulo','=','con__perfilcuentamaestros.idmodulo')
-                                                            ->leftjoin('con__tipocomprobantes','con__tipocomprobantes.idtipocomprobante','=','con__perfilcuentamaestros.idtipocomprobante')
-                                                            ->select('idperfilcuentamaestro',
-                                                                        'nomperfil',
+                                                            ->join('con__tipocomprobantes','con__tipocomprobantes.idtipocomprobante','=','con__perfilcuentamaestros.idtipocomprobante')
+                                                            ->select('con__perfilcuentamaestros.idperfilcuentamaestro',
+                                                                        'con__perfilcuentamaestros.nomperfil',
                                                                         'con__perfilcuentamaestros.descripcion',
-                                                                        'nomtipocomprobante',
-                                                                        'nommodulo',
+                                                                        'con__tipocomprobantes.nomtipocomprobante',
+                                                                        'par__modulos.nommodulo',
                                                                         'con__perfilcuentamaestros.activo',
-                                                                        'completo',
+                                                                        'con__perfilcuentamaestros.completo',
                                                                         'con__perfilcuentamaestros.idtipocomprobante',
                                                                         'con__perfilcuentamaestros.idmodulo',
                                                                         'con__perfilcuentamaestros.siporcentaje')
                                                             ->orderBy('con__perfilcuentamaestros.completo', 'asc')
                                                             ->orderBy('con__perfilcuentamaestros.idmodulo', 'asc')
+                                                            ->orderBy('con__perfilcuentamaestros.nomperfil', 'asc')
                                                             ->orderBy('con__perfilcuentamaestros.idtipocomprobante', 'asc') 
-                                                            ->paginate(10);
+                                                            ->paginate(15);
         }
        /* else{
             $perfilcuentamaestros = Con_Perfilcuentamaestro::join('par__modulos','par__modulos.idmodulo','=','con__perfilcuentamaestros.idmodulo')
