@@ -189,6 +189,13 @@ class ConPerfilcuentamaestroController extends Controller
         $perfilcuentamaestro->activo = '1';
         $perfilcuentamaestro->save();
     }
+    public function cambionombre(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/'); 
+        $perfilcuentamaestro = Con_Perfilcuentamaestro::findOrFail($request->idmaestro);
+        $perfilcuentamaestro->nomperfil = $request->nom;
+        $perfilcuentamaestro->save();
+    }
     public function finalizarcuenta(Request $request)
     {
         if (!$request->ajax()) return redirect('/');

@@ -33,17 +33,23 @@
                             <td style="text-align: center;">
                                 
                                 <template v-if="perfilcuentamaestro.completo">
-                                <button type="button" @click="abrirModalDetalle('ver',perfilcuentamaestro)" class="btn btn-success btn-sm">
-                                    <i class="icon-eye"></i>
-                                </button> &nbsp;
+                                    <!-- <button type="button" @click="abrirModalDetalle('actualizar',perfilcuentamaestro)" class="btn btn-success btn-sm">
+                                        <i class="icon-check"></i>
+                                    </button> &nbsp; -->
+                                    <button type="button" @click="abrirModalDetalle('ver',perfilcuentamaestro)" class="btn btn-success btn-sm">
+                                        <i class="icon-eye"></i>
+                                    </button> &nbsp;
+                                    <button v-if="check('perfil_eliminar')" type="button" class="btn btn-danger btn-sm" @click="desactivarPerfilcuentamaestro(perfilcuentamaestro.idperfilcuentamaestro)">
+                                            <i class="icon-trash"></i>
+                                    </button>
                                 </template>
                                 <template v-else>
                                     <button v-if="check('perfil_editar')" type="button" @click="abrirModalDetalle('registrar',perfilcuentamaestro)" class="btn btn-warning btn-sm">
                                     <i class="cui-cog"></i>
-                                </button> &nbsp;
+                                   </button> &nbsp;
                                 </template>
-                                
-                                <template v-if="perfilcuentamaestro.activo&&perfilcuentamaestro.completo">
+                                 
+                                <!-- <template v-if="perfilcuentamaestro.activo&&perfilcuentamaestro.completo">
                                     <button v-if="check('perfil_eliminar')" type="button" class="btn btn-danger btn-sm" @click="desactivarPerfilcuentamaestro(perfilcuentamaestro.idperfilcuentamaestro)">
                                         <i class="icon-trash"></i>
                                     </button>
@@ -52,9 +58,16 @@
                                     <button type="button" class="btn btn-info btn-sm" @click="activarPerfilcuentamaestro(perfilcuentamaestro.idperfilcuentamaestro)">
                                         <i class="icon-check"></i>
                                     </button>
-                                </template>
+                                </template> -->
                             </td>
-                            <td v-text="perfilcuentamaestro.nomperfil"></td>
+
+                            <!-- <td v-text="perfilcuentamaestro.nomperfil"></td> -->
+                            <td><input   type="text" 
+                                    :value="perfilcuentamaestro.nomperfil" 
+                                    class="form-control" 
+                                    placeholder="Nombre de Perfil de Cuenta" @keyup.enter="chancename($event,perfilcuentamaestro.idperfilcuentamaestro)" > </td>
+
+
                             <td v-text="perfilcuentamaestro.descripcion"></td>
                             <td v-text="perfilcuentamaestro.nomtipocomprobante"></td>
                             <td v-text="perfilcuentamaestro.nommodulo"></td>
@@ -725,6 +738,22 @@ export default {
         }
     }, 
     methods : {
+        chancename(ev,id){ 
+            let me=this;
+             axios.put('/con_perfilcuentamaestro/cambionombre',{
+                    'idmaestro': id,
+                    'nom': ev.target.value
+                }).then(function (response) {
+                    me.listarPerfilcuentamaestro(1,'','nomperfilcuentamaestro');
+                    swal(
+                    'Actualizado!',
+                    'El registro ha sido actualizado con éxito.',
+                    'success'
+                    )
+                }).catch(function (error) {
+                    console.log(error);
+                });
+        },
         tiempo(){
             this.clearSelected=1;
             },
@@ -1177,13 +1206,22 @@ export default {
                 case 'actualizar':
                 {
                     //console.log(data);
-                    me.modal=1;
-                    me.tituloModal='Actualizar Perfilcuentamaestro';
-                    me.tipoAccion=2;
+                    me.clearSelected=0;
+                    setTimeout(me.tiempo, 200);
                     me.perfilcuentamaestro_id=data['idperfilcuentamaestro'];
-                    me.idmodulo1=data['idmodulo'];
-                    
-                    me.nomperfilcuentamaestro = data['nomperfilcuentamaestro'];
+                    // me.idmodulo1=data['idmodulo'];
+                      me.tipoAccion = 2; 
+                    if (data['siporcentaje']==1)
+                    {   
+                        me.classModal.openModal('siporcentaje');
+                        me.tituloModalSiPorcentaje = 'Registrar Perfil Cuenta Detalle - ' + data['nomperfil'];
+                    }
+                    else
+                    {
+                        me.classModal.openModal('noporcentaje')
+                        me.tituloModalNoPorcentaje = 'Registrar Perfil Cuenta Detalle Sin Porcentaje - '  + data['nomperfil'];
+                    }
+                     me.selectPerfilcuentadetalle(me.perfilcuentamaestro_id);
                     break;
                 }
             }

@@ -148,6 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/con_perfilcuentamaestro/registrar','ConPerfilcuentamaestroController@store');
         Route::put ('/con_perfilcuentamaestro/desactivar','ConPerfilcuentamaestroController@desactivar');
         Route::put ('/con_perfilcuentamaestro/activar','ConPerfilcuentamaestroController@activar');
+        Route::put ('/con_perfilcuentamaestro/cambionombre','ConPerfilcuentamaestroController@cambionombre');
         Route::put ('/con_perfilcuentamaestro/actualizar','ConPerfilcuentamaestroController@update');
         Route::put ('/con_perfilcuentamaestro/finalizarcuenta','ConPerfilcuentamaestroController@finalizarcuenta');
 
