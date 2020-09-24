@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">
-                            <button class="btn btn-primary" style="margin-top:0px" @click="extractoPagos(regAsignacion.idcliente)">Extracto Pagos</button>
+                            <button class="btn btn-primary" style="margin-top:0px" @click="extractoPagos(regAsignacion.idcliente,regAsignacion.tipocliente)">Extracto Pagos</button>
                             <button class="btn btn-primary" style="margin-top:0px" @click="nuevoPago()">Registrar Pago</button>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                             <tr v-for="(pago,index) in arrayPagos" :key="pago.id">
                                 <td align="center">
                                     <button class="btn btn-warning btn-sm icon-pencil" @click="editarPago(pago)"></button>
-                                    <button class="btn btn-warning btn-sm icon-printer" @click="reporteMausoleo(pago)"></button>
+                                    <button class="btn btn-warning btn-sm icon-printer" @click="reporteMausoleo(pago,regAsignacion.tipocliente)"></button>
                                 </td>
                                 <td v-text="index+1" align="center"></td>
                                 <td v-text="pago.nombre+' '+pago.apaterno"></td>
@@ -337,6 +337,8 @@ export default {
                 var respuesta= response.data; ;                                    
                 me.pagoMausoleo = respuesta.REP_PAGOMAUSOLEO;                
                 me.pagoExtracto = respuesta.REP_EXTRACTO_MAUSOLEO;                
+                me.pagoMausoleoBe = respuesta.REP_PAGOMAUSOLEO_BE;                
+                me.pagoExtractoBe = respuesta.REP_EXTRACTO_MAUSOLEO_BE;                
             })
             .catch(function (error) {
                 console.log(error); 
@@ -357,14 +359,28 @@ export default {
             
         },
 
-        reporteMausoleo(pago){ console.log(pago);
-                var url=this.pagoMausoleo +'&idpago='+pago.idpago;
+        reporteMausoleo(pago,tipo){ 
+            if (tipo=='s') {
+                var url=this.pagoMausoleo +'&idpago='+pago.idpago;          
                 this.reporte_resumen(url,'Pago Mausoleo');
+            }
+            else if (tipo=='b') {
+                var url=this.pagoMausoleoBe +'&idpago='+pago.idpago;          
+                this.reporte_resumen(url,'Pago Mausoleo');
+            }
+                
         },
 
-        extractoPagos(idsocio){
-            var url=this.pagoExtracto +'&idcliente='+idsocio;
-            this.reporte_resumen(url,'Extracto pago mausoleo');
+        extractoPagos(idsocio,tipo){
+            if (tipo=='s') {
+                var url=this.pagoExtracto +'&idcliente='+idsocio; 
+                this.reporte_resumen(url,'Extracto pago mausoleo');
+            }
+            if (tipo=='b') { 
+                var url=this.pagoExtractoBe +'&idcliente='+idsocio; 
+                this.reporte_resumen(url,'Extracto pago mausoleo');
+            }
+            
         },
 
         reporte_resumen(url,title) {
@@ -650,7 +666,7 @@ export default {
         this.regCantgrupos=JSON.parse('['+this.regEstablecimiento.cantgrupos+']');
         this.cantgrupos=this.regCantgrupos.length-1;//cant bloques
         this.codsector=this.regEstablecimiento.sector.substr(0,1);
-        this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1);
+        this.listaAmbientes(this.regEstablecimiento.idestablecimiento,1); 
     }
     
 
