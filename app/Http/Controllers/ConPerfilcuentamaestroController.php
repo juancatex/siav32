@@ -40,6 +40,7 @@ class ConPerfilcuentamaestroController extends Controller
                                                                         'con__perfilcuentamaestros.idtipocomprobante',
                                                                         'con__perfilcuentamaestros.idmodulo',
                                                                         'con__perfilcuentamaestros.siporcentaje')
+                                                            ->where('con__perfilcuentamaestros.activo','=','1')
                                                             ->orderBy('con__perfilcuentamaestros.completo', 'asc')
                                                             ->orderBy('con__perfilcuentamaestros.idmodulo', 'asc')
                                                             ->orderBy('con__perfilcuentamaestros.nomperfil', 'asc')

@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="perfilcuentamaestro in arrayPerfilcuentamaestro" :key="perfilcuentamaestro.idperfilcuentamaestro">
-                            <td>
+                            <td style="text-align: center;">
                                 
                                 <template v-if="perfilcuentamaestro.completo">
                                 <button type="button" @click="abrirModalDetalle('ver',perfilcuentamaestro)" class="btn btn-success btn-sm">
@@ -43,12 +43,12 @@
                                 </button> &nbsp;
                                 </template>
                                 
-                                <template v-if="perfilcuentamaestro.activo">
+                                <template v-if="perfilcuentamaestro.activo&&perfilcuentamaestro.completo">
                                     <button v-if="check('perfil_eliminar')" type="button" class="btn btn-danger btn-sm" @click="desactivarPerfilcuentamaestro(perfilcuentamaestro.idperfilcuentamaestro)">
                                         <i class="icon-trash"></i>
                                     </button>
                                 </template>
-                                <template v-else>
+                                <template v-else-if="perfilcuentamaestro.completo">
                                     <button type="button" class="btn btn-info btn-sm" @click="activarPerfilcuentamaestro(perfilcuentamaestro.idperfilcuentamaestro)">
                                         <i class="icon-check"></i>
                                     </button>
