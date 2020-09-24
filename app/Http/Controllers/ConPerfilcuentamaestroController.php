@@ -42,6 +42,7 @@ class ConPerfilcuentamaestroController extends Controller
                                                                         'con__perfilcuentamaestros.siporcentaje')
                                                             ->orderBy('con__perfilcuentamaestros.idmodulo', 'asc')
                                                             ->orderBy('con__perfilcuentamaestros.idtipocomprobante', 'asc')
+                                                            ->orderBy('con__perfilcuentamaestros.completo', 'asc')
                                                             ->paginate(10);
         }
        /* else{
