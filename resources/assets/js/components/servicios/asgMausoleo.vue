@@ -359,25 +359,25 @@ export default {
             
         },
 
-        reporteMausoleo(pago,tipo){ console.log(tipo);
+        reporteMausoleo(pago,tipo){ 
             if (tipo=='s') {
                 var url=this.pagoMausoleo +'&idpago='+pago.idpago;          
                 this.reporte_resumen(url,'Pago Mausoleo');
             }
-            else {
+            else if (tipo=='b') {
                 var url=this.pagoMausoleoBe +'&idpago='+pago.idpago;          
                 this.reporte_resumen(url,'Pago Mausoleo');
             }
                 
         },
 
-        extractoPagos(idsocio,tipo){console.log(tipo);
+        extractoPagos(idsocio,tipo){
             if (tipo=='s') {
-                var url=this.pagoExtracto +'&idcliente='+idsocio;
+                var url=this.pagoExtracto +'&idcliente='+idsocio; 
                 this.reporte_resumen(url,'Extracto pago mausoleo');
             }
-            else {
-                var url=this.pagoExtractoBe +'&idcliente='+idsocio;
+            if (tipo=='b') { 
+                var url=this.pagoExtractoBe +'&idcliente='+idsocio; 
                 this.reporte_resumen(url,'Extracto pago mausoleo');
             }
             

@@ -20,8 +20,8 @@ class Ser_Reportes extends Controller
         'REP_SALIDACC' => $rutas['REP_SALIDACC'].'&user='.Auth::user()->username,        
         'REP_PAGOMAUSOLEO' => $rutas['REP_PAGOMAUSOLEO'].'&user='.Auth::user()->username,        
         'REP_EXTRACTO_MAUSOLEO' => $rutas['REP_EXTRACTO_MAUSOLEO'].'&user='.Auth::user()->username,        
-        'REP_PAGOMAUSOLEO_BE' => $rutas['REP_PAGOMAUSOLEO'].'&user='.Auth::user()->username,        
-        'REP_EXTRACTO_MAUSOLEO_BE' => $rutas['REP_EXTRACTO_MAUSOLEO'].'&user='.Auth::user()->username,        
+        'REP_PAGOMAUSOLEO_BE' => $rutas['REP_PAGOMAUSOLEO_BE'].'&user='.Auth::user()->username,        
+        'REP_EXTRACTO_MAUSOLEO_BE' => $rutas['REP_EXTRACTO_MAUSOLEO_BE'].'&user='.Auth::user()->username,        
         ];
     }
 }
