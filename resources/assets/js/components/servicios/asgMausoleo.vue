@@ -605,7 +605,11 @@ export default {
             this.fecha=pago.fecha;
             this.importe=pago.importe;
             this.idresponsable=pago.idresponsable;
-            this.listaBeneficiarios(this.regAsignacion.idcliente);
+            //this.listaBeneficiarios(this.regAsignacion.idcliente);
+            if (this.regAsignacion.tipocliente=='b')
+                this.socioResponsable(this.regAsignacion.idresponsable);
+            else
+                this.listaBeneficiarios(this.regAsignacion.idcliente);
         },
 
         storePago(){
