@@ -33,9 +33,9 @@
                             <td style="text-align: center;">
                                 
                                 <template v-if="perfilcuentamaestro.completo">
-                                    <!-- <button type="button" @click="abrirModalDetalle('actualizar',perfilcuentamaestro)" class="btn btn-success btn-sm">
+                                    <button type="button" @click="abrirModalDetalle('actualizar',perfilcuentamaestro)" class="btn btn-success btn-sm">
                                         <i class="icon-check"></i>
-                                    </button> &nbsp; -->
+                                    </button> &nbsp;
                                     <button type="button" @click="abrirModalDetalle('ver',perfilcuentamaestro)" class="btn btn-success btn-sm">
                                         <i class="icon-eye"></i>
                                     </button> &nbsp;

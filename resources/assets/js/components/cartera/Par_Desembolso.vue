@@ -75,7 +75,8 @@
                                        </h6>
                                    </div>
                                     <div v-else> 
-                                    <button v-if="check('Aprobacion_desembolso')?prestamos.idestado==1&&!prestamos.no_prestamo.includes('P.L'):false" :id="getid(prestamos)" type="button"
+                                    <!-- <button v-if="check('Aprobacion_desembolso')?prestamos.idestado==1&&!prestamos.no_prestamo.includes('P.L'):false" :id="getid(prestamos)" type="button" -->
+                                    <button v-if="check('Aprobacion_desembolso')?prestamos.idestado==1:false" :id="getid(prestamos)" type="button"
                                         class="btn btn-success  btn-sm icon-check"
                                         @click="openmodal('primarymodal',prestamos)" title="Aprobar"></button>
                                      <button v-if="check('Imprimir_calificacion')?prestamos.idestado==1:false" class="btn btn-primary btn-sm icon-printer" type="button"

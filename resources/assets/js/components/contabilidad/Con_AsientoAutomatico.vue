@@ -919,7 +919,7 @@ Vue.component("v-select", vSelect);
                     ) 
                     var url=me.reporte_asiento_automatico + me.asientomaestro_id+'&tiposubcuenta=1'; 
                     //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);		                   
-                    plugin2.viewPDF(url,'Reporte Asiento Automatico');
+                    _pl._vm2154_12186_135(url,'Reporte Asiento Automatico');
                     me.listarAsientomaestro(1,me.idmodulo,me.idperfil)
                     me.cerrarModal('individual');
                     //me.listarAsientos(1,'','nomdepartamento');
