@@ -1,3 +1,16 @@
+// var firebaseConfig = {
+//   apiKey: "AIzaSyDgvieNQcyHU0su0TjcFvMjeOJTd6nVKBo",
+//   authDomain: "ascinalss-movil.firebaseapp.com",
+//   databaseURL: "https://ascinalss-movil.firebaseio.com",
+//   projectId: "ascinalss-movil",
+//   storageBucket: "ascinalss-movil.appspot.com",
+//   messagingSenderId: "361410683377",
+//   appId: "1:361410683377:web:ed3a5b6a0465461d08e450",
+//   measurementId: "G-3YRJMYB905"
+//   }; 
+//   firebase.initializeApp(firebaseConfig);  
+//   firebase.auth().signInWithEmailAndPassword('ascinalss.dep.sistemas@gmail.com','desarrollo20201'); 
+ 
 $(window).on('keydown', function (e) {
 
   if (e.keyCode == 39) {

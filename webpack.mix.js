@@ -64,5 +64,11 @@ mix.styles([
     'resources/assets/plantilla/js/jquery.js', 
     'resources/assets/plantilla/js/login.js'
 ], 'public/js/login.js')
+// .scripts([
+//     'resources/assets/plantilla/js/fire.js', 
+//     'resources/assets/plantilla/js/fireAuth.js', 
+//     'resources/assets/plantilla/js/fireFirestore.js', 
+//     'resources/assets/plantilla/js/fireStorage.js'
+// ], 'public/js/fire.js')
  
 .js(['resources/assets/js/app.js'],'public/js/app.js') ;

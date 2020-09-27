@@ -33,20 +33,24 @@ class SocioController extends Controller
                 } 
             }            
             $socios = Socio::
-            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
             ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
             ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
             ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
+            ->join ('par__tiposocios','socios.idtiposocio','=','par__tiposocios.idtiposocio')
+            ->join ('par_especialidades','socios.idespecialidad','=','par_especialidades.idespecialidad')
             ->whereraw($sqls)                        
             ->orderBy('socios.nombre', 'asc')
             ->paginate(10);
         }
         else{
             $socios = Socio::
-                select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
                 ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
                 ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
                 ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
+                ->join ('par__tiposocios','socios.idtiposocio','=','par__tiposocios.idtiposocio')
+                ->join ('par_especialidades','socios.idespecialidad','=','par_especialidades.idespecialidad')
                 ->orderBy('socios.nombre', 'asc')->paginate(10);
         }
 
@@ -83,10 +87,10 @@ class SocioController extends Controller
         if (!$request->ajax()) return redirect('/');
         $rutas=config('app.ruta_imagen'); 
         $imageData = $request->get('image');
-        $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+        $fileName =  "foto". $request->numpapeleta. ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
         Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
         //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-        Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+          Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
         $socio = new Socio();
         $socio->numpapeleta=$request->numpapeleta; 
         $socio->rutafoto = $fileName;
@@ -128,12 +132,14 @@ class SocioController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $rutas=config('app.ruta_imagen');
-        $imageData = $request->get('image');      
-        $fileName =  "foto". time() . ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+        $imageData = $request->get('image');   
+        
+        $socio = Socio::findOrFail($request->idsocio);
+        
+        $fileName =  "foto".$socio->numpapeleta. ".jpg" ;
         Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
         //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
         Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
-        $socio = Socio::findOrFail($request->idsocio);
         $socio->rutafoto = $fileName;
         $socio->activo = '1';
         $socio->save();
@@ -193,6 +199,7 @@ class SocioController extends Controller
         $socio->activo = '1';
         $socio->save();
     }
+
 
     /*
     public function uploadFile(Request $request) {

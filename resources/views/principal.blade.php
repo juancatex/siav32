@@ -48,8 +48,8 @@
         <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?php echo date('Y')?></span>    
         <span class="ml-auto">Desarrollado por <a href="http://www.ascinalss.org/ascinalss/index.html">Dep. Sistemas</a></span>
     </footer>  
-    </div> 
-     
+    </div>  
+    <!-- <script src="js/fire.js"></script>   -->
     <script src="js/app.js"></script>  
     <script src="js/plantilla.js"></script>
     <script>

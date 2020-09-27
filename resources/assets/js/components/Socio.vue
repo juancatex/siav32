@@ -93,7 +93,7 @@
                                         <i class="icon-user"></i>
                                         </button>&nbsp; 
                                                                                                                                 
-                                        <button v-if="check('credencial')" type="button" @click="generarCarnetSocio(socio.idsocio,canet_socio_Re)" class="btn btn-warning btn-sm">
+                                        <button v-if="check('credencial')" type="button" @click="generarCarnetSocio(socio)" class="btn btn-warning btn-sm">
                                         <i class="icon-camera"></i>
                                         </button>  
                                                                                         
@@ -912,8 +912,30 @@
 
 
 
-          
+   <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="credencial">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Carnet del socio</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('credencial')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
 
+          <div class="modal-body-plandepagos">
+            <!--  <div style="display:none" v-html="plandepagosSimulacion"></div>-->
+            <iframe name="planout" id="planout" style="width:100%;height:100%;"></iframe>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('credencial')">cerrar</button>
+            <!--  <button class="btn btn-primary" type="button" @click="print()">Imprimir</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
 </main>
 
 </template>
@@ -1604,10 +1626,20 @@
                 this.errorsocio=0;
             },
 
-            generarCarnetSocio(id,canet_socio_Re){
-              var url=canet_socio_Re + id;  
-              //this.abrirVentanaModalURL(url, "Carnet Socio", 800,700);			   
-              repo.viewPDF(url,'Carnet Socio');
+            generarCarnetSocio(socio){ 
+             swal({
+        title: "Generando reporte",
+        allowOutsideClick: () => false,
+        allowEscapeKey: () => false,
+        onOpen: function() {
+          swal.showLoading();
+        }
+      });
+            _pl._vvp2521_cr01(socio,()=>{
+                swal.close()
+                this.classModal.openModal('credencial');
+            });
+            
             }, 
 			 
             abrirModal(modelo, accion, data = []){
@@ -1697,11 +1729,24 @@
                                 this.carnetestado = data['carnetestado'];
                                 this.idestado = data['idestafiliaciones'];
                                 this.rutafoto = data['rutafoto'];
+                                // firebase.storage().ref().child('socios/img'+this.numpapeleta+'.png').getDownloadURL().then((url)=>{
+                                //      var xhr = new XMLHttpRequest();
+                                //         xhr.responseType = 'blob';
+                                //         xhr.onload = function(event) {
+                                //             var blob = xhr.response;
+                                //         };
+                                //         xhr.open('GET', url);
+                                //         xhr.send();
+                                //     }).catch(()=>{
+                                //         console.log('no')
+                                //     });
+
                                 this.fotografia = data['rutafoto'];
                                 this.idusuarioregistro = data['idusuarioregistro'];
                                 this.idusuariomodificacion = data['idusuariomodificacion'];
                                 this.idtiposocio=data['idtiposocio'];
-                                this.idrol = data['idrol'];								
+                                this.idrol = data['idrol'];		
+                                this.generarcodsocio();						
 								this.updateDep(data['iddepartamentoexpedido'],data['idmunicipionacimiento']);
 								this.updateFuerza(data['idfuerza'],data['iddestino'],data['idespecialidad']);
                                 break;
@@ -1727,7 +1772,8 @@
                 if(this.nombre) strcodigo+=this.nombre[0];
                 if(this.apaterno) strcodigo+=this.apaterno[0];
                 if(this.amaterno) strcodigo+=this.amaterno[0];
-                if(this.carnetmilitar) strcodigo=this.carnetmilitar+'-'+strcodigo;
+                // if(this.carnetmilitar) strcodigo=this.carnetmilitar+'-'+strcodigo;
+                if(this.numpapeleta) strcodigo=this.numpapeleta+'-'+strcodigo;
                 this.codsocio=strcodigo; 
             },
 
@@ -2150,6 +2196,8 @@
             this.getPermisos();
 		    this.getRutasReports();
             this.listarSocio(1,this.buscar,this.criterio); 
+            this.classModal = new _pl.Modals();
+            this.classModal.addModal("credencial");  
         }
     }
 </script>
