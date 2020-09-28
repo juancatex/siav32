@@ -2,6 +2,7 @@
 $ip=$_SERVER['SERVER_ADDR'];
 if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
     $ip='127.0.0.1';
+    // $ip='192.168.100.59';
 
 return [
 
@@ -262,7 +263,7 @@ return [
         'DIRE_FOTO_SOCIO'=>'img/socios/', 
         'DIRE_FOTO_EMPLEADO'=>'img/empleados/', 
         'DIRE_FOTO_SOCIO_REPORTES'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotos/',
-        'DIRE_FOTO_SOCIO_REPORTES_EMPLEDO'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotose/'
+        'DIRE_FOTO_SERVIDOR_EMPLEADO'=>'/var/lib/tomcat8/webapps/birt-viewer/reportes/fotose/'
     ],    
     
 

@@ -86,8 +86,8 @@ class SocioController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
         $rutas=config('app.ruta_imagen'); 
-        $imageData = $request->get('image');
-        $fileName =  "foto". $request->numpapeleta. ".".explode('/', explode(':', substr($imageData, 0, strpos($imageData, ';')))[1])[1];
+        $imageData = $request->get('image'); 
+        $fileName =  "foto".$request->numpapeleta. ".jpg" ;
         Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
         //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
           Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
@@ -144,6 +144,19 @@ class SocioController extends Controller
         $socio->activo = '1';
         $socio->save();
     }
+    public function getfotoCR(Request $request)
+    {  if (!$request->ajax()) return redirect('/');
+        $full_path = Storage::path('AFI/cr.jpg');
+        $base64 = base64_encode(Storage::get('AFI/cr.jpg'));
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,'path'=>$full_path];
+        // return response()->json(array('id' => $producto->idproducto), 200);
+     }
+     public function getfotoCRA(Request $request)
+    {  if (!$request->ajax()) return redirect('/');
+        $full_path = Storage::path('AFI/cra.jpg');
+        $base64 = base64_encode(Storage::get('AFI/cr.jpg'));
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,'path'=>$full_path];
+     }
     
 
     public function update(Request $request)

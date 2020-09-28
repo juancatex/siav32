@@ -1628,17 +1628,26 @@
 
             generarCarnetSocio(socio){ 
              swal({
-        title: "Generando reporte",
-        allowOutsideClick: () => false,
-        allowEscapeKey: () => false,
-        onOpen: function() {
-          swal.showLoading();
-        }
-      });
-            _pl._vvp2521_cr01(socio,()=>{
-                swal.close()
-                this.classModal.openModal('credencial');
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
             });
+            // _pl._vvp2521_cr01(socio,()=>{
+            //     swal.close()
+            //     this.classModal.openModal('credencial');
+            // });
+            let me=this;
+                  axios.get('/sociogetfotoCR').then(function (response) {
+                           _pl._vvp2521_cr01(socio,response.data.foto,()=>{
+                                swal.close()
+                                me.classModal.openModal('credencial');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
             
             }, 
 			 

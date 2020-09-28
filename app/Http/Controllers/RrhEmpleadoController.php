@@ -53,7 +53,7 @@ class RrhEmpleadoController extends Controller
         $codempleado.=str_replace("-","",$request->ci);
         if($request->foto) {
             Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
-            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SOCIO_REPORTES_EMPLEDO']).$codempleado.".jpg");
+            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SERVIDOR_EMPLEADO']).$codempleado.".jpg");
         }
         $empleado=new Rrh_Empleado();
         $empleado->codempleado=$codempleado;
@@ -90,7 +90,7 @@ class RrhEmpleadoController extends Controller
         $codempleado.=str_replace("-","",$request->ci);
         if($request->foto) {
             Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
-            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SOCIO_REPORTES_EMPLEDO']).$codempleado.".jpg");
+            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SERVIDOR_EMPLEADO']).$codempleado.".jpg");
         }
         $empleado=Rrh_Empleado::findOrFail($request->idempleado);
         $empleado->nombre=$request->nombre;
