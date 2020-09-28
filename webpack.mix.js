@@ -58,6 +58,7 @@ mix.styles([
     'resources/assets/plantilla/js/datatables.min.js', 
     'resources/assets/plantilla/js/buttons.flash.js', 
     'resources/assets/plantilla/js/buttons.html5.js', 
+    'resources/assets/plantilla/js/JsBarcode.all.min.js', 
     'resources/assets/plantilla/js/buttons.print.js'  
 ], 'public/js/plantilla.js')
 .scripts([
