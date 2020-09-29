@@ -161,6 +161,23 @@ class SocioController extends Controller
         // return response()->json(array('id' => $producto->idproducto), 200);
      }
     
+    public function getfotoCRV(Request $request)
+    {  if (!$request->ajax()) return redirect('/');
+        $full_path = Storage::path('AFI/crv.jpg');
+        $base64 = base64_encode(Storage::get('AFI/crv.jpg'));
+
+        $full_path2 = Storage::path('AFI/crva.jpg');
+        $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
+
+        $full_path3 = Storage::path('AFI/avatar.jpg');
+        $base643 = base64_encode(Storage::get('AFI/avatar.jpg'));
+
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
+                'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
+                'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
+        // return response()->json(array('id' => $producto->idproducto), 200);
+     }
+    
     
 
     public function update(Request $request)

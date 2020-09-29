@@ -1640,8 +1640,8 @@
                 }
             }); 
             let me=this;
-                  axios.get('/sociogetfotoCR').then(function (response) {
-                           _pl._vvp2521_cr01(socio,response.data,()=>{
+                  axios.get('/sociogetfotoCRV').then(function (response) {
+                           _pl._vvp2521_cr02(socio,response.data,()=>{
                                 swal.close()
                                 me.classModal.openModal('credencial');
                             });

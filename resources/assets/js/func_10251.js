@@ -694,8 +694,7 @@ export function _vm2154_12185_145(idpres,me) {
       });
       $('#printpdf').on('load', function() {
         $("#framepdf").css("display", "inline");
-        swal.hideLoading() ; 
-        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        swal.hideLoading() ;   
         $(".swal2-popup").css("width", "85%"); 
         $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
         $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
@@ -720,8 +719,7 @@ export function _vm2154_12185_145(idpres,me) {
         });
         $('#printpdf').on('load', function() {
           $("#framepdf").css("display", "inline");
-          swal.hideLoading() ; 
-          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+          swal.hideLoading() ;  
           $(".swal2-popup").css("width", "85%"); 
           $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
           $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
@@ -768,8 +766,7 @@ export function _vm2154_12186_135(id,titulo) {
         });
   
         $('#printpdf').on('load', function() {
-          $("#framepdf").css("display", "inline");
-        //  $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+          $("#framepdf").css("display", "inline"); 
           swal.hideLoading() ; 
           $(".swal2-popup").css("width", "85%"); 
           $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
@@ -807,8 +804,7 @@ export function _vm2154_12186_135(id,titulo) {
       });
       $('#printpdf').on('load', function() {
         $("#framepdf").css("display", "inline");
-        swal.hideLoading() ; 
-        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        swal.hideLoading() ;   
         $(".swal2-popup").css("width", "85%"); 
         $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
          });
@@ -1041,6 +1037,12 @@ function centrarTextTo(doc, texto,poshorizontal, posvertical) {
   var nuevaposH=((pageWidth / 2) - (dime.w / 2))+poshorizontal; 
   doc.text(texto, nuevaposH, posvertical);
 }
+function centrarTextTo2(doc, texto,poshorizontal, posvertical) { 
+  var pageWidth = 5.5;
+  var dime = doc.getTextDimensions(texto);
+  var nuevaposH=posvertical-((pageWidth / 2) - (dime.w / 2)); 
+  doc.text(texto, poshorizontal, nuevaposH,null,90);
+}
 function textToBase64Barcode(text){
   var canvas = document.createElement("canvas");
   JsBarcode(canvas, text, {format: "CODE39",displayValue:false});
@@ -1094,7 +1096,54 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
+  export function _vvp2521_cr02(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+      var qr = new QRious();  
+      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
+      qr.mime = 'image/jpeg';
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet socio'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.2,0.9, 8.6, 5.5); 
+      doc.addImage(fotosocio, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc.setFontSize(10);
+      doc.setFontStyle('bold');
+      doc.setTextColor(52,52,52);
+          centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.2,6.4); 
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 9,6.4);
+            
+      doc.setFontStyle('normal');
+      doc.setFontSize(7); 
+      doc.text(ta.nomfuerza,9.7, 5.9,null,90); 
+      doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 10.53, 5.9,null,90);
+      doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 9.7, 3.15,null,90); 
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 10.53, 3.15,null,90);
+       
+      doc.setFontSize(6);
+      doc.text(ta.codsocio?ta.codsocio:'___', 7.29, 4.1,null,90);
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.51, 4.1,null,90);
+       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);   
+
+      $("#" + idview).attr("src", doc.output('datauristring')); 
+
+      var doc2 = new jsPDF('p', 'cm','a4');  
+      doc2.setProperties({
+        title: 'Carnet socio posterior'
+      }); 
+      doc2.addImage(fondodos, 'JPEG',3.2,0.9, 8.6, 5.5);   
+      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      $("#2" + idview).attr("src", doc2.output('datauristring')); 
  
+      funn();
+    }); 
+  }
   
 export function _vvp2521_00001(ta, idview = 'planout') {
   imgToBase64('img/iconad.png', function (base64) {
