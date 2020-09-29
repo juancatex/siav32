@@ -1052,7 +1052,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:'img/socios/avatar.jpg', function (fotosocio) {
+    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
