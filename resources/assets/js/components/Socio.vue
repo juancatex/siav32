@@ -449,7 +449,7 @@
                                     v-model="idgrado" placeholder="Grado" 
                                     v-validate.initial="'required'"
                                     name="Grado" required
-                                    :class="{'form-control formu-entrada': true, 'error': errors.has('Grado')}" disabled>
+                                    :class="{'form-control formu-entrada': true, 'error': errors.has('Grado')}" >
                                     <option selected="selected" value="" disabled>Grado...</option>
                                     <option v-for="grado in arrayGrado" :key="grado.idgrado" :value="grado.idgrado" v-text="grado.nomgrado"></option>
                                 </select>
