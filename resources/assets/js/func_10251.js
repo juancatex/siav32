@@ -769,7 +769,7 @@ export function _vm2154_12186_135(id,titulo) {
   
         $('#printpdf').on('load', function() {
           $("#framepdf").css("display", "inline");
-          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        //  $('#printpdf').attr("src", $('#printpdf').attr("src")); 
           swal.hideLoading() ; 
           $(".swal2-popup").css("width", "85%"); 
           $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
