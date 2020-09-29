@@ -288,8 +288,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/par_modulo/updateModulo', 'ParModuloController@updateModulo');    //U
     Route::put ('/par_modulo/switchModulo', 'ParModuloController@switchModulo');    //D
 
-        Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');
-        Route::get ('/sociogetfotoCRA', 'SocioController@getfotoCRA');    
+        Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');   
 
         Route::get ('/socio', 'SocioController@index');
         Route::post('/socio/registrar', 'SocioController@store');

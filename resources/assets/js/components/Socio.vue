@@ -925,13 +925,14 @@
 
           <div class="modal-body-plandepagos">
             <!--  <div style="display:none" v-html="plandepagosSimulacion"></div>-->
-            <iframe name="planout" id="planout" style="width:100%;height:100%;"></iframe>
+            <iframe  name="planout" id="planout" :style="printcredencial==0?'width:100%;height:100%;':'display:none;'"></iframe> 
+            <iframe  name="2planout" id="2planout" :style="printcredencial==1?'width:100%;height:100%;':'display:none;'"></iframe>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
-            <!--  <button class="btn btn-primary" type="button" @click="print()">Imprimir</button> -->
+             <button v-if="printcredencial==0" class="btn btn-primary" type="button" @click="generarCarnetSocioAtraz()">Siguiente</button> 
           </div>
         </div>
       </div>
@@ -976,6 +977,7 @@
         props:['idmodulo','idventanamodulo'],
         data (){
             return { 
+                printcredencial:0,
                 Modalview:'',
                 kardex_socio: '', 
                 canet_socio_Re: '', 
@@ -1627,6 +1629,8 @@
             },
 
             generarCarnetSocio(socio){ 
+                this.printcredencial=0;
+             this.classModal.closeModal('credencial');
              swal({
                 title: "Generando reporte",
                 allowOutsideClick: () => false,
@@ -1634,14 +1638,10 @@
                 onOpen: function() {
                 swal.showLoading();
                 }
-            });
-            // _pl._vvp2521_cr01(socio,()=>{
-            //     swal.close()
-            //     this.classModal.openModal('credencial');
-            // });
+            }); 
             let me=this;
                   axios.get('/sociogetfotoCR').then(function (response) {
-                           _pl._vvp2521_cr01(socio,response.data.foto,()=>{
+                           _pl._vvp2521_cr01(socio,response.data,()=>{
                                 swal.close()
                                 me.classModal.openModal('credencial');
                             });
@@ -1649,6 +1649,19 @@
                         console.log(error);
                     });
             
+            }, 
+            generarCarnetSocioAtraz(){ 
+                let me=this;
+                me.printcredencial=1;
+                me.classModal.closeModal('credencial');
+                swal(
+                  "¡Debe de dar la vuelta el pvc en el mismo sentido de la impresión!",
+                  "",
+                  "warning"
+                ).then(()=>{ 
+                           me.classModal.openModal('credencial');
+                });
+ 
             }, 
 			 
             abrirModal(modelo, accion, data = []){
@@ -1778,7 +1791,11 @@
                 this.apaterno.toUpperCase();
                 this.amaterno.toUpperCase();
                 var strcodigo='';
-                if(this.nombre) strcodigo+=this.nombre[0];
+                // if(this.nombre) strcodigo+=this.nombre[0]; 
+                _.forEach(_.split(_.trim(this.nombre),' '), function(value) {
+                 strcodigo+=value[0];
+                });
+
                 if(this.apaterno) strcodigo+=this.apaterno[0];
                 if(this.amaterno) strcodigo+=this.amaterno[0];
                 // if(this.carnetmilitar) strcodigo=this.carnetmilitar+'-'+strcodigo;

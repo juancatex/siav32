@@ -148,15 +148,15 @@ class SocioController extends Controller
     {  if (!$request->ajax()) return redirect('/');
         $full_path = Storage::path('AFI/cr.jpg');
         $base64 = base64_encode(Storage::get('AFI/cr.jpg'));
-        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,'path'=>$full_path];
+
+        $full_path2 = Storage::path('AFI/cra.jpg');
+        $base642 = base64_encode(Storage::get('AFI/cra.jpg'));
+
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
+                'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642];
         // return response()->json(array('id' => $producto->idproducto), 200);
      }
-     public function getfotoCRA(Request $request)
-    {  if (!$request->ajax()) return redirect('/');
-        $full_path = Storage::path('AFI/cra.jpg');
-        $base64 = base64_encode(Storage::get('AFI/cr.jpg'));
-        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,'path'=>$full_path];
-     }
+    
     
 
     public function update(Request $request)

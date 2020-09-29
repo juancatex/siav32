@@ -1,1 +1,2902 @@
-var _$_9f08=["_pl=require(\"./func_10251.js\");","btoa","atob","globalEval","length","toString","0","","push","png","substr","image/png","image/jpeg","crossOrigin","Anonymous","onload","CANVAS","createElement","2d","getContext","height","naturalHeight","width","naturalWidth","drawImage","toDataURL","src","complete","data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==","pageSize","internal","getWidth","getTextDimensions","w","text","canvas","CODE39","data","nombre","left","cod","cantidad","total","right","forEach","Total general en Bolivianos","bold","center","monto","  FUERZA : ","value","numpapeleta","grado","estado","moneda","cuota","plazo","Total "," : ","values","pe","fp","di","car","cut","in","indi","am","ca","div,span,label","hoverdrop","noF","removeClass","target","div","is","draggable","fast","fadeOut","<span v-data=\"datain\" v-key=\"","v-value","attr","\">","v-view","</span>","fadeIn","appendTo","invalid","document","clone","click","offset","instance","helper","floor","<span v-data=\"perfil\">","1","i","find","append","<span v-data=\"operador\" v-value=\"","\" ></span>","2","suma","color: #bb5b20;","operador","3","resta","color: #1d9009e0;","4","grupo","operadorG","5","Natural","color: #20a8d8;","input","focus",">div","6","childElementCount","Si","color:rgb(197, 149, 5);","inputSi","pulsate","slow","effect","7","v-tipo","border","1px solid","css","droppable",".divdrag","delete ",";","trim","The function does not contain data.","Exist an error in the function syntax.(The function it\'s not complete)","Exist an error in the function syntax.("," its not higher to ",")","total_cuotas","tipodecambio","cuotaf","prestamos","total_refinanciar","capital","intereses","interes_diferido","valor_abc","=","formula","iscargo","idperfilcuentadetalle","includes","message","name","<div  v-tipo=\"titulo\"><span style=\"font-weight: 400;\">"," in </span>","</div> ","stack","h","tipocargo","desembolso_perfil","idcuenta","getHours","getMinutes","getSeconds","getMilliseconds","id","random","<div class=\"progress\"><div id=\"save\" class=\"progress-bar progress-bar-striped progress-bar-animated bg-success\" role=\"progressbar\" style=\"width: 0%;\" aria-valuenow=\"15\" aria-valuemin=\"0\" aria-valuemax=\"100\">0%</div></div> <span id=\"text_saving\" style=\"font-size: 13px;\"></span>","parse","getDate"," 00:00:00","set","getFullYear","-","getMonth","desembolso","pow","cobranza","disabled","button[id=\"btsig\"]","cuotaaproximada","tipocambio","/getcriterios","socio_id","factorid","liquidopagablecomputable","montosolicitado","plazomeses","any","errors","valorfactor","maxfactor","removeAttr","html","#detallefactordeterminante","pos","No tiene prestamos en mora","m","p","barChart","destroy","#barchatdata","bar","Prestamos en mora","rgb(32, 168, 216)","rgba(220, 220, 220, 0.8)","rgba(220, 220, 220, 0.75)","rgba(220, 220, 220, 1)","rgba(54, 162, 235, 0.2)","rgb(54, 162, 235)","h1","datahtml"," %","index","meses","datasetIndex","datasets","Tiene ","toLocaleString"," meses en mora","%","criterio caso 2 linea 441","log","criterio caso 3 linea 445","tipo","get",".garantesid[id=\"","idsocio","\"] div[id=\"botones\"]","garantesporproducto","fecha_actual","fechasjson","tasaanual","fechacorte","totalcuotas","arrayperfilgarante","/getcriteriosgarantes","producto","cantaportes","<button  id=\"verdatagrafic\"  type=\"button\" class=\"btn btn-success  btn-sm\"  >","%  <i class=\"icon-check\"></i></button>","&nbsp;<button id=\"registrarbutton\"  type=\"button\" class=\"btn btn-primary  btn-sm\" >Registrar</button>","factorg","garantesseleccionados","totalgarantesseleccionados","size","#registrarbutton","children","<button id=\"verdatagrafic\" type=\"button\" class=\"btn btn-danger  btn-sm\" >","%  <i class=\"icon-close\"></i></button>","#detallefactordeterminantegarante","barChartG","#barchatdatagarante","factorviewgarante","openModal","classModal","#verdatagrafic","datafactor","#detallesociolistagraficos","factorviewgaranteLista","arrayFormulasProducto","factor","setlistasocio","/getprestamoRefi","refi","<div id=\"framepdf\" style=\"display:none;\"><div style=\" width: 100%; \"> <div class=\"row justify-content-center\"><button id=\"reloadedFrame\" class=\"icon-reload btn btn-sm\"></button> </div> </div><iframe   id=\"printpdf\" name=\"printpdf\" src=\"","REP_DESEMBOLSO","\" style=\"width:100%;height:800px;\" allowfullscreen></iframe></div>","Siguiente","showLoading","disableButtons","#printpdf","#reloadedFrame","load","display","inline","#framepdf","hideLoading","85%",".swal2-popup","padding","0px 0px 20px 0px","margin","15px 0 0 0",".swal2-progresssteps","on","REP_COBRANZA","idprestamo","\xA1Se registro los datos correctamente!","success","then","queue","<div id=\"framepdf\" style=\"display:none;\"><div style=\" width: 100%; \"><label style=\"display: inline;padding-left: 23px;font-weight: 500;float: left;\">","</label><div class=\"row justify-content-end\"><button id=\"reloadedFrame\" class=\"icon-reload btn btn-sm\"></button><button id=\"close_id_swal\" class=\"close\" style=\"float: right; margin: 0 15px 2px 5px; \">X</button></div> </div><iframe id=\"printpdf\" name=\"printpdf\" src=\"","Ok","Cerrar","#4dbd74","#f86c6b","close","#close_id_swal","Seguir","Cancelar",".listadogarantes","<li id=\"","\" class=\"list-group-item garantesid active\" style=\"padding: 5px 0 5px 0;\" ><div class=\"input-group\" style=\"align-items: center;\"><div class=\"col-md-1\"><img   src=\"img/socios/","rutafoto","avatar.png","\"  class=\"rounded-circle fotosociomini\" alt=\"Cinque Terre\"></div><div class=\"col-md-8\"> <p style=\"margin:0\">"," ","apaterno","amaterno"," ( ","% )</p></div><div class=\"col-md-3 resultado\"  id=\"botones\" style=\"text-align: right;\" ><button id=\"eliminargarante\" type=\"button\" class=\"btn btn-danger  btn-sm\" > Quitar Registro</button>","</div></div></li>","delete","#eliminargarante","has","\" class=\"list-group-item garantesid ","active\"","\""," style=\"padding: 5px 0 5px 0;\" ><div class=\"input-group\" style=\"align-items: center;\"><div class=\"col-md-1\"><img   src=\"img/socios/","</p></div><div class=\"col-md-3 resultado\"  id=\"botones\" style=\"text-align: right;\" >","<button  id=\"verificarbutton\" type=\"button\" class=\"btn btn-warning btn-sm\">Verificar </button>","<div id=\"spinner\" class=\"spinner-border \" style=\"vertical-align: middle;\" role=\"status\" aria-hidden=\"true\"></div>","#verificarbutton","arraygarantes","   |   ","YYYY-MM-DD","Seleccionar","cancelar","Desde","Hasta","Seleccionar rango","Do","Lu","Ma","Mi","Ju","Vi","Sa","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre","daterangepicker","#","bottom-right","MM - yyyy","datetimepicker","val","<div class=\"col-md-12 row \" style=\"justify-content: center;margin-top: 5px;\"><div class=\"col-md-1\" style=\" text-align: center;border: 1px solid gray; padding: 5px;\"><img   src=\"img/socios/","\"  class=\"rounded-circle fotosociomini\" alt=\"Cinque Terre\">  </div><div class=\"col-md-5 input-group\" style=\"align-items: center;border: 1px solid gray; padding: 5px;\"><p style=\"margin:0\">","nomgrado","</p><p class=\"col-md-12\" style=\"margin:0;text-align: right;\">Factor obtenido: ","%</p></div></div>"," <div class=\"form-group row \"><p class=\"col-md-12 titulo\" >Datos de los Garantes:</p> ","</div>","modales","modal-dialog-centered","addClass",".modal-dialog","data-backdrop","static","data-keyboard","false","isFunction","shown.bs.modal","hidden.bs.modal","show","modal","hide","closeOthers","openPrimary","openInfo","ionRangeSlider","from","planout","img/socios/","img/socios/avatar.png","l","mm","Carnet socio","setProperties","getHeight","JPEG","addImage","setFontSize","setFontStyle","setTextColor","nomespecialidad","___","______","normal","nomfuerza","fechanacimiento","DD/MM/YYYY","format","nomtiposocio","ci","abrvdep","__","codsocio","carnetmilitar","datauristring","output","#zoom=300","img/iconad.png","letter","Plan De Pagos","ASOCIACION NACIONAL DE SUBOFICIALES Y SARGENTOS","DE LAS FUERZAS ARMADAS","\"ASCINALSS\"","\"PLAN DE PAGOS\"","Periodo","Fecha de Pago","Dias","Capital","Interes","Interes Diferido","Cargos","Total Cuota","Saldo","Totales : ","grid","lastPage","firstPage","autoTable","Cargar Ascii","No.","Papeleta","Grado","Nombre","Estado","Moneda","Cuota","Plzo","file","everyPage","body","section","no","column","colSpan","cells","row","y","setDrawColor","setLineWidth","x","line","pla","getNumberOfPages","setPage","\"DETALLE DE ALTAS POR PRESTAMOS\"","Correspondiente a ","mes"," de ","anio","fecha","Pagina ","pageNumber","getCurrentPageInfo","Fuerza","Codigo","Cantidad","Monto Total","fue","can","mon","\"RESUMEN DE ALTAS POR PRESTAMOS\"","Reporte de la configuraci\xF3n de perfiles de cuentas","Nombre del perfil","Modulo","Cuentas","modulo","Debe","Haber","d","codcuenta","nomcuenta","nom","REPORTE DE LA CONFIGURACI\xD3N ","DE PERFILES DE CUENTAS","Usuario: ","Imp.: ","round","e","split",".","lastIndexOf","return function foo(a,b) { alert(\"native function: \"+a); return \"Hello, serialised world!\"+b; }","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z","<span v-type=\"","\" v-data=\"input\" style=\"","\"><strong style=\"padding-left: 4px;\">","</strong></span>","<div id=\"values\"><input type=\"number\" placeholder=\"0\" name=\"input\" value=\"1\" autofocus> </div>","\" v-data=\"inputSi\" style=\"","<div id=\"values\"><input id=\"i1\" type=\"number\" placeholder=\"0\" name=\"input\" value=\"1\" autofocus><i class=\"icons font-lg  mt-5 cui-arrow-right\"></i><input id=\"i2\" type=\"number\" placeholder=\"0\" name=\"input\" value=\"1\" autofocus></div><strong style=\"font-weight: bold;font-size: 17px;\">=</strong>","<span v-data=\"funcion\" style=\"","div,span","hoverdropfunctions","2px solid","span","<div id=\"values\" v-type=\"","\" ></div>","<span v-data=\"funcion\"  style=\"","<span v-data=\"perfil\" >","\"></div>","empty","<div class=\"col-md-3\" style=\"padding: 16px !important;text-align: center;\" id=\"","\" > </div>","<div class=\"col-md-9\" style=\"padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 100%;\" id=\"","1px solid #40464a52"," <u><h6 class=\"col-md-12\" style=\"text-align: center;padding: 12px 0 12px 0;\">Datos de Entrada</h6> </u>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"monto\" v-data=\"perfil\" v-view=\"Monto\">Monto<span class=\"tooltiptext tooltip-bottom\">Monto total.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"cuota\" v-data=\"perfil\" v-view=\"Cuota\">Cuota<span class=\"tooltiptext tooltip-bottom\">Cuota base perteneciente al periodo \'X\'.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"cuotaf\" v-data=\"perfil\" v-view=\"Cuota Final\">Cuota Final<span class=\"tooltiptext tooltip-bottom\">Cuota final perteneciente al periodo \'X\' contiene (interes, interes diferido, cargos adicionales).</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"capital\" v-data=\"perfil\" v-view=\"Capital\">Capital<span class=\"tooltiptext tooltip-bottom\">Es el monto que ira a amortizar a capital.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"intereses\" v-data=\"perfil\" v-view=\"Interes\">Interes<span class=\"tooltiptext tooltip-bottom\">Es la suma de los intereses generados.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"interes_diferido\" v-data=\"perfil\" v-view=\"Interes diferido\">Interes diferido<span class=\"tooltiptext tooltip-bottom\">Es la acumulaci\xF3n del interes del anterior prestamo.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"total_cuotas\" v-data=\"perfil\" v-view=\"Total cuotas\">Total cuotas<span class=\"tooltiptext tooltip-bottom\">Es el numero de cuotas del prestamo.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"total_refinanciar\" v-data=\"perfil\" v-view=\"total saldo capital de prestamos vigentes\">total saldo capital de prestamos vigentes<span class=\"tooltiptext tooltip-bottom\">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>"," <u><h6 class=\"col-md-12\" style=\"text-align: center;padding: 12px 0 12px 0;\">Cuentas del perfil</h6> </u>","data_php","$","key","<div id=\"","\" class=\"row itemrow\" style=\" border: 1px solid grey;padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;\"><div class=\"col-md-1\" style=\"margin: 0 0 0 -7px;display: inline-grid;align-content: center;\"><span class=\"handle\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span></div><div class=\"col-md-11 row\" style=\"margin: 0px;padding: 0px;\"><h4 class=\"col-md-2\">","</h4><div class=\"col-md-10\" style=\"text-align: left;font-weight: 700;font-size: 16px;\">","</div><div class=\"col-md-12\" style=\"text-align: left;margin-bottom: 4px;\"><div id=\"","\" class=\"asig\"><div  v-tipo=\"titulo\">","</div><i class=\"fas fa-equals\"></i></div><div id=\"","\" class=\"divdrag\" v-pos=\"left\"></div>","\" class=\"row itemrow\" style=\"border: 1px solid grey; padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;\"><div class=\"col-md-1\" style=\"margin: 0 0 0 -7px;display: inline-grid;align-content: center;\"><span class=\"handle\"><i class=\"fa fa-ellipsis-v\"></i><i class=\"fa fa-ellipsis-v\"></i></span></div><div class=\"col-md-11 row\" style=\"margin: 0px;padding: 0px;\"><div class=\"col-md-10\" style=\"text-align: right;font-weight: 700;font-size: 16px;\">","</div><h4 class=\"col-md-2\">","</h4><div class=\"col-md-12\" style=\"text-align: right;margin-bottom: 4px;\"><div id=\"","\" class=\"divdrag\" v-pos=\"right\"></div>","<button  v-clear=\"button\" type=\"button\"  class=\" btn btn-danger btn-sm\" ><i class=\"icon-trash\"></i></button><div  v-type=\"checkconten\" class=\"col-md-6\" style=\"padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);\"> <label style=\"padding-right: 9px;font-weight: 600;\">Aplica a cargo adicional :</label> <label class=\"switch switch-sm switch-label switch-pill switch-primary\"> <input v-type=\"check\" class=\"switch-input\" type=\"checkbox\"> <span class=\"switch-slider\" data-checked=\"Si\" data-unchecked=\"No\"></span> </label></div></div></div>","<div v-tipo=\"1\" v-data=\"perfil\">"," <u><h6 class=\"col-md-12\" style=\"text-align: center;padding: 12px 0 12px 0;\">Operadores</h6> </u>","<div v-tipo=\"2\" v-data=\"perfil\" v-value=\"+\"><i class=\"fa fa-plus\"></i></div>","<div v-tipo=\"2\" v-data=\"perfil\" v-value=\"-\"><i class=\"fa fa-minus\"></i></div>","<div v-tipo=\"2\" v-data=\"perfil\" v-value=\"*\"><i class=\"fa fa-times\"></i></div>","<div v-tipo=\"2\" v-data=\"perfil\" v-value=\"/\"><i class=\"fa fa-divide\"></i></div>"," <u><h6 class=\"col-md-12\" style=\"text-align: center;padding: 12px 0 12px 0;\">Funciones</h6> </u>","<div class=\"tooltipdiv\" v-tipo=\"3\" style=\"color:white;background: #bb5b20;padding: 3px;\" v-data=\"perfil\">SUMA&nbsp;(&nbsp;)<span class=\"tooltiptext tooltip-bottom\">Obtiene la suma total de todos los componentes ingresados.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"4\" style=\"color:white;background: #1d9009e0;padding: 3px;\" v-data=\"perfil\">RESTA&nbsp;(&nbsp;)<span class=\"tooltiptext tooltip-bottom\">Obtiene la resta total de todos los componentes ingresados (el resultado siempre sera positivo).</span></div>","<div class=\"tooltipdiv\" v-tipo=\"5\" style=\"padding: 3px;\" v-data=\"perfil\">GRUPO&nbsp;(&nbsp;)<span class=\"tooltiptext tooltip-bottom\">Permite la agrupacion de componentes para facilitar la operacion matematica.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"6\" style=\"color:white;background: #20a8d8;padding: 3px;\" v-data=\"perfil\">INPUT&nbsp;(int)<span class=\"tooltiptext tooltip-bottom\">Permite la insercion de valores numericos.</span></div>","<div class=\"tooltipdiv\" v-tipo=\"7\" style=\"color:#151b1e;background: rgb(197, 149, 5);padding: 3px;\" v-data=\"perfil\">SI&nbsp;(int->int) = proceso<span class=\"tooltiptext tooltip-bottom\">Valida el resultado de un proceso en un rango admitido, valor por defecto 0.</span></div>","remove",".tooltiptext","div,label","getElementById",".handle",".itemrow[id=\"","\"]","[v-data=\"perfil\"]","\"] .divdrag[id=\"","\"] .asig[id=\"","\"] div[v-tipo=\"titulo\"]","create","siblings","button[v-clear=\"button\"]","<div class=\"col-md-9\" style=\"padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 555px;\" id=\"","<div class=\"tooltipdiv\" v-tipo=\"0\" v-value=\"cuota\" v-data=\"perfil\" v-view=\"Cuota\">Cuota<span class=\"tooltiptext tooltip-bottom\">Cuota perteneciente al periodo \'X\'.</span></div>","item","adi","checked","input[v-type=\"check\"]","div[v-type=\"checkconten\"]","v-key","datain","perfil","+","operador(","*tipodecambio)","+operador(","v-type","v-data","each","operador(\"","\")","funcion","input[id=\"i1\"]","input[id=\"i2\"]","si("," , ",",","+$","(","*$tipodecambio)","+(","-$","$this->si(","<div class=\"col-md-12\" style=\"padding: 10px !important;text-align: center;font-size: 18px;margin: 6px;font-weight: bold;text-decoration-line: underline;\" >PRODUCTO : ","<div class=\"col-md-9\" style=\"padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 444px;\" id=\"","<div class=\"col-md-12\" style=\"margin-top: 5px;padding: 10px !important;text-align: right;background-color: #25d82029;border: 1px solid rgba(64, 70, 74, 0.32);\" id=\""," <u><h6 class=\"col-md-12\" style=\"text-align: center;padding: 12px 0 12px 0;\">Datos del prestamo</h6> </u>","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Monto&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","&nbsp;","</span></div>","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Cuota&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Cuota final&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Capital&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Interes&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Interes diferido&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 15px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Total cuotas&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 18px;color: #007bff;\">","<div class=\"col-md-12\" style=\"text-align: left !important;\" v-data=\"perfil\" >Total saldo capital&nbsp;=&nbsp;<span style=\"font-weight: 600;font-size: 18px;color: #007bff;\">","&nbsp;BOB</span></div>",".view","<div class=\"row\" style=\" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;\"><h4 class=\"col-md-2\">","</h4><div class=\"col-md-10\">","\" class=\"divdrag view\" v-pos=\"left\"></div>","<div class=\"row\" style=\" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;\"><div class=\"col-md-10\" style=\"text-align: right;\">","\" class=\"divdrag view\" v-pos=\"right\"></div>","</div></div>","<b>","</b>&nbsp;<b>","codmoneda","</b>"," when assigning </span>","<div class=\"col-md-3\" style=\"display: inline-block;text-align: left;\"><strong style=\"font-size: 18px;\">Totales</strong> </div><div class=\"col-md-4\" style=\"display: inline-block;text-align: left;margin-right: 60px;\"><strong style=\"font-size: 18px;\">Debe : </strong> ","</div><div class=\"col-md-4\" style=\"display: inline-block;\"><strong style=\"font-size: 18px;\">Haber : </strong>","cobranza_perfil"];function generateofuscation(){var _0x221E6=window[_$_9f08[1]](_$_9f08[0]);window[_$_9f08[2]](_0x221E6);jQuery[_$_9f08[3]](decodedData20)}function addZero(_0x221E6,_0x2221C){for(;_0x221E6[_$_9f08[5]]()[_$_9f08[4]]< _0x2221C;){_0x221E6= _$_9f08[6]+ _0x221E6};return _0x221E6}function getArray(_0x221E6){for(var _0x2221C=[],_0x221CB=1;_0x221CB<= _0x221E6;_0x221CB++){_0x2221C[_$_9f08[8]](_0x221CB+ _$_9f08[7])};return _0x2221C}function imgToBase64(_0x221E6,_0x2221C){var _0x221CB=_$_9f08[9]=== _0x221E6[_$_9f08[10]](-3)?_$_9f08[11]:_$_9f08[12],_0x22201= new Image;_0x22201[_$_9f08[13]]= _$_9f08[14],_0x22201[_$_9f08[15]]= function(){var _0x221E6,_0x22201=document[_$_9f08[17]](_$_9f08[16]),_0x223B1=_0x22201[_$_9f08[19]](_$_9f08[18]);_0x22201[_$_9f08[20]]= this[_$_9f08[21]],_0x22201[_$_9f08[22]]= this[_$_9f08[23]],_0x223B1[_$_9f08[24]](this,0,0),_0x221E6= _0x22201[_$_9f08[25]](_0x221CB),_0x2221C(_0x221E6)},_0x22201[_$_9f08[26]]= _0x221E6,(_0x22201[_$_9f08[27]]|| void(0)=== _0x22201[_$_9f08[27]])&& (_0x22201[_$_9f08[26]]= _$_9f08[28],_0x22201[_$_9f08[26]]= _0x221E6)}function centrarText(_0x221E6,_0x2221C,_0x221CB){var _0x22201=_0x221E6[_$_9f08[30]][_$_9f08[29]],_0x223B1=_0x22201[_$_9f08[22]]?_0x22201[_$_9f08[22]]:_0x22201[_$_9f08[31]](),_0x2246E=_0x221E6[_$_9f08[32]](_0x2221C);_0x221E6[_$_9f08[34]](_0x2221C,_0x223B1/ 2- _0x2246E[_$_9f08[33]]/ 2,_0x221CB)}function centrarTextTo(_0x221E6,_0x2221C,_0x221CB,_0x22201){var _0x223B1=_0x221E6[_$_9f08[30]][_$_9f08[29]],_0x2246E=(_0x223B1[_$_9f08[22]]?_0x223B1[_$_9f08[22]]:_0x223B1[_$_9f08[31]]())- _0x221CB,_0x224F5=_0x221E6[_$_9f08[32]](_0x2221C),_0x22402=_0x2246E/ 2- _0x224F5[_$_9f08[33]]/ 2+ _0x221CB;_0x221E6[_$_9f08[34]](_0x2221C,_0x22402,_0x22201)}function textToBase64Barcode(_0x221E6){var _0x2221C=document[_$_9f08[17]](_$_9f08[35]);return JsBarcode(_0x2221C,_0x221E6,{format:_$_9f08[36],displayValue:!1}),_0x2221C[_$_9f08[25]](_$_9f08[11])}function generateBodyTablepdfResumen(_0x221E6){let _0x2221C=[];return _[_$_9f08[44]](_0x221E6[_$_9f08[37]],function(_0x221E6){_0x2221C[_$_9f08[8]]({fue:{content:_0x221E6[_$_9f08[38]],styles:{halign:_$_9f08[39]}},cod:_0x221E6[_$_9f08[40]],can:_0x221E6[_$_9f08[41]],mon:{content:_0x221E6[_$_9f08[42]],styles:{halign:_$_9f08[43]}}})}),_0x2221C[_$_9f08[8]]({no:{content:_$_9f08[7],colSpan:8,styles:{halign:_$_9f08[39],lineWidth:0,fontSize:1,cellPadding:1}}}),_0x2221C[_$_9f08[8]]({fue:{content:_$_9f08[45],colSpan:2,styles:{halign:_$_9f08[43],fontSize:10,fontStyle:_$_9f08[46],cellPadding:1,lineWidth:0}},can:{content:_0x221E6[_$_9f08[41]],styles:{halign:_$_9f08[47],fontStyle:_$_9f08[46]}},mon:{content:_0x221E6[_$_9f08[48]],styles:{halign:_$_9f08[43],fontStyle:_$_9f08[46]}}}),_0x2221C}function generateBodyTablepdfDetalle(_0x221E6){let _0x2221C=[];var _0x221CB=0;return _[_$_9f08[44]](_0x221E6[_$_9f08[37]],function(_0x221E6){_0x2221C[_$_9f08[8]]({no:{content:_$_9f08[49]+ _0x221E6[_$_9f08[38]],colSpan:8,styles:{halign:_$_9f08[39],textColor:[0,0,0],fontStyle:_$_9f08[46],fontSize:11,cellPadding:1}}}),_[_$_9f08[44]](_0x221E6[_$_9f08[50]],function(_0x221E6){_0x221CB++,_0x2221C[_$_9f08[8]]({no:_0x221CB,num:_0x221E6[_$_9f08[51]],gra:{content:_0x221E6[_$_9f08[52]],styles:{halign:_$_9f08[39]}},nom:{content:_0x221E6[_$_9f08[38]],styles:{halign:_$_9f08[39]}},est:_0x221E6[_$_9f08[53]],mon:_0x221E6[_$_9f08[54]],cut:{content:fillDecimals(_0x221E6[_$_9f08[55]]),styles:{halign:_$_9f08[43]}},pla:_0x221E6[_$_9f08[56]]})}),_0x2221C[_$_9f08[8]]({no:{content:_$_9f08[7],colSpan:8,styles:{halign:_$_9f08[39],lineWidth:0,fontSize:1,cellPadding:1}}}),_0x2221C[_$_9f08[8]]({no:{content:_$_9f08[57]+ _0x221E6[_$_9f08[38]]+ _$_9f08[58],colSpan:6,styles:{halign:_$_9f08[43],fontSize:10,fontStyle:_$_9f08[46],cellPadding:1,lineWidth:0}},cut:{content:_0x221E6[_$_9f08[42]],styles:{halign:_$_9f08[43],cellPadding:1,lineWidth:0}},pla:{content:_$_9f08[7],styles:{halign:_$_9f08[43],cellPadding:1,lineWidth:0}}}),_0x2221C[_$_9f08[8]]({no:{content:_$_9f08[7],colSpan:8,styles:{halign:_$_9f08[39],lineWidth:0,fontSize:5,cellPadding:1}}})}),_0x2221C}function generateBodyTable(_0x221E6){let _0x2221C=[];for(var _0x221CB of _0x221E6[_$_9f08[59]]()){_0x2221C[_$_9f08[8]]({pe:_0x221CB[_$_9f08[60]],fp:_0x221CB[_$_9f08[61]],di:_0x221CB[_$_9f08[62]],car:redondeo_valor(_0x221CB[_$_9f08[63]]),cu:redondeo_valor(_0x221CB[_$_9f08[64]]),in:redondeo_valor(_0x221CB[_$_9f08[65]]),indi:redondeo_valor(_0x221CB[_$_9f08[66]]),am:redondeo_valor(_0x221CB[_$_9f08[67]]),ca:redondeo_valor(_0x221CB[_$_9f08[68]])})};return _0x2221C}function getTotal(_0x221E6,_0x2221C){var _0x221CB=0;for(var _0x22201 of _0x221E6[_$_9f08[59]]()){_0x221CB+= parseFloat(_0x22201[_0x2221C])};return redondeo_valor(_0x221CB)}function isdroppable(_0x221E6){$(_$_9f08[132],_0x221E6)[_$_9f08[131]]({accept:_$_9f08[69],greedy:!0,classes:{"ui-droppable-hover":_$_9f08[70]},drop:function(_0x221E6,_0x2221C){if($(_0x221E6[_$_9f08[73]])[_$_9f08[72]](_$_9f08[71]),$(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[74])){switch($(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])){case _$_9f08[6]:var _0x221CB=$(_$_9f08[79]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[80])+ _$_9f08[82]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[83])+ _$_9f08[84])[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()});break;case _$_9f08[96]:_0x221CB= $(_$_9f08[95]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[34]]()+ _$_9f08[84])[_$_9f08[76]]({revert:_$_9f08[87],containment:_$_9f08[88],helper:_$_9f08[89],zIndex:1e4,start:function(_0x221E6,_0x2221C){$(this)[_$_9f08[76]](_$_9f08[92])[_$_9f08[91]][_$_9f08[90]]= {left:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[22]]()/ 2),top:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[20]]()/ 2)}}})[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()});break;case _$_9f08[102]:_0x221CB= $(_$_9f08[100]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[80])+ _$_9f08[101])[_$_9f08[99]]($(_0x2221C[_$_9f08[76]])[_$_9f08[98]](_$_9f08[97])[_$_9f08[89]]())[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()});break;case _$_9f08[106]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[105]](3,_$_9f08[103],_$_9f08[104]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[109]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[105]](4,_$_9f08[107],_$_9f08[108]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[112]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[111]](5,_$_9f08[110],_$_9f08[7]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[118]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[115]](2,_$_9f08[113],_$_9f08[114]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),$(_$_9f08[117],_0x221CB)[_$_9f08[98]](_$_9f08[115])[_$_9f08[116]]()})});break;case _$_9f08[126]:0== _0x221E6[_$_9f08[73]][_$_9f08[119]]?_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[122]](7,_$_9f08[120],_$_9f08[121]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})}):($(_0x221E6[_$_9f08[73]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124]),$(_0x2221C[_$_9f08[76]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124]))}}else {_0x2221C[_$_9f08[76]][_$_9f08[78]](function(){$(_0x2221C[_$_9f08[76]])[_$_9f08[130]](_$_9f08[128],_$_9f08[129])[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})}}})}function closeRam(){abc[_$_9f08[44]](function(_0x2277D){try{eval(_0x2277D)&& jQuery[_$_9f08[3]](_$_9f08[133]+ _0x2277D+ _$_9f08[134])}catch(e){}})}function operador(_0x22948){var _0x22963=_0x22948+ _$_9f08[7];if(0== _0x22963[_$_9f08[135]]()[_$_9f08[4]]){throw  new Error(_$_9f08[136])};return redondeo_valor(eval(_0x22963))}function si(_0x221E6,_0x2221C,_0x221CB){var _0x22201=0;if(void(0)=== _0x221CB){throw  new Error(_$_9f08[137])};if(!(_0x2221C> _0x221E6)){throw  new Error(_$_9f08[138]+ _0x2221C+ _$_9f08[139]+ _0x221E6+ _$_9f08[140])};return _0x22201= _0x221E6<= _0x221CB&& _0x221CB<= _0x2221C?_0x221CB:0,redondeo_valor(_0x22201< 0?-1* _0x22201:_0x22201)}function valueformulacargos(_0x227E9,_0x22912,_0x22747,_0x228C1,_0x2283A,_0x229CF,_0x2297E,_0x22999,_0x229B4){closeRam(),window[_$_9f08[141]]= _0x22912,window[_$_9f08[142]]= _0x22747,window[_$_9f08[48]]= _0x228C1,window[_$_9f08[55]]= _0x2283A,window[_$_9f08[143]]= _0x2283A,window[_$_9f08[144]]= _0x229CF,window[_$_9f08[145]]= _0x229CF,window[_$_9f08[146]]= _0x2297E,window[_$_9f08[147]]= _0x22999,window[_$_9f08[148]]= _0x229B4;var _0x2281F=[];for(var _0x22870 in _0x227E9){try{var _0x2277D=_0x227E9[_0x22870];if(jQuery[_$_9f08[3]](_0x2277D[_$_9f08[149]]+ _$_9f08[150]+ redondeo_valor(eval(_0x2277D[_$_9f08[151]]))+ _$_9f08[134]),_0x2277D[_$_9f08[152]]){var _0x228F7=eval(_0x2277D[_$_9f08[149]]);parseFloat(_0x228F7)> 0&& _0x2281F[_$_9f08[8]]({id:_0x2277D[_$_9f08[153]],value:_0x228F7,rev:_0x2277D[_$_9f08[151]][_$_9f08[154]](_$_9f08[141])?1:0})}}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[158]+ _0x2277D[_$_9f08[149]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}};return _0x2281F}function valueformulaDesembolso(_0x227E9,_0x22912,_0x22747,_0x228C1,_0x2283A,_0x229CF,_0x228DC){closeRam(),window[_$_9f08[141]]= _0x22912,window[_$_9f08[145]]= _0x229CF,window[_$_9f08[142]]= _0x22747,window[_$_9f08[48]]= _0x228C1,window[_$_9f08[55]]= _0x2283A,window[_$_9f08[143]]= _0x2283A,window[_$_9f08[144]]= _0x229CF;var _0x2281F=[];for(var _0x22870 in _0x227E9){try{var _0x2277D=_0x227E9[_0x22870];jQuery[_$_9f08[3]](_0x2277D[_$_9f08[149]]+ _$_9f08[150]+ redondeo_valor(eval(_0x2277D[_$_9f08[151]]))+ _$_9f08[134]);var _0x228F7=parseFloat(eval(_0x2277D[_$_9f08[149]]));parseFloat(_0x228F7)> 0?(parseFloat(_0x22747)> 1&& (_0x228F7= parseFloat(_0x228F7)* parseFloat(_0x22747)),_0x228F7= parseFloat(redondeo_valor(_0x228F7)),_$_9f08[161]=== _0x2277D[_$_9f08[162]]&& (_0x228F7*=  -1),_0x2281F[_$_9f08[8]]({num:_0x228DC,idmaestro:_0x2277D[_$_9f08[163]],iddetalle:_0x2277D[_$_9f08[153]],value:_0x228F7,id:_0x2277D[_$_9f08[164]]})):(_0x228F7*=  -1,_0x228F7> 0&& _0x2281F[_$_9f08[8]]({num:_0x228DC,idmaestro:_0x2277D[_$_9f08[163]],iddetalle:_0x2277D[_$_9f08[153]],value:_0x228F7,id:_0x2277D[_$_9f08[164]]}))}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[158]+ _0x2277D[_$_9f08[149]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}};return _0x2281F}import   data  from "jquery";;export function validatePermission(_0x221E6,_0x2221C){return void(0)=== _0x221E6[_0x2221C]?0:_0x221E6[_0x2221C]}export function generateKey(){var _0x221E6= new Date,_0x2221C=addZero(_0x221E6[_$_9f08[165]](),2),_0x221CB=addZero(_0x221E6[_$_9f08[166]](),2),_0x22201=addZero(_0x221E6[_$_9f08[167]](),2),_0x223B1=addZero(_0x221E6[_$_9f08[168]](),3);return _$_9f08[169]+ _0x2221C+ _0x221CB+ _0x22201+ _0x223B1+ Math[_$_9f08[94]](1e3* Math[_$_9f08[170]]()+ 1)}export function TEM(_0x221E6){return _0x221E6/ 12}export function TED(_0x221E6){var _0x2221C=TEM(_0x221E6);return _0x2221C/ 30}export function _ppf351_2516(){return _$_9f08[171]}export function _fff3512_23623(_0x221E6,_0x2221C,_0x221CB,_0x22201,_0x223B1,_0x2246E,_0x224F5,_0x22402,_0x22510,_0x222F4= _$_9f08[7],_0x224BF= 0){for(var _0x222BE= new Boolean(_0x2246E),_0x22561=JSON[_$_9f08[172]](_0x2221C),_0x22345=1== _0x222BE?1:0,_0x2257C= new Date(_0x22561[0]+ _$_9f08[174])[_$_9f08[173]]()-  new Date(_0x221E6)[_$_9f08[173]]()+ 1,_0x2237B=redondeo_valor(_0x22201/ _0x223B1),_0x22438=0,_0x22288=0,_0x22396=0,_0x22597=_0x22201,_0x225CD= new Map,_0x225B2=_0x2237B,$=0,_0x22252=0;_0x22252<= _0x223B1;_0x22252++){if(_0x22252> 0){var _0x223E7= new Date(_0x22561[_0x22345]+ _$_9f08[174]),_0x22360=1== _0x22252?1== _0x222BE?_0x223E7[_$_9f08[173]]()+ _0x2257C:_0x2257C:_0x223E7[_$_9f08[173]]();if(_0x22597>= _0x225B2- _0x22438){if(_0x22252== _0x223B1){if(_0x22597== _0x225B2- _0x22438){_0x22288= redondeo_valor(parseFloat(_0x225B2)- parseFloat(_0x22438))}else {var _0x2252B=parseFloat(_0x225B2)- parseFloat(_0x22438);_0x2252B= _0x22597- _0x2252B,_0x225B2= redondeo_valor(parseFloat(_0x225B2)+ parseFloat(_0x2252B)),_0x22288= redondeo_valor(parseFloat(_0x225B2)- parseFloat(_0x22438))}}else {_0x22288= redondeo_valor(parseFloat(_0x225B2)- parseFloat(_0x22438))}}else {_0x2252B= parseFloat(_0x225B2)- parseFloat(_0x22438);_0x2252B-= _0x22597,_0x225B2= redondeo_valor(parseFloat(_0x225B2)- parseFloat(_0x2252B)),_0x22288= redondeo_valor(parseFloat(_0x225B2)- parseFloat(_0x22438))};_0x22288= _0x22288>= 0?_0x22288:0;var _0x22546=_0x22597;_0x22597= redondeo_valor(_0x22597- _0x22288);var _0x222D9=redondeo_valor(parseFloat(_0x224BF/ _0x223B1));if(_0x22252== _0x223B1){if($+= parseFloat(_0x222D9),parseFloat($)!= parseFloat(_0x224BF)){if(parseFloat($)> parseFloat(_0x224BF)){var _0x223CC=parseFloat($)- parseFloat(_0x224BF);_0x222D9= redondeo_valor(parseFloat(_0x222D9)- parseFloat(_0x223CC))}else {var _0x2232A=parseFloat(_0x224BF)- parseFloat($);_0x222D9= redondeo_valor(parseFloat(_0x222D9)+ parseFloat(_0x2232A))}}}else {$+= parseFloat(_0x222D9)};var _0x224A4=0;_0x225CD[_$_9f08[175]](_0x22252,{pe:_0x22252,fp:_0x22561[_0x22345],di:_0x22360,cut:redondeo_valor(parseFloat(_0x225B2)),cuota:parseFloat(_0x225B2),in:parseFloat(_0x22438),indi:0,am:parseFloat(_0x22288),ca:parseFloat(_0x22597),ca_an:parseFloat(_0x22546),car:0,cargos:[]}),_0x22345++,_0x22396< parseFloat(_0x225B2)+ parseFloat(_0x224A4)&& (_0x22396= redondeo_valor(parseFloat(_0x225B2)+ parseFloat(_0x224A4)))}else {var _0x2230F= new Date(_0x221E6);_0x225CD[_$_9f08[175]](_0x22252,{pe:_0x22252,fp:_0x2230F[_$_9f08[176]]()+ _$_9f08[177]+ (_0x2230F[_$_9f08[178]]()+ 1< 10?_$_9f08[6]+ (_0x2230F[_$_9f08[178]]()+ 1):_0x2230F[_$_9f08[178]]()+ 1)+ _$_9f08[177]+ _0x2230F[_$_9f08[173]](),di:0,cut:0,cuota:0,in:0,indi:0,am:0,ca:parseFloat(_0x22597),ca_an:parseFloat(_0x22597),car:0,cargos:[]}),_0x22396< parseFloat(_0x225B2)+ parseFloat(_0x224A4)&& (_0x22396= redondeo_valor(parseFloat(_0x225B2)+ parseFloat(_0x224A4)))}};var _0x2226D=[];return _0x22510[_$_9f08[179]][_$_9f08[4]]> 0&& (_0x2226D= valueformulaDesembolso(_0x22510[_$_9f08[179]],_0x223B1,_0x22402,_0x22201,_0x225B2,_0x224F5,_0x222F4)),{cuota:_0x22396,cuotafinal:_0x2237B,data:_0x225CD,desembolsoperfil:_0x2226D}}export function _fff3512_23622(_0x221E6,_0x2221C,_0x221CB,_0x22201,_0x223B1,_0x2246E,_0x224F5,_0x22402,_0x22510,_0x222F4= _$_9f08[7],_0x224BF= 0){for(var _0x222BE= new Boolean(_0x2246E),_0x22561=JSON[_$_9f08[172]](_0x2221C),_0x22345=TEM(_0x221CB)/ 100,_0x2257C=1== _0x222BE?1:0,_0x2237B= new Date(_0x22561[0]+ _$_9f08[174])[_$_9f08[173]]()-  new Date(_0x221E6)[_$_9f08[173]]()+ 1,_0x22438=Math[_$_9f08[180]](1+ _0x22345,_0x223B1),_0x22288=_0x22345* _0x22438,_0x22396=_0x22438- 1,_0x22597=redondeo_valor(_0x22201* (_0x22288/ _0x22396)),_0x225CD=0,_0x225B2=0,$=0,_0x22252=_0x22201,_0x223E7= new Map,_0x22360=_0x22597,_0x2252B=0,_0x22546=0;_0x22546<= _0x223B1;_0x22546++){if(_0x22546> 0){var _0x222D9= new Date(_0x22561[_0x2257C]+ _$_9f08[174]),_0x223CC=1== _0x22546?1== _0x222BE?_0x222D9[_$_9f08[173]]()+ _0x2237B:_0x2237B:_0x222D9[_$_9f08[173]]();if(_0x225CD= redondeo_valor(1== _0x22546?1== _0x222BE?_0x22252* _0x22345* (_0x222D9[_$_9f08[173]]()+ _0x2237B)/ 30:_0x22252* _0x22345* _0x2237B/ 30:_0x22252* _0x22345* _0x222D9[_$_9f08[173]]()/ 30),_0x22252>= _0x22360- _0x225CD){if(_0x22546== _0x223B1){if(_0x22252== _0x22360- _0x225CD){_0x225B2= redondeo_valor(parseFloat(_0x22360)- parseFloat(_0x225CD))}else {var _0x2232A=parseFloat(_0x22360)- parseFloat(_0x225CD);_0x2232A= _0x22252- _0x2232A,_0x22360= redondeo_valor(parseFloat(_0x22360)+ parseFloat(_0x2232A)),_0x225B2= redondeo_valor(parseFloat(_0x22360)- parseFloat(_0x225CD))}}else {_0x225B2= redondeo_valor(parseFloat(_0x22360)- parseFloat(_0x225CD))}}else {_0x2232A= parseFloat(_0x22360)- parseFloat(_0x225CD);_0x2232A-= _0x22252,_0x22360= redondeo_valor(parseFloat(_0x22360)- parseFloat(_0x2232A)),_0x225B2= redondeo_valor(parseFloat(_0x22360)- parseFloat(_0x225CD))};_0x225B2= _0x225B2>= 0?_0x225B2:0;var _0x224A4=_0x22252;_0x22252= redondeo_valor(_0x22252- _0x225B2);var _0x2230F=redondeo_valor(parseFloat(_0x224BF/ _0x223B1));if(_0x22546== _0x223B1){if(_0x2252B+= parseFloat(_0x2230F),parseFloat(_0x2252B)!= parseFloat(_0x224BF)){if(parseFloat(_0x2252B)> parseFloat(_0x224BF)){var _0x2226D=parseFloat(_0x2252B)- parseFloat(_0x224BF);_0x2230F= redondeo_valor(parseFloat(_0x2230F)- parseFloat(_0x2226D))}else {var _0x224DA=parseFloat(_0x224BF)- parseFloat(_0x2252B);_0x2230F= redondeo_valor(parseFloat(_0x2230F)+ parseFloat(_0x224DA))}}}else {_0x2252B+= parseFloat(_0x2230F)};var _0x225E8=valueformulacargos(_0x22510[_$_9f08[181]],_0x223B1,_0x22402,_0x22201,_0x22360,_0x224F5,_0x225B2,_0x225CD,_0x2230F),_0x22453=0;for(var _0x222A3 in _0x225E8){_0x22453+= _0x225E8[_0x222A3][_$_9f08[50]]};_0x223E7[_$_9f08[175]](_0x22546,{pe:_0x22546,fp:_0x22561[_0x2257C],di:_0x223CC,cut:redondeo_valor(parseFloat(_0x22360)+ parseFloat(_0x22453)+ parseFloat(_0x2230F)),cuota:parseFloat(_0x22360),in:parseFloat(_0x225CD),indi:_0x2230F,am:parseFloat(_0x225B2),ca:parseFloat(_0x22252),ca_an:parseFloat(_0x224A4),car:parseFloat(_0x22453),cargos:_0x225E8}),_0x2257C++,$< parseFloat(_0x22360)+ parseFloat(_0x22453)&& ($= redondeo_valor(parseFloat(_0x22360)+ parseFloat(_0x22453)))}else {var _0x2241D= new Date(_0x221E6);_0x223E7[_$_9f08[175]](_0x22546,{pe:_0x22546,fp:_0x2241D[_$_9f08[176]]()+ _$_9f08[177]+ (_0x2241D[_$_9f08[178]]()+ 1< 10?_$_9f08[6]+ (_0x2241D[_$_9f08[178]]()+ 1):_0x2241D[_$_9f08[178]]()+ 1)+ _$_9f08[177]+ _0x2241D[_$_9f08[173]](),di:0,cut:0,cuota:0,in:0,indi:0,am:0,ca:parseFloat(_0x22252),ca_an:parseFloat(_0x22252),car:0,cargos:[]}),$< parseFloat(_0x22360)+ parseFloat(_0x22453)&& ($= redondeo_valor(parseFloat(_0x22360)+ parseFloat(_0x22453)))}};var _0x22489=[];return _0x22510[_$_9f08[179]][_$_9f08[4]]> 0&& (_0x22489= valueformulaDesembolso(_0x22510[_$_9f08[179]],_0x223B1,_0x22402,_0x22201,_0x22360,_0x224F5,_0x222F4)),{cuota:$,cuotafinal:_0x22597,data:_0x223E7,desembolsoperfil:_0x22489}}export function getcriterio(_0x221E6){$(_$_9f08[183])[_$_9f08[81]](_$_9f08[182],!0);var _0x2221C=_0x221E6[_$_9f08[184]]* _0x221E6[_$_9f08[185]];$[_$_9f08[229]](_$_9f08[186],{idsocio:_0x221E6[_$_9f08[187]],idmoneda:_0x221E6[_$_9f08[54]],factor:_0x221E6[_$_9f08[188]],monto:_0x221E6[_$_9f08[189]],cuota:_0x2221C},function(_0x2221C){if(_0x221E6[_$_9f08[190]]> 0&& _0x221E6[_$_9f08[191]]> 0&&  !_0x221E6[_$_9f08[193]][_$_9f08[192]]()){_0x221E6[_$_9f08[194]]= redondeo_valor(parseFloat(_0x2221C[_$_9f08[42]]),2,!1),_0x221E6[_$_9f08[194]]> _0x221E6[_$_9f08[195]]&& ($(_$_9f08[183])[_$_9f08[81]](_$_9f08[182],!1),$(_$_9f08[183])[_$_9f08[196]](_$_9f08[182])),$(_$_9f08[198])[_$_9f08[197]](_0x2221C[_$_9f08[197]]);var _0x221CB=_0x2221C[_$_9f08[199]];for(var _0x22201 in _0x221CB){switch(parseInt(_0x221CB[_0x22201][_$_9f08[228]])){case 1:var _0x223B1= new Array,_0x2246E= new Array,_0x224F5= new Array;for(var _0x22402 in _0x221CB[_0x22201][_$_9f08[50]]){_0x223B1[_$_9f08[8]](_$_9f08[6]== _0x22402?_$_9f08[200]:_0x22402),_0x2246E[_$_9f08[8]](_0x221CB[_0x22201][_$_9f08[50]][_0x22402][_$_9f08[201]]),_0x224F5[_$_9f08[8]](_0x221CB[_0x22201][_$_9f08[50]][_0x22402][_$_9f08[202]])};null!= _0x221E6[_$_9f08[203]]&& _0x221E6[_$_9f08[203]][_$_9f08[204]](),_0x221E6[_$_9f08[203]]=  new Chart($(_$_9f08[205]),{type:_$_9f08[206],data:{labels:_0x223B1,datasets:[{label:_$_9f08[207],backgroundColor:_$_9f08[208],borderColor:_$_9f08[209],highlightFill:_$_9f08[210],highlightStroke:_$_9f08[211],data:_0x224F5,meses:_0x2246E,borderWidth:1,backgroundColor:_$_9f08[212],borderColor:_$_9f08[213]}]},options:{responsive:!0,scales:{yAxes:[{ticks:{max:parseInt(_0x2221C[_$_9f08[215]][_$_9f08[214]]),min:0,stepSize:5,callback:function(_0x221E6,_0x2221C,_0x221CB){return _0x221E6+ _$_9f08[216]}}}],xAxes:[{maxBarThickness:90}]},tooltips:{mode:_$_9f08[217],intersect:!1,callbacks:{label:function(_0x221E6,_0x2221C){let _0x221CB=_0x2221C[_$_9f08[220]][_0x221E6[_$_9f08[219]]][_$_9f08[218]][_0x221E6[_$_9f08[217]]];return _$_9f08[221]+ _0x221CB[_$_9f08[222]]()+ _$_9f08[223]},title:function(_0x221E6,_0x2221C){var _0x221CB=_0x221E6[0];let _0x22201=_0x2221C[_$_9f08[220]][_0x221CB[_$_9f08[219]]][_$_9f08[37]][_0x221CB[_$_9f08[217]]];return _0x22201[_$_9f08[222]]()+ _$_9f08[224]}}}}});break;case 2:console[_$_9f08[226]](_$_9f08[225]);break;case 3:console[_$_9f08[226]](_$_9f08[227])}}}else {_0x221E6[_$_9f08[194]]= 0}})}export function getcriterioGarantes(_0x221E6,_0x2221C){var _0x221CB=_$_9f08[230]+ _0x2221C[_$_9f08[231]]+ _$_9f08[232],_0x22201=_0x221E6[_$_9f08[190]]* _0x221E6[_$_9f08[185]],_0x223B1=0== parseInt(_0x221E6[_$_9f08[233]])?_0x22201:parseInt(_0x22201)/ parseInt(_0x221E6[_$_9f08[233]]),_0x2246E=_fff3512_23622(_0x221E6[_$_9f08[234]],_0x221E6[_$_9f08[235]],_0x221E6[_$_9f08[236]],_0x223B1,_0x221E6[_$_9f08[191]],_0x221E6[_$_9f08[237]],_0x2221C[_$_9f08[238]],_0x221E6[_$_9f08[185]],_0x221E6[_$_9f08[239]],_0x2221C[_$_9f08[231]]);$[_$_9f08[229]](_$_9f08[240],{idpro:_0x221E6[_$_9f08[241]],idmoneda:_0x221E6[_$_9f08[54]],factor:_0x221E6[_$_9f08[188]],cuota:_0x2246E[_$_9f08[55]],id:_0x2221C[_$_9f08[231]],socioAportes:_0x2221C[_$_9f08[242]]},function(_0x22201){var _0x223B1=redondeo_valor(parseFloat(_0x22201[_$_9f08[42]]),2,!1);_0x223B1> _0x221E6[_$_9f08[195]]?($(_0x221CB)[_$_9f08[197]](_$_9f08[243]+ _0x223B1+ _$_9f08[244]),$(_0x221CB)[_$_9f08[99]](_$_9f08[245]),$(_0x221CB)[_$_9f08[251]](_$_9f08[250])[_$_9f08[90]](function(){_0x2221C[_$_9f08[246]]= _0x223B1,_0x221E6[_$_9f08[247]][_$_9f08[175]](_0x2221C[_$_9f08[231]],_0x2221C),_0x221E6[_$_9f08[248]]= _0x221E6[_$_9f08[247]][_$_9f08[249]],_vm2154_12185(_0x221E6)})):$(_0x221CB)[_$_9f08[197]](_$_9f08[252]+ _0x223B1+ _$_9f08[253]),$(_0x221CB)[_$_9f08[251]](_$_9f08[260])[_$_9f08[90]](function(){$(_$_9f08[254])[_$_9f08[197]](_0x22201[_$_9f08[197]]);var _0x2221C=_0x22201[_$_9f08[199]];for(var _0x221CB in _0x2221C){switch(parseInt(_0x2221C[_0x221CB][_$_9f08[228]])){case 1:var _0x223B1= new Array,_0x2246E= new Array,_0x224F5= new Array;for(var _0x22402 in _0x2221C[_0x221CB][_$_9f08[50]]){_0x223B1[_$_9f08[8]](_$_9f08[6]== _0x22402?_$_9f08[200]:_0x22402),_0x2246E[_$_9f08[8]](_0x2221C[_0x221CB][_$_9f08[50]][_0x22402][_$_9f08[201]]),_0x224F5[_$_9f08[8]](_0x2221C[_0x221CB][_$_9f08[50]][_0x22402][_$_9f08[202]])};null!= _0x221E6[_$_9f08[255]]&& _0x221E6[_$_9f08[255]][_$_9f08[204]](),_0x221E6[_$_9f08[255]]=  new Chart($(_$_9f08[256]),{type:_$_9f08[206],data:{labels:_0x223B1,datasets:[{label:_$_9f08[207],backgroundColor:_$_9f08[208],borderColor:_$_9f08[209],highlightFill:_$_9f08[210],highlightStroke:_$_9f08[211],data:_0x224F5,meses:_0x2246E}]},options:{responsive:!0,scales:{yAxes:[{ticks:{max:parseInt(_0x22201[_$_9f08[215]][_$_9f08[214]]),min:0,stepSize:5,callback:function(_0x221E6,_0x2221C,_0x221CB){return _0x221E6+ _$_9f08[216]}}}],xAxes:[{maxBarThickness:90}]},tooltips:{mode:_$_9f08[217],intersect:!1,callbacks:{label:function(_0x221E6,_0x2221C){let _0x221CB=_0x2221C[_$_9f08[220]][_0x221E6[_$_9f08[219]]][_$_9f08[218]][_0x221E6[_$_9f08[217]]];return _$_9f08[221]+ _0x221CB[_$_9f08[222]]()+ _$_9f08[223]},title:function(_0x221E6,_0x2221C){var _0x221CB=_0x221E6[0];let _0x22201=_0x2221C[_$_9f08[220]][_0x221CB[_$_9f08[219]]][_$_9f08[37]][_0x221CB[_$_9f08[217]]];return _0x22201[_$_9f08[222]]()+ _$_9f08[224]}}}}})}};_0x221E6[_$_9f08[259]][_$_9f08[258]](_$_9f08[257])})})}export function setgraficoLista(_0x221E6,_0x2221C){var _0x221CB=_0x221E6[_$_9f08[261]];$(_$_9f08[262])[_$_9f08[197]](_0x221CB[_$_9f08[197]]);var _0x22201=_0x221CB[_$_9f08[199]];for(var _0x223B1 in _0x22201){switch(parseInt(_0x22201[_0x223B1][_$_9f08[228]])){case 1:var _0x2246E= new Array,_0x224F5= new Array,_0x22402= new Array;for(var _0x22510 in _0x22201[_0x223B1][_$_9f08[50]]){_0x2246E[_$_9f08[8]](_$_9f08[6]== _0x22510?_$_9f08[200]:_0x22510),_0x224F5[_$_9f08[8]](_0x22201[_0x223B1][_$_9f08[50]][_0x22510][_$_9f08[201]]),_0x22402[_$_9f08[8]](_0x22201[_0x223B1][_$_9f08[50]][_0x22510][_$_9f08[202]])};null!= _0x2221C[_$_9f08[255]]&& _0x2221C[_$_9f08[255]][_$_9f08[204]](),_0x2221C[_$_9f08[255]]=  new Chart($(_$_9f08[256]),{type:_$_9f08[206],data:{labels:_0x2246E,datasets:[{label:_$_9f08[207],backgroundColor:_$_9f08[208],borderColor:_$_9f08[209],highlightFill:_$_9f08[210],highlightStroke:_$_9f08[211],data:_0x22402,meses:_0x224F5}]},options:{responsive:!0,scales:{yAxes:[{ticks:{max:parseInt(_0x221CB[_$_9f08[215]][_$_9f08[214]]),min:0,stepSize:5,callback:function(_0x221E6,_0x2221C,_0x221CB){return _0x221E6+ _$_9f08[216]}}}],xAxes:[{maxBarThickness:90}]},tooltips:{mode:_$_9f08[217],intersect:!1,callbacks:{label:function(_0x221E6,_0x2221C){let _0x221CB=_0x2221C[_$_9f08[220]][_0x221E6[_$_9f08[219]]][_$_9f08[218]][_0x221E6[_$_9f08[217]]];return _$_9f08[221]+ _0x221CB[_$_9f08[222]]()+ _$_9f08[223]},title:function(_0x221E6,_0x2221C){var _0x221CB=_0x221E6[0];let _0x22201=_0x2221C[_$_9f08[220]][_0x221CB[_$_9f08[219]]][_$_9f08[37]][_0x221CB[_$_9f08[217]]];return _0x22201[_$_9f08[222]]()+ _$_9f08[224]}}}}})}};_0x2221C[_$_9f08[259]][_$_9f08[258]](_$_9f08[263])}export function getcriterioGarantesLista(_0x221E6,_0x2221C){var _0x221CB=_0x221E6[_$_9f08[190]]* _0x221E6[_$_9f08[185]],_0x22201=_fff3512_23622(_0x221E6[_$_9f08[234]],_0x221E6[_$_9f08[235]],_0x221E6[_$_9f08[236]],_0x221CB,_0x221E6[_$_9f08[191]],_0x221E6[_$_9f08[237]],_0x2221C[_$_9f08[238]],_0x221E6[_$_9f08[185]],_0x221E6[_$_9f08[264]],_0x2221C[_$_9f08[231]]);$[_$_9f08[229]](_$_9f08[240],{idpro:_0x221E6[_$_9f08[241]],idmoneda:_0x221E6[_$_9f08[54]],factor:_0x221E6[_$_9f08[188]],cuota:_0x22201[_$_9f08[55]],id:_0x2221C[_$_9f08[231]],socioAportes:_0x2221C[_$_9f08[242]]},function(_0x221CB){var _0x22201=redondeo_valor(parseFloat(_0x221CB[_$_9f08[42]]),2,!1);_0x2221C[_$_9f08[265]]= _0x22201,_0x2221C[_$_9f08[261]]= _0x221CB,_0x221E6[_$_9f08[266]](_0x2221C)})}export function _vm2154_12185_145(_0x221E6,_0x2221C){$[_$_9f08[229]](_$_9f08[267],{id:_0x221E6},function(_0x221CB){var _0x22201=[],_0x223B1=getArray(_0x221CB[_$_9f08[268]][_$_9f08[4]]+ 1);_0x22201[_$_9f08[8]]({html:_$_9f08[269]+ _0x2221C[_$_9f08[270]]+ _0x221E6+ _$_9f08[271],allowOutsideClick:!1,allowEscapeKey:!1,confirmButtonText:_$_9f08[272],progressSteps:_0x223B1,onBeforeOpen:function(){swal[_$_9f08[273]](),swal[_$_9f08[274]](),$(_$_9f08[276])[_$_9f08[90]](function(){$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26]))}),$(_$_9f08[275])[_$_9f08[289]](_$_9f08[277],function(){$(_$_9f08[280])[_$_9f08[130]](_$_9f08[278],_$_9f08[279]),swal[_$_9f08[281]](),$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26])),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[22],_$_9f08[282]),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[284],_$_9f08[285]),$(_$_9f08[288])[_$_9f08[130]](_$_9f08[286],_$_9f08[287])})}}),_0x221CB[_$_9f08[268]][_$_9f08[44]](function(_0x221E6){_0x22201[_$_9f08[8]]({html:_$_9f08[269]+ _0x2221C[_$_9f08[290]]+ _0x221E6[_$_9f08[291]]+ _$_9f08[271],allowOutsideClick:!1,allowEscapeKey:!1,confirmButtonText:_$_9f08[272],progressSteps:_0x223B1,onBeforeOpen:function(){swal[_$_9f08[273]](),swal[_$_9f08[274]](),$(_$_9f08[276])[_$_9f08[90]](function(){$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26]))}),$(_$_9f08[275])[_$_9f08[289]](_$_9f08[277],function(){$(_$_9f08[280])[_$_9f08[130]](_$_9f08[278],_$_9f08[279]),swal[_$_9f08[281]](),$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26])),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[22],_$_9f08[282]),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[284],_$_9f08[285]),$(_$_9f08[288])[_$_9f08[130]](_$_9f08[286],_$_9f08[287])})}})}),swal[_$_9f08[295]](_0x22201)[_$_9f08[294]]((_0x221E6)=>{_0x221E6[_$_9f08[50]]&& swal(_$_9f08[292],_$_9f08[7],_$_9f08[293])})})}export function _vm2154_12186_135(_0x221E6,_0x2221C){return swal({html:_$_9f08[296]+ _0x2221C+ _$_9f08[297]+ _0x221E6+ _$_9f08[271],showConfirmButton:!1,showCancelButton:!0,allowOutsideClick:!1,allowEscapeKey:!1,confirmButtonText:_$_9f08[298],cancelButtonText:_$_9f08[299],confirmButtonColor:_$_9f08[300],cancelButtonColor:_$_9f08[301],buttonsStyling:!0,reverseButtons:!0,onBeforeOpen:function(){swal[_$_9f08[273]](),swal[_$_9f08[274]](),$(_$_9f08[303])[_$_9f08[90]](function(){swal[_$_9f08[302]]()}),$(_$_9f08[276])[_$_9f08[90]](function(){$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26]))}),$(_$_9f08[275])[_$_9f08[289]](_$_9f08[277],function(){$(_$_9f08[280])[_$_9f08[130]](_$_9f08[278],_$_9f08[279]),$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26])),swal[_$_9f08[281]](),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[22],_$_9f08[282]),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[284],_$_9f08[285])})}})}export function _vm2999158_1fgf_135(_0x221E6,_0x2221C){return swal({html:_$_9f08[296]+ _0x2221C+ _$_9f08[297]+ _0x221E6+ _$_9f08[271],showConfirmButton:!0,allowOutsideClick:!1,allowEscapeKey:!1,showCancelButton:!0,confirmButtonText:_$_9f08[304],cancelButtonText:_$_9f08[305],confirmButtonColor:_$_9f08[300],cancelButtonColor:_$_9f08[301],buttonsStyling:!0,reverseButtons:!0,onBeforeOpen:function(){swal[_$_9f08[273]](),swal[_$_9f08[274]](),$(_$_9f08[303])[_$_9f08[90]](function(){swal[_$_9f08[302]]()}),$(_$_9f08[276])[_$_9f08[90]](function(){$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26]))}),$(_$_9f08[275])[_$_9f08[289]](_$_9f08[277],function(){$(_$_9f08[280])[_$_9f08[130]](_$_9f08[278],_$_9f08[279]),swal[_$_9f08[281]](),$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26],$(_$_9f08[275])[_$_9f08[81]](_$_9f08[26])),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[22],_$_9f08[282]),$(_$_9f08[283])[_$_9f08[130]](_$_9f08[284],_$_9f08[285])})}})}export function _vm2154_12185(_0x221E6){$(_$_9f08[306])[_$_9f08[197]](_$_9f08[7]),_0x221E6[_$_9f08[247]][_$_9f08[44]](function(_0x2221C){var _0x221CB=_$_9f08[307]+ _0x2221C[_$_9f08[231]]+ _$_9f08[308]+ (null!= _0x2221C[_$_9f08[309]]?_0x2221C[_$_9f08[309]]:_$_9f08[310])+ _$_9f08[311]+ _0x2221C[_$_9f08[38]]+ _$_9f08[312]+ _0x2221C[_$_9f08[313]]+ _$_9f08[312]+ _0x2221C[_$_9f08[314]]+ _$_9f08[315]+ _0x2221C[_$_9f08[246]]+ _$_9f08[316];$(_$_9f08[306])[_$_9f08[99]](_0x221CB+ _$_9f08[317]),$(_$_9f08[230]+ _0x2221C[_$_9f08[231]]+ _$_9f08[232])[_$_9f08[251]](_$_9f08[319])[_$_9f08[90]](function(){_0x221E6[_$_9f08[247]][_$_9f08[318]](_0x2221C[_$_9f08[231]]),_0x221E6[_$_9f08[248]]= _0x221E6[_$_9f08[247]][_$_9f08[249]],_vm2154_12185(_0x221E6)})}),_0x221E6[_$_9f08[329]][_$_9f08[44]](function(_0x2221C){if(!_0x221E6[_$_9f08[247]][_$_9f08[320]](_0x2221C[_$_9f08[231]])&& _0x221E6[_$_9f08[248]]< parseInt(_0x221E6[_$_9f08[233]])){var _0x221CB=_$_9f08[307]+ _0x2221C[_$_9f08[231]]+ _$_9f08[321]+ (_0x221E6[_$_9f08[247]][_$_9f08[320]](_0x2221C[_$_9f08[231]])?_$_9f08[322]:_$_9f08[323])+ _$_9f08[324]+ (null!= _0x2221C[_$_9f08[309]]?_0x2221C[_$_9f08[309]]:_$_9f08[310])+ _$_9f08[311]+ _0x2221C[_$_9f08[38]]+ _$_9f08[312]+ _0x2221C[_$_9f08[313]]+ _$_9f08[312]+ _0x2221C[_$_9f08[314]]+ _$_9f08[325];_0x221E6[_$_9f08[248]]< parseInt(_0x221E6[_$_9f08[233]])&& (_0x221CB+= _$_9f08[326]),$(_$_9f08[306])[_$_9f08[99]](_0x221CB+ _$_9f08[317]),$(_$_9f08[230]+ _0x2221C[_$_9f08[231]]+ _$_9f08[232])[_$_9f08[251]](_$_9f08[328])[_$_9f08[90]](function(){$(_$_9f08[230]+ _0x2221C[_$_9f08[231]]+ _$_9f08[232])[_$_9f08[197]](_$_9f08[327]),getcriterioGarantes(_0x221E6,_0x2221C)})}})}export function datapicker(_0x221E6,_0x2221C,_0x221CB,_0x22201){$(_$_9f08[357]+ _0x221E6)[_$_9f08[356]]({singleDatePicker:!0,forceUpdate:!0,autoUpdateInput:!0,autoApply:!0,showDropdowns:!0,maxDate:_0x221CB,minDate:_0x2221C,startDate:_0x22201,locale:{separator:_$_9f08[330],format:_$_9f08[331],applyLabel:_$_9f08[332],cancelLabel:_$_9f08[333],fromLabel:_$_9f08[334],toLabel:_$_9f08[335],customRangeLabel:_$_9f08[336],daysOfWeek:[_$_9f08[337],_$_9f08[338],_$_9f08[339],_$_9f08[340],_$_9f08[341],_$_9f08[342],_$_9f08[343]],monthNames:[_$_9f08[344],_$_9f08[345],_$_9f08[346],_$_9f08[347],_$_9f08[348],_$_9f08[349],_$_9f08[350],_$_9f08[351],_$_9f08[352],_$_9f08[353],_$_9f08[354],_$_9f08[355]],firstDay:1}})}export function datatime(_0x221E6){$(_$_9f08[357]+ _0x221E6)[_$_9f08[360]]({autoclose:1,startView:3,minView:3,pickerPosition:_$_9f08[358],format:_$_9f08[359]})}export function getdatapicker(_0x221E6){return $(_$_9f08[357]+ _0x221E6)[_$_9f08[361]]()}export function _mg3612152_215(_0x221E6){var _0x2221C=_$_9f08[7];return _0x221E6[_$_9f08[44]](function(_0x221E6){_0x2221C+= _$_9f08[362]+ (null!= _0x221E6[_$_9f08[309]]?_0x221E6[_$_9f08[309]]:_$_9f08[310])+ _$_9f08[363]+ _0x221E6[_$_9f08[364]]+ _$_9f08[312]+ _0x221E6[_$_9f08[38]]+ _$_9f08[312]+ _0x221E6[_$_9f08[313]]+ _$_9f08[312]+ _0x221E6[_$_9f08[314]]+ _$_9f08[365]+ _0x221E6[_$_9f08[246]]+ _$_9f08[366]}),_0x2221C[_$_9f08[4]]> 0?_$_9f08[367]+ _0x2221C+ _$_9f08[368]:_$_9f08[7]}export class Modals{constructor(){this[_$_9f08[369]]=  new Map}addModal(_0x221E6,_0x2221C= null,_0x221CB= null){$(_$_9f08[357]+ _0x221E6)[_$_9f08[251]](_$_9f08[372])[_$_9f08[371]](_$_9f08[370]),$(_$_9f08[357]+ _0x221E6)[_$_9f08[81]](_$_9f08[373],_$_9f08[374]),$(_$_9f08[357]+ _0x221E6)[_$_9f08[81]](_$_9f08[375],_$_9f08[376]),jQuery[_$_9f08[377]](_0x2221C)&& $(_$_9f08[357]+ _0x221E6)[_$_9f08[289]](_$_9f08[378],function(){_0x2221C()}),jQuery[_$_9f08[377]](_0x221CB)&& $(_$_9f08[357]+ _0x221E6)[_$_9f08[289]](_$_9f08[379],function(){_0x221CB()}),this[_$_9f08[369]][_$_9f08[175]](_0x221E6,{openPrimary:function(){$(_$_9f08[357]+ _0x221E6)[_$_9f08[381]](_$_9f08[380])},close:function(){$(_$_9f08[357]+ _0x221E6)[_$_9f08[381]](_$_9f08[382])},openInfo:function(){$(_$_9f08[357]+ _0x221E6)[_$_9f08[381]]({backdrop:!0,keyboard:!0})}})}openModal(_0x221E6){this[_$_9f08[369]][_$_9f08[320]](_0x221E6)&& (this[_$_9f08[383]](_0x221E6),this[_$_9f08[369]][_$_9f08[229]](_0x221E6)[_$_9f08[384]]())}openModalInfo(_0x221E6){this[_$_9f08[369]][_$_9f08[320]](_0x221E6)&& (this[_$_9f08[383]](_0x221E6),this[_$_9f08[369]][_$_9f08[229]](_0x221E6)[_$_9f08[385]]())}closeModal(_0x221E6){this[_$_9f08[369]][_$_9f08[320]](_0x221E6)&& this[_$_9f08[369]][_$_9f08[229]](_0x221E6)[_$_9f08[302]]()}closeOthers(_0x221E6){for(var [_0x2221C,_0x221CB] of this[_$_9f08[369]]){_0x2221C!= _0x221E6&& _0x221CB[_$_9f08[302]]()}}};export class Slider{addSlider(_0x221E6){$(_$_9f08[357]+ _0x221E6)[_$_9f08[386]]()}getValue(_0x221E6){return $(_$_9f08[357]+ _0x221E6)[_$_9f08[37]]()[_$_9f08[387]]}};export function _vvp2521_cr01(_0x221E6,_0x2221C,_0x221CB,_0x22201= _$_9f08[388]){let _0x223B1=_$_9f08[7];_0x223B1= _0x2221C,imgToBase64(_0x221E6[_$_9f08[309]]?_$_9f08[389]+ _0x221E6[_$_9f08[309]]:_$_9f08[390],function(_0x2221C){var _0x2246E= new jsPDF(_$_9f08[391],_$_9f08[392],[86,55]);_0x2246E[_$_9f08[394]]({title:_$_9f08[393]});var _0x224F5=_0x2246E[_$_9f08[30]][_$_9f08[29]],_0x22402=_0x224F5[_$_9f08[22]]?_0x224F5[_$_9f08[22]]:_0x224F5[_$_9f08[31]](),_0x22510=_0x224F5[_$_9f08[20]]?_0x224F5[_$_9f08[20]]:_0x224F5[_$_9f08[395]]();_0x2246E[_$_9f08[397]](_0x223B1,_$_9f08[396],0,0,_0x22402,_0x22510),_0x2246E[_$_9f08[397]](_0x2221C,_$_9f08[396],2.8,5.1,8.2,8.2),_0x2246E[_$_9f08[398]](3.5),_0x2246E[_$_9f08[399]](_$_9f08[46]),_0x2246E[_$_9f08[400]](52,52,52),centrarTextTo(_0x2246E,_0x221E6[_$_9f08[364]]+ _$_9f08[312]+ _0x221E6[_$_9f08[401]]?_0x221E6[_$_9f08[364]]+ _$_9f08[312]+ _0x221E6[_$_9f08[401]]:_$_9f08[402],11,6.5),centrarTextTo(_0x2246E,_0x221E6[_$_9f08[38]]?_0x221E6[_$_9f08[38]]:_$_9f08[402],11,8),centrarTextTo(_0x2246E,_0x221E6[_$_9f08[313]]+ _$_9f08[312]+ _0x221E6[_$_9f08[314]]?_0x221E6[_$_9f08[313]]+ _$_9f08[312]+ _0x221E6[_$_9f08[314]]:_$_9f08[403],11,9.5),_0x2246E[_$_9f08[399]](_$_9f08[404]),_0x2246E[_$_9f08[398]](2.5),_0x2246E[_$_9f08[34]](_0x221E6[_$_9f08[405]],13.5,12.7),_0x2246E[_$_9f08[34]](_0x221E6[_$_9f08[406]]?moment(_0x221E6[_$_9f08[406]])[_$_9f08[408]](_$_9f08[407]):_$_9f08[402],13.5,15.5),_0x2246E[_$_9f08[34]](_0x221E6[_$_9f08[409]]?_0x221E6[_$_9f08[409]]:_$_9f08[402],22.8,12.7),_0x2246E[_$_9f08[34]]((_0x221E6[_$_9f08[410]]?_0x221E6[_$_9f08[410]]:_$_9f08[402])+ _$_9f08[312]+ (_0x221E6[_$_9f08[411]]?_0x221E6[_$_9f08[411]]:_$_9f08[412]),22.8,15.5),_0x2246E[_$_9f08[400]](255,255,255),_0x2246E[_$_9f08[398]](2),_0x2246E[_$_9f08[34]](_0x221E6[_$_9f08[413]]?_0x221E6[_$_9f08[413]]:_$_9f08[402],4.5,14.8),_0x2246E[_$_9f08[34]](_0x221E6[_$_9f08[414]]?_0x221E6[_$_9f08[414]]:_$_9f08[402],4.5,15.7),_0x2246E[_$_9f08[397]](textToBase64Barcode(_0x221E6[_$_9f08[51]]?_0x221E6[_$_9f08[51]]:_$_9f08[6]),_$_9f08[396],18.5,16.5,10.2,2),$(_$_9f08[357]+ _0x22201)[_$_9f08[81]](_$_9f08[26],_0x2246E[_$_9f08[416]](_$_9f08[415])+ _$_9f08[417]),_0x221CB()})}export function _vvp2521_00001(_0x221E6,_0x2221C= _$_9f08[388]){imgToBase64(_$_9f08[418],function(_0x221CB){var _0x22201= new jsPDF(_$_9f08[202],_$_9f08[392],_$_9f08[419]);_0x22201[_$_9f08[394]]({title:_$_9f08[420]}),_0x22201[_$_9f08[397]](_0x221CB,_$_9f08[396],14,14,32,20),_0x22201[_$_9f08[398]](9),centrarText(_0x22201,_$_9f08[421],20),centrarText(_0x22201,_$_9f08[422],25),_0x22201[_$_9f08[398]](11),centrarText(_0x22201,_$_9f08[423],30),_0x22201[_$_9f08[398]](12),_0x22201[_$_9f08[399]](_$_9f08[46]),centrarText(_0x22201,_$_9f08[424],40),_0x22201[_$_9f08[438]]({head:[{pe:_$_9f08[425],fp:_$_9f08[426],di:_$_9f08[427],am:_$_9f08[428],in:_$_9f08[429],indi:_$_9f08[430],car:_$_9f08[431],cu:_$_9f08[432],ca:_$_9f08[433]}],body:generateBodyTable(_0x221E6),foot:[{pe:{content:_$_9f08[434],colSpan:3,styles:{halign:_$_9f08[43]}},car:getTotal(_0x221E6,_$_9f08[63]),cu:getTotal(_0x221E6,_$_9f08[64]),in:getTotal(_0x221E6,_$_9f08[65]),indi:getTotal(_0x221E6,_$_9f08[66]),am:getTotal(_0x221E6,_$_9f08[67]),ca:{content:_$_9f08[7]}}],theme:_$_9f08[435],styles:{lineColor:[211,211,211],lineWidth:0.2,halign:_$_9f08[47]},headStyles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46]},footStyles:{fillColor:[231,234,238],textColor:[0,0,0],fontStyle:_$_9f08[404]},showFoot:_$_9f08[436],showHead:_$_9f08[437],startY:51}),$(_$_9f08[357]+ _0x2221C)[_$_9f08[81]](_$_9f08[26],_0x22201[_$_9f08[416]](_$_9f08[415]))})}export function _vvp2521_00002(_0x221E6,_0x2221C= _$_9f08[388]){imgToBase64(_$_9f08[418],function(_0x221CB){var _0x22201= new jsPDF(_$_9f08[202],_$_9f08[392],_$_9f08[419]);_0x22201[_$_9f08[394]]({title:_$_9f08[439]});var _0x223B1=0;_0x22201[_$_9f08[438]]({head:[{no:_$_9f08[440],num:_$_9f08[441],gra:_$_9f08[442],nom:_$_9f08[443],est:_$_9f08[444],mon:_$_9f08[445],cut:_$_9f08[446],pla:_$_9f08[447]}],body:generateBodyTablepdfDetalle(JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])),theme:_$_9f08[435],bodyStyles:{textColor:[0,0,0],lineColor:[211,211,211],lineWidth:0,halign:_$_9f08[47],cellPadding:1,fontSize:8,cellPadding:0.5},headStyles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46],halign:_$_9f08[47],fontSize:10},showHead:_$_9f08[449],startY:40,margin:{top:40},didDrawCell:(_0x221E6)=>{_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[452]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& 6== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[454]]&& (_0x223B1= _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[457]],_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[452]][_$_9f08[457]])),_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[64]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& _0x223B1== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[457]]&& (_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[64]][_$_9f08[457]])),_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[462]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& _0x223B1== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[457]]&& (_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[462]][_$_9f08[457]]))}});for(var _0x2246E=_0x22201[_$_9f08[30]][_$_9f08[463]](),_0x224F5=0;_0x224F5< _0x2246E;_0x224F5++){_0x22201[_$_9f08[464]](_0x224F5),_0x22201[_$_9f08[397]](_0x221CB,_$_9f08[396],14,14,32,20),_0x22201[_$_9f08[398]](12),_0x22201[_$_9f08[399]](_$_9f08[46]),centrarText(_0x22201,_$_9f08[465],25),_0x22201[_$_9f08[398]](9),_0x22201[_$_9f08[399]](_$_9f08[404]),centrarText(_0x22201,_$_9f08[466]+ JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])[_$_9f08[467]]+ _$_9f08[468]+ JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])[_$_9f08[469]],29),_0x22201[_$_9f08[34]](_0x221E6[_$_9f08[470]],170,24),_0x22201[_$_9f08[398]](8),_0x22201[_$_9f08[34]](_$_9f08[471]+ _0x22201[_$_9f08[30]][_$_9f08[473]]()[_$_9f08[472]]+ _$_9f08[468]+ _0x2246E,170,27)};$(_$_9f08[357]+ _0x2221C)[_$_9f08[81]](_$_9f08[26],_0x22201[_$_9f08[416]](_$_9f08[415]))})}export function _vvp2521_00003(_0x221E6,_0x2221C= _$_9f08[388]){imgToBase64(_$_9f08[418],function(_0x221CB){var _0x22201= new jsPDF(_$_9f08[202],_$_9f08[392],_$_9f08[419]);_0x22201[_$_9f08[394]]({title:_$_9f08[439]});var _0x223B1=0;_0x22201[_$_9f08[438]]({head:[{fue:_$_9f08[474],cod:_$_9f08[475],can:_$_9f08[476],mon:_$_9f08[477]}],body:generateBodyTablepdfResumen(JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])),theme:_$_9f08[435],bodyStyles:{textColor:[0,0,0],lineColor:[211,211,211],lineWidth:0,halign:_$_9f08[47],cellPadding:1,fontSize:8,cellPadding:0.5},headStyles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46],halign:_$_9f08[47],fontSize:10},showHead:_$_9f08[449],startY:40,margin:{top:40},didDrawCell:(_0x221E6)=>{_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[478]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& 2== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[454]]&& (_0x223B1= _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[457]],_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[478]][_$_9f08[457]])),_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[479]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& _0x223B1== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[457]]&& (_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[479]][_$_9f08[457]])),_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[480]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& _0x223B1== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[457]]&& (_0x22201[_$_9f08[458]](0,0,0),_0x22201[_$_9f08[459]](0.3),_0x22201[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[480]][_$_9f08[457]]))}});for(var _0x2246E=_0x22201[_$_9f08[30]][_$_9f08[463]](),_0x224F5=0;_0x224F5< _0x2246E;_0x224F5++){_0x22201[_$_9f08[464]](_0x224F5),_0x22201[_$_9f08[397]](_0x221CB,_$_9f08[396],14,14,32,20),_0x22201[_$_9f08[398]](12),_0x22201[_$_9f08[399]](_$_9f08[46]),centrarText(_0x22201,_$_9f08[481],25),_0x22201[_$_9f08[398]](9),_0x22201[_$_9f08[399]](_$_9f08[404]),centrarText(_0x22201,_$_9f08[466]+ JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])[_$_9f08[467]]+ _$_9f08[468]+ JSON[_$_9f08[172]](_0x221E6[_$_9f08[448]])[_$_9f08[469]],29),_0x22201[_$_9f08[34]](_0x221E6[_$_9f08[470]],170,24),_0x22201[_$_9f08[398]](8),_0x22201[_$_9f08[34]](_$_9f08[471]+ _0x22201[_$_9f08[30]][_$_9f08[473]]()[_$_9f08[472]]+ _$_9f08[468]+ _0x2246E,170,27)};$(_$_9f08[357]+ _0x2221C)[_$_9f08[81]](_$_9f08[26],_0x22201[_$_9f08[416]](_$_9f08[415]))})}export function _vvp2521_00004(_0x221E6,_0x2221C,_0x221CB,_0x22201= _$_9f08[388]){imgToBase64(_$_9f08[418],function(_0x223B1){var _0x2246E= new jsPDF(_$_9f08[202],_$_9f08[392],_$_9f08[419]);_0x2246E[_$_9f08[394]]({title:_$_9f08[482]});var _0x224F5;_0x2246E[_$_9f08[438]]({head:[{nom:_$_9f08[483],tip:_$_9f08[228],mod:_$_9f08[484],deb:{content:_$_9f08[485],colSpan:2,styles:{halign:_$_9f08[47],cellWidth:45}},hab:{content:_$_9f08[7],styles:{cellWidth:45}}}],body:(_0x224F5= [],_0x221E6[_$_9f08[44]](function(_0x221E6){_0x224F5[_$_9f08[8]]({nom:{content:_$_9f08[7],colSpan:4}}),_0x224F5[_$_9f08[8]]({nom:{content:_0x221E6[_$_9f08[38]],rowSpan:_0x221E6[_$_9f08[37]][_$_9f08[4]]+ 1,styles:{halign:_$_9f08[39],valign:_$_9f08[47]}},tip:{content:_0x221E6[_$_9f08[228]],rowSpan:_0x221E6[_$_9f08[37]][_$_9f08[4]]+ 1,styles:{halign:_$_9f08[47],valign:_$_9f08[47]}},mod:{content:_0x221E6[_$_9f08[486]],rowSpan:_0x221E6[_$_9f08[37]][_$_9f08[4]]+ 1,styles:{halign:_$_9f08[47],valign:_$_9f08[47]}},deb:{content:_$_9f08[487],styles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46],halign:_$_9f08[47]}},hab:{content:_$_9f08[488],styles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46],halign:_$_9f08[47]}}}),_0x221E6[_$_9f08[37]][_$_9f08[44]]((_0x221E6)=>{_$_9f08[489]== _0x221E6[_$_9f08[162]]?_0x224F5[_$_9f08[8]]({deb:{content:_0x221E6[_$_9f08[490]]+ _$_9f08[177]+ _0x221E6[_$_9f08[491]],styles:{halign:_$_9f08[39],fontSize:6,cellWidth:45}},hab:{content:_$_9f08[7],styles:{cellWidth:45}}}):_0x224F5[_$_9f08[8]]({deb:{content:_$_9f08[7],styles:{cellWidth:45}},hab:{content:_0x221E6[_$_9f08[490]]+ _$_9f08[177]+ _0x221E6[_$_9f08[491]],styles:{halign:_$_9f08[39],fontSize:6,cellWidth:45}}})}),_0x224F5[_$_9f08[8]]({nom:{content:_$_9f08[7],colSpan:4}}),_0x224F5[_$_9f08[8]]({nom:{content:_$_9f08[7],colSpan:5}})}),_0x224F5),theme:_$_9f08[435],bodyStyles:{textColor:[0,0,0],lineColor:[211,211,211],lineWidth:0,halign:_$_9f08[47],cellPadding:1,fontSize:8,cellPadding:0.5},headStyles:{fillColor:[203,207,212],textColor:[0,0,0],fontStyle:_$_9f08[46],halign:_$_9f08[47],fontSize:10},showHead:_$_9f08[449],startY:40,margin:{top:40},didDrawCell:(_0x221E6)=>{_$_9f08[450]=== _0x221E6[_$_9f08[451]]&& _$_9f08[492]=== _0x221E6[_$_9f08[453]][_$_9f08[217]]&& 5== _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[454]]&& (_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[457]],_0x2246E[_$_9f08[458]](0,0,0),_0x2246E[_$_9f08[459]](0.3),_0x2246E[_$_9f08[461]](_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[460]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[457]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[460]]+ _0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[22]],_0x221E6[_$_9f08[456]][_$_9f08[455]][_$_9f08[492]][_$_9f08[457]]))}});for(var _0x22402=_0x2246E[_$_9f08[30]][_$_9f08[463]](),_0x22510=0;_0x22510< _0x22402;_0x22510++){_0x2246E[_$_9f08[464]](_0x22510),_0x2246E[_$_9f08[397]](_0x223B1,_$_9f08[396],14,14,32,20),_0x2246E[_$_9f08[398]](12),_0x2246E[_$_9f08[399]](_$_9f08[46]),centrarText(_0x2246E,_$_9f08[493],25),centrarText(_0x2246E,_$_9f08[494],29),_0x2246E[_$_9f08[398]](9),_0x2246E[_$_9f08[399]](_$_9f08[404]),_0x2246E[_$_9f08[34]](_$_9f08[495]+ _0x2221C,170,24),_0x2246E[_$_9f08[398]](8),_0x2246E[_$_9f08[34]](_$_9f08[471]+ _0x2246E[_$_9f08[30]][_$_9f08[473]]()[_$_9f08[472]]+ _$_9f08[468]+ _0x22402,170,27),_0x2246E[_$_9f08[34]](_$_9f08[496]+ _0x221CB,170,31)};$(_$_9f08[357]+ _0x22201)[_$_9f08[81]](_$_9f08[26],_0x2246E[_$_9f08[416]](_$_9f08[415]))})}export function redondeo_valor(_0x221E6,_0x2221C= 2,_0x221CB=  !0){var _0x22201=_0x221E6>= 0?1:-1;return _0x221E6*= _0x22201,0=== _0x2221C?_0x22201* Math[_$_9f08[497]](_0x221E6):(_0x221E6= _0x221E6[_$_9f08[5]]()[_$_9f08[499]](_$_9f08[498]),_0x221E6= Math[_$_9f08[497]](+(_0x221E6[0]+ _$_9f08[498]+ (_0x221E6[1]?+_0x221E6[1]+ _0x2221C:_0x2221C))),_0x221E6= _0x221E6[_$_9f08[5]]()[_$_9f08[499]](_$_9f08[498]),_0x221CB?fillDecimals(_0x22201* (_0x221E6[0]+ _$_9f08[498]+ (_0x221E6[1]?+_0x221E6[1]- _0x2221C:-_0x2221C)),_0x2221C):_0x22201* (_0x221E6[0]+ _$_9f08[498]+ (_0x221E6[1]?+_0x221E6[1]- _0x2221C:-_0x2221C)))}export function fillDecimals(_0x221E6,_0x2221C= 2){function _0x221CB(_0x221E6,_0x2221C,_0x22201){var _0x223B1=_0x221E6+ _$_9f08[7];return _0x2221C<= _0x223B1[_$_9f08[4]]?_0x223B1:_0x221CB(_0x223B1+ _0x22201,_0x2221C,_0x22201)}var _0x22201=_0x221E6+ _$_9f08[7],_0x223B1=_0x22201[_$_9f08[501]](_$_9f08[500]),_0x2246E=-1!= _0x223B1,_0x224F5=_0x2246E?_0x22201[_$_9f08[10]](0,_0x223B1):_0x22201,_0x22402=_0x2246E?_0x22201[_$_9f08[10]](_0x223B1+ 1):_$_9f08[7];return _0x22402= _0x221CB(_0x22402,_0x2221C,0),_0x224F5+ _$_9f08[500]+ _0x22402}export function ppppp(){let _0x221E6= new Function(_$_9f08[502])();alert(_0x221E6(1,2))}var abc=[_$_9f08[503],_$_9f08[504],_$_9f08[505],_$_9f08[506],_$_9f08[507],_$_9f08[508],_$_9f08[509],_$_9f08[510],_$_9f08[511],_$_9f08[512],_$_9f08[513],_$_9f08[514],_$_9f08[515],_$_9f08[516],_$_9f08[517],_$_9f08[518],_$_9f08[519],_$_9f08[520],_$_9f08[521],_$_9f08[522],_$_9f08[523],_$_9f08[524],_$_9f08[525],_$_9f08[526],_$_9f08[527]],funciones={input:function(_0x221E6,_0x2221C,_0x221CB){var _0x22201=$(_$_9f08[528]+ _0x221E6+ _$_9f08[529]+ _0x221CB+ _$_9f08[530]+ _0x2221C+ _$_9f08[531]);return $(_$_9f08[532])[_$_9f08[86]](_0x22201),_0x22201},inputSi:function(_0x221E6,_0x2221C,_0x221CB){var _0x22201=$(_$_9f08[528]+ _0x221E6+ _$_9f08[533]+ _0x221CB+ _$_9f08[530]+ _0x2221C+ _$_9f08[531]);return $(_$_9f08[534])[_$_9f08[86]](_0x22201),_0x22201},operador:function(_0x221E6,_0x2221C,_0x221CB){var _0x22201=$(_$_9f08[535]+ _0x221CB+ _$_9f08[530]+ _0x2221C+ _$_9f08[531]);return $(_$_9f08[540]+ _0x221E6+ _$_9f08[541])[_$_9f08[131]]({accept:_$_9f08[536],greedy:!0,classes:{"ui-droppable-hover":_$_9f08[537]},drop:function(_0x221E6,_0x2221C){if($(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[74])&& _$_9f08[96]== $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])){var _0x221CB=$(_$_9f08[95]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[34]]()+ _$_9f08[84])[_$_9f08[130]](_$_9f08[128],_$_9f08[538])[_$_9f08[76]]({revert:_$_9f08[87],containment:_$_9f08[88],helper:_$_9f08[89],zIndex:1e4,start:function(_0x221E6,_0x2221C){$(this)[_$_9f08[76]](_$_9f08[92])[_$_9f08[91]][_$_9f08[90]]= {left:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[22]]()/ 2),top:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[20]]()/ 2)}}})[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()})}else {if($(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[539])){_0x2221C[_$_9f08[76]][_$_9f08[78]](function(){$(_0x2221C[_$_9f08[76]])[_$_9f08[130]](_$_9f08[128],_$_9f08[538])[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})}else {if($(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[74])&& _$_9f08[6]== $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])){_0x221CB= $(_$_9f08[79]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[80])+ _$_9f08[82]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[83])+ _$_9f08[84])[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()})}else {$(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[74])&& _$_9f08[118]== $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])?_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[115]](2,_$_9f08[113],_$_9f08[7]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),$(_$_9f08[117],_0x221CB)[_$_9f08[98]](_$_9f08[115])[_$_9f08[116]]()})}):($(_0x221E6[_$_9f08[73]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124]),$(_0x2221C[_$_9f08[76]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124]))}}}}})[_$_9f08[86]](_0x22201),_0x22201},operadorG:function(_0x221E6,_0x2221C,_0x221CB){var _0x22201=$(_$_9f08[542]+ _0x221CB+ _$_9f08[530]+ _0x2221C+ _$_9f08[531]);return $(_$_9f08[540]+ _0x221E6+ _$_9f08[544])[_$_9f08[131]]({accept:_$_9f08[536],greedy:!0,classes:{"ui-droppable-hover":_$_9f08[537]},drop:function(_0x221E6,_0x2221C){if($(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[74])&& _$_9f08[96]== $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])){var _0x221CB=$(_$_9f08[543]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[34]]()+ _$_9f08[84])[_$_9f08[76]]({revert:_$_9f08[87],containment:_$_9f08[88],helper:_$_9f08[89],zIndex:1e4,start:function(_0x221E6,_0x2221C){$(this)[_$_9f08[76]](_$_9f08[92])[_$_9f08[91]][_$_9f08[90]]= {left:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[22]]()/ 2),top:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[20]]()/ 2)}}})[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()})}else {if($(_0x2221C[_$_9f08[76]])[_$_9f08[75]](_$_9f08[539])){_0x2221C[_$_9f08[76]][_$_9f08[78]](function(){$(_0x2221C[_$_9f08[76]])[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})}else {switch($(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[127])){case _$_9f08[6]:_0x221CB= $(_$_9f08[79]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[80])+ _$_9f08[82]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[83])+ _$_9f08[84])[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()});break;case _$_9f08[102]:_0x221CB= $(_$_9f08[100]+ $(_0x2221C[_$_9f08[76]])[_$_9f08[81]](_$_9f08[80])+ _$_9f08[101])[_$_9f08[99]]($(_0x2221C[_$_9f08[76]])[_$_9f08[98]](_$_9f08[97])[_$_9f08[89]]())[_$_9f08[78]](_$_9f08[77]);_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),_0x2221C[_$_9f08[76]][_$_9f08[85]]()});break;case _$_9f08[106]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[105]](3,_$_9f08[103],_$_9f08[104]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[109]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[105]](4,_$_9f08[107],_$_9f08[108]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[112]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[111]](5,_$_9f08[110],_$_9f08[7]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]]()})});break;case _$_9f08[118]:_0x2221C[_$_9f08[76]][_$_9f08[78]](_$_9f08[77],function(){var _0x221CB=funciones[_$_9f08[115]](2,_$_9f08[113],_$_9f08[114]);_0x2221C[_$_9f08[76]][_$_9f08[85]](),_0x221CB[_$_9f08[78]](_$_9f08[77],function(){_0x221CB[_$_9f08[86]](_0x221E6[_$_9f08[73]])[_$_9f08[85]](),$(_$_9f08[117],_0x221CB)[_$_9f08[98]](_$_9f08[115])[_$_9f08[116]]()})});break;case _$_9f08[126]:$(_0x221E6[_$_9f08[73]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124]),$(_0x2221C[_$_9f08[76]])[_$_9f08[125]](_$_9f08[123],_$_9f08[124])}}}}})[_$_9f08[86]](_0x22201),_0x22201}};export function generaperfil(_0x221E6,_0x2221C= [],_0x221CB){var _0x22201=generateKey(),_0x223B1=generateKey(),_0x2246E=_$_9f08[357]+ _0x22201,_0x224F5=_$_9f08[357]+ _0x223B1;$(_$_9f08[357]+ _0x221CB)[_$_9f08[545]](),$(_$_9f08[546]+ _0x223B1+ _$_9f08[547])[_$_9f08[86]]($(_$_9f08[357]+ _0x221CB)),$(_$_9f08[548]+ _0x22201+ _$_9f08[541])[_$_9f08[86]]($(_$_9f08[357]+ _0x221CB)),$(_0x224F5)[_$_9f08[130]](_$_9f08[128],_$_9f08[549]),$(_0x2246E)[_$_9f08[545]](),$(_0x224F5)[_$_9f08[545]](),$(_0x224F5)[_$_9f08[99]](_$_9f08[550]),$(_0x224F5)[_$_9f08[99]](_$_9f08[551]),$(_0x224F5)[_$_9f08[99]](_$_9f08[552]),$(_0x224F5)[_$_9f08[99]](_$_9f08[553]),$(_0x224F5)[_$_9f08[99]](_$_9f08[554]),$(_0x224F5)[_$_9f08[99]](_$_9f08[555]),$(_0x224F5)[_$_9f08[99]](_$_9f08[556]),$(_0x224F5)[_$_9f08[99]](_$_9f08[557]),$(_0x224F5)[_$_9f08[99]](_$_9f08[558]),$(_0x224F5)[_$_9f08[99]](_$_9f08[559]),_0x2221C[_$_9f08[44]](function(_0x2221C,_0x221CB){_0x2221C[_$_9f08[37]]= abc[_0x221CB],_0x2221C[_$_9f08[560]]= _$_9f08[561]+ abc[_0x221CB],_0x2221C[_$_9f08[562]]= _0x2221C[_$_9f08[37]]+ _0x2221C[_$_9f08[153]],_0x221E6[_$_9f08[175]](_0x221CB,_0x2221C),$(_0x2246E)[_$_9f08[99]]((_$_9f08[489]== _0x2221C[_$_9f08[162]]?_$_9f08[563]+ _0x221CB+ _$_9f08[564]+ (_$_9f08[489]== _0x2221C[_$_9f08[162]]?_$_9f08[487]:_$_9f08[488])+ _$_9f08[565]+ _0x2221C[_$_9f08[491]]+ _$_9f08[566]+ _0x2221C[_$_9f08[562]]+ _$_9f08[567]+ _0x2221C[_$_9f08[37]]+ _$_9f08[568]+ _0x2221C[_$_9f08[562]]+ _$_9f08[569]:_$_9f08[563]+ _0x221CB+ _$_9f08[570]+ _0x2221C[_$_9f08[491]]+ _$_9f08[571]+ (_$_9f08[489]== _0x2221C[_$_9f08[162]]?_$_9f08[487]:_$_9f08[488])+ _$_9f08[572]+ _0x2221C[_$_9f08[562]]+ _$_9f08[567]+ _0x2221C[_$_9f08[37]]+ _$_9f08[568]+ _0x2221C[_$_9f08[562]]+ _$_9f08[573])+ _$_9f08[574]),$(_0x224F5)[_$_9f08[99]](_$_9f08[575]+ _0x2221C[_$_9f08[37]]+ _$_9f08[368])}),$(_0x224F5)[_$_9f08[99]](_$_9f08[576]),$(_0x224F5)[_$_9f08[99]](_$_9f08[577]),$(_0x224F5)[_$_9f08[99]](_$_9f08[578]),$(_0x224F5)[_$_9f08[99]](_$_9f08[579]),$(_0x224F5)[_$_9f08[99]](_$_9f08[580]),$(_0x224F5)[_$_9f08[99]](_$_9f08[581]),$(_0x224F5)[_$_9f08[99]](_$_9f08[582]),$(_0x224F5)[_$_9f08[99]](_$_9f08[583]),$(_0x224F5)[_$_9f08[99]](_$_9f08[584]),$(_0x224F5)[_$_9f08[99]](_$_9f08[585]),$(_0x224F5)[_$_9f08[99]](_$_9f08[586]),$(_$_9f08[589],_0x224F5)[_$_9f08[76]]({revert:_$_9f08[87],containment:_$_9f08[88],helper:_$_9f08[89],zIndex:1e4,start:function(_0x221E6,_0x2221C){$(_0x2221C[_$_9f08[93]])[_$_9f08[98]](_$_9f08[588])[_$_9f08[587]](),$(this)[_$_9f08[76]](_$_9f08[92])[_$_9f08[91]][_$_9f08[90]]= {left:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[22]]()/ 2),top:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[20]]()/ 2)}}}),Sortable[_$_9f08[598]](document[_$_9f08[590]](_0x22201),{handle:_$_9f08[591],animation:150,onEnd:function(_0x2221C){for(var _0x221CB=!0;_0x221CB;){for(var [_0x22201,_0x223B1] of (_0x221CB=  !1,_0x221E6)){var _0x2246E=$(_$_9f08[592]+ _0x22201+ _$_9f08[593])[_$_9f08[217]]();if(_0x2246E!= _0x22201){var _0x224F5=_0x221E6[_$_9f08[229]](_0x22201);$(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[98]](_$_9f08[594])[_$_9f08[4]]> 0&& $(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[545]](),$(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x2246E]+ _0x224F5[_$_9f08[153]]),$(_$_9f08[592]+ _0x22201+ _$_9f08[596]+ _0x224F5[_$_9f08[562]]+ _$_9f08[597])[_$_9f08[34]](abc[_0x2246E]),$(_$_9f08[592]+ _0x22201+ _$_9f08[596]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x2246E]+ _0x224F5[_$_9f08[153]]),_0x224F5[_$_9f08[37]]= abc[_0x2246E],_0x224F5[_$_9f08[562]]= _0x224F5[_$_9f08[37]]+ _0x224F5[_$_9f08[153]];var _0x22402=_0x221E6[_$_9f08[229]](_0x2246E);$(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[98]](_$_9f08[594])[_$_9f08[4]]> 0&& $(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[545]](),$(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x22201]+ _0x22402[_$_9f08[153]]),$(_$_9f08[592]+ _0x2246E+ _$_9f08[596]+ _0x22402[_$_9f08[562]]+ _$_9f08[597])[_$_9f08[34]](abc[_0x22201]),$(_$_9f08[592]+ _0x2246E+ _$_9f08[596]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x22201]+ _0x22402[_$_9f08[153]]),_0x22402[_$_9f08[37]]= abc[_0x22201],_0x22402[_$_9f08[562]]= _0x22402[_$_9f08[37]]+ _0x22402[_$_9f08[153]],_0x221E6[_$_9f08[175]](_0x22201,_0x22402),_0x221E6[_$_9f08[175]](_0x2246E,_0x224F5);var _0x22510=$(_$_9f08[592]+ _0x22201+ _$_9f08[593]),_0x222F4=$(_$_9f08[592]+ _0x2246E+ _$_9f08[593]);_0x22510[_$_9f08[81]](_$_9f08[169],_0x2246E),_0x222F4[_$_9f08[81]](_$_9f08[169],_0x22201),_0x221CB=  !0;break}}}}}),$(_$_9f08[600])[_$_9f08[90]](function(){$(this)[_$_9f08[599]](_$_9f08[132])[_$_9f08[545]]()}),isdroppable(_0x2246E)}export function _mff82sdf_mjd(_0x221E6,_0x2221C){var _0x221CB=generateKey(),_0x22201=generateKey(),_0x223B1=_$_9f08[357]+ _0x221CB,_0x2246E=_$_9f08[357]+ _0x22201;for(var [_0x224F5,_0x22402] of ($(_$_9f08[357]+ _0x2221C)[_$_9f08[545]](),$(_$_9f08[546]+ _0x22201+ _$_9f08[547])[_$_9f08[86]]($(_$_9f08[357]+ _0x2221C)),$(_$_9f08[601]+ _0x221CB+ _$_9f08[541])[_$_9f08[86]]($(_$_9f08[357]+ _0x2221C)),$(_0x2246E)[_$_9f08[130]](_$_9f08[128],_$_9f08[549]),$(_0x223B1)[_$_9f08[545]](),$(_0x2246E)[_$_9f08[545]](),$(_0x2246E)[_$_9f08[99]](_$_9f08[550]),$(_0x2246E)[_$_9f08[99]](_$_9f08[551]),$(_0x2246E)[_$_9f08[99]](_$_9f08[602]),$(_0x2246E)[_$_9f08[99]](_$_9f08[553]),$(_0x2246E)[_$_9f08[99]](_$_9f08[554]),$(_0x2246E)[_$_9f08[99]](_$_9f08[555]),$(_0x2246E)[_$_9f08[99]](_$_9f08[556]),$(_0x2246E)[_$_9f08[99]](_$_9f08[557]),$(_0x2246E)[_$_9f08[99]](_$_9f08[558]),$(_0x2246E)[_$_9f08[99]](_$_9f08[559]),_0x221E6)){$(_0x223B1)[_$_9f08[99]](_0x22402[_$_9f08[603]]),$(_0x2246E)[_$_9f08[99]](_$_9f08[575]+ _0x22402[_$_9f08[37]]+ _$_9f08[368]);var _0x22510=$(_$_9f08[592]+ _0x224F5+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593]);_0x22402[_$_9f08[604]]?_0x22510[_$_9f08[599]](_$_9f08[607])[_$_9f08[98]](_$_9f08[606])[_$_9f08[81]](_$_9f08[605],!0):_0x22510[_$_9f08[599]](_$_9f08[607])[_$_9f08[98]](_$_9f08[606])[_$_9f08[81]](_$_9f08[605],!1)};$(_0x2246E)[_$_9f08[99]](_$_9f08[576]),$(_0x2246E)[_$_9f08[99]](_$_9f08[577]),$(_0x2246E)[_$_9f08[99]](_$_9f08[578]),$(_0x2246E)[_$_9f08[99]](_$_9f08[579]),$(_0x2246E)[_$_9f08[99]](_$_9f08[580]),$(_0x2246E)[_$_9f08[99]](_$_9f08[581]),$(_0x2246E)[_$_9f08[99]](_$_9f08[582]),$(_0x2246E)[_$_9f08[99]](_$_9f08[583]),$(_0x2246E)[_$_9f08[99]](_$_9f08[584]),$(_0x2246E)[_$_9f08[99]](_$_9f08[585]),$(_0x2246E)[_$_9f08[99]](_$_9f08[586]),$(_$_9f08[589],_0x2246E)[_$_9f08[76]]({revert:_$_9f08[87],containment:_$_9f08[88],helper:_$_9f08[89],zIndex:1e4,start:function(_0x221E6,_0x2221C){$(_0x2221C[_$_9f08[93]])[_$_9f08[98]](_$_9f08[588])[_$_9f08[587]](),$(this)[_$_9f08[76]](_$_9f08[92])[_$_9f08[91]][_$_9f08[90]]= {left:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[22]]()/ 2),top:Math[_$_9f08[94]](_0x2221C[_$_9f08[93]][_$_9f08[20]]()/ 2)}}}),Sortable[_$_9f08[598]](document[_$_9f08[590]](_0x221CB),{handle:_$_9f08[591],animation:150,onEnd:function(_0x2221C){for(var _0x221CB=!0;_0x221CB;){for(var [_0x22201,_0x223B1] of (_0x221CB=  !1,_0x221E6)){var _0x2246E=$(_$_9f08[592]+ _0x22201+ _$_9f08[593])[_$_9f08[217]]();if(_0x2246E!= _0x22201){var _0x224F5=_0x221E6[_$_9f08[229]](_0x22201);$(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[98]](_$_9f08[594])[_$_9f08[4]]> 0&& $(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[545]](),$(_$_9f08[592]+ _0x22201+ _$_9f08[595]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x2246E]+ _0x224F5[_$_9f08[153]]),$(_$_9f08[592]+ _0x22201+ _$_9f08[596]+ _0x224F5[_$_9f08[562]]+ _$_9f08[597])[_$_9f08[34]](abc[_0x2246E]),$(_$_9f08[592]+ _0x22201+ _$_9f08[596]+ _0x224F5[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x2246E]+ _0x224F5[_$_9f08[153]]),_0x224F5[_$_9f08[37]]= abc[_0x2246E],_0x224F5[_$_9f08[562]]= _0x224F5[_$_9f08[37]]+ _0x224F5[_$_9f08[153]];var _0x22402=_0x221E6[_$_9f08[229]](_0x2246E);$(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[98]](_$_9f08[594])[_$_9f08[4]]> 0&& $(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[545]](),$(_$_9f08[592]+ _0x2246E+ _$_9f08[595]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x22201]+ _0x22402[_$_9f08[153]]),$(_$_9f08[592]+ _0x2246E+ _$_9f08[596]+ _0x22402[_$_9f08[562]]+ _$_9f08[597])[_$_9f08[34]](abc[_0x22201]),$(_$_9f08[592]+ _0x2246E+ _$_9f08[596]+ _0x22402[_$_9f08[562]]+ _$_9f08[593])[_$_9f08[81]](_$_9f08[169],abc[_0x22201]+ _0x22402[_$_9f08[153]]),_0x22402[_$_9f08[37]]= abc[_0x22201],_0x22402[_$_9f08[562]]= _0x22402[_$_9f08[37]]+ _0x22402[_$_9f08[153]],_0x221E6[_$_9f08[175]](_0x22201,_0x22402),_0x221E6[_$_9f08[175]](_0x2246E,_0x224F5);var _0x22510=$(_$_9f08[592]+ _0x22201+ _$_9f08[593]),_0x222F4=$(_$_9f08[592]+ _0x2246E+ _$_9f08[593]);_0x22510[_$_9f08[81]](_$_9f08[169],_0x2246E),_0x222F4[_$_9f08[81]](_$_9f08[169],_0x22201),_0x221CB=  !0;break}}}}}),$(_$_9f08[600])[_$_9f08[90]](function(){$(this)[_$_9f08[599]](_$_9f08[132])[_$_9f08[545]]()}),isdroppable(_0x223B1)}export function _perff_00125(_0x221E6){var _0x2221C=!1,_0x221CB=_$_9f08[7];return $(_0x221E6)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x22201){switch($(_0x22201)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[609]:_0x221CB+= $(_0x22201)[_$_9f08[81]](_$_9f08[608]);break;case _$_9f08[610]:_0x221CB+= $(_0x22201)[_$_9f08[34]]();break;case _$_9f08[105]:_0x221CB+= $(_0x22201)[_$_9f08[81]](_$_9f08[80]);break;case _$_9f08[620]:var _0x223B1=$(_$_9f08[117],_0x22201);switch(_0x223B1[_$_9f08[81]](_$_9f08[615])){case _$_9f08[106]:var _0x2246E=_$_9f08[7];$(_0x223B1)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x2221C){switch($(_0x2221C)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[610]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= $(_0x2221C)[_$_9f08[34]]():_0x2246E+= _$_9f08[611]+ $(_0x2221C)[_$_9f08[34]]();break;case _$_9f08[115]:var _0x221CB=$(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x221CB),$(_0x2221C)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[612]+ _0x221CB+ _$_9f08[613]:_0x2246E+= _$_9f08[614]+ _0x221CB+ _$_9f08[613];break;default:_0x2246E[_$_9f08[4]],_0x2246E+= _0x221CB};break;case _$_9f08[609]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= $(_0x2221C)[_$_9f08[81]](_$_9f08[608]):_0x2246E+= _$_9f08[611]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608])}}),_0x221CB+= _$_9f08[618]+ _0x2246E+ _$_9f08[619];break;case _$_9f08[109]:_0x2246E= _$_9f08[7];$(_0x223B1)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x2221C){switch($(_0x2221C)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[610]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= $(_0x2221C)[_$_9f08[34]]():_0x2246E+= _$_9f08[177]+ $(_0x2221C)[_$_9f08[34]]();break;case _$_9f08[115]:var _0x221CB=$(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x221CB),$(_0x2221C)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[612]+ _0x221CB+ _$_9f08[613]:_0x2246E+= _$_9f08[614]+ _0x221CB+ _$_9f08[613];break;default:_0x2246E[_$_9f08[4]],_0x2246E+= _0x221CB};break;case _$_9f08[609]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= $(_0x2221C)[_$_9f08[81]](_$_9f08[608]):_0x2246E+= _$_9f08[611]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608])}}),_0x221CB+= _$_9f08[618]+ _0x2246E+ _$_9f08[619];break;case _$_9f08[112]:_0x221CB+= _$_9f08[612]+ _perff_00125(_0x223B1)+ _$_9f08[140]};break;case _$_9f08[115]:var _0x224F5=$(_0x22201)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x22201)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x224F5),$(_0x22201)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:_0x221CB+= _$_9f08[612]+ _0x224F5+ _$_9f08[613];break;default:_0x221CB+= _0x224F5};break;case _$_9f08[122]:var _0x22402=$(_0x22201)[_$_9f08[98]](_$_9f08[621])[_$_9f08[361]](),_0x22510=$(_0x22201)[_$_9f08[98]](_$_9f08[622])[_$_9f08[361]]();$(_0x22201)[_$_9f08[98]](_$_9f08[621])[_$_9f08[81]](_$_9f08[50],_0x22402),$(_0x22201)[_$_9f08[98]](_$_9f08[622])[_$_9f08[81]](_$_9f08[50],_0x22510),_0x221CB+= _$_9f08[623]+ _0x22402+ _$_9f08[624]+ _0x22510+ _$_9f08[625],_0x2221C=  !0}}),_0x2221C?_0x221CB+= _$_9f08[140]:_0x221CB}export function _perff_00126(_0x221E6){var _0x2221C=!1,_0x221CB=_$_9f08[7];return $(_0x221E6)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x22201){switch($(_0x22201)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[609]:_0x221CB+= _$_9f08[561]+ $(_0x22201)[_$_9f08[81]](_$_9f08[608]);break;case _$_9f08[610]:_0x221CB+= _$_9f08[561]+ $(_0x22201)[_$_9f08[34]]();break;case _$_9f08[105]:_0x221CB+= $(_0x22201)[_$_9f08[81]](_$_9f08[80]);break;case _$_9f08[620]:var _0x223B1=$(_$_9f08[117],_0x22201);switch(_0x223B1[_$_9f08[81]](_$_9f08[615])){case _$_9f08[106]:var _0x2246E=_$_9f08[7];$(_0x223B1)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x2221C){switch($(_0x2221C)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[610]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[561]+ $(_0x2221C)[_$_9f08[34]]():_0x2246E+= _$_9f08[626]+ $(_0x2221C)[_$_9f08[34]]();break;case _$_9f08[115]:var _0x221CB=$(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x221CB),$(_0x2221C)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[627]+ _0x221CB+ _$_9f08[628]:_0x2246E+= _$_9f08[629]+ _0x221CB+ _$_9f08[628];break;default:_0x2246E[_$_9f08[4]],_0x2246E+= _0x221CB};break;case _$_9f08[609]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[561]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608]):_0x2246E+= _$_9f08[626]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608])}}),_0x221CB+= _$_9f08[627]+ _0x2246E+ _$_9f08[140];break;case _$_9f08[109]:_0x2246E= _$_9f08[7];$(_0x223B1)[_$_9f08[251]](_$_9f08[539])[_$_9f08[617]](function(_0x221E6,_0x2221C){switch($(_0x2221C)[_$_9f08[81]](_$_9f08[616])){case _$_9f08[610]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[561]+ $(_0x2221C)[_$_9f08[34]]():_0x2246E+= _$_9f08[630]+ $(_0x2221C)[_$_9f08[34]]();break;case _$_9f08[115]:var _0x221CB=$(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x2221C)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x221CB),$(_0x2221C)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[627]+ _0x221CB+ _$_9f08[628]:_0x2246E+= _$_9f08[629]+ _0x221CB+ _$_9f08[628];break;default:_0x2246E[_$_9f08[4]],_0x2246E+= _0x221CB};break;case _$_9f08[609]:0== _0x2246E[_$_9f08[4]]?_0x2246E+= _$_9f08[561]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608]):_0x2246E+= _$_9f08[626]+ $(_0x2221C)[_$_9f08[81]](_$_9f08[608])}}),_0x221CB+= _$_9f08[627]+ _0x2246E+ _$_9f08[140];break;case _$_9f08[112]:_0x221CB+= _$_9f08[627]+ _perff_00126(_0x223B1)+ _$_9f08[140]};break;case _$_9f08[115]:var _0x224F5=$(_0x22201)[_$_9f08[98]](_$_9f08[115])[_$_9f08[361]]();switch($(_0x22201)[_$_9f08[98]](_$_9f08[115])[_$_9f08[81]](_$_9f08[50],_0x224F5),$(_0x22201)[_$_9f08[81]](_$_9f08[615])){case _$_9f08[96]:_0x221CB+= _$_9f08[627]+ _0x224F5+ _$_9f08[628];break;default:_0x221CB+= _0x224F5};break;case _$_9f08[122]:var _0x22402=$(_0x22201)[_$_9f08[98]](_$_9f08[621])[_$_9f08[361]](),_0x22510=$(_0x22201)[_$_9f08[98]](_$_9f08[622])[_$_9f08[361]]();$(_0x22201)[_$_9f08[98]](_$_9f08[621])[_$_9f08[81]](_$_9f08[50],_0x22402),$(_0x22201)[_$_9f08[98]](_$_9f08[622])[_$_9f08[81]](_$_9f08[50],_0x22510),_0x221CB+= _$_9f08[631]+ _0x22402+ _$_9f08[624]+ _0x22510+ _$_9f08[625],_0x2221C=  !0}}),_0x2221C?_0x221CB+= _$_9f08[140]:_0x221CB}export function _mmf2251_3325(_0x226DB){closeRam(),window[_$_9f08[48]]= 15e3,window[_$_9f08[55]]= 196.44,window[_$_9f08[143]]= 197.13,window[_$_9f08[144]]= 0,window[_$_9f08[146]]= 52.44,window[_$_9f08[147]]= 144,window[_$_9f08[148]]= 144,window[_$_9f08[141]]= 120,window[_$_9f08[145]]= 1e3,window[_$_9f08[142]]= 1,_0x226DB[_$_9f08[44]](function(_0x2277D,_0x22798){try{jQuery[_$_9f08[3]](_0x2277D[_$_9f08[37]]+ _$_9f08[150]+ redondeo_valor(eval(_0x2277D[_$_9f08[151]]))+ _$_9f08[134])}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[158]+ _0x2277D[_$_9f08[37]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}})}export function _mf362353_225(_0x226DB,_0x22711,_0x22747,_0x22603,_0x226F6){closeRam(),window[_$_9f08[48]]= 15e3,window[_$_9f08[55]]= 196.44,window[_$_9f08[143]]= 197.13,window[_$_9f08[144]]= 0,window[_$_9f08[146]]= 52.44,window[_$_9f08[147]]= 144,window[_$_9f08[148]]= 0,window[_$_9f08[141]]= 120,window[_$_9f08[145]]= 1e3,window[_$_9f08[142]]= _0x22747;var _0x226C0=generateKey(),_0x2272C=generateKey(),_0x226A5=generateKey(),_0x2268A=_$_9f08[357]+ _0x226C0,_0x22654=_$_9f08[357]+ _0x2272C,_0x2266F=_$_9f08[357]+ _0x226A5;$(_$_9f08[357]+ _0x22711)[_$_9f08[545]](),$(_$_9f08[632]+ _0x226F6+ _$_9f08[368])[_$_9f08[86]]($(_$_9f08[357]+ _0x22711)),$(_$_9f08[546]+ _0x226A5+ _$_9f08[547])[_$_9f08[86]]($(_$_9f08[357]+ _0x22711)),$(_$_9f08[633]+ _0x226C0+ _$_9f08[541])[_$_9f08[86]]($(_$_9f08[357]+ _0x22711)),$(_$_9f08[634]+ _0x2272C+ _$_9f08[541])[_$_9f08[86]]($(_$_9f08[357]+ _0x22711)),$(_0x2266F)[_$_9f08[130]](_$_9f08[128],_$_9f08[549]),$(_0x2268A)[_$_9f08[545]](),$(_0x2266F)[_$_9f08[545]](),$(_0x2266F)[_$_9f08[99]](_$_9f08[635]),$(_0x2266F)[_$_9f08[99]](_$_9f08[636]+ monto+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[639]+ cuota+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[640]+ cuotaf+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[641]+ capital+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[642]+ intereses+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[643]+ interes_diferido+ _$_9f08[637]+ _0x22603+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[644]+ total_cuotas+ _$_9f08[638]),$(_0x2266F)[_$_9f08[99]](_$_9f08[645]+ total_refinanciar+ _$_9f08[646]),monto= redondeo_valor(monto* tipodecambio),cuota= redondeo_valor(cuota* tipodecambio),cuotaf= redondeo_valor(cuotaf* tipodecambio),capital= redondeo_valor(capital* tipodecambio),intereses= redondeo_valor(intereses* tipodecambio),interes_diferido= redondeo_valor(interes_diferido* tipodecambio),_0x226DB[_$_9f08[44]](function(_0x2277D,_0x22798){try{jQuery[_$_9f08[3]](_0x2277D[_$_9f08[37]]+ _$_9f08[150]+ redondeo_valor(eval(_0x2277D[_$_9f08[151]]))+ _$_9f08[134])}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[158]+ _0x2277D[_$_9f08[37]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}});var _0x2261E=0,_0x22639=0,_0x22762=_$_9f08[7];_0x226DB[_$_9f08[44]](function(_0x2277D,_0x22798){var _0x227B3=_$_9f08[357]+ _0x2277D[_$_9f08[562]]+ _$_9f08[647];$(_0x2268A)[_$_9f08[99]]((_$_9f08[489]== _0x2277D[_$_9f08[162]]?_$_9f08[648]+ (_$_9f08[489]== _0x2277D[_$_9f08[162]]?_$_9f08[487]:_$_9f08[488])+ _$_9f08[649]+ _0x2277D[_$_9f08[491]]+ _$_9f08[566]+ _0x2277D[_$_9f08[562]]+ _$_9f08[567]+ _0x2277D[_$_9f08[37]]+ _$_9f08[568]+ _0x2277D[_$_9f08[562]]+ _$_9f08[650]:_$_9f08[651]+ _0x2277D[_$_9f08[491]]+ _$_9f08[571]+ (_$_9f08[489]== _0x2277D[_$_9f08[162]]?_$_9f08[487]:_$_9f08[488])+ _$_9f08[572]+ _0x2277D[_$_9f08[562]]+ _$_9f08[567]+ _0x2277D[_$_9f08[37]]+ _$_9f08[568]+ _0x2277D[_$_9f08[562]]+ _$_9f08[652])+ _$_9f08[653]);try{var _0x227CE=eval(_0x2277D[_$_9f08[37]])/ _0x2277D[_$_9f08[185]];$(_0x227B3)[_$_9f08[99]](_$_9f08[654]+ _0x227CE+ _$_9f08[655]+ _0x2277D[_$_9f08[656]]+ _$_9f08[657]),_0x22762= _0x2277D[_$_9f08[656]],_$_9f08[489]== _0x2277D[_$_9f08[162]]?_0x2261E+= _0x227CE:_0x22639+= _0x227CE}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[658]+ _0x2277D[_$_9f08[37]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}}),$(_0x22654)[_$_9f08[99]](_$_9f08[659]+ _0x2261E+ _$_9f08[637]+ _0x22762+ _$_9f08[660]+ _0x22639+ _$_9f08[637]+ _0x22762+ _$_9f08[368])}export function _mf36265_25421(_0x227E9,_0x22804,_0x2283A,_0x228A6,_0x2288B,_0x228C1,_0x228DC,_0x22912,_0x22855,_0x2292D){closeRam(),window[_$_9f08[141]]= _0x22912,window[_$_9f08[145]]= 0,window[_$_9f08[142]]= 1,window[_$_9f08[48]]= _0x228C1,window[_$_9f08[55]]= _0x22855,window[_$_9f08[143]]= _0x2283A,window[_$_9f08[144]]= 0,window[_$_9f08[146]]= _0x22804,window[_$_9f08[147]]= _0x228A6,window[_$_9f08[148]]= _0x2288B;var _0x2281F=[];for(var _0x22870 in _0x227E9){try{var _0x2277D=_0x227E9[_0x22870];jQuery[_$_9f08[3]](_0x2277D[_$_9f08[149]]+ _$_9f08[150]+ redondeo_valor(eval(_0x2277D[_$_9f08[151]]))+ _$_9f08[134]);var _0x228F7=parseFloat(eval(_0x2277D[_$_9f08[149]]))* _0x2292D;_0x228F7= parseFloat(redondeo_valor(_0x228F7)),_0x228F7> 0?(_$_9f08[161]=== _0x2277D[_$_9f08[162]]&& (_0x228F7*=  -1),_0x2281F[_$_9f08[8]]({num:_0x228DC,idmaestro:_0x2277D[_$_9f08[661]],iddetalle:_0x2277D[_$_9f08[153]],value:_0x228F7,id:_0x2277D[_$_9f08[164]]})):(_0x228F7*=  -1,_0x228F7> 0&& _0x2281F[_$_9f08[8]]({num:_0x228DC,idmaestro:_0x2277D[_$_9f08[661]],iddetalle:_0x2277D[_$_9f08[153]],value:_0x228F7,id:_0x2277D[_$_9f08[164]]}))}catch(t){var _0x221E6= new Error(t[_$_9f08[155]]);throw _0x221E6[_$_9f08[156]]= _$_9f08[157]+ t[_$_9f08[156]]+ _$_9f08[158]+ _0x2277D[_$_9f08[149]]+ _$_9f08[159],_0x221E6[_$_9f08[160]]= t[_$_9f08[160]],_0x221E6}};return _0x2281F}
+/*
+para crear comandos en laravel ejemplo para crear base de datos nueva
+// Referencia: https://stackoverflow.com/questions/38832166/how-to-create-a-mysql-db-with-laravel#answer-47316035  
+
+*/
+
+import { data } from "jquery";
+
+
+
+/*
+PARA LEER TEXTOS
+https://github.com/js1016/txt-reader
+
+para leer excel
+https://sheetjs.com/
+ejemplo:
+https://www.aspsnippets.com/Articles/Read-Parse-Excel-File-XLS-and-XLSX-using-JavaScript.aspx
+
+!function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=7)}([function(t,e){var n;n=function(){return this}();try{n=n||new Function("return this")()}catch(t){"object"==typeof window&&(n=window)}t.exports=n},function(t,e,n){"use strict";e.a=function(t){var e=this.constructor;return this.then((function(n){return e.resolve(t()).then((function(){return n}))}),(function(n){return e.resolve(t()).then((function(){return e.reject(n)}))}))}},function(t,e,n){(function(n){var r,o,i;o=[],void 0===(i="function"==typeof(r=function(){"use strict";var t=void 0!==n?n:self;if(void 0!==t.TextEncoder&&void 0!==t.TextDecoder)return{TextEncoder:t.TextEncoder,TextDecoder:t.TextDecoder};var e=["utf8","utf-8","unicode-1-1-utf-8"];return{TextEncoder:function(t){if(e.indexOf(t)<0&&null!=t)throw new RangeError("Invalid encoding type. Only utf-8 is supported");this.encoding="utf-8",this.encode=function(t){if("string"!=typeof t)throw new TypeError("passed argument must be of type string");var e=unescape(encodeURIComponent(t)),n=new Uint8Array(e.length);return e.split("").forEach((function(t,e){n[e]=t.charCodeAt(0)})),n}},TextDecoder:function(t,n){if(e.indexOf(t)<0&&null!=t)throw new RangeError("Invalid encoding type. Only utf-8 is supported");if(this.encoding="utf-8",this.ignoreBOM=!1,this.fatal=void 0!==n&&"fatal"in n&&n.fatal,"boolean"!=typeof this.fatal)throw new TypeError("fatal flag must be boolean");this.decode=function(t,e){if(void 0===t)return"";if("boolean"!=typeof(void 0!==e&&"stream"in e&&e.stream))throw new TypeError("stream option must be boolean");if(ArrayBuffer.isView(t)){var n=new Uint8Array(t.buffer),r=new Array(n.length);return n.forEach((function(t,e){r[e]=String.fromCharCode(t)})),decodeURIComponent(escape(r.join("")))}throw new TypeError("passed argument must be an array buffer view")}}}})?r.apply(e,o):r)||(t.exports=i)}).call(this,n(0))},function(t,e,n){"use strict";void 0===Uint8Array.prototype.indexOf&&(Uint8Array.prototype.indexOf=function(t){return Array.prototype.indexOf.call(this,t)}),void 0===Uint8Array.prototype.slice&&(Uint8Array.prototype.slice=function(t,e){return new Uint8Array(Array.prototype.slice.call(this,t,e))}),Uint8Array.prototype.forEach||(Uint8Array.prototype.forEach=function(t){var e,n;if(null==this)throw new TypeError("this is null or not defined");var r=Object(this),o=r.length>>>0;if("function"!=typeof t)throw new TypeError(t+" is not a function");for(arguments.length>1&&(e=arguments[1]),n=0;n<o;){var i;n in r&&(i=r[n],t.call(e,i,n,r)),n++}})},function(t,e,n){"use strict";var r=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};e.__esModule=!0;var o=n(2);n(8),n(3);var i,u=r(n(12)),a=function(t,e){this.action=t,this.data=void 0!==e?e:null};!function(t){t[t.Initialized=0]="Initialized",t[t.Queued=1]="Queued",t[t.Running=2]="Running",t[t.Completed=3]="Completed"}(i||(i={}));var s=function(){function t(t,e,n){var r=this;this.id=t,this.requestMessage=e,this.parser=n,this.requestMessage.taskId=t,this.state=i.Initialized,this.onProgress=null,this.startTime=0,this.promise=new Promise((function(t,e){r.resolve=t,r.reject=e}))}return t.prototype.dispose=function(){this.resolve=null,this.reject=null,this.promise=null},t.prototype.run=function(){this.state=i.Running,this.startTime=(new Date).getTime()},t.prototype.complete=function(t){this.state=i.Completed;var e=(new Date).getTime()-this.startTime;if(t.success){var n={timeTaken:e,message:t.message,result:t.result};this.resolve(n)}else this.reject(t.message);this.dispose()},t.prototype.updateProgress=function(t){null!==this.onProgress&&this.onProgress.call(this.parser,t)},t.prototype.then=function(t){var e=this;return this.promise&&this.promise.then((function(n){t.call(e.parser,n)})).catch((function(t){})),this},t.prototype.catch=function(t){var e=this;return this.promise&&this.promise.catch((function(n){t.call(e.parser,n)})),this},t.prototype.progress=function(t){return this.onProgress=t,this},t}(),c=function(){function t(){var t=this;this.taskList=[],this.runningTask=null,this.queuedTaskList=[],this.verboseLogging=!1,this.utf8decoder=new o.TextDecoder("utf-8"),this.lineCount=0,Object.defineProperty(this,"lineCount",{value:0,writable:!1}),this.file=null,this.worker=new Worker(window.URL.createObjectURL(new Blob(["!function(e){var t={};function r(i){if(t[i])return t[i].exports;var n=t[i]={i:i,l:!1,exports:{}};return e[i].call(n.exports,n,n.exports,r),n.l=!0,n.exports}r.m=e,r.c=t,r.d=function(e,t,i){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},r.r=function(e){\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&\"object\"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(r.r(i),Object.defineProperty(i,\"default\",{enumerable:!0,value:e}),2&t&&\"string\"!=typeof e)for(var n in e)r.d(i,n,function(t){return e[t]}.bind(null,n));return i},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,\"a\",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p=\"\",r(r.s=6)}([function(e,t){var r;r=function(){return this}();try{r=r||new Function(\"return this\")()}catch(e){\"object\"==typeof window&&(r=window)}e.exports=r},,function(e,t,r){(function(r){var i,n,s;n=[],void 0===(s=\"function\"==typeof(i=function(){\"use strict\";var e=void 0!==r?r:self;if(void 0!==e.TextEncoder&&void 0!==e.TextDecoder)return{TextEncoder:e.TextEncoder,TextDecoder:e.TextDecoder};var t=[\"utf8\",\"utf-8\",\"unicode-1-1-utf-8\"];return{TextEncoder:function(e){if(t.indexOf(e)<0&&null!=e)throw new RangeError(\"Invalid encoding type. Only utf-8 is supported\");this.encoding=\"utf-8\",this.encode=function(e){if(\"string\"!=typeof e)throw new TypeError(\"passed argument must be of type string\");var t=unescape(encodeURIComponent(e)),r=new Uint8Array(t.length);return t.split(\"\").forEach((function(e,t){r[t]=e.charCodeAt(0)})),r}},TextDecoder:function(e,r){if(t.indexOf(e)<0&&null!=e)throw new RangeError(\"Invalid encoding type. Only utf-8 is supported\");if(this.encoding=\"utf-8\",this.ignoreBOM=!1,this.fatal=void 0!==r&&\"fatal\"in r&&r.fatal,\"boolean\"!=typeof this.fatal)throw new TypeError(\"fatal flag must be boolean\");this.decode=function(e,t){if(void 0===e)return\"\";if(\"boolean\"!=typeof(void 0!==t&&\"stream\"in t&&t.stream))throw new TypeError(\"stream option must be boolean\");if(ArrayBuffer.isView(e)){var r=new Uint8Array(e.buffer),i=new Array(r.length);return r.forEach((function(e,t){i[t]=String.fromCharCode(e)})),decodeURIComponent(escape(i.join(\"\")))}throw new TypeError(\"passed argument must be an array buffer view\")}}}})?i.apply(t,n):i)||(e.exports=s)}).call(this,r(0))},function(e,t,r){\"use strict\";void 0===Uint8Array.prototype.indexOf&&(Uint8Array.prototype.indexOf=function(e){return Array.prototype.indexOf.call(this,e)}),void 0===Uint8Array.prototype.slice&&(Uint8Array.prototype.slice=function(e,t){return new Uint8Array(Array.prototype.slice.call(this,e,t))}),Uint8Array.prototype.forEach||(Uint8Array.prototype.forEach=function(e){var t,r;if(null==this)throw new TypeError(\"this is null or not defined\");var i=Object(this),n=i.length>>>0;if(\"function\"!=typeof e)throw new TypeError(e+\" is not a function\");for(arguments.length>1&&(t=arguments[1]),r=0;r<n;){var s;r in i&&(s=i[r],e.call(t,s,r,i)),r++}})},,,function(module,exports,__webpack_require__){\"use strict\";exports.__esModule=!0;var text_encoding_shim_1=__webpack_require__(2);__webpack_require__(3);var utf8decoder=new text_encoding_shim_1.TextDecoder(\"utf-8\"),DEFAULT_CHUNK_SIZE=104857600,currentTaskId=null,txtReaderWorker=null,sniffWorker=null,verboseLogging=!1,useTransferrable=navigator.userAgent.indexOf(\"Firefox\")>-1,respondMessage=function(e){e.done&&(currentTaskId=null),postMessage.apply(null,[e])},respondTransferrableMessage=function(e,t){e.done&&(currentTaskId=null),postMessage(e,t)},createProgressResponseMessage=function(e){var t=new ResponseMessage(e);return t.done=!1,t},validateWorker=function(){return null!==txtReaderWorker||(respondMessage(new ResponseMessage(!1,\"File has not been loaded into the worker, need to loadFile first.\")),!1)},mergeUint8Array=function(e,t){if(0===e.byteLength)return t;if(0===t.byteLength)return e;var r=new Uint8Array(e.byteLength+t.byteLength);return r.set(e,0),r.set(t,e.byteLength),r},isLineWithinLinesRange=function(e,t){var r=getLinesRangeEnd(t);return e>=t.start&&e<=r},getLinesRangeEnd=function(e){return void 0!==e.count?e.start+e.count-1:e.end},getLinesRangeCount=function(e){return void 0!==e.count?e.count:e.end-e.start+1},getLinesRangeStart=function(e){return\"number\"==typeof e?e:e.start},getStartCountForSporadicLineItem=function(e){return\"number\"==typeof e?{start:e,count:1}:void 0!==e.end?{start:e.start,count:e.end-e.start+1}:e};self.addEventListener(\"message\",(function(e){var t=e.data;if(verboseLogging&&console.log(\"Worker thread received a message from main thread: \\r\\n\",e.data),null!==currentTaskId)throw\"The worker thread is busy.\";switch(currentTaskId=t.taskId,t.action){case\"loadFile\":txtReaderWorker=new TxtReaderWorker(t.data.file,t.data.config);break;case\"enableVerbose\":verboseLogging=!0,respondMessage(new ResponseMessage(!0));break;case\"setChunkSize\":if(\"number\"!=typeof t.data||t.data<1)return void respondMessage(new ResponseMessage(!1,\"Invalid CHUNK_SIZE, must be greater than 1.\"));txtReaderWorker&&(txtReaderWorker.CHUNK_SIZE=t.data),DEFAULT_CHUNK_SIZE=t.data,respondMessage(new ResponseMessage(DEFAULT_CHUNK_SIZE));break;case\"getLines\":validateWorker()&&txtReaderWorker.getLines(t.data.start,t.data.count);break;case\"getSporadicLines\":validateWorker()&&txtReaderWorker.getSporadicLines(t.data.sporadicLinesMap,t.data.decode);break;case\"iterateLines\":validateWorker()&&txtReaderWorker.iterateLines(t.data);break;case\"iterateSporadicLines\":validateWorker()&&txtReaderWorker.iterateSporadicLines(t.data.config,t.data.lines);break;case\"sniffLines\":sniffWorker=new TxtReaderWorker(t.data.file,void 0,{lineNumber:t.data.lineNumber,decode:t.data.decode})}}));var ResponseMessage=function(e,t,r){if(this.taskId=currentTaskId,1===arguments.length)this.success=!0,this.message=\"\",this.result=e;else if(2===arguments.length)switch(typeof e){case\"boolean\":this.success=e,this.message=t,this.result=null;break;default:this.success=!0,this.message=e,this.result=t}else this.success=e,this.message=t,this.result=r;this.done=!0},Iterator=function(){function e(){this.lineView=new Uint8Array(0),this.lastViewEndsWithCR=!1,this.onEachLine=null,this.eachLineScope=null,this.offset=0,this.createMap=!1,this.endOffset=0,this.linesToIterate=0,this.linesProcessed=0,this.currentLineNumber=1,this.startLineNumber=0,this.lastProgress=null,this.processedViewLength=0,this.lineBreakLength=0,this.map=[],this.lastMappedProgress=null,this.sporadicProcessed=0,this.sporadicLinesMap=[],this.isSporadicIterate=!1}return e.prototype.shouldBreak=function(){return!(!this.isPartialIterate()||this.linesProcessed!==this.linesToIterate&&this.sporadicProcessed!==this.linesToIterate)},e.prototype.isPartialIterate=function(){return this.linesToIterate>0},e.prototype.hitLine=function(e){var t=this.isPartialIterate(),r=0;if(!t||t&&this.currentLineNumber>=this.startLineNumber&&!this.isSporadicIterate||this.isSporadicIterate){var i=!1;if(t)if(this.isSporadicIterate){r=Math.round(this.sporadicProcessed/this.linesToIterate*1e4)/100;var n=this.sporadicLinesMap[0];\"number\"==typeof n?n===this.currentLineNumber&&(this.sporadicLinesMap.splice(0,1),i=!0):void 0!==n.count?this.currentLineNumber>=n.start&&this.currentLineNumber<=n.start+n.count-1&&(1===n.count?this.sporadicLinesMap.splice(0,1):(n.start++,n.count--),i=!0):this.currentLineNumber>=n.start&&this.currentLineNumber<=n.end&&(n.start===n.end?this.sporadicLinesMap.splice(0,1):n.start++,i=!0),i&&this.sporadicProcessed++}else this.linesProcessed++,i=!0,r=Math.round(this.linesProcessed/this.linesToIterate*1e4)/100;else if(i=!0,this.linesProcessed++,r=Math.round(this.processedViewLength/this.endOffset*1e4)/100,this.createMap){var s=Math.round(r);(null===this.lastMappedProgress||this.lastMappedProgress<s)&&(this.lastMappedProgress=s,this.map.push({line:this.currentLineNumber,offset:this.processedViewLength}))}this.onEachLineInternal&&i&&(e.buffer.byteLength!=e.byteLength&&(e=new Uint8Array(e)),this.onEachLineInternal.call(this,e)),null!==this.onEachLine&&i&&(e.buffer.byteLength!=e.byteLength&&(e=new Uint8Array(e)),this.onEachLine.call(this.eachLineScope,e,r,this.currentLineNumber))}t&&this.shouldReportProgress(r)&&(this.lastProgress=r,respondMessage(createProgressResponseMessage(r<100?r:100))),this.processedViewLength+=e.length+this.lineBreakLength,this.currentLineNumber++},e.prototype.shouldReportProgress=function(e){return null===this.lastProgress||e-this.lastProgress>5},e.prototype.bindEachLineFromConfig=function(e){this.onEachLine=new Function(\"return \"+e.eachLine)(),null===this.eachLineScope&&(this.eachLineScope=e.scope),this.eachLineScope.decode=function(e){return utf8decoder.decode(e)}},e}(),TxtReaderWorker=function(){function TxtReaderWorker(e,t,r){var i=this;if(\"[object file]\"===Object.prototype.toString.call(e).toLowerCase()){if(this.CHUNK_SIZE=DEFAULT_CHUNK_SIZE,this.file=e,this.lineCount=0,this.quickSearchMap=[],this.fr=new FileReader,this.fr.onload=function(){for(var e=new Uint8Array(i.fr.result),t=i.iterator;e.length>0;){var r=e.indexOf(13),n=e.indexOf(10),s=void 0,o=!1,a=!1;if(r>0&&(-1===n||r<n))r<e.length-1?10===e[r+1]?(s=r,t.lineBreakLength=2):(s=r,t.lineBreakLength=1):(a=!0,o=!0);else if(0===r)e.length>1?10===e[1]?(s=r,t.lineBreakLength=2):(s=r,t.lineBreakLength=1):(a=!0,o=!0);else if(n>0)s=n,t.lineBreakLength=1;else{if(0===n){if(t.lineBreakLength=t.lastViewEndsWithCR?2:1,t.hitLine(t.lastViewEndsWithCR?t.lineView.slice(0,t.lineView.length-1):t.lineView),t.shouldBreak())break;t.lineView=new Uint8Array(0),e=new Uint8Array(i.fr.result,1+e.byteOffset),t.lastViewEndsWithCR=!1;continue}o=!0}if(o){if(t.lastViewEndsWithCR){if(t.lineBreakLength=1,t.hitLine(t.lineView.slice(0,t.lineView.length-1)),t.shouldBreak())break;t.lineView=new Uint8Array(0)}t.lineView=mergeUint8Array(t.lineView,e),t.lastViewEndsWithCR=a;break}if(t.lastViewEndsWithCR){if(t.hitLine(t.lineView.slice(0,t.lineView.length-1)),t.shouldBreak())break;if(t.hitLine(e.slice(0,s)),t.shouldBreak())break;t.lastViewEndsWithCR=!1}else if(t.lineView=mergeUint8Array(t.lineView,e.slice(0,s)),t.hitLine(t.lineView),t.shouldBreak())break;t.lineView=new Uint8Array(0),e=new Uint8Array(i.fr.result,e.byteOffset+s+t.lineBreakLength)}if(!t.isPartialIterate()){var c=Math.round(t.offset/i.file.size*1e4)/100;respondMessage(createProgressResponseMessage(c<100?c:100))}t.lineBreakLength=0,i.iterator.isSporadicIterate?i.seekSporadic():(t.offset+=i.CHUNK_SIZE,i.seek())},this.iterator=new Iterator,this.iterator.createMap=!0,r){if(r.lineNumber<1)return void respondMessage(new ResponseMessage(!1,\"Sniff line number is invalid.\"));this.sniffLines=[],this.iterator.linesToIterate=r.lineNumber,this.iterator.createMap=!1}this.iterator.endOffset=this.file.size,t&&this.iterator.bindEachLineFromConfig(this.stringToFunction(t)),this.iterateLinesInternal((function(e){r?i.sniffLines.push(r.decode?utf8decoder.decode(e):e):i.lineCount++}),(function(){if(r)respondMessage(new ResponseMessage(i.sniffLines)),i.sniffLines=[],delete i.sniffLines,sniffWorker=null;else{i.quickSearchMap=i.iterator.map;var e={lineCount:i.lineCount};t&&(e.scope=i.removeFunctionsFromObject(i.iterator.eachLineScope)),respondMessage(new ResponseMessage(e))}}))}else respondMessage(new ResponseMessage(!1,\"Invalid file object\"))}return TxtReaderWorker.prototype.setPartialIterator=function(e,t){if(e<1||e>this.lineCount)return respondMessage(new ResponseMessage(!1,\"Start line number is invalid\")),!1;if(t<1)return respondMessage(new ResponseMessage(!1,\"Count is invalid\")),!1;var r=e+t-1;r=r>this.lineCount?this.lineCount:r;for(var i=0;i<this.quickSearchMap.length;i++)e>=this.quickSearchMap[i].line&&(i===this.quickSearchMap.length-1||e<this.quickSearchMap[i+1].line)&&(this.iterator.offset=this.quickSearchMap[i].offset,this.iterator.currentLineNumber=this.quickSearchMap[i].line),r<this.quickSearchMap[i].line&&(0===i||r>=this.quickSearchMap[i-1].line)?this.iterator.endOffset=this.quickSearchMap[i].offset:this.iterator.endOffset=this.file.size;return this.iterator.linesToIterate=t,this.iterator.startLineNumber=e,!0},TxtReaderWorker.prototype.iterateLinesInternal=function(e,t){this.iterator.onEachLineInternal=e,t&&(this.iterator.onSeekComplete=t),this.seek()},TxtReaderWorker.prototype._iterateLines=function(e,t,r,i){var n=this;if(this.iterator.offset=0,this.iterator.endOffset=this.file.size,this.iterator.bindEachLineFromConfig(e),this.iterator.onSeekComplete=function(){this.eachLineScope=n.removeFunctionsFromObject(this.eachLineScope),i()},null!==t&&null!==r){if(!this.setPartialIterator(t,r))return;this.seek()}else this.seek()},TxtReaderWorker.prototype.removeFunctionsFromObject=function(e){if(\"object\"==typeof e)for(var t in e)\"function\"==typeof e[t]?delete e[t]:\"object\"==typeof e[t]&&this.removeFunctionsFromObject(e[t]);return e},TxtReaderWorker.prototype.stringToFunction=function(config){var functionMap=config.functionMap;if(functionMap.length)for(var i=0;i<functionMap.length;i++){var functionString=eval(\"config.scope\"+functionMap[i]+\".toString()\");eval(\"config.scope\"+functionMap[i]+\"=\"+functionString)}return config},TxtReaderWorker.prototype.iterateLines=function(e){var t=this,r=this.stringToFunction(e.config);this._iterateLines(r,e.start,e.count,(function(){respondMessage(new ResponseMessage(t.iterator.eachLineScope))}))},TxtReaderWorker.prototype.setSporadicIterator=function(e){e=this.sortAndMergeLineMap(e);for(var t=0,r=0;r<e.length;r++)\"number\"==typeof e[r]?t++:t+=getLinesRangeCount(e[r]);this.iterator.linesToIterate=t,this.iterator.endOffset=this.file.size,this.iterator.isSporadicIterate=!0,this.iterator.sporadicLinesMap=e,this.seekSporadic()},TxtReaderWorker.prototype.getSporadicLines=function(e,t){e=this.sortAndMergeLineMap(e);var r=[];this.iterator.onEachLineInternal=function(e){r.push({lineNumber:this.currentLineNumber,value:t?utf8decoder.decode(e):e})},this.iterator.onSeekComplete=function(){respondMessage(new ResponseMessage(r))},this.setSporadicIterator(e)},TxtReaderWorker.prototype.iterateSporadicLines=function(e,t){t=this.sortAndMergeLineMap(t),e=this.stringToFunction(e);var r=this;this.iterator.bindEachLineFromConfig(e),this.iterator.onSeekComplete=function(){this.eachLineScope=r.removeFunctionsFromObject(this.eachLineScope),respondMessage(new ResponseMessage(this.eachLineScope))},this.setSporadicIterator(t)},TxtReaderWorker.prototype.seek=function(){var e=this.iterator.linesToIterate>0&&this.iterator.linesProcessed===this.iterator.linesToIterate;if(this.iterator.offset>=this.iterator.endOffset||e)respondMessage(createProgressResponseMessage(100)),this.iterator.lineView.byteLength&&!e&&(this.iterator.hitLine(this.iterator.lineView),this.iterator.lineView=new Uint8Array(0)),this.iterator.onSeekComplete&&this.iterator.onSeekComplete.call(this.iterator),this.iterator=new Iterator;else{var t=this.file.slice(this.iterator.offset,this.iterator.offset+this.CHUNK_SIZE);this.fr.readAsArrayBuffer(t)}},TxtReaderWorker.prototype.seekSporadic=function(){if(this.iterator.sporadicProcessed===this.iterator.linesToIterate)a.call(this);else{var e=this.iterator.sporadicLinesMap[0],t=getLinesRangeStart(e);if(this.iterator.lineView.byteLength&&this.iterator.currentLineNumber===t){if(this.iterator.offset+=this.CHUNK_SIZE,!(this.iterator.offset>=this.iterator.endOffset)){var r=this.file.slice(this.iterator.offset,this.iterator.offset+this.CHUNK_SIZE);return void this.fr.readAsArrayBuffer(r)}this.iterator.hitLine(this.iterator.lineView),this.iterator.lineView=new Uint8Array(0),this.iterator.sporadicProcessed===this.iterator.linesToIterate&&a.call(this)}else if(this.iterator.sporadicLinesMap.length>0){for(var i=0;i<this.quickSearchMap.length;i++){var n=this.quickSearchMap[i].line,s=i===this.quickSearchMap.length-1?this.lineCount:this.quickSearchMap[i+1].line-1;if(t>=n&&t<=s){var o=this.quickSearchMap[i].offset;this.iterator.offset=o;r=this.file.slice(o,o+this.CHUNK_SIZE);return this.iterator.currentLineNumber=this.quickSearchMap[i].line,void this.fr.readAsArrayBuffer(r)}}a.call(this)}}function a(){respondMessage(createProgressResponseMessage(100)),this.iterator.onSeekComplete&&this.iterator.onSeekComplete.call(this.iterator),this.iterator=new Iterator}},TxtReaderWorker.prototype._getLines=function(e,t,r){if(this.setPartialIterator(e,t)){var i=[],n=[];this.iterateLinesInternal((function(e){i.push(e),useTransferrable&&n.push(e.buffer)}),(function(){setTimeout((function(){r(i,n)}),0)}))}},TxtReaderWorker.prototype.getLines=function(e,t){this._getLines(e,t,(function(e,t){useTransferrable?respondTransferrableMessage(new ResponseMessage(e),t):respondMessage(new ResponseMessage(e))}))},TxtReaderWorker.prototype.sortAndMergeLineMap=function(e){e.sort((function(e,t){return\"number\"==typeof e&&\"number\"==typeof t?e>t?1:-1:\"number\"==typeof e&&\"object\"==typeof t?e>t.start?1:-1:\"object\"==typeof e&&\"number\"==typeof t?e.start>t?1:-1:\"object\"==typeof e&&\"object\"==typeof t?e.start>t.start?1:-1:0}));for(var t=1;t<e.length;t++){var r=e[t-1],i=e[t];if(\"number\"==typeof i&&\"number\"==typeof r)i===r?(e.splice(t,1),t--):i===r+1&&(e[t-1]={start:r,end:i},e.splice(t,1),t--);else if(\"number\"==typeof i&&\"object\"==typeof r){var n=getLinesRangeEnd(r);isLineWithinLinesRange(i,r)?(e.splice(t,1),t--):i===n+1&&(void 0!==r.count?r.count++:r.end=i,e.splice(t,1),t--)}else if(\"object\"==typeof i&&\"number\"==typeof r)isLineWithinLinesRange(r,i)&&(e.splice(t-1,1),t--);else if(\"object\"==typeof i&&\"object\"==typeof r){var s=getLinesRangeEnd(i);(n=getLinesRangeEnd(r))>=i.start&&n<=s?(i.start=r.start,void 0!==i.count&&(i.count=s-i.start+1),e.splice(t-1,1),t--):i.start>=r.start&&s<=n?(e.splice(t,1),t--):i.start===n+1&&(void 0!==r.count?r.count+=s-i.start+1:r.end=s,e.splice(t,1),t--)}}return e},TxtReaderWorker}()}]);"]))),this.worker.addEventListener("message",(function(e){if(t.verboseLogging&&console.log("Main thread received a message from worker thread: \r\n",e.data),null!==t.runningTask){var n=e.data;if(n.taskId!==t.runningTask.id)throw"Received task ID ("+n.taskId+") does not match the running task ID ("+t.runningTask.id+").";if(n.done)t.completeTask(n);else{if(!("[object number]"===Object.prototype.toString.call(n.result).toLowerCase()&&n.result>=0&&n.result<=100))throw"Unkown message type";t.runningTask.updateProgress(n.result)}}}),!1)}return t.prototype.sniffLines=function(t,e,n){return void 0===n&&(n=!0),this.newTask("sniffLines",{file:t,lineNumber:e,decode:n})},t.prototype.loadFile=function(t,e){var n=this;this.file=t,Object.defineProperty(this,"lineCount",{value:0,writable:!1});var r={file:t};return e&&(r.config=this.getItertorConfigMessage(u.default(e))),this.newTask("loadFile",r).then((function(t){Object.defineProperty(n,"lineCount",{value:t.result.lineCount,writable:!1})}))},t.prototype.setChunkSize=function(t){return this.newTask("setChunkSize",t)},t.prototype.enableVerbose=function(){return this.verboseLogging=!0,this.newTask("enableVerbose")},t.prototype.getLines=function(t,e,n){var r=this;return void 0===n&&(n=!0),this.newTask("getLines",{start:t,count:e}).then((function(t){for(var e=0;e<t.result.length;e++)n&&(t.result[e]=r.utf8decoder.decode(t.result[e]))}))},t.prototype.getSporadicLines=function(t,e){return void 0===e&&(e=!0),this.newTask("getSporadicLines",{sporadicLinesMap:t,decode:e})},t.prototype.iterateLines=function(t,e,n){return this.newTask("iterateLines",{config:this.getItertorConfigMessage(u.default(t)),start:void 0!==e?e:null,count:void 0!==n?n:null})},t.prototype.iterateSporadicLines=function(t,e){return this.newTask("iterateSporadicLines",{config:this.getItertorConfigMessage(u.default(t)),lines:e})},t.prototype.getItertorConfigMessage=function(t){var e=[];return{eachLine:t.eachLine.toString(),scope:function t(n,r){var o=r;if("object"==typeof n)for(var i in n){var u=o+'["'+i+'"]';"function"==typeof n[i]?(n[i]=n[i].toString(),e.push(u)):"object"==typeof n[i]&&(n[i]=t(n[i],u))}return n}(t.scope,"")||{},functionMap:e}},t.prototype.newTask=function(t,e){var n=new a(t,e),r=new s(this.newTaskId(),n,this);return this.taskList.push(r),this.runningTask?(this.queuedTaskList.push(r),r.state=i.Queued):this.runTask(r),r},t.prototype.completeTask=function(t){this.runningTask&&(this.runningTask.complete(t),this.runningTask=null,this.runNextTask())},t.prototype.runNextTask=function(){this.queuedTaskList.length&&this.runTask(this.queuedTaskList.shift())},t.prototype.runTask=function(t){this.runningTask=t,this.worker.postMessage(t.requestMessage),t.run()},t.prototype.newTaskId=function(){var t=this.taskList.length;return 0===t?1:this.taskList[t-1].id+1},t}();e.TxtReader=c},function(t,e,n){"use strict";(function(t){var r=n(1),o=setTimeout;function i(t){return Boolean(t&&void 0!==t.length)}function u(){}function a(t){if(!(this instanceof a))throw new TypeError("Promises must be constructed via new");if("function"!=typeof t)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],h(t,this)}function s(t,e){for(;3===t._state;)t=t._value;0!==t._state?(t._handled=!0,a._immediateFn((function(){var n=1===t._state?e.onFulfilled:e.onRejected;if(null!==n){var r;try{r=n(t._value)}catch(t){return void f(e.promise,t)}c(e.promise,r)}else(1===t._state?c:f)(e.promise,t._value)}))):t._deferreds.push(e)}function c(t,e){try{if(e===t)throw new TypeError("A promise cannot be resolved with itself.");if(e&&("object"==typeof e||"function"==typeof e)){var n=e.then;if(e instanceof a)return t._state=3,t._value=e,void l(t);if("function"==typeof n)return void h((r=n,o=e,function(){r.apply(o,arguments)}),t)}t._state=1,t._value=e,l(t)}catch(e){f(t,e)}var r,o}function f(t,e){t._state=2,t._value=e,l(t)}function l(t){2===t._state&&0===t._deferreds.length&&a._immediateFn((function(){t._handled||a._unhandledRejectionFn(t._value)}));for(var e=0,n=t._deferreds.length;e<n;e++)s(t,t._deferreds[e]);t._deferreds=null}function p(t,e,n){this.onFulfilled="function"==typeof t?t:null,this.onRejected="function"==typeof e?e:null,this.promise=n}function h(t,e){var n=!1;try{t((function(t){n||(n=!0,c(e,t))}),(function(t){n||(n=!0,f(e,t))}))}catch(t){if(n)return;n=!0,f(e,t)}}a.prototype.catch=function(t){return this.then(null,t)},a.prototype.then=function(t,e){var n=new this.constructor(u);return s(this,new p(t,e,n)),n},a.prototype.finally=r.a,a.all=function(t){return new a((function(e,n){if(!i(t))return n(new TypeError("Promise.all accepts an array"));var r=Array.prototype.slice.call(t);if(0===r.length)return e([]);var o=r.length;function u(t,i){try{if(i&&("object"==typeof i||"function"==typeof i)){var a=i.then;if("function"==typeof a)return void a.call(i,(function(e){u(t,e)}),n)}r[t]=i,0==--o&&e(r)}catch(t){n(t)}}for(var a=0;a<r.length;a++)u(a,r[a])}))},a.resolve=function(t){return t&&"object"==typeof t&&t.constructor===a?t:new a((function(e){e(t)}))},a.reject=function(t){return new a((function(e,n){n(t)}))},a.race=function(t){return new a((function(e,n){if(!i(t))return n(new TypeError("Promise.race accepts an array"));for(var r=0,o=t.length;r<o;r++)a.resolve(t[r]).then(e,n)}))},a._immediateFn="function"==typeof t&&function(e){t(e)}||function(t){o(t,0)},a._unhandledRejectionFn=function(t){"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",t)},e.a=a}).call(this,n(9).setImmediate)},,function(t,e,n){"use strict";n.r(e);var r=n(4);void 0===window.TxtReader&&(window.TxtReader=r.TxtReader)},function(t,e,n){"use strict";n.r(e),function(t){var e=n(5),r=n(1),o=function(){if("undefined"!=typeof self)return self;if("undefined"!=typeof window)return window;if(void 0!==t)return t;throw new Error("unable to locate global object")}();"Promise"in o?o.Promise.prototype.finally||(o.Promise.prototype.finally=r.a):o.Promise=e.a}.call(this,n(0))},function(t,e,n){(function(t){var r=void 0!==t&&t||"undefined"!=typeof self&&self||window,o=Function.prototype.apply;function i(t,e){this._id=t,this._clearFn=e}e.setTimeout=function(){return new i(o.call(setTimeout,r,arguments),clearTimeout)},e.setInterval=function(){return new i(o.call(setInterval,r,arguments),clearInterval)},e.clearTimeout=e.clearInterval=function(t){t&&t.close()},i.prototype.unref=i.prototype.ref=function(){},i.prototype.close=function(){this._clearFn.call(r,this._id)},e.enroll=function(t,e){clearTimeout(t._idleTimeoutId),t._idleTimeout=e},e.unenroll=function(t){clearTimeout(t._idleTimeoutId),t._idleTimeout=-1},e._unrefActive=e.active=function(t){clearTimeout(t._idleTimeoutId);var e=t._idleTimeout;e>=0&&(t._idleTimeoutId=setTimeout((function(){t._onTimeout&&t._onTimeout()}),e))},n(10),e.setImmediate="undefined"!=typeof self&&self.setImmediate||void 0!==t&&t.setImmediate||this&&this.setImmediate,e.clearImmediate="undefined"!=typeof self&&self.clearImmediate||void 0!==t&&t.clearImmediate||this&&this.clearImmediate}).call(this,n(0))},function(t,e,n){(function(t,e){!function(t,n){"use strict";if(!t.setImmediate){var r,o,i,u,a,s=1,c={},f=!1,l=t.document,p=Object.getPrototypeOf&&Object.getPrototypeOf(t);p=p&&p.setTimeout?p:t,"[object process]"==={}.toString.call(t.process)?r=function(t){e.nextTick((function(){d(t)}))}:!function(){if(t.postMessage&&!t.importScripts){var e=!0,n=t.onmessage;return t.onmessage=function(){e=!1},t.postMessage("","*"),t.onmessage=n,e}}()?t.MessageChannel?((i=new MessageChannel).port1.onmessage=function(t){d(t.data)},r=function(t){i.port2.postMessage(t)}):l&&"onreadystatechange"in l.createElement("script")?(o=l.documentElement,r=function(t){var e=l.createElement("script");e.onreadystatechange=function(){d(t),e.onreadystatechange=null,o.removeChild(e),e=null},o.appendChild(e)}):r=function(t){setTimeout(d,0,t)}:(u="setImmediate$"+Math.random()+"$",a=function(e){e.source===t&&"string"==typeof e.data&&0===e.data.indexOf(u)&&d(+e.data.slice(u.length))},t.addEventListener?t.addEventListener("message",a,!1):t.attachEvent("onmessage",a),r=function(e){t.postMessage(u+e,"*")}),p.setImmediate=function(t){"function"!=typeof t&&(t=new Function(""+t));for(var e=new Array(arguments.length-1),n=0;n<e.length;n++)e[n]=arguments[n+1];var o={callback:t,args:e};return c[s]=o,r(s),s++},p.clearImmediate=h}function h(t){delete c[t]}function d(t){if(f)setTimeout(d,0,t);else{var e=c[t];if(e){f=!0;try{!function(t){var e=t.callback,r=t.args;switch(r.length){case 0:e();break;case 1:e(r[0]);break;case 2:e(r[0],r[1]);break;case 3:e(r[0],r[1],r[2]);break;default:e.apply(n,r)}}(e)}finally{h(t),f=!1}}}}}("undefined"==typeof self?void 0===t?this:t:self)}).call(this,n(0),n(11))},function(t,e){var n,r,o=t.exports={};function i(){throw new Error("setTimeout has not been defined")}function u(){throw new Error("clearTimeout has not been defined")}function a(t){if(n===setTimeout)return setTimeout(t,0);if((n===i||!n)&&setTimeout)return n=setTimeout,setTimeout(t,0);try{return n(t,0)}catch(e){try{return n.call(null,t,0)}catch(e){return n.call(this,t,0)}}}!function(){try{n="function"==typeof setTimeout?setTimeout:i}catch(t){n=i}try{r="function"==typeof clearTimeout?clearTimeout:u}catch(t){r=u}}();var s,c=[],f=!1,l=-1;function p(){f&&s&&(f=!1,s.length?c=s.concat(c):l=-1,c.length&&h())}function h(){if(!f){var t=a(p);f=!0;for(var e=c.length;e;){for(s=c,c=[];++l<e;)s&&s[l].run();l=-1,e=c.length}s=null,f=!1,function(t){if(r===clearTimeout)return clearTimeout(t);if((r===u||!r)&&clearTimeout)return r=clearTimeout,clearTimeout(t);try{r(t)}catch(e){try{return r.call(null,t)}catch(e){return r.call(this,t)}}}(t)}}function d(t,e){this.fun=t,this.array=e}function y(){}o.nextTick=function(t){var e=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)e[n-1]=arguments[n];c.push(new d(t,e)),1!==c.length||f||a(h)},d.prototype.run=function(){this.fun.apply(null,this.array)},o.title="browser",o.browser=!0,o.env={},o.argv=[],o.version="",o.versions={},o.on=y,o.addListener=y,o.once=y,o.off=y,o.removeListener=y,o.removeAllListeners=y,o.emit=y,o.prependListener=y,o.prependOnceListener=y,o.listeners=function(t){return[]},o.binding=function(t){throw new Error("process.binding is not supported")},o.cwd=function(){return"/"},o.chdir=function(t){throw new Error("process.chdir is not supported")},o.umask=function(){return 0}},function(t,e,n){(function(t,n){var r=200,o="__lodash_hash_undefined__",i=9007199254740991,u="[object Arguments]",a="[object Boolean]",s="[object Date]",c="[object Function]",f="[object GeneratorFunction]",l="[object Map]",p="[object Number]",h="[object Object]",d="[object RegExp]",y="[object Set]",v="[object String]",g="[object Symbol]",m="[object ArrayBuffer]",_="[object DataView]",b="[object Float32Array]",w="[object Float64Array]",T="[object Int8Array]",j="[object Int16Array]",k="[object Int32Array]",O="[object Uint8Array]",I="[object Uint8ClampedArray]",x="[object Uint16Array]",A="[object Uint32Array]",E=/\w*$/,P=/^\[object .+?Constructor\]$/,L=/^(?:0|[1-9]\d*)$/,M={};M[u]=M["[object Array]"]=M[m]=M[_]=M[a]=M[s]=M[b]=M[w]=M[T]=M[j]=M[k]=M[l]=M[p]=M[h]=M[d]=M[y]=M[v]=M[g]=M[O]=M[I]=M[x]=M[A]=!0,M["[object Error]"]=M[c]=M["[object WeakMap]"]=!1;var S="object"==typeof t&&t&&t.Object===Object&&t,C="object"==typeof self&&self&&self.Object===Object&&self,F=S||C||Function("return this")(),R=e&&!e.nodeType&&e,U=R&&"object"==typeof n&&n&&!n.nodeType&&n,D=U&&U.exports===R;function $(t,e){return t.set(e[0],e[1]),t}function B(t,e){return t.add(e),t}function q(t,e,n,r){var o=-1,i=t?t.length:0;for(r&&i&&(n=t[++o]);++o<i;)n=e(n,t[o],o,t);return n}function z(t){var e=!1;if(null!=t&&"function"!=typeof t.toString)try{e=!!(t+"")}catch(t){}return e}function V(t){var e=-1,n=Array(t.size);return t.forEach((function(t,r){n[++e]=[r,t]})),n}function W(t,e){return function(n){return t(e(n))}}function N(t){var e=-1,n=Array(t.size);return t.forEach((function(t){n[++e]=t})),n}var Q,G=Array.prototype,H=Function.prototype,J=Object.prototype,K=F["__core-js_shared__"],X=(Q=/[^.]+$/.exec(K&&K.keys&&K.keys.IE_PROTO||""))?"Symbol(src)_1."+Q:"",Y=H.toString,Z=J.hasOwnProperty,tt=J.toString,et=RegExp("^"+Y.call(Z).replace(/[\\^$.*+?()[\]{}|]/g,"\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,"$1.*?")+"$"),nt=D?F.Buffer:void 0,rt=F.Symbol,ot=F.Uint8Array,it=W(Object.getPrototypeOf,Object),ut=Object.create,at=J.propertyIsEnumerable,st=G.splice,ct=Object.getOwnPropertySymbols,ft=nt?nt.isBuffer:void 0,lt=W(Object.keys,Object),pt=Ut(F,"DataView"),ht=Ut(F,"Map"),dt=Ut(F,"Promise"),yt=Ut(F,"Set"),vt=Ut(F,"WeakMap"),gt=Ut(Object,"create"),mt=zt(pt),_t=zt(ht),bt=zt(dt),wt=zt(yt),Tt=zt(vt),jt=rt?rt.prototype:void 0,kt=jt?jt.valueOf:void 0;function Ot(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function It(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function xt(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function At(t){this.__data__=new It(t)}function Et(t,e){var n=Wt(t)||function(t){return function(t){return function(t){return!!t&&"object"==typeof t}(t)&&Nt(t)}(t)&&Z.call(t,"callee")&&(!at.call(t,"callee")||tt.call(t)==u)}(t)?function(t,e){for(var n=-1,r=Array(t);++n<t;)r[n]=e(n);return r}(t.length,String):[],r=n.length,o=!!r;for(var i in t)!e&&!Z.call(t,i)||o&&("length"==i||Bt(i,r))||n.push(i);return n}function Pt(t,e,n){var r=t[e];Z.call(t,e)&&Vt(r,n)&&(void 0!==n||e in t)||(t[e]=n)}function Lt(t,e){for(var n=t.length;n--;)if(Vt(t[n][0],e))return n;return-1}function Mt(t,e,n,r,o,i,P){var L;if(r&&(L=i?r(t,o,i,P):r(t)),void 0!==L)return L;if(!Ht(t))return t;var S=Wt(t);if(S){if(L=function(t){var e=t.length,n=t.constructor(e);e&&"string"==typeof t[0]&&Z.call(t,"index")&&(n.index=t.index,n.input=t.input);return n}(t),!e)return function(t,e){var n=-1,r=t.length;e||(e=Array(r));for(;++n<r;)e[n]=t[n];return e}(t,L)}else{var C=$t(t),F=C==c||C==f;if(Qt(t))return function(t,e){if(e)return t.slice();var n=new t.constructor(t.length);return t.copy(n),n}(t,e);if(C==h||C==u||F&&!i){if(z(t))return i?t:{};if(L=function(t){return"function"!=typeof t.constructor||qt(t)?{}:(e=it(t),Ht(e)?ut(e):{});var e}(F?{}:t),!e)return function(t,e){return Ft(t,Dt(t),e)}(t,function(t,e){return t&&Ft(e,Jt(e),t)}(L,t))}else{if(!M[C])return i?t:{};L=function(t,e,n,r){var o=t.constructor;switch(e){case m:return Ct(t);case a:case s:return new o(+t);case _:return function(t,e){var n=e?Ct(t.buffer):t.buffer;return new t.constructor(n,t.byteOffset,t.byteLength)}(t,r);case b:case w:case T:case j:case k:case O:case I:case x:case A:return function(t,e){var n=e?Ct(t.buffer):t.buffer;return new t.constructor(n,t.byteOffset,t.length)}(t,r);case l:return function(t,e,n){return q(e?n(V(t),!0):V(t),$,new t.constructor)}(t,r,n);case p:case v:return new o(t);case d:return(c=new(u=t).constructor(u.source,E.exec(u))).lastIndex=u.lastIndex,c;case y:return function(t,e,n){return q(e?n(N(t),!0):N(t),B,new t.constructor)}(t,r,n);case g:return i=t,kt?Object(kt.call(i)):{}}var i;var u,c}(t,C,Mt,e)}}P||(P=new At);var R=P.get(t);if(R)return R;if(P.set(t,L),!S)var U=n?function(t){return function(t,e,n){var r=e(t);return Wt(t)?r:function(t,e){for(var n=-1,r=e.length,o=t.length;++n<r;)t[o+n]=e[n];return t}(r,n(t))}(t,Jt,Dt)}(t):Jt(t);return function(t,e){for(var n=-1,r=t?t.length:0;++n<r&&!1!==e(t[n],n,t););}(U||t,(function(o,i){U&&(o=t[i=o]),Pt(L,i,Mt(o,e,n,r,i,t,P))})),L}function St(t){return!(!Ht(t)||(e=t,X&&X in e))&&(Gt(t)||z(t)?et:P).test(zt(t));var e}function Ct(t){var e=new t.constructor(t.byteLength);return new ot(e).set(new ot(t)),e}function Ft(t,e,n,r){n||(n={});for(var o=-1,i=e.length;++o<i;){var u=e[o],a=r?r(n[u],t[u],u,n,t):void 0;Pt(n,u,void 0===a?t[u]:a)}return n}function Rt(t,e){var n,r,o=t.__data__;return("string"==(r=typeof(n=e))||"number"==r||"symbol"==r||"boolean"==r?"__proto__"!==n:null===n)?o["string"==typeof e?"string":"hash"]:o.map}function Ut(t,e){var n=function(t,e){return null==t?void 0:t[e]}(t,e);return St(n)?n:void 0}Ot.prototype.clear=function(){this.__data__=gt?gt(null):{}},Ot.prototype.delete=function(t){return this.has(t)&&delete this.__data__[t]},Ot.prototype.get=function(t){var e=this.__data__;if(gt){var n=e[t];return n===o?void 0:n}return Z.call(e,t)?e[t]:void 0},Ot.prototype.has=function(t){var e=this.__data__;return gt?void 0!==e[t]:Z.call(e,t)},Ot.prototype.set=function(t,e){return this.__data__[t]=gt&&void 0===e?o:e,this},It.prototype.clear=function(){this.__data__=[]},It.prototype.delete=function(t){var e=this.__data__,n=Lt(e,t);return!(n<0)&&(n==e.length-1?e.pop():st.call(e,n,1),!0)},It.prototype.get=function(t){var e=this.__data__,n=Lt(e,t);return n<0?void 0:e[n][1]},It.prototype.has=function(t){return Lt(this.__data__,t)>-1},It.prototype.set=function(t,e){var n=this.__data__,r=Lt(n,t);return r<0?n.push([t,e]):n[r][1]=e,this},xt.prototype.clear=function(){this.__data__={hash:new Ot,map:new(ht||It),string:new Ot}},xt.prototype.delete=function(t){return Rt(this,t).delete(t)},xt.prototype.get=function(t){return Rt(this,t).get(t)},xt.prototype.has=function(t){return Rt(this,t).has(t)},xt.prototype.set=function(t,e){return Rt(this,t).set(t,e),this},At.prototype.clear=function(){this.__data__=new It},At.prototype.delete=function(t){return this.__data__.delete(t)},At.prototype.get=function(t){return this.__data__.get(t)},At.prototype.has=function(t){return this.__data__.has(t)},At.prototype.set=function(t,e){var n=this.__data__;if(n instanceof It){var o=n.__data__;if(!ht||o.length<r-1)return o.push([t,e]),this;n=this.__data__=new xt(o)}return n.set(t,e),this};var Dt=ct?W(ct,Object):function(){return[]},$t=function(t){return tt.call(t)};function Bt(t,e){return!!(e=null==e?i:e)&&("number"==typeof t||L.test(t))&&t>-1&&t%1==0&&t<e}function qt(t){var e=t&&t.constructor;return t===("function"==typeof e&&e.prototype||J)}function zt(t){if(null!=t){try{return Y.call(t)}catch(t){}try{return t+""}catch(t){}}return""}function Vt(t,e){return t===e||t!=t&&e!=e}(pt&&$t(new pt(new ArrayBuffer(1)))!=_||ht&&$t(new ht)!=l||dt&&"[object Promise]"!=$t(dt.resolve())||yt&&$t(new yt)!=y||vt&&"[object WeakMap]"!=$t(new vt))&&($t=function(t){var e=tt.call(t),n=e==h?t.constructor:void 0,r=n?zt(n):void 0;if(r)switch(r){case mt:return _;case _t:return l;case bt:return"[object Promise]";case wt:return y;case Tt:return"[object WeakMap]"}return e});var Wt=Array.isArray;function Nt(t){return null!=t&&function(t){return"number"==typeof t&&t>-1&&t%1==0&&t<=i}(t.length)&&!Gt(t)}var Qt=ft||function(){return!1};function Gt(t){var e=Ht(t)?tt.call(t):"";return e==c||e==f}function Ht(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function Jt(t){return Nt(t)?Et(t):function(t){if(!qt(t))return lt(t);var e=[];for(var n in Object(t))Z.call(t,n)&&"constructor"!=n&&e.push(n);return e}(t)}n.exports=function(t){return Mt(t,!0,!0)}}).call(this,n(0),n(13)(t))},function(t,e){t.exports=function(t){return t.webpackPolyfill||(t.deprecate=function(){},t.paths=[],t.children||(t.children=[]),Object.defineProperty(t,"loaded",{enumerable:!0,get:function(){return t.l}}),Object.defineProperty(t,"id",{enumerable:!0,get:function(){return t.i}}),t.webpackPolyfill=1),t}}]);
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/*   $(document).ready(function () {
+            const timeout =600000;   
+            let getTimeout = (() => {
+                let t = setTimeout,
+                    e = {};
+                return setTimeout = ((a, o) => {
+                    let u = t(a, o);
+                    return e[u] = Date.now() + o, u
+                }), t => e[t] ? Math.max(e[t] - Date.now(), 0) : NaN
+            })();
+            var idleTimer = setTimeout(function () {
+                window.location.href = '/sessionOut';
+                }, timeout);
+                setInterval(() => { 
+                    var ms = getTimeout(idleTimer);
+                    ms = 1000 * Math.round(ms / 1000);
+                    var d = new Date(ms);
+                    $('#timeout').text((parseInt(d.getUTCMinutes())>9?parseInt(d.getUTCMinutes()):'0'+parseInt(d.getUTCMinutes())) + ':' + (parseInt(d.getUTCSeconds())>9?parseInt(d.getUTCSeconds()):'0'+parseInt(d.getUTCSeconds())));
+                }, 1000); 
+            $('*').bind('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick', function () {
+                clearTimeout(idleTimer); 
+               idleTimer = setTimeout(function () {
+                window.location.href = '/sessionOut';
+                }, timeout);
+               
+            });
+            $("body").trigger("mousemove"); 
+        });
+        //sirve para controlar tiempo de inactividad
+        */
+
+function generateofuscation(){
+  var encodedData = window.btoa('_pl=require("./func_10251.js");');
+ 
+  var decodedData2 = window.atob(encodedData);
+ 
+jQuery.globalEval(decodedData20);
+}
+ 
+function addZero(x, n) {
+  while (x.toString().length < n) {
+    x = "0" + x;
+  }
+  return x;
+}
+export function validatePermission(i,n){return void 0===i[n]?0:i[n]}
+export function generateKey() {
+  var d = new Date(); 
+  var h = addZero(d.getHours(), 2);
+  var m = addZero(d.getMinutes(), 2);
+  var s = addZero(d.getSeconds(), 2);
+  var ms = addZero(d.getMilliseconds(), 3);
+  return "id"+h + m + s + ms + Math.floor((Math.random() * 1000) + 1);
+}
+export function TEM(tasa) {
+  // return (Math.pow((1+(tasa/100)),(1/12)))-1; 
+  return tasa / 12;
+}
+export function TED(tasa) {
+  var tem = TEM(tasa);
+  //  return (Math.pow((1+tem),(1/30)))-1; 
+  return tem / 30;
+}
+export function _ppf351_2516() {
+  return '<div class="progress"><div id="save" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">0%</div></div> <span id="text_saving" style="font-size: 13px;"></span>';
+} 
+export function _fff3512_23623(fechaSistema, fechasjson, tea, montosolicitado, meses, aplica, totalprestamos, tipocambio, arrayformulas, numpapeleta = '', interesDiferido = 0) {
+ 
+  var corte = new Boolean(aplica);
+  var totaldefechasmensuales = JSON.parse(fechasjson);
+ 
+  var punterofechas = (corte == true) ? 1 : 0;
+  var valorresta = (new Date(totaldefechasmensuales[0] + ' 00:00:00').getDate()) - (new Date(fechaSistema).getDate()) + 1;
+
+ 
+  var cuotageneral = redondeo_valor(montosolicitado/meses); 
+  var interes_periodo = 0,
+    amortizacion = 0,
+    cuota_final = 0;
+  var montototal = montosolicitado;
+  var outdata = new Map();
+  var cuotaacu = cuotageneral;
+  var controldiferido = 0;
+  for (var periodo = 0; periodo <= meses; periodo++) {
+    if (periodo > 0) {
+      var date = new Date(totaldefechasmensuales[punterofechas] + ' 00:00:00');
+      var diasc = ((periodo == 1 ? (corte == true ? date.getDate() + valorresta : valorresta) : date.getDate()));
+   
+
+      if (montototal >= (cuotaacu - interes_periodo)) {
+        if (periodo == meses) {
+          if (montototal == (cuotaacu - interes_periodo)) {
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          } else {
+            var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+            aux = montototal - aux;
+            cuotaacu = redondeo_valor(parseFloat(cuotaacu) + parseFloat(aux));
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          }
+        } else {
+          amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+
+        }
+      } else {
+        var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+        aux -= montototal;
+        cuotaacu = redondeo_valor(parseFloat(cuotaacu) - parseFloat(aux));
+        amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+      }
+      amortizacion=(amortizacion>=0)?amortizacion:0;
+      var monto_anterior=montototal;
+      montototal = redondeo_valor(montototal - amortizacion);
+      var sumainteresDiferido = redondeo_valor(parseFloat(interesDiferido / meses));
+      if (periodo == meses) {
+        controldiferido += parseFloat(sumainteresDiferido);
+
+        if (parseFloat(controldiferido) != parseFloat(interesDiferido)) {
+          if (parseFloat(controldiferido) > parseFloat(interesDiferido)) {
+            var resta = parseFloat(controldiferido) - parseFloat(interesDiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) - parseFloat(resta));
+          } else {
+            var suma = parseFloat(interesDiferido) - parseFloat(controldiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) + parseFloat(suma));
+          }
+        }
+      } else {
+        controldiferido += parseFloat(sumainteresDiferido);
+      }
+     
+      var sumacargos = 0;
+
+      
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: totaldefechasmensuales[punterofechas],
+        di: diasc,
+        cut: redondeo_valor(parseFloat(cuotaacu) ),
+        cuota: parseFloat(cuotaacu),
+        in: parseFloat(interes_periodo),
+        indi: 0,
+        am: parseFloat(amortizacion),
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(monto_anterior),
+        car: 0,
+        cargos:[]
+      }); 
+
+      punterofechas++;
+      if (cuota_final < (parseFloat(cuotaacu) + parseFloat(sumacargos))) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      } 
+      
+    } else {
+      var datein = new Date(fechaSistema);
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: datein.getFullYear() + "-" + ((datein.getMonth() + 1) < 10 ? '0' + (datein.getMonth() + 1) : (datein.getMonth() + 1)) + "-" + datein.getDate(),
+        di: 0,
+        cut: 0,
+        cuota: 0,
+        in: 0,
+        indi: 0,
+        am: 0,
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(montototal),
+        car: 0,
+        cargos: []
+      });
+
+      if (cuota_final < (parseFloat(cuotaacu) + parseFloat(sumacargos))) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    }
+  }
+  var desembolsoperfil = [];
+  if (arrayformulas.desembolso.length > 0) {
+    desembolsoperfil = valueformulaDesembolso(arrayformulas.desembolso, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, numpapeleta);
+  }
+  return {
+    'cuota': cuota_final,
+    'cuotafinal': cuotageneral,
+    'data': outdata,
+    'desembolsoperfil': desembolsoperfil
+  };
+}
+export function _fff3512_23622(fechaSistema, fechasjson, tea, montosolicitado, meses, aplica, totalprestamos, tipocambio, arrayformulas, numpapeleta = '', interesDiferido = 0) {
+
+  var corte = new Boolean(aplica);
+  var totaldefechasmensuales = JSON.parse(fechasjson);
+  var ted = TEM(tea) / 100;
+  var punterofechas = (corte == true) ? 1 : 0;
+  var valorresta = (new Date(totaldefechasmensuales[0] + ' 00:00:00').getDate()) - (new Date(fechaSistema).getDate()) + 1;
+
+  var in2 = Math.pow((1 + ted), meses);
+  var in3 = ted * in2;
+  var int4 = in2 - 1;
+  var cuotageneral = redondeo_valor(montosolicitado * (in3 / int4));
+
+  var interes_periodo = 0,
+    amortizacion = 0,
+    cuota_final = 0;
+  var montototal = montosolicitado;
+  var outdata = new Map();
+  var cuotaacu = cuotageneral;
+  var controldiferido = 0;
+  for (var periodo = 0; periodo <= meses; periodo++) {
+    if (periodo > 0) {
+      var date = new Date(totaldefechasmensuales[punterofechas] + ' 00:00:00');
+      var diasc = ((periodo == 1 ? (corte == true ? date.getDate() + valorresta : valorresta) : date.getDate()));
+      interes_periodo = (periodo == 1) ?
+        ((corte == true) ?
+          (redondeo_valor((montototal * ted * (date.getDate() + valorresta)) / 30)) :
+          (redondeo_valor((montototal * ted * (valorresta)) / 30))) :
+        (redondeo_valor((montototal * ted * (date.getDate())) / 30)); // ver si lo dejamos por dia o lo ponemos por 30
+
+      if (montototal >= (cuotaacu - interes_periodo)) {
+        if (periodo == meses) {
+          if (montototal == (cuotaacu - interes_periodo)) {
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          } else {
+            var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+            aux = montototal - aux;
+            cuotaacu = redondeo_valor(parseFloat(cuotaacu) + parseFloat(aux));
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          }
+        } else {
+          amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+
+        }
+      } else {
+        var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+        aux -= montototal;
+        cuotaacu = redondeo_valor(parseFloat(cuotaacu) - parseFloat(aux));
+        amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+      }
+      amortizacion=(amortizacion>=0)?amortizacion:0;
+      var monto_anterior=montototal;
+      montototal = redondeo_valor(montototal - amortizacion);
+      var sumainteresDiferido = redondeo_valor(parseFloat(interesDiferido / meses));
+      if (periodo == meses) {
+        controldiferido += parseFloat(sumainteresDiferido);
+
+        if (parseFloat(controldiferido) != parseFloat(interesDiferido)) {
+          if (parseFloat(controldiferido) > parseFloat(interesDiferido)) {
+            var resta = parseFloat(controldiferido) - parseFloat(interesDiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) - parseFloat(resta));
+          } else {
+            var suma = parseFloat(interesDiferido) - parseFloat(controldiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) + parseFloat(suma));
+          }
+        }
+      } else {
+        controldiferido += parseFloat(sumainteresDiferido);
+      }
+      // console.log('-------------------------');
+      // console.log(arrayformulas.cobranza, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, amortizacion, interes_periodo, sumainteresDiferido);
+      // console.log('-------------------------');
+      var cargosAdicionales = valueformulacargos(arrayformulas.cobranza, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, amortizacion, interes_periodo, sumainteresDiferido);
+      var sumacargos = 0;
+
+      for (var index in cargosAdicionales) {
+        sumacargos += cargosAdicionales[index].value;
+      }
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: totaldefechasmensuales[punterofechas],
+        di: diasc,
+        cut: redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos) + parseFloat(sumainteresDiferido)),
+        cuota: parseFloat(cuotaacu),
+        in: parseFloat(interes_periodo),
+        indi: sumainteresDiferido,
+        am: parseFloat(amortizacion),
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(monto_anterior),
+        car: parseFloat(sumacargos),
+        cargos: cargosAdicionales
+      }); 
+
+      punterofechas++;
+      if (cuota_final < (parseFloat(cuotaacu) + parseFloat(sumacargos))) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      } 
+      
+    } else {
+      var datein = new Date(fechaSistema);
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: datein.getFullYear() + "-" + ((datein.getMonth() + 1) < 10 ? '0' + (datein.getMonth() + 1) : (datein.getMonth() + 1)) + "-" + datein.getDate(),
+        di: 0,
+        cut: 0,
+        cuota: 0,
+        in: 0,
+        indi: 0,
+        am: 0,
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(montototal),
+        car: 0,
+        cargos: []
+      });
+
+      if (cuota_final < (parseFloat(cuotaacu) + parseFloat(sumacargos))) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    }
+  }
+  var desembolsoperfil = [];
+  if (arrayformulas.desembolso.length > 0) {
+    desembolsoperfil = valueformulaDesembolso(arrayformulas.desembolso, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, numpapeleta);
+  }
+  return {
+    'cuota': cuota_final,
+    'cuotafinal': cuotageneral,
+    'data': outdata,
+    'desembolsoperfil': desembolsoperfil
+  };
+}
+
+
+/* 
+export function getfactor(promises) {
+ var criterios=$.ajax({
+  type: 'GET',
+  url: '/getcriterios', 
+  dataType: 'json',
+  async: false,
+  data: {factor:promises.factorid,monto:promises.liquidopagablecomputable,cuota:promises.cuotaFinalSocio} 
+ }).responseJSON; 
+ promises.valorfactor=redondeo_valor((parseFloat(criterios['totalh'])+parseFloat(criterios['totalm'])+parseFloat(criterios['totale'])),2);
+}
+ */
+export function getcriterio(promises) {
+  $('button[id="btsig"]').attr("disabled", true);
+  var cuotaf = (promises.cuotaaproximada * promises.tipocambio);
+  $.get("/getcriterios", {
+    idsocio: promises.socio_id,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    monto: promises.liquidopagablecomputable,
+    cuota: cuotaf
+  }, function (data) {
+    if (promises.montosolicitado > 0 && promises.plazomeses > 0 && !promises.errors.any()) {
+      promises.valorfactor = redondeo_valor((parseFloat(data['total'])), 2, false);
+      if (promises.valorfactor > promises.maxfactor) {
+        $('button[id="btsig"]').attr("disabled", false);
+        $('button[id="btsig"]').removeAttr("disabled");
+      }
+
+      $("#detallefactordeterminante").html(data['html']);
+
+      var vector = data['pos'];
+      for (var idf in vector) {
+        switch (parseInt(vector[idf].tipo)) {
+          case 1:
+            var prestamosnombre = new Array();
+            var mesesenmora = new Array();
+            var porcentajeobtenido = new Array();
+
+            for (var prestamos in vector[idf].value) {
+              prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+              mesesenmora.push(vector[idf].value[prestamos].m);
+              porcentajeobtenido.push(vector[idf].value[prestamos].p);
+            }
+            if (promises.barChart != null) {
+              promises.barChart.destroy();
+            }
+            promises.barChart = new Chart($('#barchatdata'), {
+              type: 'bar',
+              data: {
+                labels: prestamosnombre,
+                datasets: [{
+                  label: 'Prestamos en mora',
+                  backgroundColor: 'rgb(32, 168, 216)',
+                  borderColor: 'rgba(220, 220, 220, 0.8)',
+                  highlightFill: 'rgba(220, 220, 220, 0.75)',
+                  highlightStroke: 'rgba(220, 220, 220, 1)',
+                  data: porcentajeobtenido,
+                  meses: mesesenmora,
+                  borderWidth: 1,
+                  backgroundColor: "rgba(54, 162, 235, 0.2)",
+                  borderColor: "rgb(54, 162, 235)"
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      max: parseInt(data['datahtml'].h1),
+                      min: 0,
+                      stepSize: 5,
+                      callback: function (value, index, values) {
+                        return value + ' %';
+                      }
+                    }
+                  }],
+                  xAxes: [{
+                    maxBarThickness: 90
+                  }]
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                  callbacks: {
+                    label: function (tooltipItem, data) {
+                      let datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                      return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                    },
+                    title: function (tooltipItems, data) {
+                      var tooltipItem = tooltipItems[0];
+                      let datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                      return datasetLabel.toLocaleString() + '%';
+                    }
+
+                  }
+                }
+              }
+            });
+            break;
+
+          case 2:
+              console.log('criterio caso 2 linea 441');
+            // console.log(vector[idf].value);
+            break;
+          case 3:
+              console.log('criterio caso 3 linea 445');
+            // console.log(vector[idf].value);
+            break;
+        }
+      }
+    } else {
+      promises.valorfactor = 0;
+    }
+  });
+}
+export function getcriterioGarantes(promises, socio) {
+  var valuesearch = '.garantesid[id="' + socio.idsocio + '"] div[id="botones"]';
+  var montocalculado = (promises.montosolicitado * promises.tipocambio);
+
+  var monto = parseInt(promises.garantesporproducto) == 0 ? montocalculado : (parseInt(montocalculado) / parseInt(promises.garantesporproducto));
+  var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayperfilgarante, socio.idsocio);
+  $.get("/getcriteriosgarantes", {
+    idpro: promises.producto,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    cuota: modelo.cuota,
+    id: socio.idsocio,
+    socioAportes: socio.cantaportes
+  }, function (datafactor) {
+    var factor = redondeo_valor((parseFloat(datafactor['total'])), 2, false);
+
+    if (factor > promises.maxfactor) {
+
+      $(valuesearch).html('<button  id="verdatagrafic"  type="button" class="btn btn-success  btn-sm"  >' + factor + '%  <i class="icon-check"></i></button>');
+      $(valuesearch).append('&nbsp;<button id="registrarbutton"  type="button" class="btn btn-primary  btn-sm" >Registrar</button>');
+      $(valuesearch).children("#registrarbutton").click(function () {
+        socio.factorg = factor;
+        promises.garantesseleccionados.set(socio.idsocio, socio);
+        promises.totalgarantesseleccionados = promises.garantesseleccionados.size;
+        _vm2154_12185(promises);
+      });
+
+    } else {
+      $(valuesearch).html('<button id="verdatagrafic" type="button" class="btn btn-danger  btn-sm" >' + factor + '%  <i class="icon-close"></i></button>');
+    }
+
+    $(valuesearch).children("#verdatagrafic").click(function () {
+      $("#detallefactordeterminantegarante").html(datafactor['html']);
+      var vector = datafactor['pos'];
+      for (var idf in vector) {
+        switch (parseInt(vector[idf].tipo)) {
+          case 1:
+            var prestamosnombre = new Array();
+            var mesesenmora = new Array();
+            var porcentajeobtenido = new Array();
+
+            for (var prestamos in vector[idf].value) {
+              prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+              mesesenmora.push(vector[idf].value[prestamos].m);
+              porcentajeobtenido.push(vector[idf].value[prestamos].p);
+            }
+            if (promises.barChartG != null) {
+              promises.barChartG.destroy();
+            }
+            promises.barChartG = new Chart($('#barchatdatagarante'), {
+              type: 'bar',
+              data: {
+                labels: prestamosnombre,
+                datasets: [{
+                  label: 'Prestamos en mora',
+                  backgroundColor: 'rgb(32, 168, 216)',
+                  borderColor: 'rgba(220, 220, 220, 0.8)',
+                  highlightFill: 'rgba(220, 220, 220, 0.75)',
+                  highlightStroke: 'rgba(220, 220, 220, 1)',
+                  data: porcentajeobtenido,
+                  meses: mesesenmora
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      max: parseInt(datafactor['datahtml'].h1),
+                      min: 0,
+                      stepSize: 5,
+                      callback: function (value, index, values) {
+                        return value + ' %';
+                      }
+                    }
+                  }],
+                  xAxes: [{
+                    maxBarThickness: 90
+                  }]
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                  callbacks: {
+                    label: function (tooltipItem, data) {
+                      let datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                      return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                    },
+                    title: function (tooltipItems, data) {
+                      var tooltipItem = tooltipItems[0];
+                      let datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                      return datasetLabel.toLocaleString() + '%';
+                    }
+
+                  }
+                }
+              }
+            });
+            break;
+
+          case 2:
+
+            break;
+          case 3:
+
+            break;
+        }
+      }
+      promises.classModal.openModal('factorviewgarante');
+    });
+
+  });
+}
+export function setgraficoLista(socio,promises){
+  var datafactor=socio.datafactor;
+    $("#detallesociolistagraficos").html(datafactor['html']);
+    var vector = datafactor['pos'];
+    for (var idf in vector) {
+      switch (parseInt(vector[idf].tipo)) {
+        case 1:
+          var prestamosnombre = new Array();
+          var mesesenmora = new Array();
+          var porcentajeobtenido = new Array();
+
+          for (var prestamos in vector[idf].value) {
+            prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+            mesesenmora.push(vector[idf].value[prestamos].m);
+            porcentajeobtenido.push(vector[idf].value[prestamos].p);
+          }
+          if (promises.barChartG != null) {
+            promises.barChartG.destroy();
+          }
+          promises.barChartG = new Chart($('#barchatdatagarante'), {
+            type: 'bar',
+            data: {
+              labels: prestamosnombre,
+              datasets: [{
+                label: 'Prestamos en mora',
+                backgroundColor: 'rgb(32, 168, 216)',
+                borderColor: 'rgba(220, 220, 220, 0.8)',
+                highlightFill: 'rgba(220, 220, 220, 0.75)',
+                highlightStroke: 'rgba(220, 220, 220, 1)',
+                data: porcentajeobtenido,
+                meses: mesesenmora
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    max: parseInt(datafactor['datahtml'].h1),
+                    min: 0,
+                    stepSize: 5,
+                    callback: function (value, index, values) {
+                      return value + ' %';
+                    }
+                  }
+                }],
+                xAxes: [{
+                  maxBarThickness: 90
+                }]
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                  label: function (tooltipItem, data) {
+                    let datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                    return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                  },
+                  title: function (tooltipItems, data) {
+                    var tooltipItem = tooltipItems[0];
+                    let datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                    return datasetLabel.toLocaleString() + '%';
+                  }
+
+                }
+              }
+            }
+          });
+          break;
+
+        case 2:
+
+          break;
+        case 3:
+
+          break;
+      }
+    }
+    promises.classModal.openModal('factorviewgaranteLista');
+  
+}
+export function getcriterioGarantesLista(promises, socio) { 
+  var monto = (promises.montosolicitado * promises.tipocambio);
+  var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayFormulasProducto, socio.idsocio);
+  $.get("/getcriteriosgarantes", {
+    idpro: promises.producto,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    cuota: modelo.cuota,
+    id: socio.idsocio,
+    socioAportes: socio.cantaportes
+  }, function (datafactor) {
+    var factor = redondeo_valor((parseFloat(datafactor['total'])), 2, false); 
+    socio.factor=factor;
+    socio.datafactor=datafactor; 
+    promises.setlistasocio(socio);
+  });
+}
+function getArray(tam){
+  var out=[];
+    for (var i = 1; i <= tam; i++) { 
+      out.push(i+'');
+    }
+    return out;
+  }
+export function _vm2154_12185_145(idpres,me) {
+  $.get("/getprestamoRefi", { 
+    id:idpres
+  }, function (response) {  
+    var ventanas=[]; 
+    var tamao= getArray(response.refi.length+1);
+    ventanas.push( { 
+      html: '<div id="framepdf" style="display:none;">'+
+      '<div style=" width: 100%; "> <div class="row justify-content-center"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button> </div> </div>'+
+    '<iframe   id="printpdf" name="printpdf" src="'+me['REP_DESEMBOLSO']+idpres+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+    allowOutsideClick:  false,
+    allowEscapeKey: false,
+    confirmButtonText: 'Siguiente',  
+    progressSteps: tamao,
+    onBeforeOpen: function(){
+      swal.showLoading() ; 
+      swal.disableButtons(); 
+      $( "#reloadedFrame" ).click(function() {
+        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+      });
+      $('#printpdf').on('load', function() {
+        $("#framepdf").css("display", "inline");
+        swal.hideLoading() ; 
+        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        $(".swal2-popup").css("width", "85%"); 
+        $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
+        $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
+         });
+        }
+    });
+     
+    response.refi.forEach(function (value) { 
+      ventanas.push( { 
+        html: '<div id="framepdf" style="display:none;">'+
+        '<div style=" width: 100%; "> <div class="row justify-content-center"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button> </div> </div>'+
+      '<iframe   id="printpdf" name="printpdf" src="'+me['REP_COBRANZA']+value.idprestamo+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+      allowOutsideClick: false,
+      allowEscapeKey:false,
+      confirmButtonText: 'Siguiente',  
+      progressSteps: tamao,
+      onBeforeOpen: function(){
+        swal.showLoading() ; 
+        swal.disableButtons(); 
+        $( "#reloadedFrame" ).click(function() {
+          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        });
+        $('#printpdf').on('load', function() {
+          $("#framepdf").css("display", "inline");
+          swal.hideLoading() ; 
+          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+          $(".swal2-popup").css("width", "85%"); 
+          $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
+          $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
+           });
+          }
+      });
+    });
+    swal.queue(ventanas).then((result) => {
+      if (result.value) {
+        swal("¡Se registro los datos correctamente!", "", "success");
+      }
+    });
+  });
+   
+}
+ 
+ 
+export function _vm2154_12186_135(id,titulo) {
+
+  return swal({ 
+    html: '<div id="framepdf" style="display:none;">'+
+    '<div style=" width: 100%; "><label style="display: inline;padding-left: 23px;font-weight: 500;float: left;">'+titulo+
+    '</label><div class="row justify-content-end"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button>'+
+    '<button id="close_id_swal" class="close" style="float: right; margin: 0 15px 2px 5px; ">X</button></div> </div>'+
+    '<iframe id="printpdf" name="printpdf" src="'+id+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+    showConfirmButton: false, 
+    showCancelButton: true,
+    allowOutsideClick: false,
+    allowEscapeKey:false,
+    confirmButtonText: 'Ok',
+    cancelButtonText:'Cerrar', 
+    confirmButtonColor: '#4dbd74',
+    cancelButtonColor: '#f86c6b', 
+    buttonsStyling: true,
+    reverseButtons: true,
+      onBeforeOpen: function() { 
+        swal.showLoading() ; 
+        swal.disableButtons();
+        $( "#close_id_swal" ).click(function() {
+          swal.close();  
+        });
+        $( "#reloadedFrame" ).click(function() {
+          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        });
+  
+        $('#printpdf').on('load', function() {
+          $("#framepdf").css("display", "inline");
+          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+          swal.hideLoading() ; 
+          $(".swal2-popup").css("width", "85%"); 
+          $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
+          });
+        
+      }
+    }); 
+ }
+ export function _vm2999158_1fgf_135(id,titulo) {
+  
+  return swal({ 
+    html: '<div id="framepdf" style="display:none;">'+
+    '<div style=" width: 100%; "><label style="display: inline;padding-left: 23px;font-weight: 500;float: left;">'+titulo+
+    '</label><div class="row justify-content-end"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button>'+
+    '<button id="close_id_swal" class="close" style="float: right; margin: 0 15px 2px 5px; ">X</button></div> </div>'+
+    '<iframe id="printpdf" name="printpdf" src="'+id+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+    showConfirmButton: true,
+    allowOutsideClick:false,
+    allowEscapeKey:false,
+    showCancelButton: true,
+    confirmButtonText: 'Seguir',
+    cancelButtonText:'Cancelar', 
+    confirmButtonColor: '#4dbd74',
+    cancelButtonColor: '#f86c6b', 
+    buttonsStyling: true,
+    reverseButtons: true,
+    onBeforeOpen: function() {
+      swal.showLoading() ; 
+      swal.disableButtons();
+      $( "#close_id_swal" ).click(function() {
+        swal.close();
+      });
+      $( "#reloadedFrame" ).click(function() {
+        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+      });
+      $('#printpdf').on('load', function() {
+        $("#framepdf").css("display", "inline");
+        swal.hideLoading() ; 
+        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        $(".swal2-popup").css("width", "85%"); 
+        $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
+         });
+    }
+    }); 
+ }
+export function _vm2154_12185(promise) {
+
+  $('.listadogarantes').html('');
+  promise.garantesseleccionados.forEach(function (value) {
+    var valuehtml = '<li id="' + value.idsocio + '" class="list-group-item garantesid active" style="padding: 5px 0 5px 0;" >' +
+      '<div class="input-group" style="align-items: center;">' +
+      '<div class="col-md-1">' +
+      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '</div>' +
+      '<div class="col-md-8"> ' +
+      '<p style="margin:0">' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + ' ( ' + value.factorg + '% )</p>' +
+      '</div>' +
+      '<div class="col-md-3 resultado"  id="botones" style="text-align: right;" >' +
+      '<button id="eliminargarante" type="button" class="btn btn-danger  btn-sm" > Quitar Registro</button>';
+
+    $('.listadogarantes').append(valuehtml + '</div></div></li>');
+    $('.garantesid[id="' + value.idsocio + '"] div[id="botones"]').children("#eliminargarante").click(function () {
+      promise.garantesseleccionados.delete(value.idsocio);
+      promise.totalgarantesseleccionados = promise.garantesseleccionados.size;
+      _vm2154_12185(promise);
+    });
+  });
+
+
+  promise.arraygarantes.forEach(function (element) {
+    if (!promise.garantesseleccionados.has(element.idsocio) && (promise.totalgarantesseleccionados < parseInt(promise.garantesporproducto))) {
+      var valuehtml = '<li id="' + element.idsocio + '" class="list-group-item garantesid ' + ((promise.garantesseleccionados.has(element.idsocio)) ? 'active"' : '"') + ' style="padding: 5px 0 5px 0;" >' +
+        '<div class="input-group" style="align-items: center;">' +
+        '<div class="col-md-1">' +
+        '<img   src="img/socios/' + ((element.rutafoto != null) ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+        '</div>' +
+        '<div class="col-md-8"> ' +
+        '<p style="margin:0">' + element.nombre + ' ' + element.apaterno + ' ' + element.amaterno + '</p>' +
+        '</div>' +
+        '<div class="col-md-3 resultado"  id="botones" style="text-align: right;" >';
+
+      if (promise.totalgarantesseleccionados < parseInt(promise.garantesporproducto)) {
+        valuehtml += '<button  id="verificarbutton" type="button" class="btn btn-warning btn-sm">Verificar </button>';
+      }
+
+      $('.listadogarantes').append(valuehtml + '</div></div></li>');
+
+
+      $('.garantesid[id="' + element.idsocio + '"] div[id="botones"]').children("#verificarbutton").click(function () {
+        $('.garantesid[id="' + element.idsocio + '"] div[id="botones"]').html('<div id="spinner" class="spinner-border " style="vertical-align: middle;" role="status" aria-hidden="true"></div>');
+        getcriterioGarantes(promise, element);
+
+      });
+    }
+  });
+}
+export function datapicker(id, fechamin, fechamax, fechaini) {
+  $("#" + id).daterangepicker({
+    singleDatePicker: true,
+    forceUpdate: true,
+    autoUpdateInput: true,
+    autoApply: true,
+    showDropdowns: true,
+    maxDate: fechamax,
+    minDate: fechamin,
+    startDate: fechaini,
+    locale: {
+      separator: "   |   ",
+      format: "YYYY-MM-DD",
+      applyLabel: "Seleccionar",
+      cancelLabel: "cancelar",
+      fromLabel: "Desde",
+      toLabel: "Hasta",
+      customRangeLabel: "Seleccionar rango",
+      daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+      monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
+        "Diciembre"
+      ],
+      firstDay: 1
+    }
+
+  });
+
+}
+export function datatime(id) {
+  $("#" + id).datetimepicker({
+    autoclose: 1,
+    startView: 3,
+    minView: 3,
+    pickerPosition: 'bottom-right',
+    format: 'MM - yyyy'
+  });
+}
+
+
+export function getdatapicker(id) {
+  return $("#" + id).val();
+}
+
+
+
+export function _mg3612152_215(promise) {
+  var valuehtml = '';
+  promise.forEach(function (value) {
+    valuehtml += '<div class="col-md-12 row " style="justify-content: center;margin-top: 5px;">' +
+      '<div class="col-md-1" style=" text-align: center;border: 1px solid gray; padding: 5px;">' +
+      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '  </div>' +
+      '<div class="col-md-5 input-group" style="align-items: center;border: 1px solid gray; padding: 5px;">' +
+      '<p style="margin:0">' + value.nomgrado + ' ' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + '</p>' +
+      '<p class="col-md-12" style="margin:0;text-align: right;">Factor obtenido: ' + value.factorg + '%</p>' +
+      '</div>' +
+      '</div>';
+  });
+  return valuehtml.length > 0 ? ' <div class="form-group row "><p class="col-md-12 titulo" >Datos de los Garantes:</p> ' + valuehtml + '</div>' : '';
+}
+
+export class Modals {
+  constructor() {
+    this.modales = new Map();
+  }
+  addModal(id,funOpen=null,funClose=null) {
+    $("#" + id).children(".modal-dialog").addClass("modal-dialog-centered");
+    $("#" + id).attr('data-backdrop', 'static');
+    $("#" + id).attr('data-keyboard', 'false');
+    if (jQuery.isFunction(funOpen)) {
+      $("#" + id).on('shown.bs.modal', function () {
+        funOpen();
+      });
+    }
+    if (jQuery.isFunction(funClose)) {
+      $("#" + id).on('hidden.bs.modal', function () {
+        funClose();
+      });
+    }
+    this.modales.set(id, {
+      openPrimary: function () {
+        $("#" + id).modal("show");
+      },
+      close: function () {
+        $("#" + id).modal("hide");
+      }, 
+      openInfo: function () {
+        $("#" + id).modal({
+          backdrop: true,
+          keyboard: true
+        });
+      }
+    });
+  }
+
+  openModal(id) {
+    if (this.modales.has(id)) {
+      this.closeOthers(id);
+      this.modales.get(id).openPrimary();
+    }
+  }
+
+  openModalInfo(id) {
+    if (this.modales.has(id)) {
+      this.closeOthers(id);
+      this.modales.get(id).openInfo();
+    }
+  }
+
+  closeModal(id) {
+    if (this.modales.has(id)) {
+      this.modales.get(id).close();
+    }
+  }
+
+  closeOthers(id) {
+    for (var [key, data] of this.modales) {
+      if (key != id) {
+        data.close();
+      }
+    }
+  }
+}
+export class Slider {
+  addSlider(id) {
+    $('#' + id).ionRangeSlider();
+  }
+  getValue(id) {
+    return $('#' + id).data().from;
+  }
+}
+
+// https://simonbengtsson.github.io/jsPDF-AutoTable/
+// https://github.com/MrRio/jsPDF
+// http://www.rotisedapsales.com/snr/cloud2/website/jsPDF-master/docs/global.html#viewerPreferences
+// https://developer.tizen.org/community/tip-tech/creating-pdf-documents-jspdf
+// https://github.com/simonbengtsson/jsPDF-AutoTable
+// ejemplos http://raw.githack.com/MrRio/jsPDF/master/#
+//https://rawgit.com/MrRio/jsPDF/master/docs/jsPDF.html#line
+//lineas en la tabla https://stackoverflow.com/questions/55293032/how-to-give-borders-to-jspdf-autotable-content-generated-dynamically-as-in-templ
+
+function imgToBase64(src, callback) {
+  var outputFormat = src.substr(-3) === 'png' ? 'image/png' : 'image/jpeg';
+  var img = new Image();
+  img.crossOrigin = 'Anonymous';
+  img.onload = function () {
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    var dataURL;
+    canvas.height = this.naturalHeight;
+    canvas.width = this.naturalWidth;
+    ctx.drawImage(this, 0, 0);
+    dataURL = canvas.toDataURL(outputFormat);
+    callback(dataURL);
+  };
+  img.src = src;
+  if (img.complete || img.complete === undefined) {
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+    img.src = src;
+  }
+}
+
+function centrarText(doc, texto, posvertical) {
+  var pageSize = doc.internal.pageSize;
+  var pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+  var dime = doc.getTextDimensions(texto);
+  doc.text(texto, (pageWidth / 2) - (dime.w / 2), posvertical);
+}
+function centrarTextTo(doc, texto,poshorizontal, posvertical) { 
+  var pageWidth = 5.3;
+  var dime = doc.getTextDimensions(texto);
+  var nuevaposH=((pageWidth / 2) - (dime.w / 2))+poshorizontal; 
+  doc.text(texto, nuevaposH, posvertical);
+}
+function textToBase64Barcode(text){
+  var canvas = document.createElement("canvas");
+  JsBarcode(canvas, text, {format: "CODE39",displayValue:false});
+  return canvas.toDataURL("image/png");
+}
+
+export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:'img/socios/avatar.jpg', function (fotosocio) {
+      var qr = new QRious();  
+      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
+      qr.mime = 'image/jpeg';
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet socio'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.2,0.9, 8.6, 5.5); 
+        doc.addImage(fotosocio, 'JPEG', 3.99, 2.37, 2.31, 2.31); 
+         doc.setFontSize(10);
+         doc.setFontStyle('bold');
+           doc.setTextColor(52,52,52);
+          centrarTextTo(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 6.5,2.7); 
+          centrarTextTo(doc, ta.nombre?ta.nombre:'___', 6.5,3.1); 
+          centrarTextTo(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 6.5,3.5);
+       doc.setFontStyle('normal');
+       doc.setFontSize(7);
+       doc.text(ta.nomfuerza,7, 4.55); 
+       doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 7, 5.35); 
+       doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 9.65, 4.55); 
+       doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 9.65, 5.35); 
+      doc.setTextColor(255,255,255);
+      doc.setFontSize(6);
+      doc.text(ta.codsocio?ta.codsocio:'___', 4.54, 5.1); 
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 4.54, 5.34); 
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',8.5, 5.8, 3,0.5);  
+      $("#" + idview).attr("src", doc.output('datauristring')); 
+
+      var doc2 = new jsPDF('p', 'cm','a4');  
+      doc2.setProperties({
+        title: 'Carnet socio posterior'
+      }); 
+      doc2.addImage(fondodos, 'JPEG',3.2,0.9, 8.6, 5.5); 
+         
+      doc2.addImage(qr.toDataURL(), 'JPEG', 8.62, 2.37, 2.18, 2.18); 
+      $("#2" + idview).attr("src", doc2.output('datauristring')); 
+ 
+      funn();
+    }); 
+  }
+ 
+  
+export function _vvp2521_00001(ta, idview = 'planout') {
+  imgToBase64('img/iconad.png', function (base64) {
+
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+    doc.setProperties({
+      title: 'Plan De Pagos'
+    });
+    doc.addImage(base64, 'JPEG', 14, 14, 32, 20);
+
+
+    doc.setFontSize(9);
+    centrarText(doc, "ASOCIACION NACIONAL DE SUBOFICIALES Y SARGENTOS", 20);
+    centrarText(doc, "DE LAS FUERZAS ARMADAS", 25);
+    doc.setFontSize(11);
+    centrarText(doc, '"ASCINALSS"', 30);
+    doc.setFontSize(12);
+    doc.setFontStyle('bold');
+    centrarText(doc, '"PLAN DE PAGOS"', 40); 
+    doc.autoTable({
+      head: [{
+        pe: 'Periodo',
+        fp: 'Fecha de Pago',
+        di: 'Dias',
+        am: 'Capital',
+        in: 'Interes',
+        indi: 'Interes Diferido',
+        car: 'Cargos',
+        cu: 'Total Cuota',
+        ca: 'Saldo'
+      }],
+      body: generateBodyTable(ta),
+      foot: [{
+        pe: {
+          content: 'Totales : ',
+          colSpan: 3,
+          styles: {
+            halign: 'right'
+          }
+        },
+        car: getTotal(ta, 'car'),
+        cu: getTotal(ta, 'cut'),
+        in: getTotal(ta, 'in'),
+        indi: getTotal(ta, 'indi'),
+        am: getTotal(ta, 'am'),
+        ca: {
+          content: ''
+        }
+      }],
+      theme: 'grid',
+      styles: {
+        lineColor: [211, 211, 211],
+        lineWidth: 0.2,
+        halign: 'center'
+      },
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+      footStyles: {
+        fillColor: [231, 234, 238],
+        textColor: [0, 0, 0],
+        fontStyle: 'normal'
+      },
+      showFoot: 'lastPage',
+      showHead: 'firstPage',
+      startY: 51
+    }); 
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+export function _vvp2521_00002(ta, idview = 'planout') {
+  imgToBase64('img/iconad.png', function (base64) {
+
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+    doc.setProperties({
+      title: 'Cargar Ascii'
+    });
+      
+    var positicon=0;
+    doc.autoTable({
+      head: [{
+        no: 'No.',
+        num: 'Papeleta',
+        gra: 'Grado',
+        nom: 'Nombre',
+        est: 'Estado',
+        mon: 'Moneda',
+        cut: 'Cuota',
+        pla: 'Plzo'
+      }],
+      body: generateBodyTablepdfDetalle(JSON.parse(ta.file)),
+       
+      theme: 'grid',
+      bodyStyles: { 
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding:1,
+        fontSize:8,
+        cellPadding:0.5
+      },
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize:10 
+      },  
+      showHead: 'everyPage',
+      startY: 40,
+      margin:{top: 40},
+      didDrawCell: data => {
+         
+        if (data.section === 'body' && data.column.index === 'no'&&(data.row.cells.no.colSpan==6)) {  
+          positicon=data.row.cells.no.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.no.x, data.row.cells.no.y, data.row.cells.no.x + data.row.cells.no.width, data.row.cells.no.y); 
+        }
+        if (data.section === 'body' && data.column.index === 'cut'&&positicon==data.row.cells.cut.y) {  
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.cut.x, data.row.cells.cut.y, data.row.cells.cut.x + data.row.cells.cut.width, data.row.cells.cut.y); 
+        }
+        if (data.section === 'body' && data.column.index === 'pla'&&positicon==data.row.cells.pla.y) {  
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.pla.x, data.row.cells.pla.y, data.row.cells.pla.x + data.row.cells.pla.width, data.row.cells.pla.y); 
+        }
+      }
+    }); 
+
+
+    var pageCount = doc.internal.getNumberOfPages();
+            for(var i = 0; i < pageCount; i++) { 
+              doc.setPage(i);  
+              doc.addImage(base64, 'JPEG', 14, 14, 32, 20); 
+              doc.setFontSize(12);
+              doc.setFontStyle('bold');
+              centrarText(doc, '"DETALLE DE ALTAS POR PRESTAMOS"', 25); 
+              doc.setFontSize(9); 
+              doc.setFontStyle('normal');
+              centrarText(doc, "Correspondiente a "+(JSON.parse(ta.file)).mes+" de "+(JSON.parse(ta.file)).anio, 29); 
+              doc.text(ta.fecha, 170, 24);
+              doc.setFontSize(8); 
+              doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+            }
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+export function _vvp2521_00003(ta, idview = 'planout') {
+  imgToBase64('img/iconad.png', function (base64) {
+
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+    doc.setProperties({
+      title: 'Cargar Ascii'
+    });
+      
+    var positicon=0;
+    doc.autoTable({
+      head: [{
+        fue: 'Fuerza',
+        cod: 'Codigo',
+        can: 'Cantidad',
+        mon: 'Monto Total'
+      }],
+      body: generateBodyTablepdfResumen(JSON.parse(ta.file)),
+       
+      theme: 'grid',
+      bodyStyles: { 
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding:1,
+        fontSize:8,
+        cellPadding:0.5
+      },
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize:10 
+      },  
+      showHead: 'everyPage',
+      startY: 40,
+      margin:{top: 40},
+      didDrawCell: data => {
+         
+        if (data.section === 'body' && data.column.index === 'fue'&&(data.row.cells.fue.colSpan==2)) {  
+          positicon=data.row.cells.fue.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.fue.x, data.row.cells.fue.y, data.row.cells.fue.x + data.row.cells.fue.width, data.row.cells.fue.y); 
+        }
+        if (data.section === 'body' && data.column.index === 'can'&&positicon==data.row.cells.can.y) {  
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.can.x, data.row.cells.can.y, data.row.cells.can.x + data.row.cells.can.width, data.row.cells.can.y); 
+        }
+        if (data.section === 'body' && data.column.index === 'mon'&&positicon==data.row.cells.mon.y) {  
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.mon.x, data.row.cells.mon.y, data.row.cells.mon.x + data.row.cells.mon.width, data.row.cells.mon.y); 
+        }
+      }
+    }); 
+
+
+    var pageCount = doc.internal.getNumberOfPages();
+            for(var i = 0; i < pageCount; i++) { 
+              doc.setPage(i);  
+              doc.addImage(base64, 'JPEG', 14, 14, 32, 20); 
+              doc.setFontSize(12);
+              doc.setFontStyle('bold');
+              centrarText(doc, '"RESUMEN DE ALTAS POR PRESTAMOS"', 25); 
+              doc.setFontSize(9); 
+              doc.setFontStyle('normal');
+              centrarText(doc, "Correspondiente a "+(JSON.parse(ta.file)).mes+" de "+(JSON.parse(ta.file)).anio, 29); 
+              doc.text(ta.fecha, 170, 24);
+              doc.setFontSize(8); 
+              doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+            }
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+export function _vvp2521_00004(ta,user,date,idview = 'planout') {
+  imgToBase64('img/iconad.png', function (base64) {
+
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+    doc.setProperties({
+      title: 'Reporte de la configuración de perfiles de cuentas'
+    });
+      
+    var positicon=0;
+    doc.autoTable({
+      head: [{
+        nom: 'Nombre del perfil',
+        tip: 'tipo',
+        mod: 'Modulo',
+        deb: {
+          content: 'Cuentas',
+          colSpan: 2,
+          styles: {
+            halign: 'center',
+            cellWidth:45 
+          }
+        },
+        hab:  {
+          content: '', 
+          styles: { 
+            cellWidth:45 
+          }
+        } 
+      }],
+      body: (()=>{ 
+        var out=[];
+        
+          ta.forEach(function(valor) { 
+            out.push({ 
+              nom:{
+                content: '', 
+                colSpan: 4
+              }
+            });
+            out.push({
+              nom:{
+                content: valor.nombre,
+                rowSpan: valor.data.length+1,
+                styles: {
+                  halign: 'left', 
+                  valign: 'center' 
+                }
+              },
+              tip:{
+                content: valor.tipo,
+                rowSpan: valor.data.length+1,
+                styles: {
+                  halign: 'center', 
+                  valign: 'center'   
+                }
+              },
+              mod:{
+                content: valor.modulo,
+                rowSpan: valor.data.length+1,
+                styles: {
+                  halign: 'center', 
+                  valign: 'center'   
+                }
+              },
+              deb:{
+                content: 'Debe',  
+                styles: {
+                  fillColor: [203, 207, 212],
+                  textColor: [0, 0, 0],
+                  fontStyle: 'bold',
+                  halign: 'center'  
+                }
+              },
+              hab:{
+                content: 'Haber',  
+                styles: {
+                  fillColor: [203, 207, 212],
+                  textColor: [0, 0, 0],
+                  fontStyle: 'bold',
+                  halign: 'center' 
+                }
+              }
+            });
+             
+            valor.data.forEach(element =>{
+                if(element.tipocargo=='d'){
+                  out.push({ 
+                    deb:{
+                      content: element.codcuenta+'-'+element.nomcuenta, 
+                      styles: {
+                        halign: 'left',  
+                        fontSize:6,
+                        cellWidth:45 
+                      }
+                    },
+                    hab:{
+                      content:'', 
+                      styles: {   
+                        cellWidth:45 
+                      }
+                    }
+                  });
+                }else{
+                  out.push({ 
+                    deb:{
+                      content:'', 
+                      styles: {   
+                        cellWidth:45 
+                      }
+                    },hab:{
+                      content: element.codcuenta+'-'+element.nomcuenta, 
+                      styles: {
+                        halign: 'left',  
+                        fontSize:6 ,
+                        cellWidth:45 
+                      }
+                    }
+                  });
+
+                }
+                
+
+            });
+
+            out.push({ 
+              nom:{
+                content: '', 
+                colSpan: 4
+              }
+            });
+            out.push({ 
+              nom:{
+                content: '', 
+                colSpan: 5
+              }
+            });
+            
+          });
+        return out;
+      })(),
+       
+      theme: 'grid',
+      bodyStyles: { 
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding:1,
+        fontSize:8,
+        cellPadding:0.5
+      },
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize:10 
+      },  
+      showHead: 'everyPage',
+      startY: 40,
+      margin:{top: 40}, 
+      didDrawCell: data => {
+         
+        if (data.section === 'body' && data.column.index === 'nom'&&(data.row.cells.nom.colSpan==5)) {  
+          positicon=data.row.cells.nom.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.nom.x, data.row.cells.nom.y, data.row.cells.nom.x + data.row.cells.nom.width, data.row.cells.nom.y); 
+        } 
+      }
+    }); 
+
+
+    var pageCount = doc.internal.getNumberOfPages();
+            for(var i = 0; i < pageCount; i++) { 
+              doc.setPage(i);  
+              doc.addImage(base64, 'JPEG', 14, 14, 32, 20); 
+              doc.setFontSize(12);
+              doc.setFontStyle('bold');
+              centrarText(doc, 'REPORTE DE LA CONFIGURACIÓN ', 25); 
+              centrarText(doc, "DE PERFILES DE CUENTAS", 29); 
+              doc.setFontSize(9); 
+              doc.setFontStyle('normal'); 
+              doc.text('Usuario: '+user, 170, 24);
+              doc.setFontSize(8); 
+              doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+              doc.text('Imp.: '+date, 170, 31);
+            }
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+function generateBodyTablepdfResumen(datas) {
+  let body = []; 
+   _.forEach(datas.data, function(datageneral) {  
+    body.push({ 
+    fue: 
+    { content: datageneral.nombre, 
+      styles: {
+        halign: 'left' 
+      }
+    },
+    cod:datageneral.cod,  
+    can:datageneral.cantidad,
+    mon: 
+    { content: datageneral.total, 
+      styles: {
+        halign: 'right' 
+      }
+    }
+    }); 
+    });
+    body.push({
+      no:{
+        content: '',
+        colSpan: 8,
+        styles: {
+          halign: 'left', 
+          lineWidth:0,
+          fontSize:1,
+          cellPadding:1 
+        }
+      }
+    });
+    body.push({
+      fue:{
+        content: 'Total general en Bolivianos',
+        colSpan: 2,
+        styles: { 
+          halign: 'right',
+          fontSize:10,
+          fontStyle: 'bold',
+          cellPadding:1,
+          lineWidth:0
+        }
+      },
+      can: 
+    { content: datas.cantidad, 
+      styles: {
+        halign: 'center' ,
+        fontStyle: 'bold'
+      }
+    },
+    mon: 
+    { content: datas.monto, 
+      styles: {
+        halign: 'right',
+        fontStyle: 'bold'
+      }
+    }
+    });  
+   
+  return body;
+}
+function generateBodyTablepdfDetalle(datas) {
+  let body = [];
+  var numero=0;
+   _.forEach(datas.data, function(datageneral) { 
+    body.push({
+      no:{
+        content: '  FUERZA : '+datageneral.nombre,
+        colSpan: 8,
+        styles: {
+          halign: 'left', 
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        fontSize:11, 
+        cellPadding:1
+        }
+      }
+    });           
+                            _.forEach(datageneral.value, function(datosfuerza) {
+                              numero++;
+                              body.push({
+                              no: numero,
+                              num: datosfuerza.numpapeleta,
+                              gra: 
+                              {
+                                content: datosfuerza.grado, 
+                                styles: {
+                                  halign: 'left' 
+                                }
+                              },
+                              nom:  {
+                                content: datosfuerza.nombre, 
+                                styles: {
+                                  halign: 'left' 
+                                }
+                              },
+                              est: datosfuerza.estado,
+                              mon: datosfuerza.moneda,
+                              cut: 
+                              {
+                                content: fillDecimals(datosfuerza.cuota), 
+                                styles: {
+                                  halign: 'right' 
+                                }
+                              },
+                              pla: datosfuerza.plazo
+                              });
+                            
+                            });
+  body.push({
+    no:{
+      content: '',
+      colSpan: 8,
+      styles: {
+        halign: 'left', 
+        lineWidth:0,
+        fontSize:1,
+        cellPadding:1 
+      }
+    }
+  });
+                            body.push({
+                              no:{
+                                content: 'Total '+datageneral.nombre+' : ',
+                                colSpan: 6,
+                                styles: { 
+                                  halign: 'right',
+                                  fontSize:10,
+                                  fontStyle: 'bold',
+                                  cellPadding:1,
+                                  lineWidth:0
+                                }
+                              },
+                              cut:{
+                                content: datageneral.total,
+                                styles: {
+                                  halign: 'right',
+                                  cellPadding:1 ,
+                                  lineWidth:0
+                                }
+                              },
+                              pla:{
+                                content: '',
+                                styles: {
+                                  halign: 'right',
+                                  cellPadding:1 ,
+                                  lineWidth:0
+                                }
+                              }
+                            });                
+      body.push({
+        no:{
+          content: '',
+          colSpan: 8,
+          styles: {
+            halign: 'left', 
+            lineWidth:0,
+            fontSize:5,
+            cellPadding:1 
+          }
+        }
+      }); 
+    });
+   
+  return body;
+}
+ 
+function generateBodyTable(datas) {
+  let body = [];
+  for (var valor of datas.values()) {
+    body.push({
+      pe: valor.pe,
+      fp: valor.fp,
+      di: valor.di,
+      car: redondeo_valor(valor.car),
+      cu: redondeo_valor(valor.cut),
+      in: redondeo_valor(valor.in),
+      indi: redondeo_valor(valor.indi),
+      am: redondeo_valor(valor.am),
+      ca: redondeo_valor(valor.ca)
+    });
+  }
+  return body;
+}
+
+function getTotal(datas, id) {
+  var out = 0;
+  for (var valor of datas.values()) {
+    out += parseFloat(valor[id]);
+  }
+  return redondeo_valor(out);
+}
+
+export function redondeo_valor(num, decimales = 2, redoncero = true) {
+  var signo = (num >= 0 ? 1 : -1);
+  num = num * signo;
+  if (decimales === 0)
+    return signo * Math.round(num);
+  num = num.toString().split('e');
+  num = Math.round(+(num[0] + 'e' + (num[1] ? (+num[1] + decimales) : decimales)));
+  num = num.toString().split('e');
+  if (redoncero) {
+    return fillDecimals(signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales)), decimales);
+  } else {
+    return (signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales)));
+  }
+
+}
+
+export function fillDecimals(number, length = 2) {
+  function pad(input, length, padding) {
+    var str = input + "";
+    return (length <= str.length) ? str : pad(str + padding, length, padding);
+  }
+  var str = number + "";
+  var dot = str.lastIndexOf('.');
+  var isDecimal = dot != -1;
+  var integer = isDecimal ? str.substr(0, dot) : str;
+  var decimals = isDecimal ? str.substr(dot + 1) : "";
+  decimals = pad(decimals, length, 0);
+  return integer + '.' + decimals;
+}
+
+export function ppppp() {
+  let sumw = new Function('return function foo(a,b) { alert("native function: "+a); return "Hello, serialised world!"+b; }')();
+  alert(sumw(1, 2));
+}
+
+
+
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/*******************************************************************************************************************************************  
+                             
+                             _____                                      _                       _         _     
+                            |  __ \                                    | |                     | |       | |      
+                            | |  \/  ___  _ __   ___  _ __    __ _   __| |  ___   _ __       __| |  ___  | |      
+                            | | __  / _ \| '__| / _ \| '_ \  / _` | / _` | / _ \ | '__|     / _` | / _ \ | |      
+                            | |_\ \|  __/| |   |  __/| | | || (_| || (_| || (_) || |       | (_| ||  __/ | |      
+                             \____/ \___||_|    \___||_| |_| \__,_| \__,_| \___/ |_|        \__,_| \___| |_|      
+                                                                                                              
+                                                                                                              
+                                                 __  _  _                          _           _      _       
+                                                / _|(_)| |                        | |         | |    | |      
+                             _ __    ___  _ __ | |_  _ | |      ___   ___   _ __  | |_   __ _ | |__  | |  ___ 
+                            | '_ \  / _ \| '__||  _|| || |     / __| / _ \ | '_ \ | __| / _` || '_ \ | | / _ \
+                            | |_) ||  __/| |   | |  | || |    | (__ | (_) || | | || |_ | (_| || |_) || ||  __/
+                            | .__/  \___||_|   |_|  |_||_|     \___| \___/ |_| |_| \__| \__,_||_.__/ |_| \___|
+                            | |                                                                               
+                            |_|          
+
+                            
+                                8888888                               888888                                   .d8888b.                   888                   
+                                  888                                   "88b                                  d88P  Y88b                  888                   
+                                  888                                    888                                  888    888                  888                   
+88888b.   .d88b.  888d888         888   88888b.   .d88b.                 888 888  888  8888b.  88888b.        888         8888b.  888d888 888  .d88b.  .d8888b  
+888 "88b d88""88b 888P"           888   888 "88b d88P"88b                888 888  888     "88b 888 "88b       888            "88b 888P"   888 d88""88b 88K      
+888  888 888  888 888             888   888  888 888  888                888 888  888 .d888888 888  888       888    888 .d888888 888     888 888  888 "Y8888b. 
+888 d88P Y88..88P 888             888   888  888 Y88b 888 d8b            88P Y88b 888 888  888 888  888       Y88b  d88P 888  888 888     888 Y88..88P      X88 
+88888P"   "Y88P"  888           8888888 888  888  "Y88888 Y8P            888  "Y88888 "Y888888 888  888        "Y8888P"  "Y888888 888     888  "Y88P"   88888P' 
+888                                                   888              .d88P                                                                                    
+888                                              Y8b d88P            .d88P"                                                                                     
+888                                               "Y88P"            888P"                                                                                       
+          
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+/******************************************************************************************************************************************* */
+var abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "U", "V", "W", "X", "Y", "Z"];
+var funciones = {
+  input: function (id, nombre, css) {
+    var operador = $('<span v-type="' + id + '" v-data="input" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values"><input type="number" placeholder="0" name="input" value="1" autofocus> </div>').appendTo(operador);
+    return operador;
+  },
+  inputSi: function (id, nombre, css) {
+    var operador = $('<span v-type="' + id + '" v-data="inputSi" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values"><input id="i1" type="number" placeholder="0" name="input" value="1" autofocus><i class="icons font-lg  mt-5 cui-arrow-right"></i><input id="i2" type="number" placeholder="0" name="input" value="1" autofocus></div><strong style="font-weight: bold;font-size: 17px;">=</strong>').appendTo(operador);
+    return operador;
+  },
+  operador: function (id, nombre, css) {
+    var operador = $('<span v-data="funcion" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values" v-type="' + id + '" ></div>').droppable({
+      accept: "div,span",
+      greedy: true,
+      classes: {
+        'ui-droppable-hover': 'hoverdropfunctions'
+      },
+      drop: function (event, ui) {
+
+        if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "1") {
+          var variable = $('<span v-data="perfil">' + $(ui.draggable).text() + '</span>').css('border', '2px solid').draggable({
+            revert: "invalid",
+            containment: "document",
+            helper: "clone",
+            zIndex: 10000,
+            start: function (event, ui) {
+              $(this).draggable('instance').offset.click = {
+                left: Math.floor(ui.helper.width() / 2),
+                top: Math.floor(ui.helper.height() / 2)
+              };
+            }
+          }).fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+        } else if ($(ui.draggable).is('span')) {
+          ui.draggable.fadeOut(function () {
+            $(ui.draggable).css('border', '2px solid').appendTo(event.target).fadeIn();
+          });
+        } else if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "0") {
+
+          var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+
+        } else if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "6") {
+          ui.draggable.fadeOut("fast", function () {
+            var funcion = funciones.input(2, "Natural", "");
+            ui.draggable.fadeIn();
+            funcion.fadeOut("fast", function () {
+              funcion.appendTo(event.target).fadeIn();
+              $('>div', funcion).find('input').focus();
+            });
+
+          });
+        } else {
+          $(event.target).effect("pulsate", "slow");
+          $(ui.draggable).effect("pulsate", "slow");
+        }
+      }
+    }).appendTo(operador);
+    return operador;
+  },
+
+
+  operadorG: function (id, nombre, css) {
+    var operador = $('<span v-data="funcion"  style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values" v-type="' + id + '"></div>').droppable({
+      accept: "div,span",
+      greedy: true,
+      classes: {
+        'ui-droppable-hover': 'hoverdropfunctions'
+      },
+      drop: function (event, ui) {
+
+        if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "1") {
+          var variable = $('<span v-data="perfil" >' + $(ui.draggable).text() + '</span>').draggable({
+            revert: "invalid",
+            containment: "document",
+            helper: "clone",
+            zIndex: 10000,
+            start: function (event, ui) {
+              $(this).draggable('instance').offset.click = {
+                left: Math.floor(ui.helper.width() / 2),
+                top: Math.floor(ui.helper.height() / 2)
+              };
+            }
+          }).fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+        } else if ($(ui.draggable).is('span')) {
+          ui.draggable.fadeOut(function () {
+            $(ui.draggable).appendTo(event.target).fadeIn();
+          });
+        } else {
+          switch ($(ui.draggable).attr('v-tipo')) {
+            case "0":
+              var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+              ui.draggable.fadeOut("fast", function () {
+                variable.appendTo(event.target).fadeIn();
+                ui.draggable.fadeIn();
+              });
+              break;
+            case "2":
+              var variable = $('<span v-data="operador" v-value="' + $(ui.draggable).attr('v-value') + '" ></span>').append($(ui.draggable).find('i').clone()).fadeOut("fast");
+              ui.draggable.fadeOut("fast", function () {
+                variable.appendTo(event.target).fadeIn();
+                ui.draggable.fadeIn();
+              });
+              break;
+            case "3":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operador(3, "suma", "color: #bb5b20;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+            case "4":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operador(4, "resta", "color: #1d9009e0;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+            case "5":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operadorG(5, "grupo", "");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+            case "6":
+              ui.draggable.fadeOut("fast", function () {
+
+                var funcion = funciones.input(2, "Natural", "color: #20a8d8;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                  $('>div', funcion).find('input').focus();
+                });
+              });
+              break;
+            case "7":
+                $(event.target).effect("pulsate", "slow");
+                $(ui.draggable).effect("pulsate", "slow");  
+            break;
+          }
+        }
+      }
+    }).appendTo(operador);
+    return operador;
+  }
+};
+export function generaperfil(mapinto, values = [], padre) {
+  var idvista = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_valores = '#' + idvalores;
+  $('#' + padre).empty();
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 100%;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos de Entrada</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="monto" v-data="perfil" v-view="Monto">Monto<span class="tooltiptext tooltip-bottom">Monto total.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuota" v-data="perfil" v-view="Cuota">Cuota<span class="tooltiptext tooltip-bottom">Cuota base perteneciente al periodo \'X\'.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuotaf" v-data="perfil" v-view="Cuota Final">Cuota Final<span class="tooltiptext tooltip-bottom">Cuota final perteneciente al periodo \'X\' contiene (interes, interes diferido, cargos adicionales).</span></div>');
+  //$(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="prestamos" v-data="perfil" v-view="Prestamos">Prestamos<span class="tooltiptext tooltip-bottom">Es la suma de saldos de prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="capital" v-data="perfil" v-view="Capital">Capital<span class="tooltiptext tooltip-bottom">Es el monto que ira a amortizar a capital.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="total saldo capital de prestamos vigentes">total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
+
+  values.forEach(function (element, index) {
+    element.data = abc[index];
+    element.data_php = '$'+abc[index];
+    element.key = element.data + element.idperfilcuentadetalle;
+    mapinto.set(index, element);
+    $(id_vista).append((element.tipocargo == 'd' ? '<div id="' + index + '" class="row itemrow" style=" border: 1px solid grey;padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;">' +
+        '<div class="col-md-1" style="margin: 0 0 0 -7px;display: inline-grid;align-content: center;"><span class="handle"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span></div><div class="col-md-11 row" style="margin: 0px;padding: 0px;"><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-10" style="text-align: left;font-weight: 700;font-size: 16px;">' + element.nomcuenta + '</div><div class="col-md-12" style="text-align: left;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag" v-pos="left"></div>' :
+        '<div id="' + index + '" class="row itemrow" style="border: 1px solid grey; padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;">' +
+        '<div class="col-md-1" style="margin: 0 0 0 -7px;display: inline-grid;align-content: center;"><span class="handle"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span></div><div class="col-md-11 row" style="margin: 0px;padding: 0px;"><div class="col-md-10" style="text-align: right;font-weight: 700;font-size: 16px;">' + element.nomcuenta + '</div><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-12" style="text-align: right;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag" v-pos="right"></div>') +
+      '<button  v-clear="button" type="button"  class=" btn btn-danger btn-sm" ><i class="icon-trash"></i></button>' +
+      '<div  v-type="checkconten" class="col-md-6" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a cargo adicional :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' +
+      '</div></div>');
+    $(id_valores).append('<div v-tipo="1" v-data="perfil">' + element.data + '</div>');
+  });
+
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Operadores</h6> </u>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="+"><i class="fa fa-plus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="-"><i class="fa fa-minus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="*"><i class="fa fa-times"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="/"><i class="fa fa-divide"></i></div>');
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Funciones</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="3" style="color:white;background: #bb5b20;padding: 3px;" v-data="perfil">SUMA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la suma total de todos los componentes ingresados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="4" style="color:white;background: #1d9009e0;padding: 3px;" v-data="perfil">RESTA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la resta total de todos los componentes ingresados (el resultado siempre sera positivo).</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="5" style="padding: 3px;" v-data="perfil">GRUPO&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Permite la agrupacion de componentes para facilitar la operacion matematica.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="6" style="color:white;background: #20a8d8;padding: 3px;" v-data="perfil">INPUT&nbsp;(int)<span class="tooltiptext tooltip-bottom">Permite la insercion de valores numericos.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="7" style="color:#151b1e;background: rgb(197, 149, 5);padding: 3px;" v-data="perfil">SI&nbsp;(int->int) = proceso<span class="tooltiptext tooltip-bottom">Valida el resultado de un proceso en un rango admitido, valor por defecto 0.</span></div>');
+
+  $("div,label", id_valores).draggable({
+    revert: "invalid",
+    containment: "document",
+    helper: "clone",
+    zIndex: 10000,
+    start: function (event, ui) {
+      $(ui.helper).find('.tooltiptext').remove();
+      $(this).draggable('instance').offset.click = {
+        left: Math.floor(ui.helper.width() / 2),
+        top: Math.floor(ui.helper.height() / 2)
+      };
+    }
+  });
+
+
+  Sortable.create(document.getElementById(idvista), {
+    handle: '.handle',
+    animation: 150,
+    onEnd: function (evt) {
+      var paso = true;
+      while (paso) {
+        paso = false;
+        for (var [key, value] of mapinto) {
+          var item = $('.itemrow[id="' + key + '"]').index();
+          if (item != key) {
+            var valuitemkey = mapinto.get(key);
+            if ($('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').find('[v-data="perfil"]').length > 0) {
+              $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').empty();
+            }
+            $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+            $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"] div[v-tipo="titulo"]').text(abc[item]);
+            $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+            valuitemkey.data = abc[item];
+            valuitemkey.key = valuitemkey.data + valuitemkey.idperfilcuentadetalle;
+            var valuitem = mapinto.get(item);
+            if ($('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').find('[v-data="perfil"]').length > 0) {
+              $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').empty();
+            }
+            $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+            $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"] div[v-tipo="titulo"]').text(abc[key]);
+            $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+            valuitem.data = abc[key];
+            valuitem.key = valuitem.data + valuitem.idperfilcuentadetalle;
+            mapinto.set(key, valuitem);
+            mapinto.set(item, valuitemkey);
+            var mainkey = $('.itemrow[id="' + key + '"]')
+            var mainitem = $('.itemrow[id="' + item + '"]')
+            mainkey.attr('id', item);
+            mainitem.attr('id', key);
+            paso = true;
+            break;
+          }
+        }
+      }
+    }
+  });
+
+  $('button[v-clear="button"]').click(function () {
+    $(this).siblings('.divdrag').empty();
+  });
+  isdroppable(id_vista);
+}
+export function _mff82sdf_mjd(mapinto, padre) {
+  var idvista = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_valores = '#' + idvalores;
+  $('#' + padre).empty();
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 555px;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos de Entrada</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="monto" v-data="perfil" v-view="Monto">Monto<span class="tooltiptext tooltip-bottom">Monto total.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuota" v-data="perfil" v-view="Cuota">Cuota<span class="tooltiptext tooltip-bottom">Cuota perteneciente al periodo \'X\'.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuotaf" v-data="perfil" v-view="Cuota Final">Cuota Final<span class="tooltiptext tooltip-bottom">Cuota final perteneciente al periodo \'X\' contiene (interes, interes diferido, cargos adicionales).</span></div>');
+  //$(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="prestamos" v-data="perfil" v-view="Prestamos">Prestamos<span class="tooltiptext tooltip-bottom">Es la suma de saldos de prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="capital" v-data="perfil" v-view="Capital">Capital<span class="tooltiptext tooltip-bottom">Es el monto que ira a amortizar a capital.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="total saldo capital de prestamos vigentes">total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
+
+
+  for (var [index, element] of mapinto) {
+    $(id_vista).append(element.item);
+    $(id_valores).append('<div v-tipo="1" v-data="perfil">' + element.data + '</div>');
+
+    var item = $('.itemrow[id="' + index + '"] .divdrag[id="' + element.key + '"]');
+    if (element.adi) {
+      item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', true);
+    } else {
+      item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', false);
+    }
+
+  }
+
+
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Operadores</h6> </u>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="+"><i class="fa fa-plus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="-"><i class="fa fa-minus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="*"><i class="fa fa-times"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="/"><i class="fa fa-divide"></i></div>');
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Funciones</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="3" style="color:white;background: #bb5b20;padding: 3px;" v-data="perfil">SUMA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la suma total de todos los componentes ingresados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="4" style="color:white;background: #1d9009e0;padding: 3px;" v-data="perfil">RESTA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la resta total de todos los componentes ingresados (el resultado siempre sera positivo).</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="5" style="padding: 3px;" v-data="perfil">GRUPO&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Permite la agrupacion de componentes para facilitar la operacion matematica.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="6" style="color:white;background: #20a8d8;padding: 3px;" v-data="perfil">INPUT&nbsp;(int)<span class="tooltiptext tooltip-bottom">Permite la insercion de valores numericos.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="7" style="color:#151b1e;background: rgb(197, 149, 5);padding: 3px;" v-data="perfil">SI&nbsp;(int->int) = proceso<span class="tooltiptext tooltip-bottom">Valida el resultado de un proceso en un rango admitido, valor por defecto 0.</span></div>');
+
+  $("div,label", id_valores).draggable({
+    revert: "invalid",
+    containment: "document",
+    helper: "clone",
+    zIndex: 10000,
+    start: function (event, ui) {
+      $(ui.helper).find('.tooltiptext').remove();
+      $(this).draggable('instance').offset.click = {
+        left: Math.floor(ui.helper.width() / 2),
+        top: Math.floor(ui.helper.height() / 2)
+      };
+    }
+  });
+
+
+  Sortable.create(document.getElementById(idvista), {
+    handle: '.handle',
+    animation: 150,
+    onEnd: function (evt) {
+      var paso = true;
+      while (paso) {
+        paso = false;
+        for (var [key, value] of mapinto) {
+          var item = $('.itemrow[id="' + key + '"]').index();
+          if (item != key) {
+            var valuitemkey = mapinto.get(key);
+            if ($('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').find('[v-data="perfil"]').length > 0) {
+              $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').empty();
+            }
+            $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+            $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"] div[v-tipo="titulo"]').text(abc[item]);
+            $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+            valuitemkey.data = abc[item];
+            valuitemkey.key = valuitemkey.data + valuitemkey.idperfilcuentadetalle;
+            var valuitem = mapinto.get(item);
+            if ($('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').find('[v-data="perfil"]').length > 0) {
+              $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').empty();
+            }
+            $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+            $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"] div[v-tipo="titulo"]').text(abc[key]);
+            $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+            valuitem.data = abc[key];
+            valuitem.key = valuitem.data + valuitem.idperfilcuentadetalle;
+            mapinto.set(key, valuitem);
+            mapinto.set(item, valuitemkey);
+            var mainkey = $('.itemrow[id="' + key + '"]')
+            var mainitem = $('.itemrow[id="' + item + '"]')
+            mainkey.attr('id', item);
+            mainitem.attr('id', key);
+            paso = true;
+            break;
+          }
+        }
+      }
+    }
+  });
+
+  $('button[v-clear="button"]').click(function () {
+    $(this).siblings('.divdrag').empty();
+  });
+  isdroppable(id_vista);
+}
+
+function isdroppable(id) {
+  $('.divdrag', id).droppable({
+    accept: "div,span,label",
+    greedy: true,
+    classes: {
+      'ui-droppable-hover': 'hoverdrop'
+    },
+    drop: function (event, ui) {
+     
+      $(event.target).removeClass('noF');
+      if ($(ui.draggable).is('div')) {
+        switch ($(ui.draggable).attr('v-tipo')) {
+          case "0":
+            var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+          case "1":
+            var variable = $('<span v-data="perfil">' + $(ui.draggable).text() + '</span>').draggable({
+              revert: "invalid",
+              containment: "document",
+              helper: "clone",
+              zIndex: 10000,
+              start: function (event, ui) {
+                $(this).draggable('instance').offset.click = {
+                  left: Math.floor(ui.helper.width() / 2),
+                  top: Math.floor(ui.helper.height() / 2)
+                };
+              }
+            }).fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+          case "2":
+            var variable = $('<span v-data="operador" v-value="' + $(ui.draggable).attr('v-value') + '" ></span>').append($(ui.draggable).find('i').clone()).fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+          case "3":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operador(3, "suma", "color: #bb5b20;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+          case "4":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operador(4, "resta", "color: #1d9009e0;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+          case "5":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operadorG(5, "grupo", "");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+          case "6":
+            ui.draggable.fadeOut("fast", function () {
+
+              var funcion = funciones.input(2, "Natural", "color: #20a8d8;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+                $('>div', funcion).find('input').focus();
+              });
+            });
+            break;
+          case "7":
+            if(event.target.childElementCount==0){
+              ui.draggable.fadeOut("fast", function () { 
+                var funcion = funciones.inputSi(7, "Si", "color:rgb(197, 149, 5);");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn(); 
+                });
+              });
+            }else{
+              $(event.target).effect("pulsate", "slow");
+              $(ui.draggable).effect("pulsate", "slow");  
+            }
+              
+
+              break;
+        }
+      } else {
+        ui.draggable.fadeOut(function () {
+          $(ui.draggable).css('border', '1px solid').appendTo(event.target).fadeIn();
+        });
+      }
+    }
+  });
+}
+export function _perff_00125(buscar) {
+  var pasoSi=false;
+   var formula = '';
+   $(buscar).children("span").each(function (i, elm) {
+     switch ($(elm).attr('v-data')) {
+       case 'datain':
+         formula += $(elm).attr('v-key');
+         break;
+       case 'perfil':
+         formula += $(elm).text();
+         break;
+       case 'operador':
+         formula += $(elm).attr('v-value');
+         break;
+       case 'funcion':
+         var item = $('>div', elm);
+         switch (item.attr('v-type')) {
+           case '3':
+             var salida = '';
+             $(item).children("span").each(function (i, element) {
+               switch ($(element).attr('v-data')) {
+                 case 'perfil':
+                   if (salida.length == 0) {
+                     salida += $(element).text();
+                   } else {
+                     salida += '+' + $(element).text();
+                   }
+                   break;
+                 case 'input':
+                   var valor = $(element).find('input').val();
+                   $(element).find('input').attr('value', valor);
+                   switch ($(element).attr('v-type')) {
+                     case '1':
+                       if (salida.length == 0) {
+                         salida += 'operador(' + valor + '*tipodecambio)';
+                       } else {
+                         salida += '+operador(' + valor + '*tipodecambio)';
+                       }
+                       break;
+                     default:
+                       if (salida.length == 0) {
+                         salida += valor;
+                       } else {
+                         salida += valor;
+                       }
+                       break;
+                   }
+                   break;
+                 case 'datain':
+                   if (salida.length == 0) {
+                     salida += $(element).attr('v-key');
+                   } else {
+                     salida += '+' + $(element).attr('v-key');
+                   }
+                   break;
+               }
+             });
+             formula += 'operador("' + salida + '")';
+             break;
+           case '4':
+             var salida = '';
+             $(item).children("span").each(function (i, element) {
+               switch ($(element).attr('v-data')) {
+                 case 'perfil':
+                   if (salida.length == 0) {
+                     salida += $(element).text();
+                   } else {
+                     salida += '-' + $(element).text();
+                   }
+                   break;
+                 case 'input':
+                   var valor = $(element).find('input').val();
+                   $(element).find('input').attr('value', valor);
+                   switch ($(element).attr('v-type')) {
+                     case '1':
+                       if (salida.length == 0) {
+                         salida += 'operador(' + valor + '*tipodecambio)';
+                       } else {
+                         salida += '+operador(' + valor + '*tipodecambio)';
+                       }
+                       break;
+                     default:
+                       if (salida.length == 0) {
+                         salida += valor;
+                       } else {
+                         salida += valor;
+                       }
+                       break;
+                   }
+                   break;
+                 case 'datain':
+                   if (salida.length == 0) {
+                     salida += $(element).attr('v-key');
+                   } else {
+                     salida += '+' + $(element).attr('v-key');
+                   }
+                   break;
+               }
+             });
+             formula += 'operador("' + salida + '")';
+             break;
+           case '5':
+             formula += 'operador(' + _perff_00125(item) + ')';
+             break;
+         }
+         break;
+       case 'input':
+         var valor = $(elm).find('input').val();
+         $(elm).find('input').attr('value', valor);
+         switch ($(elm).attr('v-type')) {
+           case '1':
+             formula += 'operador(' + valor + '*tipodecambio)';
+             break;
+           default:
+             formula += valor;
+             break;
+         }
+         break;
+       case 'inputSi':
+         var valor1 = $(elm).find('input[id="i1"]').val();
+         var valor2 = $(elm).find('input[id="i2"]').val();
+         $(elm).find('input[id="i1"]').attr('value', valor1);
+         $(elm).find('input[id="i2"]').attr('value', valor2);
+         formula += 'si(' + valor1 + ' , ' + valor2 + ',';
+         pasoSi=true;
+         break;
+ 
+         
+     }
+   });
+ 
+ 
+   return pasoSi?formula+=')':formula;
+ }
+export function _perff_00126(buscar) {
+ var pasoSi=false;
+  var formula = '';
+  $(buscar).children("span").each(function (i, elm) {
+    switch ($(elm).attr('v-data')) {
+      case 'datain':
+        formula += '$'+$(elm).attr('v-key');
+        break;
+      case 'perfil':
+        formula += '$'+$(elm).text();
+        break;
+      case 'operador':
+        formula += $(elm).attr('v-value');
+        break;
+      case 'funcion':
+        var item = $('>div', elm);
+        switch (item.attr('v-type')) {
+          case '3':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida +='$'+ $(element).text();
+                  } else {
+                    salida += '+$' + $(element).text();
+                  }
+                  break;
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += '(' + valor + '*$tipodecambio)';
+                      } else {
+                        salida += '+(' + valor + '*$tipodecambio)';
+                      }
+                      break;
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+                      break;
+                  }
+                  break;
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += '$'+$(element).attr('v-key');
+                  } else {
+                    salida += '+$' + $(element).attr('v-key');
+                  }
+                  break;
+              }
+            });
+            formula += '(' + salida + ')';
+            break;
+          case '4':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida += '$'+$(element).text();
+                  } else {
+                    salida += '-$' + $(element).text();
+                  }
+                  break;
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += '(' + valor + '*$tipodecambio)';
+                      } else {
+                        salida += '+(' + valor + '*$tipodecambio)';
+                      }
+                      break;
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+                      break;
+                  }
+                  break;
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += '$'+$(element).attr('v-key');
+                  } else {
+                    salida += '+$' + $(element).attr('v-key');
+                  }
+                  break;
+              }
+            });
+            formula += '(' + salida + ')';
+            break;
+          case '5':
+            formula += '(' + _perff_00126(item) + ')';
+            break;
+        }
+        break;
+      case 'input':
+        var valor = $(elm).find('input').val();
+        $(elm).find('input').attr('value', valor);
+        switch ($(elm).attr('v-type')) {
+          case '1':
+            formula += '(' + valor + '*$tipodecambio)';
+            break;
+          default:
+            formula += valor;
+            break;
+        }
+        break;
+      case 'inputSi':
+        var valor1 = $(elm).find('input[id="i1"]').val();
+        var valor2 = $(elm).find('input[id="i2"]').val();
+        $(elm).find('input[id="i1"]').attr('value', valor1);
+        $(elm).find('input[id="i2"]').attr('value', valor2);
+        formula += '$this->si(' + valor1 + ' , ' + valor2 + ',';
+        pasoSi=true;
+        break;
+
+        
+    }
+  });
+
+
+  return pasoSi?formula+=')':formula;
+}
+
+export function _mmf2251_3325(mapinto) {
+  closeRam();
+  window.monto = 15000;
+  window.cuota = 196.44;
+  window.cuotaf = 197.13;
+  window.prestamos = 0;
+  window.capital = 52.44;
+  window.intereses = 144;
+  window.interes_diferido = 144;
+  window.total_cuotas = 120;
+  window.total_refinanciar = 1000;
+  window.tipodecambio = 1;
+  mapinto.forEach(function (element, key) {
+
+    try {
+      jQuery.globalEval(element.data + '=' + redondeo_valor(eval(element.formula)) + ';');
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+
+  });
+
+}
+
+function closeRam() {
+  abc.forEach(function (element) {
+    try {
+      if (eval(element)) {
+        jQuery.globalEval('delete ' + element + ';');
+      }
+    } catch (error) {}
+
+  });
+}
+export function _mf362353_225(mapinto, padre, tipoc, cod, namep) {
+  closeRam();
+  window.monto = 15000;
+  window.cuota = 196.44;
+  window.cuotaf = 197.13;
+  window.prestamos = 0;
+  window.capital = 52.44;
+  window.intereses = 144;
+  window.interes_diferido = 0;
+  window.total_cuotas = 120;
+  window.total_refinanciar = 1000;
+  window.tipodecambio = tipoc;
+
+
+  var idvista = generateKey();
+  var pie = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_pie = '#' + pie;
+  var id_valores = '#' + idvalores;
+
+  $('#' + padre).empty();
+  $('<div class="col-md-12" style="padding: 10px !important;text-align: center;font-size: 18px;margin: 6px;font-weight: bold;text-decoration-line: underline;" >PRODUCTO : ' + namep + '</div>').appendTo($('#' + padre));
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 444px;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+  $('<div class="col-md-12" style="margin-top: 5px;padding: 10px !important;text-align: right;background-color: #25d82029;border: 1px solid rgba(64, 70, 74, 0.32);" id="' + pie + '" ></div>').appendTo($('#' + padre));
+
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos del prestamo</h6> </u>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Monto&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + monto + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Cuota&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + cuota + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Cuota final&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + cuotaf + '&nbsp;' + cod + '</span></div>');
+  //$(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Prestamos&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">'+prestamos+'&nbsp;'+cod+'</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Capital&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + capital + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Interes&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + intereses + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Interes diferido&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + interes_diferido + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Total cuotas&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 18px;color: #007bff;">' + total_cuotas + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Total saldo capital&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 18px;color: #007bff;">' + total_refinanciar + '&nbsp;BOB</span></div>');
+
+  monto = redondeo_valor(monto * tipodecambio);
+  cuota = redondeo_valor(cuota * tipodecambio);
+  cuotaf = redondeo_valor(cuotaf * tipodecambio); 
+  capital = redondeo_valor(capital * tipodecambio);
+  intereses = redondeo_valor(intereses * tipodecambio);
+  interes_diferido = redondeo_valor(interes_diferido * tipodecambio);
+
+  mapinto.forEach(function (element, key) {
+    // console.log('formula: ' + element.formula);
+    try {
+      jQuery.globalEval(element.data + '=' + redondeo_valor(eval(element.formula)) + ';');
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+
+  }); 
+
+  var countDebe = 0;
+  var countHaber = 0;
+  var totalcodmoneda = '';
+  mapinto.forEach(function (element, key) {
+    var iddrop = '#' + element.key + '.view';
+    $(id_vista).append((element.tipocargo == 'd' ? '<div class="row" style=" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;"><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-10">' + element.nomcuenta + '</div><div class="col-md-12" style="text-align: left;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag view" v-pos="left"></div>' :
+        '<div class="row" style=" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;"><div class="col-md-10" style="text-align: right;">' + element.nomcuenta + '</div><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-12" style="text-align: right;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag view" v-pos="right"></div>') +
+      '</div></div>');
+    try {
+      var valuecuenta = (eval(element.data) / element.tipocambio);
+      $(iddrop).append('<b>' + valuecuenta + '</b>&nbsp;<b>' + element.codmoneda + '</b>');
+      totalcodmoneda = element.codmoneda;
+      if (element.tipocargo == 'd') {
+        countDebe += valuecuenta;
+      } else {
+        countHaber += valuecuenta;
+      }
+
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' when assigning </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+
+  });
+  $(id_pie).append('<div class="col-md-3" style="display: inline-block;text-align: left;"><strong style="font-size: 18px;">Totales</strong> </div>' +
+    '<div class="col-md-4" style="display: inline-block;text-align: left;margin-right: 60px;"><strong style="font-size: 18px;">Debe : </strong> ' + countDebe + '&nbsp;' + totalcodmoneda +
+    '</div><div class="col-md-4" style="display: inline-block;"><strong style="font-size: 18px;">Haber : </strong>' + countHaber + '&nbsp;' + totalcodmoneda + '</div>');
+
+
+}
+
+function operador(into) {
+  var value = into + '';
+  if (value.trim().length == 0) {
+    throw new Error('The function does not contain data.');
+  }
+  return redondeo_valor(eval(value));
+}
+function si(v,b,e) {  
+  var outnum=0;
+if(typeof e === 'undefined'){
+  throw new Error("Exist an error in the function syntax.(The function it's not complete)");
+}
+if(b>v){ 
+  outnum = v<=e&&e<=b?e:0;  
+}else{ 
+  throw new Error('Exist an error in the function syntax.('+b+' its not higher to '+v+')');
+} 
+
+  return redondeo_valor(outnum<0?(outnum*-1):outnum);
+}
+
+
+
+function valueformulacargos(arrayformulas, tcuo, tipoc, mon, cuo, prs, cap, int, intdif) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.tipodecambio = tipoc;
+  window.monto = (mon);
+  window.cuota = (cuo);
+  window.cuotaf = (cuo);
+  window.prestamos = (prs);
+  window.total_refinanciar = (prs);
+  window.capital = (cap);
+  window.intereses = (int);
+  window.interes_diferido = (intdif);
+  var cargos = [];
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index];
+      jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';');
+
+      if (element.iscargo) {
+        var out = eval(element.valor_abc); 
+        if (parseFloat(out) > 0) {
+          cargos.push({
+            id: element.idperfilcuentadetalle,
+            value: out,
+            rev:element.formula.includes("total_cuotas")?1:0
+          });
+        }
+      }
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+  return cargos;
+}
+
+function valueformulaDesembolso(arrayformulas, tcuo, tipoc, mon, cuo, prs, numpa) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.total_refinanciar = prs;
+  window.tipodecambio = tipoc;
+  window.monto = (mon);
+  window.cuota = (cuo);
+  window.cuotaf = (cuo);
+  window.prestamos = prs;
+  // console.log('desembolso');
+  // console.log(arrayformulas);
+  var cargos = [];
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index];
+      jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';');
+
+      var out = parseFloat(eval(element.valor_abc));
+      // console.log(element.valor_abc + '=' + out);
+
+
+      if (parseFloat(out) > 0) {
+        if (parseFloat(tipoc) > 1) {
+          out = parseFloat(out) * parseFloat(tipoc);
+        }
+        out = parseFloat(redondeo_valor(out));
+        if (element.tipocargo === 'h') {
+          out *= -1;
+        }
+        cargos.push({
+          num: numpa,
+          idmaestro: element.desembolso_perfil,
+          iddetalle: element.idperfilcuentadetalle,
+          value: out,
+          id: element.idcuenta
+        });
+      } else {
+        out *= -1;
+        if (out > 0) {
+          cargos.push({
+            num: numpa,
+            idmaestro: element.desembolso_perfil,
+            iddetalle: element.idperfilcuentadetalle,
+            value: out,
+            id: element.idcuenta
+          });
+        }
+      }
+
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+  return cargos;
+}
+export function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, mon, numpa, tcuo,cuoota,tipodecambio) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.total_refinanciar = 0;
+  window.tipodecambio = 1;
+  window.monto = (mon);
+  window.cuota = (cuoota);
+  window.cuotaf = (cuo);
+  window.prestamos = 0;
+
+  window.capital = capitalin;
+  window.intereses = interesin;
+  window.interes_diferido = interesdifin;
+ // console.log('cobranza');
+ // console.log(arrayformulas);
+  var cargos = [];
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index];
+
+   //   if (element.iscargo) {
+    //    jQuery.globalEval(element.valor_abc + '=0;');
+    //  } else {
+        jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';');
+    //  }
+      var out = parseFloat(eval(element.valor_abc))*tipodecambio; 
+      out = parseFloat(redondeo_valor(out)); 
+      //console.log(element.valor_abc + '=' + out); 
+      if (out > 0) {
+        if (element.tipocargo === 'h') {
+          out *= -1;
+        }
+        cargos.push({
+          num: numpa,
+          idmaestro: element.cobranza_perfil,
+          iddetalle: element.idperfilcuentadetalle,
+          value: out,
+          id: element.idcuenta
+        });
+      } else {
+        out *= -1;
+        if (out > 0) {
+          cargos.push({
+            num: numpa,
+            idmaestro: element.cobranza_perfil,
+            iddetalle: element.idperfilcuentadetalle,
+            value: out,
+            id: element.idcuenta
+          });
+        }
+      }
+
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+  return cargos;
+}
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** 
+
+  __  _        
+ / _|(_)       
+| |_  _  _ __  
+|  _|| || '_ \ 
+| |  | || | | |
+|_|  |_||_| |_| 
+ * *************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
+/**************************************************************************************************************************************** */
