@@ -564,6 +564,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/rrh_atraso/storeAtraso','RrhAtrasoController@storeAtraso');   //C
     Route::get ('/rrh_atraso/verAtraso','RrhAtrasoController@verAtraso');       //R
     Route::put ('/rrh_atraso/updateAtraso','RrhAtrasoController@updateAtraso'); //U
+    Route::get ('/rrh_biometrico/get','RrhhBiometrico@get'); 
 
 
 

@@ -184,7 +184,7 @@ class ImportController extends Controller
                     }
                     //dd($arrayDetalle);
                     $asientomaestro= new AsientoMaestroClass();
-                    $idasientomaestro=$asientomaestro->AsientosMaestroArray($idperfilcuentamaestro, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fecha_archivo);
+                    $idasientomaestro=$asientomaestro->AsientosMaestroArrayAportes($idperfilcuentamaestro, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fecha_archivo);
                     DB::unprepared('CALL agregarasientomaestro('.$idasientomaestro.','.$idlote.',0)');
                     
                     DB::commit();

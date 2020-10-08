@@ -377,6 +377,86 @@ Class AsientoMaestroClass
             }
         } 
     }
+    public function AsientosMaestroArrayAportes($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='')
+    {
+        // definicion de array
+        //$this->tipocomprobante =$tipocomprobante;
+        $this->tipodocumento=$tipodocumento;
+        $this->numdocumento=$numdocumento;
+        $this->glosa=$glosa;
+        $this->arrayDetalle=$arrayDetalle;
+        $this->idmodulo=$idmodulo;
+        $this->fecharegistro=$fecharegistro." ".$this->hora;
+        $this->idperfilcuentamaestro=$idperfilcuentamaestro;
+        $this->loteprestamos=$loteprestamos;
+        $this->agrupacion=$agrupacion;
+        $this->segcobranza=$segcobranza;
+        $this->filial=$filial;
+        if($this->filial=='')
+        $this->filial=1;
+
+        $tipocomprobante = Con_Perfilcuentamaestro::join('con__tipocomprobantes','con__perfilcuentamaestros.idtipocomprobante','=','con__tipocomprobantes.idtipocomprobante')
+        ->where('con__perfilcuentamaestros.idperfilcuentamaestro','=',$this->idperfilcuentamaestro)                                            
+        ->select('con__tipocomprobantes.idtipocomprobante')
+        ->get()->toArray();
+
+        $idtipocomprobante=$tipocomprobante[0]['idtipocomprobante'];
+
+        DB::beginTransaction();
+        {
+            try
+            {  
+            
+                $asientomaestro=new Con_Asientomaestro();
+                $asientomaestro->loteprestamos=$this->loteprestamos;
+                $asientomaestro->idtipocomprobante=$idtipocomprobante;
+                $asientomaestro->idperfilcuentamaestro=$this->idperfilcuentamaestro;
+                $asientomaestro->fecharegistro=$this->fecharegistro;
+                $asientomaestro->tipodocumento=$this->tipodocumento;
+                $asientomaestro->numdocumento=$this->numdocumento;
+                $asientomaestro->glosa=$this->glosa;
+                //$asientomaestro->idfilial='1';//modificar con ide de filial
+                $asientomaestro->idfilial=$this->filial;
+                $asientomaestro->idmodulo=$this->idmodulo;
+                $asientomaestro->u_registro=Auth::id();
+                $asientomaestro->agrupacion=$agrupacion;
+                $asientomaestro->desembolso=1;
+                $asientomaestro->segcobranza=$this->segcobranza;
+                $asientomaestro->save();
+                $idasientomaestro=$asientomaestro->idasientomaestro;
+
+                foreach($this->arrayDetalle as $indice =>$valor)
+                {
+                    $asientodetalle=new Con_Asientodetalle();
+                    $asientodetalle->idasientomaestro=$idasientomaestro;
+                    foreach($valor as $i=>$v)
+                    {
+                        if($i=='monto')
+                        {
+                            if($v>0)
+                                $asientodetalle->debe=$v;
+                            else 
+                                $asientodetalle->haber=$v*-1;
+                        }
+                        $asientodetalle->$i=$v;
+                    }
+                    $asientodetalle->usuarioregistro=Auth::id();
+                    $asientodetalle->usuariomodifica=Auth::id();
+                    $asientodetalle->save();
+                    
+                }
+                DB::commit();
+                return $idasientomaestro;
+                      
+            }
+            catch(\Exception $e)
+            {
+                $error = $e->getMessage();
+                DB::rollback();
+                return $error;
+            }
+        } 
+    }
     //////////////////////////////////////////////////////////////////////
     ///////////////////////////////////// metodo para agregar comprobantes agrupados
     public function AsientosMaestroAgrupado($idperfilcuentamaestro='',$tipocomprobante='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$listaids='',$filial=1)

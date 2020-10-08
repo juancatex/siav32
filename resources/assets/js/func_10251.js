@@ -1110,7 +1110,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setProperties({
         title: 'Carnet socio'
       }); 
-      doc.addImage(fondo, 'JPEG',3.2,0.9, 8.6, 5.5); 
+      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
       doc.addImage(fotosocio, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
       doc.setFontSize(10);
       doc.setFontStyle('bold');
@@ -1129,7 +1129,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
       doc.text(ta.codsocio?ta.codsocio:'___', 7.29, 4.1,null,90);
       doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.51, 4.1,null,90);
-       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);   
+       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
 
       $("#" + idview).attr("src", doc.output('datauristring')); 
 
@@ -1137,7 +1137,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc2.setProperties({
         title: 'Carnet socio posterior'
       }); 
-      doc2.addImage(fondodos, 'JPEG',3.2,0.9, 8.6, 5.5);   
+      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
       doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
       $("#2" + idview).attr("src", doc2.output('datauristring')); 
  
