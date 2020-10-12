@@ -107,7 +107,8 @@ class RrhhBiometrico extends Controller
                     $arrayuservalue['userid']=$uItem['userid'];
                     $arrayuservalue['name']=($uItem['name']);
                     $arrayuservalue['role']=Util::getUserRole($uItem['role']);  
-                    $usersFinal[$uItem['uid']]=$arrayuservalue; 
+                    // $usersFinal[$uItem['userid']]=$arrayuservalue; 
+                    array_push($usersFinal,$arrayuservalue);
                 }
             // $attendance = array_reverse($attendance, true);
 
