@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Rats\Zkteco\Lib\ZKTeco;
 use Rats\Zkteco\Lib\Helper\Util; 
+use Illuminate\Support\Facades\Auth;
+use App\Rrh_Empleado;
 
 class RrhhBiometrico extends Controller
 {
@@ -54,6 +56,7 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(33, '33', 'TAPIA VARGAS DANIELA','',Util::LEVEL_USER);
             // $zk->setUser(34, '34', 'URI UTURUNCO ARTURO','',Util::LEVEL_USER);
             // $zk->setUser(32, '32', 'USCAMAYTA YUGAR BRIAN','',Util::LEVEL_USER);
+            $zk->setUser(36, '36', 'QUISPE HUANCA JOHANA','',Util::LEVEL_USER);
 
             // $zk->setUser(50, '50', 'admin2','',Util::LEVEL_USER);
             // $zk->setUser(51, '51', 'SOM. ALMANZA WILSON','',Util::LEVEL_USER);
@@ -65,9 +68,10 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(57, '57', 'SOF. LARICO MAXIMILIANO','',Util::LEVEL_USER);
             // $zk->setUser(58, '58', 'SOF. GARCIA EMILIO','',Util::LEVEL_USER);
             // $zk->setUser(59, '59', 'SO2. RAMOS RICARDO','',Util::LEVEL_USER); 
-            $zk->setUser(60, '60', 'SOF. MAIZMAN MARTIN','',Util::LEVEL_USER);
-            $zk->setUser(61, '61', 'SOF. CALLAPA JOSE RAMIRO','',Util::LEVEL_USER);
-            $zk->setUser(62, '62', 'SOI. MENDOZA HANS CARLOS','',Util::LEVEL_USER);
+            // $zk->setUser(60, '60', 'SOF. MAIZMAN MARTIN','',Util::LEVEL_USER);
+            // $zk->setUser(61, '61', 'SOF. CALLAPA JOSE RAMIRO','',Util::LEVEL_USER);
+            // $zk->setUser(62, '62', 'SOI. MENDOZA HANS CARLOS','',Util::LEVEL_USER);
+           
 
 
             $zk->enableDevice();
@@ -120,10 +124,10 @@ class RrhhBiometrico extends Controller
                 array_push($arraylista,$out); 
               
             }
-            
-             return ['users'=>$usersFinal,'data'=>$data,'attendance'=>$arraylista];
+            $empleado=Rrh_Empleado::select('codbiom')->where('idempleado','=',Auth::user()->idempleado)->get()->toArray()[0];
+             return ['users'=>$usersFinal,'data'=>$data,'attendance'=>$arraylista,'bio'=>$empleado];
         }else{
-            return ['users'=>array(),'data'=>array(),'attendance'=>array()];
+            return ['users'=>array(),'data'=>array(),'attendance'=>array(),'bio'=>''];
         } 
    
     }
