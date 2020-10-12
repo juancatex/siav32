@@ -50,6 +50,7 @@ export default {
         attendance:[], 
         users:[], 
         databio:[], 
+        idbio:'', 
     }},
 
     methods:{ 
@@ -59,13 +60,14 @@ export default {
                 this.attendance=response.data.attendance;
                 this.users=response.data.users;
                 this.databio=response.data.data; 
+                this.idbio=response.data.bio; 
                 swal.close();
                  
             });
         },
         getAttendanceWithId(){
             var asistencia= _.reduce(this.attendance,(result, value, key)=>{
-                         if(value.id=='6'){
+                         if(value.id==this.idbio){
                             if(!_.isArray(result)){ result = [];  }
                            result.push(value);
                         }
