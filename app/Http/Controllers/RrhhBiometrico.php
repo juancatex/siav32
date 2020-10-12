@@ -125,7 +125,7 @@ class RrhhBiometrico extends Controller
               
             }
             $empleado=Rrh_Empleado::select('codbiom')->where('idempleado','=',Auth::user()->idempleado)->get()->toArray()[0];
-             return ['users'=>$usersFinal,'data'=>$data,'attendance'=>$arraylista,'bio'=>$empleado];
+             return ['users'=>$usersFinal,'data'=>$data,'attendance'=>$arraylista,'bio'=>$empleado['codbiom']];
         }else{
             return ['users'=>array(),'data'=>array(),'attendance'=>array(),'bio'=>''];
         } 
