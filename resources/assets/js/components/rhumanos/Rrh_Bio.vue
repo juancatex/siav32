@@ -60,7 +60,8 @@ export default {
                 this.attendance=response.data.attendance;
                 this.users=response.data.users;
                 this.databio=response.data.data; 
-                this.idbio=response.data.bio; 
+                this.idbio=response.data.bio;
+                console.log(response.data) 
                 swal.close();
                  
             });
