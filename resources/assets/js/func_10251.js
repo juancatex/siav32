@@ -6,7 +6,11 @@ para crear comandos en laravel ejemplo para crear base de datos nueva
 
 import { data } from "jquery";
 
+/*para el biometrico instalar el composer zklib
+composer require rats/zkteco
+https://github.com/raihanafroz/zkteco
 
+*/
 
 /*
 PARA LEER TEXTOS

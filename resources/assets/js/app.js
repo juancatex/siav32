@@ -49,6 +49,7 @@ setvue(1, 'fil_filial', './components/filiales/Fil_Filial.vue');
 setvue(1, 'rrh_empleado', './components/rhumanos/Rrh_Empleado.vue');
 setvue(1, 'rrh_configuracion', './components/rhumanos/Rrh_Configuracion.vue');
 setvue(1, 'rrh_operacion', './components/rhumanos/Rrh_Operacion.vue');
+setvue(0, 'rrh_bio', './components/rhumanos/Rrh_Bio.vue');
 
 //activos fijos
 setvue(1, 'act_configuracion', './components/activos/Act_Configuracion.vue');

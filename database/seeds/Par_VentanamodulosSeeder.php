@@ -97,6 +97,7 @@ class Par_VentanamodulosSeeder extends Seeder
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'11','nomventanamodulo'=>'Configuración','template'=>'rrh_configuracion']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'11','nomventanamodulo'=>'Empleados','template'=>'rrh_empleado']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'11','nomventanamodulo'=>'Operaciones','template'=>'rrh_operacion']);
+        DB::table('par__ventanamodulos')->insert(['idmodulo'=>'11','nomventanamodulo'=>'Biometrico','template'=>'rrh_bio']);
 
 //almacen
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'12','nomventanamodulo'=>'Configuración','template'=>'alm_configuracion']);
