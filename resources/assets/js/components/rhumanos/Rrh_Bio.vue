@@ -223,6 +223,7 @@ export default {
                     if(response.data.datapermiso.length>0){
                         var respuesta=response.data.datapermiso[0].permisos; 
                         me.arrayPermisosIn = JSON.parse((respuesta));
+                        console.log(respuesta)
                     } 
                 })
                 .catch(function (error) {
