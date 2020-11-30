@@ -13,8 +13,11 @@
         </li>
 
        <li class="nav-item dropdown navItem">
-           <a class="nav-link" href="#" data-toggle="dropdown">
-               <i class="icon-bell"></i>
+           <!-- <a class="nav-link" href="#" data-toggle="dropdown"> -->
+            <a class="avatar nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+             aria-expanded="false"
+             style="width: auto;    height: 100%; padding: 0px 14px 0px 17px; display: inline-flex;  vertical-align: middle;">
+               <span class="icon-bell" style="  margin: auto !important;"></span>
                <span class="badge badge-pill badge-danger">5</span>
            </a>
            <div class="dropdown-menu dropdown-menu-right">
@@ -34,11 +37,11 @@
        <li class="nav-item dropdown navItem">
            <a class="avatar nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false"
-               style="width: auto; padding: 0px 14px 0px 17px; display: inline-flex;  vertical-align: middle;">
+               style="width: auto;    height: 100%; padding: 0px 14px 0px 17px; display: inline-flex;  vertical-align: middle;">
                  <span class="d-md-down-none"
                    style="align-content: center; width: inherit;display: grid;    padding: 0 10px 0 10px;">
                    <b>{{usuario}}</b> </span>
-               <img class="img-avatar" src="img/avatars/avatar.png" style="    margin: 0px !important;"
+               <img class="img-avatar" src="img/avatars/avatar.png" style="  margin: auto !important;"
                    alt="admin@bootstrapmaster.com">
              
            </a>

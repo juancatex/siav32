@@ -1,5 +1,5 @@
 <?php
-  
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,37 +12,37 @@
 */
 
 Route::any('/', function(){
-    if(session('error')){ 
-        $value=session('error'); 
+    if(session('error')){
+        $value=session('error');
         if(strcasecmp($value[0], '2002')==0){
             return view('auth.newlogin', ['nota' => '','status' =>'No se pudo conectar con la base de datos.']);
-        }else{ 
+        }else{
             return view('auth.newlogin', ['nota' => '','status' => $value[1]]);
-        } 
+        }
     }else{
         if(Auth::check()) return view('contenido/contenido')->with('status','');
         else return view('auth.newlogin', ['nota'=>(session('setout'))?session('setout'):'','status'=>(session('status'))?session('status'):'']);
-    }    
+    }
 });
-Route::get('login' ,function(){ 
+Route::get('login' ,function(){
     if(Auth::check()) return view('contenido/contenido')->with('status','');
     else {
         Auth::logout();
         Session::flush();
         Session::regenerate();
         return view('auth.newlogin')->with('status','Error al momento de conectar con el servidor, intente nuevamente porfavor.');
-    }  
+    }
 });
-   
-Route::post('login' ,'Auth\LoginController@login')->name('login'); 
-Route::post('logout','Auth\LoginController@logout')->name('logout'); 
-Route::post('logout2', function(){ 
+
+Route::post('login' ,'Auth\LoginController@login')->name('login');
+Route::post('logout','Auth\LoginController@logout')->name('logout');
+Route::post('logout2', function(){
     Auth::logout();
     Session::flush();
-    Session::regenerate();  
+    Session::regenerate();
     return view('auth.newlogin', ['nota' => '','status' =>'']);
 });
- 
+
 Route::get('/login_apk','apkMovile@login')->name('login_apk');
 Route::get('/check','apkMovile@validate')->name('check');
 Route::get('/logout', function(){ Auth::logout(); return response()->json(array('data' =>'ok'), 200); });
@@ -50,12 +50,10 @@ Route::get('/getPrestamos','apkMovile@getPrestamos')->name('getPrestamos');
 Route::get('/getServicios','apkMovile@verServicios')->name('getServicios');
 Route::get('/getAportes','apkMovile@verAportes')->name('getAportes');
 Route::get('/getExAportes','apkMovile@extractoAportes')->name('getExAportes');
-Route::get('/getimage','apkMovile@getimage')->name('getimage');
+Route::get('/getimage','apkMovile@getimage')->name('getimage'); 
+Route::get('sessionOut','SesionOut@out');
 
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('sessionOut','SesionOut@out');
-
+Route::group(['middleware' => ['webinterno']], function () {
         Route::get ('/afi_beneficiario', 'AfiBeneficiarioController@index');
         Route::post('/afi_beneficiario/registrar', 'AfiBeneficiarioController@store');
         Route::get ('/afi_beneficiario/listaBeneficiarios','AfiBeneficiarioController@listaBeneficiarios');
@@ -174,7 +172,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get ('/con_asientodetalle/selectasientodetalle', 'ConAsientodetalleController@selectAsientoDetalle');
         Route::get ('/con_asientomaestro/recuperarsubcuenta', 'ConAsientomaestroController@recuperarSubcuenta');
-        
+
         Route::get ('/con_librocompras','ConLibrocompraController@index');
         Route::post('/con_librocompras/registrar','ConLibrocompraController@store');
         Route::put ('/con_librocompras/actualizar','ConLibrocompraController@update');
@@ -192,7 +190,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/con_config/desactivar', 'ConConfiguracionController@desactivar');
         Route::get('/con_config/cuentasconciliacion', 'ConConfiguracionController@cuentas_conciliacion');
         Route::get('/con_config/selectconciliacion', 'ConConfiguracionController@selectCuentasConciliacion');
-        
+
         Route::get ('/con_conciliacion/selectconciliacion', 'ConMovimientobancarioController@selectConciliacion');
         Route::post('/con_conciliacion/registrar', 'ConMovimientobancarioController@store');
         Route::get ('/con_conciliacion/segcheques', 'ConMovimientobancarioController@segCheques');
@@ -208,7 +206,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get ('/libromayor', 'ConReportesController@libromayor');
         Route::get ('/librodiario', 'ConReportesController@librodiario');
         Route::get ('/saldoconciliacion', 'ConReportesController@conciliacion');
-        
+
         //////////////////////////////////////////////////////////////////////////////////////////
         Route::get ('/par_departamento', 'Par_DepartamentoController@index');
         Route::post('/par_departamento/registrar', 'Par_DepartamentoController@store');
@@ -288,8 +286,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/par_modulo/updateModulo', 'ParModuloController@updateModulo');    //U
     Route::put ('/par_modulo/switchModulo', 'ParModuloController@switchModulo');    //D
 
-        Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');   
-        Route::get ('/sociogetfotoCRV', 'SocioController@getfotoCRV');   
+        Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');
+        Route::get ('/sociogetfotoCRV', 'SocioController@getfotoCRV');
 
         Route::get ('/socio', 'SocioController@index');
         Route::post('/socio/registrar', 'SocioController@store');
@@ -306,7 +304,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/afi_reportes', 'Afi_Reportes@rutas');
         Route::get('/ser_reportes', 'Ser_Reportes@rutas');
-        
+
         Route::get('/par_estadomodulo', 'Par_EstadomoduloController@index');
         Route::post('/par_estadomodulo/registrar', 'Par_EstadomoduloController@store');
         Route::put('/par_estadomodulo/actualizar', 'Par_EstadomoduloController@update');
@@ -345,8 +343,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/apo_observados', 'ApoObservadosController@index');
 
 
-    //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS 
-    //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS 
+    //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS
+    //// ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS ACTIVOS FIJOS
     Route::post('/act_ambiente/storeAmbiente','ActAmbienteController@storeAmbiente');     //C
     Route::get ('/act_ambiente/listaAmbientes','ActAmbienteController@listaAmbientes');   //R
     Route::put ('/act_ambiente/updateAmbiente','ActAmbienteController@updateAmbiente');   //U
@@ -357,7 +355,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/act_grupo/listaCuentas','ActGrupoController@listaCuentas');//R
     Route::put ('/act_grupo/updateGrupo','ActGrupoController@updateGrupo');  //U
     Route::put ('/act_grupo/switchGrupo','ActGrupoController@switchGrupo');  //D
-    
+
     Route::post('/act_motivo/storeMotivo','ActMotivoController@storeMotivo');     //C
     Route::get ('/act_motivo/listaMotivos','ActMotivoController@listaMotivos');   //R
     Route::put ('/act_motivo/updateMotivo','ActMotivoController@updateMotivo');   //U
@@ -369,14 +367,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/act_auxiliar/switchAuxiliar','ActAuxiliarController@switchAuxiliar');  //D
 
     Route::post('/act_activo/storeActivo','ActActivoController@storeActivo');   //C
-    Route::get ('/act_activo/listaActivos','ActActivoController@listaActivos'); //R 
-    Route::get ('/act_activo/verActivo','ActActivoController@verActivo');       //R    
+    Route::get ('/act_activo/listaActivos','ActActivoController@listaActivos'); //R
+    Route::get ('/act_activo/verActivo','ActActivoController@verActivo');       //R
     Route::put ('/act_activo/updateActivo','ActActivoController@updateActivo');//U
     Route::put ('/act_activo/storeBaja','ActActivoController@storeBaja');    //baja
-    Route::get ('/act_activo/listaBajas','ActActivoController@listaBajas');  //baja 
-    Route::get ('/act_activo/validaAsignacion','ActActivoController@validaAsignacion');  //baja 
+    Route::get ('/act_activo/listaBajas','ActActivoController@listaBajas');  //baja
+    Route::get ('/act_activo/validaAsignacion','ActActivoController@validaAsignacion');  //baja
 
-    Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion'); 
+    Route::get ('/act_activo/calcDepreciacion','ActActivoController@calcDepreciacion');
 
     Route::post('/act_asignacion/storeAsignacion','ActAsignacionController@storeAsignacion');     //C
     Route::get ('/act_asignacion/listaAsignaciones','ActAsignacionController@listaAsignaciones'); //R
@@ -387,7 +385,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/act_ufv/verUfv','ActUfvController@verUfv');           //R
     Route::get ('/act_ufv/maxverUfv','ActUfvController@maxverUfv');           //R
     Route::get ('/act_ufv/ufvGestion','ActUfvController@ufvGestion');   //R
-    
+
 
     ///ALMACEN ALMACEN ALMACEN ALMACEN
     Route::get ('/alm_suministro/listaCuentas','AlmSuministroController@listaCuentas'); //R
@@ -397,7 +395,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/alm_suministro/listaSuministros','AlmSuministroController@listaSuministros'); //R
     Route::put ('/alm_suministro/updateSuministro','AlmSuministroController@updateSuministro'); //U
     Route::put ('/alm_suministro/switchSuministro','AlmSuministroController@switchSuministro'); //D
-    
+
     Route::post('/alm_suministro/storeMedida','AlmSuministroController@storeMedida');   //C
     Route::get ('/alm_suministro/listaMedidas','AlmSuministroController@listaMedidas'); //R
     Route::put ('/alm_suministro/updateMedida','AlmSuministroController@updateMedida'); //U
@@ -407,7 +405,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/alm_entrada/listaEntradas','AlmEntradaController@listaEntradas'); //R
     Route::put ('/alm_entrada/updateEntrada','AlmEntradaController@updateEntrada'); //U
     Route::put ('/alm_entrada/switchEntrada','AlmEntradaController@switchEntrada'); //D
-    
+
     Route::post('/alm_salida/storeSalida','AlmSalidaController@storeSalida');   //C
     Route::get ('/alm_salida/listaSalidas','AlmSalidaController@listaSalidas'); //R
     Route::put ('/alm_salida/updateSalida','AlmSalidaController@updateSalida'); //U
@@ -422,13 +420,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/alm_proveedor/searchProveedor','AlmProveedorController@searchProveedor');   //S
     Route::get ('/alm_proveedor/selectProveedor', 'AlmProveedorController@selectProveedor');//eddy
 
-    //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS 
-    //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS 
+    //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
+    //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
     Route::post('/fil_filial/storeFilial','FilFilialController@storeFilial');    //C
     Route::get ('/fil_filial/listaFiliales','FilFilialController@listaFiliales');//R
     Route::put ('/fil_filial/updateFilial','FilFilialController@updateFilial');  //U
     Route::put ('/fil_filial/switchFilial','FilFilialController@switchFilial');  //D
-    
+
     Route::post('/fil_unidad/storeUnidad', 'FilUnidadController@storeUnidad');  //C
     Route::get ('/fil_unidad/listaUnidades','FilUnidadController@listaUnidades'); //R
     Route::put ('/fil_unidad/updateUnidad','FilUnidadController@updateUnidad'); //U
@@ -437,7 +435,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/fil_directivo/storeDirectivo','FilDirectivoController@storeDirectivo');     //C
     Route::get ('/fil_directivo/listaDirectivos','FilDirectivoController@listaDirectivos');   //R
     Route::put ('/fil_directivo/updateDirectivo','FilDirectivoController@updateDirectivo');   //U
-    Route::put ('/fil_directivo/switchDirectivo','FilDirectivoController@switchDirectivo');   //D   
+    Route::put ('/fil_directivo/switchDirectivo','FilDirectivoController@switchDirectivo');   //D
 
     Route::post('/fil_oficina/storeOficina','FilOficinaController@storeOficina');     //C
     Route::get ('/fil_oficina/listaOficinas','FilOficinaController@listaOficinas');   //R
@@ -472,13 +470,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put ('/ser_implemento/updateImplemento','SerImplementoController@updateImplemento');  //U
     Route::put ('/ser_implemento/switchImplemento','SerImplementoController@switchImplemento');  //D
 
-    //// ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS 
-    //// ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS 
+    //// ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS
+    //// ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS ASIGNACION DE SERVICIOS
     Route::post('/ser_asignacion/storeAsignacion','SerAsignacionController@storeAsignacion');       //C
     Route::get ('/ser_asignacion/listaAsignaciones','SerAsignacionController@listaAsignaciones');   //R
     Route::get ('/ser_asignacion/verAsignacion','SerAsignacionController@verAsignacion');           //R
-    Route::put ('/ser_asignacion/updateAsignacion','SerAsignacionController@updateAsignacion');     //U   
-    Route::put ('/ser_asignacion/confirmaTraspaso','SerAsignacionController@confirmaTraspaso');     
+    Route::put ('/ser_asignacion/updateAsignacion','SerAsignacionController@updateAsignacion');     //U
+    Route::put ('/ser_asignacion/confirmaTraspaso','SerAsignacionController@confirmaTraspaso');
     Route::get ('/ser_asignacion/verCliente','SerAsignacionController@verCliente');
     Route::get ('/ser_asignacion/listarRegistrados','SerAsignacionController@listarRegistrados');
     Route::get ('/ser_asignacion/traspasoSocio','SerAsignacionController@traspasoSocio');
@@ -493,13 +491,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/ser_pago/verPago','SerPagoController@verPago');
     Route::post('/ser_pago/storePago','SerPagoController@storePago');
     Route::put ('/ser_pago/updatePago','SerPagoController@updatePago');
-    
+
     //RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS
-    //RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS        
+    //RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS  RECURSOS HUMANOS
     Route::post('/rrh_empleado/storeEmpleado','RrhEmpleadoController@storeEmpleado');      //C
     Route::get ('/rrh_empleado/listaEmpleados','RrhEmpleadoController@listaEmpleados');    //R
     Route::get ('/rrh_empleado/selectempleados','RrhEmpleadoController@selectEmpleados');  //R
-    Route::get ('/rrh_empleado/verEmpleado','RrhEmpleadoController@verEmpleado');          //R    
+    Route::get ('/rrh_empleado/verEmpleado','RrhEmpleadoController@verEmpleado');          //R
     Route::put ('/rrh_empleado/updateEmpleado','RrhEmpleadoController@updateEmpleado');    //U
     Route::put ('/rrh_empleado/switchEmpleado','RrhEmpleadoController@switchEmpleado');    //D
     Route::get ('/rrh_empleado/selectempleados2','RrhEmpleadoController@selectEmpleados2'); ///eddy
@@ -559,19 +557,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get ('/rrh_marca/listaMarcas','RrhMarcaController@listaMarcas');
     Route::get ('/rrh_planilla/listaPlanillas','RrhPlanillaController@listaPlanillas');
     Route::post('/rrh_planilla/storePlanilla','RrhPlanillaController@storePlanilla');
-    
+
 
     Route::post('/rrh_atraso/storeAtraso','RrhAtrasoController@storeAtraso');   //C
     Route::get ('/rrh_atraso/verAtraso','RrhAtrasoController@verAtraso');       //R
     Route::put ('/rrh_atraso/updateAtraso','RrhAtrasoController@updateAtraso'); //U
-    Route::get ('/rrh_biometrico/getUser','RrhhBiometrico@getUser'); 
-    Route::get ('/rrh_biometrico/getUsers','RrhhBiometrico@getUsers'); 
-    Route::get ('/rrh_biometrico/setUsersdos','RrhhBiometrico@setUsersdos'); 
-    Route::get ('/rrh_biometrico/getdatee','RrhhBiometrico@getdatee'); 
+    Route::get ('/rrh_biometrico/getUser','RrhhBiometrico@getUser');
+    Route::get ('/rrh_biometrico/getUsers','RrhhBiometrico@getUsers');
+    Route::get ('/rrh_biometrico/setUsersdos','RrhhBiometrico@setUsersdos');
+    Route::get ('/rrh_biometrico/getdatee','RrhhBiometrico@getdatee');
+    Route::get ('/rrh_biometrico/getfotoBio','RrhhBiometrico@getfotoBio');
 
 
 
-       Route::get ('/cuentacontable/selectCuentacontable', 'CuentacontableController@selectCuenta'); 
+       Route::get ('/cuentacontable/selectCuentacontable', 'CuentacontableController@selectCuenta');
        Route::get ('/apo_estado','ApoEstadoController@index');
        Route::post('/apo_estado/registrar','ApoEstadoController@store');
        Route::put ('/apo_estado/actualizar','ApoEstadoController@update');
@@ -585,7 +584,7 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/con_perfilcuentadetalle/selectPerfilcuentadetalle', 'ConPerfilcuentadetalleController@selectPerfilcuentadetalle');
        Route::get ('/con_perfilcuentadetalle/selectPerfilcuentadetalleProducto', 'ConPerfilcuentadetalleController@selectPerfilcuentadetalleProducto');
        Route::post('/con_perfilcuentadetalle/registrar','ConPerfilcuentadetalleController@store');
-      
+
 
        Route::get ('/apo_aporte','ApoAporteController@index');
        Route::post('/apo_aporte/registrar','ApoAporteController@store');
@@ -593,7 +592,7 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/apo_aporte/selectAporteDebito', 'ApoAporteController@selectAporteDebito');
        Route::put ('/apo_aporte/actualizar','ApoAporteController@update');
        Route::put ('/apo_aporte/eliminaraporte','ApoAporteController@eliminarAporte');
-       
+
 
        Route::get ('/apo_totalaporte','ApoTotalAporteController@index');////////////// metodo para actualizar la fecha de primer y ultimo aporte con total obligados =0
        Route::get ('/apo_totalaporte/2','ApoTotalAporteController@index2');////////////// metodo para actualizar la fecha de primer y ultimo aporte con total obligados =1
@@ -601,9 +600,9 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/apo_totalaporte/4','ApoTotalAporteController@index4');////////////// metodo para actualizar la fecha de primer y ultimo aporte con total obligados =1 y total obligatorios 1
        Route::get ('/apo_totalaporte/faltantes_obligados','ApoTotalAporteController@faltantes_obligados');////////////// metodo para buscar faltantes en los aportes
        Route::get ('/apo_totalaporte/faltantes_jubilacion','ApoTotalAporteController@faltantes_jubilacion');////////////// metodo para buscar faltantes en los aportes de jubilacion
-       
+
        Route::post ('/apo_debito/registrar','ApoDebitoController@store');
- 
+
        Route::get ('/par_producto','ParProductoController@index');
        Route::post('/par_producto/registrar','ParProductoController@store');
        Route::put ('/par_producto/actualizar','ParProductoController@update');
@@ -615,24 +614,24 @@ Route::group(['middleware' => 'auth'], function () {
        Route::get ('/par_producto/productosidLista','ParProductoController@getproductosidLista');
        Route::get ('/par_producto/getproductosid_tabla','ParProductoController@getproductosid_tabla');
        Route::get ('/par_producto/getproductosperfil','ParProductoController@getproductosperfil');
-       
 
 
-       Route::get ('/vista','PruebaViewController@index'); 
-       
-       Route::get ('/pre_listasocio','PreCalificacionController@pre_listasocio'); 
-       Route::get ('/pre_listasocio2','PreCalificacionController@pre_listasocio_lista'); 
-       Route::get ('/pre_listasocio_beneficiario','PreCalificacionController@pre_listasocio_lista_beneficiario'); 
-       Route::get ('/pre_listasocio_prueba','PreCalificacionController@pre_listasocio_prueba'); 
+
+       Route::get ('/vista','PruebaViewController@index');
+
+       Route::get ('/pre_listasocio','PreCalificacionController@pre_listasocio');
+       Route::get ('/pre_listasocio2','PreCalificacionController@pre_listasocio_lista');
+       Route::get ('/pre_listasocio_beneficiario','PreCalificacionController@pre_listasocio_lista_beneficiario');
+       Route::get ('/pre_listasocio_prueba','PreCalificacionController@pre_listasocio_prueba');
        Route::get ('/datos_aportes','PreCalificacionController@datos_aportes');
        Route::get ('/par_producto/selectProducto', 'PreCalificacionController@selectProducto');
-       Route::get ('/par_producto/cuentas', 'PreCalificacionController@selectCuentaBancarias'); 
-       Route::get ('/getfechas', 'PreCalificacionController@getfechas'); 
-       Route::get ('/getsaldocapital', 'PreCalificacionController@getsaldocapital'); 
-       Route::get ('/getsaldocapital_desembolso', 'PreCalificacionController@getsaldocapital_desembolso'); 
+       Route::get ('/par_producto/cuentas', 'PreCalificacionController@selectCuentaBancarias');
+       Route::get ('/getfechas', 'PreCalificacionController@getfechas');
+       Route::get ('/getsaldocapital', 'PreCalificacionController@getsaldocapital');
+       Route::get ('/getsaldocapital_desembolso', 'PreCalificacionController@getsaldocapital_desembolso');
        Route::get ('/pre_listasociogarante','PreCalificacionController@pre_listasociogarante');
        Route::get ('/reporte1','PreCalificacionController@reporte1');
-      
+
        Route::get('/par_ventanamodulo/selectVentanamodulo', 'ParVentanamoduloController@selectVentanamodulo');
 
 
@@ -686,9 +685,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get ('/config/suma', 'ConfigController@sumatotal');
         Route::get ('/getColumnsFileInput', 'ConfigController@getColumnsFileInput');
         Route::get ('/par_prestamos_escalas/getescalas','ParPrestamosEscalaController@index');
-        Route::get ('/getdate','ParFechaSistemaController@index'); 
-        Route::get ('/getdatacalculo','ParFechaSistemaController@calculoplanpagos');       
-        Route::get ('/getcriterios', 'ProceduresController@criterio'); 
+        Route::get ('/getdate','ParFechaSistemaController@index');
+        Route::get ('/getdatacalculo','ParFechaSistemaController@calculoplanpagos');
+        Route::get ('/getcriterios', 'ProceduresController@criterio');
         Route::get ('/ip', 'ProceduresController@ip');
 
         //routes daaro
@@ -706,15 +705,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/daa_devolucion/selectTipodevolucion', 'DaaDevolucionController@selectTipodevolucion');
         Route::get('/daa_devolucion/calculomatematico', 'DaaDevolucionController@calculomatematico');
         Route::get('/daa_devolucion/selectDetalleaportes', 'DaaDevolucionController@selectDetalleaportes');
-        Route::get ('/daa_devolucion/pre_listasociodev','DaaDevolucionController@pre_listasociodev'); 
-        Route::get ('/daa_devolucion/devregistrado','DaaDevolucionController@devregistrado'); 
-        Route::get ('/daa_devolucion/devregistradojub','DaaDevolucionController@devregistradojub'); 
-        Route::get ('/daa_devolucion/validaconta','DaaDevolucionController@validaconta'); 
-        Route::put ('/daa_devolucion/revertir','DaaDevolucionController@revertir'); 
+        Route::get ('/daa_devolucion/pre_listasociodev','DaaDevolucionController@pre_listasociodev');
+        Route::get ('/daa_devolucion/devregistrado','DaaDevolucionController@devregistrado');
+        Route::get ('/daa_devolucion/devregistradojub','DaaDevolucionController@devregistradojub');
+        Route::get ('/daa_devolucion/validaconta','DaaDevolucionController@validaconta');
+        Route::put ('/daa_devolucion/revertir','DaaDevolucionController@revertir');
 
         Route::get('/daa_estudiomatematico/selectEstudiomatematico', 'DaaEstudiomatematicoController@selectEstudiomatematico');
         Route::get('/daa_perfilcuenta/selectPerfilcuenta', 'DaaDevolucionController@selectPerfilcuenta');
-        
+
         Route::get('/daa_devolucion/reportes', 'DaaDevolucionController@rutas');
 
        //routes presupuesto
@@ -769,9 +768,9 @@ Route::group(['middleware' => 'auth'], function () {
        Route::put('/pto_estimacion/activar', 'PtoEstimacionController@activar');
        Route::get('/pto_estimacion/selectReparticion', 'PtoEstimacionController@selectReparticion');
 
-       
 
-           
+
+
         //routes cobranza
         Route::get('/pre_cobranza/selectPrestamo', 'PreCobranzaController@selectPrestamo');
         Route::post('/daa_listaescalafon/registrar', 'DaaListaescalafonController@store');
@@ -779,7 +778,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/daa_listaescalafon/desactivar', 'DaaListaescalafonController@desactivar');
         Route::put('/daa_listaescalafon/activar', 'DaaListaescalafonController@activar');
         Route::get('/daa_listaescalafon/selectEscalafon', 'DaaListaescalafonController@selectEscalafon');
-        
+
 
         Route::post('/registrarlista','ParPrestamosListaController@registrarlista');
 
@@ -792,8 +791,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/prestamos/regprestamoLista','ParPrestamosController@storeLista');
         Route::put('/prestamos/desembolsoupdate', 'ParPrestamosController@grabar_estado');
         Route::put('/prestamos/grabar_desembolsoNormal', 'ParPrestamosController@grabar_desembolsoNormal');
-        Route::get('/start_desembolso', 'ParPrestamosController@desembolso'); 
-        Route::get('/getprestamosEstado', 'ParPrestamosController@getprestamosEstado'); 
+        Route::get('/start_desembolso', 'ParPrestamosController@desembolso');
+        Route::get('/getprestamosEstado', 'ParPrestamosController@getprestamosEstado');
         Route::put ('/par_prestamos/eliminar','ParPrestamosController@delete_estado');
         Route::put ('/update_estado_observado','ParPrestamosController@update_estado_observado');
         Route::put ('/update_estado_revertir','ParPrestamosController@update_estado_revertir');
@@ -819,11 +818,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post ('/liq_acreedor/liquidaracreedores','LiqAcreedorController@liquidaracreedores');
         Route::get ('/liq_acreedor/reportes', 'LiqAcreedorController@rutasLiquidar');
         Route::get('/liq_reportes', 'LiqAcreedorController@reportesgeneral');
-        
-        Route::get('/getcriteriosgarantes', 'ProceduresController@criteriogarante'); 
+
+        Route::get('/getcriteriosgarantes', 'ProceduresController@criteriogarante');
 
         Route::post('/garantes/reggarante','ParPrestamoGaranteController@store');
-        
+
         Route::post('/productosperfil/regperfil','ParProductosPerfilcuentaController@store');
         Route::post('/productosperfil/update','ParProductosPerfilcuentaController@update');
         Route::get('/getFormulas','ParProductosPerfilcuentaController@getFormulas');
@@ -832,16 +831,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/grabar_estado_plan','ParPrestamosPlanController@grabar_estado_plan');
         Route::post('/cobranzaascii','ParPrestamosPlanController@cobranza_ascii');
         Route::get('/get_cobranza_refinanciamiento','ParPrestamosPlanController@get_cobranza_refinanciamiento');
-        Route::get('/getSendedAscii','ParPrestamosPlanController@getSendedAscii'); 
+        Route::get('/getSendedAscii','ParPrestamosPlanController@getSendedAscii');
         Route::put ('/delete_planpagos','ParPrestamosPlanController@delete_planpagos');
-        
+
         Route::get('/getlote/getstatus','ParPrestamosLoteController@get_lote_id');
         Route::get('/closeLote','ParPrestamosLoteController@closeLote');
         Route::get('/statusLote','ParPrestamosLoteController@statusLote');
 
-        Route::get('/ascii' ,'File_Ascii@createFile'); 
-        Route::get('/download' ,'File_Ascii@download'); 
-        Route::get('/getFile' ,'File_Ascii@get'); 
+        Route::get('/ascii' ,'File_Ascii@createFile');
+        Route::get('/download' ,'File_Ascii@download');
+        Route::get('/getFile' ,'File_Ascii@get');
         Route::get('/view' ,'File_Ascii@view');
         Route::get('/getcode' ,'CodeControl@getCode');
 
@@ -859,7 +858,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/glo_solccuenta/actualizarsegccuenta', 'GloSolicitudCargoCuentaController@updatesegccuenta');
         Route::get('/glo_solccuenta/listartesoreria', 'GloSolicitudCargoCuentaController@listarTesoreria');
         Route::put('/glo_solccuenta/desembolsar', 'GloSolicitudCargoCuentaController@desembolsar');
-        
+
 
         //FACTURAS
         Route::get('/con_facturaparametro', 'ConFacturaParametroController@index');

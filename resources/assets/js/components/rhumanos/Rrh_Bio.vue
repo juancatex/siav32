@@ -4,6 +4,11 @@
     <div class="container-fluid">
         <div class="row">
               
+          <!-- <div class="col-md-12"  >
+          <button   type="button" @click="printfBio" class="btn btn-warning btn-sm">
+                                        <i class="icon-camera"></i>
+                                        </button> 
+          </div> -->
           <div class="col-md-4" v-if="asistencia.length>0">
                 <div class="card">
                     <div class="card-header titcard">
@@ -123,6 +128,32 @@
 
         </div>
     </div>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////// -->
+   <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="printBio">
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title">Carnet asistencia biometrico</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('printBio')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body-plandepagos">
+             <iframe  name="biometricoframe" id="biometricoframe" style="width:100%;height:100%;"></iframe>  
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('printBio')">cerrar</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- ///////////////////////////////////////////////////////////////////////////////// -->
+
 </main>
 </template>
 
@@ -148,6 +179,25 @@ export default {
     }},
 
     methods:{
+        printfBio(){
+              swal({
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+            let me=this;
+                  axios.get('/rrh_biometrico/getfotoBio').then(function (response) {
+                           _pl._vvp2521_bio01(response.data,()=>{
+                                swal.close()
+                                me.classModal.openModal('printBio');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+        },
         getnameuser(){
             let me=this;
            var user= _.find(this.users, function(o) { return o.userid==me.idbio; });
@@ -238,6 +288,8 @@ export default {
     },
 
     mounted(){
+        this.classModal = new _pl.Modals();
+        this.classModal.addModal("printBio"); 
         this.asistencia=[];
         this.asistencianow=[];
         this.getPermisos();

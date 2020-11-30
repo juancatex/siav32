@@ -1148,7 +1148,20 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
-  
+  export function _vvp2521_bio01(fotocr,funn, idview = 'biometricoframe') {
+    $("#" + idview).attr("src",'');   
+    let fondo=fotocr.foto;  
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet asistencia'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
+      
+      $("#" + idview).attr("src", doc.output('datauristring')); 
+ 
+      funn();
+    z
+  }
 export function _vvp2521_00001(ta, idview = 'planout') {
   imgToBase64('img/iconad.png', function (base64) {
 

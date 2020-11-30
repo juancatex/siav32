@@ -54,7 +54,36 @@
     <script src="js/plantilla.js"></script>
     <script>
         //obtiene el tiempo de la session y lo muestra en pantalla.
-     var _$_9ba9=["now","max","href","location","/sessionOut","round","getUTCMinutes","0",":","getUTCSeconds","text","#timeout","click keydown keypress keyup submit change mouseenter scroll resize dblclick","bind","*","mousemove","trigger","body","ready"];$(document)[_$_9ba9[18]](function(){const _0x222BB=600000;let _0x2220F=(()=>{let _0x22367=setTimeout,_0x22311={};return setTimeout= ((_0x223BD,_0x22413)=>{let _0x22469=_0x22367(_0x223BD,_0x22413);return _0x22311[_0x22469]= Date[_$_9ba9[0]]()+ _0x22413,_0x22469}),(_0x22367)=>_0x22311[_0x22367]?Math[_$_9ba9[1]](_0x22311[_0x22367]- Date[_$_9ba9[0]](),0):NaN})();var _0x22265=setTimeout(function(){window[_$_9ba9[3]][_$_9ba9[2]]= _$_9ba9[4]},_0x222BB);setInterval(()=>{var _0x22515=_0x2220F(_0x22265);_0x22515= 1000* Math[_$_9ba9[5]](_0x22515/ 1000);var _0x224BF= new Date(_0x22515);$(_$_9ba9[11])[_$_9ba9[10]]((parseInt(_0x224BF[_$_9ba9[6]]())> 9?parseInt(_0x224BF[_$_9ba9[6]]()):_$_9ba9[7]+ parseInt(_0x224BF[_$_9ba9[6]]()))+ _$_9ba9[8]+ (parseInt(_0x224BF[_$_9ba9[9]]())> 9?parseInt(_0x224BF[_$_9ba9[9]]()):_$_9ba9[7]+ parseInt(_0x224BF[_$_9ba9[9]]())))},1000);$(_$_9ba9[14])[_$_9ba9[13]](_$_9ba9[12],function(){clearTimeout(_0x22265);_0x22265= setTimeout(function(){window[_$_9ba9[3]][_$_9ba9[2]]= _$_9ba9[4]},_0x222BB)});$(_$_9ba9[17])[_$_9ba9[16]](_$_9ba9[15])})
+    
+    //  $(document).ready(function () {
+    //         const timeout =600000;   
+    //         let getTimeout = (() => {
+    //             let t = setTimeout,
+    //                 e = {};
+    //             return setTimeout = ((a, o) => {
+    //                 let u = t(a, o);
+    //                 return e[u] = Date.now() + o, u
+    //             }), t => e[t] ? Math.max(e[t] - Date.now(), 0) : NaN
+    //         })();
+    //         var idleTimer = setTimeout(function () {
+    //             window.location.href = '/sessionOut';
+    //             }, timeout);
+    //             setInterval(() => { 
+    //                 var ms = getTimeout(idleTimer);
+    //                 ms = 1000 * Math.round(ms / 1000);
+    //                 var d = new Date(ms);
+    //                 $('#timeout').text((parseInt(d.getUTCMinutes())>9?parseInt(d.getUTCMinutes()):'0'+parseInt(d.getUTCMinutes())) + ':' + (parseInt(d.getUTCSeconds())>9?parseInt(d.getUTCSeconds()):'0'+parseInt(d.getUTCSeconds())));
+    //             }, 1000); 
+    //         $('*').bind('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick', function () {
+    //             clearTimeout(idleTimer); 
+    //            idleTimer = setTimeout(function () {
+    //             window.location.href = '/sessionOut';
+    //             }, timeout);
+               
+    //         });
+    //         $("body").trigger("mousemove"); 
+    //     });
+     
      $("#clockSession").click(function () {
                  $("#valueSession").animate({
                      width: "toggle"

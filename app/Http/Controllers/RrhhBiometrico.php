@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Rats\Zkteco\Lib\ZKTeco;
 use Rats\Zkteco\Lib\Helper\Util; 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Rrh_Empleado;
 
 class RrhhBiometrico extends Controller
@@ -56,7 +57,17 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(33, '33', 'TAPIA VARGAS DANIELA','',Util::LEVEL_USER);
             // $zk->setUser(34, '34', 'URI UTURUNCO ARTURO','',Util::LEVEL_USER);
             // $zk->setUser(32, '32', 'USCAMAYTA YUGAR BRIAN','',Util::LEVEL_USER);
-            $zk->setUser(36, '36', 'QUISPE HUANCA JOHANA','',Util::LEVEL_USER);
+            // $zk->setUser(36, '36', 'QUISPE HUANCA JOHANA','',Util::LEVEL_USER);
+            // $zk->setUser(50, '37', 'TRUJILLO CHAVEZ LAURA','',Util::LEVEL_USER);
+            // $zk->setUser(51, '38', 'CORTEZ CARI CINTHIA','',Util::LEVEL_USER);
+            // $zk->setUser(52, '39', 'RAMIREZ ALEJO EVELIN','',Util::LEVEL_USER);
+            // $zk->setUser(53, '40', 'CORTEZ CARI ABIGAIL','',Util::LEVEL_USER);
+            // $zk->setUser(54, '41', 'COLQUE CASIHUANCA JENY','',Util::LEVEL_USER);
+            // $zk->setUser(55, '42', 'ZEGARRA GAMBOA DAYANA','',Util::LEVEL_USER);
+            // $zk->setUser(56, '43', 'ILLANES NICOL FABIOLA','',Util::LEVEL_USER);
+            // $zk->setUser(57, '44', 'MACUCHAPI APAZA VANESSA','',Util::LEVEL_USER);
+            // $zk->setUser(58, '45', 'CABRERA AGUILAR MARIA','',Util::LEVEL_USER);
+            $zk->setUser(59, '46', 'ACARAPI CABRERA MELVI','',Util::LEVEL_USER);
 
             // $zk->setUser(50, '50', 'admin2','',Util::LEVEL_USER);
             // $zk->setUser(51, '51', 'SOM. ALMANZA WILSON','',Util::LEVEL_USER);
@@ -81,6 +92,13 @@ class RrhhBiometrico extends Controller
             return ['data'=>'Error connect'];
         } 
     }
+    public function getfotoBio(Request $request)
+    {  if (!$request->ajax()) return redirect('/');
+        $full_path = Storage::path('AFI/bio.jpg');
+        $base64 = base64_encode(Storage::get('AFI/bio.jpg')); 
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64];
+        // return response()->json(array('id' => $producto->idproducto), 200);
+     }
     public function getUsers(Request $request)
     { 
         // if (!$request->ajax()) return redirect('/');

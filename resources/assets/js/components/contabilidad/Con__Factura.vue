@@ -309,10 +309,8 @@
                     line_total: aux2[3],
                     });
                 }
-                // _pdf.openRecibo(ft.numerofactura,ft.codigocontrol,ft.razonsocial,ft.nit,detalle_fin,ft.importetotal);
-                _pdf.imgToBase64('logo1.jpg', function (base) {
-                    //console.log(base);
-                    _pdf.openRecibo(ft.numerofactura,ft.codigocontrol,ft.razonsocial,ft.nit,detalle_fin,ft.importetotal,base); 
+                 _pdf.imgToBase64('img/iconad.png', function (base) {
+                  _pdf.openRecibo(ft.numerofactura,ft.codigocontrol,ft.razonsocial,ft.nit,detalle_fin,ft.importetotal,base); 
                 });
             },
 
@@ -454,11 +452,8 @@
                             'Ingresar una dato diferente',
                             'error')
                     }
-                    else {
-                        //para imprimir la factura
-                        //console.log(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_product,me.importetotal);                       
-                        
-                        _pdf.imgToBase64('logo1.jpg', function (base) {
+                    else { 
+                        _pdf.imgToBase64('img/iconad.png', function (base) {
                             _pdf.openRecibo(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_products,me.importetotal,base); 
                         });
                         
