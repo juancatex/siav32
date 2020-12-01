@@ -118,6 +118,7 @@ setvue(1, 'con_factura', './components/contabilidad/Con__Factura.vue');
 setvue(0, 'con_tesoreria', './components/contabilidad/Con__Tesoreria.vue');
 setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
 setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
+setvue(1, 'con_ascii_pos_ser', './components/contabilidad/Con__ascii_pos_servicios.vue');
 
 // global
 setvue(1, 'glo_solicitudcargocuenta', './components/global/Glo_SolicitudCargoCuenta.vue');
@@ -152,8 +153,7 @@ setvue(0, 'registro_estatus', './components/cartera/Par_Estatus_registro.vue');
 function setvue(e, a, s) {
     var r = require(`${s}`).default;
     1 == e && DatasVues.push({ name: a, permisos: r.data().arrayPermisos }), Vue.component(a, r)
-}
-
+} 
 window.vue = new Vue({
     el: "#app",
     data: {

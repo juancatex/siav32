@@ -40,6 +40,28 @@
                         </template> -->
                     </div> 
                     <div class="card-body">
+                   
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Socios nuevos</div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                                <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
+                                        </div>
+                                        <div v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="col-md-12" style="text-align: center;    display: inline-block;">
+                                            <button class="btn btn-outline-success active" type="button"
+                                            @click="procesarFiles" >Procesar</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="input-group">
@@ -1080,7 +1102,9 @@
                 nomtiposocio:'',
                 //para los permisos, por defecto desactivados
                 arrayPermisos : {ver:0,editar:0,borrar:0,credencial:0,impkardex:0,beneficiario:0,cuentasocio:0},
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                datosdesociosnuevos:[],
+                posfilenuevo:-1
 
             }
         },
@@ -1115,7 +1139,34 @@
         },
 
 
-        methods : { 
+        methods : {
+        datasArrayNuevos(data){
+            this.posfilenuevo=(-1);
+            this.datosdesociosnuevos=data.values;
+        },procesarFiles(){
+             
+ 
+this.posfilenuevo++; 
+ var aux=this.datosdesociosnuevos[this.posfilenuevo];
+ 
+        this.generarCarnetSocio({
+            rutafoto:aux['FOTOS'],
+            codsocio:aux['CM'].toString(),
+            carnetmilitar:aux['CM'].toString(),
+            numpapeleta:'00000',
+            nomgrado:aux['GRADO'],
+            nomespecialidad:aux['ESPECIALIDAD'],
+            nombre:aux['NOMBRES'],
+            apaterno:aux['APELLIDO  AP'].toString(),
+            amaterno:aux['APELLIDO MT'].toString(),
+            nomfuerza:aux['FUERZA'],
+            fechanacimiento:aux['FECHA NACIMIENTO'],
+            nomtiposocio:aux['TIPO SOCIO'],
+            ci:aux['CEDULA'],
+            abrvdep:aux['EXPIDIDO']});
+ 
+
+        },
 		 abrirVentanaModalURL(url, title, w, h) { 
 					var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
 					var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY; 
@@ -2219,6 +2270,7 @@
             }
         },
         mounted() {
+            moment.locale('es-us');
             this.getPermisos();
 		    this.getRutasReports();
             this.listarSocio(1,this.buscar,this.criterio); 

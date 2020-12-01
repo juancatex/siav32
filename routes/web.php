@@ -875,5 +875,6 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/con_factura/desactivar', 'ConFacturaController@desactivar');
         Route::put('/con_factura/activar', 'ConFacturaController@activar');
         Route::post('/con_contabilidad/proceso', 'ConFacturaController@proceso');
+        Route::post('/con_contabilidad/procesoservicio', 'ConFacturaController@procesoservicio');
 
 });

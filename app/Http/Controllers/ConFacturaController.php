@@ -125,6 +125,20 @@ class ConFacturaController extends Controller
         return ['maxfactura' => $maxfactura];
     }   
 
+    public function procesoservicio(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');   
+
+        $valuedb=$request->valuedb;
+        $valuetipo=$request->valuetipo;
+        $numcomprobante=$request->numcomprobante;
+
+        $valida_1=DB::connection($valuedb)->select("select * from finanzas.con_tr_detalles  
+        where id_transaccion ='$numcomprobante' 
+        and id_tipo ='$valuetipo'");
+
+        return ['values'=>$valida_1];
+    }
     public function proceso(Request $request)
     {
         if (!$request->ajax()) return redirect('/');        
