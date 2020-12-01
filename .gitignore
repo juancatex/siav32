@@ -1,6 +1,6 @@
 /node_modules
 /public/hot 
-/public/img/socios
+# /public/img/socios
 /public/img/empleados
 /public/img/activos
 /public/storage
