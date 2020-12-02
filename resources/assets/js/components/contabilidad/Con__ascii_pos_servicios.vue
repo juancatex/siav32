@@ -85,7 +85,7 @@
                        <label style="text-align: right;font-weight: 500;" class="form-control-label"
                             for="text-input">Cuenta por cual sera sustituida :</label>
                            <v-select   :class="{'error': errors.has('cuenta')}"
-                                v-validate.initial="'required'" name="cuenta" label="descripcion" :options="cuentas"
+                                v-validate.initial="'required'" name="cuenta" label="cuenta" :options="cuentas"
                                 v-model="cuentaAcambiar" placeholder="Seleccione cuenta"
                                 :reduce="productoSS => productoSS.cuenta" :searchable="true" :filterable="true"
                             
