@@ -100,7 +100,7 @@
 
                         <p class="text-error">{{ errors.first('cuenta') }}</p>
                     </div>   
-                    <div  class="col-md-12">
+                    <div  class="col-md-12" v-if="check('procesarCambios')">
                     <button :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
                      </div>      
                       
@@ -173,7 +173,7 @@ Vue.use(VeeValidate,
 Vue.component("v-select", vSelect); 
 Vue.use(VeeValidate);    
     export default {
-     
+     props:['idmodulo','idventanamodulo'],
         data (){
             return { 
                 numcomprobante:'', 
@@ -190,7 +190,9 @@ Vue.use(VeeValidate);
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
                 db:[{nombre:'DB Prueba',id:'pgsql_desarrollo'},
-                {nombre:'DB Safcon',id:'pgsql'}]
+                {nombre:'DB Safcon',id:'pgsql'}],
+                arrayPermisos : {procesarCambios:0},  
+                arrayPermisosIn:[],
             }
         },
          
@@ -338,10 +340,28 @@ Vue.use(VeeValidate);
                 this.cuentaorigenacambiar='';
                 this.cuentas=[];
                  this.cuentasOrigen=[];
-            }
+            },
+             getPermisos() { 
+                //permisoId poner axios para obtener los permisos                
+                var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    me.arrayPermisosIn=[];
+                    if(response.data.datapermiso.length>0){
+                        var respuesta=response.data.datapermiso[0].permisos; 
+                        me.arrayPermisosIn = JSON.parse((respuesta));
+                    } 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            check(n){ 
+                return _pl.validatePermission(this.arrayPermisosIn,n);
+            },
         },
         mounted() {       
-                    
+            this.getPermisos();         
 
         }
     }
