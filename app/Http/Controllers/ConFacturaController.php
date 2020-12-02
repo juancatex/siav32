@@ -132,12 +132,16 @@ class ConFacturaController extends Controller
         $valuedb=$request->valuedb;
         $valuetipo=$request->valuetipo;
         $numcomprobante=$request->numcomprobante;
+ 
+        $valida_1=DB::connection($valuedb)->select("select det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu
+        where det.cuenta =cu.cuenta
+        and det.id_transaccion ='$numcomprobante' 
+        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
 
-        $valida_1=DB::connection($valuedb)->select("select * from finanzas.con_tr_detalles  
-        where id_transaccion ='$numcomprobante' 
-        and id_tipo ='$valuetipo'");
+        $cuentas=DB::connection($valuedb)->select("SELECT cuenta, descripcion
+        FROM finanzas.con_plan_cuentas");
 
-        return ['values'=>$valida_1];
+        return ['values'=>$valida_1,'cuentas'=>$cuentas];
     }
     public function proceso(Request $request)
     {

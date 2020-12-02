@@ -1163,9 +1163,7 @@ this.posfilenuevo++;
             fechanacimiento:aux['FECHA NACIMIENTO'],
             nomtiposocio:aux['TIPO SOCIO'],
             ci:aux['CEDULA'],
-            abrvdep:aux['EXPIDIDO']});
- 
-
+            abrvdep:aux['EXPIDIDO']}); 
         },
 		 abrirVentanaModalURL(url, title, w, h) { 
 					var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
