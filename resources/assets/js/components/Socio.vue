@@ -1151,7 +1151,7 @@ this.posfilenuevo++;
  
         this.generarCarnetSocio({
             rutafoto:aux['FOTOS'],
-            codsocio:aux['CM'].toString(),
+            codsocio:aux['COD.SOCIO'].toString(),
             carnetmilitar:aux['CM'].toString(),
             numpapeleta:'00000',
             nomgrado:aux['GRADO'],

@@ -107,7 +107,7 @@
       </div>
 </div>
                     <div class="col-md-12 mt-5" v-if="datos.length>0">
-                        <h1>Asiento contable</h1> 
+                        <h1>Comprobante</h1> 
                           <table class="table table-bordered table-striped table-sm" style='padding: 23px;'>
                             <thead>
                                 <tr>
@@ -132,13 +132,13 @@
                                          
                                          <template v-if="datain.importe_moneda_local>0">
                                              <td v-text="datain.id_sub_cuenta " style='text-align: left;'></td>
-                                         <td > </td>
+                                             <td v-text="datain.abrev+'  '+datain.nombrecompleto "> </td>
                                              <td v-text="datain.importe_moneda_local" style='background-color: powderblue;'></td> 
                                              <td v-text="0"  style='background-color: burlywood;'></td> 
                                          </template>
                                          <template v-else>
                                              <td v-text="datain.id_sub_cuenta " style='text-align: right;'></td>
-                                         <td > </td>
+                                             <td v-text="datain.abrev+'  '+datain.nombrecompleto "> </td>
                                              <td v-text="0"  style='background-color: powderblue;'></td> 
                                              <td v-text="datain.importe_moneda_local*-1" style='background-color: burlywood;'></td>  
                                          </template> 
@@ -225,20 +225,26 @@ Vue.use(VeeValidate);
                 }).then(result => {
                     if (result.value) { 
 
-                        swal({
-                            title: "Actualizando datos...",
-                            text: "Actualizacion de datos",
-                            type: "warning",
-                            showCancelButton: false,
-                            showConfirmButton: false,                    
-                            closeOnConfirm: false,
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            allowEnterKey: false,
-                            onOpen: () => {
-                                swal.showLoading()
-                            }
-                        });
+                        // swal({
+                        //     title: "Actualizando datos...",
+                        //     text: "Actualizacion de datos",
+                        //     type: "warning",
+                        //     showCancelButton: false,
+                        //     showConfirmButton: false,                    
+                        //     closeOnConfirm: false,
+                        //     allowOutsideClick: false,
+                        //     allowEscapeKey: false,
+                        //     allowEnterKey: false,
+                        //     onOpen: () => {
+                        //         swal.showLoading()
+                        //     }
+                        // });
+
+
+                        
+                          swal("¡Se cambio los datos correctamente!", "", "success").then((result) => {
+                                this.onChangeTipo();     
+                            }) 
 
                         // let me=this;
                         // var url= '/con_contabilidad/proceso';

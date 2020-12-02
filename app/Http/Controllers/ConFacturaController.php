@@ -133,8 +133,11 @@ class ConFacturaController extends Controller
         $valuetipo=$request->valuetipo;
         $numcomprobante=$request->numcomprobante;
  
-        $valida_1=DB::connection($valuedb)->select("select det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu
-        where det.cuenta =cu.cuenta
+        $valida_1=DB::connection($valuedb)->select("select det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio,p.nombrecompleto, g.abrev 
+        from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+                where  det.cuenta =cu.cuenta
+                and p.par_profesion=g.cod
+                and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
         and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
 
