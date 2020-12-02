@@ -146,6 +146,26 @@ class ConFacturaController extends Controller
 
         return ['values'=>$valida_1,'cuentas'=>$cuentas];
     }
+
+    public function updateCuentaComprobante(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');   
+
+        $cuentaA=$request->cuentaA;// cuenta origen
+        $cuentaB=$request->cuentaB;//cuenta a cambiar
+        $idtransaccion=$request->idtransaccion;
+        $tipo=$request->tipo;
+        $valuedb=$request->valuedb;
+ 
+        $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
+        cuenta = '$cuentaB' where 
+        id_transaccion ='$idtransaccion' and 
+        id_tipo ='$tipo' and 
+        cuenta = '$cuentaA'");
+  
+        return ['data'=>$valida_1];
+    }
+
     public function proceso(Request $request)
     {
         if (!$request->ajax()) return redirect('/');        

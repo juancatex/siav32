@@ -225,45 +225,37 @@ Vue.use(VeeValidate);
                 }).then(result => {
                     if (result.value) { 
 
-                        // swal({
-                        //     title: "Actualizando datos...",
-                        //     text: "Actualizacion de datos",
-                        //     type: "warning",
-                        //     showCancelButton: false,
-                        //     showConfirmButton: false,                    
-                        //     closeOnConfirm: false,
-                        //     allowOutsideClick: false,
-                        //     allowEscapeKey: false,
-                        //     allowEnterKey: false,
-                        //     onOpen: () => {
-                        //         swal.showLoading()
-                        //     }
-                        // });
-
-
-                        
-                          swal("¡Se cambio los datos correctamente!", "", "success").then((result) => {
-                                this.onChangeTipo();     
-                            }) 
-
-                        // let me=this;
-                        // var url= '/con_contabilidad/proceso';
-                        // axios.post(url,{'com':num_comprobante, 
-                        //                 'flag':this.flag, 
-                        //                 'host':this.host,
-                        //                 'tipo':this.tipo}).then(function (response) {
-                        //     swal("¡Proceso Terminado!", "", "success").then((result) => {
-                        //         var respuesta= response.data; console.log(respuesta.existe);       
-                        //         me.arrayProceso = respuesta.proceso;   
-                        //         me.arrayDatos = respuesta.datos;   
-                        //         me.arrayExiste = respuesta.existe;   
-                        //         me.mensaje = respuesta.mensaje;
-                        //         me.modal=1;    
-                        //     })                            
-                        // })
-                        // .catch(function (error) {
-                        //     console.log(error);
-                        // });
+                        swal({
+                            title: "Actualizando datos...",
+                            text: "Actualizacion de datos",
+                            type: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: false,                    
+                            closeOnConfirm: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+ 
+ 
+                        let me=this;
+                        var url= '/con_contabilidad/updateCuenta';
+                        axios.put(url,{'cuentaA':this.cuentaorigenacambiar, 
+                                        'cuentaB':this.cuentaAcambiar, 
+                                        'idtransaccion':this.numcomprobante, 
+                                        'tipo':this.valuetipo,
+                                        'valuedb':this.valuedb}).then(function (response) {
+                                          console.log(response)
+                                          swal("¡Se cambio los datos correctamente!", "", "success").then((result) => {
+                                                me.onChangeTipo();     
+                                            })              
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                     }                
                 }) 
 
