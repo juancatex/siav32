@@ -211,7 +211,7 @@ Vue.use(VeeValidate);
                     html:   '<div style="text-align: left;">Base de datos:      <b><font >'+(this.valuedb=='pgsql'?'DB Safcon':'DB Prueba')+'</font></b>'+
                     ' <br> No. comprobante:      <b><font >'+this.numcomprobante+'</font></b>'+
                     ' <br> Cod. cuenta origen:      <b><font >'+this.cuentaorigenacambiar+'</font></b>'+
-                    ' <br> Cod. a cambiar:      <b><font >'+this.cuentaAcambiar+'</font></b></div>',
+                    ' <br> Cod. cuenta a cambiar:      <b><font >'+this.cuentaAcambiar+'</font></b></div>',
                     type: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
