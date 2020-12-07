@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\AsinalssClass\FacturaClass;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ConFacturaController extends Controller
 {
@@ -159,7 +160,7 @@ class ConFacturaController extends Controller
         $valuedb=$request->valuedb;
         $directory='LogSafcon';
         Storage::makeDirectory($directory); 
-        Storage::append($directory.'/log.txt','DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'         Tipo:'.$tipo.'          Cuenta origen:'.$cuentaA.'  a Cuenta destino:'.$cuentaB);
+        Storage::append($directory.'/log.txt','DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'         Tipo:'.$tipo.'          Cuenta origen:'.$cuentaA.'  a Cuenta destino:'.$cuentaB.'     user:'.Auth::user()->username.'             id:'.Auth::id());
                         
  
         $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
