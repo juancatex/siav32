@@ -1,0 +1,1 @@
+Comprobante:91         Tipo:SEC_CON_COM_INGRESO          Cuenta origen:41601102  a Cuenta destino:41601102
