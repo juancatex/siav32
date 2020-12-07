@@ -127,7 +127,7 @@
                                         
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='6'></td> 
                                     </tr> 
-                                    <tr v-for="datain in padre.value" :key="datain.id_reg"> 
+                                    <tr v-for="datain in padre.value" :key="datain.id_reg+padre.id"> 
                                         <td > </td>
                                          
                                          <template v-if="datain.importe_moneda_local>0">
