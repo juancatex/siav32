@@ -107,12 +107,22 @@
       </div>
 </div>
                     <div class="col-md-12 mt-5" v-if="datos.length>0">
-                        <h1>Comprobante</h1> 
+                            <h1>Comprobante</h1> 
+                            
+<div class="form-group row col-md-4" style="padding: 6px; border: 1px solid gray;  margin: 23px;">
+<label style="text-align: right; align-items: center;" class="col-md-6 form-control-label" for="text-input">Ver por cuenta : </label>
+                                    <div class="col-md-4 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="mostrarporcuentas">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>   
+                                    </div>
+</div>
                           <table class="table table-bordered table-striped table-sm" style='padding: 23px;'>
                             <thead>
                                 <tr>
                                     <th>cuenta</th>
-                                    <th>Subcuenta</th>
+                                    <th v-if="!mostrarporcuentas" >Subcuenta</th>
                                     <th>Desripcion</th>
                                     <th>DEBE</th>
                                     <th>HABER</th>
@@ -121,12 +131,37 @@
                             </thead>
                             <tbody>
                                   
+                                <template v-if="mostrarporcuentas">
+                                                    <template  v-for="padre in datos" >
+                                                    <tr :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                                        <template v-if="padre.monto>0">
+                                                            <td v-text="padre.id +'  --  '+ padre.des" colspan='2'></td>
+                                                            <td v-text="padre.monto" style='background-color: powderblue;'></td> 
+                                                            <td v-text="0"  style='background-color: burlywood;'></td> 
+                                                             <td v-if="padre.analisis"  >Analisis auxiliar</td>
+                                                        </template>
+                                                        <template v-else> 
+                                                            <td > </td>
+                                                            <td v-text="padre.id +'  --  '+ padre.des" colspan='1'></td> 
+                                                            <td v-text="0"  style='background-color: powderblue;'></td> 
+                                                            <td v-text="padre.monto*-1" style='background-color: burlywood;'></td>  
+                                                             <td v-if="padre.analisis"  >Analisis auxiliar</td>
+                                                        </template> 
+                                                    </tr>  
+                                                </template> 
 
-                                <template v-for="padre in datos" >
-                                    <tr :key="padre.id" style='background-color: khaki;font-weight: 700;'> 
-                                        
-                                        <td v-text="padre.id +'  --  '+ padre.des" colspan='6'></td> 
+                                </template>
+                                <template v-else v-for="padre in datos" >
+                                    <tr v-if="padre.monto>0" :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                        <td v-text="padre.id +'  --  '+ padre.des" colspan='5'></td> 
+                                        <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
+                                    <tr v-else :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                        <td > </td>
+                                        <td v-text="padre.id +'  --  '+ padre.des" colspan='4'></td> 
+                                        <td v-if="padre.analisis"  >Analisis auxiliar</td>
+                                    </tr> 
+
                                     <tr v-for="datain in padre.value" :key="datain.id_reg+padre.id"> 
                                         <td > </td>
                                          
@@ -182,6 +217,7 @@ Vue.use(VeeValidate);
                 cuentaAcambiar:'', 
                 cuentaorigenacambiar:'', 
                 mostrarselect:1,
+                mostrarporcuentas:0,
                 datos:[],
                 cuentas:[],
                 cuentasOrigen:[],
@@ -291,9 +327,15 @@ Vue.use(VeeValidate);
                                        var cabesera=[];
                                         aux.forEach((value, index) => { 
                                             if(_.has(cabesera, value.cuenta)){
-                                                var out=cabesera[value.cuenta];
-                                                out.push(value);
-                                                cabesera[value.cuenta]=out;
+                                                var out=cabesera[value.cuenta]; 
+                                               var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 1; });
+
+                                                if(typeof outtt == 'undefined'){
+                                                    out.push(value);
+                                                    cabesera[value.cuenta]=out;
+                                                } 
+                                                
+                                                
                                             }else{
                                                 var u=[];
                                                 u.push(value);
@@ -304,7 +346,16 @@ Vue.use(VeeValidate);
 
 
                                         cabesera.forEach((value, index) => {  
-                                           me.datos.push({id:index,value:value,des:value[0].descripcion})
+                                           
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0);
+                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar == 1; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion}); 
                                            me.cuentasOrigen.push({cuenta:index,descripcion:value[0].descripcion});
                                         })
                                          
