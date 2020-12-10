@@ -156,24 +156,76 @@ class ConFacturaController extends Controller
         $valuedb=$request->valuedb;
         $valuetipo=$request->valuetipo;
         $numcomprobante=$request->numcomprobante;
+
+        DB::connection($valuedb)->statement( "CREATE TEMP TABLE  tmp_contable_detalle AS (
+            select det.*
+           from finanzas.con_tr_detalles  det 
+           where 
+           det.id_transaccion ='$numcomprobante'   
+           and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta )");
+
  
-        $valida_1=DB::connection($valuedb)->select("select det.analisis_auxiliar,det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio,p.nombrecompleto, g.abrev 
-        from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+        $valida_1=DB::connection($valuedb)->select("select det.*,cu.descripcion,p.nombrecompleto, g.abrev 
+        from tmp_contable_detalle  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
                 where  det.cuenta =cu.cuenta
                 and p.par_profesion=g.cod
                 and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
         and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
 
+
+        
+
+        // $valida_1=DB::connection($valuedb)->select("select det.analisis_auxiliar,det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio,p.nombrecompleto, g.abrev 
+        // from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+        //         where  det.cuenta =cu.cuenta
+        //         and p.par_profesion=g.cod
+        //         and det.id_sub_cuenta=p.numero_papeleta
+        // and det.id_transaccion ='$numcomprobante' 
+        // and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+
+        
+
+        $sql_max_reg=DB::connection($server)->select("select max(id_reg) as max_reg from tmp_contable_detalle");
+        $max_reg = $sql_max_reg[0]->max_reg;
+
         foreach($valida_1 as $linea){
                 if($linea->cuenta=='41101101'){
-                    echo $linea->importe_moneda_local.'<br>';
-                    $linea->importe_moneda_local=52222;
+                    $max_reg++;
+
+                    $sql_max_item=DB::connection($server)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
+                    where  id_transaccion ='$numcomprobante'
+                    and id_tipo = '$valuetipo'");
+                            
+                    $max_item = $sql_max_item[0]->max;
+                     
+                    
+                    $setenta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.7,2);
+                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.3,2);
+                    $setenta_por=$linea->importe_moneda_local>0?$setenta_por:$setenta_por*-1;
+                    $treinta_por=$linea->importe_moneda_local>0?$treinta_por:$treinta_por*-1;
+                    $cien_por=(round(($setenta_por+$treinta_por),2));
+                   
+                    echo $linea->fecha_transaccion.'<br>';
+                    echo $linea->importe_moneda_local.' = '. $cien_por.'<br>';
+                   // $linea->importe_moneda_local=$setenta_por;
+                   
+                    if($linea->importe_moneda_local==$cien_por){
+
+                    }else{
+                        return ['mensaje'=>'No coenciden los datos 70 - 30 %'];
+                    }
+                   
                     echo $linea->importe_moneda_local;
                 }
         } 
 
-         
+
+ 
+ 
+   
+$productList = DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
+ 
     }
 
     public function updateCuentaComprobante(Request $request)
