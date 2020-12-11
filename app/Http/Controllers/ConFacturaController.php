@@ -139,6 +139,7 @@ class ConFacturaController extends Controller
         from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
                 where  det.cuenta =cu.cuenta
                 and p.par_profesion=g.cod
+                and det.analisis_auxiliar =cu.analisis_auxiliar
                 and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
         and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
@@ -370,6 +371,7 @@ $max_item++;
         from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
                 where  det.cuenta =cu.cuenta
                 and p.par_profesion=g.cod
+                and det.analisis_auxiliar =cu.analisis_auxiliar
                 and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
         and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
@@ -620,9 +622,10 @@ $max_item++;
         from tmp_contable_detalle  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
                 where  det.cuenta =cu.cuenta
                 and p.par_profesion=g.cod
+                and det.analisis_auxiliar =cu.analisis_auxiliar
                 and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
-        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+        and det.id_tipo ='$valuetipo' order by det.cuenta, det.id_sub_cuenta");
 
        
  

@@ -257,12 +257,12 @@ let me=this;
                                         aux.forEach((value, index) => { 
                                             if(_.has(cabesera, value.cuenta)){
                                                 var out=cabesera[value.cuenta]; 
-                                               var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 1; });
+                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
 
-                                                if(typeof outtt == 'undefined'){
+                                                // if(typeof outtt == 'undefined'){
                                                     out.push(value);
                                                     cabesera[value.cuenta]=out;
-                                                } 
+                                                // } 
                                                 
                                                 
                                             }else{
@@ -279,7 +279,7 @@ let me=this;
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0);
-                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar == 1; });
+                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
@@ -331,12 +331,12 @@ let me=this;
                                         aux.forEach((value, index) => { 
                                             if(_.has(cabesera, value.cuenta)){
                                                 var out=cabesera[value.cuenta]; 
-                                               var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 1; });
+                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
 
-                                                if(typeof outtt == 'undefined'){
+                                                // if(typeof outtt == 'undefined'){
                                                     out.push(value);
                                                     cabesera[value.cuenta]=out;
-                                                } 
+                                                // } 
                                                 
                                                 
                                             }else{
@@ -353,7 +353,7 @@ let me=this;
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0);
-                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar == 1; });
+                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
