@@ -5,7 +5,9 @@
              <div class="container-fluid">
                 <div class="card">
      <div class="row">  
+        <div class="col-md-12">
           <h1>Actualizacion de cuentas a Reserva</h1>              
+        </div>
  <div class="col-md-6">
     
      <div class="form-group row col-md-6" style="padding: 6px; border: 1px solid gray;  margin: 23px;">
