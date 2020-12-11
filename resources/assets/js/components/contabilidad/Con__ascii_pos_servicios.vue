@@ -298,7 +298,7 @@ Vue.use(VeeValidate);
 
 
             },
-            buscarcomprobante() { 
+            buscarcomprobante(link='/con_contabilidad/procesoservicio') { 
                 this.cuentaAcambiar='';
                 this.cuentaorigenacambiar='';
                 this.cuentas=[];
@@ -314,7 +314,7 @@ Vue.use(VeeValidate);
                             }
                         }); 
                      let me=this;
-                        var url= '/con_contabilidad/procesoservicio';
+                        var url= link;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
