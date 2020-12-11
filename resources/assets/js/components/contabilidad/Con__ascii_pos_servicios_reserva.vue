@@ -247,7 +247,7 @@ let me=this;
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
                                             swal.close()
-                                       
+                                        swal("¡Se actualizo los datos correctamente!", "", "success");
                                      
                                       var aux=response.data.values;
                                       console.log('aux:',aux)

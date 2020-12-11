@@ -170,7 +170,7 @@ class ConFacturaController extends Controller
         $max_reg = $sql_max_reg[0]->max_reg;
 
         foreach($valida_1 as $linea){
-                if($linea->cuenta=='41101101'){
+                if($linea->cuenta=='41101101'||$linea->cuenta=='41101102'||$linea->cuenta=='41101103'){
                     $max_reg++; 
                     $sql_max_item=DB::connection($valuedb)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
                     where  id_transaccion ='$numcomprobante'
@@ -413,7 +413,7 @@ $max_item++;
         $max_reg = $sql_max_reg[0]->max_reg;
 
         foreach($valida_1 as $linea){
-                if($linea->cuenta=='41101101'){
+                if($linea->cuenta=='41101101'||$linea->cuenta=='41101102'||$linea->cuenta=='41101103'){
                     $max_reg++;
 
                     $sql_max_item=DB::connection($valuedb)->select("select max(item)+1 as max from tmp_contable_detalle 
