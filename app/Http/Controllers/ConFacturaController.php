@@ -147,7 +147,11 @@ class ConFacturaController extends Controller
         $cuentas=DB::connection($valuedb)->select("SELECT cuenta, descripcion
         FROM finanzas.con_plan_cuentas");
 
-        return ['values'=>$valida_1,'cuentas'=>$cuentas];
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe
+        FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
+       
+
+        return ['values'=>$valida_1,'cuentas'=>$cuentas,'fecha'=>$fechaR[0]->fe];
     }
     public function procesoReservaUpdate(Request $request)
     {
@@ -649,12 +653,38 @@ $max_item++;
                         
  
         $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
-        cuenta = '$cuentaB' where 
-        id_transaccion ='$idtransaccion' and 
+        cuenta = '$cuentaB' 
+        where  id_transaccion ='$idtransaccion' and 
         id_tipo ='$tipo' and 
         cuenta = '$cuentaA'");
   
         return ['data'=>$valida_1];
+    }
+    public function updateDateCuentaComprobante(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');   
+
+      
+        $fecha=$request->fecha;
+        $fechaantes=$request->fechaantes;
+        $idtransaccion=$request->idtransaccion;
+        $tipo=$request->tipo;
+        $valuedb=$request->valuedb;
+        $directory='LogSafcon';
+        Storage::makeDirectory($directory); 
+        Storage::append($directory.'/logDate.txt','DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'     Fecha antes:'. $fechaantes.'     Fecha new:'.$fecha.'         Tipo:'.$tipo.'  user:'.Auth::user()->username.'             id:'.Auth::id());
+                        
+ 
+        $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_maestro set 
+        fecha_transaccion = '$fecha' 
+        where  id_transaccion ='$idtransaccion' and 
+        id_tipo ='$tipo'");
+
+        $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
+        fecha_transaccion = '$fecha' 
+        where  id_transaccion ='$idtransaccion' and 
+        id_tipo ='$tipo'");
+   
     }
 
     public function proceso(Request $request)

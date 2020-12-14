@@ -60,8 +60,8 @@
                     </div>
   </div>
    <div class="col-md-6" v-if="datos.length>0&&cuentas.length>0">
-                        <h1>Operaciones</h1> 
-                    <div  class="col-md-10">
+                        <h1 v-if="check('procesarCambios')">Operaciones</h1> 
+                    <div  class="col-md-10" v-if="check('procesarCambios')">
                        <label style="text-align: right;font-weight: 500;" class="form-control-label"
                             for="text-input">Cuenta origen :</label>
                            <v-select   :class="{'error': errors.has('cuenta origen')}"
@@ -81,7 +81,7 @@
                         <p class="text-error">{{ errors.first('cuenta origen') }}</p>
                     </div>
 
-                   <div  class="col-md-10">
+                   <div  class="col-md-10" v-if="check('procesarCambios')">
                        <label style="text-align: right;font-weight: 500;" class="form-control-label"
                             for="text-input">Cuenta por cual sera sustituida :</label>
                            <v-select   :class="{'error': errors.has('cuenta')}"
@@ -102,7 +102,21 @@
                     </div>   
                     <div  class="col-md-12" v-if="check('procesarCambios')">
                     <button :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
-                     </div>      
+                     </div> 
+<h1 v-if="check('procesarCambiosFecha')">Cambio de fecha</h1> 
+                     <div v-if="check('procesarCambiosFecha')" class="col-md-10">
+                      <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
+                        for="text-input">Fecha del comprobante:</label>
+                      <div class="input-group">
+                        <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2020-01-01" max="2020-12-31"
+                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante" @keyup.enter="updateDate()"/> 
+                           <div class="input-group-append">
+                            <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
+                            <i class="fa fa-search"></i> cambiar fecha
+                           </span>
+                          </div>
+                      </div>
+                    </div>     
                       
       </div>
 </div>
@@ -212,6 +226,8 @@ Vue.use(VeeValidate);
         data (){
             return { 
                 numcomprobante:'', 
+                fechacomprobante:'', 
+                fechacomprobantenew:'', 
                 valuetipo:'', 
                 valuedb:'', 
                 cuentaAcambiar:'', 
@@ -227,7 +243,7 @@ Vue.use(VeeValidate);
                 
                 db:[{nombre:'DB Prueba',id:'pgsql_desarrollo'},
                 {nombre:'DB Safcon',id:'pgsql'}],
-                arrayPermisos : {procesarCambios:0},  
+                arrayPermisos : {procesarCambios:0,procesarCambiosFecha:0},  
                 arrayPermisosIn:[],
             }
         },
@@ -301,6 +317,8 @@ Vue.use(VeeValidate);
             buscarcomprobante(link='/con_contabilidad/procesoservicio') { 
                 this.cuentaAcambiar='';
                 this.cuentaorigenacambiar='';
+                this.fechacomprobante='';
+                this.fechacomprobantenew='';
                 this.cuentas=[];
                 this.cuentasOrigen=[];
                 if(this.numcomprobante.length>0){
@@ -319,8 +337,10 @@ Vue.use(VeeValidate);
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
                                             swal.close()
-                                       
+                                    
                                       me.cuentas=response.data.cuentas;
+                                      me.fechacomprobante=response.data.fecha;
+                                      me.fechacomprobantenew=response.data.fecha;
                                       var aux=response.data.values;
                                        me.datos=[];
                                        me.cuentasOrigen=[];
@@ -369,7 +389,74 @@ Vue.use(VeeValidate);
 
 
                 } 
-            } ,
+            } ,updateDate(link='/con_contabilidad/procesoservicio') {
+                    console.log('fecha:',this.fechacomprobante);  
+                    console.log('fecha:',this.fechacomprobantenew);  
+                    
+
+ swal({
+                    title: 'Esta seguro de realizar el cambio de fecha?', 
+                    type: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Seguir',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then(result => {
+                    if (result.value) { 
+
+                        swal({
+                            title: "Actualizando datos...",
+                            text: "Actualizacion de datos",
+                            type: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: false,                    
+                            closeOnConfirm: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+ 
+ 
+                        let me=this;
+                        // var url= '/con_contabilidad/updateCuenta';
+                        // axios.put(url,{'cuentaA':this.cuentaorigenacambiar, 
+                        //                 'cuentaB':this.cuentaAcambiar, 
+                        //                 'idtransaccion':this.numcomprobante, 
+                        //                 'tipo':this.valuetipo,
+                        //                 'valuedb':this.valuedb}).then(function (response) {
+                        //                   console.log(response)
+                        //                   swal("¡Se cambio los datos correctamente!", "", "success").then((result) => {
+                        //                         me.onChangeTipo();     
+                        //                     })              
+                        // })
+                        // .catch(function (error) {
+                        //     console.log(error);
+                        // });
+                        axios.put('/con_contabilidad/updateDateCuentaComprobante',{
+                        'fechaantes': me.fechacomprobante,
+                        'fecha': me.fechacomprobantenew,
+                        'valuedb':me.valuedb, 
+                        'tipo':me.valuetipo,
+                        'idtransaccion':me.numcomprobante
+                        }).then(function (response) {
+                                        swal("¡Se cambio los datos correctamente!", "", "success") 
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }                
+                }) 
+
+
+
+            },
             onChangeCuenta(){  
                 
             },
