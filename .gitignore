@@ -6,6 +6,7 @@
 /public/storage
 /storage/*.key
 /storage/ASCII
+/storage/LogSafcon
 /vendor
 /.idea
 /.vscode
