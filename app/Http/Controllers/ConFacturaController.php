@@ -676,20 +676,21 @@ $max_item++;
         Storage::append($directory.'/logDate.txt','DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'     Fecha antes:'. $fechaantes.'     Fecha new:'.$fecha.'         Tipo:'.$tipo.'  user:'.Auth::user()->username.'             id:'.Auth::id());
                         
         DB::connection($valuedb)->statement("ALTER TABLE finanzas.con_tr_maestro DISABLE TRIGGER am_fecha_con_maestro_tr");
-        $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_maestro set 
-        fecha_transaccion = '$fecha', 
-        fecha_reg =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') ,
-        fecha_mod =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') 
-        where  id_transaccion ='$idtransaccion' and 
-        id_tipo ='$tipo'");
+            $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_maestro set 
+            fecha_transaccion = '$fecha', 
+            fecha_reg =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') ,
+            fecha_mod =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') 
+            where  id_transaccion ='$idtransaccion' and 
+            id_tipo ='$tipo'");
         DB::connection($valuedb)->statement("ALTER TABLE finanzas.con_tr_maestro ENABLE TRIGGER am_fecha_con_maestro_tr");
+
         DB::connection($valuedb)->statement("ALTER TABLE finanzas.con_tr_detalles DISABLE TRIGGER am_fecha_con_detalles_tr");
-        $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
-        fecha_transaccion = '$fecha',
-        fecha_reg =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') ,
-        fecha_mod =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') 
-        where  id_transaccion ='$idtransaccion' and 
-        id_tipo ='$tipo'");
+            $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_detalles set 
+            fecha_transaccion = '$fecha',
+            fecha_reg =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') ,
+            fecha_mod =  TO_TIMESTAMP(CONCAT('$fecha',' ',to_char(fecha_reg, 'HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS') 
+            where  id_transaccion ='$idtransaccion' and 
+            id_tipo ='$tipo'");
         DB::connection($valuedb)->statement("ALTER TABLE finanzas.con_tr_detalles ENABLE TRIGGER am_fecha_con_detalles_tr");
    
     }
