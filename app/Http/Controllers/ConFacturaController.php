@@ -183,7 +183,7 @@ class ConFacturaController extends Controller
 
                     $max_item = $sql_max_item[0]->max; 
                     // para moneda local
-                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.3,2);
+                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.2,2);
                     $setenta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)-$treinta_por,2); 
                     $setenta_por=$linea->importe_moneda_local>0?$setenta_por:$setenta_por*-1;
                     $treinta_por=$linea->importe_moneda_local>0?$treinta_por:$treinta_por*-1;
@@ -198,7 +198,7 @@ class ConFacturaController extends Controller
                     
 
                     // para moneda origen
-                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.3,2);
+                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.2,2);
                     $setenta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)-$treinta_por2,2);
                     $setenta_por2=$linea->importe_moneda_origen>0?$setenta_por2:$setenta_por2*-1;
                     $treinta_por2=$linea->importe_moneda_origen>0?$treinta_por2:$treinta_por2*-1;
@@ -430,7 +430,7 @@ $max_item++;
                      
                     
                     // para moneda local
-                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.3,2);
+                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.2,2);
                     $setenta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)-$treinta_por,2); 
                     $setenta_por=$linea->importe_moneda_local>0?$setenta_por:$setenta_por*-1;
                     $treinta_por=$linea->importe_moneda_local>0?$treinta_por:$treinta_por*-1;
@@ -445,7 +445,7 @@ $max_item++;
                     
 
                     // para moneda origen
-                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.3,2);
+                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.2,2);
                     $setenta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)-$treinta_por2,2);
                     $setenta_por2=$linea->importe_moneda_origen>0?$setenta_por2:$setenta_por2*-1;
                     $treinta_por2=$linea->importe_moneda_origen>0?$treinta_por2:$treinta_por2*-1;
