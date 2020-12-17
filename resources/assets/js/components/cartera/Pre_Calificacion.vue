@@ -2000,19 +2000,28 @@ export default {
         var url ="/par_producto/productosidLista?id=" + e ;
         axios .get(url) .then(function(response) {
             var respuesta = response.data;
-            me.tasaanual = respuesta.productos[0].tasa;
-            me.tipocambio = respuesta.productos[0].tipocambio;
-            me.codigomoneda = respuesta.productos[0].codmoneda;
-            me.islineal = respuesta.productos[0].linea;
-            me.plazomesesmax = respuesta.productos[0].plazomaximo;
-            me.cancelarprestamos = respuesta.productos[0].cancelarprestamos;
-            me.plazomesesmin = respuesta.productos[0].plazominimo;
-            me.factorid = respuesta.productos[0].idfactor;
-            me.maxfactor = respuesta.productos[0].aprobacion;
-            me.garantesporproducto = respuesta.productos[0].garantes; 
-            me.idescala = respuesta.productos[0].idescala; 
-            me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
-            me.arrayFormulasProducto["desembolso"] = [];
+            if(respuesta.productos.length>0){
+                me.tasaanual = respuesta.productos[0].tasa;
+                me.tipocambio = respuesta.productos[0].tipocambio;
+                me.codigomoneda = respuesta.productos[0].codmoneda;
+                me.islineal = respuesta.productos[0].linea;
+                me.plazomesesmax = respuesta.productos[0].plazomaximo;
+                me.cancelarprestamos = respuesta.productos[0].cancelarprestamos;
+                me.plazomesesmin = respuesta.productos[0].plazominimo;
+                me.factorid = respuesta.productos[0].idfactor;
+                me.maxfactor = respuesta.productos[0].aprobacion;
+                me.garantesporproducto = respuesta.productos[0].garantes; 
+                me.idescala = respuesta.productos[0].idescala; 
+                me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
+                me.arrayFormulasProducto["desembolso"] = [];
+            }else{
+               me.closemodallist();
+                swal(
+                    "¡No se tiene configurado el producto crediticio!",
+                    "",
+                    "error"
+                  );
+            } 
           })
           .catch(function(error) {
             console.log(error);

@@ -465,15 +465,12 @@ $max_item++;
 
                     // echo 'local: '.$linea->importe_moneda_local.' = '. $cien_por.'    = '.$final_validate.'<br>';
                     // echo 'origen: '.$linea->importe_moneda_origen.' = '. $cien_por2.'    = '.$final_validate2.'<br>';
- 
-
+  
                     $tres_por=round(($treinta_por>0?$treinta_por:$treinta_por*-1)*0.03,2);
                     $tres_por2=round(($treinta_por2>0?$treinta_por2:$treinta_por2*-1)*0.03,2);
                     $tres_porA=round(($treinta_por>0?$treinta_por:$treinta_por*-1)*0.03,2)*-1;
                     $tres_por2A=round(($treinta_por2>0?$treinta_por2:$treinta_por2*-1)*0.03,2)*-1;
-                     
- 
-                   
+                      
                    if(($linea->importe_moneda_local==$cien_por
                    &&$linea->importe_moneda_origen==$cien_por2)
                    &&($linea->importe_moneda_local==$final_validate
@@ -616,12 +613,7 @@ $max_item++;
                     
                 }
         } 
-
-
-        // $valida_3=DB::connection($valuedb)->select("select det.cuenta, sum(det.importe_moneda_local) 
-        // from tmp_contable_detalle  det 
-        //         where det.id_transaccion ='$numcomprobante' 
-        // and det.id_tipo ='$valuetipo' group by det.cuenta");
+ 
         $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,p.nombrecompleto, g.abrev 
         from tmp_contable_detalle  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
                 where  det.cuenta =cu.cuenta
@@ -630,8 +622,7 @@ $max_item++;
                 and det.id_sub_cuenta=p.numero_papeleta
         and det.id_transaccion ='$numcomprobante' 
         and det.id_tipo ='$valuetipo' order by det.cuenta, det.id_sub_cuenta");
-
-       
+ 
  
   DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
