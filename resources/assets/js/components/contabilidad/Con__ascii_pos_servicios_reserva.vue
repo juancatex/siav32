@@ -193,6 +193,7 @@ Vue.use(VeeValidate);
                 datos:[],  
                 tipoarray:[{nombre:'INGRESO',id:'SEC_CON_COM_INGRESO'},
                 {nombre:'EGRESO',id:'SEC_CON_COM_EGRESO'},
+                {nombre:'AJUSTE',id:'SEC_CON_COM_AJUSTE'},
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
                 db:[{nombre:'DB Prueba',id:'pgsql_desarrollo'},
