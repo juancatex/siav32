@@ -2015,8 +2015,7 @@ export default {
                 me.garantesporproducto = respuesta.productos[0].garantes; 
                 me.idescala = respuesta.productos[0].idescala; 
                 me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
-                me.arrayFormulasProducto["desembolso"] = [];
-              
+                me.arrayFormulasProducto["desembolso"] = []; 
                 responses = true;
             }else{
                responses = false;
@@ -2064,21 +2063,25 @@ export default {
               return responses;      
             }
     ,listacrear(){
+      let me = this;
       this.listaSocios=[];
       this.listaSociosObservados=[];
       this.arrayCuentaSocio=[];
       this.socio_id="";
       this.producto=1;// 1= es el id del producto de emergencia
       this.productoporLista(this.producto).then((result)=>{
-        console.log('result:',result);
-        // this.closemodallist();
-        //         swal(
-        //             "¡No se tiene configurado el producto crediticio!",
-        //             "",
-        //             "error"
-        //           );
+        if(result){
+           me.classModal.openModal("listaPrestamos"); 
+        }else{
+           me.closemodallist();
+                swal(
+                    "¡No se tiene configurado el producto crediticio!",
+                    "",
+                    "error"
+                  );
+        }
       });
-      this.classModal.openModal("listaPrestamos"); 
+     
     }
     ,closemodallist(){
       this.classModal.closeModal('listaPrestamos');
