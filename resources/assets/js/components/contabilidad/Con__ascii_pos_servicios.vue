@@ -7,6 +7,16 @@
      <div class="row">               
  <div class="col-md-6">
      <h1>Actualizacion de cuentas</h1> 
+     <div class="form-group row col-md-6" style="padding: 6px; border: 1px solid gray;  margin: 23px;">
+         
+<label style="text-align: right; align-items: center;" class="col-md-6 form-control-label" for="text-input">Ver por cuenta : </label>
+                                    <div class="col-md-4 my-auto"> 
+                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="mostrarporcuentas">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>   
+                                    </div>
+</div>
                    <div class="col-md-10">
                       <label style="text-align: right;font-weight: 500;" class="form-control-label"
                         for="text-input">Seleccione base de datos :</label>
@@ -122,16 +132,7 @@
 </div>
                     <div class="col-md-12 mt-5" v-if="datos.length>0">
                             <h1>Comprobante</h1> 
-                            
-<div class="form-group row col-md-4" style="padding: 6px; border: 1px solid gray;  margin: 23px;">
-<label style="text-align: right; align-items: center;" class="col-md-6 form-control-label" for="text-input">Ver por cuenta : </label>
-                                    <div class="col-md-4 my-auto"> 
-                                         <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="mostrarporcuentas">
-                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
-                                        </label>   
-                                    </div>
-</div>
+                             
                           <table class="table table-bordered table-striped table-sm" style='padding: 23px;'>
                             <thead>
                                 <tr>
