@@ -140,25 +140,32 @@ class ConFacturaController extends Controller
 
         $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe,par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
-       if($fechaR[0]->tip=='S'){
-        $valida_1=DB::connection($valuedb)->select("select det.analisis_auxiliar,det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio,p.nombrecompleto, g.abrev 
-        from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
-                where  det.cuenta =cu.cuenta
-                and p.par_profesion=g.cod
-                and det.analisis_auxiliar =cu.analisis_auxiliar
-                and det.id_sub_cuenta=p.numero_papeleta
-        and det.id_transaccion ='$numcomprobante' 
-        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
-       }else{
-        $valida_1=DB::connection($valuedb)->select("select det.*,cu.descripcion,'' as nombrecompleto,'' as abrev 
-        from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu 
-           where  det.cuenta =cu.cuenta 
-              and det.analisis_auxiliar =cu.analisis_auxiliar
-        and det.id_transaccion ='$numcomprobante' 
-        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
-       }
 
-        return ['values'=>$valida_1,'cuentas'=>$cuentas,'fecha'=>$fechaR[0]->fe];
+        if(count($fechaR)>0){
+            if($fechaR[0]->tip=='S'){
+                $valida_1=DB::connection($valuedb)->select("select det.analisis_auxiliar,det.id_reg ,cu.descripcion,det.cuenta,det.id_sub_cuenta, det.importe_moneda_local,det.tipo_cambio,p.nombrecompleto, g.abrev 
+                from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+                        where  det.cuenta =cu.cuenta
+                        and p.par_profesion=g.cod
+                        and det.analisis_auxiliar =cu.analisis_auxiliar
+                        and det.id_sub_cuenta=p.numero_papeleta
+                and det.id_transaccion ='$numcomprobante' 
+                and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+               }else{
+                $valida_1=DB::connection($valuedb)->select("select det.*,cu.descripcion,'' as nombrecompleto,'' as abrev 
+                from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu 
+                   where  det.cuenta =cu.cuenta 
+                      and det.analisis_auxiliar =cu.analisis_auxiliar
+                and det.id_transaccion ='$numcomprobante' 
+                and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+               }
+        }else{
+            $valida_1=[];
+        }
+
+        
+
+        return ['values'=>$valida_1,'cuentas'=>$cuentas,'fecha'=>count($fechaR)>0?$fechaR[0]->fe:date("Y-m-d")];
     }
     public function procesoReservaUpdate(Request $request)
     {
