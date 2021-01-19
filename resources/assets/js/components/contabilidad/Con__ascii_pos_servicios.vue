@@ -244,6 +244,7 @@ Vue.use(VeeValidate);
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
                 db:[{nombre:'DB Prueba',id:'pgsql_desarrollo'},
+                 {nombre:'DB 2020',id:'pgsql2020'},
                 {nombre:'DB Safcon',id:'pgsql'}],
                 arrayPermisos : {procesarCambios:0,procesarCambiosFecha:0},  
                 arrayPermisosIn:[],
