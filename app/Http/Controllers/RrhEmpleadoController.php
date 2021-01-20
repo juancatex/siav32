@@ -119,6 +119,10 @@ class RrhEmpleadoController extends Controller
         $empleado->codbiom=$request->codbiom;
         $empleado->fecharetiro=$request->fecharetiro;
         $empleado->obs=$request->obs;
+        $empleado->ssocial=$request->ssocial;
+        $empleado->codssocial=$request->codssocial;
+        $empleado->ssalud=$request->ssalud;
+        $empleado->codssalud=$request->codssalud;
         $empleado->save();
     }
 
