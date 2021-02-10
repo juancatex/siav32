@@ -21,7 +21,38 @@
             <button class="btn btn-success cui-options botonnav"></button>
         </div>
     </div>
+
+
+    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i>Credenciales CEN</div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                                <excelReader  @array_Files_Data="carnetcen"></excelReader>
+                                        </div> 
+                                    </div>
+                            </div>
+                        </div>
+    </div>
+    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i>Credenciales empleados</div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                                <excelReader  @array_Files_Data="carnetempleados"></excelReader>
+                                        </div> 
+                                    </div>
+                            </div>
+                        </div>
+    </div>
+
+
     <div class="container-fluid">
+
         <div class="card" v-if="divEmpleados">
             <div class="card-header">
                 <div class="row">
@@ -397,7 +428,29 @@
             </div>
         </div>
     </div>
+   <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="credencial">
+      <div class="modal-dialog modal-primary modal-xl" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Carnet del socio</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('credencial')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
 
+          <div class="modal-body-plandepagos"> 
+            <iframe  name="planout" id="planout"  style="width:100%;height:100%;"></iframe> 
+            <iframe  name="2planout" id="2planout" style="width:100%;height:100%;"></iframe>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('credencial')">cerrar</button> 
+          </div>
+        </div>
+      </div>
+    </div>
 </main>
 </template>
 
@@ -430,6 +483,48 @@ export default {
 directives: { focus },
 
     methods: { 
+        carnetcen(data){
+            var aux=data.values[0];
+            console.log('aux:',aux);
+                var socio={
+                            rutafoto:aux['FOTO'],
+                            codsocio:aux['COD_SOCIO'].toString(),
+                            carnetmilitar:aux['CM'].toString(), 
+                            nomgrado:aux['GRADO'].toUpperCase(),
+                            nomespecialidad:aux['ESPECIALIDAD'].toUpperCase(),
+                            nombre:aux['NOMBRES'].toUpperCase(),
+                            apaterno:aux['APELLIDO  AP'].toString().toUpperCase(),
+                            amaterno:aux['APELLIDO MT'].toString().toUpperCase(),
+                            cargo:aux['CARGO'].toUpperCase(), 
+                            ci:aux['CEDULA'].toString(),
+                            abrvdep:aux['EXPIDIDO'].toUpperCase(),  
+                            validate:aux['VALIDO']  
+                          };
+                          
+             this.classModal.closeModal('credencial');
+             swal({
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+            let me=this;
+            
+                  axios.get('/sociogetfotoCRV_cen').then(function (response) {
+                           _pl._vvp2521_cr_cen(socio,response.data,()=>{
+                                swal.close()
+                                me.classModal.openModal('credencial');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+            
+        },
+        carnetempleados(e){
+
+        },
         listaEmpleados(){ 
             var url='/rrh_empleado/listaEmpleados?sedelp='+this.sedelp+'&activou='+this.activo+'&buscado='+this.buscado;
             axios.get(url).then(response=>{
@@ -782,9 +877,11 @@ directives: { focus },
     },
         
     mounted() {
+        moment.locale('es-us');
         this.listaEmpleados();
         this.classModal=new _pl.Modals();
-        this.classModal.addModal('modalnewEmpleado');
+        this.classModal.addModal('modalnewEmpleado'); 
+        this.classModal.addModal("credencial"); 
     }
 }
 </script>

@@ -289,6 +289,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');
         Route::get ('/sociogetfotoCRV', 'SocioController@getfotoCRV');
 
+        Route::get ('/sociogetfotoCRV_cen', 'SocioController@getfotoCRV_cen');
+        Route::get ('/sociogetfotoCRV_emp', 'SocioController@getfotoCRV_emp');
+
         Route::get ('/socio', 'SocioController@index');
         Route::post('/socio/registrar', 'SocioController@store');
         Route::post('/socio/upload', 'SocioController@update');
