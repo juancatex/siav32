@@ -1148,19 +1148,16 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
-  export function _vvp2521_cr_cen(ta,fotocr,funn, idview = 'planout') {
-    $("#" + idview).attr("src",''); 
-    $("#2" + idview).attr("src",''); 
+  export function _vvp2521_cr_cen_emp(ta,fotocr,idview = 'contenedorframes') { 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.rutafoto?'img/empleados/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+    let fotosocio=fotocr.avatar;  
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.abrvdep?ta.abrvdep:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.cargo;
-      qr.mime = 'image/jpeg';
-      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
-      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      qr.mime = 'image/jpeg'; 
+      var doc = new jsPDF('p', 'cm','a4'); 
       doc.setProperties({
-        title: 'Credencial CEN'
+        title: 'Credencial'
       }); 
       doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
       doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
@@ -1169,11 +1166,11 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setTextColor(52,52,52);
           centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.2,6.4); 
           centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 9,6.4);
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 9,6.4);
       
           doc.setFontSize(6);
-      doc.text(ta.ci?ta.ci:'___', 7.24, 4.1,null,90);
-      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);   
+      doc.text(ta.ci?ta.ci+' '+(ta.abrvdep?ta.abrvdep:''):'0', 7.24, 4.1,null,90);
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'-', 7.46, 4.1,null,90);   
 
       doc.setFontStyle('bold');
       doc.setFontSize(11);   
@@ -1188,20 +1185,76 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
       centrarTextTo2(doc, (ta.validate?('Válido hasta '+ (moment(ta.validate).format("MMMM - YYYY")).toUpperCase()):' '), 10.8,6.4); 
       doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
+ 
+ 
+      var diva= $('<div>')
+      .css('padding','0')
+      .addClass( "col-md-6");
 
-      $("#" + idview).attr("src", doc.output('datauristring')); 
+
+      var cre1=$('<iframe>')                    
+      .attr('src', doc.output('datauristring')) 
+      .attr('height','500px')
+      .attr('width','100%') ;
+      cre1.appendTo(diva);
+
+      var botones1= $('<div>').css('bottom','0') 
+      .css('position','absolute')
+      .css('margin','3%');
+
+     $('<button/>') 
+      .addClass( "btn btn-primary") 
+      .text('Ampliar')
+      .click(function () { window.open(doc.output('bloburl'), '_blank',"fullscreen=yes, scrollbars=auto"); })
+      .appendTo(botones1);
+
+      $('<button/>').addClass( "btn btn-primary") 
+      .css('margin-left','7px')
+      .text('Recargar')
+      .click(function () { cre1.attr('src', doc.output('datauristring'));})
+      .appendTo(botones1);
+
+      botones1.appendTo(diva);
+
+       
+  
+      diva.appendTo('#'+idview);
 
       var doc2 = new jsPDF('p', 'cm','a4');  
       doc2.setProperties({
-        title: 'Credencial CEN posterior'
-      }); 
+        title: 'Credencial posterior'
+      });  
       doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
       doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
-      $("#2" + idview).attr("src", doc2.output('datauristring')); 
- 
-      funn();
-    }); 
+     
+      var divv= $('<div>').css('padding','0').addClass( "col-md-6");
+      var cre=$('<iframe>')                    
+      .attr('src', doc2.output('datauristring')) 
+      .attr('height','500px')
+      .attr('width','100%') ;
+      cre.appendTo(divv);
+
+      var botones= $('<div>').css('bottom','0') 
+       .css('position','absolute')
+       .css('margin','3%');
+
+      $('<button/>') 
+       .addClass( "btn btn-primary") 
+       .text('Ampliar')
+       .click(function () { window.open(doc2.output('bloburl'), '_blank',"fullscreen=yes, scrollbars=auto"); })
+       .appendTo(botones);
+
+       $('<button/>').addClass( "btn btn-primary") 
+       .css('margin-left','7px')
+       .text('Recargar')
+       .click(function () { cre.attr('src', doc2.output('datauristring'));})
+       .appendTo(botones);
+
+       botones.appendTo(divv); 
+      divv.appendTo('#'+idview);
   }
+ 
+
   export function _vvp2521_bio01(fotocr,funn, idview = 'biometricoframe') {
     $("#" + idview).attr("src",'');   
     let fondo=fotocr.foto;  

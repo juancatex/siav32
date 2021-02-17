@@ -22,28 +22,19 @@
         </div>
     </div>
 
-
-    <div class="form-group row">
+ 
+  
+   <div class="form-group row" >
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-align-justify"></i>Credenciales CEN</div>
+                                    <i class="fa fa-align-justify"></i>Credenciales</div>
                                     <div class="card-body">
                                         <div class="form-group">
-                                                <excelReader  @array_Files_Data="carnetcen"></excelReader>
+                                            <button     @click="openModale('emp')" class="btn btn-primary">Empleados</button>  
                                         </div> 
-                                    </div>
-                            </div>
-                        </div>
-    </div>
-    <div class="form-group row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-align-justify"></i>Credenciales empleados</div>
-                                    <div class="card-body">
                                         <div class="form-group">
-                                                <excelReader  @array_Files_Data="carnetempleados"></excelReader>
+                                            <button     @click="openModale('cen')" class="btn btn-primary">CEN</button>  
                                         </div> 
                                     </div>
                             </div>
@@ -432,16 +423,43 @@
       <div class="modal-dialog modal-primary modal-xl" role="document">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">
-            <h4 class="modal-title" id="modalOneLabel">Carnet del socio</h4>
+            <h4 class="modal-title" id="modalOneLabel">Credencial</h4>
             <button type="button" class="close" aria-hidden="true" aria-label="Close"
               @click="classModal.closeModal('credencial')">
               <span aria-hidden="true">×</span>
             </button>
           </div>
+     
+          <div class="modal-body-plandepagos" style="max-height:600px"> 
+              <div class="form-group row" v-if="tipoCred=='cen'">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i>Credenciales CEN</div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                                <excelReader v-if="tipoCred=='cen'"  @array_Files_Data="carnetcen"></excelReader>
+                                        </div> 
+                                    </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group row" v-if="tipoCred=='emp'">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <i class="fa fa-align-justify"></i>Credenciales empleados</div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                            <excelReader v-if="tipoCred=='emp'" @array_Files_Data="carnetempleados"></excelReader>
+                                                    </div> 
+                                                </div>
+                                        </div>
+                                    </div>
+                </div>
+             <div class="row" id='contenedorframes'>
 
-          <div class="modal-body-plandepagos"> 
-            <iframe  name="planout" id="planout"  style="width:100%;height:100%;"></iframe> 
-            <iframe  name="2planout" id="2planout" style="width:100%;height:100%;"></iframe>
+             </div>
           </div>
 
           <div class="modal-footer">
@@ -464,6 +482,7 @@ Vue.component('empReferencia',require('./empReferencia.vue').default);
   
 export default {     
     data (){ return {
+        tipoCred:'',
         accion:1,  ipbirt:'', currfecha:'',
         buscado:'', regEmpleado:[], sedelp:'1', activo:'1',
         arrayEmpleados:[], arrayDepartamentos:[], arrayFormaciones:[], arrayProfesiones:[],
@@ -483,9 +502,63 @@ export default {
 directives: { focus },
 
     methods: { 
+        openModale(valor){
+            this.tipoCred='';
+             swal.close();
+             let me=this; 
+             $('#contenedorframes').empty();
+            setTimeout(() => {
+              me.tipoCred=valor;
+              me.classModal.openModal('credencial');  
+            },500);
+        },
         carnetcen(data){
-            var aux=data.values[0];
-            console.log('aux:',aux);
+            this.tipoCred='';
+               this.classModal.closeModal('credencial');
+             swal({
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+             
+            let me=this;
+            $("#contenedorframes").empty();
+            this.generatePDFCen(data.values,'contenedorframes').then(()=>{
+                         swal.close();
+                        me.classModal.openModal('credencial');
+            }).catch((error)=>{
+                console.log('error cen:',error);
+            });
+            
+        },
+        carnetempleados(data){
+               this.tipoCred='';
+               this.classModal.closeModal('credencial');
+             swal({
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+             
+            let me=this;
+            $("#contenedorframes").empty();
+            this.generatePDFEmp(data.values,'contenedorframes').then(()=>{
+                        swal.close();
+                        me.classModal.openModal('credencial');
+            }).catch((error)=>{
+                console.log('error emp:',error);
+            });
+        },
+       
+       async generatePDFCen(array,nam) { 
+         
+            for (var aux of array) {
                 var socio={
                             rutafoto:aux['FOTO'],
                             codsocio:aux['COD_SOCIO'].toString(),
@@ -497,33 +570,33 @@ directives: { focus },
                             amaterno:aux['APELLIDO MT'].toString().toUpperCase(),
                             cargo:aux['CARGO'].toUpperCase(), 
                             ci:aux['CEDULA'].toString(),
-                            abrvdep:aux['EXPIDIDO'].toUpperCase(),  
+                            abrvdep:aux['EXPEDIDO'].toUpperCase(),  
                             validate:aux['VALIDO']  
                           };
-                          
-             this.classModal.closeModal('credencial');
-             swal({
-                title: "Generando reporte",
-                allowOutsideClick: () => false,
-                allowEscapeKey: () => false,
-                onOpen: function() {
-                swal.showLoading();
-                }
-            }); 
-            let me=this;
-            
-                  axios.get('/sociogetfotoCRV_cen').then(function (response) {
-                           _pl._vvp2521_cr_cen(socio,response.data,()=>{
-                                swal.close()
-                                me.classModal.openModal('credencial');
-                            });
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-            
+            var consulta=await axios.get('/sociogetfotoCRV_cen?foto='+aux['FOTO']);
+             _pl._vvp2521_cr_cen_emp(socio,consulta.data,nam);
+            } 
         },
-        carnetempleados(e){
-
+          async generatePDFEmp(array,nam) { 
+         
+            for (var aux of array) {
+                var socio={
+                            rutafoto:aux['FOTO'],
+                            codsocio:aux['COD_EMPLEADO'].toString(),
+                            carnetmilitar:aux['COD_EMPLEADO'].toString(), 
+                            nomgrado:aux['GRADO_ACADEMICO'].toUpperCase(),
+                            nomespecialidad:' ',
+                            nombre:aux['NOMBRES'].toUpperCase(),
+                            apaterno:aux['APELLIDO  AP'].toString().toUpperCase(),
+                            amaterno:aux['APELLIDO MT'].toString().toUpperCase(),
+                            cargo:aux['CARGO'].toUpperCase(), 
+                            ci:aux['CEDULA'].toString(),
+                            abrvdep:aux['EXPEDIDO'].toUpperCase(),  
+                            validate:aux['VALIDO']  
+                          };
+            var consulta=await axios.get('/sociogetfotoCRV_emp?foto='+aux['FOTO']);
+                 _pl._vvp2521_cr_cen_emp(socio,consulta.data,nam);
+            } 
         },
         listaEmpleados(){ 
             var url='/rrh_empleado/listaEmpleados?sedelp='+this.sedelp+'&activou='+this.activo+'&buscado='+this.buscado;
