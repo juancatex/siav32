@@ -393,8 +393,7 @@ Vue.use(VeeValidate);
 
                 } 
             } ,updateDate(link='/con_contabilidad/procesoservicio') {
-                    console.log('fecha:',this.fechacomprobante);  
-                    console.log('fecha:',this.fechacomprobantenew);  
+                     
                     
 
  swal({

@@ -713,7 +713,7 @@ $max_item++;
         $valuedb=$request->valuedb;
         $directory='LogSafcon';
         Storage::makeDirectory($directory); 
-        Storage::append($directory.'/logDate.txt','DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'     Fecha antes:'. $fechaantes.'     Fecha new:'.$fecha.'         Tipo:'.$tipo.'  user:'.Auth::user()->username.'             id:'.Auth::id());
+        Storage::append($directory.'/logDate.txt','Date:'.date("Y_m_d H:i:s").'  DB:'.$valuedb.'     Comprobante:'.$idtransaccion.'     Fecha antes:'. $fechaantes.'     Fecha new:'.$fecha.'         Tipo:'.$tipo.'  user:'.Auth::user()->username.'             id:'.Auth::id());
                         
         DB::connection($valuedb)->statement("ALTER TABLE finanzas.con_tr_maestro DISABLE TRIGGER am_fecha_con_maestro_tr");
             $valida_1=DB::connection($valuedb)->update("update finanzas.con_tr_maestro set 

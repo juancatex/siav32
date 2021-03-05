@@ -77,13 +77,25 @@
                     </div>
   </div>
    <div class="col-md-6" v-if="datos.length>0">
-                        <h1>Operaciones</h1> 
-                   
-  
+                        
+       <h1>Cambio de fecha</h1> 
+                     <div class="col-md-10">
+                      <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
+                        for="text-input">Fecha del comprobante:</label>
+                      <div class="input-group">
+                        <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2020-01-01" max="2020-12-31"
+                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante" @keyup.enter="updateDate()"/> 
+                           <div class="input-group-append">
+                            <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
+                            <i class="fa fa-search"></i> cambiar fecha
+                           </span>
+                          </div>
+                      </div>
+                    </div>
+        <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
                     <button :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
                      </div>  
-       
                       
       </div>
 </div>
@@ -183,6 +195,8 @@ Vue.use(VeeValidate);
      props:['idmodulo','idventanamodulo'],
         data (){
             return { 
+                fechacomprobantenew:'', 
+                fechacomprobante:'', 
                 numcomprobante:'', 
                 valuetipo:'', 
                 valuedb:'', 
@@ -207,6 +221,56 @@ Vue.use(VeeValidate);
          
         
         methods : {
+            updateDate() {
+                swal({
+                    title: 'Esta seguro de realizar el cambio de fecha?', 
+                    type: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Seguir',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then(result => {
+                    if (result.value) { 
+
+                        swal({
+                            title: "Actualizando datos...",
+                            text: "Actualizacion de datos",
+                            type: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: false,                    
+                            closeOnConfirm: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+ 
+ 
+                        let me=this; 
+                        axios.put('/con_contabilidad/updateDateCuentaComprobante',{
+                        'fechaantes': me.fechacomprobante,
+                        'fecha': me.fechacomprobantenew,
+                        'valuedb':me.valuedb, 
+                        'tipo':me.valuetipo,
+                        'idtransaccion':me.numcomprobante
+                        }).then(function (response) {
+                                        swal("¡Se cambio los datos correctamente!", "", "success") 
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }                
+                }) 
+
+
+
+            },
             procesar(){
                     
                     
@@ -307,6 +371,8 @@ let me=this;
             buscarcomprobante(link='/con_contabilidad/procesoservicio') { 
                 this.cuentaAcambiar='';
                 this.cuentaorigenacambiar='';
+                this.fechacomprobantenew='';
+                this.fechacomprobante='';
               
                 if(this.numcomprobante.length>0){
                     
@@ -327,8 +393,9 @@ let me=this;
                                        
                                      
                                       var aux=response.data.values;
-                                      console.log('aux:',aux)
-                                      console.log('mensaje:',aux.length==0?response.data.mensaje:'')
+                                      me.fechacomprobante=response.data.fecha;
+                                      me.fechacomprobantenew=response.data.fecha; 
+                                      
                                        me.datos=[]; 
                                        var cabesera=[];
                                         aux.forEach((value, index) => { 
