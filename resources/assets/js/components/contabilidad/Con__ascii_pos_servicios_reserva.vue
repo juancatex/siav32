@@ -94,7 +94,7 @@
                     </div>
         <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
-                    <button :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
+                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
                      </div>  
                       
       </div>
@@ -114,7 +114,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                  
+                                 <tr>
+                                <td v-if="mostrarporcuentas" colspan='2' style="text-align: right;font-weight: bold;"><span >Total</span></td>
+                                <td v-if="!mostrarporcuentas" colspan='3' style="text-align: right;font-weight: bold;"><span >Total</span></td> 
+                                <td v-text="debesuma" ></td>
+                                <td v-text="habersuma"></td>
+                                <td></td>
+                                </tr>  
                                 <template v-if="mostrarporcuentas">
                                                     <template  v-for="padre in datos" >
                                                     <tr :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
@@ -163,7 +169,14 @@
                                          </template> 
                                         <td v-text="datain.tipo_cambio"></td> 
                                     </tr> 
-                                </template>                             
+                                </template> 
+                                <tr>
+                                <td v-if="mostrarporcuentas" colspan='2' style="text-align: right;font-weight: bold;"><span >Total</span></td>
+                                <td v-if="!mostrarporcuentas" colspan='3' style="text-align: right;font-weight: bold;"><span >Total</span></td> 
+                                <td v-text="debesuma" ></td>
+                                <td v-text="habersuma"></td>
+                                <td></td>
+                                </tr>                            
                             </tbody>
                         </table>                      
                       
@@ -197,6 +210,8 @@ Vue.use(VeeValidate);
             return { 
                 fechacomprobantenew:'', 
                 fechacomprobante:'', 
+                debesuma:0,  
+                habersuma:0, 
                 numcomprobante:'', 
                 valuetipo:'', 
                 valuedb:'', 
@@ -373,6 +388,8 @@ let me=this;
                 this.cuentaorigenacambiar='';
                 this.fechacomprobantenew='';
                 this.fechacomprobante='';
+                this.debesuma=0;
+                this.habersuma=0;
               
                 if(this.numcomprobante.length>0){
                     
@@ -417,20 +434,30 @@ let me=this;
                                             }
                                         }) 
 
-
+                                        
                                         cabesera.forEach((value, index) => {  
                                            
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0);
+
+
                                              var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
                                             me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                        })
-                                         
+                                        });
+                                     
+                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+
+                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+                                                me.habersuma=(me.habersuma*-1); 
 
                         })
                         .catch(function (error) {
