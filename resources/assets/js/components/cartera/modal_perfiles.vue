@@ -91,9 +91,10 @@
         methods : { 
             save(){
               let me=this;
+              console.log(me.data_producto_main.seriemap);
                axios.put('/par_producto/actualizar/map', {
-                                'idproducto': this.data_producto_main.idproducto,
-                                'map': this.data_producto_main.seriemap
+                                'idproducto': me.data_producto_main.idproducto,
+                                'map': me.data_producto_main.seriemap
                             }).then(function (response) { 
                                 me.modalperfilesclass.closeModal('modalperfiles');
                                 me.$emit('cerrarvueprincipal');
@@ -101,7 +102,7 @@
                                 $(".swal2-modal").css('z-index', '2000');
                                 $(".swal2-container").css('z-index', '2000');
                             }).catch(function (error) {
-                                console.log(error);
+                                console.log('error:',error);
                             });
             }, 
              validateperfil(idperfil){

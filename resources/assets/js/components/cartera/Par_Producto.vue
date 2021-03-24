@@ -30,14 +30,15 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
-                                    <!-- <th>Perfiles</th> -->
+                                    <!-- <th>Perfiles</th> --> 
+                                    <th>Estado</th>
                                     <th>Nombre</th>
                                     <th>Codigo</th>
                                     <th>Moneda</th>
                                     <th>Tasa Anual</th>
                                     <!-- <th>Monto Minimo</th> 
                                     <th>Monto Maximo</th>-->
-                                    <th>Estado</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,14 +50,6 @@
                                             <button v-if="producto.activo==2&&visormaps(producto)&&check('Consolidar_perfil')" data-toggle="tooltip" data-placement="top" title="Consolidar" type="button" class="btn btn-primary btn-sm" @click="consolidar(producto)"> <i class="icon-login"></i>&nbsp;Consolidar</button>    
                                             <button v-if="producto.activo==2&&!visormaps(producto)&&check('Edición_Perfiles')" data-toggle="tooltip" data-placement="top" title="Perfiles" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilesproducto(producto)"> <i class="icon-list"></i> &nbsp;Perfiles</button>
                                     </td>
-                                    <!-- <td>    
-                                    
-                                     <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilcobranzaVista(producto)"> <i class="icon-list"></i> &nbsp;Cobranza</button>
-                                    </td> -->
-                                    <td v-text="producto.nomproducto"></td>
-                                    <td v-text="producto.codproducto"></td>
-                                    <td v-text="producto.codmoneda"></td>
-                                    <td v-text="producto.tasa+' %'"></td> 
                                     <td>
                                         <div v-if="producto.activo==1">
                                             <span class="badge badge-success">Activo</span>
@@ -72,6 +65,15 @@
                                         </div>
                                         
                                     </td>
+                                    <!-- <td>    
+                                    
+                                     <button v-if="producto.activo==2" type="button" style="min-width: 115px;" class="btn btn-success btn-sm" @click="perfilcobranzaVista(producto)"> <i class="icon-list"></i> &nbsp;Cobranza</button>
+                                    </td> -->
+                                    <td v-text="producto.nomproducto"></td>
+                                    <td v-text="producto.codproducto"></td>
+                                    <td v-text="producto.codmoneda"></td>
+                                    <td v-text="producto.tasa+' %'"></td> 
+                                    
                                 </tr>                                
                             </tbody>
                         </table>
@@ -872,6 +874,7 @@
             },
              
             visormaps(value){
+                console.log(value)
               var aux = new Map(JSON.parse(value.serializedmap));
               return aux.size>0;
             },

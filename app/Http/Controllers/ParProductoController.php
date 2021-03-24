@@ -9,6 +9,7 @@ use App\Par_productos_perfilcuenta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth; 
 
 class ParProductoController extends Controller
 { public function __construct()
@@ -306,6 +307,7 @@ class ParProductoController extends Controller
         $producto->perfil_cambio_estado_mora = $request->perfil_cambio_estado_mora; 
         $producto->serializedmap = '[]';
         $producto->fecharegistro = $fecha; 
+        $producto->idusuario=Auth::id();
         $producto->save();  
         return response()->json(array('id' => $producto->idproducto), 200);
     }

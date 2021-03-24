@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Par_Productos_Factores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class ParProductoFactoresController extends Controller
 {
@@ -73,6 +74,7 @@ class ParProductoFactoresController extends Controller
         $factores->nombrefactor=$request->nombre;
         $factores->descripcion=$request->des;
         $factores->aprobacion=$request->apro;
+        $factores->idusuario=Auth::id();
         $factores->save();
     }
 

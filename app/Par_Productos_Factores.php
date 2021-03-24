@@ -8,7 +8,7 @@ class Par_Productos_Factores extends Model
 {
     protected $table = 'par__productos__factores';
     protected $primaryKey = 'idfactor';
-    protected $fillable = ['nombrefactor','descripcion','refvalor'];
+    protected $fillable = ['nombrefactor','descripcion','refvalor','idusuario'];
     
     public function par_productos_parametros()
     {

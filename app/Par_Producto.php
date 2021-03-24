@@ -30,6 +30,7 @@ class Par_Producto extends Model
     ,'perfil_cambio_estado'
     ,'perfil_cambio_estado_mora'
     ,'serializedmap'
-    ,'fecharegistro'];
+    ,'fecharegistro'
+    ,'idusuario'];
   
 }

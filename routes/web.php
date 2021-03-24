@@ -884,4 +884,6 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_contabilidad/procesoReservaUpdate', 'ConFacturaController@procesoReservaUpdate');
         Route::put ('/con_contabilidad/updateCuenta','ConFacturaController@updateCuentaComprobante');
 
+        Route::get('/pruebaget','ConFacturaController@pruebaget');
+
 });

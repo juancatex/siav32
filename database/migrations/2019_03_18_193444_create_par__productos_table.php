@@ -52,6 +52,7 @@ class CreateParProductosTable extends Migration
 
             $table->text('serializedmap'); 
             $table->dateTime('fecharegistro');
+            $table->integer('idusuario')->unsigned();
             $table->timestamps();
 
             $table->foreign('moneda')->references('idmoneda')->on('par__monedas');

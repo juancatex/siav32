@@ -19,7 +19,8 @@ class CreateParProductosFactoresTable extends Migration
             $table->string('descripcion');
             $table->float('refvalor')->default(0);
             $table->float('aprobacion')->default(0);
-            $table->integer('activo')->default(1);
+            $table->integer('activo')->default(1); 
+            $table->integer('idusuario')->unsigned();
             $table->timestamps();
         });
     }
