@@ -874,7 +874,7 @@
             },
              
             visormaps(value){
-                console.log(value)
+                console.log('visor:',value);
               var aux = new Map(JSON.parse(value.serializedmap));
               return aux.size>0;
             },
