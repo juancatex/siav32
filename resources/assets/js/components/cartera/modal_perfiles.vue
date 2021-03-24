@@ -90,8 +90,7 @@
           },
         methods : { 
             save(){
-              let me=this;
-              console.log(me.data_producto_main.seriemap);
+              let me=this; 
                axios.put('/par_producto/actualizar/map', {
                                 'idproducto': me.data_producto_main.idproducto,
                                 'map': me.data_producto_main.seriemap
@@ -135,6 +134,7 @@
                 }
         } ,
         mounted() {
+            this.mapDataGeneral=new Map();
              this.modalperfilesclass=new _pl.Modals();
              this.modalperfilesclass.addModal('modalperfiles');  
         }
