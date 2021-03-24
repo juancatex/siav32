@@ -874,7 +874,9 @@
             },
              
             visormaps(value){
-                console.log('visor:',JSON.parse(value.serializedmap));
+                console.log('visor:',value);
+                console.log('serializedmap:',value.serializedmap);
+                console.log('json:',JSON.parse(value.serializedmap));
               var aux = new Map(JSON.parse(value.serializedmap));
               return aux.size>0;
             },
