@@ -22,6 +22,7 @@ class CreateParProductosPerfilcuentasTable extends Migration
             $table->string('valor_abc_php');
           //  $table->string('key_abc');
             $table->boolean('iscargo')->default(0);
+            $table->boolean('iscomision')->default(0);
             $table->string('formula'); 
             $table->string('formulaphp'); 
            // $table->text('html_value');  

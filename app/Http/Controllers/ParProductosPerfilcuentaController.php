@@ -32,6 +32,7 @@ class ParProductosPerfilcuentaController extends Controller
         $productoperfil->valor_abc = $request->valor_abc;  
         $productoperfil->valor_abc_php = $request->valor_abc_php;  
         $productoperfil->iscargo = $request->iscargo; 
+        $productoperfil->iscomision = $request->iscomision; 
         $productoperfil->formula = $request->formula;  
         $productoperfil->formulaphp = $request->formulaphp;  
         $productoperfil->fecharegistro = $fecha; 
@@ -49,6 +50,7 @@ class ParProductosPerfilcuentaController extends Controller
         ->select( 'par__productos.linea','par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
         'par__productos__perfilcuentas.valor_abc',
         'par__productos__perfilcuentas.formula',
+        'par__productos__perfilcuentas.iscomision',
         'con__perfilcuentadetalles.tipocargo',
         'con__perfilcuentadetalles.idcuenta',
         'par__productos__perfilcuentas.iscargo')

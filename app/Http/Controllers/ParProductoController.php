@@ -68,6 +68,7 @@ class ParProductoController extends Controller
             ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
             'par__productos__perfilcuentas.valor_abc',
             'par__productos__perfilcuentas.formula',
+            'par__productos__perfilcuentas.iscomision',
             'par__productos.linea',
             'par__productos__perfilcuentas.iscargo')
             ->where('par__productos__perfilcuentas.activo','=','1')
@@ -96,6 +97,7 @@ class ParProductoController extends Controller
             ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
             'par__productos__perfilcuentas.valor_abc',
             'par__productos__perfilcuentas.formula',
+            'par__productos__perfilcuentas.iscomision',
             'par__productos.linea',
             'par__productos__perfilcuentas.iscargo')
             ->where('par__productos__perfilcuentas.activo','=','1')
@@ -156,6 +158,7 @@ class ParProductoController extends Controller
           ->select( 'par__productos.linea','par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
           'par__productos__perfilcuentas.valor_abc',
           'par__productos__perfilcuentas.formula',
+          'par__productos__perfilcuentas.iscomision',
           'con__perfilcuentadetalles.tipocargo',
           'con__perfilcuentadetalles.idcuenta',
           'par__productos__perfilcuentas.iscargo')

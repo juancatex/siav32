@@ -860,6 +860,7 @@ function getperfil($producto,$idperfil){
     'par__productos__perfilcuentas.valor_abc_php',
     'par__productos__perfilcuentas.formula',
     'par__productos__perfilcuentas.formulaphp',
+    'par__productos__perfilcuentas.iscomision',
     'con__perfilcuentadetalles.tipocargo',
     'con__perfilcuentadetalles.idcuenta',
     'par__productos__perfilcuentas.iscargo')

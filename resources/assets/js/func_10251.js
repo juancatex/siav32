@@ -2165,7 +2165,8 @@ export function generaperfil(mapinto, values = [], padre) {
         '<div id="' + index + '" class="row itemrow" style="border: 1px solid grey; padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;">' +
         '<div class="col-md-1" style="margin: 0 0 0 -7px;display: inline-grid;align-content: center;"><span class="handle"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span></div><div class="col-md-11 row" style="margin: 0px;padding: 0px;"><div class="col-md-10" style="text-align: right;font-weight: 700;font-size: 16px;">' + element.nomcuenta + '</div><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-12" style="text-align: right;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag" v-pos="right"></div>') +
       '<button  v-clear="button" type="button"  class=" btn btn-danger btn-sm" ><i class="icon-trash"></i></button>' +
-      '<div  v-type="checkconten" class="col-md-6" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a cargo adicional :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' +
+      '<div  v-type="checkconten" class="col-md-4" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a cargo adicional :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' +
+      '<div  v-type="checkcontencomision" class="col-md-4" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a comisión :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' +
       '</div></div>');
     $(id_valores).append('<div v-tipo="1" v-data="perfil">' + element.data + '</div>');
   });
@@ -2281,6 +2282,11 @@ export function _mff82sdf_mjd(mapinto, padre) {
       item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', true);
     } else {
       item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', false);
+    }
+    if (element.comision) {
+      item.siblings('div[v-type="checkcontencomision"]').find('input[v-type="check"]').attr('checked', true);
+    } else {
+      item.siblings('div[v-type="checkcontencomision"]').find('input[v-type="check"]').attr('checked', false);
     }
 
   }

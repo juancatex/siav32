@@ -61,7 +61,7 @@
                expresion:false,
                nombreproducto:'', 
                mapData:new Map(),
-               mapDataGeneral:new Map()
+               mapDataGeneraladicional:new Map()
                 
             }
         } ,
@@ -73,10 +73,10 @@
 
                         try {
                             _pl._mmf2251_3325(me.mapData);
-                           // me.mapDataGeneral.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
+                           // me.mapDataGeneraladicional.set(me.idmaestro, JSON.stringify(Array.from(me.mapData)));
                             // axios.put('/par_producto/actualizar/map', {
                             //     'idproducto': me.idproducto,
-                            //     'map': JSON.stringify(Array.from(me.mapDataGeneral))
+                            //     'map': JSON.stringify(Array.from(me.mapDataGeneraladicional))
                             // }).then(function (response) {
                             //     me.$emit('cerrarvueprincipalperfiles');
                             //     me.classModal2.closeModal('primarymodal');
@@ -153,6 +153,7 @@
                    // console.log(value);
                     var item=$('.itemrow[id="'+key+'"] .divdrag[id="'+value.key+'"]'); 
                     if(item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').is(':checked')){  value.adi=1; }else{value.adi=0;}
+                    if(item.siblings('div[v-type="checkcontencomision"]').find('input[v-type="check"]').is(':checked')){  value.comision=1; }else{value.comision=0;}
                     if(item.contents().length==0){ item.addClass('noF');responses = false; 
                     }else{ value.idpro=this.idproducto;value.formula=_pl._perff_00125(item);value.formula2=_pl._perff_00126(item);
                     value.item=$('.itemrow[id="'+key+'"]')[0].outerHTML; map.set(key,value);} 
@@ -189,9 +190,9 @@
               this.tipocambio=id.tipocambio;
               this.codmoneda=id.codmoneda;
               this.nombreproducto=id.nomproducto;   
-              this.mapDataGeneral = new Map(JSON.parse(id.seriemap));
-              if(this.mapDataGeneral.has(idperfilmaestro)){
-               this.mapData = new Map(JSON.parse(this.mapDataGeneral.get(idperfilmaestro)));
+              this.mapDataGeneraladicional = new Map(JSON.parse(id.seriemap));
+              if(this.mapDataGeneraladicional.has(idperfilmaestro)){
+               this.mapData = new Map(JSON.parse(this.mapDataGeneraladicional.get(idperfilmaestro)));
               }else{
                this.mapData.clear(); 
               }  

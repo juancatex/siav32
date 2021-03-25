@@ -392,6 +392,7 @@ if(!empty($request->buscar)){
             ->select('par__productos.cobranza_perfil_ascii','par__productos__perfilcuentas.idperfilcuentadetalle',
             'par__productos__perfilcuentas.valor_abc',
             'par__productos__perfilcuentas.formula',
+            'par__productos__perfilcuentas.iscomision',
             'par__productos__perfilcuentas.iscargo')
             ->where('par__productos__perfilcuentas.activo','=','1')
             ->where('par__productos.idproducto','=',$request->idpro)
