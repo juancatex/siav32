@@ -1,7 +1,9 @@
 <?php
-$ip=$_SERVER['SERVER_ADDR'];
+ 
+// $ip=$_SERVER['SERVER_ADDR'];
+ 
 // if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
-//     $ip='192.168.100.60';
+    $ip='192.168.100.60';
     // $ip='192.168.100.59';
 
 return [
@@ -326,7 +328,8 @@ return [
         'REP_CONTRATOJP'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_jpintocontrato.rptdesign&__format=pdf&idasignacion=', 
         'REP_ENTRADACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomentrada.rptdesign&__format=pdf', 
         'REP_SALIDACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomsalida.rptdesign&__format=pdf',
-        'REP_REGISTRO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
+        // 'REP_REGISTRO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
+        'REP_REGISTRO'=> ':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
         'REP_REGISTRO_TODO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_todo.rptdesign&__format=pdf',          
         'REP_REGISTRO_SALIDA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
         'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
