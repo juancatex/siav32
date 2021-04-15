@@ -116,10 +116,7 @@
                     msg:
                         "Existe una cobranza irregular, consulte con el administrador del sistema."
                     });
-                }
-               
-
-                
+                } 
                 this.prestamosEnviadosAscii=enviadosAscii;
                 this.prestamosAcreedor=datas;
                 this.totalascii= _num(parseFloat(total_ascii)).format('0,0[.]00 $');
