@@ -118,8 +118,7 @@
                     });
                 }
                
-git config --global user.email "you@example.com"
-  git config --global user.name "Your Name"
+
                 
                 this.prestamosEnviadosAscii=enviadosAscii;
                 this.prestamosAcreedor=datas;
