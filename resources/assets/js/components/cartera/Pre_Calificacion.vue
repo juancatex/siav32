@@ -1867,7 +1867,7 @@ export default {
         me.factorid = 0;
         me.valorfactor = 0;
         me.plazomesesmin = 0; 
-        me.cuotas_vigentes = 0; 
+        //me.cuotas_vigentes = 0; 
         me.islineal=0; 
         me.garantesporproducto = 0;
         me.arrayFormulasProducto = [];

@@ -102,9 +102,9 @@
             
         },
         methods : { 
-            cerrarmodaleve(id){ 
+            cerrarmodaleve(id,a=-1){ 
                 this.modalcobranza.closeModal(id);
-                this.$emit('cerrarvue');
+                this.$emit('cerrarvue',a);
             }, 
             showVue(enviadosAscii,datas,total_ascii,subtotall,cobrados,errorss,modulo,nombrefiles){
                 this.obs='';
@@ -118,7 +118,8 @@
                     });
                 }
                
-
+git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
                 
                 this.prestamosEnviadosAscii=enviadosAscii;
                 this.prestamosAcreedor=datas;
@@ -154,19 +155,21 @@
  console.log('prestamos',this.prestamosEnviadosAscii,
                         'acreedores',acreedores,
                         'idmodulo',this.idmodulomain);
-                    // axios.post('/cobranzaascii',{
-                    //     'obs':this.obs,    
-                    //     'prestamos':this.prestamosEnviadosAscii,
-                    //     'acreedores':acreedores,
-                    //     'idmodulo':this.idmodulomain
-                    // }).then((response)=>{
-                   
-                    //     if(response.data.status){
-                    //         console.log('si');
-                    //     }else{
-                    //         console.log(response.data.mensaje);
-                    //     }
-                    // });
+                    axios.post('/cobranzaascii',{
+                        'obs':this.obs,    
+                        'prestamos':this.prestamosEnviadosAscii,
+                        'acreedores':acreedores,
+                        'idmodulo':this.idmodulomain
+                    }).then((response)=>{
+                   console.log('estatus:',response.data)
+                        if(response.data.status){
+                            console.log('si');
+                            this.cerrarmodaleve('modal_cobranza',1);
+                        }else{
+                            console.log(response.data.mensaje);
+                            this.cerrarmodaleve('modal_cobranza',0);
+                        }
+                    });
 
 
 

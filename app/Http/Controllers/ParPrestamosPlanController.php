@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;   
 use App\AsinalssClass\AsientoMaestroClass;
+use Illuminate\Database\Eloquent\ModelNotFoundException; 
+ 
 
 class ParPrestamosPlanController extends Controller
 {
@@ -340,13 +342,14 @@ class ParPrestamosPlanController extends Controller
                         ->update(['idestprestamos' => 1]); 
                     }
                 }
-                if($debe!=$haber){ 
+                // if($debe!=$haber){ 
+                if(bccomp($debe,$haber,2)!=0){ 
                     throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable
                      al momento de realizar la cobranza por ascii, comuniquese con el administrador del sistema.
-                     (idproducto = ".$idproducto.")"); 
+                     (idproducto = ".$idproducto." , !$debe! - !$haber! ".bccomp($debe,$haber,2).")"); 
                 } 
                 $asientomaestro= new AsientoMaestroClass();
-                $respuesta_perfil=$asientomaestro->AsientosMaestroArray($idmaestro,
+                $respuesta_perfil=$asientomaestro->AsientosMaestroArrayASCII($idmaestro,
                 '', 
                 'ASCII',  
                 $request->obs, 

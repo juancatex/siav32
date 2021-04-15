@@ -87,8 +87,19 @@
             }
         },
         methods : { 
-            cerrarModalvue(){
-
+            cerrarModalvue(ins){
+                if(ins>=0){
+                    if(ins==1){
+                        swal("¡El proceso termino correctamente!", "", "success");
+                                $(".swal2-modal").css('z-index', '2000');
+                                $(".swal2-container").css('z-index', '2000');
+                    }else{
+                        swal("¡Ocurrio un error al momento de realizar el proceso!", "", "warning"); 
+                                $(".swal2-modal").css('z-index', '2000');
+                                $(".swal2-container").css('z-index', '2000');
+                    }
+                      
+                }
             },
           processing(arraysql) {  
               let me = this; 

@@ -49,7 +49,7 @@
 </div>
 
  <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="generarpdf">
-      <div class="modal-dialog modal-primary modal-lg" role="document">
+      <div class="modal-dialog modal-primary modal-xl" role="document">
         <div class="modal-content animated fadeIn">
           <div class="modal-header">
             <h4 class="modal-title" id="modalOneLabel">Detalle de carga ASCII</h4>

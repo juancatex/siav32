@@ -111,7 +111,7 @@ class CreateApoAportesTrigger extends Migration
                     INSERT INTO apo__aportes (numpapeleta, idtipoaporte,aporte,totalganado,fechaaporte,idperfilcuentamaestro,idlote,obsaporte,created_at,updated_at)
                     VALUES(new.numpapeleta,new.idtipoaporte,new.aporte,new.aporte*100/4,new.fechaaporte,new.idperfilcuentamaestro,new.idlote,new.observaciones,new.created_at,new.updated_at);
                     
-                    IF (SELECT COUNT(coddestino) FROM par__destinos WHERE coddestino=TRIM(new.coddestino)) = 0 THEN BEGIN
+                    IF (SELECT COUNT(coddestino) FROM par__destinos WHERE coddestino=TRIM(new.coddestino) and idfuerza=TRIM(new.codfuerza)) = 0 THEN BEGIN
                             INSERT INTO par__destinos (idfuerza,coddestino,nomdestino)
                             VALUES(TRIM(new.codfuerza),TRIM(new.coddestino),TRIM(new.destino));
                     END;
@@ -163,7 +163,7 @@ class CreateApoAportesTrigger extends Migration
                         END;
                     ELSE
                         SELECT iddestino FROM socios WHERE numpapeleta=new.numpapeleta INTO @olddestino;
-                        SELECT iddestino FROM par__destinos WHERE coddestino LIKE new.coddestino INTO @newdestino;
+                        SELECT iddestino FROM par__destinos WHERE coddestino LIKE new.coddestino and idfuerza=new.codfuerza INTO @newdestino;
                         SELECT idgrado FROM socios WHERE numpapeleta=new.numpapeleta INTO @idgradosocio;
                         SELECT idgrado FROM par_grados WHERE nomgrado LIKE new.grado INTO @idgradogrados;
                         SELECT idespecialidad FROM socios WHERE numpapeleta=new.numpapeleta INTO @oldespecialidad;
