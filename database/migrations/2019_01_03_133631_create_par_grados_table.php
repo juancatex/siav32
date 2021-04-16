@@ -16,7 +16,7 @@ class CreateParGradosTable extends Migration
         Schema::create('par_grados', function (Blueprint $table) {
             $table->increments('idgrado'); 
             $table->string('nomgrado',10);
-            $table->string('abrev',3)->nullable();
+            $table->string('abrev',5)->nullable();
             $table->boolean('activo')->default(1);
             $table->timestamps(); 
         });
