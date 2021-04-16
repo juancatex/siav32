@@ -68,7 +68,7 @@ class Par_GradoController extends Controller
         if (!$request->ajax()) return redirect('/');
 
         $grados = Par_Grado::where('activo','=','1')
-        ->select('idgrado','nomgrado')->orderBy('nomgrado', 'asc')->get();
+        ->select('idgrado','nomgrado','abrev')->orderBy('nomgrado', 'asc')->get();
         return ['grados' => $grados];
     }
 

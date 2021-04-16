@@ -473,7 +473,7 @@
                                     name="Grado" required
                                     :class="{'form-control formu-entrada': true, 'error': errors.has('Grado')}" >
                                     <option selected="selected" value="" disabled>Grado...</option>
-                                    <option v-for="grado in arrayGrado" :key="grado.idgrado" :value="grado.idgrado" v-text="grado.nomgrado"></option>
+                                    <option v-for="grado in arrayGrado" :key="grado.idgrado" :value="grado.idgrado" v-text="grado.abrev +' : '+ grado.nomgrado"></option>
                                 </select>
                                 </div>
                                 <p v-show="errors.has('Grado')" class="text-error">{{ errors.first('Grado') }}</p> 
