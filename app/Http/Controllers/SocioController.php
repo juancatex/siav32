@@ -33,7 +33,7 @@ class SocioController extends Controller
                 } 
             }            
             $socios = Socio::
-            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par_grados.abrev','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
             ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
             ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
             ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
@@ -45,7 +45,7 @@ class SocioController extends Controller
         }
         else{
             $socios = Socio::
-            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par_grados.abrev','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
                 ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
                 ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
                 ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
