@@ -1135,7 +1135,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
      
       centrarTextTo2(doc, (ta.idtiposocio==1)?'BENEFICIARIO(A)':'BENEFICIARIO(A) - SP', 10.77,6.4);
-      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.7, 3,0.5,'barra','NONE',90);   
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.8, 3,0.5,'barra','NONE',90);   
       doc.setFontSize(5);
       doc.setTextColor(255,255,255);
       centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(1, 'years').format("YYYY")).toUpperCase()), 11.5,6.4); 
