@@ -178,6 +178,28 @@ class SocioController extends Controller
         // return response()->json(array('id' => $producto->idproducto), 200);
      }
 
+     public function getfotoBENE(Request $request)
+     {  if (!$request->ajax()) return redirect('/');
+         $full_path = Storage::path('AFI/bene.jpg');
+         $base64 = base64_encode(Storage::get('AFI/bene.jpg'));
+ 
+         $full_path2 = Storage::path('AFI/crva.jpg');
+         $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
+ 
+         if(Storage::exists('fotos/bene/'.$request->foto)){
+            $full_path3 = Storage::path('fotos/bene/'.$request->foto);
+            $base643 = base64_encode(Storage::get('fotos/bene/'.$request->foto));
+          }else{
+            $full_path3 = Storage::path('AFI/avatare.jpg');
+            $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));
+          }
+ 
+         return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
+                 'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
+                 'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
+         // return response()->json(array('id' => $producto->idproducto), 200);
+      }
+
      public function getfotoCRV_cen(Request $request)
      {  if (!$request->ajax()) return redirect('/');
          $full_path = Storage::path('AFI/crcen.jpg');

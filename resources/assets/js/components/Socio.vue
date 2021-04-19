@@ -708,6 +708,10 @@
                             <tbody>
                                 <tr v-for="beneficiario in arrayBeneficiarios" :key="beneficiario.idbeneficiario" :class="beneficiario.activo?'':'txtdesactivado'">
                                     <td align="center">
+                                         
+                                        <button v-if="check('credencial')" type="button" @click="generarCarnetSocioBene(beneficiario)" class="btn btn-warning btn-sm">
+                                        <i class="icon-camera"></i>
+                                        </button>
                                         <button type="button" class="btn btn-warning btn-sm icon-pencil" @click="abrirModalBeneficiario('beneficiario','actualizar',beneficiario)">
                                         </button>
                                         <template v-if="beneficiario.activo">
@@ -752,13 +756,10 @@
                                     <tr>
                                         <td nowrap>Parentesco:</td>
                                         <td><select class="form-control" name="paren" v-model="parentesco" v-validate.initial="'required'">
-                                            <option value=''>--Seleccione--</option>
-                                            <option value='Espos@'>Espos@</option>
-                                            <option value='Hij@'>Hij@</option>
-                                            <option value='Herman@'>Herman@</option>
-                                            <option value='Padre'>Padre</option>
-                                            <option value='Madre'>Madre</option>
-                                            <option value='Otro'>Otro</option>                                            
+                                            <option value='Esposo'>Esposo</option>
+                                            <option value='Esposa'>Esposa</option>
+                                            <option value='Hijo'>Hijo</option>
+                                            <option value='Hija'>Hija</option>                                        
                                             </select></td>
                                     </tr>
                                         <span class="text-error">{{ errors.first('paren')}}</span>
@@ -1691,6 +1692,28 @@ this.posfilenuevo++;
             let me=this;
                   axios.get('/sociogetfotoCRV').then(function (response) {
                            _pl._vvp2521_cr02(socio,response.data,()=>{
+                                swal.close()
+                                me.classModal.openModal('credencial');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+            
+            }, 
+            generarCarnetSocioBene(beneficiario){ 
+                this.printcredencial=0;
+             this.classModal.closeModal('credencial');
+             swal({
+                title: "Generando reporte",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+            let me=this;
+                  axios.get('/sociogetfotoBENE?foto='+beneficiario.foto).then(function (response) {
+                           _pl._vvp2521_cr02_b(beneficiario,response.data,()=>{
                                 swal.close()
                                 me.classModal.openModal('credencial');
                             });

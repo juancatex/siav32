@@ -11,7 +11,8 @@ class AfiBeneficiarioController extends Controller
 {
     public function index(Request $request)
     {
-        $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*')
+        $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*','abrvdep','socios.codsocio','socios.carnetmilitar','socios.numpapeleta','socios.idtiposocio')
+        ->join('par_departamentos','par_departamentos.iddepartamento','afi__beneficiarios.iddepartamento')
         ->join('socios','afi__beneficiarios.idsocio','=','socios.idsocio')
         ->where('afi__beneficiarios.idsocio','=',$request->idsocio)
         ->orderBy('idbeneficiario', 'asc')->get();
