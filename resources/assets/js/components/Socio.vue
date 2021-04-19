@@ -709,10 +709,10 @@
                                 <tr v-for="beneficiario in arrayBeneficiarios" :key="beneficiario.idbeneficiario" :class="beneficiario.activo?'':'txtdesactivado'">
                                     <td align="center">
                                          
-                                        <button v-if="check('credencial')" type="button" @click="generarCarnetSocioBene(beneficiario)" class="btn btn-warning btn-sm">
+                                        <button v-if="check('credencial')&&beneficiario.activo" type="button" @click="generarCarnetSocioBene(beneficiario)" class="btn btn-warning btn-sm">
                                         <i class="icon-camera"></i>
                                         </button>
-                                        <button type="button" class="btn btn-warning btn-sm icon-pencil" @click="abrirModalBeneficiario('beneficiario','actualizar',beneficiario)">
+                                        <button v-if="beneficiario.activo" type="button" class="btn btn-warning btn-sm icon-pencil" @click="abrirModalBeneficiario('beneficiario','actualizar',beneficiario)">
                                         </button>
                                         <template v-if="beneficiario.activo">
                                             <button type="button" class="btn btn-danger btn-sm icon-trash" @click="desactivarBeneficiario(beneficiario)"></button>
