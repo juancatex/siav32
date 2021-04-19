@@ -1173,12 +1173,12 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontStyle('bold');
       doc.setTextColor(52,52,52);
       if(ta.idfuerza==5){// solo valida fuera armada para imprimir la abreviacion
-        centrarTextTo2(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___', 8.2,6.4); 
+        centrarTextTo2(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___', 8.05,6.4); 
       }else{
-        centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.2,6.4); 
+        centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.05,6.4); 
       } 
-          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 9,6.4);
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.45,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.85,6.4);
             
       doc.setFontStyle('normal');
       doc.setFontSize(7); 
@@ -1190,14 +1190,14 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
       doc.text(ta.codsocio?ta.codsocio:'___', 7.24, 4.1,null,90);
       doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);
-      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
-      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);
+      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);
 
-      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
-      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
       doc.setFontSize(5);
       doc.setTextColor(255,255,255);
-      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.5,6.4); 
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.63,6.4); 
 
   
       $("#" + idview).attr("src", doc.output('datauristring'));  
@@ -1248,7 +1248,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
  
       doc.setFontSize(6);
       centrarTextTo2(doc, (ta.validate?('Válido hasta '+ (moment(ta.validate).format("MMMM - YYYY")).toUpperCase()):' '), 10.8,6.4); 
-      doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
+      doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);   
  
  
       var diva= $('<div>')
