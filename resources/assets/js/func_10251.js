@@ -1190,11 +1190,17 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
       doc.text(ta.codsocio?ta.codsocio:'___', 7.24, 4.1,null,90);
       doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);
-      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
-      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);
-  
-      $("#" + idview).attr("src", doc.output('datauristring')); 
+      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
+      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);
 
+      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.5,6.4); 
+
+  
+      $("#" + idview).attr("src", doc.output('datauristring'));  
       var doc2 = new jsPDF('p', 'cm','a4');  
       doc2.setProperties({
         title: 'Carnet socio posterior'
