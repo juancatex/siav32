@@ -798,7 +798,7 @@
                                      
                                     <tr>
                                         <td>Foto:</td> 
-                                        <td><input type="file" id="fileon" ref="fileon" class="form-control" @change="imagenView" > </td>
+                                        <td><input type="file" id="fileon" ref="fileon" name='fotografia' class="form-control" @change="imagenView" v-validate.initial="'required'"> </td>
                                     </tr>
                                       <tr> 
                                        <td colspan="2"> <div id="imgbene"></div></td> 
@@ -1148,13 +1148,18 @@
 
 
         methods : {
-            imagenView(evt){ 
-                    var file = this.$refs.fileon.files[0]; 
+            imagenView(evt){  
+                   if(this.$refs.fileon.files.length==0){  
+                             $('#imgbene').html('');     
+                       return;
+                   }else{  
+                   var file = this.$refs.fileon.files[0]; 
                     var reader = new FileReader();
                     reader.onload = function(event) { 
                     $(`<img src='${event.target.result}' style="max-width: 50%;">`).appendTo('#imgbene');
                     }
                     reader.readAsDataURL(file);
+                   }
             },
         datasArrayNuevos(data){
             this.posfilenuevo=(-1);
