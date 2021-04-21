@@ -120,8 +120,8 @@
                                         </button>  
                                                                                         
                                     </td>
-									<td><img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
-										<img v-else :src="'img/socios/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+									<td><img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
+										<img v-else :src="'storage/socio/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
 									</td> 
                                     <td v-text="socio.nomgrado"></td> 
                                     <td v-text="socio.nombre"></td>
@@ -721,7 +721,9 @@
                                             <button type="button" class="btn btn-warning btn-sm icon-action-redo" @click="activarBeneficiario(beneficiario)"></button>
                                         </template>                                                                               
                                     </td>
-                                    <td> {{beneficiario.nombre}} {{beneficiario.apaterno}} {{beneficiario.amaterno}} </td>
+                                    <td>  
+                                    <img  :src="'storage/bene/'+beneficiario.foto"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+                                         {{beneficiario.nombre}} {{beneficiario.apaterno}} {{beneficiario.amaterno}} </td>
                                     <td v-text="beneficiario.parentesco"></td>
                                     <td v-text="beneficiario.ci" align="center"></td>
                                     <td v-text="beneficiario.fechanac" align="center"></td>
@@ -737,69 +739,74 @@
                                 <table>
                                     <tr>
                                         <td>Nombre:</td>
-                                        <td><input type="text" name="nom" class="form-control" v-model="nombre"  v-validate.initial="'required'"> </td>
-                                    </tr>
-                                    <span class="text-error">{{ errors.first('nom')}}</span>
+                                        <td><input type="text" name="nombre beneficiario" class="form-control" v-model="nombre"  v-validate.initial="'required'"> </td>
+                                    </tr> 
+                                    <tr><td colspan="2"> <span class="text-error">{{ errors.first('nombre beneficiario')}}</span></td></tr>
                                     <tr>
                                         <td>Paterno:</td>
-                                        <td> <input type="text" name="pat" class="form-control" v-model="apaterno"  v-validate.initial="'required'"> </td>
-                                    </tr>
-                                    <span class="text-error">{{ errors.first('pat')}}</span>
+                                        <td> <input type="text" name="apellido paterno" class="form-control" v-model="apaterno"  v-validate.initial="'required'"> </td>
+                                    </tr> 
+                                    <tr><td colspan="2"><span class="text-error">{{ errors.first('apellido paterno')}}</span></td></tr>
                                     <tr>
                                         <td>Materno:</td>
                                         <td> <input type="text" class="form-control" v-model="amaterno"> </td>
                                     </tr>
-                                </table>
-                            </div>
-                            <div class="col-md-4" >
-                                <table>
+                                    <tr><td colspan="2"></td></tr>
                                     <tr>
                                         <td nowrap>Parentesco:</td>
-                                        <td><select class="form-control" name="paren" v-model="parentesco" v-validate.initial="'required'">
+                                        <td><select class="form-control" name="parentesco" v-model="parentesco" v-validate.initial="'required'">
                                             <option value='Esposo'>Esposo</option>
                                             <option value='Esposa'>Esposa</option>
                                             <option value='Hijo'>Hijo</option>
                                             <option value='Hija'>Hija</option>                                        
                                             </select></td>
                                     </tr>
-                                        <span class="text-error">{{ errors.first('paren')}}</span>
+                                    <tr><td colspan="2"><span class="text-error">{{ errors.first('parentesco')}}</span></td></tr>
+                                </table>
+                            </div>
+                            <div class="col-md-4" >
+                                <table>
+                                      
                                     <tr>
                                         <td>Nro C.I. :</td>
-                                        <td><input type="text" name="ci1" class="form-control" v-model="ci" v-validate.initial="'required|numeric'"> </td>
+                                        <td><input type="text" name="carnet de identidad del beneficiario" class="form-control" v-model="ci" v-validate.initial="'required|numeric'"> </td>
                                     </tr>
-                                        <span class="text-error">{{ errors.first('ci1')}}</span>
+                                     <tr><td colspan="2"><span class="text-error">{{ errors.first('carnet de identidad del beneficiario')}}</span></td></tr>
                                     <tr>
                                         <td>Expedido :</td>
-                                        <td><select class="form-control" name="expe" v-model="iddepartamentoexpedido"  v-validate.initial="'required'">
+                                        <td><select class="form-control" name="expedido" v-model="iddepartamentoexpedido"  v-validate.initial="'required'">
                                                 <option value=''>--Seleccione--</option>
                                                 <option v-for="departamento in arrayDepartamento" :key="departamento.iddepartamento"
                                                 :value="departamento.iddepartamento" v-text="departamento.nomdepartamento"></option>
                                             </select>
                                         </td>
                                     </tr>
-                                        <span class="text-error">{{ errors.first('expe')}}</span>
-                                    <!-- <tr>
-                                        <td>Sexo</td>
-                                        <td><input type="radio" name="sexo" value="m" v-model="sexo">Masculino
-                                            <input type="radio" name="sexo" value="f" v-model="sexo">Femenino
-                                        </td>
-                                    </tr> -->
-
-                                </table>
-                            </div>
-                            <div class="col-md-4" >
-                                <table >
-                                    <tr>
+                                   <tr><td colspan="2"><span class="text-error">{{ errors.first('expedido')}}</span> </td></tr>
+                                   <tr>
                                         <td nowrap>Fecha Nac.:</td>
-                                        <td><input type="date" name="fecnac11" class="form-control" v-model="fechanacimiento" style="width:150px"> </td>
-                                    </tr>
-                                    <span class="text-error">{{ errors.first('fecnac1')}}</span>
-                                    <tr>
+                                        <td><input type="date" name="fecnac11" class="form-control" v-model="fechanacimiento" > </td>
+                                    </tr> 
+                                    <tr><td colspan="2">  </td></tr>
+                                     <tr>
                                         <td>Celular:</td> 
                                         <td><input type="text" class="form-control" v-model="telcelular" > </td> 
                                     </tr>
                                 </table>
                             </div>
+                            <div class="col-md-4" >
+                                <table >
+                                     
+                                    <tr>
+                                        <td>Foto:</td> 
+                                        <td><input type="file" id="fileon" ref="fileon" class="form-control" @change="imagenView" > </td>
+                                    </tr>
+                                      <tr> 
+                                       <td colspan="2"> <div id="imgbene"></div></td> 
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                           
                         </div>                       
 
                 </form> 
@@ -1141,6 +1148,14 @@
 
 
         methods : {
+            imagenView(evt){ 
+                    var file = this.$refs.fileon.files[0]; 
+                    var reader = new FileReader();
+                    reader.onload = function(event) { 
+                    $(`<img src='${event.target.result}' style="max-width: 50%;">`).appendTo('#imgbene');
+                    }
+                    reader.readAsDataURL(file);
+            },
         datasArrayNuevos(data){
             this.posfilenuevo=(-1);
             this.datosdesociosnuevos=data.values;
@@ -1884,50 +1899,75 @@ this.posfilenuevo++;
                 this.iddepartamentoexpedido='';
                 this.fechanacimiento='';
                 this.telcelular='';
-                this.sexo='';
-            },
-
-
+                this.sexo=''; 
+               $('#fileon').val("");
+               $('#imgbene').html('');
+            }, 
             registrarBeneficiario(){               
-                let me = this;
+                let me = this; 
+
+        let formData = new FormData(); 
+        formData.append('foto', this.$refs.fileon.files[0]);  
+        axios.post( '/saveimagenBeneficiario',
+                formData 
+            ).then(function(e){   
                 axios.post('/afi_beneficiario/registrar',{
-                    'idsocio':this.socio_id,                         
-                    'nombre': this.nombre.toUpperCase(),
-                    'apaterno':this.apaterno.toUpperCase(),
-                    'amaterno':this.amaterno.toUpperCase(),
-                    'parentesco': this.parentesco,
-                    'ci': this.ci,
-                    'iddepartamentoexpedido':this.iddepartamentoexpedido,
-                    'fechanac': this.fechanacimiento,
-                    'telcelular':this.telcelular,
-                    //'sexo':this.sexo
+                    'idsocio':me.socio_id,                         
+                    'nombre': me.nombre.toUpperCase(),
+                    'apaterno':me.apaterno.toUpperCase(),
+                    'amaterno':me.amaterno.toUpperCase(),
+                    'parentesco': me.parentesco,
+                    'ci': me.ci,
+                    'iddepartamentoexpedido':me.iddepartamentoexpedido,
+                    'fechanac': me.fechanacimiento,
+                    'telcelular':me.telcelular,
+                    'foto':e.data.foto
                 }).then(function (response) {
                     swal('Creado correctamente','','success');
                     me.listaBeneficiarios(me.socio_id);
                     me.resetBeneficiario();
                 });
+        })
+        .catch(function (error) {
+                    console.log(error);
+                });
+
+
             },
 
             actualizarBeneficiario(){ 
                 let me = this;
-                axios.put('/afi_beneficiario/actualizar',{
-                    'idbeneficiario':this.beneficiario_id,
-                    'nombre': this.nombre,
-                    'apaterno':this.apaterno,
-                    'amaterno':this.amaterno,
-                    'parentesco': this.parentesco,
-                    'ci': this.ci,
-                    'idsocio': this.idsocio,
-                    'iddepartamentoexpedido':this.iddepartamentoexpedido,
-                    'fechanac': this.fechanacimiento,
-                    'telcelular':this.telcelular,
-                    //'sexo':this.sexo
+            
+
+
+
+                let formData = new FormData(); 
+        formData.append('foto', this.$refs.fileon.files[0]);  
+        axios.post( '/saveimagenBeneficiario',
+                formData 
+            ).then(function(e){  
+                    axios.put('/afi_beneficiario/actualizar',{
+                    'idbeneficiario':me.beneficiario_id,
+                    'nombre': me.nombre,
+                    'apaterno':me.apaterno,
+                    'amaterno':me.amaterno,
+                    'parentesco': me.parentesco,
+                    'ci': me.ci,
+                    'idsocio': me.idsocio,
+                    'iddepartamentoexpedido':me.iddepartamentoexpedido,
+                    'fechanac': me.fechanacimiento,
+                    'telcelular':me.telcelular,
+                    'foto':e.data.foto
                 }).then(function (response) {
                     swal('Datros actualizados','','success');
                     me.listaBeneficiarios(me.socio_id);
                     me.resetBeneficiario();
                     me.tipoAccion=1;
-                }); 
+                });  
+        })
+        .catch(function (error) {
+                    console.log(error);
+                });
             }, 
 
             registrarCuentasocio(){               

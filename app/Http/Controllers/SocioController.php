@@ -127,7 +127,12 @@ class SocioController extends Controller
         $socio->save();
     }
 
-    
+    public function getfotoSOCIO(Request $request)
+     {  if (!$request->ajax()) return redirect('/');
+         $full_path = Storage::path('/app/public/bene/'.$request->foto);
+         $base64 = base64_encode(Storage::get('/app/public/bene/'.$request->foto)); 
+         return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64]; 
+      }
     public function updatefoto(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
@@ -186,9 +191,9 @@ class SocioController extends Controller
          $full_path2 = Storage::path('AFI/crva.jpg');
          $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
  
-         if(Storage::exists('fotos/bene/'.$request->foto)){
-            $full_path3 = Storage::path('fotos/bene/'.$request->foto);
-            $base643 = base64_encode(Storage::get('fotos/bene/'.$request->foto));
+         if(Storage::exists('/app/public/bene/'.$request->foto)){
+            $full_path3 = Storage::path('/app/public/bene/'.$request->foto);
+            $base643 = base64_encode(Storage::get('/app/public/bene/'.$request->foto));
           }else{
             $full_path3 = Storage::path('AFI/avatare.jpg');
             $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));
