@@ -67,7 +67,8 @@ class AfiBeneficiarioController extends Controller
         if (!$request->ajax()) return redirect('/');  
         $var = Str::random(32);
         $var.='.jpg';
-        $request->file('foto')->storeAs('fotos/bene',$var); 
+        // $request->file('foto')->storeAs('fotos/bene',$var); 
+        $request->file('foto')->storeAs('app/public/bene',$var); 
        return ['foto'=>$var];
     }
     
