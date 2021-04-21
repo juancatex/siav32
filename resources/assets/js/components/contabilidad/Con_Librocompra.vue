@@ -265,6 +265,7 @@
                                                 v-bind:precision="2"
                                                 v-on:focus="selectAll">
                                 </vue-numeric>
+                                <span class="text-error" v-if="iscreditofiscal">el monto no debe ser mayor al importe total</span>
                             </div>
                             <div class="form-group col-md-4">
                                 <strong>Descuentos - Rebajas:</strong>
@@ -276,6 +277,7 @@
                                                 v-bind:precision="2"
                                                 v-on:focus="selectAll">
                                 </vue-numeric>
+                                <span class="text-error" v-if="isdescuentos">el monto no debe ser mayor al importe</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -292,8 +294,8 @@
                             <div>
                                 <button type="button" class="btn btn-secondary" @click="cerrarModalCompras()">Cerrar</button>
                                 <!-- :disabled = "errors.any()" -->
-                                <button :disabled ="!iscompletelibro" type="submit" v-if="tipoAccionlibro==1" class="btn btn-primary" @click="registroLibrocompra()">Guardar</button>
-                                <button :disabled ="!iscompletelibro" type="button" v-if="tipoAccionlibro==2" class="btn btn-primary" @click="actualizarLibrocompra()">Actualizar</button>
+                                <button :disabled ="!iscompletelibro || (isdescuentos || iscreditofiscal)" type="submit" v-if="tipoAccionlibro==1" class="btn btn-primary" @click="registroLibrocompra()">Guardar</button>
+                                <button :disabled ="!iscompletelibro || (isdescuentos || iscreditofiscal)" type="button" v-if="tipoAccionlibro==2" class="btn btn-primary" @click="actualizarLibrocompra()">Actualizar</button>
                             </div>
                         </div>
                     </div>
@@ -496,12 +498,26 @@
                 
                 return !this.cerrado;
             },
+            isdescuentos(){
+                let me=this;
+                if(me.descuentos>me.importetotal)
+                    return true;
+                else
+                    return false;
+            },
+            iscreditofiscal(){
+                let me=this;
+                if(me.nocreditofiscal>me.importetotal)
+                    return true;
+                else
+                    return false;
+            },
 
             iscompletelibro(){
                 let me=this;
                 //console.log(me.idproveedor.length+ ' complete libro');
                 
-                if((me.idproveedor.length!=0||me.idproveedorrespuesta!=0) && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal && me.detalle)
+                if((me.idproveedor.length!=0||me.idproveedorrespuesta!=0) && me.fechafactura && me.numfactura && me.numautorizacion && me.importetotal && me.detalle) 
                     return true;
                 else
                     return false
