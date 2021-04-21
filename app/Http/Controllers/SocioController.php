@@ -186,9 +186,9 @@ class SocioController extends Controller
          $full_path2 = Storage::path('AFI/crva.jpg');
          $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
  
-         if(Storage::exists('fotos/bene/'.$request->foto)){
-            $full_path3 = Storage::path('fotos/bene/'.$request->foto);
-            $base643 = base64_encode(Storage::get('fotos/bene/'.$request->foto));
+         if(Storage::exists('fotos/bene/2478715.jpg')){
+            $full_path3 = Storage::path('fotos/bene/2478715.jpg');
+            $base643 = base64_encode(Storage::get('fotos/bene/2478715.jpg'));
           }else{
             $full_path3 = Storage::path('AFI/avatare.jpg');
             $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));
