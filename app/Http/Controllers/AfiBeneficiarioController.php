@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Afi_Beneficiario;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use App\Socio;
 
 class AfiBeneficiarioController extends Controller
@@ -17,14 +16,7 @@ class AfiBeneficiarioController extends Controller
         ->join('par_departamentos','par_departamentos.iddepartamento','afi__beneficiarios.iddepartamento')
         ->join('socios','afi__beneficiarios.idsocio','=','socios.idsocio')
         ->where('afi__beneficiarios.idsocio','=',$request->idsocio)
-        ->orderBy('idbeneficiario', 'asc')->get()->toArray();
-        
-        foreach ($beneficiarios as $clave => $valor) {
-            $full_path = Storage::path('fotos/bene/'.$valor['foto']);
-            $base64 = base64_encode(Storage::get('fotos/bene/'.$valor['foto']));
-            $valor['fotodata']='data:'.mime_content_type($full_path) . ';base64,' . $base64;
-            $beneficiarios[$clave]=$valor;
-        }
+        ->orderBy('idbeneficiario', 'asc')->get();
         return ['beneficiarios' => $beneficiarios];
     }
 
@@ -76,7 +68,6 @@ class AfiBeneficiarioController extends Controller
         $var = Str::random(32);
         $var.='.jpg';
         $request->file('foto')->storeAs('fotos/bene',$var); 
-        $request->file('foto')->storeAs('/app/public/bene',$var); 
        return ['foto'=>$var];
     }
     

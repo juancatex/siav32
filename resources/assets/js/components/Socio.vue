@@ -120,8 +120,8 @@
                                         </button>  
                                                                                         
                                     </td>
-									<td><img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
-										<img v-else :src="'storage/socio/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+									<td><img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
+										<img v-else :src="'img/socios/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
 									</td> 
                                     <td v-text="socio.nomgrado"></td> 
                                     <td v-text="socio.nombre"></td>
@@ -1727,7 +1727,6 @@ this.posfilenuevo++;
                 }
             }); 
             let me=this;
-            console.log(beneficiario.foto);
                   axios.get('/sociogetfotoBENE?foto='+beneficiario.foto).then(function (response) {
                            _pl._vvp2521_cr02_b(beneficiario,response.data,()=>{
                                 swal.close()

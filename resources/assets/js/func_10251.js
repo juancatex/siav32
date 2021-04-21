@@ -822,7 +822,7 @@ export function _vm2154_12185(promise) {
     var valuehtml = '<li id="' + value.idsocio + '" class="list-group-item garantesid active" style="padding: 5px 0 5px 0;" >' +
       '<div class="input-group" style="align-items: center;">' +
       '<div class="col-md-1">' +
-      '<img   src="storage/socio/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
       '</div>' +
       '<div class="col-md-8"> ' +
       '<p style="margin:0">' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + ' ( ' + value.factorg + '% )</p>' +
@@ -844,7 +844,7 @@ export function _vm2154_12185(promise) {
       var valuehtml = '<li id="' + element.idsocio + '" class="list-group-item garantesid ' + ((promise.garantesseleccionados.has(element.idsocio)) ? 'active"' : '"') + ' style="padding: 5px 0 5px 0;" >' +
         '<div class="input-group" style="align-items: center;">' +
         '<div class="col-md-1">' +
-        '<img   src="storage/socio/' + ((element.rutafoto != null) ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+        '<img   src="img/socios/' + ((element.rutafoto != null) ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
         '</div>' +
         '<div class="col-md-8"> ' +
         '<p style="margin:0">' + element.nombre + ' ' + element.apaterno + ' ' + element.amaterno + '</p>' +
@@ -917,7 +917,7 @@ export function _mg3612152_215(promise) {
   promise.forEach(function (value) {
     valuehtml += '<div class="col-md-12 row " style="justify-content: center;margin-top: 5px;">' +
       '<div class="col-md-1" style=" text-align: center;border: 1px solid gray; padding: 5px;">' +
-      '<img   src="storage/socio/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
       '  </div>' +
       '<div class="col-md-5 input-group" style="align-items: center;border: 1px solid gray; padding: 5px;">' +
       '<p style="margin:0">' + value.nomgrado + ' ' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + '</p>' +
@@ -1058,7 +1058,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.rutafoto?'storage/socio/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
