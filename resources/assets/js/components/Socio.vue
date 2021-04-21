@@ -1727,6 +1727,7 @@ this.posfilenuevo++;
                 }
             }); 
             let me=this;
+            console.log(beneficiario.foto);
                   axios.get('/sociogetfotoBENE?foto='+beneficiario.foto).then(function (response) {
                            _pl._vvp2521_cr02_b(beneficiario,response.data,()=>{
                                 swal.close()
