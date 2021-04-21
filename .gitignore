@@ -3,7 +3,7 @@
 # /public/img/socios
 /public/img/empleados
 /public/img/activos
-# /public/storage
+/public/storage
 /storage/*.key
 /storage/ASCII
 /storage/LogSafcon

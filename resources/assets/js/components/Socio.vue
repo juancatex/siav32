@@ -120,8 +120,8 @@
                                         </button>  
                                                                                         
                                     </td>
-									<td><img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
-										<img v-else :src="'img/socios/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+									<td><img v-if="socio.rutafoto" :src="'storage/socios/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
+										<img v-else :src="'storage/socios/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
 									</td> 
                                     <td v-text="socio.nomgrado"></td> 
                                     <td v-text="socio.nombre"></td>
@@ -372,8 +372,8 @@
                                                     </div> 												 
 												</div>
 												<div v-else> 															 															
-                                                    <img v-if="rutafoto" :src="'img/socios/'+rutafoto"   class="fotosocio">
-                                                    <img v-else :src="'img/socios/avatar.png'"  class="fotosocio">		
+                                                    <img v-if="rutafoto" :src="'storage/socios/'+rutafoto"   class="fotosocio">
+                                                    <img v-else :src="'storage/socios/avatar.png'"  class="fotosocio">		
                                                     <input  accept="image/*" id="fileInputSocio" type="file" v-on:change="onFileChange" class="form-control" style="display:none">
                                                     
                                                     <button style="width:89%" type="button" class="btn btn-primary" onclick="document.getElementById('fileInputSocio').click()" >Fotografia</button>
