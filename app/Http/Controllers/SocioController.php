@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 use App\Socio;    
 use App\Adm_User;
@@ -85,15 +86,23 @@ class SocioController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $rutas=config('app.ruta_imagen'); 
-        $imageData = $request->get('image'); 
-        $fileName =  "foto".$request->numpapeleta. ".jpg" ;
-        Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
-        //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-          Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+        // $rutas=config('app.ruta_imagen');  
+        // $imageData = $request->get('image'); 
+        // $fileName =  "foto".$request->numpapeleta. ".jpg" ;
+        // Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
+        // guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
+        // Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+
+
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->image, strpos($request->image, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/socio/'.$var, $value);
+ 
         $socio = new Socio();
         $socio->numpapeleta=$request->numpapeleta; 
-        $socio->rutafoto = $fileName;
+        $socio->rutafoto = $var;
         $socio->codsocio=$request->codsocio;
         $socio->nombre = $request->nombre;
         $socio->apaterno=$request->apaterno;
@@ -131,16 +140,23 @@ class SocioController extends Controller
     public function updatefoto(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $rutas=config('app.ruta_imagen');
-        $imageData = $request->get('image');   
+       
+        // $rutas=config('app.ruta_imagen');
+        // $imageData = $request->get('image');   
+        // $fileName =  "foto".$socio->numpapeleta. ".jpg" ;
+        // Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
+        // //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
+        // Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
         
-        $socio = Socio::findOrFail($request->idsocio);
-        
-        $fileName =  "foto".$socio->numpapeleta. ".jpg" ;
-        Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
-        //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-        Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
-        $socio->rutafoto = $fileName;
+        $socio = Socio::findOrFail($request->idsocio); 
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->image, strpos($request->image, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/socio/'.$var, $value);
+
+
+        $socio->rutafoto = $var;
         $socio->activo = '1';
         $socio->save();
     }

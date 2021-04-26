@@ -1112,7 +1112,8 @@
                 arrayPermisos : {ver:0,editar:0,borrar:0,credencial:0,impkardex:0,beneficiario:0,cuentasocio:0},
                 arrayPermisosIn:[],
                 datosdesociosnuevos:[],
-                posfilenuevo:-1
+                posfilenuevo:-1,
+                imagebenefi:''
 
             }
         },
@@ -1149,14 +1150,47 @@
 
         methods : {
             imagenView(evt){  
+                let me=this;
                    if(this.$refs.fileon.files.length==0){  
                              $('#imgbene').html('');     
                        return;
-                   }else{  
+                   }else{ 
+                      $('#idimagen').cropper('destroy');
+                     $('#imgbene').html(''); 
                    var file = this.$refs.fileon.files[0]; 
                     var reader = new FileReader();
                     reader.onload = function(event) { 
-                    $(`<img src='${event.target.result}' style="max-width: 50%;">`).appendTo('#imgbene');
+                    $(`<img src='${event.target.result}' id="idimagen" style="max-width: 50%;">
+                    <div style="padding: 9px;" id="fotoimagenbenecrood">
+                    <button  type="button" class="btn btn-success" id="btnselecctbene">Seleccionar</button> 
+                    <button  type="button" class="btn btn-danger" id="btncancelbene">Cancelar</button>
+                    </div>`).appendTo('#imgbene');
+
+                     $("#idimagen").cropper({
+			            aspectRatio: 1/1,
+					    viewMode: 1,
+					    dragMode: 'move',
+						autoCropArea: 1,
+						restore: false, 
+						guides: false, 
+						rotatable: false,
+					    multiple: false
+					}); 
+
+                    $("#btncancelbene").click(function(){
+                     $('#idimagen').cropper('destroy');
+                     $('#imgbene').html('');
+                     $('#fileon').val(""); 
+                    });
+
+                    $("#btnselecctbene").click(function(){ 
+                        me.imagebenefi=$("#idimagen").cropper('getCroppedCanvas',{ width: 300, height: 300 }).toDataURL();   
+                        $('#idimagen').cropper('destroy');
+                        $("#idimagen").attr("src",me.imagebenefi);
+                        $('#fotoimagenbenecrood').html(''); 
+                    });
+
+                   
                     }
                     reader.readAsDataURL(file);
                    }
@@ -1326,7 +1360,7 @@ this.posfilenuevo++;
 			vm.success='ok'; 
 			         if(vm.tipoAccion==2){$("#BmodalSocio").removeAttr('disabled');}
 			
-					 var canvas = $("#imgC").cropper('getCroppedCanvas').toDataURL(); 
+					 var canvas = $("#imgC").cropper('getCroppedCanvas',{ width: 300, height: 300 }).toDataURL(); 
 					 vm.image=canvas; 
 					 vm.fotografia=canvas; 
 					 $('#imgC').cropper('destroy');
@@ -1842,19 +1876,7 @@ this.posfilenuevo++;
                                 this.activo = data['activo'];
                                 this.carnetestado = data['carnetestado'];
                                 this.idestado = data['idestafiliaciones'];
-                                this.rutafoto = data['rutafoto'];
-                                // firebase.storage().ref().child('socios/img'+this.numpapeleta+'.png').getDownloadURL().then((url)=>{
-                                //      var xhr = new XMLHttpRequest();
-                                //         xhr.responseType = 'blob';
-                                //         xhr.onload = function(event) {
-                                //             var blob = xhr.response;
-                                //         };
-                                //         xhr.open('GET', url);
-                                //         xhr.send();
-                                //     }).catch(()=>{
-                                //         console.log('no')
-                                //     });
-
+                                this.rutafoto = data['rutafoto']; 
                                 this.fotografia = data['rutafoto'];
                                 this.idusuarioregistro = data['idusuarioregistro'];
                                 this.idusuariomodificacion = data['idusuariomodificacion'];
@@ -1909,13 +1931,7 @@ this.posfilenuevo++;
                $('#imgbene').html('');
             }, 
             registrarBeneficiario(){               
-                let me = this; 
-
-        let formData = new FormData(); 
-        formData.append('foto', this.$refs.fileon.files[0]);  
-        axios.post( '/saveimagenBeneficiario',
-                formData 
-            ).then(function(e){   
+                let me = this;  
                 axios.post('/afi_beneficiario/registrar',{
                     'idsocio':me.socio_id,                         
                     'nombre': me.nombre.toUpperCase(),
@@ -1926,32 +1942,17 @@ this.posfilenuevo++;
                     'iddepartamentoexpedido':me.iddepartamentoexpedido,
                     'fechanac': me.fechanacimiento,
                     'telcelular':me.telcelular,
-                    'foto':e.data.foto
+                    'foto':me.imagebenefi
                 }).then(function (response) {
                     swal('Creado correctamente','','success');
                     me.listaBeneficiarios(me.socio_id);
                     me.resetBeneficiario();
-                });
-        })
-        .catch(function (error) {
-                    console.log(error);
-                });
-
-
+                }); 
             },
 
             actualizarBeneficiario(){ 
-                let me = this;
-            
-
-
-
-                let formData = new FormData(); 
-        formData.append('foto', this.$refs.fileon.files[0]);  
-        axios.post( '/saveimagenBeneficiario',
-                formData 
-            ).then(function(e){  
-                    axios.put('/afi_beneficiario/actualizar',{
+                let me = this; 
+               axios.put('/afi_beneficiario/actualizar',{
                     'idbeneficiario':me.beneficiario_id,
                     'nombre': me.nombre,
                     'apaterno':me.apaterno,
@@ -1962,17 +1963,13 @@ this.posfilenuevo++;
                     'iddepartamentoexpedido':me.iddepartamentoexpedido,
                     'fechanac': me.fechanacimiento,
                     'telcelular':me.telcelular,
-                    'foto':e.data.foto
+                    'foto':me.imagebenefi
                 }).then(function (response) {
                     swal('Datros actualizados','','success');
                     me.listaBeneficiarios(me.socio_id);
                     me.resetBeneficiario();
                     me.tipoAccion=1;
-                });  
-        })
-        .catch(function (error) {
-                    console.log(error);
-                });
+                });   
             }, 
 
             registrarCuentasocio(){               

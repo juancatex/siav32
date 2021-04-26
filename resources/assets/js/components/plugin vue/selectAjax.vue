@@ -42,12 +42,12 @@ Vue.component("v-select", vSelect);
     if (value == "rutafoto") {
       if (va[value]) {
         outs = outs.trim().length > 0 ?
-          "&nbsp;" + '<img  src="img/socios/' + va[value] + '" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">' :
-          '<img  src="img/socios/' + va[value] + '" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">';
+          "&nbsp;" + '<img  src="storage/socio/' + va[value] + '" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">' :
+          '<img  src="storage/socio/' + va[value] + '" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">';
       } else {
         outs = outs.trim().length > 0 ?
-          "&nbsp;" + '<img  src="img/socios/avatar.png" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">' :
-          '<img  src="img/socios/avatar.png" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">';
+          "&nbsp;" + '<img  src="storage/socio/avatar.png" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">' :
+          '<img  src="storage/socio/avatar.png" style="margin: 3px 9px 3px 3px !important;" class="rounded-circle fotosociomini" alt="Cinque Terre">';
       }
     } else {
       outs = outs + "&nbsp;" + va[value];

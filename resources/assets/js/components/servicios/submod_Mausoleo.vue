@@ -102,8 +102,7 @@
                 <div class="card-body">
                     <div class="row" v-if="regCliente.tipocliente=='s'">
                         <div class="col-md-3">
-                            <!-- <img v-if="rutafoto && datossocio" :src="'img/socios/'+rutafoto" width="150" height="150" class="fotosocio"> -->
-                            <img src="img/socios/avatar.png" class="fotosocioservicios">
+                            <img src="storage/socio/avatar.png" class="fotosocioservicios">
                         </div>
                         <div class="col-md-9">
                             <div class="nombrecliente text-center" v-text="regCliente.nomcliente"></div>
