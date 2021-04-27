@@ -166,9 +166,6 @@ class RrhEmpleadoController extends Controller
         $buscararray = array(); 
         if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
         $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
-        $rawidempleado=DB::raw('socios.numpapeleta as idempleado,socios.numpapeleta as id');
-        $rawdirectivos=DB::raw('1 as directivos');
-        $rawnodirectivos=DB::raw('0 as directivos');
         if (sizeof($buscararray)>0) { 
             $sqls=''; 
             foreach($buscararray as $valor){
@@ -177,17 +174,13 @@ class RrhEmpleadoController extends Controller
                 else
                     $sqls.=" and (apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
             }   
-            $first= Socio::select($rawidempleado,$raw,'ci',$rawdirectivos)
-                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
-                                    ->where('fil__directivos.activo',1)
-                                    ->whereraw($sqls);
+           
                                     //->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')
 
             
-            $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci',$rawnodirectivos)
+            $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
                                     ->where('activo',1)
                                     ->whereraw($sqls)
-                                    ->union($first)
                                     ->orderBy('nombres','asc')->get();
                                     
             //dd($empleados);                        
@@ -195,30 +188,69 @@ class RrhEmpleadoController extends Controller
         else {
             if ($request->id)
             
-            {    $first= Socio::select($rawidempleado,$raw,'ci',$rawdirectivos)
-                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
-                                    ->where('fil__directivos.activo',1)
-                                    ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc');
+            {    
 
-                $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci',$rawnodirectivos)
+                $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
                 ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')->where('idempleado','=',$request->id)
-                ->union($first)->get();
+                ->get();
             }
             else
             {
-                    $first= Socio::select($rawidempleado,$raw,'ci',$rawdirectivos)
-                                            ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
-                                            ->where('fil__directivos.activo',1)
-                                            ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc');
+                    
 
                 
-                    $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci',$rawnodirectivos)
+                    $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
                     ->where('activo',1)
                     ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')
-                    ->union($first)->get();
+                    ->get();
             }
         } 
         //dd($empleados);
+        return ['empleados' => $empleados];
+    }
+    public function selectDirectivos(Request $request)  //AjaxSelect
+    {
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre," - ",fil__filials.sigla) as nombres');
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
+                else
+                    $sqls.=" and (apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
+            }   
+            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci',)
+                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    ->where('fil__directivos.activo',1)
+                                    ->whereraw($sqls)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+        }
+        else {
+            if ($request->id){
+                    $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    ->where('fil__directivos.activo',1)
+                                    ->where('socios.idsocio','=',$request->id)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+            }
+                
+            else
+            {
+                $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    ->where('fil__directivos.activo',1)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+            }
+              
+        }
         return ['empleados' => $empleados];
     }
 }

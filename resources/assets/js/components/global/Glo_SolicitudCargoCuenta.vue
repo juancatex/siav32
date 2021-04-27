@@ -103,8 +103,33 @@
                                 <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarModal('modalsolicitud')"><span aria-hidden="true">×</span></button>
                             </div> 
                         <div class="modal-body">
+                           
+                            <div class="col-6 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo()"> Directivos
+                                </label>
+                                </div>
+                                <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo()">Personal
+                                </label>
+                            </div>
+                        </div>
                             <div class="row">
-                                <div class="form-group col-md-8">
+                                <div class="form-group col-md-8" v-if="directivo=='directivo'">
+                                    <strong>Directivo:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectdirectivos?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idsocio"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div class="form-group col-md-8" v-else>
                                     <strong>Personal:</strong>
                                     <Ajaxselect  v-if="clearSelected"
                                         ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
@@ -206,6 +231,9 @@
     </main>
 </template>
 <script>
+const st = {};
+
+   
     import VueCurrencyFilter from 'vue-currency-filter'
     Vue.use(VueCurrencyFilter,
     {
@@ -260,6 +288,7 @@
                 solicitud_id:'',
                 offset:3,
                 modal:0,
+                directivo:'directivo'
 
             }
         },
@@ -298,6 +327,20 @@
            
         },
         methods:{
+            cambiaDirectivo(valor){
+                let me=this;
+                me.clearSelected=0;
+                if(valor=="directivo")
+                {
+                        valor="personal";
+                        setTimeout(me.tiempo, 200); 
+                }
+                else
+                {
+                    valor="directivo";
+                    setTimeout(me.tiempo, 200); 
+                }
+            },
             cambiarPagina(page,buscar){
                 let me = this;
                 //console.log(page + ' ' +buscar);
@@ -382,6 +425,7 @@
             },
             registrarSolicitud(){
                 let me = this;
+                let valor=0;
 
                 /*swal({
                      title: "Ajax request example",
@@ -397,9 +441,13 @@
                     }, 2000);
                 }); */
                 this.abrirModal();
+                if(me.directivo=="directivo")
+                    valor=1;
+                else
+                    valor=0;
                 axios.post('/glo_solccuenta/registrar',{
                     'subcuenta':me.idempleado[1],
-                    'directorio':me.idempleado[4],
+                    'directorio':valor,
                     'monto':me.monto,
                     'glosa':me.glosa,
                     
@@ -425,10 +473,15 @@
             },
             actualizarSolicitud(){
                 let me = this;
+                let valor=0;
+                if(me.directivo=="directivo")
+                    valor=1;
+                else
+                    valor=0;
                 axios.put('/glo_solccuenta/actualizar',{
                     'idsolccuenta':me.solicitud_id,
                     'subcuenta':me.idempleado[1],
-                    'directorio':me.idempleado[4],
+                    'directorio':valor,
                     'monto':me.monto,
                     'glosa':me.glosa,
                     
