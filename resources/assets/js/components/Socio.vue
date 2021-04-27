@@ -1160,7 +1160,7 @@
                    var file = this.$refs.fileon.files[0]; 
                     var reader = new FileReader();
                     reader.onload = function(event) { 
-                    $(`<img src='${event.target.result}' id="idimagen" style="max-width: 50%;">
+                    $(`<img src='${event.target.result}' id="idimagen" style="max-width: 70%;margin: auto;">
                     <div style="padding: 9px;" id="fotoimagenbenecrood">
                     <button  type="button" class="btn btn-success" id="btnselecctbene">Seleccionar</button> 
                     <button  type="button" class="btn btn-danger" id="btncancelbene">Cancelar</button>
