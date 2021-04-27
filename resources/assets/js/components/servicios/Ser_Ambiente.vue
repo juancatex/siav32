@@ -479,7 +479,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 text-center">
-                            <img v-if="rutafoto && datossocio" :src="'img/socios/'+rutafoto" width="150" height="150" class="fotosocio">
+                            <img v-if="rutafoto && datossocio" :src="'storage/socio/'+rutafoto" width="150" height="150" class="fotosocio">
                         </div>
                     </div>
 

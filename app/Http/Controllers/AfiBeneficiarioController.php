@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Afi_Beneficiario;
+use Illuminate\Support\Str;
 use App\Socio;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class AfiBeneficiarioController extends Controller
 {
     public function index(Request $request)
     {
-        $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*')
+        $beneficiarios=Afi_Beneficiario::select('afi__beneficiarios.*','abrvdep','socios.codsocio','socios.carnetmilitar','socios.numpapeleta','socios.idtiposocio')
+        ->join('par_departamentos','par_departamentos.iddepartamento','afi__beneficiarios.iddepartamento')
         ->join('socios','afi__beneficiarios.idsocio','=','socios.idsocio')
         ->where('afi__beneficiarios.idsocio','=',$request->idsocio)
         ->orderBy('idbeneficiario', 'asc')->get();
@@ -41,7 +45,14 @@ class AfiBeneficiarioController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
+        if (!$request->ajax()) return redirect('/'); 
+
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->foto, strpos($request->foto, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/bene/'.$var, $value);
+
         $beneficiario = new Afi_Beneficiario();
         $beneficiario->idsocio=$request->idsocio;
         $beneficiario->nombre=$request->nombre;
@@ -51,18 +62,37 @@ class AfiBeneficiarioController extends Controller
         $beneficiario->ci=$request->ci;
         $beneficiario->iddepartamento=$request->iddepartamentoexpedido;
         $beneficiario->fechanac=$request->fechanac;
-        $beneficiario->telcelular=$request->telcelular;
+        $beneficiario->telcelular=$request->telcelular;  
+        $beneficiario->foto=$var;  
         $beneficiario->save();
-        if($request->parentesco=='Espos@')
+        if($request->parentesco=='Esposa'||$request->parentesco=='Esposo')
         {   $socio=Socio::findOrFail($request->idsocio);
             $socio->idestadocivil=2;
             $socio->save();
         }
     }
+    public function saveimagebene(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');  
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->image, strpos($request->image, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/bene/'.$var, $value);
+       
+       return ['foto'=>$var];
+    }
+    
 
     public function update(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->foto, strpos($request->foto, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/bene/'.$var, $value);
+
         $beneficiario = Afi_Beneficiario::findOrFail($request->idbeneficiario);
         $beneficiario->nombre=$request->nombre;
         $beneficiario->apaterno=$request->apaterno;
@@ -72,6 +102,7 @@ class AfiBeneficiarioController extends Controller
         $beneficiario->iddepartamento=$request->iddepartamentoexpedido;
         $beneficiario->fechanac=$request->fechanac;
         $beneficiario->telcelular=$request->telcelular;
+        $beneficiario->foto=$var;  
         $beneficiario->save();
         if($request->parentesco=='Espos@') {
             $socio=Socio::findOrFail($request->idsocio);

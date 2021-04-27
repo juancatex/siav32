@@ -2,7 +2,7 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 window._pl = require("./func_10251.js");
-window._num = require("./numeral.js");
+window._nume = require("./numeral.js");
 window._pdf = require("./pdf.js");
 window._code = require("./ControlCode.js");
 window.VeeValidate = require("vee-validate");

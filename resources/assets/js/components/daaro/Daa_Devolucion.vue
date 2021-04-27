@@ -66,8 +66,8 @@
                                 </template>                               
                             </td>
                             <td style=" vertical-align: middle;text-align: center;">
-                                <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
-                                <img v-else :src="'img/socios/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+                                <img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto"  class="rounded-circle fotosociomini" alt="Cinque Terre">
+                                <img v-else :src="'storage/socio/avatar.png'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
                             </td> 
                             <td v-text="socio.nomgrado"></td> 
                             <td v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno" ></td>
@@ -173,8 +173,8 @@
                             
                             <p class="col-md-12 tituloP" >{{grado}} {{nombre}} {{apaterno}} {{amaterno}}</p>
                             <div class="col-md-3" style="text-align: center;">
-                                <img v-if="fotosocio" :src="'img/socios/'+fotosocio"  class="fotosocioimg" alt="Cinque Terre">
-                                <img v-else :src="'img/socios/avatar.png'"  class="fotosocioimg" alt="Cinque Terre" > 
+                                <img v-if="fotosocio" :src="'storage/socio/'+fotosocio"  class="fotosocioimg" alt="Cinque Terre">
+                                <img v-else :src="'storage/socio/avatar.png'"  class="fotosocioimg" alt="Cinque Terre" > 
                             </div>
                             <div class="form-group" style="display: inherit;" >
                                 <div class="col-md-15" >

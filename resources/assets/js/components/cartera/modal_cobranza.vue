@@ -119,9 +119,9 @@
                 } 
                 this.prestamosEnviadosAscii=enviadosAscii;
                 this.prestamosAcreedor=datas;
-                this.totalascii= _num(parseFloat(total_ascii)).format('0,0[.]00 $');
-                this.subtotal= _num(parseFloat(subtotall)).format('0,0[.]00 $');
-                this.cobrado=_num(parseFloat(cobrados)).format('0,0[.]00 $');
+                this.totalascii= _nume(parseFloat(total_ascii)).format('0,0[.]00 $');
+                this.subtotal= _nume(parseFloat(subtotall)).format('0,0[.]00 $');
+                this.cobrado=_nume(parseFloat(cobrados)).format('0,0[.]00 $');
                  
                 this.modalcobranza=new _pl.Modals();
                 this.modalcobranza.addModal('modal_cobranza'); 
@@ -129,18 +129,17 @@
                 var dobytable='';
                 _.forEach(datas, function(value) {    
                     dobytable+='<tr '+(value.estado==1?'style="background-color: #0ee23f7d;"':'style="background-color: transparent;"')+'>'
-                    +'<td>'+value.numpapeleta+'</td>'+'<td>'+
-                    _num(parseFloat(value.totaloriginal)).format('0,0[.]00 $')
+                    +'<td style=" vertical-align: middle;text-align: center;"></td><td>'+value.numpapeleta+'</td>'+'<td>'+
+                    _nume(parseFloat(value.totaloriginal)).format('0,0[.]00 $')
                     +'</td>'
-                    +'<td>'+(_.has(value, 'plans_total')?_num(parseFloat(value.plans_total)).format('0,0[.]00 $'):0)+'</td>'+'<td>'+
-                     _num(parseFloat(value.aporte)).format('0,0[.]00 $')
+                    +'<td>'+(_.has(value, 'plans_total')?_nume(parseFloat(value.plans_total)).format('0,0[.]00 $'):0)+'</td>'+'<td>'+
+                     _nume(parseFloat(value.aporte)).format('0,0[.]00 $')
                     +'</td>'+'</tr>';
                 
                 }); 
                  this.initdata(dobytable);
             } ,
-            procesar(){
-                
+            procesar(){                
                 var acreedores = [];
                _.forEach(this.prestamosAcreedor, function(value) {    
                         if(parseFloat(value.aporte)>0){
@@ -176,9 +175,18 @@
                     if ($.fn.DataTable.isDataTable( '#listado' ) ) {
                       $('#listado').DataTable().destroy();
                     }
-                $("#listado thead tr").html('<th>Numero papeleta</th><th>Ascii Min. Def.</th><th>Monto a cobrar</th><th>Acreedor</th>');
+                $("#listado thead tr").html('<th>Opción</th><th>Numero papeleta</th><th>Ascii Min. Def.</th><th>Monto a cobrar</th><th>Acreedor</th>');
                 $("#listado tbody").html(valuein);
                 $('#listado').DataTable( { 
+                    "columnDefs": [ {
+                            "targets": 0, 
+                            "render": function ( data, type, row, meta ) {
+                                console.log("data:",data);
+                                console.log("row:",row[1]); 
+                            return `<button type="button" style="margin-top: 0.2rem;min-width: 75px;" class="btn btn-success btn-sm " >Registrar</button>
+                   <button type="button" style="margin-top: 0.2rem;min-width: 75px;" class="btn btn-warning btn-sm " >Estado</button> `;
+                            }
+                        } ],
                             "dom": '<"pull-left"f><"pull-right"B>tip',
                             "buttons": [ {
                                 extend: 'csv',

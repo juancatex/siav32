@@ -83,9 +83,9 @@
                 </td>
 
                 <td style=" vertical-align: middle;text-align: center;">
-                  <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto" class="rounded-circle fotosociomini_pre"
+                  <img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto" class="rounded-circle fotosociomini_pre"
                     alt="Cinque Terre" />
-                  <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
+                  <img v-else :src="'storage/socio/avatar.png'" class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
                 </td>
 
                 <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
@@ -136,8 +136,8 @@
 
             <div class="form-group row" style=" margin-left: 3px;margin-right: 3px;justify-content: center;">
               <div class="col-md-3" style="text-align: center;">
-                <img v-if="fotosocio" :src="'img/socios/'+fotosocio" class="fotosocioimg" alt="Cinque Terre" />
-                <img v-else :src="'img/socios/avatar.png'" class="fotosocioimg" alt="Cinque Terre" />
+                <img v-if="fotosocio" :src="'storage/socio/'+fotosocio" class="fotosocioimg" alt="Cinque Terre" />
+                <img v-else :src="'storage/socio/avatar.png'" class="fotosocioimg" alt="Cinque Terre" />
               </div>
               <div class="row col-md-9" style="display: inherit;    align-content: baseline;">
                 <p class="col-md-12 tituloP">{{grado}} {{nombre}} {{apaterno}} {{amaterno}}</p>
@@ -916,9 +916,9 @@
                     <tr v-for="(socio, keyin) in listaSociosObservados" :key="socio.idsocio" class="table-danger">
                       <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
                       <td style=" vertical-align: middle;text-align: center;width: 66px;">
-                        <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
+                        <img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto"
                           class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
-                        <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
+                        <img v-else :src="'storage/socio/avatar.png'" class="rounded-circle fotosociomini_pre"
                           alt="Cinque Terre" />
                       </td>
 
@@ -954,9 +954,9 @@
                       v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
                       <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
                       <td style=" vertical-align: middle;text-align: center;width: 66px;">
-                        <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
+                        <img v-if="socio.rutafoto" :src="'storage/socio/'+socio.rutafoto"
                           class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
-                        <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
+                        <img v-else :src="'storage/socio/avatar.png'" class="rounded-circle fotosociomini_pre"
                           alt="Cinque Terre" />
                       </td>
 
@@ -1068,86 +1068,6 @@
                     </div>
                   </div>
 
-           <!-- <div class="form-group row" v-if="arrayCuentaSocio.length>0&&socio_id!=''">
-             <div class="col-md-12">
-               <label style="text-align: left; align-items: center;font-weight: 500;"
-                    class="form-control-label">Seleccionar socio para la lista:</label>
-            <template v-if="agregarlista"  >
-                    <Ajaxselect      
-                        ruta="/pre_listasocio2?buscar=" @found="sociosListaView"
-                        resp_ruta="socios"
-                        labels="rutafoto,numpapeleta,nombre,apaterno,amaterno"
-                        placeholder="Ingrese Nombre, Apellido, CI, Numero de papeleta" 
-                        idtabla="idsocio" >
-                    </Ajaxselect>
-             </template>
-               </div>  
-            </div> -->
-
-
-
-            <!-- <div class=" row form-group" v-if="listaSocios.length>0">
-               <button class="col-md-4 btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseLista"
-                 aria-expanded="false" aria-controls="collapseLista">
-                  Socios seleccionados  {{listaSocios.length}}.
-               </button>
-              <div class="col-md-12 collapse" id="collapseLista">
-              <div class="card card-body">
-                <label style="text-align: left; align-items: center;font-weight: 500;"
-                    class="form-control-label">Lista de socios seleccionados:</label>
-                <table class="tablelista table table-bordered table-striped table-sm">
-                  <thead>
-                    <tr>
-                      <th style="width: 60px;">Nro</th>
-                      <th style="width: 66px;">Foto</th>
-                      <th>Grado</th>
-                      <th style="width: 400px;">Nombre Completo</th>
-                      <th>Num Papeleta</th>
-                      <th>CI</th>
-                      <th>Fuerza</th>
-                      <th>Estado</th>
-                      <th>Opciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(socio, keyin) in listaSocios" :key="socio.idsocio"
-                      v-bind:class="socio.idestprestamos==1 ? 'table-danger' :''">
-                      <td style=" vertical-align: middle;width: 60px;text-align: center;">{{keyin+1}}</td>
-                      <td style=" vertical-align: middle;text-align: center;width: 66px;">
-                        <img v-if="socio.rutafoto" :src="'img/socios/'+socio.rutafoto"
-                          class="rounded-circle fotosociomini_pre" alt="Cinque Terre" />
-                        <img v-else :src="'img/socios/avatar.png'" class="rounded-circle fotosociomini_pre"
-                          alt="Cinque Terre" />
-                      </td>
-
-                      <td style=" vertical-align: middle;" v-text="socio.nomgrado"></td>
-                      <td :id="getid(socio)" style="width: 400px; vertical-align: middle;"
-                        v-text="socio.nombre +' '+socio.apaterno+' '+socio.amaterno"></td>
-                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.numpapeleta"></td>
-                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.ci+' '+ socio.abrvdep"></td>
-                      <td style=" vertical-align: middle;text-align: center;" v-text="socio.nomfuerza"></td>
-
-                      <td style=" vertical-align: middle;text-align: center;">
-                        <div v-if="socio.activo">
-                          <span class="badge badge-success">Activo</span>
-                        </div>
-                        <div v-else>
-                          <span class="badge badge-danger">Desactivado</span>
-                        </div>
-                      </td>
-                      <td style=" vertical-align: middle;text-align: center;"> 
-                        <button type="button" style="margin-top: 0.2rem;min-width: 75px;"
-                          class="btn btn-danger btn-sm " @click="borrarlistasocio(socio)">Quitar</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <button type="button" class="btn btn-warning col-md-2" aria-hidden="true" aria-label="Close"
-                  v-if="listaSocios.length>0" @click="borrarlista">Borrar lista</button>
-              </div>
-              </div>
-            </div> -->
- 
 
               <div class="form-group row" v-if="listaSociosObservados.length==0&&listaSocios.length>0&&cuentaBancaria!=''">
                 <div class="col-md-4">

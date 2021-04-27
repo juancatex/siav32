@@ -53,9 +53,10 @@ Route::get('/getExAportes','apkMovile@extractoAportes')->name('getExAportes');
 Route::get('/getimage','apkMovile@getimage')->name('getimage'); 
 Route::get('sessionOut','SesionOut@out');
 
-Route::group(['middleware' => ['webinterno']], function () {
+Route::group(['middleware' => ['webinterno']], function () { 
         Route::get ('/afi_beneficiario', 'AfiBeneficiarioController@index');
         Route::post('/afi_beneficiario/registrar', 'AfiBeneficiarioController@store');
+        Route::post('/saveimagenBeneficiario', 'AfiBeneficiarioController@saveimagebene');
         Route::get ('/afi_beneficiario/listaBeneficiarios','AfiBeneficiarioController@listaBeneficiarios');
         Route::get ('/afi_beneficiario/socioResponsable','AfiBeneficiarioController@socioResponsable');
         Route::get ('/afi_beneficiario/verEsposa', 'AfiBeneficiarioController@verEsposa');
@@ -288,6 +289,7 @@ Route::group(['middleware' => ['webinterno']], function () {
 
         Route::get ('/sociogetfotoCR', 'SocioController@getfotoCR');
         Route::get ('/sociogetfotoCRV', 'SocioController@getfotoCRV');
+        Route::get ('/sociogetfotoBENE', 'SocioController@getfotoBENE');
 
         Route::get ('/sociogetfotoCRV_cen', 'SocioController@getfotoCRV_cen');
         Route::get ('/sociogetfotoCRV_emp', 'SocioController@getfotoCRV_emp');

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 use App\Socio;    
 use App\Adm_User;
@@ -33,7 +34,7 @@ class SocioController extends Controller
                 } 
             }            
             $socios = Socio::
-            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par_grados.abrev','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
             ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
             ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
             ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
@@ -45,7 +46,7 @@ class SocioController extends Controller
         }
         else{
             $socios = Socio::
-            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
+            select('par_departamentos.abrvdep','socios.*','par_fuerzas.nomfuerza','par_grados.nomgrado','par_grados.abrev','par__tiposocios.nomtiposocio','par_especialidades.nomespecialidad') 
                 ->join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
                 ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
                 ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento')
@@ -85,15 +86,23 @@ class SocioController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $rutas=config('app.ruta_imagen'); 
-        $imageData = $request->get('image'); 
-        $fileName =  "foto".$request->numpapeleta. ".jpg" ;
-        Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
-        //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-          Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+        // $rutas=config('app.ruta_imagen');  
+        // $imageData = $request->get('image'); 
+        // $fileName =  "foto".$request->numpapeleta. ".jpg" ;
+        // Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
+        // guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
+        // Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
+
+
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->image, strpos($request->image, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/socio/'.$var, $value);
+ 
         $socio = new Socio();
         $socio->numpapeleta=$request->numpapeleta; 
-        $socio->rutafoto = $fileName;
+        $socio->rutafoto = $var;
         $socio->codsocio=$request->codsocio;
         $socio->nombre = $request->nombre;
         $socio->apaterno=$request->apaterno;
@@ -131,16 +140,23 @@ class SocioController extends Controller
     public function updatefoto(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $rutas=config('app.ruta_imagen');
-        $imageData = $request->get('image');   
+       
+        // $rutas=config('app.ruta_imagen');
+        // $imageData = $request->get('image');   
+        // $fileName =  "foto".$socio->numpapeleta. ".jpg" ;
+        // Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
+        // //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
+        // Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
         
-        $socio = Socio::findOrFail($request->idsocio);
-        
-        $fileName =  "foto".$socio->numpapeleta. ".jpg" ;
-        Image::make($request->get('image'))->save(public_path($rutas['DIRE_FOTO_SOCIO']).$fileName);
-        //guarda las fotos en la carpeta del server tomcat para ser visto en el reporte
-        Image::make($request->get('image'))->save(($rutas['DIRE_FOTO_SOCIO_REPORTES']).$fileName);
-        $socio->rutafoto = $fileName;
+        $socio = Socio::findOrFail($request->idsocio); 
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->image, strpos($request->image, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/socio/'.$var, $value);
+
+
+        $socio->rutafoto = $var;
         $socio->activo = '1';
         $socio->save();
     }
@@ -177,6 +193,28 @@ class SocioController extends Controller
                 'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
         // return response()->json(array('id' => $producto->idproducto), 200);
      }
+
+     public function getfotoBENE(Request $request)
+     {  if (!$request->ajax()) return redirect('/');
+         $full_path = Storage::path('AFI/bene.jpg');
+         $base64 = base64_encode(Storage::get('AFI/bene.jpg'));
+ 
+         $full_path2 = Storage::path('AFI/crva.jpg');
+         $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
+ 
+         if(Storage::exists('app/public/bene/'.$request->foto)){
+            $full_path3 = Storage::path('app/public/bene/'.$request->foto);
+            $base643 = base64_encode(Storage::get('app/public/bene/'.$request->foto));
+          }else{
+            $full_path3 = Storage::path('AFI/avatare.jpg');
+            $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));
+          }
+ 
+         return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
+                 'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
+                 'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
+         // return response()->json(array('id' => $producto->idproducto), 200);
+      }
 
      public function getfotoCRV_cen(Request $request)
      {  if (!$request->ajax()) return redirect('/');

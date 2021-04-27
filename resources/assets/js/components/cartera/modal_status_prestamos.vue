@@ -6,8 +6,8 @@
                         <div class="modal-content animated fadeIn"> 
                                 <div class="modal-header"> 
                                     <div style="margin-right: 17px;">
-                                        <img v-if="socioimg" :src="'img/socios/'+socioimg" style="    width: 60px;" class="rounded-circle fotosociomini" alt="Cinque Terre">
-										<img v-else :src="'img/socios/avatar.png'" style="    width: 60px;"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+                                        <img v-if="socioimg" :src="'storage/socio/'+socioimg" style="    width: 60px;" class="rounded-circle fotosociomini" alt="Cinque Terre">
+										<img v-else :src="'storage/socio/avatar.png'" style="    width: 60px;"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
                                     </div>
                                     <h4 class="modal-title" v-text="tituloModalstatus"></h4>
                                     <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarmodaleve('primarymodalstatus')"><span aria-hidden="true">×</span></button>

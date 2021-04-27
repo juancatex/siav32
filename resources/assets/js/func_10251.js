@@ -822,7 +822,7 @@ export function _vm2154_12185(promise) {
     var valuehtml = '<li id="' + value.idsocio + '" class="list-group-item garantesid active" style="padding: 5px 0 5px 0;" >' +
       '<div class="input-group" style="align-items: center;">' +
       '<div class="col-md-1">' +
-      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '<img   src="storage/socio/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
       '</div>' +
       '<div class="col-md-8"> ' +
       '<p style="margin:0">' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + ' ( ' + value.factorg + '% )</p>' +
@@ -844,7 +844,7 @@ export function _vm2154_12185(promise) {
       var valuehtml = '<li id="' + element.idsocio + '" class="list-group-item garantesid ' + ((promise.garantesseleccionados.has(element.idsocio)) ? 'active"' : '"') + ' style="padding: 5px 0 5px 0;" >' +
         '<div class="input-group" style="align-items: center;">' +
         '<div class="col-md-1">' +
-        '<img   src="img/socios/' + ((element.rutafoto != null) ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+        '<img   src="storage/socio/' + ((element.rutafoto != null) ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
         '</div>' +
         '<div class="col-md-8"> ' +
         '<p style="margin:0">' + element.nombre + ' ' + element.apaterno + ' ' + element.amaterno + '</p>' +
@@ -917,7 +917,7 @@ export function _mg3612152_215(promise) {
   promise.forEach(function (value) {
     valuehtml += '<div class="col-md-12 row " style="justify-content: center;margin-top: 5px;">' +
       '<div class="col-md-1" style=" text-align: center;border: 1px solid gray; padding: 5px;">' +
-      '<img   src="img/socios/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
+      '<img   src="storage/socio/' + ((value.rutafoto != null) ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' +
       '  </div>' +
       '<div class="col-md-5 input-group" style="align-items: center;border: 1px solid gray; padding: 5px;">' +
       '<p style="margin:0">' + value.nomgrado + ' ' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + '</p>' +
@@ -1058,7 +1058,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+    imgToBase64(ta.rutafoto?'storage/socio/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
@@ -1100,12 +1100,65 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
+  export function _vvp2521_cr02_b(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa;  
+      let fotosocio = fotocr.avatar;
+      var qr = new QRious();  
+      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.ci?ta.ci:'')+'|'+ta.numpapeleta;
+      qr.mime = 'image/jpeg';
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet beneficiario'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
+      doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc.setFontSize(10);
+      doc.setFontStyle('bold');
+      doc.setTextColor(52,52,52);
+      
+          // centrarTextTo2(doc, (ta.nombre)?ta.nombre:'___', 8.2,6.4); 
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 7.8,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.2,6.4);
+            
+      doc.setFontStyle('normal');
+      doc.setFontSize(7); 
+      doc.text((ta.codsocio?ta.codsocio:''),9.1, 5.9,null,90); 
+      doc.text(ta.parentesco?ta.parentesco:'___', 9.1, 3.15,null,90); 
+
+      doc.text(ta.fechanac?( moment(ta.fechanac).format("DD/MM/YYYY")):'___', 9.93, 5.9,null,90);
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 9.93, 3.15,null,90);
+       
+      doc.setFontSize(6);
+     
+      centrarTextTo2(doc, (ta.idtiposocio==1)?'BENEFICIARIO(A)':'BENEFICIARIO(A) - SP', 10.77,6.4);
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(1, 'years').format("YYYY")).toUpperCase()), 11.5,6.4); 
+
+      $("#" + idview).attr("src", doc.output('datauristring')); 
+
+      var doc2 = new jsPDF('p', 'cm','a4');  
+      doc2.setProperties({
+        title: 'Carnet beneficiario posterior'
+      }); 
+      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
+      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      $("#2" + idview).attr("src", doc2.output('datauristring')); 
+ 
+      funn();
+    
+  }
   export function _vvp2521_cr02(ta,fotocr,funn, idview = 'planout') {
     $("#" + idview).attr("src",''); 
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.rutafoto?'img/socios/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+    imgToBase64(ta.rutafoto?'storage/socio/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
@@ -1119,9 +1172,13 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(10);
       doc.setFontStyle('bold');
       doc.setTextColor(52,52,52);
-          centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.2,6.4); 
-          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 9,6.4);
+      if(ta.idfuerza==5){// solo valida fuera armada para imprimir la abreviacion
+        centrarTextTo2(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+      }else{
+        centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+      } 
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.45,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.85,6.4);
             
       doc.setFontStyle('normal');
       doc.setFontSize(7); 
@@ -1134,10 +1191,20 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.text(ta.codsocio?ta.codsocio:'___', 7.24, 4.1,null,90);
       doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);
       centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
+<<<<<<< HEAD
        doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
+=======
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);
+>>>>>>> 6af76cf962c2292dfd1c2479da21371bf39e8725
 
-      $("#" + idview).attr("src", doc.output('datauristring')); 
+      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.63,6.4); 
 
+  
+      $("#" + idview).attr("src", doc.output('datauristring'));  
       var doc2 = new jsPDF('p', 'cm','a4');  
       doc2.setProperties({
         title: 'Carnet socio posterior'
@@ -1185,7 +1252,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
  
       doc.setFontSize(6);
       centrarTextTo2(doc, (ta.validate?('Válido hasta '+ (moment(ta.validate).format("MMMM - YYYY")).toUpperCase()):' '), 10.8,6.4); 
-      doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
+      doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);   
  
  
       var diva= $('<div>')

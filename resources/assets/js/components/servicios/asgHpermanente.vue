@@ -107,8 +107,8 @@
                     </h4>
                     <div class="row">
                         <div class="col-md-2 text-center">
-                            <img v-if="regCliente.rutafoto" :src="'img/socios/'+regCliente.rutafoto">
-                            <img v-else src="img/socios/avatar.png" >
+                            <img v-if="regCliente.rutafoto" :src="'storage/socio/'+regCliente.rutafoto">
+                            <img v-else src="storage/socio/avatar.png" >
                         </div>
                         <div class="col-md-5">
                             <div class="tablacen">

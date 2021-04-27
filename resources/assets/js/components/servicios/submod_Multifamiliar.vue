@@ -120,8 +120,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <img v-if="regCliente.rutafoto && datossocio" :src="'img/socios/'+regCliente.rutafoto" width="150" height="150" class="fotosocio">
-                            <img v-else src="img/socios/avatar.png" class="fotosocioservicios">
+                            <img v-if="regCliente.rutafoto && datossocio" :src="'storage/socio/'+regCliente.rutafoto" width="150" height="150" class="fotosocio">
+                            <img v-else src="storage/socio/avatar.png" class="fotosocioservicios">
                         </div>
                         <div class="col-md-9">
                             <div class="nombrecliente text-center" v-text="regCliente.nomcliente"></div>

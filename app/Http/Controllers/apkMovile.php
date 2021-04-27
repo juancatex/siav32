@@ -108,9 +108,9 @@ class apkMovile extends Controller
     public function getimage(Request $request){
        
     if(empty($request->ruta)){
-        return base64_encode(file_get_contents("img/socios/avatar.png"));
+        return base64_encode(file_get_contents("storage/socio/avatar.png"));
     }else{
-        return base64_encode(file_get_contents("img/socios/".$request->ruta));
+        return base64_encode(file_get_contents("storage/socio/".$request->ruta));
     }
     
     }
