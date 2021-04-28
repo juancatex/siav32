@@ -42,7 +42,7 @@ class Par_EspecialidadController extends Controller
     }
     
     public function selectEspecialidad(Request $request){
-        if (!$request->ajax()) return redirect('/');
+       // if (!$request->ajax()) return redirect('/');
          $idFuerza = $request->idfuerza; 
         $especialidads = Par_Especialidad::where('activo','=','1')
 		->where('idfuerza','=', $idFuerza)
