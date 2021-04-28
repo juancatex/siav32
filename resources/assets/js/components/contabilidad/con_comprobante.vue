@@ -422,6 +422,7 @@
                                                 v-on:focus="selectAll"
                                                 :disabled='!ismescerrado'>
                                 </vue-numeric>
+                                <span class="text-error" v-if="iscreditofiscal">el monto no debe ser mayor al importe total</span>
                             </div>
                             <div class="form-group col-md-4">
                                 <strong>Descuentos - Rebajas:</strong>
@@ -434,6 +435,7 @@
                                                 v-on:focus="selectAll"
                                                 :disabled='!ismescerrado'>
                                 </vue-numeric>
+                                <span class="text-error" v-if="isdescuentos">el monto no debe ser mayor al importe</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -456,8 +458,8 @@
                             <button type="button"  class="btn btn-secondary" v-if="!sifacturas" @click="cerrarModalCompras()">Cerrar</button>
                             <button type="button"  class="btn btn-success" v-if="sifacturas" @click="cerrarModalCompras()">Registrar 13%</button>
 
-                            <button :disabled ="!iscompletelibro" type="submit" v-if="tipoAccionlibro==1" class="btn btn-primary" @click="registroLibrocompra()">Registrar Factura</button>
-                            <button :disabled = "errors.any()" type="button" v-if="tipoAccionlibro==2" class="btn btn-primary" @click="actualizarLibrocompra()">Actualizar</button>
+                            <button :disabled ="!iscompletelibro || (isdescuentos || iscreditofiscal)" type="submit" v-if="tipoAccionlibro==1" class="btn btn-primary" @click="registroLibrocompra()">Registrar Factura</button>
+                            <button :disabled ="!iscompletelibro || (isdescuentos || iscreditofiscal)" type="button" v-if="tipoAccionlibro==2" class="btn btn-primary" @click="actualizarLibrocompra()">Actualizar</button>
                         </div>
                     </div>
                 </div>                    
@@ -727,6 +729,20 @@ export default {
     }
     },
     computed:{
+        isdescuentos(){
+                let me=this;
+                if(me.descuentos>me.importetotal)
+                    return true;
+                else
+                    return false;
+            },
+            iscreditofiscal(){
+                let me=this;
+                if(me.nocreditofiscal>me.importetotal)
+                    return true;
+                else
+                    return false;
+            },
         menorfacturas(){
             let me=this;
             if (me.debe<me.sumafac)
