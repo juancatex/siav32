@@ -1181,6 +1181,7 @@
                      $('#imgbene').html('');
                      $('#fileon').val(""); 
                     });
+                    
 
                     $("#btnselecctbene").click(function(){ 
                         me.imagebenefi=$("#idimagen").cropper('getCroppedCanvas',{ width: 300, height: 300 }).toDataURL();   
