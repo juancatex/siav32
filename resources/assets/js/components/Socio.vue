@@ -1175,8 +1175,7 @@
 						guides: false, 
 						rotatable: false,
 					    multiple: false
-					}); 
-
+					});  
                     $("#btncancelbene").click(function(){
                      $('#idimagen').cropper('destroy');
                      $('#imgbene').html('');
@@ -1188,9 +1187,7 @@
                         $('#idimagen').cropper('destroy');
                         $("#idimagen").attr("src",me.imagebenefi);
                         $('#fotoimagenbenecrood').html(''); 
-                    });
-
-                   
+                    }); 
                     }
                     reader.readAsDataURL(file);
                    }
@@ -1198,9 +1195,7 @@
         datasArrayNuevos(data){
             this.posfilenuevo=(-1);
             this.datosdesociosnuevos=data.values;
-        },procesarFiles(){
-             
- 
+        },procesarFiles(){ 
 this.posfilenuevo++; 
  var aux=this.datosdesociosnuevos[this.posfilenuevo];
  
