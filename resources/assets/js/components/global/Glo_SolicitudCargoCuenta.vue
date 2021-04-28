@@ -141,6 +141,7 @@
                                         :clearable='true'>
                                     </Ajaxselect>
                                 </div>
+                                
                                 <div class="form-group col-md-4">
                                     <strong>Monto:</strong>
                                     <vue-numeric  
@@ -232,7 +233,7 @@
 </template>
 <script>
 const st = {};
-
+/*prueba*/
    
     import VueCurrencyFilter from 'vue-currency-filter'
     Vue.use(VueCurrencyFilter,
