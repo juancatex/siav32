@@ -235,7 +235,7 @@ class SocioController extends Controller
          return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
                  'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
                  'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
-         // return response()->json(array('id' => $producto->idproducto), 200);
+          
       }
       public function getfotoCRV_emp(Request $request)
       {  if (!$request->ajax()) return redirect('/');
@@ -253,13 +253,11 @@ class SocioController extends Controller
         $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));
       }
    }else{$full_path3 = Storage::path('AFI/avatare.jpg');
-        $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));}
-         
-  
+        $base643 = base64_encode(Storage::get('AFI/avatare.jpg'));} 
           return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
                   'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
                   'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643];
-          // return response()->json(array('id' => $producto->idproducto), 200);
+          
        }
   
     public function update(Request $request)
