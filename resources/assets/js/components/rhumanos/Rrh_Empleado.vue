@@ -29,10 +29,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <i class="fa fa-align-justify"></i>Credenciales</div>
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <button     @click="openModale('emp')" class="btn btn-primary">Empleados</button>  
-                                        </div> 
+                                    <div class="card-body"> 
                                         <div class="form-group">
                                             <button     @click="openModale('cen')" class="btn btn-primary">CEN</button>  
                                         </div> 
@@ -101,6 +98,8 @@
                         <tbody>
                             <tr v-for="empleado in arrayEmpleados" :key="empleado.idempleado" :class="empleado.activo?'':'txtdesactivado'">
                                 <td v-if="empleado.activo" align="center" nowrap>
+                                     <button class="btn btn-warning btn-sm icon-camera" title="Credencial"
+                                      @click="generarCarnetEmpl(empleado)" ></button>
                                     <button class="btn btn-warning btn-sm icon-pencil" title="Editar datos"
                                         @click="editarEmpleado(empleado)"></button>
                                     <button class="btn btn-warning btn-sm icon-user"  title="Kardex personal"
@@ -128,8 +127,8 @@
                                         @click="estadoEmpleado(empleado)"></button>
                                 </td>
                                 <td v-if="sedelp=='0'" v-text="empleado.filial"></td>
-                                <td><img v-if="empleado.foto" :src="'img/empleados/'+empleado.foto"  class="rounded-circle fotosociomini">
-                                    <img v-else :src="'img/empleados/avatar.png'"  class="rounded-circle fotosociomini" >
+                                <td><img v-if="empleado.foto" :src="'storage/emp/'+empleado.foto"  class="rounded-circle fotosociomini">
+                                    <img v-else :src="'storage/emp/avatare.jpg'"  class="rounded-circle fotosociomini" >
                                 </td>
                                 <td v-text="empleado.apaterno"></td>
                                 <td v-text="empleado.amaterno"></td>
@@ -249,11 +248,27 @@
                                 </tr>
                             </table>
                         </div>
+                        
                         <div class="col-md-4 text-center"> 
-                            <img v-if="nuevafoto" :src="foto" id="lafoto" @load="ajustarImagen"> 
-                            <img v-else :src="regEmpleado.foto?'/img/empleados/'+regEmpleado.foto:'/img/empleados/avatar.png'"> 
-                            <input type="file" style="display:none" accept=".jpg,.jpeg,.JPG,.JPEG" ref="buscar" @change="buscarImagen">
-                            <button class="btn btn-primary" @click="$refs.buscar.click()">Cargar Foto</button>
+                            <!-- <img v-if="nuevafoto" :src="foto" id="lafoto" @load="ajustarImagen"> 
+                            <img v-else :src="regEmpleado.foto?'/img/empleados/'+regEmpleado.foto:'/img/empleados/avatar.png'">  -->
+                              <!-- <input type="file" style="display:none" accept=".jpg,.jpeg,.JPG,.JPEG" ref="buscar" @change="buscarImagen"> -->
+                          
+                            
+
+                            <div v-if="nuevafoto==''"> 
+                                    <img v-if="foto"  :src="'storage/emp/'+foto">
+                                    <img v-else :src="'storage/emp/avatare.jpg'">  
+                            </div>
+                            <div v-else> 
+                                     <div id="imgbene"> 
+                                     </div>
+                            </div>
+
+                            <div class="fileUpload btn btn-primary">
+                                <span>Cargar Foto</span> 
+                                <input type="file" id="fileon" ref="fileon" class="upload" accept="image/x-png,image/jpeg" @change="imagenView">
+                            </div> 
                         </div>
                     </div>
                     <br>
@@ -444,19 +459,7 @@
                             </div>
                         </div>
                 </div>
-                <div class="form-group row" v-if="tipoCred=='emp'">
-                                    <div class="col-lg-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <i class="fa fa-align-justify"></i>Credenciales empleados</div>
-                                                <div class="card-body">
-                                                    <div class="form-group">
-                                                            <excelReader v-if="tipoCred=='emp'" @array_Files_Data="carnetempleados"></excelReader>
-                                                    </div> 
-                                                </div>
-                                        </div>
-                                    </div>
-                </div>
+                
              <div class="row" id='contenedorframes'>
 
              </div>
@@ -469,6 +472,31 @@
         </div>
       </div>
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true" id="credencialUser">
+      <div class="modal-dialog modal-primary modal-xl" role="document">
+        <div class="modal-content animated fadeIn">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalOneLabel">Credencial</h4>
+            <button type="button" class="close" aria-hidden="true" aria-label="Close"
+              @click="classModal.closeModal('credencialUser')">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div> 
+          <div class="modal-body-plandepagos" style="max-height:600px">  
+             <div class="row" id='contenedorframesuser'> 
+             </div>
+          </div> 
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              @click="classModal.closeModal('credencialUser')">cerrar</button> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 </main>
 </template>
 
@@ -481,14 +509,14 @@ Vue.component('empAsistencia',require('./empAsistencia.vue').default);
 Vue.component('empReferencia',require('./empReferencia.vue').default);
   
 export default {     
-    data (){ return {
+    data (){ return { 
         tipoCred:'',
         accion:1,  ipbirt:'', currfecha:'',
         buscado:'', regEmpleado:[], sedelp:'1', activo:'1',
         arrayEmpleados:[], arrayDepartamentos:[], arrayFormaciones:[], arrayProfesiones:[],
         arrayFiliales:[], arrayOficinas:[], arrayCargos:[], arrayBancos:[], arraySeguros:[],
         idempleado:'', codempleado:'', nombre:'', apaterno:'', amaterno:'', sexo:'', ci:'', iddepartamento:'',
-        fechanacimiento:'', idestadocivil:'', idformacion:'', idprofesion:'', foto:'', nuevafoto:0,
+        fechanacimiento:'', idestadocivil:'', idformacion:'', idprofesion:'', foto:'', nuevafoto:'',
         telcelular:'', telfijo:'', email:'', domicilio:'', zona:'',
         idfilial:'', idoficina:'', idcargo:'', fechaingreso:'',
         idbanco:'', nrcuenta:'', codbiom:'', fecharetiro:'', obs:'',
@@ -499,9 +527,34 @@ export default {
         divDocumentos:0, divReferencias:0, 
     }},
 
-directives: { focus },
-
+directives: { focus }, 
     methods: { 
+      generarCarnetEmpl(empe){ 
+          let me=this;
+           me.classModal.closeModal('credencialUser');
+                    axios.get('/rrh_empleado/verEmpleadopdf?idempleado='+empe.idempleado).then(function (responseuser) { 
+                           var regEmpleado=responseuser.data.empleado[0]; 
+                            swal({
+                                title: "Generando reporte",
+                                allowOutsideClick: () => false,
+                                allowEscapeKey: () => false,
+                                onOpen: function() {
+                                swal.showLoading();
+                                }
+                            });  
+                            $("#contenedorframesuser").empty(); 
+                                    axios.get('/sociogetfotoCRV_emp?foto='+(regEmpleado.foto==null?'':regEmpleado.foto)).then(function (response) { 
+                                            _pl._vvp2521_cr_cen_emp(regEmpleado,response.data,'contenedorframesuser',()=>{
+                                                swal.close();
+                                                me.classModal.openModal('credencialUser');
+                                            });
+                                    }).catch(function (error) {
+                                        console.log('error2:',error);
+                                    });
+                    }).catch(function (error) {
+                        console.log('error1:',error);
+                    });
+        },
         openModale(valor){
             this.tipoCred='';
              swal.close();
@@ -534,27 +587,7 @@ directives: { focus },
             });
             
         },
-        carnetempleados(data){
-               this.tipoCred='';
-               this.classModal.closeModal('credencial');
-             swal({
-                title: "Generando reporte",
-                allowOutsideClick: () => false,
-                allowEscapeKey: () => false,
-                onOpen: function() {
-                swal.showLoading();
-                }
-            }); 
-             
-            let me=this;
-            $("#contenedorframes").empty();
-            this.generatePDFEmp(data.values,'contenedorframes').then(()=>{
-                        swal.close();
-                        me.classModal.openModal('credencial');
-            }).catch((error)=>{
-                console.log('error emp:',error);
-            });
-        },
+   
        
        async generatePDFCen(array,nam) { 
          
@@ -577,27 +610,7 @@ directives: { focus },
              _pl._vvp2521_cr_cen_emp(socio,consulta.data,nam);
             } 
         },
-          async generatePDFEmp(array,nam) { 
          
-            for (var aux of array) {
-                var socio={
-                            rutafoto:aux['FOTO'],
-                            codsocio:aux['COD_EMPLEADO'].toString(),
-                            carnetmilitar:aux['COD_EMPLEADO'].toString(), 
-                            nomgrado:aux['GRADO_ACADEMICO'].toUpperCase(),
-                            nomespecialidad:' ',
-                            nombre:aux['NOMBRES'].toUpperCase(),
-                            apaterno:aux['APELLIDO  AP'].toString().toUpperCase(),
-                            amaterno:aux['APELLIDO MT'].toString().toUpperCase(),
-                            cargo:aux['CARGO'].toUpperCase(), 
-                            ci:aux['CEDULA'].toString(),
-                            abrvdep:aux['EXPEDIDO'].toUpperCase(),  
-                            validate:aux['VALIDO']  
-                          };
-            var consulta=await axios.get('/sociogetfotoCRV_emp?foto='+aux['FOTO']);
-                 _pl._vvp2521_cr_cen_emp(socio,consulta.data,nam);
-            } 
-        },
         listaEmpleados(){ 
             var url='/rrh_empleado/listaEmpleados?sedelp='+this.sedelp+'&activou='+this.activo+'&buscado='+this.buscado;
             axios.get(url).then(response=>{
@@ -656,12 +669,61 @@ directives: { focus },
                 this.arrayBancos=response.data.bancos;
             });
         },
+imagenView(evt){  
+                let me=this;
+                   if(this.$refs.fileon.files.length==0){  
+                              me.nuevafoto='';  
+                              $('#imgbene').html('');  
+                       return;
+                   }else{ 
+                       me.nuevafoto='ok';
+                $(".fileUpload").css('display', 'none');
+                 $('#idimagen').cropper('destroy'); 
+                  $('#imgbene').html(''); 
+                   var file = this.$refs.fileon.files[0]; 
+                    var reader = new FileReader();
+                    reader.onload = function(event) { 
+                     me.nuevafoto=event.target.result; 
+                $(`<img src='${event.target.result}' id="idimagen" style="max-width: 70%;margin: auto;">
+                    <div style="padding: 9px;" id="fotoimagenbenecrood">
+                    <button  type="button" class="btn btn-success" id="btnselecctbene">Seleccionar</button> 
+                    <button  type="button" class="btn btn-danger" id="btncancelbene">Cancelar</button>
+                    </div>`).appendTo('#imgbene');
 
+                     $("#idimagen").cropper({
+			            aspectRatio: 1/1,
+					    viewMode: 1,
+					    dragMode: 'move',
+						autoCropArea: 1,
+						restore: false, 
+						guides: false, 
+						rotatable: false,
+					    multiple: false
+					});  
+                    $("#btncancelbene").click(function(){
+                     $('#idimagen').cropper('destroy'); 
+                     $('#imgbene').html('');
+                     me.nuevafoto=''; 
+                     $('#fileon').val("");  
+                      $(".fileUpload").css('display', 'block');
+                    }); 
+
+                    $("#btnselecctbene").click(function(){ 
+                        me.nuevafoto=$("#idimagen").cropper('getCroppedCanvas',{ width: 300, height: 300 }).toDataURL();   
+                        $('#idimagen').cropper('destroy');
+                        $("#idimagen").attr("src",me.nuevafoto);
+                        $('#fotoimagenbenecrood').html(''); 
+                        $(".fileUpload").css('display', 'block');
+                    }); 
+                    }
+                    reader.readAsDataURL(file);
+                   }
+            },
         buscarImagen(event){
             let archivo=event.target.files[0];
             let lector=new FileReader();
             lector.onload = event => this.foto=event.target.result;
-            this.nuevafoto=1;
+            
             lector.readAsDataURL(archivo);            
         },
 
@@ -686,7 +748,10 @@ directives: { focus },
             if(this.fechanacimiento) this.codempleado+=this.fechanacimiento.replace('-','');
         },
 
-        nuevoEmpleado(){            
+        nuevoEmpleado(){   
+             $('#fileon').val("");
+            $(".fileUpload").css('display', 'block');
+            this.nuevafoto='';         
             this.classModal.openModal('modalnewEmpleado');                        
             this.accion=1;
             this.listaDepartamentos();
@@ -700,7 +765,7 @@ directives: { focus },
             this.nombre=''; this.apaterno=''; this.amaterno=''; 
             this.sexo=''; this.ci=''; this.iddepartamento='';
             this.fechanacimiento=''; this.idestadocivil=''; 
-            this.idformacion=''; this.idprofesion=''; this.foto='';
+            this.idformacion=''; this.idprofesion=''; 
             this.telcelular=''; this.telfijo=''; this.email=''; 
             this.domicilio=''; this.zona=''; this.foto=''; this.codempleado='',
             this.idfilial=''; this.idoficina=''; this.idcargo=''; this.fechaingreso='';
@@ -710,8 +775,9 @@ directives: { focus },
         },
 
         async editarEmpleado(empleado){
+            $('#fileon').val(""); 
             // window.scroll({top:0,left:0,behavior:'smooth'});
-              this.nuevafoto=0;
+              this.nuevafoto='';
             this.accion=2;
             this.listaDepartamentos();
             this.listaFiliales();
@@ -753,6 +819,7 @@ directives: { focus },
             this.codssocial=this.regEmpleado.codssocial;
             this.ssalud=this.regEmpleado.ssalud;
             this.codssalud=this.regEmpleado.codssalud;
+             $(".fileUpload").css('display', 'block');
             this.classModal.openModal('modalnewEmpleado'); 
         },
 
@@ -844,7 +911,7 @@ directives: { focus },
                 'gruposangre':this.gruposangre,
                 'fechanacimiento':this.fechanacimiento,
                 'idestadocivil':this.idestadocivil,
-                'foto':$('#lafoto').length?$('#lafoto').cropper('getCroppedCanvas').toDataURL():'',
+                'foto':this.nuevafoto,
                 'idformacion':this.idformacion,
                 'idprofesion':this.idprofesion,
                 'telcelular':this.telcelular,
@@ -887,7 +954,7 @@ directives: { focus },
                 'gruposangre':this.gruposangre,
                 'fechanacimiento':this.fechanacimiento,
                 'idestadocivil':this.idestadocivil,
-                'foto':$('#lafoto').length?$("#lafoto").cropper('getCroppedCanvas').toDataURL():'',
+                'foto':this.nuevafoto,
                 'idformacion':this.idformacion,
                 'idprofesion':this.idprofesion,
                 'telcelular':this.telcelular,
@@ -955,6 +1022,27 @@ directives: { focus },
         this.classModal=new _pl.Modals();
         this.classModal.addModal('modalnewEmpleado'); 
         this.classModal.addModal("credencial"); 
+        this.classModal.addModal("credencialUser"); 
     }
 }
 </script>
+<style>    
+   .fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+    display: block;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+</style>

@@ -721,8 +721,10 @@
                                             <button type="button" class="btn btn-warning btn-sm icon-action-redo" @click="activarBeneficiario(beneficiario)"></button>
                                         </template>                                                                               
                                     </td>
-                                    <td>  
-                                    <img  :src="'storage/bene/'+beneficiario.foto"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+                                    <td>   
+                                    <img v-if="beneficiario.foto"  :src="'storage/bene/'+beneficiario.foto"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+									<img v-else :src="'storage/bene/avatare.jpg'"  class="rounded-circle fotosociomini" alt="Cinque Terre" >
+
                                          {{beneficiario.nombre}} {{beneficiario.apaterno}} {{beneficiario.amaterno}} </td>
                                     <td v-text="beneficiario.parentesco"></td>
                                     <td v-text="beneficiario.ci" align="center"></td>
@@ -798,7 +800,8 @@
                                      
                                     <tr>
                                         <td>Foto:</td> 
-                                        <td><input type="file" id="fileon" ref="fileon" name='fotografia' class="form-control" @change="imagenView" v-validate.initial="'required'"> </td>
+                                        <td><input type="file" id="fileon" ref="fileon" name='fotografia' class="form-control"
+                                        accept="image/x-png,image/jpeg" @change="imagenView" v-validate.initial="'required'"> </td>
                                     </tr>
                                       <tr> 
                                        <td colspan="2"> <div id="imgbene"></div></td> 

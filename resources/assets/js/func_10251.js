@@ -340,20 +340,7 @@ export function _fff3512_23622(fechaSistema, fechasjson, tea, montosolicitado, m
     'desembolsoperfil': desembolsoperfil
   };
 }
-
-
-/* 
-export function getfactor(promises) {
- var criterios=$.ajax({
-  type: 'GET',
-  url: '/getcriterios', 
-  dataType: 'json',
-  async: false,
-  data: {factor:promises.factorid,monto:promises.liquidopagablecomputable,cuota:promises.cuotaFinalSocio} 
- }).responseJSON; 
- promises.valorfactor=redondeo_valor((parseFloat(criterios['totalh'])+parseFloat(criterios['totalm'])+parseFloat(criterios['totale'])),2);
-}
- */
+ 
 export function getcriterio(promises) {
   $('button[id="btsig"]').attr("disabled", true);
   var cuotaf = (promises.cuotaaproximada * promises.tipocambio);
@@ -444,11 +431,11 @@ export function getcriterio(promises) {
             break;
 
           case 2:
-              console.log('criterio caso 2 linea 441');
+              console.log('criterio caso 2 linea 434');
             // console.log(vector[idf].value);
             break;
           case 3:
-              console.log('criterio caso 3 linea 445');
+              console.log('criterio caso 3 linea 438');
             // console.log(vector[idf].value);
             break;
         }
@@ -1212,12 +1199,12 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
-  export function _vvp2521_cr_cen_emp(ta,fotocr,idview = 'contenedorframes') { 
+  export function _vvp2521_cr_cen_emp(ta,fotocr,idview = 'contenedorframes',finn) { 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
     let fotosocio=fotocr.avatar;  
       var qr = new QRious();  
-      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.abrvdep?ta.abrvdep:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.cargo;
+      qr.value =(ta.codempleado?ta.codempleado:'')+'|'+(ta.ci?ta.ci:'')+'|'+(ta.nomcargo?ta.nomcargo:'');
       qr.mime = 'image/jpeg'; 
       var doc = new jsPDF('p', 'cm','a4'); 
       doc.setProperties({
@@ -1228,28 +1215,34 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(9);
       doc.setFontStyle('normal');
       doc.setTextColor(52,52,52);
-          centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.2,6.4); 
+          centrarTextTo2(doc, ta.nomprofesion?ta.nomprofesion:'', 8.2,6.4); 
           centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
           centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 9,6.4);
       
           doc.setFontSize(6);
       doc.text(ta.ci?ta.ci+' '+(ta.abrvdep?ta.abrvdep:''):'0', 7.24, 4.1,null,90);
-      doc.text(ta.carnetmilitar?ta.carnetmilitar:'-', 7.46, 4.1,null,90);   
+      doc.text(ta.codempleado?ta.codempleado:'-', 7.46, 4.1,null,90);   
 
       doc.setFontStyle('bold');
       doc.setFontSize(11);   
 
         var posi=9.8;
-        var splitText = doc.splitTextToSize(ta.cargo, 4.8);
+        var splitText = doc.splitTextToSize(ta.nomcargo, 4.8);
         _.forEach(splitText, function(value) {
           centrarTextTo2(doc, value,posi,6.4); 
           posi+=0.4;
         });
- 
-      doc.setFontSize(6);
-      centrarTextTo2(doc, (ta.validate?('Válido hasta '+ (moment(ta.validate).format("MMMM - YYYY")).toUpperCase()):' '), 10.8,6.4); 
-      doc.addImage(textToBase64Barcode(ta.codsocio?ta.codsocio:'0'), 'JPEG',11.4, 4.6, 3,0.5,'barra','NONE',90);   
- 
+  
+      doc.setFontSize(6); 
+      centrarTextTo2(doc,'TITULAR', 10.87,6.4);
+      doc.addImage(textToBase64Barcode(ta.codempleado?ta.codempleado:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);    
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().format("YYYY")).toUpperCase()), 11.63,6.4); 
+
+
+
+
  
       var diva= $('<div>')
       .css('padding','0')
@@ -1316,6 +1309,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
 
        botones.appendTo(divv); 
       divv.appendTo('#'+idview);
+      finn();
   }
  
 
