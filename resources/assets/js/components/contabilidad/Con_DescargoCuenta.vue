@@ -31,6 +31,39 @@
                         </div>
                     </div>
                     <div class="card-body" style="padding-bottom: 5px;">
+                        <div class="form-group row" style="margin-bottom:5px">
+                            <div class="col-md-2 pt-1" >
+                                <strong>Tipo Comprobante:&nbsp;&nbsp;</strong>
+                            </div>
+                            <div class="col-md-4">
+                                    <select class="form-control " style="background-color: burlywood; font-size: 1rem; padding-top: 0.2rem; color:black"
+                                            v-model="idtipocomprobante"
+                                            v-validate.initial="'required'"
+                                            name="tipocomprobante">
+                                        
+                                        <option v-for="tipocomprobante in arrayTipocomprobante" :key="tipocomprobante.idtipocomprobante" :value="tipocomprobante.idtipocomprobante" v-text="tipocomprobante.nomtipocomprobante"></option>
+                                    </select>  
+                                
+                            </div>
+                            <div class="col-md-2 pt-1" >
+                                <label for="checkbox"><strong>Excedente?</strong> &nbsp;&nbsp;</label>
+                                <input class="form-check-input" type="checkbox" id="checkbox" v-model="excedente" style="margin-left: 0.25rem;" @click="resetexcedente()">
+                            </div>
+                            <div class="col-md-4 " v-if="excedente">
+                                <div class="form-group row">
+                                    <label for="montoexcedente" class="pt-1"><strong>Monto Total Bs.:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> </label>
+                                    <vue-numeric  
+                                                class="inputnext form-control input-importe" style="width: 150px; font-size: 1.2rem; background: burlywood;color:black"
+                                                separator="," 
+                                                v-model="montoexcedente"
+                                                v-bind:precision="2"
+                                                v-on:focus="selectAll"
+                                                @blur="modificarsaldo">
+                                            </vue-numeric>
+                                </div>
+                                    <span v-if="siexcedente" class="text-error">El excedente debe ser mayor al monto original</span>
+                            </div>
+                        </div>
                         <div class="form-group row" style="margin-bottom: 5px;">
                             <div class="col-md-6">
                                 <strong>Asignado a:&nbsp;&nbsp;</strong>
@@ -41,8 +74,8 @@
                                 <label  v-text="tipocargo"></label>
                             </div>
                             <div class="col-md-3">
-                                <strong>Monto:&nbsp;&nbsp;</strong>
-                                <label  v-text="monto + ' Bs.'"></label>                                
+                                <strong>Monto Cargo de Cuenta:&nbsp;&nbsp;</strong>
+                                <label  v-text="montooriginal + ' Bs.'"></label>                                
                             </div>
                         </div>
                         <div class="form-group row">
@@ -107,7 +140,7 @@
                         </div>
                             <div id="contenglobalButton" >
                                 <div class="row">
-                                    <div class="bg-info text-white border border-white col-md-6" >
+                                    <div class="bg-info text-white border border-white" :class="excedente?' col-md-4':'col-md-6'"  >
                                         <strong style="padding-left: 20px;">CUENTA</strong>
                                     </div>
                                     <div class="bg-info text-white border border-white col-md-3" >
@@ -116,14 +149,17 @@
                                     <div class="bg-info text-white border border-white col-md-2" >
                                         <strong>DEBE</strong>
                                     </div>
+                                    <div class="bg-info text-white border border-white col-md-2" v-if="excedente" >
+                                        <strong><label>HABER</label></strong>
+                                    </div>
                                     <div class="bg-info text-white border border-white col-md-1"  style="text-align:center">
                                         <strong> + </strong>
                                     </div>
                                 </div>
                                 <div id="contenidoValue">
                                 <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
-                                    <template v-if="!borrador">
-                                        <div class="border col-md-6" >
+                                    <template ><!-- v-if="!borrador" -->
+                                        <div :class="excedente?'border col-md-4':'border col-md-6'"   >
                                         <Ajaxselect v-if="limpiarajax" :ref="'ajaxselect'+index"
                                             class="border-0 "  
                                             ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
@@ -136,22 +172,6 @@
                                         </Ajaxselect>
                                         </div>
                                     </template>
-                                    <template v-else>
-                                        <div class="border col-md-6" >
-                                        <Ajaxselect :ref="'ajaxselect'+index"
-                                            class="border-0 "  
-                                            ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentas" @cleaning="clean" @next="e=>{e()}"
-                                            resp_ruta="cuentas"
-                                            labels="cuentas"
-                                            placeholder="Ingrese texto" 
-                                            idtabla="idcuenta"
-                                            :keyIn="index"
-                                            :id="rowcuentas.idcuenta"
-                                            :clearable='true'>
-                                        </Ajaxselect>
-                                        </div>
-                                    </template>
-                                    
                                     <div class="border col-md-3" >
                                         <input  id="input1" inputvalued="1"
                                                 v-model="rowcuentas.documento" 
@@ -193,6 +213,16 @@
                                             </vue-numeric>
                                         </div>
                                     </template>
+                                    <div class="border col-md-2" v-if="excedente" >
+                                        <vue-numeric  id="input3" inputvalued="3"
+                                            :disabled="rowcuentas.debe!=0"
+                                            class="inputnext form-control input-importe border-0"
+                                            separator="," 
+                                            v-model="rowcuentas.haber"
+                                            v-bind:precision="2"
+                                            v-on:focus="selectAll">
+                                        </vue-numeric>
+                                    </div>
                                     <div v-if="recorrerowcuentas-1==index" class="border col-md-1" style="text-align:center">
                                         <button @click="deleterowcuentas(index)" class="btn btn-danger botonpadding" >
                                                 Borrar
@@ -201,11 +231,14 @@
                                 </div>
                                 </div>
                                 <div class="row" style="text-align:right;">
-                                    <div class="bg-info text-white col-md-9" >
+                                    <div class="bg-info text-white" :class="excedente?'col-md-7':'col-md-9'" >
                                         <strong><label >Total es:</label></strong>
                                     </div>
                                     <div class="border col-md-2" style="padding-right: 5px;">
                                         <strong for="debe" >{{debe | currency }}</strong>
+                                    </div>
+                                    <div class="border col-md-2" style="padding-right: 5px;" v-if="excedente">
+                                        <strong for="haber" >{{haber | currency }}</strong>
                                     </div>
                                     <div class="border col-md-1" style="text-align:center">
                                         <button id='botonAddAjax' @click="addrowcuentas" class="btn btn-success botonpadding">
@@ -230,11 +263,11 @@
                             </div>
                             
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" v-if="!excedente">
                             <div class="col-md-3">
-                                <strong>Saldo Cargo de Cuenta:</strong>
+                                <strong style="font-size: 1.2rem; ">Saldo Cargo de Cuenta:</strong>
                             </div>
-                            <div :class="saldoc<0?'col-md-2 divsierror':'col-md-2 divnoerror'">
+                            <div :class="saldoc<0?'col-md-2 divsierror':'col-md-2 divnoerror'" style="font-size: 1.2rem;" >
                                 <label :class="saldoc<0?'error':''">{{salcoc=saldocargocuenta |currency}} </label><span>&nbsp;</span>
                             </div>
                             <div class="col-md-5">
@@ -250,6 +283,18 @@
                                     <i class="icon-plus"></i>
                                 </button>
                             </div> -->
+                        </div>
+                        <div class="form-group row" v-else>
+                             <div class="col-md-3">
+                                <strong style="font-size: 1.2rem; ">Saldo Cargo de Cuenta:</strong>
+                            </div>
+                            <div :class="saldoc<0?'col-md-2 divsierror':'col-md-2 divnoerror'" style="font-size: 1.2rem;" >
+                                <label :class="saldoc<0?'error':''">{{salcoc=saldocargocuenta |currency}} </label><span>&nbsp;</span>
+                            </div>
+                            <div class="col-md-5">
+                                <span class="text-error" v-if="saldoc<0">El Saldo no debe ser menor a 0</span> 
+                                <span class="text-error" v-if="menorfacturas">El Monto del Comprobante no debe ser menor a la suma del Total de las Facturas</span>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -563,7 +608,9 @@ export default {
         reporte_asiento_automatico:'',
         fechaactual:'',
         fechatransaccion:'',
-        idtipocomprobante:'',
+        idtipocomprobante:3, //tipo de comprobante por defecto 3 traspaso
+        excedente:false,
+        montoexcedente:0,
         tipodocumento:'',
         numdocumento:'',
         glosa2:'',
@@ -652,9 +699,26 @@ export default {
         sigla:'',
         idfilial:'',
         detalle:'',
-        sidirectorio:''
+        sidirectorio:'',
+        arrayTipocomprobante:[],
+        montoexcedente2:0,
+        montooriginal:0,
+        
     }},
     computed:{
+        siexcedente(){
+            let me=this;
+            
+            if(me.montooriginal>=me.montoexcedente)
+                return true;
+            else
+                return false;
+        },
+        actualizarmonto(){
+            if(me.siexcedente)
+                me.montoexcedente2=me.montoexcedente-me.monto;
+            return me.montoexcedente2;
+        },
         menorfacturas(){
             let me=this;
             if (me.debe<me.sumafac)
@@ -675,12 +739,16 @@ export default {
             let me=this;
             var contador=0;
             me.debe=0;
-            //me.haber=0;
+            if(me.excedente)
+            {
+                me.haber=me.montooriginal;
+            }
+            
             me.confacturas=false
             me.rowcuentas.forEach(element => {
                 contador++;
                 me.debe=parseFloat(me.debe)+parseFloat(element.debe);
-                //me.haber=parseFloat(me.haber)+parseFloat(element.haber);
+                me.haber=parseFloat(me.haber)+parseFloat(element.haber);
                 if(element.idcuenta==me.lc)
                     me.confacturas=true;
 
@@ -743,6 +811,39 @@ export default {
        
     },
     methods:{ 
+        modificarsaldo(){
+            let me=this;
+            console.log("saldo modificado");
+            me.monto=me.montoexcedente;
+        },
+        resetexcedente(){
+            let me=this;
+            if(!me.excedente)
+            {    
+                me.montoexcedente=0;
+                //console.log(me.monto+" verdad");
+                me.monto=me.montooriginal;
+                console.log(me.monto);
+            }
+            else
+            {
+                me.monto=me.montooriginal;
+                console.log(me.monto+" falso");
+            }
+          
+        },
+        selectTipocomprobante(){
+                let me=this;
+                var url= '/con_tipocomprobante/selectTipocomprobante';
+                axios.get(url).then(function (response) {
+                    //console.log(response);
+                    var respuesta= response.data;
+                    me.arrayTipocomprobante = respuesta.tipocomprobantes;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
          verchecked(id){
             // console.log(id);
             let me=this;
@@ -792,6 +893,9 @@ export default {
                     debe:0,
                     haber:0
                         }] ;
+            this.montooriginal=this.monto;
+            this.excedente=false;
+            this.montoexcedente=0;
         },
         selectCuentaHaber(id){
             let me=this;
@@ -812,6 +916,8 @@ export default {
             this.silibrocompra=0;
             this.limpiarajax=0;
         },
+
+       /* no se esta utilizando
         selectasientodetalles(idmaestro,tipo){
             let me=this;
             var url= '/con_asientodetalle/selectasientodetalle?idasientomaestro=' + idmaestro;
@@ -901,6 +1007,7 @@ export default {
             });
         
         },
+        */
         deleterowcuentas:function(index) {
             this.rowcuentas.splice(index, 1);
             if(index===0)
@@ -1102,6 +1209,12 @@ export default {
         },
         registrarAsiento(){
             let me = this;
+            let conexcedente;
+            if(me.excedente)
+                conexcedente=me.montooriginal;
+            else
+                conexcedente=me.debe;
+            
             /* me.acumulado13=0;
             me.acumulado87=0; */
             var validarfacturas=0;
@@ -1110,7 +1223,7 @@ export default {
                                             moneda:'bs',
                                             documento:'',
                                             debe:"",
-                                            haber:me.debe }); 
+                                            haber: conexcedente}); 
 
 
             if(me.checkusarfactura.length>0)
@@ -1120,7 +1233,7 @@ export default {
             axios.post('/con_asientomaestro/registrar',{
                 'rowregistros':me.rowcuentas,
                 'fechatransaccion':me.fechatransaccion,
-                'idtipocomprobante':3, //TODO:el id de tipo comprobate es egreso, cambiar manualmente si es diferente
+                'idtipocomprobante':me.idtipocomprobante, //corregido y ahora se selcciona el tipo de comprobante, por defecto es 3 tipo comprobante traspaso
                 'tipodocumento':me.tipodocumento,
                 'numdocumento':me.numdocumento,
                 'glosa':me.glosa2,
@@ -1194,6 +1307,7 @@ export default {
                 console.log(error);
             });
         },
+        /*
         actualizarAsiento(){
             let me = this;
             axios.post('/con_asientomaestro/registrar',{
@@ -1221,6 +1335,7 @@ export default {
                 console.log(error);
             });
         },
+        */
         resetComprobante(){
             this.limpiarajax=0;
             setTimeout(this.tiempolimpiar, 100); 
@@ -1232,7 +1347,7 @@ export default {
                         haber:''
                             }] 
             this.fechatransaccion=this.fechaactual;
-            this.idtipocomprobante='';
+            this.idtipocomprobante=3;
             this.tipodocumento='';
             this.numdocumento='';
             this.glosa2='';
@@ -1412,39 +1527,39 @@ export default {
                 
                 //return letrafinal;
             },
-            cerrarmodalproveedor(){
-                let me =this;
-                me.nomproveedor='';
-                me.direccion='';
-                me.nomcontacto='';
-                me.nit='';
-                me.telefono='';
-                me.celular='';
-                me.classModal.closeModal('proveedor'); 
-                me.classModal.openModal('librocompras');
+        cerrarmodalproveedor(){
+            let me =this;
+            me.nomproveedor='';
+            me.direccion='';
+            me.nomcontacto='';
+            me.nit='';
+            me.telefono='';
+            me.celular='';
+            me.classModal.closeModal('proveedor'); 
+            me.classModal.openModal('librocompras');
 
-            },
-            storeProveedor(){
-                var url='/alm_proveedor/storeProveedor';
-                let me=this;
-                axios.post(url,{
-                    'nomproveedor':this.nomproveedor,
-                    'nomcontacto':this.nomcontacto,
-                    'nit':this.nit,
-                    'direccion':this.direccion,
-                    'telefono':this.telefono,
-                    'celular':this.celular
-                }).then(function(){
-                    swal('Adicionado correctamente','','success');
-                    me.cerrarmodalproveedor();
-                });
-            },
-            abrirModalProveedores(){
-                let me=this;
-                me.classModal.closeModal('librocompras'); 
-                me.classModal.openModal('proveedor');
-                
-            },
+        },
+        storeProveedor(){
+            var url='/alm_proveedor/storeProveedor';
+            let me=this;
+            axios.post(url,{
+                'nomproveedor':this.nomproveedor,
+                'nomcontacto':this.nomcontacto,
+                'nit':this.nit,
+                'direccion':this.direccion,
+                'telefono':this.telefono,
+                'celular':this.celular
+            }).then(function(){
+                swal('Adicionado correctamente','','success');
+                me.cerrarmodalproveedor();
+            });
+        },
+        abrirModalProveedores(){
+            let me=this;
+            me.classModal.closeModal('librocompras'); 
+            me.classModal.openModal('proveedor');
+            
+        },
     },
     filters: {
         ucase: function (value) {
@@ -1452,10 +1567,13 @@ export default {
             value = value.toString()
             return value.toUpperCase(); 
         }
-    }
+    },
+    mounted() {
+        this.selectTipocomprobante();
+    },
 }
 </script>
-<style>
+<style >
 .ancho30{
         width: 30%;
 }.ancho15{
