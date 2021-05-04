@@ -21,9 +21,7 @@
             <button class="btn btn-success cui-options botonnav"></button>
         </div>
     </div>
-
  
-  
    <div class="form-group row" >
                         <div class="col-lg-12">
                             <div class="card">
