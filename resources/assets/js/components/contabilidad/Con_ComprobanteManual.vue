@@ -72,7 +72,7 @@
                                             <i class="icon-eye"></i>
                                         </button> 
                                         <template v-if="asientomaestro.estado==1 && asientomaestro.idrevertido==null">
-                                            <button  v-if="criterio!=2 && check('revertir')" type="button" @click="revertirAsiento(asientomaestro)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Revertir">
+                                            <button  v-if="check('revertir')" type="button" @click="revertirAsiento(asientomaestro)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Revertir">
                                                 <i class="icon-shuffle"></i><!-- fa fa-exchange   icon-shuffle -->
                                             </button>
                                             <button type="button" v-if="check('copiar')" @click="cargarvue('copiar',asientomaestro)" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Copiar">
