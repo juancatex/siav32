@@ -158,7 +158,7 @@
                                 </div>
                                 <div id="contenidoValue">
                                 <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
-                                    <template ><!-- v-if="!borrador" -->
+                                    <template >
                                         <div :class="excedente?'border col-md-4':'border col-md-6'"   >
                                         <Ajaxselect v-if="limpiarajax" :ref="'ajaxselect'+index"
                                             class="border-0 "  
@@ -916,98 +916,6 @@ export default {
             this.silibrocompra=0;
             this.limpiarajax=0;
         },
-
-       /* no se esta utilizando
-        selectasientodetalles(idmaestro,tipo){
-            let me=this;
-            var url= '/con_asientodetalle/selectasientodetalle?idasientomaestro=' + idmaestro;
-            axios.get(url).then(function (response) {
-                var respuesta= response.data;
-                var optdebe=0;
-                var opthaber=0;
-                var optdocumento='';
-                if(tipo=='editar')
-    	        {
-                    console.log(tipo);
-                    for (let index = 0; index < respuesta.asientodetalles.length; index++) {
-                        const element = respuesta.asientodetalles[index];
-                        //console.log(element.nomcuenta);
-                        if(element.debe!=null)
-                            optdebe=element.debe;
-                        else
-                            optdebe=0;
-                        if(element.haber!=null)
-                            opthaber=element.haber;
-                        else
-                            opthaber=0;
-                        if(element.documento!=null)
-                            optdocumento=element.documento;
-                        else
-                            optdocumento='';
-                        if(element.idcuenta==me.lc)
-                            me.silibrocompra=1;
-
-                        if(index==0)
-                        {
-                        me.rowcuentas= [{ idcuenta:element.idcuenta,
-                                    idsubcuenta: this.subcuenta,
-                                    moneda:'bs',
-                                    documento:optdocumento,
-                                    debe:optdebe,
-                                    haber:opthaber
-                                    }] ;
-                        }
-                        else
-                        {
-                            me.addrowcuentas(false);
-                            me.rowcuentas[index].idcuenta=element.idcuenta;              
-                            me.rowcuentas[index].idsubcuenta=this.subcuenta;
-                            me.rowcuentas[index].moneda=element.moneda;
-                            me.rowcuentas[index].documento=optdocumento;
-                            me.rowcuentas[index].debe=optdebe;
-                            me.rowcuentas[index].haber=opthaber;
-                        }                    
-                    }
-                }
-                else {
-                    if(tipo=='copiar')
-                    {
-                        console.log(tipo);
-                        
-                        for (let index = 0; index < respuesta.asientodetalles.length; index++) {
-                            const element = respuesta.asientodetalles[index];
-                            //console.log(element.nomcuenta);
-                            if(index==0)
-                            {
-                            me.rowcuentas= [{ idcuenta:element.idcuenta,
-                                        idsubcuenta: this.subcuenta,
-                                        moneda:'bs',
-                                        documento:optdocumento,
-                                        debe:0,
-                                        haber:0
-                                        }] ;
-                            }
-                            else
-                            {
-                                me.addrowcuentas(false);
-                                me.rowcuentas[index].idcuenta=element.idcuenta;              
-                                me.rowcuentas[index].idsubcuenta=this.subcuenta;
-                                me.rowcuentas[index].moneda=element.moneda;
-                                me.rowcuentas[index].documento='';
-                                me.rowcuentas[index].debe=0;
-                                me.rowcuentas[index].haber=0;
-                            }                    
-                        }
-                    }
-                }
-                me.borrador=true; 
-            })
-            .catch(function (response) {
-                console.log(response);
-            });
-        
-        },
-        */
         deleterowcuentas:function(index) {
             this.rowcuentas.splice(index, 1);
             if(index===0)
@@ -1574,84 +1482,10 @@ export default {
 }
 </script>
 <style >
-.ancho30{
-        width: 30%;
-}.ancho15{
-    width: 12%;
-}.ancho10{
-    width: 10%;
-}
-.ancho30c{
-    text-align: center;
-    width: 30%;
-}
-.ancho60c{
-    text-align: center;
-    width: 60%;
-}.ancho15c{
-    text-align: center;
-    width: 12%;
-    padding-bottom: 5px;
-    padding-bottom: 1px;
-}.ancho10c{
-    text-align: center;
-    width: 10%;
-    
-}
-.ancho40c{
-    width:44%;
-    padding-right: 15px;
-}
-.ancho40{
-    width:44%;
-}
-.ancho20c{
-    width:24%;
-    padding-right: 15px;
-}
-.ancho60{
-    width:64%;
-    padding-right: 15px;
-}
-.ancho20{
-    width: 24%;
-}
-.ancho12{
-    width:12%;
-    padding-bottom: 5px;
-    padding-bottom: 1px;
-}
-.ancho10{
-    width:8%;
-}
-.ancho70{
-    width:70%;
-    padding-right: 15px;
-}
-.ancho12c{
-    text-align: center;
-    width:12%;
-}
-.ancho10c{
-    text-align: center;
-    width:8%;
-}
-.ancho20c{
-    text-align: center;
-    width: 20%;
-    
-}
 .botonpadding{
     padding-top: 2px;
     padding-bottom: 2px;
     
-}
-.ancho6c{
-    text-align: center;
-    width:6%;
-}
-.ancho6{
-    width:6%;
 }
 .padding5{
     margin-bottom: 5px;
