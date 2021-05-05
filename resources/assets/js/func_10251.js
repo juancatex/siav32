@@ -1215,26 +1215,28 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(9);
       doc.setFontStyle('normal');
       doc.setTextColor(52,52,52);
-          centrarTextTo2(doc, ta.nomprofesion?ta.nomprofesion:'', 8.2,6.4); 
-          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.6,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 9,6.4);
-      
+      if(ta.nomprofesion){
+        centrarTextTo2(doc, ta.nomprofesion?ta.nomprofesion:'', 8.1,6.4); 
+        centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.5,6.4); 
+        centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 8.9,6.4);
+      }else{
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.3,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 8.7,6.4);
+      }
+         
       doc.setFontSize(6);
       doc.text(ta.ci?ta.ci+' '+(ta.abrvdep?ta.abrvdep:''):'0', 7.24, 4.1,null,90);
       doc.text(ta.codempleado?ta.codempleado:'-', 7.46, 4.1,null,90);   
 
       doc.setFontStyle('bold');
       doc.setFontSize(11);   
-
-        var posi=9.8;
-        var splitText = doc.splitTextToSize(ta.nomcargo.toString(), 4);
+      var splitText = doc.splitTextToSize(ta.nomcargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g,' ').toUpperCase(), 4.7); 
+      var posi=splitText.length==1?10:(splitText.length==2?9.73:(splitText.length>=3?9.63:9.63));
         _.forEach(splitText, function(value) {
           centrarTextTo2(doc, value,posi,6.4); 
           posi+=0.4;
         });
-        console.log('array:',splitText);
-        console.log('tam:',doc.getStringUnitWidth(ta.nomcargo.toString()));
-  
+      
       doc.setFontSize(6); 
       centrarTextTo2(doc,'TITULAR', 10.87,6.4);
       doc.addImage(textToBase64Barcode(ta.codempleado?ta.codempleado:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);    
@@ -1341,7 +1343,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(11);   
 
         var posi=9.8;
-        var splitText = doc.splitTextToSize(ta.cargo, 4.8);
+        var splitText = doc.splitTextToSize(ta.cargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g,' '), 4.8);
         _.forEach(splitText, function(value) {
           centrarTextTo2(doc, value,posi,6.4); 
           posi+=0.4;

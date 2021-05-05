@@ -63,7 +63,7 @@ class RrhEmpleadoController extends Controller
     public function storeEmpleado(Request $request)
     {    if (!$request->ajax()) return redirect('/');  
         $empleado=new Rrh_Empleado();
-        $empleado->codempleado=$codempleado;
+        $empleado->codempleado=$request->codempleado;
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
         $empleado->amaterno=$request->amaterno;
@@ -101,6 +101,7 @@ class RrhEmpleadoController extends Controller
     public function updateEmpleado(Request $request)
     {    if (!$request->ajax()) return redirect('/');  
         $empleado=Rrh_Empleado::findOrFail($request->idempleado);
+        $empleado->codempleado=$request->codempleado;
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
         $empleado->amaterno=$request->amaterno;

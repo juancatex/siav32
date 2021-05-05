@@ -163,19 +163,19 @@
                         <div class="col-md-4">
                             <table width="100%">
                                 <tr><td>Nombres: <span class="txtasterisco"></span></td>
-                                    <td><input type="text" class="form-control" autofocus v-model="nombre" @keyup="generarCodigo()"  
-                                        name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required|alpha_spaces'">
+                                    <td><input type="text" class="form-control" autofocus v-model="nombre"   
+                                        name="nom" :class="{'invalido':errors.has('nom')}" v-validate="'required|alpha_spaces'" v-uppercase>
                                     </td>
                                 </tr>
                                 <tr><td colspan="2" class="txtvalidador text-right" v-if="errors.has('nom')">Dato requerido</td></tr>
                                 <tr><td nowrap>Ap. Paterno: <span class="txtasterisco"></span></td>
-                                    <td><input type="text" class="form-control" v-model="apaterno" @keyup="generarCodigo()"
-                                        name="pat" :class="{'invalido':errors.has('pat')}" v-validate="'required|alpha_spaces'">
+                                    <td><input type="text" class="form-control" v-model="apaterno" 
+                                        name="pat" :class="{'invalido':errors.has('pat')}" v-validate="'required|alpha_spaces'" v-uppercase>
                                     </td>
                                 </tr>
                                 <tr><td colspan="2" class="txtvalidador text-right" v-if="errors.has('pat')">Dato requerido</td></tr>
                                 <tr><td>Ap. Materno:</td>
-                                    <td><input type="text" class="form-control" v-model="amaterno" @keyup="generarCodigo()"></td>
+                                    <td><input type="text" class="form-control" v-model="amaterno" v-uppercase></td>
                                 </tr>
                                 <tr><td>Nro CI: <span class="txtasterisco"></span></td>
                                     <td><input type="text" class="form-control" v-model="ci" 
@@ -209,7 +209,7 @@
                         <div class="col-md-4">
                             <table width="100%">
                                 <tr><td nowrap>Fecha Nacim: <span class="txtasterisco"></span></td>
-                                    <td><input type="date" class="form-control" v-model="fechanacimiento" @change="generarCodigo()"
+                                    <td><input type="date" class="form-control" v-model="fechanacimiento" 
                                         name="nac" :class="{'invalido':errors.has('nac')}" v-validate.initial="'required'">
                                     </td>
                                 </tr>
@@ -513,7 +513,7 @@ export default {
         buscado:'', regEmpleado:[], sedelp:'1', activo:'1',
         arrayEmpleados:[], arrayDepartamentos:[], arrayFormaciones:[], arrayProfesiones:[],
         arrayFiliales:[], arrayOficinas:[], arrayCargos:[], arrayBancos:[], arraySeguros:[],
-        idempleado:'', codempleado:'', nombre:'', apaterno:'', amaterno:'', sexo:'', ci:'', iddepartamento:'',
+        idempleado:'',   nombre:'', apaterno:'', amaterno:'', sexo:'', ci:'', iddepartamento:'',
         fechanacimiento:'', idestadocivil:'', idformacion:'', idprofesion:'', foto:'', nuevafoto:'',
         telcelular:'', telfijo:'', email:'', domicilio:'', zona:'',
         idfilial:'', idoficina:'', idcargo:'', fechaingreso:'',
@@ -526,6 +526,16 @@ export default {
     }},
 
 directives: { focus }, 
+computed: { 
+    codempleado: function() { 
+      var sum =(this.apaterno?this.apaterno.substr(0,1):'')+
+        (this.amaterno?this.amaterno.substr(0,1):'')+
+        (this.nombre?_.join(_.map(this.nombre.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g,' ').split(" "),(value)=>{
+             return value.substr(0,1).toUpperCase();
+        }),''):'')+(this.fechanacimiento?moment(this.fechanacimiento).format("YYMD"):''); 
+      return sum.toUpperCase();
+      }
+    },
     methods: { 
       generarCarnetEmpl(empe){ 
           let me=this;
@@ -738,13 +748,7 @@ imagenView(evt){
             });
         },
 
-        generarCodigo(){
-            if(this.apaterno) this.codempleado=this.apaterno.substr(0,1);
-            if(this.amaterno) this.codempleado+=this.amaterno.substr(0,1);
-            if(this.nombre) this.codempleado+=this.nombre.substr(0,1);
-            this.codempleado=this.codempleado.toUpperCase();
-            if(this.fechanacimiento) this.codempleado+=this.fechanacimiento.replace('-','');
-        },
+       
 
         nuevoEmpleado(){   
              $('#fileon').val("");
@@ -765,17 +769,18 @@ imagenView(evt){
             this.fechanacimiento=''; this.idestadocivil=''; 
             this.idformacion=''; this.idprofesion=''; 
             this.telcelular=''; this.telfijo=''; this.email=''; 
-            this.domicilio=''; this.zona=''; this.foto=''; this.codempleado='',
+            this.domicilio=''; this.zona=''; this.foto='';
+            //  this.codempleado='',
             this.idfilial=''; this.idoficina=''; this.idcargo=''; this.fechaingreso='';
             this.nrcontrato=''; this.tipocontrato=''; this.inicontrato=''; this.fincontrato=''; 
             this.sueldo=''; this.idbanco=''; this.nrcuenta=''; this.codbiom='';
             this.$validator.reset();
         },
 
-        async editarEmpleado(empleado){
+          editarEmpleado(empleado){
             $('#fileon').val(""); 
-            // window.scroll({top:0,left:0,behavior:'smooth'});
-              this.nuevafoto='';
+          
+            this.nuevafoto='';
             this.accion=2;
             this.listaDepartamentos();
             this.listaFiliales();
@@ -786,9 +791,9 @@ imagenView(evt){
             this.listaBancos();
             this.listaSeguros();
             this.idempleado=empleado.idempleado;
-            let response=await axios.get('/rrh_empleado/verEmpleado?idempleado='+this.idempleado);
-            this.regEmpleado=response.data.empleado[0];
-            this.codempleado=this.regEmpleado.codempleado;
+           axios.get('/rrh_empleado/verEmpleado?idempleado='+this.idempleado).then(response=>{
+                this.regEmpleado=response.data.empleado[0];
+            //this.codempleado=this.regEmpleado.codempleado;
             this.nombre=this.regEmpleado.nombre;
             this.apaterno=this.regEmpleado.apaterno;
             this.amaterno=this.regEmpleado.amaterno;
@@ -819,6 +824,8 @@ imagenView(evt){
             this.codssalud=this.regEmpleado.codssalud;
              $(".fileUpload").css('display', 'block');
             this.classModal.openModal('modalnewEmpleado'); 
+            });
+           
         },
 
         nivelPrevio(){
@@ -900,6 +907,7 @@ imagenView(evt){
                 onOpen:() => { swal.showLoading() }
             });             
             axios.post('/rrh_empleado/storeEmpleado',{
+                'codempleado':this.codempleado,
                 'nombre':this.nombre.toUpperCase(),
                 'apaterno':this.apaterno.toUpperCase(),
                 'amaterno':this.amaterno.toUpperCase(),
@@ -942,6 +950,7 @@ imagenView(evt){
                 onOpen:() => { swal.showLoading() }
             }); 
             axios.put('/rrh_empleado/updateEmpleado',{
+                'codempleado':this.codempleado,
                 'idempleado':this.idempleado,
                 'nombre':this.nombre.toUpperCase(),
                 'apaterno':this.apaterno.toUpperCase(),

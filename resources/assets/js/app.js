@@ -155,6 +155,11 @@ function setvue(e, a, s) {
     var r = require(`${s}`).default;
     1 == e && DatasVues.push({ name: a, permisos: r.data().arrayPermisos }), Vue.component(a, r)
 } 
+Vue.directive('uppercase', {
+	update (el) {
+		el.value = el.value.toUpperCase()
+	},
+});
 window.vue = new Vue({
     el: "#app",
     data: {
