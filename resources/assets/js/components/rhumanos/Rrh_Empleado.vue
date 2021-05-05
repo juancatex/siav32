@@ -542,7 +542,7 @@ directives: { focus },
                             });  
                             $("#contenedorframesuser").empty(); 
                                     axios.get('/sociogetfotoCRV_emp?foto='+(regEmpleado.foto==null?'':regEmpleado.foto)).then(function (response) { 
-                                            _pl._vvp2521_cr_cen_emp(regEmpleado,response.data,'contenedorframesuser',()=>{
+                                            _pl._vvp2521_cr_emp(regEmpleado,response.data,'contenedorframesuser',()=>{
                                                 swal.close();
                                                 me.classModal.openModal('credencialUser');
                                             });
