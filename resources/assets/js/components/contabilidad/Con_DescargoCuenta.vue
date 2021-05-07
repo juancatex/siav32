@@ -1149,7 +1149,8 @@ export default {
                 'idfacturas':me.checkusarfactura,
                 'validarfacturas':validarfacturas,
                 'saldoc':me.saldoc,
-                'sidirectorio':this.sidirectorio
+                'sidirectorio':this.sidirectorio,
+                'borrador':true,
 
             }).then(function (response) {
                 
