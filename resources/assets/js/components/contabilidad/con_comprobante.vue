@@ -71,13 +71,13 @@
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
                             <h4 class="col-md-8">Asiento Contable</h4>
-                            <div class="col-md-4" >  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
+                            <div class="col-md-4"  v-if="estado_aprobado!=4">  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
                                 <button type="button" @click="abrirmodalCompras()" style="float: right;" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir libro de compras">
                                     <i class="icon-basket"></i> Libro de compras
                                 </button> 
                             </div>
                         </div>
-                            <div id="contenglobalButton" >
+                            <div id="contenglobalButton" v-if="estado_aprobado!=4" >
                                 <div class="row">
                                     <div class="bg-info text-white border border-white ancho44c" >
                                         <strong style="padding-left: 20px;"><label>CUENTA</label></strong>
@@ -95,8 +95,8 @@
                                         <strong><label> + </label></strong>
                                     </div>
                                 </div>
-                                <div id="contenidoValue">
-                                <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
+                                <div id="contenidoValue" >
+                                    <div v-for="(rowcuentas, index) in rowcuentas" :id="'filaRow'+index" :filaindex="index" :key="index" class="row filacontable">
                                     <template v-if="!borrador">
                                         <div class="border ancho44" >
                                         <Ajaxselect v-if="limpiarajax" :ref="'ajaxselect'+index"
@@ -111,6 +111,7 @@
                                         </Ajaxselect>
                                         </div>
                                     </template>
+                                    
                                     <template v-else>
                                         <div class="border ancho44" >
                                         <Ajaxselect  :ref="'ajaxselect'+index"
@@ -122,7 +123,8 @@
                                             idtabla="idcuenta"
                                             :keyIn="index"
                                             :id="rowcuentas.idcuenta"
-                                            :clearable='true'>
+                                            :clearable='true'
+                                            disabled>
                                         </Ajaxselect>
                                         </div>
                                     </template>
@@ -204,6 +206,35 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div v-else>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-info" >
+                                            <th>Cuenta</th>
+                                            <th style="width: 150px;">Debe</th>
+                                            <th style="width: 150px;">Haber</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="reccuenta in arrayreccuentas" :key="reccuenta.idcuenta" >
+                                            <td v-text="reccuenta.nomcuenta" ></td>
+                                            <td v-if="reccuenta.debe!=null" style="text-align: right;">{{reccuenta.debe + 'Bs.'}}</td> 
+                                            <td v-else></td>   
+                                            <td v-if="reccuenta.haber!=null" style="text-align: right;">{{reccuenta.haber + 'Bs.'}}</td> 
+                                            <td v-else></td>   
+                                        </tr>
+                                    </tbody>
+                                        <tr>
+                                            <td style="text-align: right; "><strong> Total:</strong></td>
+                                            <td style="text-align: right;"><strong>{{ totalcuentas + 'Bs.' }}</strong></td>
+                                            <td style="text-align: right;"><strong>{{ totalcuentas + 'Bs.'}}</strong></td>
+                                        </tr>  
+
+                                </table>
+                            </div>
+
+
                         <hr style="margin-bottom: 5px;">
                         <div v-if="acumulado13!=0 && acumulado87!=0 && confacturas" class="row table-warning rounded" style="padding-top: 5px;">
                             <div class="col-md-3">
@@ -226,11 +257,15 @@
 
                         </div>
                         <div class="card-footer">
-                        <div style="text-align:right">
+                        <div style="text-align:right" v-if="estado_aprobado==''">
                             <button :disabled ="!isallcomplete || !isComplete || !isComplete2 || menorfacturas"   
                                 v-if="tipoAccion==1" class="btn btn-warning" @click="registrarAsiento(true)">Guardar Borrador</button>
                             <button :disabled ="!isallcomplete || !isComplete || !isComplete2"   
                                 v-if="tipoAccion==2" class="btn btn-warning" @click="actualizarAsiento()" >Guardar Edicion</button>
+                        </div>
+                        <div style="text-align:right" v-else>
+                            <button :disabled ="!completocuentas"   
+                                v-if="tipoAccion==2" class="btn btn-warning" @click="actualizarAsiento(true)">Guardar Edicion</button>
                         </div>
                     </div>
                     </div>
@@ -636,6 +671,7 @@ export default {
         idtipocomprobante:'',
         tipodocumento:'',
         numdocumento:'',
+        estado_aprobado:'',
         glosa:'',
         arrayDocumento:[],
         accion:'',
@@ -724,11 +760,20 @@ export default {
         filialselected:1,
         detalle:'',
         loteverificacion:'',
+        arrayreccuentas:[],
+        totalcuentas:0
 
       
     }
     },
     computed:{
+        completocuentas(){
+            let me=this;
+            if(me.tipodocumento && me.numdocumento && me.glosa)
+                return true
+            else
+                return false
+        },
         isdescuentos(){
                 let me=this;
                 if(me.descuentos>me.importetotal)
@@ -850,6 +895,7 @@ export default {
             
         },
         cargarvue(arrayvalores,valor){
+            console.log(arrayvalores);
             $('#divcomprobante').css('display','block');
             this.classModal=new _pl.Modals();
             this.classModal.addModal('librocompras');
@@ -884,7 +930,7 @@ export default {
                 break;
                 case 'editar':
                     this.asientomaestro=arrayvalores['idasientomaestro'];
-                    //console.log(this.asientomaestro.idasientomaestro);
+                    //console.log(this.asientomaestro);
                     
                     this.numdocumento=this.asientomaestro.numdocumento;
                     this.tipodocumento=this.asientomaestro.tipodocumento;
@@ -894,6 +940,10 @@ export default {
                     this.selectasientodetalles(this.idasientomaestro,'editar');
                     this.tipoAccion=2;
                     this.accion='editar';
+                    this.estado_aprobado=this.asientomaestro.estado_aprobado;
+                    if (this.estado_aprobado!=null)
+                        this.recuperarcuentas();
+                    //console.log(this.estado_aprobado + "estado aprobado");
                 break;
                 case 'copiar':
                    // console.log('switch copiar');
@@ -1018,6 +1068,27 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        recuperarcuentas(){
+            let me=this;
+            var url='/con_asientomaestro/recuperarcuenta?idasientomaestro='+me.idasientomaestro;
+            //console.log(url);
+            axios.get(url).then(function(response){
+                var respuesta=response.data;
+                me.arrayreccuentas=respuesta.reccuentas;
+                console.log(me.arrayreccuentas);
+                me.arrayreccuentas.forEach(element => {
+                    if(element.debe!=null)
+                        me.totalcuentas=element.debe;
+                });
+                
+            
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
+
+
         },
         selectasientodetalles(idmaestro,tipo){
             let me=this;
@@ -1373,6 +1444,7 @@ export default {
                 'idasientomaestro':me.idasientomaestro,
                 'reslote':me.reslote,
                 'idfacturas':me.checkusarfactura,
+                'estado_aprobado':me.estado_aprobado
             }).then(function (response) {
                 var residasientomaestro=response.data;
                 //console.log(response.data)

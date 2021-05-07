@@ -257,7 +257,7 @@
                     'to' : 0,
                 },
                 offset : 3,
-                criterio : 1,
+                criterio : 1,//es el tipo de comprobante contable seleccionado, por defecto 1 de ingreso
                 buscar : '',
                 reporte_asiento_automatico:'',
                 arrayTipocomprobante:[],

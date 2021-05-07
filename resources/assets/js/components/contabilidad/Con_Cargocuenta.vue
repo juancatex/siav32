@@ -77,6 +77,11 @@
                                             <i class="icon-eye"></i>
                                         </button>
                                     </template>
+                                    <template v-else-if="cargocuenta.estado_aprobado==4">
+                                        <button type="button" @click="repdocobligacion(cargocuenta.idsolccuenta,cargocuenta.sidirectorio)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Doc. Obligacion">
+                                                <i class="cui-file"></i>
+                                        </button> 
+                                    </template>
                                     <template v-else >
                                         <div v-if="cargocuenta.seg_descargoccuenta==0">
                                             <button type="button" @click="cargarvue(cargocuenta)" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Seguimiento">
@@ -124,7 +129,10 @@
                                         <span v-else-if="cargocuenta.seg_descargoccuenta==1" class="badge badge-info">Con Descargo y Saldo</span>
                                         <span v-else class="badge badge-success">Con Desacargo y Saldo 0</span>
                                     </div>
-                                    <span v-else-if="cargocuenta.estado_aprobado==2" class="badge badge-warning">Observado</span>
+                                    <div v-else-if="cargocuenta.estado_aprobado==4">
+                                        <span class="badge badge-warning">Comprobante Borrador</span><br />
+                                    </div>
+                                    <span v-else-if="cargocuenta.estado_aprobado==2" class="badge badge-danger">Observado</span>
                                     <span v-else-if="cargocuenta.estado_aprobado==0" class="badge badge-warning">No Desembolsado</span>
                                 </td>
                             </tr>                                
@@ -658,7 +666,7 @@
                         me.solicitadopor=data['username'];
                         me.sidirectorio=data['sidirectorio'];
                         me.cargo=data['nomrol'];
-                        me.tituloModal='Asiento Contable Cargo de Cuenta';
+                        me.tituloModal='Asiento Contable Cargo de Cuenta - BORRADOR';
                         me.clearSelected=0;
                         me.fechamin=data['fecha_solicitud'];
                         me.subcuenta=data['subcuenta'];
@@ -704,7 +712,7 @@
                     else
                     {
                     swal(
-                            'Registrado correctamente',
+                            'Registrado correctamente en estado borrador',
                        )                    
                     }
                     if(me.sidirectorio)

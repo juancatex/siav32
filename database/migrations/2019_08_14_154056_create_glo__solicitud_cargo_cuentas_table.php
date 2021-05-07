@@ -22,7 +22,7 @@ class CreateGloSolicitudCargoCuentasTable extends Migration
             $table->string('glosa',500);
             $table->float('monto',10,2)->unsigned();
             //$table->string('tipocargo',15)->default('interno')->comment('interno-> para cargos de cuenta al personal, externo->para cargos de cuenta a personal externo');
-            $table->tinyInteger('estado_aprobado')->unsigned()->comment('0->no aprobada,1->aprobada-validada por conta,2->observado por contabilidad,3->desembolsada por tesoreria');
+            $table->tinyInteger('estado_aprobado')->unsigned()->comment('0->no aprobada,1->aprobada-validada por conta,2->observado por contabilidad,3->desembolsada por tesoreria,4->estado borrador contabilidad');
             $table->smallInteger('idcuentadesembolso')->unsigned()->nullable()->comment('id de la cuenta contable por la que ha sido desembolsado'); //TODO:ALTER TABLE `glo__solicitud_cargo_cuentas` ADD `idcuentadesembolso` SMALLINT UNSIGNED NULL COMMENT 'id de la cuenta contable por la que ha sido desembolsado' AFTER `estado_aprobado`;
             $table->dateTime('fecha_desembolso')->nullable()->comment('fecha del desembolso por tesoreria');
             $table->date('fecha_apertura_cuenta')->nullable()->comment('fecha de apertura de cuenta');

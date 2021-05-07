@@ -47,7 +47,7 @@
                         <tbody>
                             <tr v-for="solicitud in arraySolicitud" :key="solicitud.idsolccuenta">
                                 <td>
-                                    <template v-if="solicitud.estado_aprobado!=1 && solicitud.estado_aprobado!=3">
+                                    <template v-if="solicitud.estado_aprobado!=1 && solicitud.estado_aprobado!=4 && solicitud.estado_aprobado!=3">
                                         <!-- <button type="button" @click="abrirModalSolicitud('modalsolicitud','editar',solicitud)" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar">
                                                <i class="cui-note"></i>
                                         </button> -->
@@ -63,7 +63,7 @@
                                 <td style="text-align:right" >{{solicitud.monto | currency}}</td>
                                 <!-- <td v-text="solicitud.nomgrado"></td>-->
                                 <td>
-                                    <div v-if="solicitud.estado_aprobado==1">
+                                    <div v-if="solicitud.estado_aprobado==1 || solicitud.estado_aprobado==4">
                                         <span class="badge badge-success">Validado Conta</span>
                                     </div>
                                     <div v-else-if="solicitud.estado_aprobado==0">
@@ -73,7 +73,7 @@
                                         <span class="badge badge-info">Desembolsado</span>
                                     </div>
                                     <div v-else>
-                                        <span class="badge badge-danger">Obsevado</span>
+                                        <span class="badge badge-danger">Observado</span>
                                     </div>
                                 </td>
                             </tr>                                
