@@ -28,5 +28,4 @@ app/AsinalssClass/Base64SIN.php
 app/AsinalssClass/ControlCode.php
 app/AsinalssClass/Verhoeff.php
 app/Http/Controllers/CodeControl.php
-.env
 
