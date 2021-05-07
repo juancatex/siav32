@@ -340,20 +340,7 @@ export function _fff3512_23622(fechaSistema, fechasjson, tea, montosolicitado, m
     'desembolsoperfil': desembolsoperfil
   };
 }
-
-
-/* 
-export function getfactor(promises) {
- var criterios=$.ajax({
-  type: 'GET',
-  url: '/getcriterios', 
-  dataType: 'json',
-  async: false,
-  data: {factor:promises.factorid,monto:promises.liquidopagablecomputable,cuota:promises.cuotaFinalSocio} 
- }).responseJSON; 
- promises.valorfactor=redondeo_valor((parseFloat(criterios['totalh'])+parseFloat(criterios['totalm'])+parseFloat(criterios['totale'])),2);
-}
- */
+ 
 export function getcriterio(promises) {
   $('button[id="btsig"]').attr("disabled", true);
   var cuotaf = (promises.cuotaaproximada * promises.tipocambio);
@@ -444,11 +431,11 @@ export function getcriterio(promises) {
             break;
 
           case 2:
-              console.log('criterio caso 2 linea 441');
+              console.log('criterio caso 2 linea 434');
             // console.log(vector[idf].value);
             break;
           case 3:
-              console.log('criterio caso 3 linea 445');
+              console.log('criterio caso 3 linea 438');
             // console.log(vector[idf].value);
             break;
         }
@@ -1212,6 +1199,122 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
+  export function _vvp2521_cr_emp(ta,fotocr,idview = 'contenedorframes',finn) { 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    let fotosocio=fotocr.avatar;  
+      var qr = new QRious();  
+      qr.value =(ta.codempleado?ta.codempleado:'')+'|'+(ta.ci?ta.ci:'')+'|'+(ta.nomcargo?ta.nomcargo:'');
+      qr.mime = 'image/jpeg'; 
+      var doc = new jsPDF('p', 'cm','a4'); 
+      doc.setProperties({
+        title: 'Credencial'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
+      doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc.setFontSize(9);
+      doc.setFontStyle('normal');
+      doc.setTextColor(52,52,52);
+      if(ta.nomprofesion){
+        centrarTextTo2(doc, ta.nomprofesion?ta.nomprofesion:'', 8.1,6.4); 
+        centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.5,6.4); 
+        centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 8.9,6.4);
+      }else{
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.3,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'___'), 8.7,6.4);
+      }
+         
+      doc.setFontSize(6);
+      doc.text(ta.ci?ta.ci+' '+(ta.abrvdep?ta.abrvdep:''):'0', 7.24, 4.1,null,90);
+      doc.text(ta.codempleado?ta.codempleado:'-', 7.46, 4.1,null,90);   
+
+      doc.setFontStyle('bold');
+      doc.setFontSize(11);   
+      var splitText = doc.splitTextToSize(ta.nomcargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g,' ').toUpperCase(), 4.7); 
+      var posi=splitText.length==1?10:(splitText.length==2?9.73:(splitText.length>=3?9.63:9.63));
+        _.forEach(splitText, function(value) {
+          centrarTextTo2(doc, value,posi,6.4); 
+          posi+=0.4;
+        });
+      
+      doc.setFontSize(6); 
+      centrarTextTo2(doc,'TITULAR', 10.87,6.4);
+      doc.addImage(textToBase64Barcode(ta.codempleado?ta.codempleado:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);    
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().format("YYYY")).toUpperCase()), 11.63,6.4); 
+
+
+
+
+ 
+      var diva= $('<div>')
+      .css('padding','0')
+      .addClass( "col-md-6");
+
+
+      var cre1=$('<iframe>')                    
+      .attr('src', doc.output('datauristring')) 
+      .attr('height','500px')
+      .attr('width','100%') ;
+      cre1.appendTo(diva);
+
+      var botones1= $('<div>').css('bottom','0') 
+      .css('position','absolute')
+      .css('margin','3%');
+
+     $('<button/>') 
+      .addClass( "btn btn-primary") 
+      .text('Ampliar')
+      .click(function () { window.open(doc.output('bloburl'), '_blank',"fullscreen=yes, scrollbars=auto"); })
+      .appendTo(botones1);
+
+      $('<button/>').addClass( "btn btn-primary") 
+      .css('margin-left','7px')
+      .text('Recargar')
+      .click(function () { cre1.attr('src', doc.output('datauristring'));})
+      .appendTo(botones1);
+
+      botones1.appendTo(diva);
+
+       
+  
+      diva.appendTo('#'+idview);
+
+      var doc2 = new jsPDF('p', 'cm','a4');  
+      doc2.setProperties({
+        title: 'Credencial posterior'
+      });  
+      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
+      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+     
+      var divv= $('<div>').css('padding','0').addClass( "col-md-6");
+      var cre=$('<iframe>')                    
+      .attr('src', doc2.output('datauristring')) 
+      .attr('height','500px')
+      .attr('width','100%') ;
+      cre.appendTo(divv);
+
+      var botones= $('<div>').css('bottom','0') 
+       .css('position','absolute')
+       .css('margin','3%');
+
+      $('<button/>') 
+       .addClass( "btn btn-primary") 
+       .text('Ampliar')
+       .click(function () { window.open(doc2.output('bloburl'), '_blank',"fullscreen=yes, scrollbars=auto"); })
+       .appendTo(botones);
+
+       $('<button/>').addClass( "btn btn-primary") 
+       .css('margin-left','7px')
+       .text('Recargar')
+       .click(function () { cre.attr('src', doc2.output('datauristring'));})
+       .appendTo(botones);
+
+       botones.appendTo(divv); 
+      divv.appendTo('#'+idview);
+      finn();
+  }
   export function _vvp2521_cr_cen_emp(ta,fotocr,idview = 'contenedorframes') { 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
@@ -1240,7 +1343,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(11);   
 
         var posi=9.8;
-        var splitText = doc.splitTextToSize(ta.cargo, 4.8);
+        var splitText = doc.splitTextToSize(ta.cargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g,' '), 4.8);
         _.forEach(splitText, function(value) {
           centrarTextTo2(doc, value,posi,6.4); 
           posi+=0.4;

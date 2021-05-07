@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Rrh_Empleado;
 use App\Socio;
 
@@ -42,21 +44,26 @@ class RrhEmpleadoController extends Controller
     }
 
     public function verEmpleado(Request $request)
-    {
+    {if (!$request->ajax()) return redirect('/'); 
         $empleado=Rrh_Empleado::where('idempleado',$request->idempleado);
         return ['empleado'=>$empleado->get()];
     }
 
+    public function verEmpleadopdf(Request $request)
+    {  
+        $empleado=Rrh_Empleado:: join('par_departamentos','par_departamentos.iddepartamento','rrh__empleados.iddepartamento')
+        ->leftJoin('rrh__profesions','rrh__profesions.idprofesion','rrh__empleados.idprofesion')
+        ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')
+        ->select('codempleado','nombre','apaterno','amaterno','ci','abrvdep','nomprofesion',
+        'foto','nomcargo')
+        ->where('idempleado',$request->idempleado)->get();
+        return ['empleado'=>$empleado];
+    }
+
     public function storeEmpleado(Request $request)
-    {   $rutas=config('app.ruta_imagen'); 
-        $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codempleado.=str_replace("-","",$request->ci);
-        if($request->foto) {
-            Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
-            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SERVIDOR_EMPLEADO']).$codempleado.".jpg");
-        }
+    {    if (!$request->ajax()) return redirect('/');  
         $empleado=new Rrh_Empleado();
-        $empleado->codempleado=$codempleado;
+        $empleado->codempleado=$request->codempleado;
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
         $empleado->amaterno=$request->amaterno;
@@ -66,7 +73,14 @@ class RrhEmpleadoController extends Controller
         $empleado->fechanacimiento=$request->fechanacimiento;
         $empleado->idestadocivil=$request->idestadocivil;
         $empleado->gruposangre=$request->gruposangre;
-        $empleado->foto=$request->foto?$codempleado.".jpg":"";
+        if($request->foto) {
+            $var = Str::random(32);
+            $var.='.jpg'; 
+            $value = substr($request->foto, strpos($request->foto, ',') + 1); 
+            $value = base64_decode($value); 
+            Storage::put('app/public/emp/'.$var, $value); 
+                $empleado->foto=$var;
+            } 
         $empleado->idformacion=$request->idformacion;
         $empleado->idprofesion=$request->idprofesion;
         $empleado->telcelular=$request->telcelular;
@@ -85,14 +99,9 @@ class RrhEmpleadoController extends Controller
     }
 
     public function updateEmpleado(Request $request)
-    {   $rutas=config('app.ruta_imagen'); 
-        $codempleado=substr($request->apaterno,0,1).substr($request->amaterno,0,1).substr($request->nombre,0,1);
-        $codempleado.=str_replace("-","",$request->ci);
-        if($request->foto) {
-            Image::make($request->foto)->save(public_path($rutas['DIRE_FOTO_EMPLEADO']).$codempleado.".jpg"); 
-            Image::make($request->foto)->save(($rutas['DIRE_FOTO_SERVIDOR_EMPLEADO']).$codempleado.".jpg");
-        }
+    {    if (!$request->ajax()) return redirect('/');  
         $empleado=Rrh_Empleado::findOrFail($request->idempleado);
+        $empleado->codempleado=$request->codempleado;
         $empleado->nombre=$request->nombre;
         $empleado->apaterno=$request->apaterno;
         $empleado->amaterno=$request->amaterno;
@@ -101,8 +110,15 @@ class RrhEmpleadoController extends Controller
         $empleado->sexo=$request->sexo;
         $empleado->fechanacimiento=$request->fechanacimiento;
         $empleado->idestadocivil=$request->idestadocivil;
-        $empleado->gruposangre=$request->gruposangre;
-        $empleado->foto=$request->foto?$codempleado.".jpg":"";
+        $empleado->gruposangre=$request->gruposangre; 
+        if($request->foto) {
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->foto, strpos($request->foto, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/emp/'.$var, $value); 
+            $empleado->foto=$var;
+        } 
         $empleado->idformacion=$request->idformacion;
         $empleado->idprofesion=$request->idprofesion;
         $empleado->telcelular=$request->telcelular;

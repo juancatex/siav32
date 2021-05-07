@@ -505,6 +505,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/rrh_empleado/listaEmpleados','RrhEmpleadoController@listaEmpleados');    //R
     Route::get ('/rrh_empleado/selectempleados','RrhEmpleadoController@selectEmpleados');  //R
     Route::get ('/rrh_empleado/verEmpleado','RrhEmpleadoController@verEmpleado');          //R
+    Route::get ('/rrh_empleado/verEmpleadopdf','RrhEmpleadoController@verEmpleadopdf');          //R
     Route::put ('/rrh_empleado/updateEmpleado','RrhEmpleadoController@updateEmpleado');    //U
     Route::put ('/rrh_empleado/switchEmpleado','RrhEmpleadoController@switchEmpleado');    //D
     Route::get ('/rrh_empleado/selectempleados2','RrhEmpleadoController@selectEmpleados2'); ///eddy

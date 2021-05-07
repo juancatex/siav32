@@ -23,7 +23,7 @@ class CreateRrhEmpleadosTable extends Migration
             $table->string('gruposangre',5)->nullable();
             $table->string('ci',12)->nullable();
             $table->integer('iddepartamento')->unsigned();
-            $table->string('foto',30)->nullable();
+            $table->string('foto',150)->nullable();
             $table->date('fechanacimiento')->nullable();
             $table->integer('idestadocivil')->nullable();
             $table->integer('idformacion')->nullable(); 
