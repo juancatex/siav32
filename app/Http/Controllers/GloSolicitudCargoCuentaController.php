@@ -273,7 +273,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'con___movimientobancarios.numdocumento',
                                                                     'idmovimiento',
                                                                     'sidirectorio',
-                                                                    'glo__solicitud_cargo_cuentas.created_at')
+                                                                    'glo__solicitud_cargo_cuentas.created_at',
+                                                                    'con__asientomaestros.estado')
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->where(function($query) use ($filtro)
                                                             {
@@ -342,7 +343,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'con___movimientobancarios.numdocumento',
                                                                 'idmovimiento',
                                                                 'sidirectorio',
-                                                                'glo__solicitud_cargo_cuentas.created_at')
+                                                                'glo__solicitud_cargo_cuentas.created_at',
+                                                                'con__asientomaestros.estado')
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->where(function($query) use ($filtro)
                                                         {
@@ -427,7 +429,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         'con___movimientobancarios.numdocumento',
                                                         'idmovimiento',
                                                         'sidirectorio',
-                                                        'glo__solicitud_cargo_cuentas.created_at'
+                                                        'glo__solicitud_cargo_cuentas.created_at',
+                                                        'con__asientomaestros.estado'
                                                         )
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->whereraw($sqls)
@@ -497,8 +500,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'con___movimientobancarios.numdocumento',
                                                             'idmovimiento',
                                                             'sidirectorio',
-                                                            'glo__solicitud_cargo_cuentas.created_at' //,
-                                                            //'socios.numpapeleta'
+                                                            'glo__solicitud_cargo_cuentas.created_at', //,
+                                                            //'socios.numpapeleta',
+                                                            'con__asientomaestros.estado'
                                                             )
                                             ->where('glo__solicitud_cargo_cuentas.activo',1)
                                             ->whereraw($sqls)

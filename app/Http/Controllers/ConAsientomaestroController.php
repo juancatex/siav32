@@ -166,7 +166,8 @@ class ConAsientomaestroController extends Controller
                                                                     'fact_modificada',
                                                                     'cod_comprobante',
                                                                     $raw,
-                                                                    'glo__solicitud_cargo_cuentas.idsolccuenta'
+                                                                    'glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                                    'seg_descargoccuenta'
                                                                     )
                                                         ->orderBy('fecharegistro', 'desc')
                                                         ->orderBy('cont_comprobante','desc')
@@ -258,7 +259,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 'cod_comprobante',
                                                                 $raw,
-                                                                'glo__solicitud_cargo_cuentas.idsolccuenta'
+                                                                'glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                                'seg_descargoccuenta'
                                                                 )
                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
@@ -1006,6 +1008,12 @@ class ConAsientomaestroController extends Controller
         $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
         $asientomaestro->estado = '4';
         $asientomaestro->save();
+
+        if($request->seg_descargoccuenta)
+        {
+            DB::table('glo__solicitud_cargo_cuentas')->where('idsolccuenta', $request->idsolccuenta)->update(['estado_aprobado' => 3,'idasientomaestro'=>null]);
+        }
+
         
         //$asientomaestro->save();join('con__asientodetalles','con__asientodetalles.idasientomaestro','=','con__asientomaestros.idasientomaestro')
         //return $asientomaestro;
