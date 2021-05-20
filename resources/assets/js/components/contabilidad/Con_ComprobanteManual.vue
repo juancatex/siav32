@@ -71,7 +71,7 @@
                                         <button type="button"  @click="abrirAsientoMaestro(asientomaestro.idasientomaestro)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Comprobante">
                                             <i class="icon-eye"></i>
                                         </button> 
-                                        <template v-if="asientomaestro.estado==1 && asientomaestro.idrevertido==null">
+                                        <template v-if="asientomaestro.estado==1 && asientomaestro.idrevertido==null && (asientomaestro.seg_descargoccuenta==null || asientomaestro.seg_descargoccuenta==0)">
                                             <button  v-if="check('revertir')" type="button" @click="revertirAsiento(asientomaestro)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Revertir">
                                                 <i class="icon-shuffle"></i><!-- fa fa-exchange   icon-shuffle -->
                                             </button>
@@ -540,9 +540,15 @@
                 var glosaobservado="Reversión de Comprobante de "+data['nomtipocomprobante'] + " Nº " + data['cod_comprobante'];
                 var fecharegistro=data['fecharegistro'];
                 var fechamin = fecharegistro.split(" ");
-
-                swal({
-                    title: 'Esta seguro de Revertir Este comprobante?',
+                var titulo='<h4>Esta seguro de Revertir Este comprobante?</h4>';
+                var seg_descargo=false;
+                if(data['seg_descargoccuenta']===0)
+                {
+                    var titulo=titulo + ' <br /><h5>Debe volver a generar el comprobante desde Cargo de Cuentas</h5>';
+                    seg_descargo=true;
+                }
+            swal({
+                    title: titulo,
                     html:   '<div class="form-group row "> <label style="text-align: left; align-items: center;" class="col-md-5 form-control-label" for="text-input">Fecha de Reversion : </label>' +
                             '<div class="col-md-7">  <div class="input-group"> <input class="form-control" id="fechareversion"   type="text"    placeholder="Fecha de reversion" autocomplete="off"></div> </div> </div>' +
                             '<div class="form-group row "> <label style="text-align: right; align-items: center;" class="col-md-2 form-control-label" for="text-input">Glosa : </label>' +
@@ -588,7 +594,9 @@
                             'idasientomaestro': idasientomaestro,
                             'idmodulo':this.idmodulo,
                             'fechareversion':result.value[0],
-                            'glosareversion':result.value[1]
+                            'glosareversion':result.value[1],
+                            'seg_descargoccuenta':seg_descargo,
+                            'idsolccuenta':data['idsolccuenta']
                             
                             
                         }).then(function (response) {
