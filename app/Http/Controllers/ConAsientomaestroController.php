@@ -484,6 +484,15 @@ class ConAsientomaestroController extends Controller
         if($request->idasientomaestro)
         {
             //echo "entra idasientomaestro";
+
+            $buscarsolccuenta = Con_Asientomaestro::select('idsolccuenta')->where('idasientomaestro',$request->idasientomaestro)->get()->toArray();
+
+            if($buscarsolccuenta[0]['idsolccuenta']!=null);
+            {
+                $sisolccuenta=true;
+                $idsolccuenta = $buscarsolccuenta[0]['idsolccuenta'];
+            }
+
             
             DB::table('con__asientodetalles')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
             DB::table('con__asientomaestros')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
@@ -491,6 +500,12 @@ class ConAsientomaestroController extends Controller
             $asientomaestro= new AsientoMaestroClass();
             $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador);
             
+            if($sisolccuenta){
+                //echo "entra";
+                DB::table('con__asientomaestros')->where('idasientomaestro', $respuesta)->update(['idsolccuenta' => $idsolccuenta]);    
+            }
+            
+
             if($idfacturas)
             {
                 DB::table('con__librocompras')->where('lote', $request->reslote)->update(['idasientomaestro' => null,
@@ -1038,11 +1053,30 @@ class ConAsientomaestroController extends Controller
             DB::table('con__librocompras')->where('idasientomaestro', '=', $request->idasientomaestro)->update(['activo' => 0]);
         }
 
+
+        $buscarsolccuenta = Con_Asientomaestro::select('idsolccuenta')->where('idasientomaestro',$request->idasientomaestro)->get()->toArray();
+
+        if($buscarsolccuenta[0]['idsolccuenta']!=null);
+        {
+            $monto=Glo_SolicitudCargoCuenta::select('monto')->where('idsolccuenta',$buscarsolccuenta[0]['idsolccuenta'])->get()->toArray();
+            $solccuenta = Glo_SolicitudCargoCuenta::findOrFail($buscarsolccuenta[0]['idsolccuenta']);
+            $solccuenta->seg_descargoccuenta = 0;
+            $solccuenta->saldo_descargo=$monto[0]['monto'];
+            $solccuenta->save();
+            
+            //DB::table('glo__solicitud_cargo_cuentas')->where('idasientomaestro', $respuesta)->update(['idsolccuenta' => $idsolccuenta]);    
+        }
+
+
+
         DB::table('glo__solicitud_cargo_cuentas')->where('idasientomaestro', $request->idasientomaestro)->update(['estado_aprobado' => 3]);
+
+        
 
 
         $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
         $asientomaestro->estado = 6;
+        $asientomaestro->idsolccuenta=null;
         $asientomaestro->save();
     }
     public function validarBorrador(Request $request)
@@ -1474,7 +1508,6 @@ class ConAsientomaestroController extends Controller
         }
 
     }
-    
 }
 /* $arrayDetalle = array(array('idcuenta'='',
 							'monto',

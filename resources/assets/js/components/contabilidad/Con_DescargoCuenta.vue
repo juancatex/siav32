@@ -361,6 +361,7 @@
                                         <th>Registrado Por</th>
                                         <th>Importe</th>
                                         <th>No Cred Fiscal</th>
+                                        <th>Filial</th>
                                         <th>Estado</th>
                                         <th>*</th>
                                     </tr>
@@ -374,6 +375,7 @@
                                         <td v-text="librocompras.username"></td>
                                         <td v-text="librocompras.importe+' Bs.'" style="text-align:right"></td>
                                         <td v-text="librocompras.impnocredfiscal+' Bs.'" style="text-align:right"></td>
+                                        <td v-text="librocompras.sigla"></td>
                                         <td><template v-if="librocompras.lote && librocompras.idasientomaestro && librocompras.validadoconta">
                                                 <span class="badge badge-success">Validado</span>
                                             </template>
@@ -384,6 +386,7 @@
                                                 <span class="badge badge-danger">Sin Compr.</span>
                                             </template>
                                         </td>
+                                        
                                         <td style="text-align:right">
                                             <template v-if="!librocompras.idasientomaestro">
                                                 <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="librocompras.idlibrocompra" @change="sumar13()" :checked="verchecked(librocompras.idlibrocompra)" >

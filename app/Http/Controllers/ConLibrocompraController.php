@@ -54,7 +54,7 @@ class ConLibrocompraController extends Controller
                                             //->where('con__librocompras.registrado_por',Auth::id())  solo muestra las facturas llenadas por un usuario en el moda y eso es un error debe mostrar todas
                                             ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                             ->whereYear('con__librocompras.fecha_factura','=',$anio)
-                                            ->where('con__librocompras.idfilial',$request->idfilial)
+                                            //->where('con__librocompras.idfilial',$request->idfilial) mostrara todas las filiales hasta que de decida lo contrario
                                             ->orderBy(DB::raw('IF(lote IS NULL,1000000,lote)'),'DESC')
                                             ->orderBy('con__librocompras.created_at','desc')
                                             ->take(20)
