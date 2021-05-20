@@ -47,9 +47,11 @@ class ConLibrocompraController extends Controller
                                                      'detalle_fac',
                                                      'sigla',
                                                      'con__librocompras.idfilial',
-                                                     'con__asientomaestros.estado')
+                                                     'con__asientomaestros.estado',
+                                                     'subtotal',
+                                                     'impnocredfiscal')
                                             ->where('con__librocompras.activo',1)
-                                            ->where('con__librocompras.registrado_por',Auth::id())
+                                            //->where('con__librocompras.registrado_por',Auth::id())  solo muestra las facturas llenadas por un usuario en el moda y eso es un error debe mostrar todas
                                             ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                             ->whereYear('con__librocompras.fecha_factura','=',$anio)
                                             ->where('con__librocompras.idfilial',$request->idfilial)
@@ -93,7 +95,9 @@ class ConLibrocompraController extends Controller
                                                      'username',
                                                      'detalle_fac',
                                                      'sigla',
-                                                     'con__librocompras.idfilial')
+                                                     'con__librocompras.idfilial',
+                                                     'subtotal',
+                                                     'impnocredfiscal')
                                             ->where('con__librocompras.activo',1)
                                             ->where('con__librocompras.validadoconta',0)
                                             ->whereNull('idasientomaestro')
@@ -146,7 +150,8 @@ class ConLibrocompraController extends Controller
                                                          'detalle_fac',
                                                          'sigla',
                                                          'con__librocompras.idfilial',
-                                                         'con__asientomaestros.estado')
+                                                         'con__asientomaestros.estado',
+                                                         'subtotal' )
                                                     ->where('con__librocompras.activo',1)
                                                     ->whereMonth('con__librocompras.fecha_factura','=',$mes)
                                                     ->whereYear('con__librocompras.fecha_factura','=',$anio);
@@ -197,7 +202,8 @@ class ConLibrocompraController extends Controller
                                                         'restoimporte',
                                                         'cod_comprobante',
                                                         'username',
-                                                        'con__asientomaestros.estado')
+                                                        'con__asientomaestros.estado',
+                                                        'subtotal')
                                                     ->where('con__librocompras.activo',1)
                                                     ->whereraw($sqls)
                                                     ->whereMonth('con__librocompras.fecha_factura','=',$mes)

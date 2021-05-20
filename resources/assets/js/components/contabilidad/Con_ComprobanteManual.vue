@@ -162,7 +162,7 @@
             </div>
             <con_comprobante @cerrarmanual="cerrarvuemanual" ref="vuecomprobante"></con_comprobante>
         </div>
-        <!-- MODAL EDITAR CABECERA  -->
+        <!-- MODAL EDITAR CABECERA 
         <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="cabecera"  data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-primary modal-lg">
                 <div class="modal-content animated fadeIn">
@@ -215,7 +215,63 @@
                 </div>
             </div>
         </div>
-        <!-- fin modal EDITAR CABECERA -->
+
+        
+        fin modal EDITAR CABECERA -->
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="cabecera"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar Cabecera Comprobante de {{`${edit_nomtipocomprobante} Nº ${edit_cont_comprobante}   por: Bs. ${edit_monto}`}}</h4>
+                        <button class="close" @click="cerrarmodalcabecera()">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label ><strong>Documento:</strong></label>
+                                <input type="text" 
+                                            v-model="edit_documento"
+                                            class="form-control formu-entrada" 
+                                            v-validate.initial="'required'"
+                                            name="Documento">
+                                        <span class="text-error">{{ errors.first('Documento')}}</span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label ><strong>Nº Documento:</strong></label>
+                                <input type="text" 
+                                            v-model="edit_numdocumento"
+                                            class="form-control formu-entrada" 
+                                            v-validate.initial="'required'"
+                                            name="num documento">
+                                        <span class="text-error">{{ errors.first('num documento')}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+                                <label class="col-md-12"><strong>Glosa:</strong></label>
+                                <div class="col-md-12">
+                                    <textarea 
+                                        :class="{'form-control': true, 'is-invalid textareaerror': errors.has('glosa')}"  
+                                        rows="4" 
+                                        v-model="edit_glosa"
+                                        name="glosa"
+                                        v-validate.initial="'required'" >
+                                    </textarea>
+                                    <span class="text-error">{{ errors.first('glosa')}}</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalcabecera()">Cerrar</button>
+                        <button :disabled="!iscompleteedit" class="btn btn-primary" @click="editarcabecera()">Editar Cabecera</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </template>
 
@@ -689,13 +745,6 @@
     }
 </script>
 <style>  
-    .div-tabla{
-        margin-bottom: 0rem;
-    }
-    .div-error{
-        display: flex;
-        justify-content: center;
-    }
     .text-error{
         color: red !important;
         font-style: italic;
@@ -703,18 +752,6 @@
     .text-factura{
         color:red !important;
         font: size 1,5rem;
-    }
-    .sizecuenta{
-        width:80px !important;
-    }
-    .sizemoneda{
-        width: 30px;
-    }
-    .sizesubcuenta{
-        width: 40px;
-    }
-    .sizedebehaber{
-        width: 40px
     }
     #input-subcuenta::placeholder{
         color: red;
@@ -734,72 +771,10 @@
     .size2{
     width: 10em;
     }
-    .input-number{
-        text-align:right;
-        width: 100%;
-        height: 27px;
-    }
-    .input-text{
-        text-align:left;
-        width: 100%;
-        padding-left: 7px;
-        padding-right: 7px;
-        height: 28px;
-    }
-    .ancho20{
-        width: 20%;
-    }
-    .ancho12{
-        width:12%;
-        padding-bottom: 5px;
-        padding-bottom: 1px;
-    }
-    .ancho10{
-        width:10%;
-    }
-    .ancho70{
-        width:70%;
-        padding-right: 15px;
-    }
-    .ancho12c{
-        text-align: center;
-        width:12%;
-    }
-    .ancho10c{
-        text-align: center;
-        width:10%;
-    }
-    .ancho20c{
-        text-align: center;
-        width: 20%;
-        
-    }
     .botonpadding{
         padding-top: 2px;
         padding-bottom: 2px;
         
     }
-    .ancho6c{
-        text-align: center;
-        width:6%;
-    }
-    .ancho6{
-        width:6%;
-    }
-    .padding5{
-        margin-bottom: 5px;
-        padding-left: 5px;
-        padding-right: 5px;
-
-    }
-    hr{
-        border-top: 2px solid rgba(112, 159, 181, 0.52);
-    }
-    .headerpadding{   
-    padding-top: 5px;
-    padding-bottom: 5px;
-    }
-    .input-importe{
-        text-align: right;
-    }
+  
 </style>

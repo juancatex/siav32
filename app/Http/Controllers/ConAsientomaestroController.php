@@ -1038,6 +1038,9 @@ class ConAsientomaestroController extends Controller
             DB::table('con__librocompras')->where('idasientomaestro', '=', $request->idasientomaestro)->update(['activo' => 0]);
         }
 
+        DB::table('glo__solicitud_cargo_cuentas')->where('idasientomaestro', $request->idasientomaestro)->update(['estado_aprobado' => 3]);
+
+
         $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
         $asientomaestro->estado = 6;
         $asientomaestro->save();

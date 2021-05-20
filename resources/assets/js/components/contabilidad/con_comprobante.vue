@@ -2,7 +2,7 @@
     <main>  
         <div style="display:none" id="divcomprobante">    
             <div class="container-fluid" style="padding-right: 0px;padding-left: 0px;">
-                <div class="card">
+                <div class="card" style="padding-bottom: 5px;padding-top: 5px;">
                     <!-- <form class="form-horizontal" @submit.prevent="validateBeforeSubmit" autocomplete="off"> -->
                     <div class="card-header" style="padding-top: 5px;padding-bottom: 0px;height: 51px;">
                         <div class="form-group row">
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" style="padding-bottom: 5px;">
+                    <div class="card-body" style="padding-bottom: 5px; padding-top: 5px;">
                         <div class="form-group row" style="margin-bottom: 5px;">
                             <div class="col-md-3 padding5">
                                 <strong><label>Tipo Documento:</label></strong>
@@ -71,7 +71,12 @@
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
                             <h4 class="col-md-8">Asiento Contable</h4>
-                            <div class="col-md-4"  v-if="estado_aprobado!=4">  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
+                            <div class="col-md-2"  v-if="estado_aprobado!=4">  
+                                <button type="button" @click="abrirmodalSocios()" style="float: right;" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
+                                    <i class="icon-people"></i> Agregar Socios
+                                </button> 
+                            </div>
+                            <div class="col-md-2"  v-if="estado_aprobado!=4">  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
                                 <button type="button" @click="abrirmodalCompras()" style="float: right;" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir libro de compras">
                                     <i class="icon-basket"></i> Libro de compras
                                 </button> 
@@ -331,6 +336,7 @@
                                         <th>Nº Factura</th>
                                         <th>Registrado Por</th>
                                         <th>Importe</th>
+                                        <th>No Cred Fiscal</th>
                                         <th>Estado</th>
                                         <th>*</th>
                                     </tr>
@@ -343,6 +349,7 @@
                                         <td v-text="librocompras.numfactura" style="text-align:right"></td>
                                         <td v-text="librocompras.username"></td>
                                         <td v-text="librocompras.importe+' Bs.'" style="text-align:right"></td>
+                                        <td v-text="librocompras.impnocredfiscal+' Bs.'" style="text-align:right"></td>
                                         <td><template v-if="librocompras.estado==1">
                                                 <span class="badge badge-success">Validado</span>
                                             </template>
@@ -1478,6 +1485,38 @@ export default {
             this.acumulado13=0;
             this.idfacturas=[];
         },
+        abrirmodalSocios(){
+            
+            let me=this;
+            me.indice=0;
+            //me.selectProveedor();
+            
+            me.checkusarfactura=[];
+            me.selectLibrocompras();
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 50); 
+            //me.sumar13();
+            
+            //me.classModal.closeModal('comprobantecontable');
+            me.classModal.openModal('librocompras');
+            me.tituloModallibro = 'Libro de Compras';
+            //me.$refs.comboproveedor.clearSelection(); 
+            if(me.mes+1==me.messelected)
+            {    
+                me.fechafactura=me.fechaactual;
+                //me.fechafinal=me.fechaactual;
+            }
+            else   
+                me.fechafactura=me.fechafinal;
+
+            me.numfactura='';
+            me.numautorizacion='';
+            me.codcontrol='';
+            me.importetotal=0;
+            me.nocreditofiscal=0;
+            me.descuentos=0;
+            me.indice=indice;
+        },
         abrirmodalCompras(indice=''){
             
             let me=this;
@@ -1549,8 +1588,8 @@ export default {
             //console.log(me.idproveedor[0]);
             var total=me.importetotal-me.nocreditofiscal-me.descuentos;
             me.corregircodcontrol()
-            var _13porciento=parseFloat((total * 0.13)).toFixed(2);
-            var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+            var _13porciento=Number((total*0.13).toFixed(2));   //parseFloat((total * 0.13)).toFixed(2);
+            var _87porciento=Number((total-_13porciento).toFixed(2));//(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
             
             axios.post('/con_librocompras/registrar',{
                 'fechafactura':me.fechafactura,
@@ -1579,6 +1618,10 @@ export default {
                 //me.$refs.comboproveedor.clearSelection(); 
                 me.clearSelected=0;
                 setTimeout(me.tiempo, 50); 
+                if(me.messelected==me.mes) 
+                    me.fechafactura=me.fechaactual;
+                else
+                
                 me.fechafactura=me.fechaactual;
                 me.numfactura='';
                 me.numautorizacion='';
@@ -1611,16 +1654,18 @@ export default {
             me.acumulado87=0;
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
-                sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
-                suma87=parseFloat(suma87)+parseFloat(resultado.importe);
+               sumacheck=Number(sumacheck+resultado.credfiscal);
+                suma87=Number(suma87+resultado.subtotal);
                 //me.idfacturas.push(me.arrayLibrocompras[element].idlibrocompra);
                 
             });
-            me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
-            me.acumulado13=me.acumulado13.toFixed(2);
+            me.acumulado13=Number((me.acumulado13+sumacheck).toFixed(2));
+            //me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
+            //me.acumulado13=me.acumulado13.toFixed(2);
             me.sumafac=suma87;
-            me.acumulado87=parseFloat(me.sumafac)-parseFloat(me.acumulado13);
-            me.acumulado87=me.acumulado87.toFixed(2);
+            me.acumulado87=Number((me.sumafac-me.acumulado13).toFixed(2));
+            //me.acumulado87=parseFloat(me.sumafac)-parseFloat(me.acumulado13);
+            //me.acumulado87=me.acumulado87.toFixed(2);
            //console.log(me.acumulado13);
             
             if(me.acumulado13>0)
@@ -1711,30 +1756,18 @@ export default {
     } 
     }
 </script> 
-<style>
-.ancho30{
-        width: 30%;
-}.ancho12{
+<style scoped>
+.ancho12{
     width: 12%;
 }.ancho10{
     width: 10%;
 }
-.ancho30c{
-    text-align: center;
-    width: 30%;
-}
-.ancho60c{
-    text-align: center;
-    width: 60%;
-}.ancho12c{
+
+.ancho12c{
     text-align: center;
     width: 12%;
     padding-bottom: 5px;
     padding-bottom: 1px;
-}.ancho10c{
-    text-align: center;
-    width: 10%;
-    
 }
 .ancho44c{
     width:44%;
@@ -1774,23 +1807,14 @@ export default {
     text-align: center;
     width:8%;
 }
-.ancho20c{
-    text-align: center;
-    width: 20%;
-    
-}
+
 .botonpadding{
     padding-top: 2px;
     padding-bottom: 2px;
     
 }
-.ancho6c{
-    text-align: center;
-    width:6%;
-}
-.ancho6{
-    width:6%;
-}
+
+
 .padding5{
     margin-bottom: 5px;
     padding-left: 5px;
@@ -1805,5 +1829,11 @@ padding-bottom: 5px;
 .input-importe{
     text-align: right;
 }
+.form-group{
+    margin-top: 0px;
+    margin-bottom: 5px;
+
+}
+
 
 </style>
