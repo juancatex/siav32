@@ -1388,7 +1388,7 @@ export default {
             var sumacheck=0;
             var suma87=0;
             me.acumulado13=0;
-            //console.log(me.arrayLibrocompras);
+            console.log(me.arrayLibrocompras);
             
 
 
@@ -1397,17 +1397,10 @@ export default {
                 //console.log(resultado.credfiscal);
                 sumacheck=Number(sumacheck+resultado.credfiscal);
                 suma87=Number(suma87+resultado.subtotal);
-                /* sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
-                suma87=parseFloat(suma87)+parseFloat(resultado.importe);  */
-                
             });
-            me.acumulado13=Number((me.acumulado13+sumacheck).toFixed(2));//parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
-            //me.acumulado13=me.acumulado13.toFixed(2);
+            me.acumulado13=Number((me.acumulado13+sumacheck).toFixed(2));
             me.sumafac=suma87;
-            me.acumulado87=Number((me.sumafac-me.acumulado13).toFixed(2));//parseFloat(me.sumafac)-parseFloat(me.acumulado13);
-            //me.acumulado87=me.acumulado87.toFixed(2);
-            //console.log(me.acumulado13);
-            
+            me.acumulado87=Number((me.sumafac-me.acumulado13).toFixed(2));
             if(me.acumulado13>0)
                 me.sifacturas=true;
             else

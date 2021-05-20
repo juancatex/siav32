@@ -402,7 +402,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
                                                     ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                                     ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
-                                                        ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
+                                                    ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
                                                         'subcuenta',
                                                         'rrh__empleados.idfilial',
