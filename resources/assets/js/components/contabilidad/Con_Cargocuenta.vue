@@ -66,11 +66,10 @@
                         <tbody>
                             <tr v-for="cargocuenta in arrayCargocuenta" :key="cargocuenta.idsolccuenta">
                                 <td>
-                                    <template v-if="cargocuenta.estado_aprobado==0 || cargocuenta.estado_aprobado==3">
-                                        <button type="button" @click="abrirModal('ccuenta','validar',cargocuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Realizar Cargo de Cuenta" :disabled="cargocuenta.estado_aprobado!=3">
+                                    <template v-if="cargocuenta.estado_aprobado==0 || cargocuenta.estado_aprobado==3 || cargocuenta.estado==4">
+                                        <button v-if="cargocuenta.estado!=4" type="button" @click="abrirModal('ccuenta','validar',cargocuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Realizar Cargo de Cuenta" :disabled="cargocuenta.estado_aprobado==0">
                                             <i class="icon-check"></i>
                                         </button> 
-                                       
                                     </template>
                                     <template v-else-if="cargocuenta.estado_aprobado==2">
                                         <button type="button" @click="detallesObservacion(cargocuenta.idsolccuenta)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Detalles Observacion">
@@ -359,12 +358,12 @@
     import VueCurrencyFilter from 'vue-currency-filter'
     Vue.use(VueCurrencyFilter,
     {
-    symbol : '',
-    thousandsSeparator: '.',
-    fractionCount: 2,
-    fractionSeparator: ',',
-    symbolPosition: 'front',
-    symbolSpacing: true
+        symbol : '',
+        thousandsSeparator: '.',
+        fractionCount: 2,
+        fractionSeparator: ',',
+        symbolPosition: 'front',
+        symbolSpacing: true
     })
     Vue.component("con_descargo", require("./Con_DescargoCuenta.vue").default);
     

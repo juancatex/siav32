@@ -867,8 +867,11 @@
                 var total=me.importetotal-me.nocreditofiscal-me.descuentos;
                 me.corregircodcontrol()
                
-                var _13porciento=parseFloat((total * 0.13)).toFixed(2);
-                var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+                var _13porciento=Number((total*0.13).toFixed(2));   //parseFloat((total * 0.13)).toFixed(2);
+                var _87porciento=Number((total-_13porciento).toFixed(2));//(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+
+    /*             var _13porciento=parseFloat((total * 0.13)).toFixed(2);
+                var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2); */
                 axios.post('/con_librocompras/registrar',{
                     'fechafactura':me.fechafactura,
                     'idproveedor':me.idproveedor[0],
@@ -899,6 +902,11 @@
                     setTimeout(me.tiempo, 100);
                     me.idproveedor=[];
                     me.idproveedorrespuesta=0;
+
+                    if(me.messelected==me.mes) 
+                        me.fechafactura=me.fechaactual;
+                    else
+                    me.fechafactura=me.fechafinal;
                     me.fechafactura=me.fechaactual;
                     me.numfactura='';
                     me.numautorizacion='';

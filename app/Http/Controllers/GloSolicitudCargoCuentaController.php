@@ -273,7 +273,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'con___movimientobancarios.numdocumento',
                                                                     'idmovimiento',
                                                                     'sidirectorio',
-                                                                    'glo__solicitud_cargo_cuentas.created_at')
+                                                                    'glo__solicitud_cargo_cuentas.created_at',
+                                                                    'con__asientomaestros.estado')
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->where(function($query) use ($filtro)
                                                             {
@@ -342,7 +343,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'con___movimientobancarios.numdocumento',
                                                                 'idmovimiento',
                                                                 'sidirectorio',
-                                                                'glo__solicitud_cargo_cuentas.created_at')
+                                                                'glo__solicitud_cargo_cuentas.created_at',
+                                                                'con__asientomaestros.estado')
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->where(function($query) use ($filtro)
                                                         {
@@ -400,7 +402,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
                                                     ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                                     ->leftjoin('con__cuentas','con__cuentas.idcuenta','=','glo__solicitud_cargo_cuentas.idcuentadesembolso')
-                                                        ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
+                                                    ->leftjoin('con___movimientobancarios','con___movimientobancarios.idmovimiento','=','glo__solicitud_cargo_cuentas.idmovbancario')
                                                     ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
                                                         'subcuenta',
                                                         'rrh__empleados.idfilial',
@@ -427,7 +429,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         'con___movimientobancarios.numdocumento',
                                                         'idmovimiento',
                                                         'sidirectorio',
-                                                        'glo__solicitud_cargo_cuentas.created_at'
+                                                        'glo__solicitud_cargo_cuentas.created_at',
+                                                        'con__asientomaestros.estado'
                                                         )
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->whereraw($sqls)
@@ -497,8 +500,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'con___movimientobancarios.numdocumento',
                                                             'idmovimiento',
                                                             'sidirectorio',
-                                                            'glo__solicitud_cargo_cuentas.created_at' //,
-                                                            //'socios.numpapeleta'
+                                                            'glo__solicitud_cargo_cuentas.created_at', //,
+                                                            //'socios.numpapeleta',
+                                                            'con__asientomaestros.estado'
                                                             )
                                             ->where('glo__solicitud_cargo_cuentas.activo',1)
                                             ->whereraw($sqls)

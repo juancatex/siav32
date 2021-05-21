@@ -2,7 +2,7 @@
     <main>  
         <div style="display:none" id="divdescargo">    
             <div class="container-fluid" style="padding-right: 0px;padding-left: 0px;">
-                <div class="card">
+                <div class="card" style="padding-bottom: 5px;padding-top: 5px;">
                     <!-- <form class="form-horizontal" @submit.prevent="validateBeforeSubmit" autocomplete="off"> -->
                     <div class="card-header" style="padding-top: 5px;padding-bottom: 0px;height: 51px;">
                         <div class="form-group row">
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" style="padding-bottom: 5px;">
+                    <div class="card-body" style="padding-bottom: 5px; padding-top: 5px;">
                         <div class="form-group row" style="margin-bottom:5px">
                             <div class="col-md-2 pt-1" >
                                 <strong>Tipo Comprobante:&nbsp;&nbsp;</strong>
@@ -310,7 +310,7 @@
         
         <!-- MODAL Libro de compras --> 
         <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="librocompras"  data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-dialog modal-primary modal-xl" role="document">
                 <div class="modal-content">
                     
                     <div class="modal-header justify-content-between" style="padding-bottom: 5px;padding-top: 5px;">
@@ -360,6 +360,8 @@
                                         <th>Nº Factura</th>
                                         <th>Registrado Por</th>
                                         <th>Importe</th>
+                                        <th>No Cred Fiscal</th>
+                                        <th>Filial</th>
                                         <th>Estado</th>
                                         <th>*</th>
                                     </tr>
@@ -372,6 +374,8 @@
                                         <td v-text="librocompras.numfactura" style="text-align:right"></td>
                                         <td v-text="librocompras.username"></td>
                                         <td v-text="librocompras.importe+' Bs.'" style="text-align:right"></td>
+                                        <td v-text="librocompras.impnocredfiscal+' Bs.'" style="text-align:right"></td>
+                                        <td v-text="librocompras.sigla"></td>
                                         <td><template v-if="librocompras.lote && librocompras.idasientomaestro && librocompras.validadoconta">
                                                 <span class="badge badge-success">Validado</span>
                                             </template>
@@ -382,6 +386,7 @@
                                                 <span class="badge badge-danger">Sin Compr.</span>
                                             </template>
                                         </td>
+                                        
                                         <td style="text-align:right">
                                             <template v-if="!librocompras.idasientomaestro">
                                                 <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="librocompras.idlibrocompra" @change="sumar13()" :checked="verchecked(librocompras.idlibrocompra)" >
@@ -1149,7 +1154,8 @@ export default {
                 'idfacturas':me.checkusarfactura,
                 'validarfacturas':validarfacturas,
                 'saldoc':me.saldoc,
-                'sidirectorio':this.sidirectorio
+                'sidirectorio':this.sidirectorio,
+                'borrador':true,
 
             }).then(function (response) {
                 
@@ -1295,11 +1301,14 @@ export default {
             me.diaminmax();
             if(me.mes+1==me.messelected)
             {    
+                //console.log(me.mes+' entra a me.mes+1=me.messelected');
                 me.fechafactura=me.fechaactual;
                 //me.fechafinal=me.fechaactual;
             }
-            else   
+            else   {
                 me.fechafactura=me.fechafinal;
+                //console.log(me.fechafactura+' entra a fechafactura');
+            }
 
             var url= '/con_librocompras?modal=1&mes='+me.messelected+'&anio='+me.anioselected+'&idfilial='+me.idfilial;
             //console.log(url);
@@ -1318,8 +1327,11 @@ export default {
             //console.log(me.idproveedor[0]);
             var total=me.importetotal-me.nocreditofiscal-me.descuentos;
             me.corregircodcontrol()
-            var _13porciento=parseFloat((total * 0.13)).toFixed(2);
-            var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+
+
+
+            var _13porciento=Number((total*0.13).toFixed(2));   //parseFloat((total * 0.13)).toFixed(2);
+            var _87porciento=Number((total-_13porciento).toFixed(2));//(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
             
             axios.post('/con_librocompras/registrar',{
                 'fechafactura':me.fechafactura,
@@ -1347,8 +1359,12 @@ export default {
                 me.selectLibrocompras();
                 //me.$refs.comboproveedor.clearSelection(); 
                 me.clearSelected=0;
-                setTimeout(me.tiempo, 50); 
-                me.fechafactura=me.fechaactual;
+                setTimeout(me.tiempo, 50);
+                if(me.messelected==me.mes) 
+                    me.fechafactura=me.fechaactual;
+                else
+                    me.fechafactura=me.fechafinal;
+
                 me.numfactura='';
                 me.numautorizacion='';
                 me.codcontrol='';
@@ -1375,20 +1391,19 @@ export default {
             var sumacheck=0;
             var suma87=0;
             me.acumulado13=0;
+            console.log(me.arrayLibrocompras);
             
+
+
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
-                sumacheck=parseFloat(sumacheck)+parseFloat(resultado.credfiscal);
-                suma87=parseFloat(suma87)+parseFloat(resultado.importe); 
-                
+                //console.log(resultado.credfiscal);
+                sumacheck=Number(sumacheck+resultado.credfiscal);
+                suma87=Number(suma87+resultado.subtotal);
             });
-            me.acumulado13=parseFloat(me.acumulado13)+parseFloat(sumacheck.toFixed(2));
-            me.acumulado13=me.acumulado13.toFixed(2);
+            me.acumulado13=Number((me.acumulado13+sumacheck).toFixed(2));
             me.sumafac=suma87;
-            me.acumulado87=parseFloat(me.sumafac)-parseFloat(me.acumulado13);
-            me.acumulado87=me.acumulado87.toFixed(2);
-            //console.log(me.acumulado13);
-            
+            me.acumulado87=Number((me.sumafac-me.acumulado13).toFixed(2));
             if(me.acumulado13>0)
                 me.sifacturas=true;
             else
@@ -1481,7 +1496,7 @@ export default {
     },
 }
 </script>
-<style >
+<style  scoped>
 .botonpadding{
     padding-top: 2px;
     padding-bottom: 2px;
@@ -1500,6 +1515,11 @@ padding-bottom: 5px;
 }
 .input-importe{
     text-align: right;
+}
+.form-group{
+    margin-top: 0px;
+    margin-bottom: 5px;
+
 }
 
 </style>

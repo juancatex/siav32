@@ -197,7 +197,7 @@ Class AsientoMaestroClass
         $this->idmodulo=$idmodulo;
         $this->fecharegistro=$fecharegistro." ".$this->hora;
         $this->borrador=$borrador;
-       // echo $this->borrador." hola mundo";
+        //dd($this->borrador);
         $this->filial=$filial;
         if($this->filial=='')
             $this->filial=1;
