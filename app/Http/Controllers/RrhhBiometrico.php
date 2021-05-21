@@ -76,11 +76,19 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(64, '71', 'CASTANETA U ANDREA','',Util::LEVEL_USER);
             // $zk->setUser(65, '72', 'LIMACHI URI RAMIRO','',Util::LEVEL_USER);
             // $zk->setUser(66, '73', 'LIRIAN CALLIZAYA','',Util::LEVEL_USER);
-            $zk->setUser(67, '74', 'EDDY CLAROS CORI','',Util::LEVEL_USER);
-             
+            //$zk->setUser(67, '74', 'EDDY CLAROS CORI','',Util::LEVEL_USER);
+            //$zk->setUser(68, '75', 'EDWIN GALBARRO M','',Util::LEVEL_USER);
+           // $zk->setUser(70, '76', 'SOF. ROQUE UMADAY','',Util::LEVEL_USER);
+            //$zk->setUser(71, '77', 'SOF. VICTOR CADIMA','',Util::LEVEL_USER);
+            //$zk->setUser(72, '78', 'ALEX CONDORI TORREZ','',Util::LEVEL_USER);
+            
+//$zk->setUser(73, '79', 'TANIA MAMANI TARQUINO','',Util::LEVEL_USER);
+//$zk->setUser(74, '80', 'JOSE SANTANDER LUJAN','',Util::LEVEL_USER);
+//$zk->setUser(75, '81', 'SERGIO TAPIA CONDE','',Util::LEVEL_USER);
+$zk->setUser(76, '82', 'OSMAR GOMEZ CHOQUE','',Util::LEVEL_USER);
             // $zk->setUser(50, '50', 'admin2','',Util::LEVEL_USER);
             // $zk->setUser(51, '51', 'SOM. ALMANZA WILSON','',Util::LEVEL_USER);
-            // $zk->setUser(52, '52', 'SOF. RAMIREZ WILFREDO','',Util::LEVEL_USER);
+            // $zk->setUser(52, '52', 'SOF. RAMIREZ WI$zk->setUser(68, '75', 'EDWIN GALBARRO M','',Util::LEVEL_USER);LFREDO','',Util::LEVEL_USER);
             // $zk->setUser(53, '53', 'SOF. ZAPATA ANGEL','',Util::LEVEL_USER);
             // $zk->setUser(54, '54', 'SOF. GUARDIA NELSON','',Util::LEVEL_USER);
             // $zk->setUser(55, '55', 'SOM. CUENTAS JUAN','',Util::LEVEL_USER);
