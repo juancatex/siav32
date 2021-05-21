@@ -358,12 +358,12 @@
     import VueCurrencyFilter from 'vue-currency-filter'
     Vue.use(VueCurrencyFilter,
     {
-    symbol : '',
-    thousandsSeparator: '.',
-    fractionCount: 2,
-    fractionSeparator: ',',
-    symbolPosition: 'front',
-    symbolSpacing: true
+        symbol : '',
+        thousandsSeparator: '.',
+        fractionCount: 2,
+        fractionSeparator: ',',
+        symbolPosition: 'front',
+        symbolSpacing: true
     })
     Vue.component("con_descargo", require("./Con_DescargoCuenta.vue").default);
     
