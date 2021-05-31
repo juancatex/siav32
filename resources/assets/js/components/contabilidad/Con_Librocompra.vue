@@ -1062,8 +1062,12 @@
                
                 let me = this;
                 var total=me.importetotal-me.nocreditofiscal-me.descuentos;
-                var _13porciento=parseFloat((total * 0.13)).toFixed(2);
-                var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+                /* var _13porciento=parseFloat((total * 0.13)).toFixed(2);
+                var _87porciento=(parseFloat(total)-parseFloat(_13porciento)).toFixed(2); */
+
+                var _13porciento=Number((total*0.13).toFixed(2));   //parseFloat((total * 0.13)).toFixed(2);
+                var _87porciento=Number((total-_13porciento).toFixed(2));//(parseFloat(total)-parseFloat(_13porciento)).toFixed(2);
+            
                 
                 if(me.asientomaestro==1)
                 {

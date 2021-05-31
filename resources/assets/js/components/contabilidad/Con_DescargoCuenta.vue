@@ -752,8 +752,11 @@ export default {
             me.confacturas=false
             me.rowcuentas.forEach(element => {
                 contador++;
-                me.debe=parseFloat(me.debe)+parseFloat(element.debe);
-                me.haber=parseFloat(me.haber)+parseFloat(element.haber);
+                me.debe=Number((me.debe).toFixed(2))+Number((element.debe).toFixed(2));
+                me.haber=Number((me.haber).toFixed(2))+Number((element.haber).toFixed(2)); 
+
+                /* me.debe=parseFloat(me.debe)+parseFloat(element.debe);
+                me.haber=parseFloat(me.haber)+parseFloat(element.haber); */
                 if(element.idcuenta==me.lc)
                     me.confacturas=true;
 
