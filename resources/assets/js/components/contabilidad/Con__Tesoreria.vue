@@ -73,7 +73,10 @@
                                 </td>
                                 <!-- <td style="text-align:right">{{ index+1}}</td> --> <!-- index+1 + -->
                                 <td v-text="movimiento.fecha_solicitud" style="text-align:right"></td>
-                                <td v-text="movimiento.nombres"></td>
+                                <td v-if="movimiento.nombres==null" style="text-align:center"><button type="button" @click="addnomccuenta(movimiento.idsolccuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Persona">
+                                        <i class="icon-people"></i>
+                                    </button> </td>
+                                <td v-else v-text="movimiento.nombres"></td>
                                 <td v-text="movimiento.nrcuenta"></td>
                                 <td v-text="movimiento.sigla"></td>
                                 <td v-text="movimiento.glosa"></td>
@@ -82,9 +85,8 @@
                                     <span  v-text="movimiento.fecha_desembolso"></span>
                                 </td>                              
                                 <td v-else-if="desembolsocheck=='por_desembolsar'">
-                                    
-                                        <label class="switch switch-label switch-pill switch-outline-primary-alt">
-                                            <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="movimiento.idsolccuenta" >
+                                        <label class="switch switch-label switch-pill switch-outline-primary-alt" >
+                                            <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="movimiento.idsolccuenta" :disabled="movimiento.nombres==null">
                                             <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>
                                         <input v-if="checkValidacion[index]" type="text"  v-model="num_documento[index]" placeholder="Nº Cheque" style="width:100px;text-align: right;">
@@ -209,6 +211,62 @@
                                 
                   </div> 
         </div>
+        <!-- modal agregar persona en cargo de cuenta -->
+        <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="modalsolicitud"  data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                        <div class="modal-content animated fadeIn">
+                            <div class="modal-header"> 
+                                <h4 class="modal-title" v-text="tituloModal"></h4>
+                                <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarModal('modalsolicitud')"><span aria-hidden="true">×</span></button>
+                            </div> 
+                        <div class="modal-body">
+                            <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo('directivo')"> Directivos
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo('personal')">Personal
+                                    </label>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-8" v-if="directivo=='directivo'">
+                                    <strong>Directivo:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectdirectivos?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idsocio"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div class="form-group col-md-8" v-else-if="directivo=='personal'">
+                                    <strong>Personal:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idempleado"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="modal-footer"> 
+                            <button type="button" class="btn btn-secondary" @click="cerrarModal('modalsolicitud')">Cerrar</button>
+                            <button :disabled="!isComplete" class="btn btn-primary" type="button"  @click="registrarSolicitud('modalsolicitud')">Guardar</button>
+                        </div>    
+                    </div>
+                </div>
+            </div>
     </main>
 </template>
 
@@ -297,7 +355,13 @@
                 iddepartamentodebNoBanco:2,
                 num_operaciondebNoBanco:'',
                 montodebNoBanco:0,
-                boton:true
+                boton:true,
+                directivo:'directivo',
+                clearSelected:1,
+                idempleadoselected:'',
+                idempleado:[],
+                valor:'',
+                idccuenta:''
 
             }
         },
@@ -308,6 +372,12 @@
         },
 
         computed:{
+            isComplete () {
+                let me=this;
+                if (me.directivo=='directivo' || me.directivo=='personal')
+                    return me.idempleado.length>0;
+                
+            },
             vercheckvalidacion(){
                 let me=this;
                 var valor=false;
@@ -354,6 +424,85 @@
             
         },
         methods : {
+            registrarSolicitud(){
+                let me = this;
+                let valor=0;
+                let tipo_filial;
+                if(me.directivo=="directivo")
+                    valor=1;
+                else
+                {
+                    if(me.directivo=="personal")
+                        valor=0;
+                }
+                if(me.idempleado[4]=='LP')
+                    tipo_filial=1;
+                else
+                    tipo_filial=2;
+                axios.put('/glo_solccuenta/agregarpersona',{
+                    'idsolccuenta':me.idccuenta,
+                    'subcuenta':me.idempleado[1],
+                    'directorio':valor,
+                    'tipo_filial':tipo_filial
+                }).then(function (response) {
+                    swal(
+                            'Registrado Correctamente'
+                       )   
+                    me.cerrarModal('modalsolicitud');
+                    me.listarDesembolso();
+                   // console.log('cerrar modal');
+                    
+                    
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+             empleados(empleados){
+                this.idempleado=[];
+                for (const key in empleados) {
+                    if (empleados.hasOwnProperty(key)) {
+                        const element = empleados[key];
+                        //console.log(element);
+                        this.idempleado.push(element);
+                    }
+                }
+                //console.log(this.idempleado);
+            },
+            cleanempleados(){
+                this.idempleado=[];
+                //this.idempleadorespuesta=0;
+            //console.log('clean')
+            },
+            
+            cerrarModal(id){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 50); 
+                me.classModal.closeModal(id);
+                me.idempleado=[];
+                me.monto=0;
+                me.glosa='';
+            },
+             cambiaDirectivo(valor){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                me.directivo=valor;
+                me.idempleado=[];
+                
+               
+            },
+            addnomccuenta(id){
+                let me=this;
+                me.tituloModal = 'Agregar Persona Cargo de Cuenta ';
+                me.idempleado=[];
+                me.classModal.openModal('modalsolicitud');
+                me.idccuenta=id;
+                    
+            },
+             tiempo(){
+            this.clearSelected=1;
+            }, 
             observado_view(observado){
                 //console.log(pr);
                 let me=this;
@@ -599,7 +748,22 @@
             },
             registrarDesembolso(valor){
                 this.boton=false;
-                swal({
+                 swal({
+                title: 'Esta seguro de Realizar el Desembolso?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                    if (result.value) 
+                    {
+                        swal({
                         title: "Registrando los datos",
                         allowOutsideClick: () => false,
                         allowEscapeKey: () => false,
@@ -711,6 +875,22 @@
                         break;
                     }
                 }
+                        
+            }
+            else if (result.dismiss === swal.DismissReason.cancel) 
+            {
+
+            }
+        })
+
+
+
+
+
+
+
+
+                
             },
         },
         mounted() {
@@ -719,6 +899,7 @@
             this.selectConciliacion();
             this.classModal=new _pl.Modals();
             this.classModal.addModal('registrarmov');
+            this.classModal.addModal('modalsolicitud');
             
         }
     }

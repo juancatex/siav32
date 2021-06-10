@@ -180,7 +180,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_librocompras/registrar','ConLibrocompraController@store');
         Route::put ('/con_librocompras/actualizar','ConLibrocompraController@update');
         Route::get ('/con_librocompras/verificarfactura','ConLibrocompraController@verificarfactura');
-        Route::put ('/con_librocompras/desactivar', 'ConLibrocompraController@desactivar');
+        Route::post ('/con_librocompras/desactivar', 'ConLibrocompraController@desactivar');
 
         Route::get ('/con_cierrelibrocompra','ConCierrelibrocompraController@index');
         Route::post('/con_cierrelibrocompra/registrar','ConCierrelibrocompraController@store');
@@ -193,6 +193,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/con_config/desactivar', 'ConConfiguracionController@desactivar');
         Route::get('/con_config/cuentasconciliacion', 'ConConfiguracionController@cuentas_conciliacion');
         Route::get('/con_config/selectconciliacion', 'ConConfiguracionController@selectCuentasConciliacion');
+        Route::post('/con_config/desactivardias', 'ConConfiguracionController@desactivarccdias');
+        Route::get('/con_config/recuperarccdias', 'ConConfiguracionController@recuperarccdias');
+        
 
         Route::get ('/con_conciliacion/selectconciliacion', 'ConMovimientobancarioController@selectConciliacion');
         Route::post('/con_conciliacion/registrar', 'ConMovimientobancarioController@store');
@@ -867,7 +870,8 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/glo_solccuenta/actualizarsegccuenta', 'GloSolicitudCargoCuentaController@updatesegccuenta');
         Route::get('/glo_solccuenta/listartesoreria', 'GloSolicitudCargoCuentaController@listarTesoreria');
         Route::put('/glo_solccuenta/desembolsar', 'GloSolicitudCargoCuentaController@desembolsar');
-
+        Route::put('/glo_solccuenta/agregarpersona', 'GloSolicitudCargoCuentaController@addpersona');
+        
 
         //FACTURAS
         Route::get('/con_facturaparametro', 'ConFacturaParametroController@index');

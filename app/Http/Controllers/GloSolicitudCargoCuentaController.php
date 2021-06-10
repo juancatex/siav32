@@ -13,6 +13,7 @@ use App\Adm_User;
 use App\Config;
 use App\Con_Asientomaestro;
 use App\Con__Movimientobancario;
+use App\Con_Configuracion;
 
 
 class GloSolicitudCargoCuentaController extends Controller
@@ -37,8 +38,22 @@ class GloSolicitudCargoCuentaController extends Controller
         $raw2=DB::raw('DATE(glo__solicitud_cargo_cuentas.created_at) as fecha_solicitud');
         $raw3=DB::raw('DATE(fechavalidado) as fechav');
         //TODO:hacer una discriminacion de subcuenta cuando el tipo cargo sea exteno o interno, el join cambia de tabla a proveedores.
+        $principal=Glo_SolicitudCargoCuenta::select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                            DB::raw('subcuenta as nombres'),
+                                                            DB::raw('DATE(glo__solicitud_cargo_cuentas.created_at) as fecha_solicitud'),
+                                                            'subcuenta',
+                                                            'glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'estado_aprobado',
+                                                            'glo__solicitud_cargo_cuentas.idasientomaestro',
+                                                            DB::raw('subcuenta as fechav'),
+                                                            'sidirectorio',
+                                                            'glo__solicitud_cargo_cuentas.created_at'
+
+                                                            )->where('subcuenta',null);
+                                                            //dd($principal);
         if (!$buscar){
-            
+
             $first = Glo_SolicitudCargoCuenta::join('rrh__empleados','rrh__empleados.idempleado','=','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->leftjoin('con__asientomaestros','con__asientomaestros.idasientomaestro','=','glo__solicitud_cargo_cuentas.idasientomaestro')
                                                         ->select('glo__solicitud_cargo_cuentas.idsolccuenta',
@@ -57,9 +72,11 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->where('idrole',$idrol)
                                                     ->where('sidirectorio',0)
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
-                                                    ->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
+                                                    ->union($principal);
+                                                    //->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
             
                                                     $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+
             $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                                     //->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
@@ -123,8 +140,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     ->where('idrole',$idrol)
                                                     ->where('sidirectorio',0)
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
-                                                    ->whereraw($sqls)
-                                                    ->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
+                                                    ->union($principal)
+                                                    ->whereraw($sqls);
+                                                    //->orderBy('glo__solicitud_cargo_cuentas.created_at','desc');
             
             $solicitudes=Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->join('par_grados','par_grados.idgrado','socios.idgrado')
@@ -186,7 +204,27 @@ class GloSolicitudCargoCuentaController extends Controller
         $solicitud->glosa=$request->glosa;
         $solicitud->monto=$request->monto;
         $solicitud->saldo_descargo=$request->monto;
+        $solicitud->tipo_filial=$request->tipo_filial;
         //$solicitud->tipocargo=$request->tipocargo;
+        $solicitud->save();
+    }
+    public function addpersona(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $usuariolog=Auth::id();
+        
+        $role=Adm_Roleuser::select('idrole')
+                                ->where('iduser',$usuariolog)
+                                ->where('activo',1)
+                                ->get()->toArray();
+        $idrol=$role[0]['idrole'];
+
+        $solicitud = Glo_SolicitudCargoCuenta::findOrFail($request->idsolccuenta);
+        $solicitud->tipo_filial=$request->tipo_filial;
+        $solicitud->subcuenta = $request->subcuenta;
+        
+       // $solicitud->tipocargo=$request->tipocargo;
         $solicitud->save();
     }
     public function update(Request $request)
@@ -274,7 +312,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'idmovimiento',
                                                                     'sidirectorio',
                                                                     'glo__solicitud_cargo_cuentas.created_at',
-                                                                    'con__asientomaestros.estado')
+                                                                    'con__asientomaestros.estado',
+                                                                    'cant_dias',
+                                                                    'tipo_filial')
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->where(function($query) use ($filtro)
                                                             {
@@ -344,7 +384,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'idmovimiento',
                                                                 'sidirectorio',
                                                                 'glo__solicitud_cargo_cuentas.created_at',
-                                                                'con__asientomaestros.estado')
+                                                                'con__asientomaestros.estado',
+                                                                'cant_dias',
+                                                                'tipo_filial')
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->where(function($query) use ($filtro)
                                                         {
@@ -375,7 +417,7 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         })
                                                 ->union($first)
                                                 ->orderBy('created_at','desc')
-                                                ->paginate(10);
+                                                ->paginate(25);
             
         
         }
@@ -430,7 +472,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                         'idmovimiento',
                                                         'sidirectorio',
                                                         'glo__solicitud_cargo_cuentas.created_at',
-                                                        'con__asientomaestros.estado'
+                                                        'con__asientomaestros.estado',
+                                                        'cant_dias',
+                                                        'tipo_filial'
                                                         )
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->whereraw($sqls)
@@ -502,7 +546,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                             'sidirectorio',
                                                             'glo__solicitud_cargo_cuentas.created_at', //,
                                                             //'socios.numpapeleta',
-                                                            'con__asientomaestros.estado'
+                                                            'con__asientomaestros.estado',
+                                                            'cant_dias',
+                                                            'tipo_filial'
                                                             )
                                             ->where('glo__solicitud_cargo_cuentas.activo',1)
                                             ->whereraw($sqls)
@@ -535,10 +581,67 @@ class GloSolicitudCargoCuentaController extends Controller
                                                     })
                                                 ->union($first)
                                                 ->orderBy('created_at','desc')
-                                                ->paginate(10);
+                                                ->paginate(25);
         }
         
+        
+        $respuestadias=Con_Configuracion::where('activo',1)
+                                                ->where(function($query) {
+                                                    $query->where('codigo', 'ccdiasoc')
+                                                            ->orWhere('codigo', 'ccdiasor');
+                                                })->get()->toarray();
+                                                
+        foreach ($respuestadias as $key => $value) {
+            if($value['codigo']=='ccdiasor')
+                $diasor=$value['valor'];
+            elseif ($value['codigo']=='ccdiasoc') {
+                $diasoc=$value['valor'];
+            }
+        }
+        $_70diasoc=round($diasoc*0.7)-1;
+        $_70diasor=round($diasor*0.7)-1;
 
+    
+        
+        
+        foreach ($cargocuentas as $key => $value) {
+            //echo $key;
+            if($value['tipo_filial']==1)
+            {
+                if($value['cant_dias']<=$_70diasoc)
+                    $cargocuentas[$key]->color='verde';
+                else 
+                {
+                    if($value['cant_dias']<=$diasoc)
+                        $cargocuentas[$key]->color='amarillo';
+                    else
+                        $cargocuentas[$key]->color='rojo';
+                }
+            }
+            else{
+                if($value['cant_dias']<=$_70diasor)
+                    $cargocuentas[$key]->color='verde';
+                else 
+                {
+                    if($value['cant_dias']<=$diasor)
+                        $cargocuentas[$key]->color='amarillo';
+                    else
+                        $cargocuentas[$key]->color='rojo';
+                }
+
+            }
+
+
+/* 
+
+            if($value['tipo_filial']==1)
+            {
+                $cargocuentas[$key]->prueba="prueba"; 
+            }
+            */ //echo $value."/<br>";
+            //////echo $value['cant_dias']." ".$value['tipo_filial']."</br>";
+        } 
+       // dd ($cargocuentas);
         return [
             'pagination' => [
                 'total'        => $cargocuentas->total(),
@@ -596,6 +699,27 @@ class GloSolicitudCargoCuentaController extends Controller
         */
         $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
         $raw2=DB::raw('DATE(glo__solicitud_cargo_cuentas.created_at) as fecha_solicitud');
+        $principal=Glo_SolicitudCargoCuenta::select('glo__solicitud_cargo_cuentas.idsolccuenta',
+                                                            
+                                                            DB::raw('subcuenta as idfilial'),
+                                                            DB::raw('subcuenta as nommunicipio'),
+                                                            DB::raw('subcuenta as sigla'),
+                                                            DB::raw('subcuenta as nombres'),
+                                                            DB::raw('DATE(glo__solicitud_cargo_cuentas.created_at) as fecha_solicitud'),
+                                                            'subcuenta',
+                                                            DB::raw('subcuenta as idusuario'),
+                                                            'glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'estado_aprobado',
+                                                            'glo__solicitud_cargo_cuentas.idasientomaestro',
+                                                            DB::raw('subcuenta as modificado'),
+                                                            DB::raw('subcuenta as cod_comprobante'),
+                                                            DB::raw('subcuenta as fecha_desembolso'),
+                                                            DB::raw('subcuenta as fecha_validado'),
+                                                            'sidirectorio',
+                                                            'glo__solicitud_cargo_cuentas.created_at'
+                                                            )->where('subcuenta',null);
+                                                            //dd($principal);
         $first = Glo_SolicitudCargoCuenta::join('rrh__empleados','rrh__empleados.idempleado','=','glo__solicitud_cargo_cuentas.subcuenta')
                                                 ->join('fil__filials','fil__filials.idfilial','=','rrh__empleados.idfilial')
                                                 ->join('par_municipios','par_municipios.idmunicipio','=','fil__filials.idmunicipio')
@@ -624,7 +748,8 @@ class GloSolicitudCargoCuentaController extends Controller
                                                 $query->where('estado_aprobado', 0) //cargos no aprobados no desembolsados
                                                     ->orWhere('estado_aprobado', 1) //cargos desembolsados y aprobados por conta
                                                     ->orWhere('estado_aprobado', 3); //cargos desembolsados
-                                            });
+                                            })
+                                            ->union($principal);
     
     $cargocuentas = Glo_SolicitudCargoCuenta::join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
                                             ->join('par_grados','par_grados.idgrado','socios.idgrado')
@@ -681,6 +806,7 @@ class GloSolicitudCargoCuentaController extends Controller
             $solicitud->estado_aprobado = 3;
             $solicitud->fecha_desembolso=$fecha;
             $solicitud->idcuentadesembolso=$request->idcuentadesembolso;
+            $solicitud->cant_dias=0;
             if($valor['num_cheque'])
             {
                 $solicitud->tipo_desembolso="cheque";
