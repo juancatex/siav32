@@ -122,8 +122,8 @@
                                 <td></td>
                                 </tr>  
                                 <template v-if="mostrarporcuentas">
-                                                    <template  v-for="padre in datos" >
-                                                    <tr :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                                    <template  v-for="(padre,index) in datos" >
+                                                    <tr :key="index" style='background-color: khaki;font-weight: 700;'>  
                                                         <template v-if="padre.monto>0">
                                                             <td v-text="padre.id +'  --  '+ padre.des" colspan='2'></td>
                                                             <td v-text="padre.monto" style='background-color: powderblue;'></td> 
@@ -141,8 +141,8 @@
                                                 </template> 
 
                                 </template>
-                                <template v-else v-for="padre in datos" >
-                                    <tr v-if="padre.monto>0" :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                <template v-else v-for="(padre,index)  in datos" >
+                                    <tr v-if="padre.monto>0" :key="index" style='background-color: khaki;font-weight: 700;'>  
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='5'></td> 
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
