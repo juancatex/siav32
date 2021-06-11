@@ -412,7 +412,8 @@ let me=this;
                                       var aux=response.data.values;
                                       me.fechacomprobante=response.data.fecha;
                                       me.fechacomprobantenew=response.data.fecha; 
-                                      
+                                      console.log('aux:',aux)
+                                      console.log('mensaje:',aux.length==0?response.data.mensaje:'')
                                        me.datos=[]; 
                                        var cabesera=[];
                                         aux.forEach((value, index) => { 
