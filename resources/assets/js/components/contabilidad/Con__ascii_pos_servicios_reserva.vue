@@ -464,6 +464,7 @@ let me=this;
                                         };
                 } catch (err) {
                     dataout=[];
+                    console.log(err);
                 }                
                 return dataout;
                 },
