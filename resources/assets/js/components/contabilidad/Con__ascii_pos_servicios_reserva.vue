@@ -146,13 +146,13 @@
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='5'></td> 
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
-                                    <tr v-else :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                    <tr v-else :key="index" style='background-color: khaki;font-weight: 700;'>  
                                         <td > </td>
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='4'></td> 
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
 
-                                    <tr v-for="datain in padre.value" :key="datain.id_reg+padre.id"> 
+                                    <tr v-for="(datain,indexs) in padre.value" :key="indexs"> 
                                         <td > </td>
                                          
                                          <template v-if="datain.importe_moneda_local>0">
