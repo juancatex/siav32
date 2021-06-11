@@ -388,6 +388,7 @@ let me=this;
                                         me.gettabla(aux).then((response)=>{
                                                     swal.close();
                                                     me.datos=response; 
+                                                    console.log(response);
                                                     me.debesuma=_.reduce(me.datos, function(sum, n) {  
                                                             return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
                                                     }, 0); 
