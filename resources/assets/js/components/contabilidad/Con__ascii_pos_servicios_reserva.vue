@@ -286,8 +286,9 @@ Vue.use(VeeValidate);
 
 
             },
-            procesar(){
-                    
+            procesar(){ 
+                this.debesuma=0;
+                this.habersuma=0;
                     
 let me=this;
  swal({
@@ -329,46 +330,19 @@ let me=this;
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
                                             swal.close()
-                                        swal("¡Se actualizo los datos correctamente!", "", "success");
-                                     
-                                      var aux=response.data.values;
-                                      console.log('aux:',aux)
-                                      console.log('mensaje:',aux.length==0?response.data.mensaje:'')
-                                       me.datos=[]; 
-                                       var cabesera=[];
-                                        aux.forEach((value, index) => { 
-                                            if(_.has(cabesera, value.cuenta)){
-                                                var out=cabesera[value.cuenta]; 
-                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
-
-                                                // if(typeof outtt == 'undefined'){
-                                                    out.push(value);
-                                                    cabesera[value.cuenta]=out;
-                                                // } 
-                                                
-                                                
-                                            }else{
-                                                var u=[];
-                                                u.push(value);
-                                                cabesera[value.cuenta]=u;
-                                                 
-                                            }
-                                        }) 
-
-
-                                        cabesera.forEach((value, index) => {  
-                                           
-                                            var sumatoria=_.reduce(value, function(sum, n) {
-                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
-                                                }, 0);
-                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
-                                            var analisis=0;
-                                                if(typeof outtt !== 'undefined'){
-                                                   analisis=1; 
-                                                } 
-                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion}); 
-                                            
-                                        })
+                                         swal("¡Se actualizo los datos correctamente!", "", "success"); 
+                                         var aux=response.data.values; 
+                                         me.datos=[];  
+                                         me.gettabla(aux).then((response)=>{ 
+                                                    me.datos=response; 
+                                                    me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                            return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                    }, 0); 
+                                                    me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                        return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                    }, 0);
+                                                    me.habersuma=(me.habersuma*-1); 
+                                        });
                                          
 
                         })
@@ -406,19 +380,42 @@ let me=this;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
-                                            swal.close()
-                                       
-                                     
+                                      
                                       var aux=response.data.values;
                                       me.fechacomprobante=response.data.fecha;
-                                      me.fechacomprobantenew=response.data.fecha; 
-                                      console.log('aux:',aux)
-                                      console.log('mensaje:',aux.length==0?response.data.mensaje:'')
-                                       me.datos=[]; 
-                                       var cabeseraDebe=[];
-                                       var cabeseraHaber=[];
-                                        aux.forEach((value, index) => {
+                                      me.fechacomprobantenew=response.data.fecha;  
+                                      me.datos=[];   
+                                        me.gettabla(aux).then((response)=>{
+                                                    swal.close();
+                                                    me.datos=response; 
+                                                    me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                            return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                    }, 0); 
+                                                    me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                        return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                    }, 0);
+                                                    me.habersuma=(me.habersuma*-1); 
+                                        });
 
+                                     
+                                                
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+
+
+
+                } 
+            } ,
+            async gettabla(aux) {
+                var dataout=[];
+                var cabeseraDebe=[];
+                var cabeseraHaber=[];
+                try {
+                                        for (var value of aux) { 
                                             if(value.importe_moneda_local>0){
                                                     if(_.has(cabeseraDebe, value.cuenta)){
                                                         var out=cabeseraDebe[value.cuenta];  
@@ -439,11 +436,10 @@ let me=this;
                                                         u.push(value);
                                                         cabeseraHaber[value.cuenta]=u; 
                                                     }
-                                            }
-                                            
-
-                                        });  
-                                        cabeseraDebe.forEach((value, index) => {  
+                                            } 
+                                        };  
+                                        
+                                        for (let [key, value] of cabeseraDebe) {
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0); 
@@ -452,9 +448,9 @@ let me=this;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
-                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                        });
-                                        cabeseraHaber.forEach((value, index) => {  
+                                            dataout.push({id:key,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        };
+                                       for (let [key, value] of cabeseraHaber) {
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0); 
@@ -463,33 +459,13 @@ let me=this;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
-                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                        });
-
-
-                                     
-                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
-                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                }, 0);
-
-                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
-                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                }, 0);
-                                                me.habersuma=(me.habersuma*-1); 
-
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-
-
-
-
-                } 
-            } ,
-            onChangeCuenta(){  
-                
-            },
+                                            dataout.push({id:key,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        };
+                } catch (err) {
+                    dataout=[];
+                }                
+                return dataout;
+                },
             onChangeTipo(){ 
                 this.numcomprobante='';
                 this.datos=[]; 
