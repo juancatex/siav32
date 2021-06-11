@@ -329,7 +329,7 @@ let me=this;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
-                                            swal.close()
+                                            swal.close();
                                          swal("¡Se actualizo los datos correctamente!", "", "success"); 
                                          var aux=response.data.values; 
                                          me.datos=[];  
@@ -431,7 +431,7 @@ let me=this;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
-                                      
+                                         swal.close();
                                       var aux=response.data.values;
                                       me.fechacomprobante=response.data.fecha;
                                       me.fechacomprobantenew=response.data.fecha;  
