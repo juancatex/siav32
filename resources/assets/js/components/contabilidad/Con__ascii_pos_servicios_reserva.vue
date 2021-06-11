@@ -415,34 +415,38 @@ let me=this;
                                       console.log('aux:',aux)
                                       console.log('mensaje:',aux.length==0?response.data.mensaje:'')
                                        me.datos=[]; 
-                                       var cabesera=[];
-                                        aux.forEach((value, index) => { 
-                                            if(_.has(cabesera, value.cuenta)){
-                                                var out=cabesera[value.cuenta]; 
-                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
+                                       var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
 
-                                                // if(typeof outtt == 'undefined'){
-                                                    out.push(value);
-                                                    cabesera[value.cuenta]=out;
-                                                // } 
-                                                
-                                                
+                                            if(value.importe_moneda_local>0){
+                                                    if(_.has(cabeseraDebe, value.cuenta)){
+                                                        var out=cabeseraDebe[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraDebe[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraDebe[value.cuenta]=u; 
+                                                    }
                                             }else{
-                                                var u=[];
-                                                u.push(value);
-                                                cabesera[value.cuenta]=u;
-                                                 
+                                                 if(_.has(cabeseraHaber, value.cuenta)){
+                                                        var out=cabeseraHaber[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraHaber[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraHaber[value.cuenta]=u; 
+                                                    }
                                             }
-                                        }) 
+                                            
 
-                                        
-                                        cabesera.forEach((value, index) => {  
-                                           
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
-                                                }, 0);
-
-
+                                                }, 0); 
                                              var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
@@ -450,6 +454,19 @@ let me=this;
                                                 } 
                                             me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
                                         });
+                                        cabeseraHaber.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                            var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
                                      
                                                me.debesuma=_.reduce(me.datos, function(sum, n) {  
                                                         return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
