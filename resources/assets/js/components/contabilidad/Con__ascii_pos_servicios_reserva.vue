@@ -333,16 +333,67 @@ let me=this;
                                          swal("¡Se actualizo los datos correctamente!", "", "success"); 
                                          var aux=response.data.values; 
                                          me.datos=[];  
-                                         me.gettabla(aux).then((response)=>{ 
-                                                    me.datos=response; 
-                                                    me.debesuma=_.reduce(me.datos, function(sum, n) {  
-                                                            return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                    }, 0); 
-                                                    me.habersuma=_.reduce(me.datos, function(sum, n) { 
-                                                        return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                    }, 0);
-                                                    me.habersuma=(me.habersuma*-1); 
+                                          var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
+
+                                            if(value.importe_moneda_local>0){
+                                                    if(_.has(cabeseraDebe, value.cuenta)){
+                                                        var out=cabeseraDebe[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraDebe[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraDebe[value.cuenta]=u; 
+                                                    }
+                                            }else{
+                                                 if(_.has(cabeseraHaber, value.cuenta)){
+                                                        var out=cabeseraHaber[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraHaber[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraHaber[value.cuenta]=u; 
+                                                    }
+                                            }
+                                            
+
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
                                         });
+                                        cabeseraHaber.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                            var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
+                                     
+                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+
+                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+                                                me.habersuma=(me.habersuma*-1); 
                                          
 
                         })
@@ -385,38 +436,10 @@ let me=this;
                                       me.fechacomprobante=response.data.fecha;
                                       me.fechacomprobantenew=response.data.fecha;  
                                       me.datos=[];   
-                                        me.gettabla(aux).then((response)=>{
-                                                    swal.close();
-                                                    me.datos=response; 
-                                                    console.log(response);
-                                                    me.debesuma=_.reduce(me.datos, function(sum, n) {  
-                                                            return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                    }, 0); 
-                                                    me.habersuma=_.reduce(me.datos, function(sum, n) { 
-                                                        return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
-                                                    }, 0);
-                                                    me.habersuma=(me.habersuma*-1); 
-                                        });
+                                       var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
 
-                                     
-                                                
-
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-
-
-
-
-                } 
-            } ,
-            async gettabla(aux) {
-                var dataout=[];
-                var cabeseraDebe=[];
-                var cabeseraHaber=[];
-                try {
-                                        for (var value of aux) { 
                                             if(value.importe_moneda_local>0){
                                                     if(_.has(cabeseraDebe, value.cuenta)){
                                                         var out=cabeseraDebe[value.cuenta];  
@@ -437,10 +460,11 @@ let me=this;
                                                         u.push(value);
                                                         cabeseraHaber[value.cuenta]=u; 
                                                     }
-                                            } 
-                                        };  
-                                        
-                                        for (let [key, value] of cabeseraDebe) {
+                                            }
+                                            
+
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0); 
@@ -449,9 +473,9 @@ let me=this;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
-                                            dataout.push({id:key,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                        };
-                                       for (let [key, value] of cabeseraHaber) {
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+                                        cabeseraHaber.forEach((value, index) => {  
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
                                                 }, 0); 
@@ -460,14 +484,34 @@ let me=this;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
-                                            dataout.push({id:key,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                        };
-                } catch (err) {
-                    dataout=[];
-                    console.log(err);
-                }                
-                return dataout;
-                },
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
+                                     
+                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+
+                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+                                                me.habersuma=(me.habersuma*-1); 
+
+                                     
+                                                
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+
+
+
+                } 
+            } ,
+            
             onChangeTipo(){ 
                 this.numcomprobante='';
                 this.datos=[]; 
