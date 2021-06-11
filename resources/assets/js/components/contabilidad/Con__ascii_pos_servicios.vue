@@ -387,7 +387,7 @@ Vue.use(VeeValidate);
                                                 } 
                                             me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
 
-                                                   if(!_.has(me.cuentasOrigen,index)){
+                                                   if(!_.has(me.cuentasOrigen,index)&&index=='41201123'){
                                                        me.cuentasOrigen.push({cuenta:index,descripcion:value[0].descripcion});
                                                     } 
                                             
@@ -402,9 +402,9 @@ Vue.use(VeeValidate);
                                                    analisis=1; 
                                                 } 
                                             me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
-                                            if(!_.has(me.cuentasOrigen,index)){
+                                             if(!_.has(me.cuentasOrigen,index)&&index=='41201123'){
                                                        me.cuentasOrigen.push({cuenta:index,descripcion:value[0].descripcion});
-                                                    }
+                                             }
                                         });
 
                                          
