@@ -152,7 +152,7 @@
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
 
-                                    <tr v-for="(datain,indexs) in padre.value" :key="indexs"> 
+                                    <tr v-for="(datain,indexs) in padre.value" :key="indexs+'data'"> 
                                         <td > </td>
                                          
                                          <template v-if="datain.importe_moneda_local>0">
