@@ -122,8 +122,8 @@
                                 <td></td>
                                 </tr>  
                                 <template v-if="mostrarporcuentas">
-                                                    <template  v-for="padre in datos" >
-                                                    <tr :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                                    <template  v-for="(padre,index) in datos" >
+                                                    <tr :key="index" style='background-color: khaki;font-weight: 700;'>  
                                                         <template v-if="padre.monto>0">
                                                             <td v-text="padre.id +'  --  '+ padre.des" colspan='2'></td>
                                                             <td v-text="padre.monto" style='background-color: powderblue;'></td> 
@@ -141,18 +141,18 @@
                                                 </template> 
 
                                 </template>
-                                <template v-else v-for="padre in datos" >
-                                    <tr v-if="padre.monto>0" :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                <template v-else v-for="(padre,index)  in datos" >
+                                    <tr v-if="padre.monto>0" :key="index" style='background-color: khaki;font-weight: 700;'>  
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='5'></td> 
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
-                                    <tr v-else :key="padre.id" style='background-color: khaki;font-weight: 700;'>  
+                                    <tr v-else :key="index" style='background-color: khaki;font-weight: 700;'>  
                                         <td > </td>
                                         <td v-text="padre.id +'  --  '+ padre.des" colspan='4'></td> 
                                         <td v-if="padre.analisis"  >Analisis auxiliar</td>
                                     </tr> 
 
-                                    <tr v-for="datain in padre.value" :key="datain.id_reg+padre.id"> 
+                                    <tr v-for="(datain,indexs) in padre.value" :key="indexs+'data'"> 
                                         <td > </td>
                                          
                                          <template v-if="datain.importe_moneda_local>0">
@@ -286,8 +286,9 @@ Vue.use(VeeValidate);
 
 
             },
-            procesar(){
-                    
+            procesar(){ 
+                this.debesuma=0;
+                this.habersuma=0;
                     
 let me=this;
  swal({
@@ -328,47 +329,71 @@ let me=this;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
-                                            swal.close()
-                                        swal("¡Se actualizo los datos correctamente!", "", "success");
-                                     
-                                      var aux=response.data.values;
-                                      console.log('aux:',aux)
-                                      console.log('mensaje:',aux.length==0?response.data.mensaje:'')
-                                       me.datos=[]; 
-                                       var cabesera=[];
-                                        aux.forEach((value, index) => { 
-                                            if(_.has(cabesera, value.cuenta)){
-                                                var out=cabesera[value.cuenta]; 
-                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
+                                            swal.close();
+                                         swal("¡Se actualizo los datos correctamente!", "", "success"); 
+                                         var aux=response.data.values; 
+                                         me.datos=[];  
+                                          var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
 
-                                                // if(typeof outtt == 'undefined'){
-                                                    out.push(value);
-                                                    cabesera[value.cuenta]=out;
-                                                // } 
-                                                
-                                                
+                                            if(value.importe_moneda_local>0){
+                                                    if(_.has(cabeseraDebe, value.cuenta)){
+                                                        var out=cabeseraDebe[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraDebe[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraDebe[value.cuenta]=u; 
+                                                    }
                                             }else{
-                                                var u=[];
-                                                u.push(value);
-                                                cabesera[value.cuenta]=u;
-                                                 
+                                                 if(_.has(cabeseraHaber, value.cuenta)){
+                                                        var out=cabeseraHaber[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraHaber[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraHaber[value.cuenta]=u; 
+                                                    }
                                             }
-                                        }) 
+                                            
 
-
-                                        cabesera.forEach((value, index) => {  
-                                           
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
-                                                }, 0);
+                                                }, 0); 
                                              var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
                                                    analisis=1; 
                                                 } 
-                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion}); 
-                                            
-                                        })
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+                                        cabeseraHaber.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                            var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
+                                     
+                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+
+                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+                                                me.habersuma=(me.habersuma*-1); 
                                          
 
                         })
@@ -406,42 +431,43 @@ let me=this;
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
-                                            swal.close()
-                                       
-                                     
+                                         swal.close();
                                       var aux=response.data.values;
                                       me.fechacomprobante=response.data.fecha;
-                                      me.fechacomprobantenew=response.data.fecha; 
-                                      
-                                       me.datos=[]; 
-                                       var cabesera=[];
-                                        aux.forEach((value, index) => { 
-                                            if(_.has(cabesera, value.cuenta)){
-                                                var out=cabesera[value.cuenta]; 
-                                            //    var outtt= _.find(out, function(o) { return o.analisis_auxiliar == 12; });
+                                      me.fechacomprobantenew=response.data.fecha;  
+                                      me.datos=[];   
+                                       var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
 
-                                                // if(typeof outtt == 'undefined'){
-                                                    out.push(value);
-                                                    cabesera[value.cuenta]=out;
-                                                // } 
-                                                
-                                                
+                                            if(value.importe_moneda_local>0){
+                                                    if(_.has(cabeseraDebe, value.cuenta)){
+                                                        var out=cabeseraDebe[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraDebe[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraDebe[value.cuenta]=u; 
+                                                    }
                                             }else{
-                                                var u=[];
-                                                u.push(value);
-                                                cabesera[value.cuenta]=u;
-                                                 
+                                                 if(_.has(cabeseraHaber, value.cuenta)){
+                                                        var out=cabeseraHaber[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraHaber[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraHaber[value.cuenta]=u; 
+                                                    }
                                             }
-                                        }) 
+                                            
 
-                                        
-                                        cabesera.forEach((value, index) => {  
-                                           
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
                                             var sumatoria=_.reduce(value, function(sum, n) {
                                                 return _.round(sum +parseFloat(n.importe_moneda_local), 2);
-                                                }, 0);
-
-
+                                                }, 0); 
                                              var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
                                             var analisis=0;
                                                 if(typeof outtt !== 'undefined'){
@@ -449,6 +475,19 @@ let me=this;
                                                 } 
                                             me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
                                         });
+                                        cabeseraHaber.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                            var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
                                      
                                                me.debesuma=_.reduce(me.datos, function(sum, n) {  
                                                         return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
@@ -458,6 +497,9 @@ let me=this;
                                                        return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
                                                 }, 0);
                                                 me.habersuma=(me.habersuma*-1); 
+
+                                     
+                                                
 
                         })
                         .catch(function (error) {
@@ -469,9 +511,7 @@ let me=this;
 
                 } 
             } ,
-            onChangeCuenta(){  
-                
-            },
+            
             onChangeTipo(){ 
                 this.numcomprobante='';
                 this.datos=[]; 
