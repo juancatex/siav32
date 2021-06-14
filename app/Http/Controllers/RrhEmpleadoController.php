@@ -181,7 +181,7 @@ class RrhEmpleadoController extends Controller
     {
         $buscararray = array(); 
         if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
-        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre," - ",fil__filials.sigla) as nombres');
         if (sizeof($buscararray)>0) { 
             $sqls=''; 
             foreach($buscararray as $valor){
@@ -194,8 +194,9 @@ class RrhEmpleadoController extends Controller
                                     //->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')
 
             
-            $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
-                                    ->where('activo',1)
+            $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci','fil__filials.sigla')
+                                    ->join('fil__filials','rrh__empleados.idfilial','fil__filials.idfilial')
+                                    ->where('rrh__empleados.activo',1)
                                     ->whereraw($sqls)
                                     ->orderBy('nombres','asc')->get();
                                     
@@ -206,8 +207,9 @@ class RrhEmpleadoController extends Controller
             
             {    
 
-                $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
-                ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')->where('idempleado','=',$request->id)
+                $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci','fil__filials.sigla')
+                ->join('fil__filials','rrh__empleados.idfilial','fil__filials.idfilial')
+                ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')->where('rrh__empleados.idempleado','=',$request->id)
                 ->get();
             }
             else
@@ -215,8 +217,9 @@ class RrhEmpleadoController extends Controller
                     
 
                 
-                    $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci')
-                    ->where('activo',1)
+                    $empleados = Rrh_Empleado::select('idempleado',DB::raw('idempleado as id'),$raw,'ci','fil__filials.sigla')
+                    ->join('fil__filials','rrh__empleados.idfilial','fil__filials.idfilial')
+                    ->where('rrh__empleados.activo',1)
                     ->orderBy('apaterno','desc')->orderBy('amaterno','desc')->orderBy('nombres','desc')
                     ->get();
             }
@@ -237,7 +240,7 @@ class RrhEmpleadoController extends Controller
                 else
                     $sqls.=" and (apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
             }   
-            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci',)
+            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci','fil__filials.sigla')
                                     ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
                                     ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
                                     ->where('fil__directivos.activo',1)

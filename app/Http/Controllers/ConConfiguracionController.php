@@ -20,6 +20,9 @@ class ConConfiguracionController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
+        $dias=$request->dias;
+        $diasoc='';
+        $diasor='';
        
         $relaciones = Con_Configuracion::join('con__cuentas','con__cuentas.idcuenta','=','con__configuracions.valor')
         ->select('idconconfig',
@@ -33,6 +36,18 @@ class ConConfiguracionController extends Controller
         ->where('con__configuracions.activo',1)
         ->orderBy('con__configuracions.created_at', 'asc')->paginate(10);
 
+        if($dias)
+        {
+            $respuesta=$this->recuperarccdias();
+            
+            $diasor=$respuesta['diasor'];
+            $diasoc=$respuesta['diasoc'];
+            
+            
+            //echo $diasor.'->'.$diasoc;
+
+        }
+
         return [
             'pagination' => [
                 'total'        => $relaciones->total(),
@@ -42,7 +57,9 @@ class ConConfiguracionController extends Controller
                 'from'         => $relaciones->firstItem(),
                 'to'           => $relaciones->lastItem(),
             ],
-            'relaciones' => $relaciones
+            'relaciones' => $relaciones,
+            'diasor'=>$diasor,
+            'diasoc'=>$diasoc
         ];
     }
 
@@ -162,11 +179,62 @@ class ConConfiguracionController extends Controller
     public function desactivar(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-
+        $dias=$request->dias;
         $relaciones = Con_Configuracion::findOrFail($request->idconconfig);
+        if($dias)
+        DB::table('con__configuracions')->where('codigo','ccdiasor')
+                                            ->orwhere('codigo','ccdiasoc')
+                                            ->update(['activo' => 0]);
 
         $relaciones->activo = '0';
         $relaciones->save();
+    }
+
+    public function desactivarccdias(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        
+        DB::table('con__configuracions')->where('codigo','ccdiasor')
+                                            ->orwhere('codigo','ccdiasoc')
+                                            ->update(['activo' => 0]);
+        $ccdiasor=$request->ccdiasor;
+        $ccdiasoc=$request->ccdiasoc;
+        $relaciones = new Con_Configuracion();
+        
+        $relaciones->codigo = 'ccdiasor';
+        $relaciones->descripcion ='limite dias oficina regional';
+        $relaciones->valor =$ccdiasor;
+        $relaciones->tipoconfiguracion=4;
+        $relaciones->save();
+
+        $relaciones = new Con_Configuracion();
+        
+        $relaciones->codigo = 'ccdiasoc';
+        $relaciones->descripcion ='limite dias oficina central';
+        $relaciones->valor =$ccdiasoc;
+        $relaciones->tipoconfiguracion=4;
+        $relaciones->save();
+
+
+        
+    }
+    public function recuperarccdias(){
+        $respuestadias=Con_Configuracion::where('activo',1)
+                                                ->where(function($query) {
+                                                    $query->where('codigo', 'ccdiasoc')
+                                                          ->orWhere('codigo', 'ccdiasor');
+                                                })->get()->toarray();
+                                                
+        foreach ($respuestadias as $key => $value) {
+            if($value['codigo']=='ccdiasor')
+                $diasor=$value['valor'];
+            elseif ($value['codigo']=='ccdiasoc') {
+                $diasoc=$value['valor'];
+            }
+        }
+        return ['diasor'=>$diasor,
+                'diasoc'=>$diasoc];
+
     }
     public function selectCuentasConciliacion(Request $request)
     {
