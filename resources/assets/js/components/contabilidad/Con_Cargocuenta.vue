@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-sm">
+                    <table class="table  table-sm">
                         <thead>
                             <tr>
                                 <th style="width:90px">Opciones</th>
@@ -61,10 +61,11 @@
                                 <th>Solicitado por:</th>
                                 <th>Cargo</th>
                                 <th>Estado</th>
+                                <th>dias</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="cargocuenta in arrayCargocuenta" :key="cargocuenta.idsolccuenta">
+                            <tr v-for="cargocuenta in arrayCargocuenta" :key="cargocuenta.idsolccuenta" :class="[cargocuenta.color=='verde' ? 'verde' : cargocuenta.color=='amarillo'?'amarillo':cargocuenta.color=='rojo'?'rojo':'']">
                                 <td>
                                     <template v-if="cargocuenta.estado_aprobado==0 || cargocuenta.estado_aprobado==3 || cargocuenta.estado==4">
                                         <button v-if="cargocuenta.estado!=4" type="button" @click="abrirModal('ccuenta','validar',cargocuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Realizar Cargo de Cuenta" :disabled="cargocuenta.estado_aprobado==0">
@@ -117,9 +118,6 @@
                                 <td style="text-align:right">{{cargocuenta.monto | currency}}</td>
                                 <td v-text="cargocuenta.username"></td>
                                 <td v-text="cargocuenta.nomrol"></td>
-                                <!-- <td v-text="socio.nomgrado"></td>-->
-                                
-                                
                                 <td>
                                     <span v-if="cargocuenta.estado_aprobado==3" class="badge badge-info">Ya Desembolsado</span>
                                     <div v-else-if="cargocuenta.estado_aprobado==1">
@@ -134,6 +132,7 @@
                                     <span v-else-if="cargocuenta.estado_aprobado==2" class="badge badge-danger">Observado</span>
                                     <span v-else-if="cargocuenta.estado_aprobado==0" class="badge badge-warning">No Desembolsado</span>
                                 </td>
+                                <td v-text="cargocuenta.cant_dias"></td>
                             </tr>                                
                         </tbody>
                     </table>
@@ -458,7 +457,9 @@
                 codcuenta:'',
                 numchequeregistrado:'',
                 sidirectorio:'',
-                subcuenta:''
+                subcuenta:'',
+                ccdiasoc:0,
+                ccdiasor:0
 
             }
         },
@@ -509,7 +510,12 @@
                 return pagesArray;             
 
             },
+            classfila(){
+
+                return 'yellow';
+            }
         },
+
         methods:{
             cerrarvuedescargo(){
                 this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
@@ -635,13 +641,56 @@
                 let me=this;
                 var url= '/glo_solccuenta/listarconta?page=' + page + '&buscar='+ buscar+'&tipocargo='+tipocargo+'&filtro='+filtro;
                 axios.get(url).then(function (response) {
+                    //console.log(response);
                     var respuesta= response.data;
+
                     me.arrayCargocuenta = respuesta.cargocuentas.data;
                     me.pagination= respuesta.pagination;
+                   /*  let _70porcientooc= Number((me.ccdiasoc*0.7).toFixed())-1;
+                    //let _30porcientooc=me.ccdiasoc - _70porcientooc;
+                    
+
+                    let _70porcientoor=Number((me.ccdiasor*0.7).toFixed(1));;
+                    //let _30porcientoor=me.ccdiasor - _70porcientoor;
+                    
+                    console.log(_70porcientooc);
+                    console.log(_30porcientooc);
+
+                    me.arrayCargocuenta.forEach((element, index) => {
+                        if(element.tipo_filial==1)
+                        {
+                            if(element.cant_dias<=_70porcientooc)
+                                me.arrayCargocuenta[index].color='verde';
+                            else 
+                            {
+                                if(element.cant_dias<=ccdiasoc)
+                                    me.arrayCargocuenta[index].color='amarillo';
+                                else
+                                    me.arrayCargocuenta[index].color='rojo';
+                            }
+                        }
+                        else{
+                            if(element.cant_dias<=_70porcientoor)
+                                me.arrayCargocuenta[index].color='verde';
+                            else 
+                            {
+                                if(element.cant_dias<=ccdiasor)
+                                    me.arrayCargocuenta[index].color='amarillo';
+                                else
+                                    me.arrayCargocuenta[index].color='rojo';
+                            }
+
+                        }
+                        
+
+                    });
+                    console.log(me.arrayCargocuenta); */
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+                
+                
             },
             selectDocumento(){
                 let me=this;
@@ -698,7 +747,7 @@
                     'sidirectorio':this.sidirectorio
 
                 }).then(function (response) {
-                    console.log(response.data);
+                   // console.log(response.data);
                     
                     if(response.data=='incorrecto')
                     {
@@ -808,7 +857,7 @@
             reporteAsientoautomatico(idasientomaestro,directorio){
                 let me=this;
                 var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
-                console.log(url);
+                //console.log(url);
 
                 plugin.viewPDF(url,'Asiento Contable');
 
@@ -820,7 +869,7 @@
                 //console.log(url);
                 axios.get(url).then(function (response) {
                         var respuesta= response.data;
-                        console.log(respuesta);
+                        //console.log(respuesta);
                         
                         respuesta.forEach(element => {
                              me.cuentasconciliacion.push(element.valor);
@@ -847,7 +896,7 @@
             selectConciliacion(idcuenta){
                 let me=this;
                 var url= '/con_conciliacion/selectconciliacion?idcuenta='+idcuenta;
-                console.log(url);
+                //console.log(url);
                 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
@@ -882,7 +931,7 @@
                     'importe':me.monto,
                     'tipocargo':'h'
                 }).then(function (response) {
-                    console.log(response);
+                    //console.log(response);
                     me.idmovimiento=response.data;
                             'Registrado correctamente',
                     me.cerrarModalConciliacion('conciliacion');
@@ -890,9 +939,21 @@
                 }).catch(function (error) {
                     console.log(error);
                 });
-            }
+            },
+            listardiascc(){
+                let me=this;
+                var url= '/con_config/recuperarccdias';
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    me.ccdiasoc= respuesta.diasoc;
+                    me.ccdiasor= respuesta.diasor;
+                    
+                })
+            },
         },
+        
         mounted(){
+            //this.listardiascc();
             this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
             this.getRutasReports();
             this.getCConciliacion();
@@ -901,12 +962,24 @@
             this.classModal.addModal('ccuenta');
             this.classModal.addModal('conciliacionbancaria');
             
+            
             //this.classModal.addModal('librocompras');
             this.fechahoy();
         }
     }
 </script>
 <style>
+    .verde{
+        background: rgba(131, 235, 183,0.5);
+    }
+    .amarillo{
+        background: rgba(241, 241, 169,0.5);
+    }
+    .rojo{
+        background:   rgba(252, 157, 157,0.5);
+        
+        color: white;
+    }
     .modal-content{
         width: 100% !important;
         position: absolute !important;

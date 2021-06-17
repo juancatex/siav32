@@ -25,6 +25,21 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div v-if="relacion=='CC'" class="">
+                    <h5>Limite de Descargo en Dias</h5>
+                    <div class="col-md-12 form-group row " >
+                        <label for="" class="col-3">Limite en dias Oficina Regional:</label>
+                        <input type="number" v-model="ccdiasor" style="text-align:right; padding" class="form-control col-1" >
+                        <span class="text-error" v-if="ccdiasor=='' || ccdiasor==0">* Debe Introducir el Numero de dias</span>
+                    </div>
+                    <div class="col-md-12 form-group row ">
+                        <label for="" class="col-3">Limite en dias Oficina Central:</label>
+                        <input type="number" v-model="ccdiasoc" style="text-align:right" class="form-control col-1">
+                        <span class="text-error" v-if="ccdiasoc=='' || ccdiasoc==''">* Debe Introducir el Numero de dias</span>
+                        <button type="button" v-if="ccdiasoc!='' && ccdiasoc!='' && arrayResRelaciones.length>0" @click="actualizardias()" class="btn btn-success btn-sm col-2" style="margin-left: 20px;">Actualizar Nº de Dias</button>
+                    </div>
+                </div>
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
@@ -81,6 +96,7 @@
                         </li>
                     </ul>
                 </nav>
+                
             </div>
         </div>
         <!-- Fin ejemplo de tabla Listado -->
@@ -195,7 +211,9 @@ export default {
             },
             offset : 3,
             criterio : 'nomdepartamento',
-            buscar : ''
+            buscar : '',
+            ccdiasor:'',
+            ccdiasoc:''
         }
     },
 
@@ -206,10 +224,21 @@ export default {
 
     computed:{
         iscompleteLB: function(){
-            if(this.descripcion && this.idcuenta.length>0)
-                return true
-            else    
-                return false
+            let me=this;
+            if(me.relacion=='CC')
+            {
+                if(me.descripcion && me.idcuenta.length>0 && me.ccdiasor && me.ccdiasoc)
+                    return true
+                else    
+                    return false    
+            }
+            else
+            {
+                if(me.descripcion && me.idcuenta.length>0)
+                    return true
+                else    
+                    return false
+            }
         },
         isActived: function(){
             return this.pagination.current_page;
@@ -240,6 +269,22 @@ export default {
         }
     },
     methods : {
+        actualizardias(){
+            let me = this;
+           axios.post('/con_config/desactivardias',{
+                'ccdiasor': me.ccdiasor,
+                'ccdiasoc': me.ccdiasoc,
+            }).then(function (response) {
+                swal(
+                    'Registrado Correctamente',
+                )                    
+                
+                me.listarRelaciones(1);
+            }).catch(function (error) {
+                console.log(error);
+            });
+            
+        },
         cuentas(cuentas){ 
             this.idcuenta=[];
             // this.arrayCuenta.push({cuentita:cuentas.idcuenta})         
@@ -286,13 +331,19 @@ export default {
 
         listarRelaciones(page){
             let me=this;
-            var url= '/con_config?page=' + page+'&criterio='+me.relacion;
+            let dias=false
+            if(me.relacion=='CC')
+                dias=true;
+
+            var url= '/con_config?page=' + page+'&criterio='+me.relacion+'&dias='+dias;
             //console.log(url);
             
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
                 me.arrayResRelaciones= respuesta.relaciones.data;
                 me.pagination= respuesta.pagination;
+                me.ccdiasoc=respuesta.diasoc;
+                me.ccdiasor=respuesta.diasor;
             })
             .catch(function (response) {
                 console.log(response);
@@ -307,6 +358,25 @@ export default {
         },
         registrarRelacion(){
             let me = this;
+            if(me.relacion='CC')
+            {
+               axios.post('/con_config/registrar',{
+                   'codigo':'ccdiasor',
+                   'descripcion':'Cantidad de Dias oficina regional',
+                   'valor':me.ccdiasor
+               }).then(function (response){}).catch(function(error){
+                   console.log(error);
+               });
+               axios.post('/con_config/registrar',{
+                   'codigo':'ccdiasoc',
+                   'descripcion':'Cantidad de Dias oficina Central',
+                   'valor':me.ccdiasoc
+               }).then(function (response){}).catch(function(error){
+                   console.log(error);
+               });
+               me.ccdiasor='';
+               me.ccdiasoc='';
+            }
 
             axios.post('/con_config/registrar',{
                 'codigo': me.relacion,
@@ -355,6 +425,7 @@ export default {
             }); 
         },
         desactivarRelacion(idconconfig){
+            let dias=false;
             swal({
             title: 'Esta seguro de desactivar esta Relacion?',
             text:'No podra hacer seguimiento de esta cuenta',
@@ -371,9 +442,14 @@ export default {
             }).then((result) => {
             if (result.value) {
                 let me = this;
+                if(me.relacion=='CC')
+                {
+                    dias=true;
+                }
 
                 axios.put('/con_config/desactivar',{
-                    'idconconfig': idconconfig
+                    'idconconfig': idconconfig,
+                    'dias':dias
                 }).then(function (response) {
                     me.listarRelaciones(1);
                     swal(
