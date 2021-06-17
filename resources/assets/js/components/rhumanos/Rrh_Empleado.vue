@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="card-body"> 
                                         <div class="form-group">
-                                            <button     @click="window._pl._vm2154_12186_135('http://192.168.100.60:8082/api/html','prueba')" class="btn btn-primary">pdf</button>  
+                                            <button     @click="openReport()" class="btn btn-primary">pdf</button>  
                                         </div> 
                                     </div>
                             </div>
@@ -577,6 +577,8 @@ computed: {
               me.tipoCred=valor;
               me.classModal.openModal('credencial');  
             },500);
+        },openReport(){
+            openReport('html','prueba');
         },
         carnetcen(data){
             this.tipoCred='';
