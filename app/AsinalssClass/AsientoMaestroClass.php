@@ -29,6 +29,7 @@ Class AsientoMaestroClass
     var $segcobranza;
     var $filial;
     var $fechavalidacion;
+    var $unidad;
     
 
     public function __construct()
@@ -186,7 +187,7 @@ Class AsientoMaestroClass
         }
     }
     //////////////////////////////////////////funcion para almacenar asientos manuale en modo array
-    public function AsientosManualMaestroArray($tipocomprobante='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$borrador=false,$filial='')
+    public function AsientosManualMaestroArray($tipocomprobante='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$borrador=false,$filial='',$unidad='')
     {
         // definicion de array
         $this->tipocomprobante =$tipocomprobante;
@@ -197,8 +198,9 @@ Class AsientoMaestroClass
         $this->idmodulo=$idmodulo;
         $this->fecharegistro=$fecharegistro." ".$this->hora;
         $this->borrador=$borrador;
-        //dd($this->borrador);
         $this->filial=$filial;
+        $this->unidad=$unidad;
+
         if($this->filial=='')
             $this->filial=1;
 
@@ -232,6 +234,7 @@ Class AsientoMaestroClass
                 $asientomaestro->idperfilcuentamaestro=$this->idperfilcuentamaestro;
                 $asientomaestro->fechavalidado=$this->fecharegistro;
                 $asientomaestro->idfilial=$this->filial;
+                $asientomaestro->idunidad=$this->unidad;
                 if($estado!=5)
                 {
                     $asientomaestro->cont_comprobante=$respuesta[0];

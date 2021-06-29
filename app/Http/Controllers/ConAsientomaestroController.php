@@ -81,7 +81,8 @@ class ConAsientomaestroController extends Controller
                                                                 'nomperfil',
                                                                 'observaciones',
                                                                 'fact_modificada',
-                                                                'cod_comprobante'
+                                                                'cod_comprobante',
+                                                                'idunidad'
                                                                 )
                                                     ->orderBy('fecharegistro', 'asc')
                                                     ->orderBy('cont_comprobante','desc')->paginate(50);
@@ -116,7 +117,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 'cod_comprobante',
                                                                 'desembolso',
-                                                                $raw
+                                                                $raw,
+                                                                'idunidad'
                                                                 )
                                                     ->orderBy('fecharegistro', 'desc')
                                                     ->orderBy('cont_comprobante','desc')
@@ -167,7 +169,8 @@ class ConAsientomaestroController extends Controller
                                                                     'cod_comprobante',
                                                                     $raw,
                                                                     'glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                                    'seg_descargoccuenta'
+                                                                    'seg_descargoccuenta',
+                                                                    'idunidad'
                                                                     )
                                                         ->orderBy('fecharegistro', 'desc')
                                                         ->orderBy('cont_comprobante','desc')
@@ -205,7 +208,8 @@ class ConAsientomaestroController extends Controller
                                                                     'fact_modificada',
                                                                     $raw,
                                                                     'cod_comprobante',
-                                                                    'estado_aprobado'
+                                                                    'estado_aprobado',
+                                                                    'idunidad'
                                                                     )
                                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                         ->orderBy('fecharegistro', 'desc')
@@ -260,7 +264,8 @@ class ConAsientomaestroController extends Controller
                                                                 'cod_comprobante',
                                                                 $raw,
                                                                 'glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                                'seg_descargoccuenta'
+                                                                'seg_descargoccuenta',
+                                                                'idunidad'
                                                                 )
                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
@@ -304,7 +309,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 $raw,
                                                                 'cod_comprobante',
-                                                                'estado_aprobado'
+                                                                'estado_aprobado',
+                                                                'idunidad'
                                                                 )
                                                                 ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
@@ -387,7 +393,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 'cod_comprobante',
                                                                 'desembolso',
-                                                                $raw
+                                                                $raw,
+                                                                'idunidad'
                                                             );
                                                 if(!empty($sqlss)){
                                                     $asientomaestros= $asientomaestros->whereraw($sqlss);
@@ -451,6 +458,9 @@ class ConAsientomaestroController extends Controller
         $librocomprasok=$request->librocomprasok;
         $idfacturas=$request->idfacturas;
         $validarfacturas=$request->validarfacturas;
+        $idfilial=$request->idfilial;
+        $idunidad=$request->idunidad;
+
         if($request->sidirectorio)
             $tiposubcuenta=1;
         else
@@ -498,7 +508,7 @@ class ConAsientomaestroController extends Controller
             DB::table('con__asientomaestros')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
 
             $asientomaestro= new AsientoMaestroClass();
-            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador);
+            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
             
             if($sisolccuenta){
                 //echo "entra";
@@ -539,7 +549,7 @@ class ConAsientomaestroController extends Controller
             {
                 //echo "else idasientomaestro entra idfacturas2";
                 $asientomaestro= new AsientoMaestroClass();
-                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador);
+                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
                 
                 
                /*  foreach ($idfacturas as $indice => $valor) {
@@ -563,7 +573,7 @@ class ConAsientomaestroController extends Controller
             {
                 //echo "entra idfacturas else";
                 $asientomaestro= new AsientoMaestroClass();
-                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador); 
+                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad); 
                 //echo "respueta".$respuesta;
             }
             if($request->idmovimiento!=0)
@@ -1360,6 +1370,45 @@ class ConAsientomaestroController extends Controller
     
          return ['reccuentas'=>$reccuentas];                                               
 
+    }
+
+    public function datospdf(){
+        $array=array(1);
+        $maestros=DB::table('con__asientomaestros')
+                        ->join('con__tipocomprobantes','con__asientomaestros.idtipocomprobante','con__tipocomprobantes.idtipocomprobante')
+                    ->where('idasientomaestro',2214)
+                    ->where('estado',1)
+                   ->get();
+                  /*  dd($maestros); */
+        
+        $detalles=DB::table('con__asientodetalles')
+                        ->join('con__cuentas','con__asientodetalles.idcuenta','con__cuentas.idcuenta')
+                        ->leftjoin('socios','con__asientodetalles.subcuenta','socios.numpapeleta')
+                        ->where('idasientomaestro',2214)
+                        ->orderby('debe','desc')
+                        ->orderby('haber','asc')
+                        ->get();
+                        /* dd($detalles); */                        
+                    
+        $totalh=0;
+        $totald=0;
+        foreach ($detalles as $key => $value) {
+            $totald=$totald+$value->debe;
+            $totalh=$totalh+$value->haber;
+            
+        }
+        
+        //$maestro=DB::select('select * from con__asientomaestros where estado = 1 and idasientomaestro=2186');
+
+        /* $detalle=Con_Asientodetalle::join('')
+        where('idasientomaestro') */
+        
+
+        return view('pdf')->with(['maestros'=>$maestros,
+                                    'detalles'=>$detalles,
+                                
+                                'totalh'=>$totalh,
+                                'totald'=>$totald]);
     }
     public function validaraportes($idasientomaestro){
         ini_set('memory_limit', '1024M');

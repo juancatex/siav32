@@ -9,6 +9,7 @@
                             <div class="col-md-7">
                                 <h4>Comprobante de: {{ titulo | ucase }}</h4>
                             </div>
+                            
                             <div class="input-group col-md-5">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-info">Fecha Transaccion</span>
@@ -33,7 +34,13 @@
                     <div class="card-body" style="padding-bottom: 5px; padding-top: 5px;">
                         <div class="form-group row" style="margin-bottom: 5px;">
                             <div class="col-md-3 padding5">
-                                <strong><label>Tipo Documento:</label></strong>
+                                <div>
+                                    <strong class="form-control-label">Filial:</strong>
+                                    <select v-model="filialselected"  class="form-control"> <!-- por defecto 1 para la filial la paz -->
+                                        <option v-for="filial in arrayFilial" v-bind:key="filial.idfilial" :value="filial.idfilial" v-text="filial.nommunicipio"></option>
+                                    </select>
+                                </div>
+                                <strong>Tipo Documento:</strong>
                                 <select 
                                     :class="{'form-control': true, 'is-invalid selecterror': errors.has('Tipo Documento')}"  
                                     v-validate.initial="'required'" 
@@ -45,7 +52,14 @@
                                 <span class="text-error">{{ errors.first('Tipo Documento') }}</span><br />
                             </div>
                             <div class="col-md-3 padding5">
-                                 <strong><label>Num. Documento:</label></strong>
+                                <div v-if="filialselected==1">
+                                    <strong class="form-control-label">Repartición:</strong>
+                                    <select v-model="idunidad"  class="form-control" name="car" :class="{'invalido':errors.has('car')}" v-validate="'required'">
+                                         <option v-for="unidad in arrayUnidades" :key="unidad.id"
+                                            :value="unidad.idunidad" v-text="unidad.nomunidad"></option>
+                                    </select>
+                                </div>
+                                 <strong>Num. Documento:</strong>
                                 <input  type="text" 
                                         v-model="numdocumento" 
                                         :class="{'form-control': true, 'is-invalid inputerror': errors.has('Numero Documento')}" 
@@ -71,11 +85,9 @@
                         <hr style="margin-top: 5px;margin-bottom: 5px;">
                          <div class="form-group row" style="margin-bottom: 5px;">
                             <h4 class="col-md-8">Asiento Contable</h4>
-                            <div class="col-md-2"  v-if="estado_aprobado!=4">  
-                                <button type="button" @click="abrirmodalSocios()" style="float: right;" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
-                                    <i class="icon-people"></i> Agregar Socios
-                                </button> 
-                            </div>
+                             
+                               
+                            
                             <div class="col-md-2"  v-if="estado_aprobado!=4">  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de compras-->
                                 <button type="button" @click="abrirmodalCompras()" style="float: right;" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir libro de compras">
                                     <i class="icon-basket"></i> Libro de compras
@@ -88,7 +100,7 @@
                                         <strong style="padding-left: 20px;"><label>CUENTA</label></strong>
                                     </div>
                                     <div class="bg-info text-white border border-white ancho24c" >
-                                        <strong><label>DESCRIPCION</label></strong>
+                                        <strong><label>SUBCUENTAS</label></strong>
                                     </div>
                                     <div class="bg-info text-white border border-white ancho12c" >
                                         <strong><label>DEBE</label></strong>
@@ -135,14 +147,17 @@
                                     </template>
                                     
                                     <div class="border ancho24" >
-                                        <input  id="input1" inputvalued="1"
+                                         <button type="button" @click="abrirModalSubcuentas(index)" style="float: right;" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
+                                            <i class="icon-people"></i> Agregar Socios
+                                        </button> 
+                                        <!-- <input  inputvalued="1"
                                                 v-model="rowcuentas.documento" 
                                                 class="inputnext form-control border-0 input-text2" 
-                                                type="text" >
+                                                type="text" > -->
                                     </div>
                                     <template v-if="rowcuentas.idcuenta==lc && acumulado13!=0">
                                         <div class="ancho12 border"  style="text-align:right">
-                                            <vue-numeric   id="input2" inputvalued="2"
+                                            <vue-numeric   inputvalued="2"
                                                 :disabled="rowcuentas.haber!=0"
                                                 readOnly
                                                 class="inputnext form-control input-importe border-0"
@@ -155,7 +170,7 @@
                                     </template>
                                     <template v-else-if="rowcuentas.idcuenta==lc && acumulado13==0">
                                         <div class="ancho12 border" >
-                                            <vue-numeric   id="input2" inputvalued="2"
+                                            <vue-numeric   inputvalued="2"
                                                 disabled
                                                 class="inputnext form-control input-importe border-0"
                                                 separator="," 
@@ -167,7 +182,7 @@
                                     </template>
                                     <template v-else>
                                         <div class="ancho12 border" >
-                                            <vue-numeric  id="input2" inputvalued="2"
+                                            <vue-numeric   inputvalued="2"
                                                 :disabled="rowcuentas.haber!=0"
                                                 class="inputnext form-control input-importe border-0"
                                                 separator="," 
@@ -178,7 +193,7 @@
                                         </div>
                                     </template>
                                     <div class="ancho12 border" >
-                                        <vue-numeric  id="input3" inputvalued="3"
+                                        <vue-numeric  inputvalued="3"
                                             :disabled="rowcuentas.debe!=0"
                                             class="inputnext form-control input-importe border-0"
                                             separator="," 
@@ -288,11 +303,11 @@
                         <div>
                         <div class="form-group row" style="margin-top: 10px">
                             <strong class="form-control-label" style="margin-bottom: 0px;margin-top: 8px; padding-right: 10px;padding-left: 10px;">Filial</strong>
-                            <div>
+                            <!-- <div>
                                 <select v-model="filialselected"  class="form-control" @change="selectLibrocompras()">
                                     <option v-for="filial in arrayFilial" v-bind:key="filial.idfilial" :value="filial.idfilial" v-text="filial.nommunicipio"></option>
                                 </select>
-                            </div>
+                            </div> -->
                             <strong class="form-control-label" style="margin-bottom: 0px;margin-top: 8px; padding-right: 10px;padding-left: 10px;" >Mes:</strong>
                             <div>
                                 <select v-model="messelected"  class="form-control" @change="selectLibrocompras()">
@@ -648,6 +663,127 @@
             </div>                
         </div> 
         <!-- fin modal conciliacion bancaria -->
+         <!-- modal sucuentas -->
+        <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="addsubcuentas"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModalSubcuentas" ></h4><br/>
+                        <button type="button" class="close" @click="cerrarModalSubcuentas()" aria-label="Close">
+                            <span  aria-hidden="true">x</span>    
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                                <div class="col-3 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo('directivo')"> Directivos
+                                    </label>
+                                </div>
+                                <div class="col-3 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo('personal')">Personal
+                                    </label>
+                                </div>
+                                <div class="col-4 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="sindesignacion" @change="cambiaDirectivo('otros')">Otros
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-5" v-if="directivo=='directivo'">
+                                    <strong>Directivo:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectdirectivos?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idsocio"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div class="form-group col-md-5" v-else-if="directivo=='personal'">
+                                    <strong>Personal:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idempleado"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div v-else class="form-group col-md-5">
+                                    <strong>Otros:</strong>
+                                     <Ajaxselect  v-if="clearSelected"
+                                            ruta="/alm_proveedor/selectProveedor?buscar=" @found="proveedores" @cleaning="cleanproveedores"
+                                            resp_ruta="proveedores"
+                                            labels="nit_proveedor"
+                                            placeholder="Ingrese texto" 
+                                            idtabla="idproveedor"
+                                            :clearable='true'>
+                                        </Ajaxselect>
+                                </div>
+                                
+                                <div class="form-group col-md-3">
+                                    <strong>Debe:</strong>
+                                    <vue-numeric  
+                                        class="form-control input-importe"
+                                        currency="Bs." 
+                                        separator="," 
+                                        v-model="subdebe"
+                                        v-bind:precision="2"
+                                        v-on:focus="selectAll">
+                                    </vue-numeric>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <strong>Haber:</strong>
+                                    <vue-numeric  
+                                        class="form-control input-importe"
+                                        currency="Bs." 
+                                        separator="," 
+                                        v-model="subhaber"
+                                        v-bind:precision="2"
+                                        v-on:focus="selectAll">
+                                    </vue-numeric>
+                                </div>
+                                <div class="form-group col-md-1 pt-1">
+                                    <button type="button" class="btn btn-secondary" @click="agregarSubcuenta()">
+                                        <i class="icon-plus"></i>&nbsp;
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Subcuenta</th>
+                                            <th>Nombre</th>
+                                            <th>Debe</th>
+                                            <th>Haber</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>  
+                    <div class="modal-footer">
+                        <button type="button"   class="btn btn-secondary" @click="cerrarModalSubcuentas()">Cerrar</button>
+                        <button :disabled ="!iscompletesubcuenta" type="submit" class="btn btn-primary" @click="registrarSucuenta()">Registrar Subcuentas</button>
+                    </div>
+                </div>                    
+            </div>                
+        </div> 
+        <!-- fin modal subcuentas -->
     </main>
 </template>
 
@@ -771,12 +907,21 @@ export default {
         detalle:'',
         loteverificacion:'',
         arrayreccuentas:[],
-        totalcuentas:0
+        totalcuentas:0,
+        arrayUnidades:[],
+        idunidad:3, /*por defecto 3 hacienda */
+        tituloModalSubcuentas:'',
+        directivo:'',
+        idempleado:[],
+        
 
       
     }
     },
     computed:{
+        iscompletesubcuenta(){
+
+        },
         completocuentas(){
             let me=this;
             if(me.tipodocumento && me.numdocumento && me.glosa)
@@ -821,9 +966,14 @@ export default {
             me.haber=0;
             me.confacturas=false
             me.rowcuentas.forEach(element => {
+                //console.log(Number((element.debe).toFixed(2)));
+                element.debe=Number(element.debe);
+                element.haber=Number(element.haber);
+                me.debe=Number(me.debe);
+                me.haber=Number(me.haber);
                 contador++;
-                me.debe=Number((me.debe).toFixed(2))+Number((element.debe).toFixed(2));
-                me.haber=Number((me.haber).toFixed(2))+Number((element.haber).toFixed(2)); 
+                me.debe=(me.debe+element.debe).toFixed(2);
+                me.haber=(me.haber+element.haber).toFixed(2); 
 
 
                 /* me.debe=parseFloat(me.debe)+parseFloat(element.debe);
@@ -895,6 +1045,42 @@ export default {
         },
     },
     methods:{
+        agregarSubcuenta(){
+
+        },
+        cleanempleados(){
+                this.idempleado=[];
+            },
+        cambiaDirectivo(valor){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                me.directivo=valor;
+                me.idempleado=[];
+            },
+        abrirModalSubcuentas(indice){
+            let me=this;
+            console.log(indice);
+            me.tituloModalSubcuentas="Agregar Subcuentas";
+            me.indice=0;
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 50); 
+            me.classModal.openModal('addsubcuentas');
+
+        },
+        cerrarModalSubcuentas(){
+            let me=this;
+            me.classModal.closeModal('addsubcuentas'); 
+        },
+        registrarSucuenta(){
+
+        },
+        listaUnidades(){
+            var url='/fil_unidad/listaUnidades?activo=1';
+            axios.get(url).then(response=>{
+                this.arrayUnidades=response.data.unidades;
+            });
+        },
         verchecked(id){
             // console.log(id);
             let me=this;
@@ -915,10 +1101,12 @@ export default {
             this.classModal.addModal('librocompras');
             this.classModal.addModal('proveedor');
             this.classModal.addModal('conciliacionbancaria');
+            this.classModal.addModal('addsubcuentas');
             this.borrador=false;
             this.resetComprobante();
             setTimeout(this.tiempo, 200); 
             this.selectfilial();
+            this.listaUnidades();
             this.getCConciliacion();
             this.fechahoy();
             this.selectLibroCuenta();
@@ -933,7 +1121,7 @@ export default {
                 case 'nuevo':
                     this.tipoAccion=1;
                     this.rowcuentas= [{   idcuenta:'',
-                            idsubcuenta: '',
+                            idsubcuenta:[{tiposubcuenta:'',subcuenta:''}] ,
                             moneda:'bs',
                             documento:'',
                             debe:0,
@@ -951,6 +1139,8 @@ export default {
                     this.glosa=this.asientomaestro.glosa;
                     this.fechatransaccion=this.asientomaestro.fecharegistro.split(' ')[0];
                     this.idasientomaestro=this.asientomaestro.idasientomaestro;
+                    this.filialselected=this.asientomaestro.idfilial;
+                    this.idunidad=this.asientomaestro.idunidad;
                     this.selectasientodetalles(this.idasientomaestro,'editar');
                     this.tipoAccion=2;
                     this.accion='editar';
@@ -973,6 +1163,8 @@ export default {
         cerrarvue(){
             $('#divcomprobante').css('display','none');
             this.silibrocompra=0;
+            this.filialselected=1;
+            this.idunidad=3;
         },
         selectfilial(){
                 let me=this;
@@ -1412,6 +1604,8 @@ export default {
             me.acumulado87=0; */
             if(me.checkusarfactura.length>0)
             validarfacturas=1;
+            if(me.filialselected!=1)
+                me.idunidad=0;
             axios.post('/con_asientomaestro/registrar',{
                 'rowregistros':me.rowcuentas,
                 'fechatransaccion':me.fechatransaccion,
@@ -1426,6 +1620,8 @@ export default {
                 'idfacturas':me.checkusarfactura,
                 'idmovimiento':me.idmovimiento,
                 'validarfacturas':validarfacturas,
+                'idfilial':me.filialselected,
+                'idunidad':me.idunidad
 
             }).then(function (response) {
                 //console.log(response);
@@ -1491,39 +1687,10 @@ export default {
             this.idasientomaestro='',
             this.acumulado13=0;
             this.idfacturas=[];
+            this.filialselected=1;
+            this.idunidad=3;
         },
-        abrirmodalSocios(){
-            
-            let me=this;
-            me.indice=0;
-            //me.selectProveedor();
-            
-            me.checkusarfactura=[];
-            me.selectLibrocompras();
-            me.clearSelected=0;
-            setTimeout(me.tiempo, 50); 
-            //me.sumar13();
-            
-            //me.classModal.closeModal('comprobantecontable');
-            me.classModal.openModal('librocompras');
-            me.tituloModallibro = 'Libro de Compras';
-            //me.$refs.comboproveedor.clearSelection(); 
-            if(me.mes+1==me.messelected)
-            {    
-                me.fechafactura=me.fechaactual;
-                //me.fechafinal=me.fechaactual;
-            }
-            else   
-                me.fechafactura=me.fechafinal;
-
-            me.numfactura='';
-            me.numautorizacion='';
-            me.codcontrol='';
-            me.importetotal=0;
-            me.nocreditofiscal=0;
-            me.descuentos=0;
-            me.indice=indice;
-        },
+        
         abrirmodalCompras(indice=''){
             
             let me=this;
@@ -1752,6 +1919,8 @@ export default {
                 let me=this;
                 me.classModal.closeModal('librocompras'); 
                 me.classModal.openModal('proveedor');
+                
+                
             },
     },
     filters: {

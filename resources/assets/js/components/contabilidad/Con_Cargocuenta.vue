@@ -13,8 +13,11 @@
             <div class="card" v-if="divCargoPrincipal">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i>Cargos de Cuenta
-                    <!-- <button type="button" class="btn btn-secondary" @click="abrirModal()">
-                        <i class="icon-plus"></i>&nbsp;Nuevo
+                   <!--  <button type="button" class="btn btn-secondary" @click="conectarapi()">
+                        <i class="icon-plus"></i>&nbsp;API
+                    </button>
+                    <button type="button" class="btn btn-secondary" @click="conectar2()">
+                        <i class="icon-plus"></i>&nbsp;API_2
                     </button> -->
                 </div>
                 <div class="card-body">
@@ -459,7 +462,9 @@
                 sidirectorio:'',
                 subcuenta:'',
                 ccdiasoc:0,
-                ccdiasor:0
+                ccdiasor:0,
+                usuario:'',
+                pass:'',
 
             }
         },
@@ -517,6 +522,42 @@
         },
 
         methods:{
+
+         /*    conectarapi(){
+                let me=this;
+                
+                axios.get('http://192.168.100.231/sia/public/api/html'
+                ).then(function (response) {
+                    //me.idmovimiento=response.data;
+                    console.log(response);
+                    sessionStorage.token = response.data.access_token;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                console.log("prueba api"); 
+
+            },
+            conectar2(){
+                let me=this;
+                
+
+
+                axios.get('http://192.168.100.231/sia/public/api/users', 
+                            {
+                    headers: { 
+                        'Accept': 'application/json', 
+                        'Authorization': 'Bearer '+sessionStorage.token
+                    }
+                    }
+                ).then(function (response) {
+                    //me.idmovimiento=response.data;
+                    console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                
+            }, */
+
             cerrarvuedescargo(){
                 this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
                 $('#divdescargo').css('display','none');
@@ -646,45 +687,10 @@
 
                     me.arrayCargocuenta = respuesta.cargocuentas.data;
                     me.pagination= respuesta.pagination;
-                   /*  let _70porcientooc= Number((me.ccdiasoc*0.7).toFixed())-1;
-                    //let _30porcientooc=me.ccdiasoc - _70porcientooc;
-                    
+                    me.usuario=respuesta.usuario;
+                    me.pass=respuesta.pass;
 
-                    let _70porcientoor=Number((me.ccdiasor*0.7).toFixed(1));;
-                    //let _30porcientoor=me.ccdiasor - _70porcientoor;
-                    
-                    console.log(_70porcientooc);
-                    console.log(_30porcientooc);
-
-                    me.arrayCargocuenta.forEach((element, index) => {
-                        if(element.tipo_filial==1)
-                        {
-                            if(element.cant_dias<=_70porcientooc)
-                                me.arrayCargocuenta[index].color='verde';
-                            else 
-                            {
-                                if(element.cant_dias<=ccdiasoc)
-                                    me.arrayCargocuenta[index].color='amarillo';
-                                else
-                                    me.arrayCargocuenta[index].color='rojo';
-                            }
-                        }
-                        else{
-                            if(element.cant_dias<=_70porcientoor)
-                                me.arrayCargocuenta[index].color='verde';
-                            else 
-                            {
-                                if(element.cant_dias<=ccdiasor)
-                                    me.arrayCargocuenta[index].color='amarillo';
-                                else
-                                    me.arrayCargocuenta[index].color='rojo';
-                            }
-
-                        }
-                        
-
-                    });
-                    console.log(me.arrayCargocuenta); */
+                   
                 })
                 .catch(function (error) {
                     console.log(error);

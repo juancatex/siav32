@@ -25,6 +25,7 @@ class CreateConAsientomaestrosTable extends Migration
             $table->string('numdocumento')->nullable();
             $table->string('glosa',1000)->nullable();
             $table->integer('idfilial');
+            $table->tinyInteger('idunidad')->unsigned()->comment('id de la unidad, presidencia, vice press, etc.');
             $table->tinyInteger('idmodulo')->unsigned();
             $table->tinyInteger('estado')->default(0)->unsigned()->comment('0=no validado, 1=validado y para comprobantes agrupados verificar que id agrupacion sea diferente de null, 2=eliminacion logica, 3=error de datos-observado,4=reversion,5=borrador,6=borrador eliminado');
             $table->integer('idagrupacion')->unsigned()->nullable()->comment('idasientomaestro del comprobante que resulte de la agrupacion de comprobantes por parte de contabilidad ');

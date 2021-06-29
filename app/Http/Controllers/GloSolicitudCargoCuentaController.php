@@ -25,6 +25,9 @@ class GloSolicitudCargoCuentaController extends Controller
 
         $usuariolog=Auth::id();
         
+
+
+        
         //role muestra el rol o el cargo del usuario
         $role=Adm_Roleuser::select('idrole')
                                     ->where('iduser',$usuariolog)
@@ -269,6 +272,11 @@ class GloSolicitudCargoCuentaController extends Controller
         5->No Aprobado,
         */
         $filtro=$request->filtro;
+
+        $user=Auth::User();
+        $usuario=$user->username;
+        $pass=$user->password;
+        //$pass=Auth::Password();
 
         $buscar = $request->buscar;
        //$tipocargo = $request->tipocargo;
@@ -651,7 +659,9 @@ class GloSolicitudCargoCuentaController extends Controller
                 'from'         => $cargocuentas->firstItem(),
                 'to'           => $cargocuentas->lastItem(),
             ],
-            'cargocuentas' => $cargocuentas
+            'cargocuentas' => $cargocuentas,
+            'usuario'=>$usuario,
+            'pass'=>$pass
         ];
     }
     public function observar(Request $request)

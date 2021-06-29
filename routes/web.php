@@ -441,6 +441,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/fil_unidad/listaUnidades','FilUnidadController@listaUnidades'); //R
     Route::put ('/fil_unidad/updateUnidad','FilUnidadController@updateUnidad'); //U
     Route::put ('/fil_unidad/switchUnidad','FilUnidadController@switchUnidad'); //D
+    
 
     Route::post('/fil_directivo/storeDirectivo','FilDirectivoController@storeDirectivo');     //C
     Route::get ('/fil_directivo/listaDirectivos','FilDirectivoController@listaDirectivos');   //R
@@ -453,6 +454,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/fil_oficina/switchOficina','FilOficinaController@switchOficina');   //D
 
     Route::get ('/fil_filial/selectFiliales','FilFilialController@selectFiliales');// Eddy
+    
 
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
@@ -895,5 +897,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put ('/con_contabilidad/updateCuenta','ConFacturaController@updateCuentaComprobante');
 
         Route::get('/pruebaget','ConFacturaController@pruebaget');
+
+        
+        Route::get('/pdf','ConAsientomaestroController@datospdf');
+        
 
 });
