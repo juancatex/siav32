@@ -1121,7 +1121,7 @@ export default {
                 case 'nuevo':
                     this.tipoAccion=1;
                     this.rowcuentas= [{   idcuenta:'',
-                            idsubcuenta:[{tiposubcuenta:'',subcuenta:''}] ,
+                            idsubcuenta:'' ,
                             moneda:'bs',
                             documento:'',
                             debe:0,
