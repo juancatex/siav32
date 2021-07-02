@@ -8,10 +8,8 @@ class Ser_Reportes extends Controller
 {
     public function rutas(Request $request)
     {   
-      //  if (!$request->ajax()) return redirect('/'); 
-         $rutas=config('app.rutaServicios');  
-         echo request()->server('SERVER_ADDR')."<br>";
-         echo request()->server('REMOTE_ADDR')."<br>";
+      if (!$request->ajax()) return redirect('/'); 
+         $rutas=config('app.rutaServicios');   
         return [ 	
         // 'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->username.'&id=',        
         // 'REP_REGISTRO_TODO' => $rutas['REP_REGISTRO_TODO'].'&user='.Auth::user()->username.'&id=',        
