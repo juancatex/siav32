@@ -8,7 +8,7 @@ class Ser_Reportes extends Controller
 {
     public function rutas(Request $request)
     {   
-        if (!$request->ajax()) return redirect('/'); 
+      //  if (!$request->ajax()) return redirect('/'); 
          $rutas=config('app.rutaServicios');  
         return [ 	
         'REP_REGISTRO' => $rutas['REP_REGISTRO'].'&user='.Auth::user()->username.'&id=',        
