@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Socio;
 use App\Par_Prestamos;
 use App\Par_prestamos_plan;
-use App\Con_Asientomaestro;
+use App\Con_Asientomaestro; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;   
 use App\AsinalssClass\AsientoMaestroClass; 
+use App\AsinalssClass\MetodoAmortizacion;
 use App\Par_productos_perfilcuenta;
 use App\Par_prestamos_plan_cargo;
 use App\Par_Producto;
@@ -195,9 +196,40 @@ class ParPrestamosController extends Controller
                              $prestamo_desembolso->fechardesembolso = $fechaasiento; 
                              $prestamo_desembolso->idasiento = $respuesta_perfil; 
                              $prestamo_desembolso->idusuario=Auth::id();   
+                            
+
+                             $plandepagos = new MetodoAmortizacion();
+                             $dataplanpagos = $plandepagos->metodofrances($prestamo_desembolso->idproducto,
+                             $prestamo_desembolso->plazo,$prestamo_desembolso->monto,$request->interesDiferido);
+                              
+                             foreach ($dataplanpagos["data"] as   $plandepagosarray){ 
+                             
+                                        $prestamoplan = new Par_prestamos_plan(); 
+                                        $prestamoplan->idprestamo=$prestamo_desembolso->idprestamo;
+                                        $prestamoplan->pe=$plandepagosarray["pe"];
+                                        $prestamoplan->fp=$plandepagosarray["fp"];
+                                        $prestamoplan->di=$plandepagosarray["di"];
+                                        $prestamoplan->am=$plandepagosarray["am"];
+                                        $prestamoplan->in=$plandepagosarray["in"];
+                                        $prestamoplan->indi=$plandepagosarray["indi"];
+                                        $prestamoplan->car=$plandepagosarray["car"];
+                                        $prestamoplan->cut=$plandepagosarray["cut"];
+                                        $prestamoplan->ca=$plandepagosarray["ca"];
+                                        $prestamoplan->ca_an=$plandepagosarray["ca_an"];
+                                        $prestamoplan->cuota=$plandepagosarray["cuota"];
+                                        $prestamoplan->fecharegistro=$fechaasiento; 
+                                        if($plandepagosarray["pe"]==0){
+                                        $prestamoplan->idestado=20;
+                                        }
+                                        $prestamoplan->save();
+                             }
+ 
+                             $prestamo_desembolso->cuota = $dataplanpagos["cuota"];   
                              $prestamo_desembolso->save();
+                            
+
                 DB::commit(); 
-                return response()->json(array('data' =>'ok'), 200);   
+                return response()->json(array('data' =>"ok"), 200);   
             }
             catch(\Exception $e)
             {
@@ -585,14 +617,26 @@ class ParPrestamosController extends Controller
         try{     
                 // http://localhost:8000/start_refinanciamiento?socio=534&idmodulo=2&idprestamoin=2&detalle=asdfasdfa&numdoc=00122015   
                 //http://localhost:8000/start_refinanciamiento?socio=3463&idmodulo=3&idprestamoin=4&detalle=asdfasdfa&numdoc=P-PR-0000000004
-                 $prestamos_refinanciar=DB::select("select pre.idprestamo,mo.tipocambio ,pro.cobranza_perfil_refi,pro.idproducto,pre.plazo,so.numpapeleta 
-                from par__prestamos pre,par__productos pro,par__monedas mo,socios so 
-                where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pro.cobranza_perfil_refi!=0
-                and pre.idsocio=? and pre.idsocio=so.idsocio and pre.idestado between 2 and 3", array($request->socio));
+                //  $prestamos_refinanciar=DB::select("select pre.idprestamo,mo.tipocambio ,pro.cobranza_perfil_refi,pro.idproducto,pre.plazo,so.numpapeleta 
+                // from par__prestamos pre,par__productos pro,par__monedas mo,socios so 
+                // where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pro.cobranza_perfil_refi!=0
+                // and pre.idsocio=? and pre.idsocio=so.idsocio and pre.idestado between 2 and 3", array($request->socio));
+                
+                $prestamos_refinanciar=Par_Prestamos::select('par__prestamos.idprestamo','par__monedas.tipocambio',
+                'par__productos.cobranza_perfil_refi','par__productos.idproducto','par__prestamos.plazo','socios.numpapeleta')
+                ->join('socios','par__prestamos.idsocio','=','socios.idsocio') 
+                ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
+                ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+                ->whereBetween('par__prestamos.idestado',[2,3]) 
+                ->where('par__productos.cobranza_perfil_refi','!=','0') 
+                ->where('par__prestamos.idsocio','=',$request->socio);
+
                     $total_refinanciar=0;
                     $fecha=(DB::select("select fechaSistema as total  from par__fecha__sistemas where activo=1"))[0]->total; 
+                    $metodo=new MetodoAmortizacion();
+
                 foreach($prestamos_refinanciar as $prestamo){
-                    $valores=json_decode(DB::select("select getmontoRefi2(?) as total", array($prestamo->idprestamo))[0]->total);
+                    $valores=json_decode(DB::select("select getmontoRefi2(?) as total", array($prestamo->idprestamo))[0]->total);//getmontoRefi2() aplica metodo frances para cobrar
                         if($valores->datas->cuota<0){ 
                                 throw new ModelNotFoundException("Tiene uno o mas prestamos no validados por contabilidad."); 
                         } elseif($valores->datas->cuota==0){
@@ -603,7 +647,7 @@ class ParPrestamosController extends Controller
                     ////////////////////////////////////////////////////////////////////////////////////////
 
                             $total_cuotas = $prestamo->plazo;   
-                            $cuota =round($valores->datas->am+$valores->datas->in,2);
+                            $cuota =round($valores->datas->am + $valores->datas->in,2);
                             $cuotaf = $valores->datas->cuota;  
                             $capital = $valores->datas->am;
                             $intereses = $valores->datas->in;
@@ -823,6 +867,7 @@ class ParPrestamosController extends Controller
                                             $request->detalle, 
                                             $arrayDesembolso,
                                             $request->idmodulo,$fechaasiento,$request->lote,$request->idprestamoin); 
+
                                     $prestamo_desembolso = Par_Prestamos::findOrFail($request->idprestamoin); 
                                     $prestamo_desembolso->idestado =2; 
                                     $total=DB::select("select codproducto as total from  par__productos where idproducto=?", array($prestamo_desembolso->idproducto)); 
@@ -1022,9 +1067,10 @@ public function get_status_reg(Request $request)
         ->orderBy('par__productos__perfilcuentas.valor_abc', 'asc')
         ->get()->toArray();*/
 
-        return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
-        and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($request->id)))[0]->ca_an; 
-    
+        // return (DB::select("select plan.ca_an from par__prestamos__plans plan where plan.idprestamo=? 
+        // and (plan.idestado=2 or plan.idestado=10) ORDER by plan.pe asc limit 1", array($request->id)))[0]->ca_an; 
+        $plandepagos = new MetodoAmortizacion();
+       return $plandepagos->getRefinanciamientoMetodoFraces(4764,1);
     }
      
 }

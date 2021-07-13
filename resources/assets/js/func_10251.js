@@ -672,26 +672,26 @@ export function _vm2154_12185_145(idpres,me) {
     ventanas.push( { 
       html: '<div id="framepdf" style="display:none;">'+
       '<div style=" width: 100%; "> <div class="row justify-content-center"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button> </div> </div>'+
-    '<iframe   id="printpdf" name="printpdf" src="'+me['REP_DESEMBOLSO']+idpres+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
-    allowOutsideClick:  false,
-    allowEscapeKey: false,
-    confirmButtonText: 'Siguiente',  
-    progressSteps: tamao,
-    onBeforeOpen: function(){
-      swal.showLoading() ; 
-      swal.disableButtons(); 
-      $( "#reloadedFrame" ).click(function() {
-        $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+      '<iframe   id="printpdf" name="printpdf" src="'+me['REP_DESEMBOLSO']+idpres+'" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+      allowOutsideClick:  false,
+      allowEscapeKey: false,
+      confirmButtonText: 'Siguiente',  
+      progressSteps: tamao,
+      onBeforeOpen: function(){
+        swal.showLoading() ; 
+        swal.disableButtons(); 
+        $( "#reloadedFrame" ).click(function() {
+          $('#printpdf').attr("src", $('#printpdf').attr("src")); 
+        });
+        $('#printpdf').on('load', function() {
+          $("#framepdf").css("display", "inline");
+          swal.hideLoading() ;   
+          $(".swal2-popup").css("width", "85%"); 
+          $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
+          $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
+          });
+          }
       });
-      $('#printpdf').on('load', function() {
-        $("#framepdf").css("display", "inline");
-        swal.hideLoading() ;   
-        $(".swal2-popup").css("width", "85%"); 
-        $(".swal2-popup").css("padding", "0px 0px 20px 0px"); 
-        $(".swal2-progresssteps").css("margin", "15px 0 0 0"); 
-         });
-        }
-    });
      
     response.refi.forEach(function (value) { 
       ventanas.push( { 
