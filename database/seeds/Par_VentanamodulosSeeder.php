@@ -76,6 +76,7 @@ class Par_VentanamodulosSeeder extends Seeder
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Conciliación Bancaria','template'=>'con_conciliacion']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Productos','template'=>'con_productos']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Tesorería','template'=>'con_tesoreria']);
+        DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Firmas Autorizadas','template'=>'con_firmasautorizadas']);
         
 //daaro
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'8','nomventanamodulo'=>'Devoluciones','template'=>'daa_devolucion']);

@@ -513,6 +513,7 @@ class ConAsientomaestroController extends Controller
             
             DB::table('con__asientodetalles')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
             DB::table('con__asientomaestros')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
+            DB::table('con__asientosubcuentas')->where('idasientomaestro',$request->idasientomaestro)->delete();
 
             $asientomaestro= new AsientoMaestroClass();
             $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
