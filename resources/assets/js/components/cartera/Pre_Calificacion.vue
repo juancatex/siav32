@@ -1229,8 +1229,7 @@ export default {
       arrayperfilgarante: [],
       statusLote: null,
       arrayProducto: [],
-      arrayCuentaSocio: [],
-      arrayFormulasProducto: [],
+      arrayCuentaSocio: [], 
       garantesseleccionados: new Map(),
       totalgarantesseleccionados: 0,
       modal: 0,
@@ -1381,38 +1380,19 @@ export default {
          this.generacuota(this,paso);
       }  
        
-    },generacuota:_.debounce((ls,paso) => {
-    
-        var salida = (ls.tasaanual>0)?_pl._fff3512_23622(
-          ls.fecha_actual,
-          ls.fechasjson,
-          ls.tasaanual,
-          ls.montosolicitado,
-          ls.plazomeses,
-          ls.fechacorte,
-          ls.total_saldo_capital, 
-          ls.tipocambio,
-          ls.arrayFormulasProducto
-        )
-:
-       _pl._fff3512_23623(
-          ls.fecha_actual,
-          ls.fechasjson,
-          ls.tasaanual,
-          ls.montosolicitado,
-          ls.plazomeses,
-          ls.fechacorte,
-          ls.total_saldo_capital,  
-          ls.tipocambio,
-          ls.arrayFormulasProducto
-        );
- 
-        ls.PlandePagosPrint = salida.data;
-        ls.cuotaaproximada = (ls.montosolicitado > 0 && ls.plazomeses > 0 && !ls.errors.any())  ? salida["cuota"]  : 0;
-         if (ls.cuotaaproximada&&paso) {
-          ls.cambiocuota();
-        }
-        ls.cargandocalculo=0;
+    },generacuota:_.debounce((me,paso) => { 
+                axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+'&montosolicitado='+me.montosolicitado+'&interesDiferido=0').then(function (response) {
+                    var salida= response.data;   
+                    me.PlandePagosPrint = salida.data;
+                    me.cuotaaproximada = (me.montosolicitado > 0 && me.plazomeses > 0 && !me.errors.any())  ? salida["cuota"]  : 0;
+                    if (me.cuotaaproximada&&paso) {
+                      me.cambiocuota();
+                    }
+                      me.cargandocalculo=0; 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
     }, 550),
     viewstatus(socio) {
       this.$refs.ModalVueStatus.showVuestatus(socio);
@@ -1789,8 +1769,7 @@ export default {
         me.plazomesesmin = 0; 
         //me.cuotas_vigentes = 0; 
         me.islineal=0; 
-        me.garantesporproducto = 0;
-        me.arrayFormulasProducto = [];
+        me.garantesporproducto = 0; 
         me.garantesseleccionados.clear();
         me.totalgarantesseleccionados = 0; 
         var url =
@@ -1816,10 +1795,7 @@ export default {
                           me.errors.removeById("8301791");
                           me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
                           me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                            console.log('formulas');
-                            console.log(respuesta.formulas);
+                           
                         } else {
                           me.montomaximo=0;
                           me.errors.add({
@@ -1912,8 +1888,7 @@ export default {
         me.plazomesesmin = 0; 
         me.cuotas_vigentes = 0; 
         me.islineal=0; 
-        me.garantesporproducto = 0;
-        me.arrayFormulasProducto = [];
+        me.garantesporproducto = 0; 
         me.garantesseleccionados.clear();
         me.totalgarantesseleccionados = 0; 
         me.idescala=""; 
@@ -1933,9 +1908,7 @@ export default {
                 me.factorid = respuesta.productos[0].idfactor;
                 me.maxfactor = respuesta.productos[0].aprobacion;
                 me.garantesporproducto = respuesta.productos[0].garantes; 
-                me.idescala = respuesta.productos[0].idescala; 
-                me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
-                me.arrayFormulasProducto["desembolso"] = []; 
+                me.idescala = respuesta.productos[0].idescala;  
                 responses = true;
             }else{
                responses = false;

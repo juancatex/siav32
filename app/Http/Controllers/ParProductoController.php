@@ -64,19 +64,9 @@ class ParProductoController extends Controller
             ->orWhere('par__prestamos.idestado','=',10)->count();  
           } 
       
-          $formulas = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
-            ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
-            'par__productos__perfilcuentas.valor_abc',
-            'par__productos__perfilcuentas.formula',
-            'par__productos__perfilcuentas.iscomision',
-            'par__productos.linea',
-            'par__productos__perfilcuentas.iscargo')
-            ->where('par__productos__perfilcuentas.activo','=','1')
-            ->where('par__productos.idproducto','=',$request->id)
-            ->get();
-          
          
-        return ['productos' => $productos,'escala' => $escala,'formulas' => $formulas ,'status'=>$validador];
+         
+        return ['productos' => $productos,'escala' => $escala,'status'=>$validador];
     }
     public function getproductosidLista(Request $request)
     {
@@ -92,20 +82,8 @@ class ParProductoController extends Controller
             'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
             ->where('par__productos.idproducto','=',$request->id)  
             ->get();
-             
-          $formulas = Par_productos_perfilcuenta::join('par__productos','par__productos.cobranza_perfil_ascii','=','par__productos__perfilcuentas.idperfilcuentamaestro')
-            ->select('par__productos__perfilcuentas.idperfilcuentadetalle',
-            'par__productos__perfilcuentas.valor_abc',
-            'par__productos__perfilcuentas.formula',
-            'par__productos__perfilcuentas.iscomision',
-            'par__productos.linea',
-            'par__productos__perfilcuentas.iscargo')
-            ->where('par__productos__perfilcuentas.activo','=','1')
-            ->where('par__productos.idproducto','=',$request->id)
-            ->get();
-          
-         
-        return ['productos' => $productos, 'formulas' => $formulas];
+              
+        return ['productos' => $productos];
     }
     public function getproductosid_tabla(Request $request)
     {

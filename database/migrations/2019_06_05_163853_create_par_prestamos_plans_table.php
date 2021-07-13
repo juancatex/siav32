@@ -22,14 +22,15 @@ class CreateParPrestamosPlansTable extends Migration
             $table->float('am')->index()->comment('amortizacion');
             $table->float('in')->default(0)->comment('interes');
             $table->float('indi')->default(0)->comment('intereses diferidos');
-            $table->float('car')->default(0)->comment('cargos');
-            $table->float('cut')->default(0)->comment('cuota final');
+            $table->float('seg')->default(0)->comment('seguro de desgravamen');
+            $table->float('car')->default(0)->comment('cargos'); 
             $table->float('ca')->default(0)->comment('capital');
             $table->float('ca_an')->default(0)->comment('capital anterior');
             $table->float('cuota')->default(0)->comment('cuota inicial');
+            $table->float('cut')->default(0)->comment('cuota final');
             $table->dateTime('fecharegistro');
             $table->integer('tipo')->default(0)->comment('0=normal, 1=Recalculado por amortizacion, 2=Recalculado por mora, 3=Recalculado por refinanciamiento,10=No activo'); 
-            $table->integer('idestado')->unsigned()->default(2)->comment('2=vigente, 11=Cobrado por plataforma, 12=Cobrado por Ascii, 13=Cobrado por Refinanciamiento, 14=Cobrado por Liquidacion del prestamo, 15=Cobrado por Amortizacion, 16=Cobrado por Alta Garante, 20=Desembolso'); 
+            $table->integer('idestado')->unsigned()->default(2)->comment('2=vigente,10=enviado ascii, 11=Cobrado por plataforma, 12=Cobrado por Ascii, 13=Cobrado por Refinanciamiento, 14=Cobrado por Liquidacion del prestamo, 15=Cobrado por Amortizacion, 16=Cobrado por Alta Garante, 20=Desembolso'); 
             $table->float('send_ascii')->default(0); 
             $table->float('tipocambio')->default(0); 
             $table->string('file')->nullable();
@@ -42,7 +43,7 @@ class CreateParPrestamosPlansTable extends Migration
             $table->integer('idusuario')->nullable()->comment('usuario quien hizo la cobranza');  
 
             $table->dateTime('fecharde_apro_conta')->nullable(); 
-            $table->integer('apro_conta')->default(0)->index();// cambia de estado 1 cuanto contabilidad lo aprueba
+            $table->integer('apro_conta')->default(0)->index()->comment('cambia de estado 1 cuanto contabilidad lo aprueba'); // cambia de estado 1 cuanto contabilidad lo aprueba
             $table->integer('idasiento')->nullable()->index();  
 
             $table->timestamps();
