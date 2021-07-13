@@ -120,6 +120,7 @@ setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
 setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
 setvue(1, 'con_ascii_pos_ser', './components/contabilidad/Con__ascii_pos_servicios.vue');
 setvue(1, 'con_ascii_pos_reserva', './components/contabilidad/Con__ascii_pos_servicios_reserva.vue');
+setvue(1, 'con_firmasautorizadas', './components/contabilidad/Con_Firmasautorizadas.vue');
 
 // global
 setvue(1, 'glo_solicitudcargocuenta', './components/global/Glo_SolicitudCargoCuenta.vue');

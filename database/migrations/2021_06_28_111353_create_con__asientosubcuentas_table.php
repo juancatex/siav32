@@ -14,10 +14,16 @@ class CreateConAsientosubcuentasTable extends Migration
     public function up()
     {
         Schema::create('con__asientosubcuentas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idasientosubcuenta');
             $table->integer('idasientomaestro')->unsigned();
-            $table->tinyInteger('tipo_subcuenta')->unsigned()->comment('1->socio,2->empleado,3->externo');
-            $table->integer('idsubcuenta')->unsigned();
+            $table->tinyInteger('tipo_subcuenta')->unsigned()->comment('1->socio,2->empleado,3->externo,4->cuenta general asscinalss');
+            $table->integer('idsubcuenta')->unsigned()->comment('columna id de las tablas proveedor, socios, empleados');
+            $table->integer('subcuenta')->unsigned()->comment('ci->empleado,numpapeleta->socios,nit->proveedores');
+            $table->integer('idcuenta')->unsigned()->comment('id de la cuenta contable');
+            $table->string('subdetalle',);
+            $table->float('subdebe',10,2)->nullable();
+            $table->float('subhaber',10,2)->nullable();
+            $table->boolean('activo')->default(true);
             $table->timestamps();
         });
     }

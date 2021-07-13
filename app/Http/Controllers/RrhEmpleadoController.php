@@ -272,4 +272,49 @@ class RrhEmpleadoController extends Controller
         }
         return ['empleados' => $empleados];
     }
+    public function selectSocios(Request $request)  //AjaxSelect
+    {
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw('concat(numpapeleta," - ",apaterno," ",amaterno," ",nombre) as nombres');
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
+                else
+                    $sqls.=" and (apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or nombre like '%".$valor."%' or ci like '%".$valor."%')";
+            }   
+            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    //->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    //->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    //->where('fil__directivos.activo',1)
+                                    ->whereraw($sqls)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+        }
+        else {
+            if ($request->id){
+                    $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    //->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    //->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    //->where('fil__directivos.activo',1)
+                                    ->where('socios.idsocio','=',$request->id)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+            }
+                
+            else
+            {
+                $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    //->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    //->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
+                                    //->where('fil__directivos.activo',1)
+                                    ->orderBy('nombres','asc')
+                                    ->get();
+            }
+              
+        }
+        return ['empleados' => $empleados];
+    }
 }

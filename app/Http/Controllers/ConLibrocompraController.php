@@ -38,6 +38,7 @@ class ConLibrocompraController extends Controller
                                                      'con__librocompras.importe',
                                                      'alm__proveedors.nomproveedor',
                                                      'alm__proveedors.nit',
+                                                     'alm__proveedors.idproveedor',
                                                      'con__librocompras.idasientomaestro',
                                                      'validadoconta',
                                                      'lote',
@@ -57,7 +58,7 @@ class ConLibrocompraController extends Controller
                                             //->where('con__librocompras.idfilial',$request->idfilial) mostrara todas las filiales hasta que de decida lo contrario
                                             ->orderBy(DB::raw('IF(lote IS NULL,1000000,lote)'),'DESC')
                                             ->orderBy('con__librocompras.created_at','desc')
-                                            ->take(20)
+                                            ->take(50)
                                             ->get(); 
                                             //->limit(3); //SELECT * FROM `con__librocompras` ORDER BY IF(lote IS NULL,1000000,lote) DESC
             $verdad = 0;
@@ -87,6 +88,7 @@ class ConLibrocompraController extends Controller
                                                      'con__librocompras.importe',
                                                      'alm__proveedors.nomproveedor',
                                                      'alm__proveedors.nit',
+                                                     'alm__proveedors.idproveedor',
                                                      'con__librocompras.idasientomaestro',
                                                      'validadoconta',
                                                      'lote',

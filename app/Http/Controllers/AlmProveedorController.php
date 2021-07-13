@@ -41,6 +41,40 @@ class AlmProveedorController extends Controller
         //return ['subcuentas' => $subcuentas]; */
     }
 
+    public function selectProveedor2(Request $request){
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        } 
+        $raw=DB::raw('concat(nit," ",nomproveedor) as nit_proveedor');
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(nomproveedor like '%".$valor."%' or nit like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (nomproveedor like '%".$valor."%' or nit like '%".$valor."%')";
+                } 
+            }   
+            $proveedores = Alm_Proveedor::select('idproveedor','nit',$raw,'nit as nit1','nomproveedor')->orderBy('nit', 'desc')->whereraw($sqls)->get();
+        }
+        else {
+            if (!empty($request->id))
+                $proveedores = Alm_Proveedor::select('idproveedor','nit',$raw,'nit as nit1','nomproveedor')->orderBy('nit', 'desc')->where('idproveedor','=',$request->id)->get();
+            else
+                $proveedores = Alm_Proveedor::select('idproveedor','nit',$raw,'nit as nit1','nomproveedor')->orderBy('nit', 'desc')->get();
+        }
+        //dd($proveedores);
+        return ['proveedores' => $proveedores];
+       /*  $raw=DB::raw('concat(nit," ",nomproveedor) as mostrar');
+        $proveedors = Alm_Proveedor::select('idproveedor',$raw)
+        ->where('activo','=','1')
+        ->orderBy('nit', 'asc')->get();
+
+        return response()->json($proveedors);
+        //return ['subcuentas' => $subcuentas]; */
+    }
+
 
 
     public function listaProveedores(Request $request)

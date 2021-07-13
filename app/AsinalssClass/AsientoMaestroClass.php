@@ -7,6 +7,7 @@ use App\Con_Asientodetalle;
 use App\Con_Tipocomprobante;
 use App\Con_Perfilcuentamaestro;
 use App\con_Perfilcuentadetalle;
+use App\Con_Asientosubcuenta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -276,10 +277,36 @@ Class AsientoMaestroClass
                                 else 
                                     $asientodetalle->haber=$v*-1;
                             }
-                            $asientodetalle->$i=$v;
+                            if($i=='subcuenta')
+                            {
+                                if(count($v)>0)
+                                    $asientodetalle->$i='';
+                                else
+                                    $asientodetalle->$i=$v;    
+                            }    
+                            else
+                                $asientodetalle->$i=$v;
+                            
                         }
                         $asientodetalle->usuarioregistro=Auth::id();
                         $asientodetalle->usuariomodifica=Auth::id();
+
+                        if(count($valor['subcuenta'])>0)
+                        {
+                            foreach ($valor['subcuenta'] as $i => $v) {
+                                $asientosubcuenta=new Con_Asientosubcuenta();
+                                $asientosubcuenta->idasientomaestro=$idasientomaestro;
+                                $asientosubcuenta->tipo_subcuenta=$v['tiposubcuenta'];
+                                $asientosubcuenta->idsubcuenta=$v['idsubcuenta'];
+                                $asientosubcuenta->subcuenta=$v['subcuenta'];
+                                $asientosubcuenta->idcuenta=$v['idcuenta'];
+                                $asientosubcuenta->subdetalle=$v['detalle'];
+                                $asientosubcuenta->subhaber=$v['subhaber'];
+                                $asientosubcuenta->subdebe=$v['subdebe'];
+                                $asientosubcuenta->save();
+                            }
+                        }
+
                         $asientodetalle->save();
                     }
                 }
@@ -291,7 +318,7 @@ Class AsientoMaestroClass
             {
                 $error = $e->getMessage();
                 DB::rollback();
-                return $error;
+                return $error.' es un error';
 
             }
         } 

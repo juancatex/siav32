@@ -15,10 +15,10 @@ class CreateConConfiguracionsTable extends Migration
     {
         Schema::create('con__configuracions', function (Blueprint $table) {
             $table->increments('idconconfig');
-            $table->string('codigo'); 
+            $table->string('codigo',10); 
             $table->string('descripcion'); 
             $table->integer('valor')->default(0);  
-            $table->tinyInteger('tipoconfiguracion')->comment('1->libro de compras,2->libro de ventas,3->conciliacion bancaria,4->cargo de cuenta,5->relacion de la cuenta con la fuera para el perfil de carga de ascii a una cuenta por fuerza');
+            $table->tinyInteger('tipoconfiguracion')->comment('1->libro de compras,2->libro de ventas,3->conciliacion bancaria,4->cargo de cuenta,5->relacion de la cuenta con la fuera para el perfil de carga de ascii a una cuenta por fuerza,6->subcuentageneral ascinalss');
             $table->boolean('activo')->default(1);
             $table->timestamps();
         });

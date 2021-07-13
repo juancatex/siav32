@@ -249,4 +249,15 @@ class ConConfiguracionController extends Controller
         return ['cuentaslibros'=>$cuentaslibros];
 
     }
+    public function selectSubCuentaAscinalss()
+    {
+        //if (!$request->ajax()) return redirect('/');
+
+        $subasc = Con_Configuracion::where('codigo','SubASC')
+                                     ->where('con__configuracions.activo',1)
+                                     ->get();
+        
+        return ['subasc'=>$subasc];
+
+    }
 }

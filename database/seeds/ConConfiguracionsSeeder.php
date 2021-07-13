@@ -24,6 +24,7 @@ class ConConfiguracionsSeeder extends Seeder
         DB::table('con__configuracions')->insert(['codigo'=>'EJH','descripcion'=>'aportes de que estan relacionadas con el ejercito y la cuenta contable que van al haber','valor'=>'136','tipoconfiguracion'=>5]);
         DB::table('con__configuracions')->insert(['codigo'=>'AEH','descripcion'=>'aportes de que estan relacionadas con la fuerza aerea y la cuenta contable que van al haber','valor'=>'137','tipoconfiguracion'=>5]);
         DB::table('con__configuracions')->insert(['codigo'=>'ARH','descripcion'=>'aportes de que estan relacionadas con la armada y la cuenta contable que van al haber','valor'=>'138','tipoconfiguracion'=>5]);
+        DB::table('con__configuracions')->insert(['codigo'=>'SubASC','descripcion'=>'Ascinalss','valor'=>'20000000','tipoconfiguracion'=>6]);
         
     }
 }

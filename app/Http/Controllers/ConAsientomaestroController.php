@@ -480,6 +480,13 @@ class ConAsientomaestroController extends Controller
             $swh=0;
             //echo"{$valor['idcuenta']}";
             $arrayDetalle[$cont]['idcuenta']=$valor['idcuenta'];
+            if(count($valor['idsubcuenta'])>0)
+            {
+                foreach ($valor['idsubcuenta'] as $i => $v) {
+                    $arrayDetalle[$cont]['subcuenta'][$i]=$v;
+                }
+            }
+
             $arrayDetalle[$cont]['subcuenta']=$valor['idsubcuenta'];
             $arrayDetalle[$cont]['documento']=$valor['documento'];
             $arrayDetalle[$cont]['moneda']=$valor['moneda'];

@@ -174,6 +174,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         
 
         Route::get ('/con_asientodetalle/selectasientodetalle', 'ConAsientodetalleController@selectAsientoDetalle');
+        Route::get ('/con_asientodetalle/selectasientodetalle_2', 'ConAsientodetalleController@selectAsientoDetalle2');
         Route::get ('/con_asientomaestro/recuperarsubcuenta', 'ConAsientomaestroController@recuperarSubcuenta');
 
         Route::get ('/con_librocompras','ConLibrocompraController@index');
@@ -195,6 +196,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/con_config/selectconciliacion', 'ConConfiguracionController@selectCuentasConciliacion');
         Route::post('/con_config/desactivardias', 'ConConfiguracionController@desactivarccdias');
         Route::get('/con_config/recuperarccdias', 'ConConfiguracionController@recuperarccdias');
+        Route::get('/con_config/selectsubcuentaascinalss', 'ConConfiguracionController@selectSubCuentaAscinalss');
         
 
         Route::get ('/con_conciliacion/selectconciliacion', 'ConMovimientobancarioController@selectConciliacion');
@@ -429,6 +431,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/alm_proveedor/switchProveedor','AlmProveedorController@switchProveedor');   //D
     Route::get ('/alm_proveedor/searchProveedor','AlmProveedorController@searchProveedor');   //S
     Route::get ('/alm_proveedor/selectProveedor', 'AlmProveedorController@selectProveedor');//eddy
+    Route::get ('/alm_proveedor/selectProveedor2', 'AlmProveedorController@selectProveedor2');//eddy
 
     //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
     //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
@@ -515,6 +518,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/rrh_empleado/switchEmpleado','RrhEmpleadoController@switchEmpleado');    //D
     Route::get ('/rrh_empleado/selectempleados2','RrhEmpleadoController@selectEmpleados2'); ///eddy
     Route::get ('/rrh_empleado/selectdirectivos','RrhEmpleadoController@selectDirectivos'); ///eddy
+    Route::get ('/rrh_empleado/selectsocios','RrhEmpleadoController@selectSocios'); ///eddy
 
 
     Route::post('/rrh_presentado/storePresentado','RrhPresentadoController@storePresentado');   //C
@@ -900,6 +904,13 @@ Route::group(['middleware' => ['webinterno']], function () {
 
         
         Route::get('/pdf','ConAsientomaestroController@datospdf');
+
+        ///////////////////////////firmas autorizadas
+        Route::get ('/con_firmasautorizadas','ConFirmaautorizadaController@index');
+        Route::post('/con_firmasautorizadas/registrar','ConFirmaautorizadaController@store');
+        Route::put ('/con_firmasautorizadas/desactivar','ConFirmaautorizadaController@desactivar');
+        /*
+        Route::put ('/con_firmasautorizadas/updatePago','SerPagoController@updatePago'); */
         
 
 });
