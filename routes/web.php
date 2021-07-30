@@ -211,8 +211,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put ('/con_segbancario/desactivar', 'ConSegbancarioController@desactivar');
 
         ////////////////////// REPORTES CONTABILIDAD////////////////////
-        Route::get ('/libromayor', 'ConReportesController@libromayor');
-        Route::get ('/librodiario', 'ConReportesController@librodiario');
+        Route::get ('/libro_mayor', 'ConReportesController@libromayor');
+        Route::get ('/balance_general', 'ConReportesController@balancegeneral');
+        Route::get ('/libro_diario', 'ConReportesController@librodiario');
         Route::get ('/saldoconciliacion', 'ConReportesController@conciliacion');
 
         //////////////////////////////////////////////////////////////////////////////////////////

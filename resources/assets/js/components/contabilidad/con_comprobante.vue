@@ -1092,7 +1092,7 @@ export default {
                 //console.log(me.debe+ '---'+me.haber);
                 
             });
-
+            //console.log(contador);
             return contador;
         
         },
@@ -1202,7 +1202,7 @@ export default {
             setTimeout(me.tiempo, 200); 
             me.directivo=valor;
             if (me.directivo==4) {
-                console.log('entra');
+                //console.log('entra');
                 me.idempleado=[
                         me.arraySubAscinalss[0].idconconfig,
                         me.arraySubAscinalss[0].valor,

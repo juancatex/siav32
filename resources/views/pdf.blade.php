@@ -17,6 +17,8 @@
     
 }
     table {
+        
+        
         width: 100%;
         
         border-collapse: collapse;
@@ -34,6 +36,7 @@
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         position: relative;
         font-size:12px;
+        
        /*    
         margin: 8px auto 8px auto;
          */
@@ -58,6 +61,9 @@
         border-top:1px solid #999;
         
     }
+    div{
+        background-image:url("{{ asset('img/borrador.png')}}");
+    }
    /*  table,td,  th{
         border:1px solid black ;
         width: 800px;
@@ -72,13 +78,14 @@
     
      */
 </style>
-<body>
+<body style="background-color: cadetblue;">
 <div class="body_wrapper">
+    <!-- <img src="{{ asset('img/borrador.png') }}" alt=""> -->
 
     <table>
         <tr>
             <th style="width: 20%" rowspan=5></th>
-            <th style="width: 50%; text-align:center" colspan=2> COMPROBANTE DE {{ strtoupper($maestros[0]->nomtipocomprobante) }} Nº {{ strtoupper($maestros[0]->cont_comprobante) }}</th>
+            <th style="width: 50%; text-align:center" colspan=2> COMPROBANTE DE {{ strtoupper($maestros[0]->nomtipocomprobante) }} @if($maestros[0]->cont_comprobante===0) BORRADOR @else  Nº {{ strtoupper($maestros[0]->cont_comprobante) }} @endif</th>
             <th style="width: 30%; text-align:center"> {{ strtoupper($maestros[0]->cod_comprobante) }}</th>
         </tr>
         <tr>
@@ -133,12 +140,15 @@
             <tr style="border:0">
                 
                 <td style="vertical-align:top"><strong>{{ $det->codcuenta }}</strong></td>
-                <td><strong><u>{{ $det->nomcuenta }}</u> </strong></br>
-                    <span>{{ $det->numpapeleta }} {{ $det->apaterno }} {{ $det->amaterno }} {{ $det->nombre }}</span>
+                <td><strong><u>{{ strtoupper($det->nomcuenta) }}</u> </strong></br>
+                    @foreach($det->subdetalles as $subd)  
+                        <p>{{ $subd->subcuenta }} {{ $subd->nombre }} {{ $subd->detalle }} </p>
+                    
+                    @endforeach
                 </td>
-                <td class="derecha">{{ number_format($det->debe,2) }}</td>
-                <td class="derecha">{{ number_format($det->haber,2) }}</td>
-                <td class="derecha">1</td>
+                <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subdebe,2) }} </p> @endforeach</td>
+                <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subhaber,2) }} </p>@endforeach</td>
+                <td class="derecha">@foreach($det->subdetalles as $subd) <p> 1.00000 </p>@endforeach</td>
             <tr>
             @endforeach
         </tbody>
@@ -149,7 +159,20 @@
             <th></th>
         </tr>
         
-    </table>    
+    </table>   
+    <table>
+        <tr style="height:100px;text-align:center">
+            @for($i=0;$i < count($firmas)/2;$i++)
+            <td style="vertical-align:bottom"> <p>{{ $firmas[$i]->nombre}}</p> {{ $firmas[$i]->nomcargo}}  </td>
+            @endfor
+        </tr>
+        <tr style="height:100px;text-align:center">
+            @for($i=count($firmas)/2;$i < count($firmas);$i++)
+            <td style="vertical-align:bottom"> <p>{{ $firmas[$i]->nombre}}</p> {{ $firmas[$i]->nomcargo}}  </td>
+            @endfor
+        </tr>
+
+    </table> 
     
     </div> 
 </body>

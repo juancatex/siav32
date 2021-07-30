@@ -196,6 +196,7 @@ Class AsientoMaestroClass
         $this->numdocumento=$numdocumento;
         $this->glosa=$glosa;
         $this->arrayDetalle=$arrayDetalle;
+        //dd($this->arrayDetalle);
         $this->idmodulo=$idmodulo;
         $this->fecharegistro=$fecharegistro." ".$this->hora;
         $this->borrador=$borrador;
@@ -279,7 +280,7 @@ Class AsientoMaestroClass
                             }
                             if($i=='subcuenta')
                             {
-                                if(count($v)>0)
+                                if(is_array($v))
                                     $asientodetalle->$i='';
                                 else
                                     $asientodetalle->$i=$v;    
@@ -290,23 +291,26 @@ Class AsientoMaestroClass
                         }
                         $asientodetalle->usuarioregistro=Auth::id();
                         $asientodetalle->usuariomodifica=Auth::id();
-
-                        if(count($valor['subcuenta'])>0)
+                        //dd($arrayDetalle);
+                        if(is_array($valor['subcuenta']))
                         {
-                            foreach ($valor['subcuenta'] as $i => $v) {
-                                $asientosubcuenta=new Con_Asientosubcuenta();
-                                $asientosubcuenta->idasientomaestro=$idasientomaestro;
-                                $asientosubcuenta->tipo_subcuenta=$v['tiposubcuenta'];
-                                $asientosubcuenta->idsubcuenta=$v['idsubcuenta'];
-                                $asientosubcuenta->subcuenta=$v['subcuenta'];
-                                $asientosubcuenta->idcuenta=$v['idcuenta'];
-                                $asientosubcuenta->subdetalle=$v['detalle'];
-                                $asientosubcuenta->subhaber=$v['subhaber'];
-                                $asientosubcuenta->subdebe=$v['subdebe'];
-                                $asientosubcuenta->save();
-                            }
+                            /* if(count($valor['subcuenta'])>0)
+                            { */
+                                foreach ($valor['subcuenta'] as $i => $v) {
+                                    //echo $v['tiposubcuenta'];
+                                    $asientosubcuenta=new Con_Asientosubcuenta();
+                                    $asientosubcuenta->idasientomaestro=$idasientomaestro;
+                                    $asientosubcuenta->tipo_subcuenta=$v['tiposubcuenta'];
+                                    $asientosubcuenta->idsubcuenta=$v['idsubcuenta'];
+                                    $asientosubcuenta->subcuenta=$v['subcuenta'];
+                                    $asientosubcuenta->idcuenta=$v['idcuenta'];
+                                    $asientosubcuenta->subdetalle=$v['detalle'];
+                                    $asientosubcuenta->subhaber=$v['subhaber'];
+                                    $asientosubcuenta->subdebe=$v['subdebe'];
+                                    $asientosubcuenta->save();
+                                }
+                            /* } */
                         }
-
                         $asientodetalle->save();
                     }
                 }
@@ -684,6 +688,120 @@ Class AsientoMaestroClass
 
         return $cont_tipocomprobante;
     }
+
+    public function recuperarsubdetalles($arraydetalles,$idasientomaestro)
+    {
+        //$idasientomaestro=$value->idasientomaestro;
+        $siasientomaestro=Con_Asientosubcuenta::where('idasientomaestro',$idasientomaestro)
+                                                ->get();
+        if(count($siasientomaestro)>0)
+        {
+            foreach ($arraydetalles as $valor) {
+                $filtro=$valor->monto;
+                $socios =Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                            'subdebe',
+                                                            'subhaber',
+                                                            'idcuenta',
+                                                            DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                            'idsocio as idsubcuenta',
+                                                            'numpapeleta as subcuenta',
+                                                            'tipo_subcuenta as tiposubcuenta')
+                                                    ->join('socios','socios.idsocio','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('tipo_subcuenta',1)//tipo subcuenta  socios
+                                                    ->where('idcuenta',$valor->idcuenta)
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            });
+                                                    
+                                                    
+                $personal=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                        'subdebe',
+                                                        'subhaber',
+                                                        'idcuenta',
+                                                        DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                        'idempleado as idsubcuenta',
+                                                        'ci as subcuenta',
+                                                        'tipo_subcuenta as tiposubcuenta')                                    
+                                                    ->join('rrh__empleados','rrh__empleados.idempleado','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('idcuenta',$valor->idcuenta)
+                                                    ->where('tipo_subcuenta',2)//tipo subcuenta personal
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                    ->union($socios);
+                
+                $otros=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                    'subdebe',
+                                                    'subhaber',
+                                                    'idcuenta',
+                                                    'nomproveedor as nombre',
+                                                    'idproveedor as idsubcuenta',
+                                                    'nit as subcuenta',
+                                                    'tipo_subcuenta as tiposubcuenta')
+                                                    ->join('alm__proveedors','alm__proveedors.idproveedor','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('idcuenta',$valor->idcuenta)
+                                                    ->where('tipo_subcuenta',3)// tipo subcuenta otros
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                    ->union($personal);
+                
+                $subascinalss=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                            'subdebe',
+                                                            'subhaber',
+                                                            'idcuenta',
+                                                            'descripcion as nombre',
+                                                            'idconconfig as idsubcuenta',
+                                                            'valor as subcuenta',
+                                                            'tipo_subcuenta as tiposubcuenta')
+                                                            ->join('con__configuracions','con__configuracions.idconconfig','con__asientosubcuentas.idsubcuenta')
+                                                            ->where('idasientomaestro',$idasientomaestro)
+                                                            ->where('idcuenta',$valor->idcuenta)
+                                                            ->where('tipo_subcuenta',4)// tipo subcuenta subascinalss
+                                                            ->union($otros)
+                                                            ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                            ->get();
+                if(count($subascinalss)==0)
+                    $valor->asientosubdetalles=[];
+                else
+                    $valor->asientosubdetalles=$subascinalss;
+            }
+            
+    
+        }
+        else
+        {
+            foreach ($arraydetalles as $valor)
+                $valor->asientosubdetalles=[];
+        }
+        return $arraydetalles;
+
+    }
+        
+                
+                                                       
+    
 }
 
 

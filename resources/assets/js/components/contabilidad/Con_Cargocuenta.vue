@@ -589,6 +589,9 @@
                 arrayValores['idmodulo']=this.idmodulo;
                 arrayValores['sidirectorio']=cargocuenta['sidirectorio'];
                 arrayValores['subcuenta']=cargocuenta['subcuenta'];
+                arrayValores['idsubcuenta']=cargocuenta['idsubcuenta'];
+                arrayValores['tiposubcuenta']=cargocuenta['tiposubcuenta'];
+
                 //console.log(arrayValores);
                 this.$refs.vuedescargo.cargarvue(arrayValores);
                
@@ -754,6 +757,7 @@
 
                 }).then(function (response) {
                    // console.log(response.data);
+                   var residasientomaestro=response.data;
                     
                     if(response.data=='incorrecto')
                     {
@@ -773,10 +777,11 @@
                         var directorio=1;
                     else    
                         var directorio=2;
-
-                    me.reporteAsientoautomatico(response.data,directorio);
+                    //console.log(residasientomaestro);
+                    
                     me.listarCargoCuenta(1,'',me.tipocargo,me.filtro);
                     me.cerrarModal('ccuenta');
+                    me.reporteAsientoautomatico(residasientomaestro);
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -862,10 +867,16 @@
             },
             reporteAsientoautomatico(idasientomaestro,directorio){
                 let me=this;
-                var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+                ///////////////////birt
+                /* var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
                 //console.log(url);
 
-                plugin.viewPDF(url,'Asiento Contable');
+                plugin.viewPDF(url,'Asiento Contable'); */
+                ///////////////////////////
+
+                var url='http://localhost:8000/pdf?idasientomaestro='+idasientomaestro;
+                //console.log(url);
+                window.open(url, '_blank');
 
             },
             getCConciliacion(){

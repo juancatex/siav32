@@ -167,7 +167,9 @@
                                     v-model="idtipocomprobante"
                                     v-validate.initial="'required'" 
                                     name="Tipocomprobante">
-                                <option :value="arrayTipocomprobante[3].idtipocomprobante" selected="selected" disabled>{{arrayTipocomprobante[3].nomtipocomprobante}}</option>
+                                <!-- <option :value="arrayTipocomprobante[3].idtipocomprobante" selected="selected" disabled>{{arrayTipocomprobante[3].nomtipocomprobante}}</option> -->
+                                <option value="" selected="selected" disabled>Seleccione...</option>
+
                                 <option v-for="tipocomprobante in arrayTipocomprobante" :key="tipocomprobante.idtipocomprobante" :value="tipocomprobante.idtipocomprobante" v-text="tipocomprobante.nomtipocomprobante"></option>
                             </select>                                        
                             <span class="text-error">{{ errors.first('Tipocomprobante') }}</span>

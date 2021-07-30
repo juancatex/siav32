@@ -322,7 +322,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                     'glo__solicitud_cargo_cuentas.created_at',
                                                                     'con__asientomaestros.estado',
                                                                     'cant_dias',
-                                                                    'tipo_filial')
+                                                                    'tipo_filial',
+                                                                    'rrh__empleados.idempleado as idsubcuenta',
+                                                                    DB::raw('2 as tiposubcuenta'))
                                                     ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                     ->where(function($query) use ($filtro)
                                                             {
@@ -394,7 +396,9 @@ class GloSolicitudCargoCuentaController extends Controller
                                                                 'glo__solicitud_cargo_cuentas.created_at',
                                                                 'con__asientomaestros.estado',
                                                                 'cant_dias',
-                                                                'tipo_filial')
+                                                                'tipo_filial',
+                                                                'socios.idsocio as idsubcuenta',
+                                                                DB::raw('1 as tiposubcuenta'))
                                                 ->where('glo__solicitud_cargo_cuentas.activo',1)
                                                 ->where(function($query) use ($filtro)
                                                         {

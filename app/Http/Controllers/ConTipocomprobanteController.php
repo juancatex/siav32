@@ -6,6 +6,7 @@ use App\Adm_User;
 use App\Con_Tipocomprobante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Con_Asientomaestro;
 
 
 class ConTipocomprobanteController extends Controller
@@ -114,10 +115,22 @@ class ConTipocomprobanteController extends Controller
     {
        // if (!$request->ajax()) return redirect('/');
 
-        $tipocomprobante = Con_Tipocomprobante::findOrFail($request->idtipocomprobante);
-
-        $tipocomprobante->activo = '0';
-        $tipocomprobante->save();
+        $sitipocomprobante=Con_Asientomaestro::where('idtipocomprobante',$request->idtipocomprobante)->get()->toArray();
+    
+        //dd($sitipocomprobante);
+        if(count($sitipocomprobante)>0)
+        {
+            //echo "entra is array";
+            return "activo";
+        }
+            
+        else
+        {
+            //echo "no entra is array";
+            $tipocomprobante = Con_Tipocomprobante::findOrFail($request->idtipocomprobante);
+            $tipocomprobante->activo = '0';
+            $tipocomprobante->save();
+        }
     }
 
     public function activar(Request $request)
