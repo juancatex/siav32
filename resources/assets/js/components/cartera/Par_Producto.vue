@@ -945,7 +945,7 @@
                             'valor_abc':values.data, 
                             'valor_abc_php':values.data_php, 
                             'iscargo':values.adi, 
-                            'iscomision':values.iscomision, 
+                            'iscomision':values.comision, 
                             'formula':values.formula, 
                             'formulaphp':values.formula2 
                             }).then(function (response) { responses=true;  }).catch(function (error) {  responses=false;  });   

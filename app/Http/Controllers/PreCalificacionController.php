@@ -21,9 +21,10 @@ class PreCalificacionController extends Controller
     }
  
     public function plandepagos(Request $request){
-       // if (!$request->ajax()) return redirect('/');
+      // if (!$request->ajax()) return redirect('/');
         $plandepagos=new MetodoAmortizacion();
-        return $plandepagos->metodofrances($request->idproducto,$request->meses,$request->montosolicitado,$request->interesDiferido);
+        return $plandepagos->metodofrances($request->idproducto,$request->meses,$request->montosolicitado,$request->interesDiferido,$request->seg);
+        // return $plandepagos->metodofrances(6,120,15000,0,1);
     }
  
     public function getcuota(Request $request){
@@ -425,6 +426,7 @@ if(!empty($request->buscar)){
        if (!$request->ajax()) return redirect('/'); 
       
          $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+         
      return ['capital'=>($total[0]->total + 0)];
     }
 

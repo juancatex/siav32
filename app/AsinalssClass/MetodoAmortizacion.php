@@ -7,9 +7,14 @@ use App\Par_Prestamos;
 use App\Par_productos_perfilcuenta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
  
 Class MetodoAmortizacion
 { 
+    function seguro_desgravamen($monto){
+        $seguro=0.78; 
+        return $this->redondeo_valor(($monto*($seguro))/1000);
+    }
     function TEM($tasa){
         return $tasa / 12;
     }
@@ -17,7 +22,7 @@ Class MetodoAmortizacion
         return round($valor,2);
     }
     function getproductocobranza($producto){ 
-        return Par_Producto::select('cobranza_perfil_ascii','tasa') 
+        return Par_Producto::select('cobranza_perfil_ascii','tasa','desembolso_perfil','desembolso_perfil_refi') 
          ->where('idproducto','=',$producto) 
          ->limit(1)
          ->get();
@@ -42,7 +47,7 @@ Class MetodoAmortizacion
      }
 
 
-    public function metodofrances($idproducto,$meses,$montosolicitado,$interesDiferido){
+    public function metodofrances($idproducto,$meses,$montosolicitado,$interesDiferido,$segurovalidate){
         $idperfilcobranzaascii=$this->getproductocobranza($idproducto)[0]->cobranza_perfil_ascii;
         $tasa=$this->getproductocobranza($idproducto)[0]->tasa;
         $fechas=DB::select('select checkcut() as corte, getfecha() as fecha, getfechas() as fechas')[0];
@@ -50,11 +55,8 @@ Class MetodoAmortizacion
         $ted = $this->TEM($tasa)/100;
         $punterofechas = $fechas->corte==1? 1 : 0;
         $valorresta = (intval(date('d', strtotime($fechaspuntero[0])))-intval(date('d', strtotime($fechas->fecha))))+1; 
-        // aplicacion del metodo frances
-        $in2 = pow((1 + $ted), $meses);
-        $in3 = $ted * $in2;
-        $int4 = $in2 - 1;
-        $cuotageneral = $this->redondeo_valor(($montosolicitado * ($in3 / $int4)));
+        // aplicacion del metodo frances  
+        $cuotageneral = $this->redondeo_valor(   ($ted * pow((1 + $ted), $meses) / (pow((1 + $ted), $meses) - 1)) * $montosolicitado );
         // aplicacion del metodo frances 
         $interes_periodo=0;
         $amortizacion=0;
@@ -125,6 +127,11 @@ Class MetodoAmortizacion
                                         } else {
                                             $controldiferido = $this->redondeo_valor($controldiferido+$cuotadiferido);
                                         }
+                                        if($segurovalidate==1){
+                                            $seguro=$this->seguro_desgravamen($monto_anterior);
+                                        }else{
+                                            $seguro=0;
+                                        }
 /////////////////////////////////////////////////////////////////////////////////////////////////calculo de cargos/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                         $perfilcobranza =$this->getperfil($idproducto,$idperfilcobranzaascii); 
                                         for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
@@ -132,8 +139,8 @@ Class MetodoAmortizacion
                                         $sumacargos=0;
                                         /////// parametros para el calculo de cargos
                                         $total_cuotas=$meses;
-                                        $cuota=$cuotaacu;
-                                        $cuotaf=$cuotaacu;
+                                        $cuota=$this->redondeo_valor($cuotaacu+$seguro);
+                                        $cuotaf=$this->redondeo_valor($cuotaacu+$seguro);
                                         $intereses=$interes_periodo;
                                         $capital=$amortizacion;
 
@@ -142,19 +149,20 @@ Class MetodoAmortizacion
                                                 $abc="$".$perfil->valor_abc; 
                                                 eval($abc."=".$perfil->formulaphp.";");
                                                 if($perfil['iscargo']==1){ 
-                                                    $cargoin=eval("return round(".$abc.",2);");
-                                                    $sumacargos+=$cargoin;
-                                                    $sumacargos=round($sumacargos,2);  
+                                                    $cargoin=$this->redondeo_valor(eval("return ".$abc.";")); 
+                                                    $sumacargos=$this->redondeo_valor($sumacargos + $cargoin);  
                                                 }
                                         } 
                                        // echo $cuotaacu."<br>";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+                                  
+                                    
                                 $outdata[$periodo]=array(
                                     'pe'=>$periodo,
                                     'fp'=> date('Y-m-d', strtotime($fechaspuntero[$punterofechas])),
                                     'di'=> $diasc,
-                                    'cut'=> $this->redondeo_valor($cuotaacu + $sumacargos+ $cuotadiferido),
+                                    'seg'=> $seguro,
+                                    'cut'=> $this->redondeo_valor($cuotaacu + $sumacargos+ $cuotadiferido + $seguro),
                                     'cuota'=> $cuotaacu,
                                     'in'=> $interes_periodo,
                                     'indi'=> $cuotadiferido,
@@ -164,15 +172,35 @@ Class MetodoAmortizacion
                                     'car'=> $sumacargos
                                 );
                                 $punterofechas++;
-                    if ($cuota_final < ($cuotaacu + $sumacargos)) {
-                        $cuota_final = $this->redondeo_valor($cuotaacu + $sumacargos);
+                    if ($cuota_final < ($cuotaacu + $sumacargos+ $cuotadiferido + $seguro)) {
+                        $cuota_final = $this->redondeo_valor($cuotaacu + $sumacargos+ $cuotadiferido + $seguro);
                     } 
             }else{
-                 
+                $perildesembolso=$this->getproductocobranza($idproducto)[0];
+                
+
+                                         $perfilcobranza =$this->getperfil($idproducto,$perildesembolso->desembolso_perfil>0?$perildesembolso->desembolso_perfil:$perildesembolso->desembolso_perfil_refi); 
+                                         
+                                        for($i=65; $i<=90; $i++) { $abc="$".chr($i); eval($abc."=0;"); }
+                                       
+                                        $sumacargos=0;
+                                        /////// parametros para el calculo de cargos 
+                                        /////////
+                                        foreach($perfilcobranza as $perfil){  
+                                                if($perfil['iscargo']==1){ 
+                                                    $abc="$".$perfil->valor_abc; 
+                                                    eval($abc."=".$perfil->formulaphp.";");
+                                                    $cargoin=$this->redondeo_valor(eval("return ".$abc.";")); 
+                                                    $sumacargos=$this->redondeo_valor($sumacargos + $cargoin);  
+                                                }
+                                        } 
+
+
                 $outdata[$periodo]=array(
                   'pe'=>$periodo,
                   'fp'=> date('Y-m-d', strtotime($fechas->fecha)),
                   'di'=> 0,
+                  'seg'=> 0,
                   'cut'=> 0,
                   'cuota'=> 0,
                   'in'=> 0,
@@ -180,7 +208,7 @@ Class MetodoAmortizacion
                   'am'=> 0,
                   'ca'=> $montototal,
                   'ca_an'=> $montototal,
-                  'car'=> 0 
+                  'car'=> $sumacargos
                 );
             }
         } 
@@ -326,9 +354,10 @@ Class MetodoAmortizacion
 
         return  $i;
     }
-    public function getRefinanciamientoMetodoFraces($idsocio,$cuotatransito){
-        $prestamos_refinanciar=Par_Prestamos::select(DB::raw('MONTH(par__prestamos.fechardesembolso) as mesdesembolso'),'par__prestamos.idprestamo','par__prestamos.apro_conta','par__monedas.tipocambio',
-        'par__productos.cobranza_perfil_refi','par__productos.idproducto','par__prestamos.plazo','socios.numpapeleta')
+    public function getRefinanciamientoMetodoFraces($idsocio,$cuotatransito,$numdoc,$idmodulo,$idprestamoin){
+        $prestamos_refinanciar=Par_Prestamos::select(DB::raw('DAY(par__prestamos.fechardesembolso) as diadesembolso'),DB::raw('MONTH(par__prestamos.fechardesembolso) as mesdesembolso'),
+        'par__prestamos.idprestamo','par__prestamos.apro_conta','par__monedas.tipocambio','par__productos.tasa',
+        'par__productos.cobranza_perfil_refi','par__productos.idproducto','par__prestamos.plazo','par__prestamos.seguro','socios.numpapeleta')
         ->join('socios','par__prestamos.idsocio','=','socios.idsocio') 
         ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
         ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
@@ -336,24 +365,199 @@ Class MetodoAmortizacion
         ->where('par__productos.cobranza_perfil_refi','!=','0') 
         ->where('par__prestamos.idsocio','=',$idsocio)->get(); 
         $outdata = array(); 
-        $validadoconta=0;
-        $sum_in_diferido=0;
-        foreach($prestamos_refinanciar as $prestamo){
+        $validadoconta=0; 
+        $total_refinanciar=0;
+        $suma_cuota=0; 
+        $fecha=(DB::select("select fechaSistema as fecha  from par__fecha__sistemas where activo=1"))[0]->fecha; 
+        foreach($prestamos_refinanciar as $prestamo){ 
             if($prestamo->apro_conta==1){
+                                
+                                /////////////////////////////////////////////TEM////////////////////////////////////////////////////////////////////////////////
+                                $tem=0;
+                                $prestamo->tasa;
+                                if($prestamo->tasa>0){ 
+                                    $tem = $this->TEM($prestamo->tasa)/100;
+                                }
+                                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                /////////////////////////////////////////////suma de interes diferido///////////////////////////////////////////////////////////
+                                            $varinteres= DB::table('par__prestamos__plans')->where('idprestamo',$prestamo->idprestamo); 
+                                            if($cuotatransito==1){
+                                                $varinteres=$varinteres->where(function($query) {
+                                                    $query->where('idestado',2)
+                                                        ->orwhere('idestado',10);
+                                                    });
+                                            }else{
+                                                $varinteres=$varinteres->where('idestado',2);
+                                            }
 
-               /////////////////////////////////////////////suma de interes diferido///////////////////////////////////////////////////////////
-               $var= DB::table('par__prestamos__plans')->where('idprestamo',4); 
-               if($cuotatransito==1){
-                   $var=$var->where(function($query) {
-                       $query->where('idestado',2)
-                           ->orwhere('idestado',10);
-                       });
-               }else{
-                   $var=$var->where('idestado',2);
-               }
-               $sum_in_diferido=$var->sum('indi');
-               echo $prestamo->idprestamo;
-               ////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                 $sum_in_diferido=$varinteres->sum('indi');
+                                    
+                                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                /////////////////////////////////////////////ultima cuota vigente   ///////////////////////////////////////////////////////////
+                                $datosprestamo= DB::table('par__prestamos__plans')
+                                ->select('ca_an','pe','fp','di',DB::raw('DAY(fp) as dias_fecha_plan'),DB::raw('MONTH(fp) as mes_fecha_plan'))->where('idprestamo',$prestamo->idprestamo); 
+                                if($cuotatransito==1){
+                                    $datosprestamo=$datosprestamo->where(function($query) {
+                                        $query->where('idestado',2)
+                                            ->orwhere('idestado',10);
+                                        });
+                                }else{
+                                    $datosprestamo=$datosprestamo->where('idestado',2);
+                                }
+
+                                $datosprestamo=$datosprestamo->orderby('pe','asc')->limit(1)->get()[0]; 
+                                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                /////////////////////////////////////////////////////////calculo metodo frances/////////////////////////////////////////////////
+                                    if($tem>0){
+                                        $datesistema=(DB::select("select getfecha() as fecha,month(getfecha()) as mesactual,day(getfecha()) as diaactual"))[0];
+                                        if($datesistema->mesactual==$prestamo->mesdesembolso){
+                                            $dias=($datesistema->diaactual-$prestamo->diadesembolso)+1;
+
+                                        }elseif( $datosprestamo->mes_fecha_plan<$datesistema->mesactual){
+                                            $dias=($datesistema->diaactual+$datosprestamo->di);
+
+                                        }elseif( $datosprestamo->mes_fecha_plan==$datesistema->mesactual){
+                                            $dias=($datesistema->diaactual+($datosprestamo->di-$datosprestamo->dias_fecha_plan))+1; 
+                                        }
+                                       $interes_periodo = $this->redondeo_valor(($datosprestamo->ca_an * $tem * $dias) / 30);
+                                       $cuotafinal = $this->redondeo_valor($datosprestamo->ca_an + $interes_periodo + $sum_in_diferido);
+                                    }else{
+                                        $cuotafinal = $datosprestamo->ca_an;
+                                    }
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+                                ////////////////////////////////////----- obtiene el perfil de cobranza segun el producto del presamo------///////////////////////////////////////////////////
+                                $perfilcobranza =$this->getperfil($prestamo->idproducto,$prestamo->cobranza_perfil_refi); 
+                                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                
+                                 if($prestamo->seguro==1){
+                                    $segurodesgravamen= $this->seguro_desgravamen($datosprestamo->ca_an);
+                                 }else{
+                                    $segurodesgravamen=0;
+                                 } 
+                                 
+                                $total_cuotas = $prestamo->plazo;
+                                $cuota =$this->redondeo_valor($cuotafinal + $segurodesgravamen);/// verificar si en caso se sigue pagando cargos en este proceso
+                                $cuotaf = $this->redondeo_valor($cuotafinal + $segurodesgravamen); /// verificar si en caso se sigue pagando cargos en este proceso
+                                $capital = $datosprestamo->ca_an;
+                                $intereses = $interes_periodo;
+                                $interes_diferido =$sum_in_diferido;
+                                $cargoscobranza = array();
+                                $sumacargos=0; 
+                                                                                              /*      ////////////////////////////////////obtencion de cargos/////////////////////////////////////////////////////
+                                                                                                    ///////////////////////////// clear ram ///////////////////////////////////////////////////////
+                                                                                                            for($i=65; $i<=90; $i++) {  
+                                                                                                                $abc="$".chr($i); 
+                                                                                                                eval($abc."=0;");
+                                                                                                            }
+                                                                                                    ////////////////////////////////////////////////////////////////////////////////////
+                                                                                                    foreach($perfilcobranza as $perfil){ 
+                                                                                                        $abc="$".$perfil['valor_abc'];
+                                                                                                        eval($abc."=".$perfil['formulaphp'].";");
+                                                                                                        if($perfil['iscargo']==1){ 
+                                                                                                                $cargoin=eval("return round(".$abc.",2);"); 
+                                                                                                                $sumacargos=$this->redondeo_valor($sumacargos+$cargoin); 
+                                                                                                                array_push($cargoscobranza,['idperfilcuentadetalle'=>$perfil['idperfilcuentadetalle'],'cargo'=>$cargoin,'rev'=>(strpos($perfil['formulaphp'],'$total_cuotas')>0)?1:0]);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    /////////////////////////////////////////////////////////////////////////////////////////*/
+     
+                               $cuotaf =  $this->redondeo_valor($cuota+$sumacargos); 
+                                $arrayDetalle = array();  
+                                $debe=0;
+                                $haber=0;
+                                ///////////////////////////// clear ram ///////////////////////////////////////////////////////
+                                for($i=65; $i<=90; $i++) {  
+                                    $abc="$".chr($i); 
+                                    eval($abc."=0;");
+                                }
+                                ////////////////////////////////////////////////////////////////////////////////////
+                                foreach($perfilcobranza as $perfil){ 
+                                    $abc="$".$perfil['valor_abc'];
+                                    eval($abc."=".$perfil['formulaphp'].";");
+                                    $value=$this->redondeo_valor(eval("return ".$abc.";"));
+                                    $value=$this->redondeo_valor($value*$prestamo->tipocambio);  
+                                    if($value>0){ 
+                                        if($perfil['tipocargo']=='h'){ 
+                                            $haber=$this->redondeo_valor($haber+$value);
+                                            $value*= -1;
+                                        }else{ 
+                                            $debe=$this->redondeo_valor($debe+$value); 
+                                        }
+                                            ///////////////////////// registrar el perfil con su valor en un array
+                                            array_push($arrayDetalle,array('idcuenta'=>$perfil['idcuenta'],
+                                            'subcuenta'=>$prestamo->numpapeleta, 
+                                            'documento'=>'Automatico', 
+                                            'moneda'=>'bs',	 
+                                            'monto'=>$value
+                                            )); 
+                                    }else{
+                                        $value*= -1;
+                                        if($value>0){ 
+                                            if($perfil['tipocargo']=='h'){
+                                                $haber=$this->redondeo_valor($haber+$value);
+                                                $value*= -1;
+                                            }else{
+                                                $debe=$this->redondeo_valor($debe+$value); 
+                                            }
+                                                ///////////////////////// registrar el perfil con su valor en un array
+                                            array_push($arrayDetalle,array('idcuenta'=>$perfil['idcuenta'],
+                                            'subcuenta'=>$prestamo->numpapeleta, 
+                                            'documento'=>'Automatico', 
+                                            'moneda'=>'bs',	 
+                                            'monto'=>$value
+                                            )); 
+                                        }
+
+                                    }
+                                }
+                               ////////////////////////////////////////////////////////////////////////////////////  
+                             
+                   if($debe!=$haber){ 
+                    $outdata = array();
+                    $validadoconta=2;
+                   }  
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    $cuotafinal=$this->redondeo_valor($cuotaf*$prestamo->tipocambio);  
+                    $total_refinanciar=$this->redondeo_valor($total_refinanciar+$cuotafinal); 
+                   
+                    array_push($outdata,array('cuotafinal'=>$cuotafinal,'idprestamo'=> $prestamo->idprestamo,
+                    'asiento'=> array(
+                        'cobranza_perfil_refi'=>$prestamo->cobranza_perfil_refi,
+                        'numdoc'=>$numdoc,
+                        'arraydetalle'=>$arrayDetalle,
+                        'idmodulo'=>$idmodulo,
+                        'fechaasiento'=>$fecha,
+                        'idprestamoin'=>$idprestamoin
+
+                    ),'db'=>array(
+                        'idprestamo'=> $prestamo->idprestamo,
+                        'pe'=> 500,
+                        'fp'=> $fecha,
+                        'di'=> $dias,
+                        'ca_an'=> $datosprestamo->ca_an,
+                        'am'=> $datosprestamo->ca_an,
+                        'in'=> $interes_periodo,
+                        'indi'=> $sum_in_diferido,
+                        'ca'=> 0,
+                        'car'=> 0,
+                        'cut'=> $cuotaf,
+                        'cuota'=> $cuota,
+                        'fecharegistro'=> $fecha,
+                        'fechaCobranza'=> $fecha,
+                        'tipo'=> 3,
+                        'idestado'=> 13,
+                        'idtransaccionC'=> "R-".$idprestamoin."-".$prestamo->idprestamo,
+                        'numDocC'=> $numdoc,
+                        'glosa'=> 'Cobranza del prestamo - Refinanciamiento - automatico',
+                        'tipocambio'=> $prestamo->tipocambio,
+                        'importe'=> $cuotafinal,
+                        'idusuario'=> Auth::id()
+                     )));
+                   
+                    
+                                         
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
             }else{
                 $outdata = array();
@@ -361,7 +565,7 @@ Class MetodoAmortizacion
                 break;
             }
         }
-        return ['conta'=>$validadoconta,'data'=>$prestamos_refinanciar];      
+        return ['conta'=>$validadoconta,'data'=>$outdata,'total'=>$total_refinanciar];      
     }
 }
 

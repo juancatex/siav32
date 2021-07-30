@@ -326,7 +326,7 @@ export default {
 		},
 		getfiles(){
 			let me=this;
-			 axios.get('/view').then(function (response) {  
+			axios.get('/view').then(function (response) {  
 				 me.response=[];
 				 me.response.push(response.data);
                  me.ini();

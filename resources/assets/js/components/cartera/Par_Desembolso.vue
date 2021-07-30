@@ -227,7 +227,7 @@
                                 for="text-input">¿ Refinanciar cuotas en transito ? </label>
                                     <div class="col-md-6 my-auto"> 
                                          <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="cobrarenvioascii">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="cobrarenvioascii" disabled>
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>   
                                     </div>
@@ -314,7 +314,7 @@
                 idmodulomain: this.idmodulo,
                 tipocambio: 0,
                 tasaanual: 0,
-                cobrarenvioascii: 0,
+                cobrarenvioascii: true,
                 plazomeses: 0, 
                 montosolicitado: 0,
                 idsocio: 0,
@@ -705,45 +705,17 @@
                                                                                                     'detalle':me.obs,
                                                                                                     'lote':responselote.data.id,
                                                                                                     'numdoc':me.numdoc_desembolso,
-                                                                                                    'cobrar':me.cobrarenvioascii 
+                                                                                                    'interesDiferido':0,   
+                                                                                                    'seg':me.arrayPrestamosSeleccionado.seguro ,
+                                                                                                    'cobrar':me.cobrarenvioascii?1:0 
                                                                                             }).then(function (response) {  
-                                                                                               
-                                                                                               if(response.data.status){
-                                                                                                $('#text_saving').text('Generando plan de cuotas.');
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                  axios.get('/plandepagos?idproducto='+me.arrayPrestamosSeleccionado.idproducto+'&tasa='+me.arrayPrestamosSeleccionado.tasa+
-                                                                                                                  '&meses='+me.arrayPrestamosSeleccionado.plazo+'&montosolicitado='+me.arrayPrestamosSeleccionado.monto+'&interesDiferido=0')
-                                                                                                                  .then(function (response) {
-                                                                                                                                var salida= response.data;   
-                                                                                                                                    me.regPlan_de_pagos(salida.data,me.arrayPrestamosSeleccionado.idprestamo).then(function(responses) { 
-                                                                                                                                        if(responses){  
-                                                                                                                                            $('#text_saving').text('Registrando desembolso...');
-                                                                                                                                            axios.put('/prestamos/desembolsoupdate',{ 
-                                                                                                                                                'idp':me.idpres,
-                                                                                                                                                'cuota':salida.cuota   
-                                                                                                                                            }).then(function (responsess) {  
-                                                                                                                                                me.listar(); 
-                                                                                                                                                _pl._vm2154_12185_145(me.idpres,me.rutas);
-                                                                                                                                            }).catch(function (error) { 
-                                                                                                                                                swal("¡ocurrio un problema al actualizar el registro (desembolso)!",'', "error");
-                                                                                                                                            });
-
-                                                                                                                                        } else{
-                                                                                                                                        swal("¡ocurrio un problema al registrar el plan de pagos!",'', "error"); 
-                                                                                                                                        }
-                                                                                                                                    });
-                                                                                                                    })
-                                                                                                                    .catch(function (error) {
-                                                                                                                        console.log(error);
-                                                                                                                    }); 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////                                                                                                
-                                                                                                         
-                                                                                                }else{
-                                                                                                    swal("¡ocurrio un problema al refinanciar el prestamo!",response.data.mensaje, "error");
-                                                                                                }    
+                                                                                               console.log("response:",response); 
+                                                                                                $('.progress-bar[id="save"]').css('width','100%').attr('aria-valuenow', 100).text('100%');   
+                                                                                                    me.listar(); 
+                                                                                                   _pl._vm2154_12185_145(me.idpres,me.rutas);  
                                                                                             }).catch(function (error) { 
-                                                                                                swal("¡ocurrio un problema al registrar prestamos!",'', "error");
+                                                                                                console.log("error:",error);
+                                                                                                swal("¡ocurrio un problema al refinanciar  el prestamos!",error.data.mensaje, "error");
                                                                                             });
                                                                                 /////////////////////////////////////////////////////////////////
                                                                     }).catch(function (error) { 
@@ -771,8 +743,10 @@
                                                                                                 'lote':responselote.data.id,
                                                                                                 'idmodulo':me.idmodulomain,
                                                                                                 'interesDiferido':0,
-                                                                                                'perfilmaestro':me.perfilmaestrodesembolso  
-                                                                                        }).then(function (responsess) {    
+                                                                                                'perfilmaestro':me.perfilmaestrodesembolso,  
+                                                                                                'seg':me.arrayPrestamosSeleccionado.seguro  
+                                                                                        }).then(function (responsess) {  
+                                                                                                              $('.progress-bar[id="save"]').css('width','100%').attr('aria-valuenow', 100).text('100%');   
                                                                                                        me.listar(); 
                                                                                                       _pl._vm2154_12185_145(me.idpres,me.rutas); 
                                                                                         }).catch(function (error) { 
@@ -812,6 +786,7 @@
                        'car':prestamos.car,
                        'cut':prestamos.cut,
                        'indi':prestamos.indi,
+                       'seg':prestamos.seg,
                        'ca':prestamos.ca,
                        'ca_an':prestamos.ca_an,
                        'cuota':prestamos.cuota
@@ -835,7 +810,7 @@
                 this.idproducto=data.idproducto; 
                 this.tipocambio=data.tipocambio;
                 this.tasaanual=data.tasa;
-                this.cobrarenvioascii=0;
+                this.cobrarenvioascii=true;
                 this.plazomeses=data.plazo;
                 this.montosolicitado=data.monto;
                 this.numdoc_desembolso=data.no_prestamo;

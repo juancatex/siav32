@@ -1436,7 +1436,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     z
   }
-export function _vvp2521_00001(ta, idview = 'planout') {
+export function _vvp2521_00001(ta, idview = 'planout') { 
   imgToBase64('img/iconad.png', function (base64) {
 
     var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
@@ -1462,6 +1462,7 @@ export function _vvp2521_00001(ta, idview = 'planout') {
         am: 'Capital',
         in: 'Interes',
         indi: 'Interes Diferido',
+        seg: 'Seguro',
         car: 'Cargos',
         cu: 'Total Cuota',
         ca: 'Saldo'
@@ -1479,6 +1480,7 @@ export function _vvp2521_00001(ta, idview = 'planout') {
         cu: getTotal(ta, 'cut'),
         in: getTotal(ta, 'in'),
         indi: getTotal(ta, 'indi'),
+        seg: getTotal(ta, 'seg'),
         am: getTotal(ta, 'am'),
         ca: {
           content: ''
@@ -2035,6 +2037,7 @@ function generateBodyTable(datas) {
       cu: redondeo_valor(valor.cut),
       in: redondeo_valor(valor.in),
       indi: redondeo_valor(valor.indi),
+      seg: redondeo_valor(valor.seg),
       am: redondeo_valor(valor.am),
       ca: redondeo_valor(valor.ca)
     });
@@ -2319,7 +2322,8 @@ export function generaperfil(mapinto, values = [], padre) {
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
-  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="total saldo capital de prestamos vigentes">total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="Total saldo capital de prestamos vigentes">Total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="segurodesgravamen" v-data="perfil" v-view="Total seguro desgravamen">Total seguro desgravamen<span class="tooltiptext tooltip-bottom">Es el calculo que se realiza al saldo capital del prestamo.</span></div>');
   $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
 
   values.forEach(function (element, index) {
@@ -2436,7 +2440,8 @@ export function _mff82sdf_mjd(mapinto, padre) {
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
   $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
-  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="total saldo capital de prestamos vigentes">total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="Total saldo capital de prestamos vigentes">Total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="segurodesgravamen" v-data="perfil" v-view="Total seguro desgravamen">Total seguro desgravamen<span class="tooltiptext tooltip-bottom">Es el calculo que se realiza al saldo capital del prestamo.</span></div>');
   $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
 
 
@@ -2923,6 +2928,7 @@ export function _mmf2251_3325(mapinto) {
   window.interes_diferido = 144;
   window.total_cuotas = 120;
   window.total_refinanciar = 1000;
+  window.segurodesgravamen = 0;
   window.tipodecambio = 1;
   mapinto.forEach(function (element, key) {
 
@@ -2960,6 +2966,7 @@ export function _mf362353_225(mapinto, padre, tipoc, cod, namep) {
   window.interes_diferido = 0;
   window.total_cuotas = 120;
   window.total_refinanciar = 1000;
+  window.segurodesgravamen = 0;
   window.tipodecambio = tipoc;
 
 
@@ -3076,6 +3083,7 @@ function valueformulacargos(arrayformulas, tcuo, tipoc, mon, cuo, prs, cap, int,
   window.cuotaf = (cuo);
   window.prestamos = (prs);
   window.total_refinanciar = (prs);
+  window.segurodesgravamen = 0;
   window.capital = (cap);
   window.intereses = (int);
   window.interes_diferido = (intdif);
@@ -3109,6 +3117,7 @@ function valueformulaDesembolso(arrayformulas, tcuo, tipoc, mon, cuo, prs, numpa
   closeRam();
   window.total_cuotas = tcuo;
   window.total_refinanciar = prs;
+  window.segurodesgravamen = 0;
   window.tipodecambio = tipoc;
   window.monto = (mon);
   window.cuota = (cuo);
@@ -3167,6 +3176,7 @@ export function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interes
   closeRam();
   window.total_cuotas = tcuo;
   window.total_refinanciar = 0;
+  window.segurodesgravamen = 0;
   window.tipodecambio = 1;
   window.monto = (mon);
   window.cuota = (cuoota);

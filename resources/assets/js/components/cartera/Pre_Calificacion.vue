@@ -506,9 +506,19 @@
                       </div>
 
                       <div class="form-group row">
-                        <label style="text-align: right; align-items: center;font-weight: 900;font-size: 20px;"
-                          class="col-md-4 form-control-label" for="text-input"> </label>
-
+                       
+                   
+                    <div class="col-md-4">
+                          <label style="text-align: right; align-items: center;font-weight: 500;"
+                            class="form-control-label" for="text-input">Aplicar seguro de desgravamen :</label>
+                          <div class="input-group">
+                            <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="aplicasegurodesgravamen">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>
+                          </div>
+                          
+                        </div>
 
 
 
@@ -1257,7 +1267,8 @@ export default {
       barChart: null,
       barChartG: null,
       PlandePagosPrint: null,
-      dataCuentaBancaria: null
+      dataCuentaBancaria: null,
+      aplicasegurodesgravamen: 0
     };
   },
 
@@ -1318,6 +1329,9 @@ export default {
       this.calculoCuota();
     },
     plazomeses: function() {
+      this.calculoCuota();
+    } ,
+    aplicasegurodesgravamen: function() {
       this.calculoCuota();
     }
   },
@@ -1381,7 +1395,8 @@ export default {
       }  
        
     },generacuota:_.debounce((me,paso) => { 
-                axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+'&montosolicitado='+me.montosolicitado+'&interesDiferido=0').then(function (response) {
+                axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+
+                '&montosolicitado='+me.montosolicitado+'&seg='+(me.aplicasegurodesgravamen?1:0)+'&interesDiferido=0').then(function (response) {
                     var salida= response.data;   
                     me.PlandePagosPrint = salida.data;
                     me.cuotaaproximada = (me.montosolicitado > 0 && me.plazomeses > 0 && !me.errors.any())  ? salida["cuota"]  : 0;
@@ -1479,12 +1494,13 @@ export default {
           lipcom:this.liquidopagablecomputable,
           lip:this.liqpagable,
           riesgo:this.riesgo,
+          seg:(this.aplicasegurodesgravamen?1:0),
           fami:this.familiar,
           libro:this.prolibro,
           fron:this.frontera,
           pvig:this.cuotas_vigentes,  
           cuo_aprox:this.cuotaFinalSocio,  
-          planPagosMap:JSON.stringify(Array.from(this.PlandePagosPrint)),  
+          planPagosMap:JSON.stringify(this.PlandePagosPrint),  
         })
         .then(function(response) {
                    
@@ -1945,7 +1961,7 @@ export default {
                           pvig: 0,
                           idlista: idprestamolista.data.id,
                           cuo_aprox: el.cuotaaproximada,
-                          planPagosMap: JSON.stringify(Array.from(el.PlandePagosPrint)),
+                          planPagosMap: JSON.stringify(el.PlandePagosPrint),
                         });
                         
                         };
@@ -2281,6 +2297,7 @@ export default {
           this.obs = "";
           this.cuentaBancaria = "";
           this.tasaanual = 0;
+          this.aplicasegurodesgravamen = 0;
           this.valorfactor = 0;
           this.montomaximo = 0;
           this.maxfactor = 0;

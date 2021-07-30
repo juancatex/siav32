@@ -22,13 +22,14 @@ class CreateParPrestamosTable extends Migration
 
             $table->integer('idproducto')->unsigned();  
             $table->integer('idsocio')->unsigned();
-            $table->integer('idcuentasocio')->nullable();//se registra la cuenta bancaria en la que se abonara el monto del prestamo  
-            $table->integer('idestado')->unsigned()->default(1);// se registra el estado del prestamo ( 1=pendiente de dessembolso, 2=vigente, 3=mora, 4=cancelado, 5=liquidado(pagado))
+            $table->integer('idcuentasocio')->nullable()->comment('se registra la cuenta bancaria en la que se abonara el monto del prestamo'); //s  
+            $table->integer('idestado')->unsigned()->default(1)->comment(' se registra el estado del prestamo ( 1=pendiente de dessembolso, 2=vigente, 3=mora, 4=cancelado, 5=liquidado(pagado))');//
+            $table->boolean('seguro')->default(0)->comment('si tiene =1, si no tiene = 0, el detalle del seguro se muestra en el plan de pagos');
             
-            $table->integer('idsupervisor')->nullable(); //ejecutivo autorizado (quien esta a cargo del area)
-            $table->integer('idoperario')->nullable(); //ejecutivo responsable (quien realiza la operacion)
+            $table->integer('idsupervisor')->nullable()->comment('ejecutivo autorizado quien esta a cargo del area');  //
+            $table->integer('idoperario')->nullable()->comment('ejecutivo responsable quien realiza la operacion'); //
             
-            $table->float('monto')->default(0); 
+            $table->float('monto')->default(0);  
             $table->float('cuota')->default(0); 
             $table->integer('plazo')->default(0);
             $table->integer('interesdiferido')->default(0);
