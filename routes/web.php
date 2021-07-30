@@ -650,6 +650,7 @@ Route::group(['middleware' => ['webinterno']], function () {
        Route::get ('/getsaldocapital_desembolso', 'PreCalificacionController@getsaldocapital_desembolso');
        Route::get ('/pre_listasociogarante','PreCalificacionController@pre_listasociogarante');
        Route::get ('/reporte1','PreCalificacionController@reporte1');
+       Route::get ('/plandepagos','PreCalificacionController@plandepagos');
 
        Route::get('/par_ventanamodulo/selectVentanamodulo', 'ParVentanamoduloController@selectVentanamodulo');
 

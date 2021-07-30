@@ -174,9 +174,10 @@
             }
         },
         methods : { 
-            pdf(pdfin){
-       this.classModalstatus.openModal('plandepagospdf');        
-      _pl._vvp2521_00001(new Map(JSON.parse(pdfin)),'planoutpdf');
+            pdf(pdfin){ 
+         this.classModalstatus.openModal('plandepagospdf');        
+         _pl._vvp2521_00001(JSON.parse(pdfin),'planoutpdf');
+    //   _pl._vvp2521_00001(new Map(JSON.parse(pdfin)),'planoutpdf');
             },
             completacero(g){
                 return _pl.fillDecimals(g);

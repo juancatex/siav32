@@ -32,6 +32,11 @@
                                             <button     @click="openModale('cen')" class="btn btn-primary">CEN</button>  
                                         </div> 
                                     </div>
+                                    <div class="card-body"> 
+                                        <div class="form-group">
+                                            <button     @click="openReport()" class="btn btn-primary">pdf</button>  
+                                        </div> 
+                                    </div>
                             </div>
                         </div>
     </div>
@@ -572,6 +577,8 @@ computed: {
               me.tipoCred=valor;
               me.classModal.openModal('credencial');  
             },500);
+        },openReport(){
+            openReport('html','prueba');
         },
         carnetcen(data){
             this.tipoCred='';
