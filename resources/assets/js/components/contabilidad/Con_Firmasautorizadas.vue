@@ -75,6 +75,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Predeterminado Usuario Registro</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         <tr v-for="firma in arrayFirmas" :key="firma.idfirmaautorizada">
                             <td v-text="firma.orden"></td>
                             <td v-text="firma.nombres"></td>
@@ -187,7 +193,7 @@
                     var respuesta= response.data;
                     me.arrayFirmas = respuesta;
                     let sw=0;
-                    var cont=0;
+                    var cont=1;
                     while (sw!=1) {
                         cont ++;
                         let resultado= me.arrayFirmas.find(elem=>elem.orden==cont)

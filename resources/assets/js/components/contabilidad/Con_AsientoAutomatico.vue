@@ -92,7 +92,7 @@
                             <td style="text-align: center;vertical-align: middle;"> <h5>{{asientomaestro.loteprestamos}}</h5></td>
                             <td>
                                 <label class="switch switch-label switch-pill switch-outline-primary-alt">
-                                    <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion" :value="asientomaestro.idasientomaestro" :disabled="(asientomaestro.idtipocomprobante==2 && asientomaestro.desembolso==0) || asientomaestro.estado==3" >
+                                    <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion" :value="asientomaestro.idasientomaestro" :disabled="(asientomaestro.idtipocomprobante==2 && (asientomaestro.desembolso==0 || asientomaestro.desembolso==2)) || asientomaestro.estado==3" >
                                     <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                 </label>
                             </td>

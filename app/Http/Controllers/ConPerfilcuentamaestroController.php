@@ -111,12 +111,14 @@ class ConPerfilcuentamaestroController extends Controller
 
          return ['perfilcuentamaestros' => $perfilcuentamaestros];
      }
-    public function selectPerfilMaestroTesoreria(Request $request){
+    
+    
+     public function selectPerfilMaestroTesoreria(Request $request){
         //if (!$request->ajax()) return redirect('/');
-  
-         //$idmodulo=$request->idmodulo;
-         $idmodulo=3;//TODO:cambiar dinamicamente, ahora 3 pertenece a contabilidad
-         $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro','nomperfil','descripcion')
+        //$tipo=$request->tipomovimiento; /// cobranza o desembolso 
+        //$cobranza=$request->cobranza;
+        $idmodulo=3;//TODO:cambiar dinamicamente, ahora 3 pertenece a contabilidad
+        $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro','nomperfil','descripcion')
                                                          ->where('idmodulo','=',$idmodulo)
                                                          ->where('activo','=','1')
                                                          ->where('completo','=','1')

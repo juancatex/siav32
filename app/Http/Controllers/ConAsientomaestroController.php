@@ -24,6 +24,7 @@ use App\Apo_Excedenteaporte;
 use App\Con_Asientosubcuenta;
 use App\Con_Firmaautorizada;
 use App\Rrh_Empleado;
+use App\Con_Perfilcuentamaestro;
 
 //agregar mas tablas de subcuentas para la seleccion
 
@@ -1330,6 +1331,23 @@ class ConAsientomaestroController extends Controller
             
         }
     }
+    public function cobrar(Request $request)
+    {
+        //dd($request);
+        if (!$request->ajax()) return redirect('/');
+        $hora = time();
+      //  $fecha= date('Y-m-d H:i:s',$hora);
+        $fecha=(DB::select("select getfecha() as total"))[0]->total;
+        //echo $fecha;
+        //echo date("d-m-Y (H:i:s)", $time);
+        foreach ($request->arrayids as $valor) {
+                $asientomaestro=Con_Asientomaestro::findOrFail($valor);
+                $asientomaestro->desembolso = 1;
+                $asientomaestro->fechahora_desembolso=$fecha;
+                $asientomaestro->u_registro_tesoreria=Auth::id();
+                $asientomaestro->save();
+            }
+    }
     public function agruparcomprobante(Request $request)
     {
         //if (!$request->ajax()) return redirect('/');
@@ -1413,6 +1431,45 @@ class ConAsientomaestroController extends Controller
             
         }
     }
+    public function listarcobranza(Request $request){
+        $valor=$request->valor;
+        $idmodulo=3;//TODO:cambiar dinamicamente, ahora 3 pertenece a contabilidad
+        $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro')
+                                                        ->where('idmodulo','=',$idmodulo)
+                                                        ->where('activo','=','1')
+                                                        ->where('completo','=','1')
+                                                        ->where('idtipocomprobante','1') // tipo comprobante de egreso
+                                                        ->orderBy('nomperfil', 'asc')
+                                                        ->get()->toArray();
+        
+        
+        $cobranza=Con_Asientomaestro::join('con__perfilcuentamaestros','con__asientomaestros.idperfilcuentamaestro','con__perfilcuentamaestros.idperfilcuentamaestro')
+                                        //->join('con__cuentasocios','con__cuentasocios.idcuentasocio','=','par__prestamos.idcuentasocio')
+                                        //->join('socios','socios.idsocio','=','par__prestamos.idsocio')
+                                        ->select('con__asientomaestros.idasientomaestro',
+                                                    'nomperfil',
+                                                    'descripcion',
+                                                    //'socios.numpapeleta',
+                                                    'con__asientomaestros.fecharegistro',
+                                                    'con__asientomaestros.numdocumento',
+                                                    'con__asientomaestros.glosa',
+                                                    //$raw,
+                                                    //'par__prestamos.monto',
+                                                    //'numcuentasocio',
+                                                    //'idagrupacion',
+                                                    'desembolso',
+                                                    'fechahora_desembolso',
+                                                    'con__asientomaestros.estado',
+                                                    //'par__prestamos.lote',
+                                                    'con__asientomaestros.observaciones',
+                                                    'numdocumento')
+                                        ->whereIn('con__asientomaestros.idperfilcuentamaestro',$perfilcuentamaestros)
+                                        ->where('desembolso',$valor)
+                                        ->orderby('fecharegistro','desc')
+                                        ->get();
+        return $cobranza;
+    }
+    
     public function recuperarCuenta(Request $request){
         //echo "hola";
         $reccuentas=Con_Asientomaestro::join('con__asientodetalles','con__asientodetalles.idasientomaestro','con__asientomaestros.idasientomaestro')
@@ -1606,14 +1663,22 @@ class ConAsientomaestroController extends Controller
         }
         
 
+        $firm=Con_Asientomaestro::join('rrh__empleados','rrh__empleados.idempleado','con__asientomaestros.u_registro') 
+                                    ->leftjoin('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo') 
+                                    ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                'nomcargo',
+                                                DB::raw('1 as orden'))
+                                    ->where('idasientomaestro',$request->idasientomaestro);
+
+                                    
         $firmas1=Con_Firmaautorizada::join('socios','socios.idsocio','con__firmaautorizadas.idpersona')
                                     ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
                                     ->join('fil__unidads','fil__directivos.idunidad','fil__unidads.idunidad')
                                     ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
                                             'nomcargo',
                                             'orden')
-                                    ->where('tipo_persona',1);//1 es el valor de los directivos
-                                    
+                                    ->where('tipo_persona',1)//1 es el valor de los directivos
+                                    ->union($firm);
         $firma2=Con_Firmaautorizada::join('rrh__empleados','rrh__empleados.idempleado','con__firmaautorizadas.idpersona') 
                                     ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')                   
                                     ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
@@ -1641,7 +1706,7 @@ class ConAsientomaestroController extends Controller
         /* $detalle=Con_Asientodetalle::join('')
         where('idasientomaestro') */
         
-
+        //return($firma2);
         return view('pdf')->with(['maestros'=>$maestros,
                                     'detalles'=>$asientodetalles,
                                     'firmas'=>$firma2,

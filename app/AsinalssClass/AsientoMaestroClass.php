@@ -449,7 +449,7 @@ Class AsientoMaestroClass
                 $asientomaestro->tipodocumento=$this->tipodocumento;
                 $asientomaestro->numdocumento=$this->numdocumento;
                 $asientomaestro->glosa=$this->glosa;
-                $asientomaestro->desembolso=1;
+                $asientomaestro->desembolso=2;
                 //$asientomaestro->idfilial='1';//modificar con ide de filial
                 $asientomaestro->idfilial=$this->filial;
                 $asientomaestro->idmodulo=$this->idmodulo;
@@ -535,7 +535,7 @@ Class AsientoMaestroClass
                 $asientomaestro->u_registro=Auth::id();
                 $asientomaestro->agrupacion=$agrupacion;
                 $asientomaestro->segcobranza=$this->segcobranza;
-                $asientomaestro->desembolso=1;
+                $asientomaestro->desembolso=2;
                 $asientomaestro->save();
                 $idasientomaestro=$asientomaestro->idasientomaestro;
 
