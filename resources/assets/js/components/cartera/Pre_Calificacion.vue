@@ -1166,6 +1166,7 @@
     <cuentaBancaria @cerrarvue="cerrarModalvue" ref="ModalVueCuentaBancaria"></cuentaBancaria>
 
     <status ref="ModalVueStatus"></status>
+     <!-- <calificacion_lista  ref="modal_calificacion_lista"></calificacion_lista> -->
   </main>
 </template>
 
@@ -1837,13 +1838,26 @@ export default {
           });
       }
     }, sociosListaView(e) { 
+      let me=this;
         if (_.findIndex(this.listaSocios, function (o) {
             return o.idsocio == e.idsocio;
           }) < 0&&_.findIndex(this.listaSociosObservados, function (o) {
             return o.idsocio == e.idsocio;
           }) < 0){
             e.obs='';
-            _pl.getcriterioGarantesLista(this,e);
+            
+                var monto = (me.montosolicitado * me.tipocambio); 
+              axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+
+                '&montosolicitado='+monto+'&seg=0&interesDiferido=0').then(function (response) {
+                    var salida= response.data;  
+                    console.log(salida);
+                     _pl.getcriterioGarantesLista(me,e,salida["cuota"]);
+                      
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
+
           }
             
           this.agregarlista = 0;
@@ -1972,24 +1986,25 @@ export default {
               return responses;      
             }
     ,listacrear(){
-      let me = this;
-      this.listaSocios=[];
-      this.listaSociosObservados=[];
-      this.arrayCuentaSocio=[];
-      this.socio_id="";
-      this.producto=1;// 1= es el id del producto de emergencia
-      this.productoporLista(this.producto).then((result)=>{
-        if(result){
-           me.classModal.openModal("listaPrestamos"); 
-        }else{
-           me.closemodallist();
-                swal(
-                    "¡No se tiene configurado el producto crediticio!",
-                    "",
-                    "error"
-                  );
-        }
-      });
+  this.$refs.modal_calificacion_lista.showVue();
+      // let me = this;
+      // this.listaSocios=[];
+      // this.listaSociosObservados=[];
+      // this.arrayCuentaSocio=[];
+      // this.socio_id="";
+      // this.producto=1;// 1= es el id del producto de emergencia
+      // this.productoporLista(this.producto).then((result)=>{
+      //   if(result){
+      //      me.classModal.openModal("listaPrestamos"); 
+      //   }else{
+      //      me.closemodallist();
+      //           swal(
+      //               "¡No se tiene configurado el producto crediticio!",
+      //               "",
+      //               "error"
+      //             );
+      //   }
+      // });
      
     }
     ,closemodallist(){

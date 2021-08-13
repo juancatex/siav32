@@ -138,12 +138,14 @@ setvue(1, 'par_prestamo_factor', './components/cartera/Par_factores.vue');
 setvue(1, 'pre_calificacion', './components/cartera/Pre_Calificacion.vue');
 setvue(1, 'par_producto', './components/cartera/Par_Producto.vue');
 setvue(1, 'par_desembolso', './components/cartera/Par_Desembolso.vue');
+setvue(1, 'par_cambiogarante', './components/cartera/Par_Cambio_garante.vue');
 setvue(0, 'cargos', './components/cartera/modal_cargos_adicionales.vue');
 setvue(0, 'view-cargos', './components/cartera/modal_cargos_adicionales_view.vue');
 setvue(0, 'cuentaBancaria', './components/cartera/modal_cuentaBancaria.vue');
 setvue(0, 'status', './components/cartera/modal_status_prestamos.vue');
 setvue(0, 'perfiles', './components/cartera/modal_perfiles.vue');
 
+setvue(0, 'calificacion_lista', './components/cartera/modal_calificacion_lista.vue');
 setvue(0, 'cobranza_ascii', './components/cartera/modal_cobranza.vue');
 setvue(1, 'liq_saldosmenores', './components/cartera/Liq_saldosmenores.vue');
 setvue(1, 'liq_saldosacreedor', './components/cartera/Liq_saldosacreedores.vue');

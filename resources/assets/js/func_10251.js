@@ -639,14 +639,14 @@ export function setgraficoLista(socio,promises){
     promises.classModal.openModal('factorviewgaranteLista');
   
 }
-export function getcriterioGarantesLista(promises, socio) { 
-  var monto = (promises.montosolicitado * promises.tipocambio);
-  var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayFormulasProducto, socio.idsocio);
+export function getcriterioGarantesLista(promises, socio,cuotai) { 
+  // var monto = (promises.montosolicitado * promises.tipocambio);
+  // var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayFormulasProducto, socio.idsocio);
   $.get("/getcriteriosgarantes", {
     idpro: promises.producto,
     idmoneda: promises.moneda,
     factor: promises.factorid,
-    cuota: modelo.cuota,
+    cuota:  cuotai,
     id: socio.idsocio,
     socioAportes: socio.cantaportes
   }, function (datafactor) {
