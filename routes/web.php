@@ -805,6 +805,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/prestamos/getprestamosperiodo','ParPrestamosController@getprestamosperiodo');
         Route::get('/prestamos/getprestamostotal','ParPrestamosController@getprestamostotal');
         Route::get('/prestamos/desembolso','ParPrestamosController@prestamosDesembolso');
+        Route::get('/prestamos/prestamoscambiogarante','ParPrestamosController@prestamoscambiogarante');
         Route::get('/prestamos/prestamosMoras','ParPrestamosController@prestamosMoras');
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
