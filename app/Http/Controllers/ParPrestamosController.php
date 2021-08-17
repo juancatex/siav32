@@ -521,6 +521,99 @@ $product_perfil=Par_Prestamos::select( 'par__productos.idproducto','par__product
             'prestamos' => $socios
         ];
     }
+    public function prestamoscobranzamanual(Request $request)
+    {  
+      if (!$request->ajax()) return redirect('/');
+
+        
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        } 
+        $tipo = DB::raw("par__prestamos__tipo__ejecucion.nombre as nombretipo");
+     
+        if (sizeof($buscararray)>0){
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(par__prestamos.no_prestamo like '%".$valor."%' or  par__productos.nomproducto like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (par__prestamos.no_prestamo like '%".$valor."%' or par__productos.nomproducto like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                } 
+            } 
+            
+            $socios=Par_Prestamos::select( 'par__prestamos.fecharde_apro_conta','par__prestamos.idejecucion',
+            'par__prestamos.idasiento','socios.numpapeleta','par__prestamos.lote','par__prestamos.fechardesembolso','par__prestamos.apro_conta',
+            'par__prestamos.idtransaccionD','par__prestamos.idestado','par__prestamos__estados.nombreestado','par__prestamos.no_prestamo',
+            'par__monedas.tipocambio','par__productos.idproducto','socios.idsocio','par__productos.tasa','par__prestamos.detalle_desembolso',
+            'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
+            'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
+            ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
+             ,'par__prestamos.seguro'
+            ,'par__productos.cancelarprestamos'
+            ,'par__productos.activar_garante' 
+            ,'par__productos.desembolso_perfil' 
+            ,'par__productos.desembolso_perfil_refi'
+            ,'par__productos.desembolso_perfil_garante'
+            ,'par__productos.cobranza_perfil_refi'
+            ,'par__productos.cobranza_perfil_garante')
+            ->join ('par__productos','par__prestamos.idproducto','=','par__productos.idproducto')
+            ->join ('par__prestamos__estados','par__prestamos.idestado','=','par__prestamos__estados.idestado')
+            ->join ('socios','par__prestamos.idsocio','=','socios.idsocio')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('par__prestamos__tipo__ejecucion','par__prestamos.idejecucion','=','par__prestamos__tipo__ejecucion.idejecucion')
+            ->join ('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+            ->whereBetween('par__prestamos.idestado',[2,3]) 
+            ->whereraw($sqls) 
+            ->orderBy('par__prestamos.apro_conta', 'DESC') 
+            ->orderBy('par__prestamos.idestado', 'asc')
+            ->orderBy('par__prestamos.lote', 'DESC') 
+            ->orderBy('par__prestamos.idprestamo', 'asc')
+            ->paginate(10);
+            
+        }
+        else{	 
+            $socios=Par_Prestamos::select( 'par__prestamos.fecharde_apro_conta','par__prestamos.idejecucion',
+            'par__prestamos.idasiento','socios.numpapeleta','par__prestamos.lote','par__prestamos.fechardesembolso','par__prestamos.apro_conta',
+            'par__prestamos.idtransaccionD','par__prestamos.idestado','par__prestamos__estados.nombreestado','par__prestamos.no_prestamo',
+            'par__monedas.tipocambio','par__productos.idproducto','socios.idsocio','par__productos.tasa','par__prestamos.detalle_desembolso',
+            'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
+            'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
+            ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
+            ,'par__prestamos.seguro'
+            ,'par__productos.cancelarprestamos'
+            ,'par__productos.activar_garante'
+            ,'par__productos.desembolso_perfil' 
+            ,'par__productos.desembolso_perfil_refi'
+            ,'par__productos.desembolso_perfil_garante'
+            ,'par__productos.cobranza_perfil_refi'
+            ,'par__productos.cobranza_perfil_garante')
+            ->join ('par__productos','par__prestamos.idproducto','=','par__productos.idproducto')
+            ->join ('par__prestamos__estados','par__prestamos.idestado','=','par__prestamos__estados.idestado')
+            ->join ('socios','par__prestamos.idsocio','=','socios.idsocio')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('par__prestamos__tipo__ejecucion','par__prestamos.idejecucion','=','par__prestamos__tipo__ejecucion.idejecucion')
+            ->join ('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
+            ->whereBetween('par__prestamos.idestado',[2,3])  
+            ->orderBy('par__prestamos.apro_conta', 'DESC') 
+            ->orderBy('par__prestamos.idestado', 'asc')
+            ->orderBy('par__prestamos.lote', 'DESC') 
+            ->orderBy('par__prestamos.idprestamo', 'asc')
+            ->paginate(10);
+        }
+        
+        return [
+            'pagination' => [
+                'total'        => $socios->total(),
+                'current_page' => $socios->currentPage(),
+                'per_page'     => $socios->perPage(),
+                'last_page'    => $socios->lastPage(),
+                'from'         => $socios->firstItem(),
+                'to'           => $socios->lastItem(),
+            ],
+            'prestamos' => $socios
+        ];
+    }
     public function prestamosMoras(Request $request)
     {  
       if (!$request->ajax()) return redirect('/');
