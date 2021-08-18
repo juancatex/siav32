@@ -330,7 +330,7 @@ $max_item++;
  
 $max_reg++;
 $max_item++;
-
+    
                     //registro impuesto a las transacciones de la cuenta:51301106
                     DB::connection($valuedb)->insert("INSERT INTO finanzas.con_tr_detalles
                     (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento,
@@ -358,6 +358,7 @@ $max_item++;
                     $max_reg, 
                     'N'::character varying, 
                     '')");
+                  
 $max_reg++;
 $max_item++;
 
@@ -590,7 +591,7 @@ $max_item++;
  
 $max_reg++;
 $max_item++;
-                        if($tres_por>0&&$tres_por2>0){
+                       
                     //registro impuesto a las transacciones de la cuenta:51301106
                     DB::connection($valuedb)->insert("INSERT INTO tmp_contable_detalle
                     (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento,
@@ -617,7 +618,7 @@ $max_item++;
                     '12501', 
                     $max_reg, 
                     'N'::character varying, 
-                    '')");}
+                    '')"); 
 $max_reg++;
 $max_item++;
 

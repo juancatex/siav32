@@ -441,7 +441,7 @@ let me=this;
                                        var cabeseraDebe=[];
                                        var cabeseraHaber=[];
                                         aux.forEach((value, index) => {
-                                            if(value.cuenta=='51301106')console.log(value);
+                                             
                                             if(value.importe_moneda_local>0){
                                                     if(_.has(cabeseraDebe, value.cuenta)){
                                                         var out=cabeseraDebe[value.cuenta];  
