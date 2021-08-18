@@ -679,6 +679,9 @@
                     if(me.mes<10)
                         me.mes='0'+me.mes;
                     
+                    if(me.dia<10)
+                        me.dia='0'+me.dia;
+                    
                     me.fechamin=me.anio+'-01-01';
                     me.fechaactual=me.anio+'-'+me.mes+'-'+me.dia;
                     me.fechainicio=me.anio+'-'+me.mes+'-'+'01';

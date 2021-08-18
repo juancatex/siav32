@@ -167,10 +167,14 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_asientomaestro/registrarccuenta','ConAsientomaestroController@storeccuenta');
         Route::get ('/con_asientomaestro/selectdesembolso', 'ConAsientomaestroController@selectdesembolso');
         Route::put ('/con_asientomaestro/desembolsar','ConAsientomaestroController@desembolsar');
+        Route::put ('/con_asientomaestro/cobrar','ConAsientomaestroController@cobrar');
         Route::get ('/con_asientomaestro/agruparcomprobante', 'ConAsientomaestroController@agruparcomprobante');
         Route::post('/con_asientomaestro/registraragrupacion','ConAsientomaestroController@registraragrupacion');
         Route::put ('/con_asientomaestro/editarcabecera','ConAsientomaestroController@editarcabecera');
         Route::get ('/con_asientomaestro/recuperarcuenta', 'ConAsientomaestroController@recuperarCuenta');
+        Route::get ('/con_asientomaestro/cobranza', 'ConAsientomaestroController@listarcobranza');
+        
+
         
 
         Route::get ('/con_asientodetalle/selectasientodetalle', 'ConAsientodetalleController@selectAsientoDetalle');

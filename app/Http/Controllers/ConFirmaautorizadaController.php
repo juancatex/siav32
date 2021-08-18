@@ -21,7 +21,8 @@ class ConFirmaautorizadaController extends Controller
                                             'idfirmaautorizada',
                                             DB::raw('concat(nomcargo," - ",fil__filials.sigla) as cargo'))
                                     ->where('con__firmaautorizadas.activo',1)
-                                    ->where('tipo_persona',1);
+                                    ->where('tipo_persona',1)
+                                    ->where('orden','>=',2);
         
         
         $firmas=Con_Firmaautorizada::join('rrh__empleados','rrh__empleados.idempleado','con__firmaautorizadas.idpersona')
@@ -32,6 +33,7 @@ class ConFirmaautorizadaController extends Controller
                                             DB::raw('nomcargo as cargo'))
                                     ->where('con__firmaautorizadas.activo',1)
                                     ->where('tipo_persona',2)
+                                    ->where('orden','>=',2)
                                     ->union($first)
                                     ->orderby('orden','asc')
                                     ->get();
