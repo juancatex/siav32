@@ -685,8 +685,7 @@ $max_item++;
 
 
  
- 
-  //DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
+  DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
  return ['values'=>$valida_3,'cuentas'=>$cuentas];
     }
