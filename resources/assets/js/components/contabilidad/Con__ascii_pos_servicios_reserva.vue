@@ -208,6 +208,7 @@ Vue.use(VeeValidate);
      props:['idmodulo','idventanamodulo'],
         data (){
             return { 
+                auxxx:0,
                 fechacomprobantenew:'', 
                 fechacomprobante:'', 
                 debesuma:0,  
@@ -433,6 +434,7 @@ let me=this;
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
                                          swal.close();
                                       var aux=response.data.values;
+                                      me.auxxx=aux;
                                       me.fechacomprobante=response.data.fecha;
                                       me.fechacomprobantenew=response.data.fecha;  
                                       me.datos=[];   
