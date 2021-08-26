@@ -72,7 +72,7 @@
                            <span class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva')">
                             <i class="fa fa-search"></i> probar
                            </span>
-                           <span class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
+                           <span class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
                            </span>
                           </div>
@@ -98,6 +98,7 @@
         <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
                     <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
+                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>    
                      </div>  
                       
       </div>
@@ -330,6 +331,128 @@ let me=this;
                         });
                     
                         var url= '/con_contabilidad/procesoReservaUpdate';
+                        axios.post(url,{'valuedb':this.valuedb, 
+                                        'valuetipo':this.valuetipo,
+                                        'numcomprobante':this.numcomprobante}).then(function (response) {
+                                            swal.close();
+                                         swal("¡Se actualizo los datos correctamente!", "", "success"); 
+                                         var aux=response.data.values; 
+                                         me.datos=[];  
+                                          var cabeseraDebe=[];
+                                       var cabeseraHaber=[];
+                                        aux.forEach((value, index) => {
+
+                                            if(value.importe_moneda_local>0){
+                                                    if(_.has(cabeseraDebe, value.cuenta)){
+                                                        var out=cabeseraDebe[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraDebe[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraDebe[value.cuenta]=u; 
+                                                    }
+                                            }else{
+                                                 if(_.has(cabeseraHaber, value.cuenta)){
+                                                        var out=cabeseraHaber[value.cuenta];  
+                                                            out.push(value);
+                                                            cabeseraHaber[value.cuenta]=out; 
+                                                    }else{
+                                                        var u=[];
+                                                        u.push(value);
+                                                        cabeseraHaber[value.cuenta]=u; 
+                                                    }
+                                            }
+                                            
+
+                                        });  
+                                        cabeseraDebe.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                             var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+                                        cabeseraHaber.forEach((value, index) => {  
+                                            var sumatoria=_.reduce(value, function(sum, n) {
+                                                return _.round(sum +parseFloat(n.importe_moneda_local), 2);
+                                                }, 0); 
+                                            var outtt= _.find(value, function(o) { return o.analisis_auxiliar >0; });
+                                            var analisis=0;
+                                                if(typeof outtt !== 'undefined'){
+                                                   analisis=1; 
+                                                } 
+                                            me.datos.push({id:index,value:value,monto:sumatoria,analisis:analisis,des:value[0].descripcion});  
+                                        });
+
+
+                                     
+                                               me.debesuma=_.reduce(me.datos, function(sum, n) {  
+                                                        return n.monto>0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+
+                                                me.habersuma=_.reduce(me.datos, function(sum, n) { 
+                                                       return n.monto<0?_.round(sum +parseFloat(n.monto), 2):sum;
+                                                }, 0);
+                                                me.habersuma=(me.habersuma*-1); 
+                                         
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+ 
+                         
+                    }                
+                }) 
+
+
+
+            },
+            procesarreversion(){ 
+                this.debesuma=0;
+                this.habersuma=0;
+                    
+let me=this;
+ swal({
+                    title: 'Esta seguro de realizar los cambios?',
+                    html:   '<div style="text-align: left;">Base de datos:      <b><font >'+(this.valuedb=='pgsql'?'DB Safcon':'DB Prueba')+'</font></b>'+
+                    ' <br> No. comprobante:      <b><font >'+this.numcomprobante+'</font></b>'+
+                    ' <br> Tipo:      <b><font >'+this.valuetipo+'</font></b>',
+                    type: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Seguir',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then(result => {
+                    me.datos=[]; 
+                    if (result.value) { 
+
+                        swal({
+                            title: "Actualizando datos...",
+                            text: "Actualizacion de datos",
+                            type: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: false,                    
+                            closeOnConfirm: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            onOpen: () => {
+                                swal.showLoading()
+                            }
+                        });
+                    
+                        var url= '/con_contabilidad/procesoReservaUpdaterev';
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {
