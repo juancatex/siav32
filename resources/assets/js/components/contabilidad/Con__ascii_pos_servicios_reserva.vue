@@ -72,6 +72,9 @@
                            <span class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva')">
                             <i class="fa fa-search"></i> probar
                            </span>
+                           <span class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
+                            <i class="fa fa-search"></i> probar reversion
+                           </span>
                           </div>
                       </div>
                     </div>
