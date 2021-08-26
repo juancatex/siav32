@@ -463,20 +463,20 @@
                 plugin.viewPDF(url,'Asiento Contable'); */
                 ///////////////////////////////////////
                 
-                var url='http://localhost:8000/libro_diario?idtipocomprobante='+ me.idtipocomprobante +'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/libro_diario?idtipocomprobante='+ me.idtipocomprobante +'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 
                 //console.log(url);
                 window.open(url, '_blank');
             },
             reportelibromayor(){
                 let me=this;
-                var url='http://localhost:8000/libro_mayor?fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&cuentai='+me.idcuentainicial[2]+'&cuentaf='+me.idcuentafinal[2]+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/libro_mayor?fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&cuentai='+me.idcuentainicial[2]+'&cuentaf='+me.idcuentafinal[2]+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 //console.log(url);
                 window.open(url, '_blank');
             },
             reportebalancegeneral(){
                 let me=this;
-                var url='http://localhost:8000/balance_general?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/balance_general?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 //console.log(url);
                 window.open(url, '_blank');
             },

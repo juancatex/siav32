@@ -874,7 +874,7 @@
                 plugin.viewPDF(url,'Asiento Contable'); */
                 ///////////////////////////
 
-                var url='http://localhost:8000/pdf?idasientomaestro='+idasientomaestro;
+                var url='/pdf?idasientomaestro='+idasientomaestro;
                 //console.log(url);
                 window.open(url, '_blank');
 
