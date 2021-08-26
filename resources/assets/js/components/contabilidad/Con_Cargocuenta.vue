@@ -13,8 +13,11 @@
             <div class="card" v-if="divCargoPrincipal">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i>Cargos de Cuenta
-                    <!-- <button type="button" class="btn btn-secondary" @click="abrirModal()">
-                        <i class="icon-plus"></i>&nbsp;Nuevo
+                   <!--  <button type="button" class="btn btn-secondary" @click="conectarapi()">
+                        <i class="icon-plus"></i>&nbsp;API
+                    </button>
+                    <button type="button" class="btn btn-secondary" @click="conectar2()">
+                        <i class="icon-plus"></i>&nbsp;API_2
                     </button> -->
                 </div>
                 <div class="card-body">
@@ -47,7 +50,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-sm">
+                    <table class="table  table-sm">
                         <thead>
                             <tr>
                                 <th style="width:90px">Opciones</th>
@@ -61,10 +64,11 @@
                                 <th>Solicitado por:</th>
                                 <th>Cargo</th>
                                 <th>Estado</th>
+                                <th>dias</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="cargocuenta in arrayCargocuenta" :key="cargocuenta.idsolccuenta">
+                            <tr v-for="cargocuenta in arrayCargocuenta" :key="cargocuenta.idsolccuenta" :class="[cargocuenta.color=='verde' ? 'verde' : cargocuenta.color=='amarillo'?'amarillo':cargocuenta.color=='rojo'?'rojo':'']">
                                 <td>
                                     <template v-if="cargocuenta.estado_aprobado==0 || cargocuenta.estado_aprobado==3 || cargocuenta.estado==4">
                                         <button v-if="cargocuenta.estado!=4" type="button" @click="abrirModal('ccuenta','validar',cargocuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Realizar Cargo de Cuenta" :disabled="cargocuenta.estado_aprobado==0">
@@ -117,9 +121,6 @@
                                 <td style="text-align:right">{{cargocuenta.monto | currency}}</td>
                                 <td v-text="cargocuenta.username"></td>
                                 <td v-text="cargocuenta.nomrol"></td>
-                                <!-- <td v-text="socio.nomgrado"></td>-->
-                                
-                                
                                 <td>
                                     <span v-if="cargocuenta.estado_aprobado==3" class="badge badge-info">Ya Desembolsado</span>
                                     <div v-else-if="cargocuenta.estado_aprobado==1">
@@ -134,6 +135,7 @@
                                     <span v-else-if="cargocuenta.estado_aprobado==2" class="badge badge-danger">Observado</span>
                                     <span v-else-if="cargocuenta.estado_aprobado==0" class="badge badge-warning">No Desembolsado</span>
                                 </td>
+                                <td v-text="cargocuenta.cant_dias"></td>
                             </tr>                                
                         </tbody>
                     </table>
@@ -458,7 +460,11 @@
                 codcuenta:'',
                 numchequeregistrado:'',
                 sidirectorio:'',
-                subcuenta:''
+                subcuenta:'',
+                ccdiasoc:0,
+                ccdiasor:0,
+                usuario:'',
+                pass:'',
 
             }
         },
@@ -509,8 +515,49 @@
                 return pagesArray;             
 
             },
+            classfila(){
+
+                return 'yellow';
+            }
         },
+
         methods:{
+
+         /*    conectarapi(){
+                let me=this;
+                
+                axios.get('http://192.168.100.231/sia/public/api/html'
+                ).then(function (response) {
+                    //me.idmovimiento=response.data;
+                    console.log(response);
+                    sessionStorage.token = response.data.access_token;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                console.log("prueba api"); 
+
+            },
+            conectar2(){
+                let me=this;
+                
+
+
+                axios.get('http://192.168.100.231/sia/public/api/users', 
+                            {
+                    headers: { 
+                        'Accept': 'application/json', 
+                        'Authorization': 'Bearer '+sessionStorage.token
+                    }
+                    }
+                ).then(function (response) {
+                    //me.idmovimiento=response.data;
+                    console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                
+            }, */
+
             cerrarvuedescargo(){
                 this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
                 $('#divdescargo').css('display','none');
@@ -542,6 +589,9 @@
                 arrayValores['idmodulo']=this.idmodulo;
                 arrayValores['sidirectorio']=cargocuenta['sidirectorio'];
                 arrayValores['subcuenta']=cargocuenta['subcuenta'];
+                arrayValores['idsubcuenta']=cargocuenta['idsubcuenta'];
+                arrayValores['tiposubcuenta']=cargocuenta['tiposubcuenta'];
+
                 //console.log(arrayValores);
                 this.$refs.vuedescargo.cargarvue(arrayValores);
                
@@ -635,13 +685,21 @@
                 let me=this;
                 var url= '/glo_solccuenta/listarconta?page=' + page + '&buscar='+ buscar+'&tipocargo='+tipocargo+'&filtro='+filtro;
                 axios.get(url).then(function (response) {
+                    //console.log(response);
                     var respuesta= response.data;
+
                     me.arrayCargocuenta = respuesta.cargocuentas.data;
                     me.pagination= respuesta.pagination;
+                    me.usuario=respuesta.usuario;
+                    me.pass=respuesta.pass;
+
+                   
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+                
+                
             },
             selectDocumento(){
                 let me=this;
@@ -698,7 +756,8 @@
                     'sidirectorio':this.sidirectorio
 
                 }).then(function (response) {
-                    console.log(response.data);
+                   // console.log(response.data);
+                   var residasientomaestro=response.data;
                     
                     if(response.data=='incorrecto')
                     {
@@ -718,10 +777,11 @@
                         var directorio=1;
                     else    
                         var directorio=2;
-
-                    me.reporteAsientoautomatico(response.data,directorio);
+                    //console.log(residasientomaestro);
+                    
                     me.listarCargoCuenta(1,'',me.tipocargo,me.filtro);
                     me.cerrarModal('ccuenta');
+                    me.reporteAsientoautomatico(residasientomaestro);
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -807,10 +867,16 @@
             },
             reporteAsientoautomatico(idasientomaestro,directorio){
                 let me=this;
-                var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
-                console.log(url);
+                ///////////////////birt
+                /* var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+                //console.log(url);
 
-                plugin.viewPDF(url,'Asiento Contable');
+                plugin.viewPDF(url,'Asiento Contable'); */
+                ///////////////////////////
+
+                var url='http://localhost:8000/pdf?idasientomaestro='+idasientomaestro;
+                //console.log(url);
+                window.open(url, '_blank');
 
             },
             getCConciliacion(){
@@ -820,7 +886,7 @@
                 //console.log(url);
                 axios.get(url).then(function (response) {
                         var respuesta= response.data;
-                        console.log(respuesta);
+                        //console.log(respuesta);
                         
                         respuesta.forEach(element => {
                              me.cuentasconciliacion.push(element.valor);
@@ -847,7 +913,7 @@
             selectConciliacion(idcuenta){
                 let me=this;
                 var url= '/con_conciliacion/selectconciliacion?idcuenta='+idcuenta;
-                console.log(url);
+                //console.log(url);
                 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
@@ -882,7 +948,7 @@
                     'importe':me.monto,
                     'tipocargo':'h'
                 }).then(function (response) {
-                    console.log(response);
+                    //console.log(response);
                     me.idmovimiento=response.data;
                             'Registrado correctamente',
                     me.cerrarModalConciliacion('conciliacion');
@@ -890,9 +956,21 @@
                 }).catch(function (error) {
                     console.log(error);
                 });
-            }
+            },
+            listardiascc(){
+                let me=this;
+                var url= '/con_config/recuperarccdias';
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    me.ccdiasoc= respuesta.diasoc;
+                    me.ccdiasor= respuesta.diasor;
+                    
+                })
+            },
         },
+        
         mounted(){
+            //this.listardiascc();
             this.listarCargoCuenta(1,this.buscar,this.tipocargo,this.filtro);
             this.getRutasReports();
             this.getCConciliacion();
@@ -901,12 +979,24 @@
             this.classModal.addModal('ccuenta');
             this.classModal.addModal('conciliacionbancaria');
             
+            
             //this.classModal.addModal('librocompras');
             this.fechahoy();
         }
     }
 </script>
 <style>
+    .verde{
+        background: rgba(131, 235, 183,0.5);
+    }
+    .amarillo{
+        background: rgba(241, 241, 169,0.5);
+    }
+    .rojo{
+        background:   rgba(252, 157, 157,0.5);
+        
+        color: white;
+    }
     .modal-content{
         width: 100% !important;
         position: absolute !important;

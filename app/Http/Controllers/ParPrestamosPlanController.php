@@ -241,6 +241,7 @@ class ParPrestamosPlanController extends Controller
                                 $nuevocobro->di=$newdias; 
                                 $nuevocobro->fecharegistro=$fecha;
                                 $nuevocobro->tipo=2; 
+                                $nuevocobro->idestado=12;
                                 $nuevocobro->idusuario=Auth::id();
                                 $nuevocobro->save(); 
                                 array_push($cobrados_plans,$nuevocobro->idplan); 

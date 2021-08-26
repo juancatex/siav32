@@ -30,7 +30,21 @@ class CreateConContabilidadProcedures extends Migration
                     END";
         
         DB::unprepared($setcompleto);
+
+        //para que el evento funcione correctamente se debe comprobar que el even_scheduler este en on
+        // set global event_scheduler=on  por consola o en el phpmyadmin
         
+        DB::unprepared("CREATE OR REPLACE EVENT calculardias
+                            ON SCHEDULE EVERY 1 DAY STARTS '2021-06-08 02:00:00' ON COMPLETION PRESERVE 
+                            DO
+                                BEGIN
+                            SET @hoy = '';
+                            SELECT DAYNAME(NOW()) INTO @hoy;
+                        
+                            IF @hoy!='Sunday' AND @hoy!='Saturday' THEN
+                                UPDATE glo__solicitud_cargo_cuentas set cant_dias=cant_dias + 1 where activo=1;
+                            END IF;
+                        END");
     }
 
     /**

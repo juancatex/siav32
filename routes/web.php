@@ -167,20 +167,25 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_asientomaestro/registrarccuenta','ConAsientomaestroController@storeccuenta');
         Route::get ('/con_asientomaestro/selectdesembolso', 'ConAsientomaestroController@selectdesembolso');
         Route::put ('/con_asientomaestro/desembolsar','ConAsientomaestroController@desembolsar');
+        Route::put ('/con_asientomaestro/cobrar','ConAsientomaestroController@cobrar');
         Route::get ('/con_asientomaestro/agruparcomprobante', 'ConAsientomaestroController@agruparcomprobante');
         Route::post('/con_asientomaestro/registraragrupacion','ConAsientomaestroController@registraragrupacion');
         Route::put ('/con_asientomaestro/editarcabecera','ConAsientomaestroController@editarcabecera');
         Route::get ('/con_asientomaestro/recuperarcuenta', 'ConAsientomaestroController@recuperarCuenta');
+        Route::get ('/con_asientomaestro/cobranza', 'ConAsientomaestroController@listarcobranza');
+        
+
         
 
         Route::get ('/con_asientodetalle/selectasientodetalle', 'ConAsientodetalleController@selectAsientoDetalle');
+        Route::get ('/con_asientodetalle/selectasientodetalle_2', 'ConAsientodetalleController@selectAsientoDetalle2');
         Route::get ('/con_asientomaestro/recuperarsubcuenta', 'ConAsientomaestroController@recuperarSubcuenta');
 
         Route::get ('/con_librocompras','ConLibrocompraController@index');
         Route::post('/con_librocompras/registrar','ConLibrocompraController@store');
         Route::put ('/con_librocompras/actualizar','ConLibrocompraController@update');
         Route::get ('/con_librocompras/verificarfactura','ConLibrocompraController@verificarfactura');
-        Route::put ('/con_librocompras/desactivar', 'ConLibrocompraController@desactivar');
+        Route::post ('/con_librocompras/desactivar', 'ConLibrocompraController@desactivar');
 
         Route::get ('/con_cierrelibrocompra','ConCierrelibrocompraController@index');
         Route::post('/con_cierrelibrocompra/registrar','ConCierrelibrocompraController@store');
@@ -193,6 +198,10 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/con_config/desactivar', 'ConConfiguracionController@desactivar');
         Route::get('/con_config/cuentasconciliacion', 'ConConfiguracionController@cuentas_conciliacion');
         Route::get('/con_config/selectconciliacion', 'ConConfiguracionController@selectCuentasConciliacion');
+        Route::post('/con_config/desactivardias', 'ConConfiguracionController@desactivarccdias');
+        Route::get('/con_config/recuperarccdias', 'ConConfiguracionController@recuperarccdias');
+        Route::get('/con_config/selectsubcuentaascinalss', 'ConConfiguracionController@selectSubCuentaAscinalss');
+        
 
         Route::get ('/con_conciliacion/selectconciliacion', 'ConMovimientobancarioController@selectConciliacion');
         Route::post('/con_conciliacion/registrar', 'ConMovimientobancarioController@store');
@@ -206,8 +215,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put ('/con_segbancario/desactivar', 'ConSegbancarioController@desactivar');
 
         ////////////////////// REPORTES CONTABILIDAD////////////////////
-        Route::get ('/libromayor', 'ConReportesController@libromayor');
-        Route::get ('/librodiario', 'ConReportesController@librodiario');
+        Route::get ('/libro_mayor', 'ConReportesController@libromayor');
+        Route::get ('/balance_general', 'ConReportesController@balancegeneral');
+        Route::get ('/libro_diario', 'ConReportesController@librodiario');
         Route::get ('/saldoconciliacion', 'ConReportesController@conciliacion');
 
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -426,6 +436,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/alm_proveedor/switchProveedor','AlmProveedorController@switchProveedor');   //D
     Route::get ('/alm_proveedor/searchProveedor','AlmProveedorController@searchProveedor');   //S
     Route::get ('/alm_proveedor/selectProveedor', 'AlmProveedorController@selectProveedor');//eddy
+    Route::get ('/alm_proveedor/selectProveedor2', 'AlmProveedorController@selectProveedor2');//eddy
 
     //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
     //FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS FILIALES Y OFICINAS
@@ -438,6 +449,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/fil_unidad/listaUnidades','FilUnidadController@listaUnidades'); //R
     Route::put ('/fil_unidad/updateUnidad','FilUnidadController@updateUnidad'); //U
     Route::put ('/fil_unidad/switchUnidad','FilUnidadController@switchUnidad'); //D
+    
 
     Route::post('/fil_directivo/storeDirectivo','FilDirectivoController@storeDirectivo');     //C
     Route::get ('/fil_directivo/listaDirectivos','FilDirectivoController@listaDirectivos');   //R
@@ -450,6 +462,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/fil_oficina/switchOficina','FilOficinaController@switchOficina');   //D
 
     Route::get ('/fil_filial/selectFiliales','FilFilialController@selectFiliales');// Eddy
+    
 
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
@@ -510,6 +523,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::put ('/rrh_empleado/switchEmpleado','RrhEmpleadoController@switchEmpleado');    //D
     Route::get ('/rrh_empleado/selectempleados2','RrhEmpleadoController@selectEmpleados2'); ///eddy
     Route::get ('/rrh_empleado/selectdirectivos','RrhEmpleadoController@selectDirectivos'); ///eddy
+    Route::get ('/rrh_empleado/selectsocios','RrhEmpleadoController@selectSocios'); ///eddy
 
 
     Route::post('/rrh_presentado/storePresentado','RrhPresentadoController@storePresentado');   //C
@@ -640,6 +654,7 @@ Route::group(['middleware' => ['webinterno']], function () {
        Route::get ('/getsaldocapital_desembolso', 'PreCalificacionController@getsaldocapital_desembolso');
        Route::get ('/pre_listasociogarante','PreCalificacionController@pre_listasociogarante');
        Route::get ('/reporte1','PreCalificacionController@reporte1');
+       Route::get ('/plandepagos','PreCalificacionController@plandepagos');
 
        Route::get('/par_ventanamodulo/selectVentanamodulo', 'ParVentanamoduloController@selectVentanamodulo');
 
@@ -794,6 +809,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/prestamos/getprestamosperiodo','ParPrestamosController@getprestamosperiodo');
         Route::get('/prestamos/getprestamostotal','ParPrestamosController@getprestamostotal');
         Route::get('/prestamos/desembolso','ParPrestamosController@prestamosDesembolso');
+        Route::get('/prestamos/prestamoscambiogarante','ParPrestamosController@prestamoscambiogarante');
         Route::get('/prestamos/prestamosMoras','ParPrestamosController@prestamosMoras');
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
@@ -867,7 +883,8 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/glo_solccuenta/actualizarsegccuenta', 'GloSolicitudCargoCuentaController@updatesegccuenta');
         Route::get('/glo_solccuenta/listartesoreria', 'GloSolicitudCargoCuentaController@listarTesoreria');
         Route::put('/glo_solccuenta/desembolsar', 'GloSolicitudCargoCuentaController@desembolsar');
-
+        Route::put('/glo_solccuenta/agregarpersona', 'GloSolicitudCargoCuentaController@addpersona');
+        
 
         //FACTURAS
         Route::get('/con_facturaparametro', 'ConFacturaParametroController@index');
@@ -891,5 +908,16 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put ('/con_contabilidad/updateCuenta','ConFacturaController@updateCuentaComprobante');
 
         Route::get('/pruebaget','ConFacturaController@pruebaget');
+
+        
+        Route::get('/pdf','ConAsientomaestroController@datospdf');
+
+        ///////////////////////////firmas autorizadas
+        Route::get ('/con_firmasautorizadas','ConFirmaautorizadaController@index');
+        Route::post('/con_firmasautorizadas/registrar','ConFirmaautorizadaController@store');
+        Route::put ('/con_firmasautorizadas/desactivar','ConFirmaautorizadaController@desactivar');
+        /*
+        Route::put ('/con_firmasautorizadas/updatePago','SerPagoController@updatePago'); */
+        
 
 });

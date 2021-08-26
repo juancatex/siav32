@@ -337,12 +337,25 @@
                     axios.put('/con_tipocomprobante/desactivar',{
                         'idtipocomprobante': idtipocomprobante
                     }).then(function (response) {
-                        me.listarTipocomprobante(1);
-                        swal(
-                        'Desactivado!',
-                        'El registro ha sido desactivado con éxito.',
-                        'success'
-                        )
+                        //console.log(response);
+                        if(response=='activo')
+                        {
+                            swal(
+                                'No Desactivado!',
+                                'El Tipo de Comprobante tiene registros activos.',
+                                'success'
+                            )
+                        }
+                        else
+                        {
+                            me.listarTipocomprobante(1);
+                            swal(
+                                'Desactivado!',
+                                'El registro ha sido desactivado con éxito.',
+                                'success'
+                            )
+                        }
+                        
                     }).catch(function (error) {
                         console.log(error);
                     });

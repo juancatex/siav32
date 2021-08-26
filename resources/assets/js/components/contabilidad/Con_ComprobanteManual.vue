@@ -116,6 +116,9 @@
                             <tbody>
                                 <tr v-for="asientomaestro in arrayAsientoMaestro" :key="asientomaestro.idasientomaestro" v-bind:class="[asientomaestro.estado==4 ? 'table-info' :true , false]" >
                                     <td>
+                                        <button type="button"  @click="abrirAsientoMaestro(asientomaestro.idasientomaestro)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Comprobante">
+                                            <i class="icon-eye"></i>
+                                        </button> 
                                         <button v-if="check('editar_borrador')" type="button" @click="cargarvue('editar',asientomaestro)" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar">
                                             <i class="icon-note"></i>
                                         </button> 
@@ -687,9 +690,16 @@
             },
             abrirAsientoMaestro(asientomaestro){
                 let me=this;
-                var url=me.reporte_asiento_automatico + asientomaestro+'&tiposubcuenta=1'; 
+                /* var url=me.reporte_asiento_automatico + asientomaestro+'&tiposubcuenta=1';    // birt
                 //me.abrirVentanaModalURL(url,"reporte_asiento_automatico",800,700);	
-                plugin.viewPDF(url,'Reporte Asiento Automatico');
+                plugin.viewPDF(url,'Reporte Asiento Automatico'); */
+
+                /////////////// dompdf///////////
+                var url='http://localhost:8000/pdf?idasientomaestro='+asientomaestro;
+                console.log(url);
+                window.open(url, '_blank');
+                // Cambiar el foco al nuevo tab (punto opcional)
+                //win.focus();
 
             },
             //metodo agregado para la validacion

@@ -21,6 +21,10 @@ use App\Apo_Tipoaporte;
 use App\Apo_TotalAporte;
 use App\Apo_Idsaporte;
 use App\Apo_Excedenteaporte;
+use App\Con_Asientosubcuenta;
+use App\Con_Firmaautorizada;
+use App\Rrh_Empleado;
+use App\Con_Perfilcuentamaestro;
 
 //agregar mas tablas de subcuentas para la seleccion
 
@@ -81,7 +85,8 @@ class ConAsientomaestroController extends Controller
                                                                 'nomperfil',
                                                                 'observaciones',
                                                                 'fact_modificada',
-                                                                'cod_comprobante'
+                                                                'cod_comprobante',
+                                                                'idunidad'
                                                                 )
                                                     ->orderBy('fecharegistro', 'asc')
                                                     ->orderBy('cont_comprobante','desc')->paginate(50);
@@ -116,7 +121,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 'cod_comprobante',
                                                                 'desembolso',
-                                                                $raw
+                                                                $raw,
+                                                                'idunidad'
                                                                 )
                                                     ->orderBy('fecharegistro', 'desc')
                                                     ->orderBy('cont_comprobante','desc')
@@ -167,12 +173,13 @@ class ConAsientomaestroController extends Controller
                                                                     'cod_comprobante',
                                                                     $raw,
                                                                     'glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                                    'seg_descargoccuenta'
+                                                                    'seg_descargoccuenta',
+                                                                    'idunidad'
                                                                     )
                                                         ->orderBy('fecharegistro', 'desc')
                                                         ->orderBy('cont_comprobante','desc')
                                                         ->groupBy('con__asientomaestros.idasientomaestro')
-                                                        ->limit(50)->paginate(15);
+                                                        ->limit(50)->paginate(50);
                 }
                 elseif ($borradorcheck=='borrador')
                 {
@@ -205,11 +212,12 @@ class ConAsientomaestroController extends Controller
                                                                     'fact_modificada',
                                                                     $raw,
                                                                     'cod_comprobante',
-                                                                    'estado_aprobado'
+                                                                    'estado_aprobado',
+                                                                    'idunidad'
                                                                     )
                                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                         ->orderBy('fecharegistro', 'desc')
-                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
+                                                        ->orderBy('cont_comprobante','desc')->limit(50)->paginate(50);
                     
                 }
             }
@@ -260,11 +268,12 @@ class ConAsientomaestroController extends Controller
                                                                 'cod_comprobante',
                                                                 $raw,
                                                                 'glo__solicitud_cargo_cuentas.idsolccuenta',
-                                                                'seg_descargoccuenta'
+                                                                'seg_descargoccuenta',
+                                                                'idunidad'
                                                                 )
                                                     ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(50);
             }
             elseif ($borradorcheck=='borrador')
             {
@@ -304,11 +313,12 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 $raw,
                                                                 'cod_comprobante',
-                                                                'estado_aprobado'
+                                                                'estado_aprobado',
+                                                                'idunidad'
                                                                 )
                                                                 ->groupBy('con__asientomaestros.idasientomaestro')
                                                     ->orderBy('fecharegistro', 'desc')
-                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(15);
+                                                    ->orderBy('cont_comprobante','desc')->limit(50)->paginate(50);
                 
             }
         }
@@ -387,7 +397,8 @@ class ConAsientomaestroController extends Controller
                                                                 'fact_modificada',
                                                                 'cod_comprobante',
                                                                 'desembolso',
-                                                                $raw
+                                                                $raw,
+                                                                'idunidad'
                                                             );
                                                 if(!empty($sqlss)){
                                                     $asientomaestros= $asientomaestros->whereraw($sqlss);
@@ -451,6 +462,9 @@ class ConAsientomaestroController extends Controller
         $librocomprasok=$request->librocomprasok;
         $idfacturas=$request->idfacturas;
         $validarfacturas=$request->validarfacturas;
+        $idfilial=$request->idfilial;
+        $idunidad=$request->idunidad;
+
         if($request->sidirectorio)
             $tiposubcuenta=1;
         else
@@ -470,6 +484,13 @@ class ConAsientomaestroController extends Controller
             $swh=0;
             //echo"{$valor['idcuenta']}";
             $arrayDetalle[$cont]['idcuenta']=$valor['idcuenta'];
+            if(count($valor['idsubcuenta'])>0)
+            {
+                foreach ($valor['idsubcuenta'] as $i => $v) {
+                    $arrayDetalle[$cont]['subcuenta'][$i]=$v;
+                }
+            }
+
             $arrayDetalle[$cont]['subcuenta']=$valor['idsubcuenta'];
             $arrayDetalle[$cont]['documento']=$valor['documento'];
             $arrayDetalle[$cont]['moneda']=$valor['moneda'];
@@ -496,9 +517,10 @@ class ConAsientomaestroController extends Controller
             
             DB::table('con__asientodetalles')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
             DB::table('con__asientomaestros')->where('idasientomaestro', '=', $request->idasientomaestro)->delete();
-
+            DB::table('con__asientosubcuentas')->where('idasientomaestro',$request->idasientomaestro)->delete();
+            //dd($arrayDetalle);
             $asientomaestro= new AsientoMaestroClass();
-            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador);
+            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
             
             if($sisolccuenta){
                 //echo "entra";
@@ -539,7 +561,7 @@ class ConAsientomaestroController extends Controller
             {
                 //echo "else idasientomaestro entra idfacturas2";
                 $asientomaestro= new AsientoMaestroClass();
-                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador);
+                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
                 
                 
                /*  foreach ($idfacturas as $indice => $valor) {
@@ -563,7 +585,7 @@ class ConAsientomaestroController extends Controller
             {
                 //echo "entra idfacturas else";
                 $asientomaestro= new AsientoMaestroClass();
-                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador); 
+                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad); 
                 //echo "respueta".$respuesta;
             }
             if($request->idmovimiento!=0)
@@ -955,7 +977,12 @@ class ConAsientomaestroController extends Controller
                                             ->where('con__asientodetalles.idasientomaestro','=',$request->idasientomaestro)
                                             ->get()
                                             ->toArray();
+        
+        $asientosubcuentas=Con_Asientosubcuenta::select('tipo_subcuenta','idsubcuenta','subcuenta','idcuenta','subdebe','subhaber')
+                                                ->where('idasientomaestro',$request->idasientomaestro)
+                                                ->get()->toArray();
 
+        //dd($asientosubcuentas);
         //return $asientodetalle;
         //var_dump($asientodetalle);
         //dd($asientodetalle);
@@ -970,64 +997,102 @@ class ConAsientomaestroController extends Controller
 
         $loteprestamos=$asientomaestro[0]['loteprestamos'];
 
-        $asientomaestro=new Con_Asientomaestro();
-        $asientomaestro->idtipocomprobante=$idtipocomprobante;
-        $asientomaestro->fecharegistro=$fecharegistro;          
-
-        $asientomaestroclass= new AsientoMaestroClass();
-        $respuesta=$asientomaestroclass->verificarfecha($fecharegistro,$idtipocomprobante);
-        $asientomaestro->cont_comprobante=$respuesta[0];
-        $asientomaestro->cod_comprobante=$respuesta[1];
-
-        $asientomaestro->tipodocumento='';
-        $asientomaestro->numdocumento='';
-        $asientomaestro->glosa=$glosa;
-        $asientomaestro->idfilial='1';//modificar con ide de filial
-        $asientomaestro->idmodulo=$request->idmodulo;
-        $asientomaestro->estado=1;
-        $asientomaestro->idrevertido=$request->idasientomaestro;
-        $asientomaestro->loteprestamos=$loteprestamos;
-        $asientomaestro->u_obs_val=Auth::id();
-        $asientomaestro->save();
-        $idasientomaestro=$asientomaestro->idasientomaestro;
-        //dd($asientodetalle);
-        foreach($asientodetalle as $valor)
+        DB::beginTransaction();
         {
-            
-            $asientodetalle=new Con_Asientodetalle();
-            $asientodetalle->idasientomaestro=$idasientomaestro;
-                
-            foreach($valor as $i=>$v)
-            {          
-                if($i=='monto')
+            try
+            {
+                $asientomaestro=new Con_Asientomaestro();
+                $asientomaestro->idtipocomprobante=$idtipocomprobante;
+                $asientomaestro->fecharegistro=$fecharegistro;          
+
+                $asientomaestroclass= new AsientoMaestroClass();
+                $respuesta=$asientomaestroclass->verificarfecha($fecharegistro,$idtipocomprobante);
+                $asientomaestro->cont_comprobante=$respuesta[0];
+                $asientomaestro->cod_comprobante=$respuesta[1];
+
+                $asientomaestro->tipodocumento='';
+                $asientomaestro->numdocumento='';
+                $asientomaestro->glosa=$glosa;
+                $asientomaestro->idfilial='1';//modificar con ide de filial
+                $asientomaestro->idmodulo=$request->idmodulo;
+                $asientomaestro->estado=1;
+                $asientomaestro->idrevertido=$request->idasientomaestro;
+                $asientomaestro->loteprestamos=$loteprestamos;
+                $asientomaestro->u_obs_val=Auth::id();
+                $asientomaestro->save();
+                $idasientomaestro=$asientomaestro->idasientomaestro;
+                //dd($asientodetalle);
+                foreach($asientodetalle as $valor)
                 {
-                    if($v>0)
-                        $asientodetalle->haber=$v;
-                    else
-                        $asientodetalle->debe=$v*-1;
                     
-                    $v=$v*(-1);
+                    $asientodetalle=new Con_Asientodetalle();
+                    $asientodetalle->idasientomaestro=$idasientomaestro;
+                        
+                    foreach($valor as $i=>$v)
+                    {          
+                        if($i=='monto')
+                        {
+                            if($v>0)
+                                $asientodetalle->haber=$v;
+                            else
+                                $asientodetalle->debe=$v*-1;
+                            
+                            $v=$v*(-1);
+                        }
+                        
+                        $asientodetalle->$i=$v;
+                        $asientodetalle->moneda='bs';//cambiar por moneda
+                        /* $asientodetalle->usuarioregistro=Auth::id();
+                        $asientodetalle->usuariomodifica=Auth::id();
+                        $asientodetalle->save(); */
+                        
+                    }
+                    $asientodetalle->usuarioregistro=Auth::id();
+                    $asientodetalle->usuariomodifica=Auth::id();
+                    $asientodetalle->save();
                 }
-                
-                $asientodetalle->$i=$v;
-                $asientodetalle->moneda='bs';//cambiar por moneda
-                $asientodetalle->usuarioregistro=Auth::id();
-                $asientodetalle->usuariomodifica=Auth::id();
-                $asientodetalle->save();
-                
-            }
-            $asientodetalle->usuarioregistro=Auth::id();
-            $asientodetalle->usuariomodifica=Auth::id();
-            $asientodetalle->save();
-        }
-        $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
-        $asientomaestro->estado = '4';
-        $asientomaestro->save();
+                foreach($asientosubcuentas as $valor)
+                {
+                    
+                    $asientosubcuenta=new Con_Asientosubcuenta();
+                    $asientosubcuenta->idasientomaestro=$idasientomaestro;
+                    $asientosubcuenta->subdetalle="Revertido";
+                    foreach ($valor as $i =>$v) {
+                        
+                        if($i=='subdebe')
+                            $asientosubcuenta->subhaber=$v;
+                        else
+                        {
+                            if($i=='subhaber')
+                                $asientosubcuenta->subdebe=$v;
+                            else
+                                $asientosubcuenta->$i=$v;
+                        }
+                        
+                        
+                        
+                        
+                    }
+                    //echo $asientosubcuenta;
+                    $asientosubcuenta->save();
+                }
+                $asientomaestro = Con_Asientomaestro::findOrFail($request->idasientomaestro);
+                $asientomaestro->estado = '4';
+                $asientomaestro->save();
 
-        if($request->seg_descargoccuenta)
-        {
-            DB::table('glo__solicitud_cargo_cuentas')->where('idsolccuenta', $request->idsolccuenta)->update(['estado_aprobado' => 3,'idasientomaestro'=>null]);
+                if($request->seg_descargoccuenta)
+                {
+                    DB::table('glo__solicitud_cargo_cuentas')->where('idsolccuenta', $request->idsolccuenta)->update(['estado_aprobado' => 3,'idasientomaestro'=>null]);
+                }
+            }
+            catch(\Exeption $e)
+            {
+                $error=$e->getMessage();
+                DB::rollback();
+                return $error;
+            }
         }
+        
 
         
         //$asientomaestro->save();join('con__asientodetalles','con__asientodetalles.idasientomaestro','=','con__asientomaestros.idasientomaestro')
@@ -1202,8 +1267,9 @@ class ConAsientomaestroController extends Controller
             $arrayDetalle[1]['documento']='';
             $arrayDetalle[1]['moneda']='Bs.';
             $arrayDetalle[1]['monto']=$monto * (-1);
-            $arrayDetalle[0]['tiposubcuenta']=$tiposubcuenta;
+            $arrayDetalle[1]['tiposubcuenta']=$tiposubcuenta;
 
+            //dd($arrayDetalle);
             $asientomaestro= new AsientoMaestroClass();
             $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial);
 
@@ -1264,6 +1330,23 @@ class ConAsientomaestroController extends Controller
             }
             
         }
+    }
+    public function cobrar(Request $request)
+    {
+        //dd($request);
+        if (!$request->ajax()) return redirect('/');
+        $hora = time();
+      //  $fecha= date('Y-m-d H:i:s',$hora);
+        $fecha=(DB::select("select getfecha() as total"))[0]->total;
+        //echo $fecha;
+        //echo date("d-m-Y (H:i:s)", $time);
+        foreach ($request->arrayids as $valor) {
+                $asientomaestro=Con_Asientomaestro::findOrFail($valor);
+                $asientomaestro->desembolso = 1;
+                $asientomaestro->fechahora_desembolso=$fecha;
+                $asientomaestro->u_registro_tesoreria=Auth::id();
+                $asientomaestro->save();
+            }
     }
     public function agruparcomprobante(Request $request)
     {
@@ -1348,6 +1431,45 @@ class ConAsientomaestroController extends Controller
             
         }
     }
+    public function listarcobranza(Request $request){
+        $valor=$request->valor;
+        $idmodulo=3;//TODO:cambiar dinamicamente, ahora 3 pertenece a contabilidad
+        $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro')
+                                                        ->where('idmodulo','=',$idmodulo)
+                                                        ->where('activo','=','1')
+                                                        ->where('completo','=','1')
+                                                        ->where('idtipocomprobante','1') // tipo comprobante de egreso
+                                                        ->orderBy('nomperfil', 'asc')
+                                                        ->get()->toArray();
+        
+        
+        $cobranza=Con_Asientomaestro::join('con__perfilcuentamaestros','con__asientomaestros.idperfilcuentamaestro','con__perfilcuentamaestros.idperfilcuentamaestro')
+                                        //->join('con__cuentasocios','con__cuentasocios.idcuentasocio','=','par__prestamos.idcuentasocio')
+                                        //->join('socios','socios.idsocio','=','par__prestamos.idsocio')
+                                        ->select('con__asientomaestros.idasientomaestro',
+                                                    'nomperfil',
+                                                    'descripcion',
+                                                    //'socios.numpapeleta',
+                                                    'con__asientomaestros.fecharegistro',
+                                                    'con__asientomaestros.numdocumento',
+                                                    'con__asientomaestros.glosa',
+                                                    //$raw,
+                                                    //'par__prestamos.monto',
+                                                    //'numcuentasocio',
+                                                    //'idagrupacion',
+                                                    'desembolso',
+                                                    'fechahora_desembolso',
+                                                    'con__asientomaestros.estado',
+                                                    //'par__prestamos.lote',
+                                                    'con__asientomaestros.observaciones',
+                                                    'numdocumento')
+                                        ->whereIn('con__asientomaestros.idperfilcuentamaestro',$perfilcuentamaestros)
+                                        ->where('desembolso',$valor)
+                                        ->orderby('fecharegistro','desc')
+                                        ->get();
+        return $cobranza;
+    }
+    
     public function recuperarCuenta(Request $request){
         //echo "hola";
         $reccuentas=Con_Asientomaestro::join('con__asientodetalles','con__asientodetalles.idasientomaestro','con__asientomaestros.idasientomaestro')
@@ -1360,6 +1482,242 @@ class ConAsientomaestroController extends Controller
     
          return ['reccuentas'=>$reccuentas];                                               
 
+    }
+
+    public function datospdf(Request $request){
+        $idasientomaestro=$request->idasientomaestro;
+
+        
+        $maestros=Con_Asientomaestro::select('idasientomaestro',
+                                            'cod_comprobante',
+                                            'fecharegistro',
+                                            'fechavalidado',
+                                            'tipodocumento',
+                                            'numdocumento',
+                                            'nomtipocomprobante',
+                                            'glosa',
+                                            'cont_comprobante',
+                                            )
+                                        ->join('con__tipocomprobantes','con__asientomaestros.idtipocomprobante','con__tipocomprobantes.idtipocomprobante')
+                                        ->where('idasientomaestro',$idasientomaestro)
+                                        //->where('estado',1)
+                                        ->get();
+
+        //dd($maestros);
+
+        $asientodetalles = Con_Asientodetalle::join('con__cuentas','con__asientodetalles.idcuenta','con__cuentas.idcuenta')
+                                                ->select(
+                                                            'nomcuenta',
+                                                            'codcuenta',
+                                                            'monto',
+                                                            'debe',
+                                                            'haber',
+                                                            'con__asientodetalles.idcuenta',
+                                                            'con__asientodetalles.documento',
+                                                            'tiposubcuenta',
+                                                            'subcuenta'
+                                                            )
+                                                ->where('idasientomaestro',$idasientomaestro)
+                                                ->orderby('debe','desc')
+                                                ->orderby('haber','asc')
+                                                ->get();
+        //dd($asientodetalles);
+        
+        //dd($asientodetalles);
+        //$asientosubdetalles=[];
+        
+
+        $siasientomaestro=Con_Asientosubcuenta::where('idasientomaestro',$idasientomaestro)
+                                                    ->get();
+        
+        //dd($siasientomaestro);
+        if(count($siasientomaestro)>0)
+        {
+            foreach ($asientodetalles as $value) {
+               
+                $filtro=$value->monto;
+                $socios =Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                            'subdebe',
+                                                            'subhaber',
+                                                            'idcuenta',
+                                                            DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                            'idsocio as idsubcuenta',
+                                                            'numpapeleta as subcuenta',
+                                                            'tipo_subcuenta as tiposubcuenta')
+                                                    ->join('socios','socios.idsocio','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('tipo_subcuenta',1)//tipo subcuenta  socios
+                                                    ->where('idcuenta',$value->idcuenta)
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            });
+                                                    
+                                                    
+                $personal=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                        'subdebe',
+                                                        'subhaber',
+                                                        'idcuenta',
+                                                        DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                        'idempleado as idsubcuenta',
+                                                        'ci as subcuenta',
+                                                        'tipo_subcuenta as tiposubcuenta')                                    
+                                                    ->join('rrh__empleados','rrh__empleados.idempleado','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('idcuenta',$value->idcuenta)
+                                                    ->where('tipo_subcuenta',2)//tipo subcuenta personal
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                    ->union($socios);
+                
+                $otros=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                    'subdebe',
+                                                    'subhaber',
+                                                    'idcuenta',
+                                                    'nomproveedor as nombre',
+                                                    'idproveedor as idsubcuenta',
+                                                    'nit as subcuenta',
+                                                    'tipo_subcuenta as tiposubcuenta')
+                                                    ->join('alm__proveedors','alm__proveedors.idproveedor','con__asientosubcuentas.idsubcuenta')
+                                                    ->where('idasientomaestro',$idasientomaestro)
+                                                    ->where('idcuenta',$value->idcuenta)
+                                                    ->where('tipo_subcuenta',3)// tipo subcuenta otros
+                                                    ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                    ->union($personal);
+                
+                $subascinalss=Con_Asientosubcuenta::select('subdetalle as detalle',
+                                                            'subdebe',
+                                                            'subhaber',
+                                                            'idcuenta',
+                                                            'descripcion as nombre',
+                                                            'idconconfig as idsubcuenta',
+                                                            'valor as subcuenta',
+                                                            'tipo_subcuenta as tiposubcuenta')
+                                                            ->join('con__configuracions','con__configuracions.idconconfig','con__asientosubcuentas.idsubcuenta')
+                                                            ->where('idasientomaestro',$idasientomaestro)
+                                                            ->where('idcuenta',$value->idcuenta)
+                                                            ->where('tipo_subcuenta',4)// tipo subcuenta subascinalss
+                                                            ->union($otros)
+                                                            ->where(function($query) use ($filtro)
+                                                            {
+                                                                if ($filtro>0)
+                                                                    $query->where('subdebe','>',0);
+                                                                else
+                                                                    $query->where('subhaber','>',0); 
+                                                            })
+                                                            ->get();
+                
+                                                        
+                $value->subdetalles=$subascinalss;
+                
+                    //array_push($asientosubdetalles,$subascinalss);
+                    
+            }
+           // dd($asientodetalles);
+        }
+        else
+        {
+            foreach ($asientodetalles as  $value) {
+                if($value->subcuenta!='');
+                {
+                    if($value->tiposubcuenta==2)
+                    {
+                        $subcuentas=Rrh_Empleado::select(
+                                                        
+                                                            DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                            'idempleado as idsubcuenta',
+                                                            'ci as subcuenta')                                    
+                                                        ->where('idempleado',$value->subcuenta)
+                                                        ->get();
+                    }
+                    else
+                    {
+                        $subcuentas =Socio::select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                                'idsocio as idsubcuenta',
+                                                                'numpapeleta as subcuenta')
+                                                        ->where('numpapeleta',$value->subcuenta)//tipo subcuenta  socios
+                                                        ->get();
+                    }
+                    
+                    $subcuentas[0]['detalle']='';
+                    $subcuentas[0]['subdebe']=$value->debe;
+                    $subcuentas[0]['subhaber']=$value->haber;
+                    $value->subdetalles=$subcuentas;
+                }
+            }
+            //dd($asientodetalles);
+        }
+        
+
+        $firm=Con_Asientomaestro::join('rrh__empleados','rrh__empleados.idempleado','con__asientomaestros.u_registro') 
+                                    ->leftjoin('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo') 
+                                    ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                                'nomcargo',
+                                                DB::raw('1 as orden'))
+                                    ->where('idasientomaestro',$request->idasientomaestro);
+
+                                    
+        $firmas1=Con_Firmaautorizada::join('socios','socios.idsocio','con__firmaautorizadas.idpersona')
+                                    ->join('fil__directivos','socios.idsocio','fil__directivos.idsocio')
+                                    ->join('fil__unidads','fil__directivos.idunidad','fil__unidads.idunidad')
+                                    ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                            'nomcargo',
+                                            'orden')
+                                    ->where('tipo_persona',1)//1 es el valor de los directivos
+                                    ->union($firm);
+        $firma2=Con_Firmaautorizada::join('rrh__empleados','rrh__empleados.idempleado','con__firmaautorizadas.idpersona') 
+                                    ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')                   
+                                    ->select(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombre'),
+                                    'nomcargo',
+                                    'orden')                       
+                                    ->where('tipo_persona',2)
+                                    ->union($firmas1)
+                                    ->orderby('orden', 'asc')
+                                    ->get();
+
+                                            
+
+        
+
+        $totalh=0;
+        $totald=0;
+        foreach ($asientodetalles as $key => $value) {
+            $totald=$totald+$value->debe;
+            $totalh=$totalh+$value->haber;
+            
+        }
+        
+        //$maestro=DB::select('select * from con__asientomaestros where estado = 1 and idasientomaestro=2186');
+
+        /* $detalle=Con_Asientodetalle::join('')
+        where('idasientomaestro') */
+        
+        //return($firma2);
+        return view('pdf')->with(['maestros'=>$maestros,
+                                    'detalles'=>$asientodetalles,
+                                    'firmas'=>$firma2,
+                                    'totalh'=>$totalh,
+                                    'totald'=>$totald]);
+
+                              /*   return ['maestros'=>$maestros,
+                                'detalles'=>$asientodetalles,
+                                'firmas'=>$firma2,
+                            'totalh'=>$totalh,
+                            'totald'=>$totald]; */
     }
     public function validaraportes($idasientomaestro){
         ini_set('memory_limit', '1024M');

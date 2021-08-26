@@ -3,11 +3,23 @@
         <div class="container-fluid" style="padding-top: 10px;">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-3" style="padding-top: 8px;">
-                            <i class="fa fa-align-justify"></i> Tesoreria
+                    <div class="form-group row" style="margin-bottom: 0px;">
+                        <div class="col-md-2">
+                           <i class="fa fa-align-justify"></i> Tesoreria
+                        </div> 
+                        <div class="col-md-3">
+                            <select class="form-control" v-model="tipocargo" @change="selectcobranza()">
+                                <option value="1">Desembolso</option>
+                                <option value="2">Cobranza</option>
+                            </select>
                         </div>
-                        <div :class="tipodesembolso>0?'col-md-4':'col-md-9'">
+                        
+                    </div>
+                </div>
+                <div class="card-body" v-if="tipocargo==1" style="padding-top: 5px;">
+                    <div class="row">
+                        
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-5 my-auto" style="text-align: right;">
                                     <strong>Tipo Desembolso:</strong>
@@ -31,21 +43,18 @@
                             </div> 
                         </div>
                         <div v-else-if="tipodesembolso==2" class="col-md-5"> 
-                                        <div class="row">
-                                            <strong class="col-md-4 my-auto" style="text-align: right;">Seleccionar Perfil:</strong>
-                                            <div class="col-md-8">
-                                                <select class="form-control" v-model="perfildesembolso" @change="listarDesembolsoPrestamos()">
-                                                    <option value="0" disabled>Seleccionar...</option>
-                                                    <option v-for="desembolso in arrayPerfilDesembolso" :key="desembolso.idperfilcuentamaestro" :value="desembolso.idperfilcuentamaestro" v-text="desembolso.nomperfil"></option>
-                                                </select>
-                                            </div>
-                                        </div> 
-                            </div>
-
-
+                            <div class="row">
+                                <strong class="col-md-4 my-auto" style="text-align: right;">Seleccionar Perfil:</strong>
+                                <div class="col-md-8">
+                                    <select class="form-control" v-model="perfildesembolso" @change="listarDesembolsoPrestamos()">
+                                        <option value="0" disabled>Seleccionar...</option>
+                                        <option v-for="desembolso in arrayPerfilDesembolso" :key="desembolso.idperfilcuentamaestro" :value="desembolso.idperfilcuentamaestro" v-text="desembolso.nomperfil"></option>
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
+                    <hr>
                     <!-- inicio de cargo de cuenta -->
                     <table class="table table-bordered table-striped table-sm" v-if="tipodesembolso==1">
                         <thead class="thead-dark">
@@ -73,7 +82,10 @@
                                 </td>
                                 <!-- <td style="text-align:right">{{ index+1}}</td> --> <!-- index+1 + -->
                                 <td v-text="movimiento.fecha_solicitud" style="text-align:right"></td>
-                                <td v-text="movimiento.nombres"></td>
+                                <td v-if="movimiento.nombres==null" style="text-align:center"><button type="button" @click="addnomccuenta(movimiento.idsolccuenta)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar Persona">
+                                        <i class="icon-people"></i>
+                                    </button> </td>
+                                <td v-else v-text="movimiento.nombres"></td>
                                 <td v-text="movimiento.nrcuenta"></td>
                                 <td v-text="movimiento.sigla"></td>
                                 <td v-text="movimiento.glosa"></td>
@@ -82,9 +94,8 @@
                                     <span  v-text="movimiento.fecha_desembolso"></span>
                                 </td>                              
                                 <td v-else-if="desembolsocheck=='por_desembolsar'">
-                                    
-                                        <label class="switch switch-label switch-pill switch-outline-primary-alt">
-                                            <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="movimiento.idsolccuenta" >
+                                        <label class="switch switch-label switch-pill switch-outline-primary-alt" >
+                                            <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="movimiento.idsolccuenta" :disabled="movimiento.nombres==null">
                                             <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>
                                         <input v-if="checkValidacion[index]" type="text"  v-model="num_documento[index]" placeholder="Nº Cheque" style="width:100px;text-align: right;">
@@ -109,34 +120,32 @@
                         </tbody>
                     </table>
                     <!-- fin de cargo de cuenta -->
-                     <!-- inicio prestamos -->
-    <div v-if="perfildesembolso>0" class="form-group row" style="justify-content: flex-end;">
-            <div v-if="tipodesembolso==2" class="col-md-8">
-              <div class="input-group" style="align-items: center;">
-                <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
-                </p>
-                <input type="text" v-model="buscar" @keyup.enter="listarDesembolsoPrestamos()" class="form-control"
-                  placeholder="Nombres , Numero de Prestamos , Apellidos , Numero de Papeleta , lote , Fecha Solicitud (YYYY-MM-DD)" />
-                <button type="submit" @click="listarDesembolsoPrestamos()" class="btn btn-primary">
-                  <i class="fa fa-search"></i> Buscar
-                </button>
-              </div>
-            </div>
-          </div>
-                        <div v-if="perfildesembolso>0" class="row" style="text-align: center;margin:15px;"> 
-                            <div v-if="tipodesembolso==2" class="col-md-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
-                                    <div>
-                                        <label class="form-check-label" style="margin-right: 15px;">
-                                            <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Por Desembolsar
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Ya Desembolsados
-                                        </label> 
-                                    </div>
+                    <!-- inicio prestamos -->
+                    <div v-if="perfildesembolso>0" class="form-group row" style="justify-content: flex-end;">
+                        <div v-if="tipodesembolso==2" class="col-md-8">
+                            <div class="input-group" style="align-items: center;">
+                                <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: 500;">Criterio de busqueda:
+                                </p>
+                                <input type="text" v-model="buscar" @keyup.enter="listarDesembolsoPrestamos()" class="form-control"
+                                placeholder="Nombres , Numero de Prestamos , Apellidos , Numero de Papeleta , lote , Fecha Solicitud (YYYY-MM-DD)" />
+                                <button type="submit" @click="listarDesembolsoPrestamos()" class="btn btn-primary">
+                                <i class="fa fa-search"></i> Buscar
+                                </button>
                             </div>
                         </div>
-                        
-
+                    </div>
+                    <div v-if="perfildesembolso>0" class="row" style="text-align: center;margin:15px;"> 
+                        <div v-if="tipodesembolso==2" class="col-md-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
+                                <div>
+                                    <label class="form-check-label" style="margin-right: 15px;">
+                                        <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Por Desembolsar
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarDesembolsoPrestamos()" style="margin-right: 5px;">Ya Desembolsados
+                                    </label> 
+                                </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-striped table-sm" v-if="tipodesembolso==2">
                         <thead class="thead-dark">
                             <tr><th>Nº</th> 
@@ -185,30 +194,153 @@
                             
                         </tbody>
                     </table>
-                     
-                  
                     <!-- fin prestamos -->
                 </div>
+                <!-- cobranzas -->
+                <div class="card-body" v-else> 
+                    <!-- //////// habilitar combo de perfiles de cobranza por el momento se muestra lista general de todos los perfiles de cobranza -->
+                    <!-- <div class="col-md-6">
+                        <div class="row">
+                            <strong class="col-md-4 my-auto" style="text-align: right;">Seleccionar Perfil:</strong>
+                            <div class="col-md-8">
+                                <select class="form-control" v-model="perfildesembolso" @change="listarDesembolsoCobranzas()">
+                                    <option value="0" disabled>Seleccionar...</option>
+                                    <option v-for="desembolso in arrayPerfilDesembolso" :key="desembolso.idperfilcuentamaestro" :value="desembolso.idperfilcuentamaestro" v-text="desembolso.nomperfil"></option>
+                                </select>
+                            </div>
+                        </div> 
+                    </div> -->
+                    <!-- ///////////////////////////////////// -->
+                    <div class="col-md-6 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;background-color: white;">
+                        <div>
+                            <label class="form-check-label" style="margin-right: 15px;">
+                                <input type="radio" class="form-check-input" v-model="desembolsocheck" value="por_desembolsar" checked @change="listarcobranza(2)" style="margin-right: 5px;">Por Desembolsar
+                            </label>
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" v-model="desembolsocheck" value="ya_desembolsado" @change="listarcobranza(1)" style="margin-right: 5px;">Ya Desembolsados
+                            </label> 
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-striped table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th v-if="desembolsocheck=='ya_desembolsado'">Nº</th>
+                                <th v-else style="width:50px">Opciones</th>
+                                <th style="width:110px">Fecha Sol.</th>
+                                <th>a Nombre de:</th>
+                                <th>Num Documento</th>
+                                <!-- <th style="width:70px">Filial</th>
+                                <th >Glosa</th>
+                                <th style="width:100px">Monto</th> -->
+                                <th style="width:200px"><span v-if="desembolsocheck=='ya_desembolsado'">Hora Desembolso </span><span v-else>Cobranza</span> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(cobranza,index) in arraycobranza" :key="cobranza.idasientomaestro">
+                                <td v-if="desembolsocheck=='ya_desembolsado'" style="text-align:right">{{ index+1}}</td>
+                                <td v-else>
+                                     <button type="button" @click="observarCargo(cobranza.idasientomaestro,1)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Observar Cobranza">
+                                        <i class="icon-eye"></i>
+                                    </button> 
+                                </td>
+                                <td v-text="cobranza.fecharegistro" style="text-align:right"></td>
+                                <td></td>
+                                <td v-text="cobranza.numdocumento"></td>
+                                <!-- <td v-text="cobranza.sigla"></td>
+                                <td v-text="cobranza.glosa"></td>
+                                <td v-text="cobranza.glosa"></td> -->
+                                <td v-if="desembolsocheck=='ya_desembolsado'">
+                                    <span  v-text="cobranza.fecha_desembolso"></span>
+                                </td>                              
+                                <td v-else-if="desembolsocheck=='por_desembolsar'">
+                                        <label class="switch switch-label switch-pill switch-outline-primary-alt" >
+                                            <input class="switch-input" type="checkbox" unchecked="" v-model="checkValidacion[index]" value="cobranza.idasientomaestro" >
+                                            <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>
+                                </td>                                  
+                            </tr> 
+                            <tr v-if="desembolsocheck=='por_desembolsar'">
+                                <td colspan="3"></td>
+                                <td colspan="2" style="text-align:center"><button class="btn btn-primary" type="button" @click="registrarCobranza(1)" :disabled="!vercheckvalidacion">
+                                            Registrar Cobranza
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-             
-                <div id="inferior" class="position-fixed animated slideInUp"  v-if="checkvalidate&&tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
-                                
-                                
-                                    <div class="col-md-5 row" style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
-                                            <div class="col-md-8 my-auto">     
-                                                <span style="padding-right: 8px;">Cuenta de Desembolso:</span>
-                                                <strong style="font-size: 15px;" v-text="cuentasconciliacion.codcuenta + ' - '+ cuentasconciliacion.nomcuenta"></strong> 
-                                            </div>
-                                            <div class="col-md-4"><button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
-                                            @click="registrarDesembolso(2)" :disabled="!cuentasconciliacion || !vercheckvalidacion">
-                                                        Desembolsar
-                                                </button>
-                                            </div>
-                                    </div>
-                                  
-                                
-                  </div> 
+            <div id="inferior" class="position-fixed animated slideInUp"  v-if="checkvalidate&&tipodesembolso==2&&desembolsocheck=='por_desembolsar' && arrayPrestamos.length!=0">
+                <div class="col-md-5 row" style="float: right;float: right;    padding: 10px;    background-color: rgb(33, 43, 49);    color: white;">
+                    <div class="col-md-8 my-auto">     
+                        <span style="padding-right: 8px;">Cuenta de Desembolso:</span>
+                        <strong style="font-size: 15px;" v-text="cuentasconciliacion.codcuenta + ' - '+ cuentasconciliacion.nomcuenta"></strong> 
+                    </div>
+                    <div class="col-md-4"><button class="btn btn-primary   btn-block" style="font-size: large;" type="button" 
+                    @click="registrarDesembolso(2)" :disabled="!cuentasconciliacion || !vercheckvalidacion">
+                                Desembolsar
+                        </button>
+                    </div>
+                </div>
+            </div> 
         </div>
+        <!-- modal agregar persona en cargo de cuenta -->
+        <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="modalsolicitud"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-lg" role="document">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header"> 
+                        <h4 class="modal-title" v-text="tituloModal"></h4>
+                        <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarModal('modalsolicitud')"><span aria-hidden="true">×</span></button>
+                    </div> 
+                    <div class="modal-body">
+                        <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo('directivo')"> Directivos
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo('personal')">Personal
+                                </label>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-8" v-if="directivo=='directivo'">
+                                <strong>Directivo:</strong>
+                                <Ajaxselect  v-if="clearSelected"
+                                    ruta="/rrh_empleado/selectdirectivos?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                    resp_ruta="empleados"
+                                    labels="nombres"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="idsocio"
+                                    :id="idempleadoselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                            </div>
+                            <div class="form-group col-md-8" v-else-if="directivo=='personal'">
+                                <strong>Personal:</strong>
+                                <Ajaxselect  v-if="clearSelected"
+                                    ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                    resp_ruta="empleados"
+                                    labels="nombres"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="idempleado"
+                                    :id="idempleadoselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="modal-footer"> 
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal('modalsolicitud')">Cerrar</button>
+                        <button :disabled="!isComplete" class="btn btn-primary" type="button"  @click="registrarSolicitud('modalsolicitud')">Guardar</button>
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <!-- fin modal agregar usuario a cargo de cuenta -->
     </main>
 </template>
 
@@ -245,8 +377,6 @@
                                         {valor:2,tipodesembolso:'Prestamos'}],
                 desembolsocheck:'por_desembolsar',
                 arrayCargoscuenta:[],
-                arrayCCDesembolsados:[],
-                arrayCCNodesembolsados:[],
                 tipodesembolso:0,
                 checkValidacion:[],
                 documento:[],
@@ -255,6 +385,8 @@
                 arrayResultado:[],
                 arrayDatosDesembolso:[],
                 perfildesembolso:0,
+                perfilcobranza:0,
+                arrayPerfilCobranza:[],
                 arrayPerfilDesembolso:[],
                 arrayPrestamos:[],
                 arraycuentasHaber:[],
@@ -272,7 +404,7 @@
                 nomcuenta:'',
                 codcuenta:'',
                 idcuenta:'',
-                arrayMovimientos:[],
+                
                 concepto:'',
                 conceptodeb:'',
                 iddepartamento:2,
@@ -284,20 +416,27 @@
                 
                 tituloModal:'',
                 numero:0,
-                arrayMovimientosCred:[],
-                arrayMovimientosDeb:[],
-                arrayDebitosNoBanco:[],
+                
                 fechainicio:'',
                 fechafin:'',
                 saldo:0,
-                arrayCheques:[],
+                
                 montobanco:0,
                 fecha_movimientodebNoBanco:'',
                 conceptodebNoBanco:'',
                 iddepartamentodebNoBanco:2,
                 num_operaciondebNoBanco:'',
                 montodebNoBanco:0,
-                boton:true
+                boton:true,
+                directivo:'directivo',
+                clearSelected:1,
+                idempleadoselected:'',
+                idempleado:[],
+                valor:'',
+                idccuenta:'',
+                tipocargo:1,
+                arrayTipoCobranza:[],
+                arraycobranza:[],
 
             }
         },
@@ -308,6 +447,13 @@
         },
 
         computed:{
+
+            isComplete () {
+                let me=this;
+                if (me.directivo=='directivo' || me.directivo=='personal')
+                    return me.idempleado.length>0;
+                
+            },
             vercheckvalidacion(){
                 let me=this;
                 var valor=false;
@@ -354,6 +500,112 @@
             
         },
         methods : {
+            selectcobranza(){
+                let me=this;
+                let valor=0;
+                if(me.tipocargo==2)
+                {
+                    console.log(me.tipocargo);
+                    if(me.desembolsocheck=='por_desembolsar')
+                        valor=2;
+                    else
+                        valor=1;
+                    me.listarcobranza(valor)
+                }
+            },
+            listarcobranza(valor){
+                let me=this;
+                var url= '/con_asientomaestro/cobranza?valor='+valor;
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    //console.log(respuesta);
+                    me.arraycobranza = respuesta;
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+
+            },
+            
+            registrarSolicitud(){
+                let me = this;
+                let valor=0;
+                let tipo_filial;
+                if(me.directivo=="directivo")
+                    valor=1;
+                else
+                {
+                    if(me.directivo=="personal")
+                        valor=0;
+                }
+                if(me.idempleado[4]=='LP')
+                    tipo_filial=1;
+                else
+                    tipo_filial=2;
+                axios.put('/glo_solccuenta/agregarpersona',{
+                    'idsolccuenta':me.idccuenta,
+                    'subcuenta':me.idempleado[1],
+                    'directorio':valor,
+                    'tipo_filial':tipo_filial
+                }).then(function (response) {
+                    swal(
+                            'Registrado Correctamente'
+                       )   
+                    me.cerrarModal('modalsolicitud');
+                    me.listarDesembolso();
+                   // console.log('cerrar modal');
+                    
+                    
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+             empleados(empleados){
+                this.idempleado=[];
+                for (const key in empleados) {
+                    if (empleados.hasOwnProperty(key)) {
+                        const element = empleados[key];
+                        //console.log(element);
+                        this.idempleado.push(element);
+                    }
+                }
+                //console.log(this.idempleado);
+            },
+            cleanempleados(){
+                this.idempleado=[];
+                //this.idempleadorespuesta=0;
+            //console.log('clean')
+            },
+            
+            cerrarModal(id){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 50); 
+                me.classModal.closeModal(id);
+                me.idempleado=[];
+                me.monto=0;
+                me.glosa='';
+            },
+             cambiaDirectivo(valor){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                me.directivo=valor;
+                me.idempleado=[];
+                
+               
+            },
+            addnomccuenta(id){
+                let me=this;
+                me.tituloModal = 'Agregar Persona Cargo de Cuenta ';
+                me.idempleado=[];
+                me.classModal.openModal('modalsolicitud');
+                me.idccuenta=id;
+                    
+            },
+             tiempo(){
+            this.clearSelected=1;
+            }, 
             observado_view(observado){
                 //console.log(pr);
                 let me=this;
@@ -508,32 +760,50 @@
             listarDesembolso(){
                 let me=this;
                 this.buscar='';
-                switch (me.tipodesembolso) {
-                    case 1:
-                        var url= '/glo_solccuenta/listartesoreria';
-                        //console.log(url);
-                        axios.get(url).then(function (response) {
-                            var respuesta= response.data; 
-                            me.arrayCargoscuenta=respuesta.cargocuentas;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                    break;
-                    case 2:
-                        //para desembolso de prestamos
-                        url= '/con_perfilcuentamaestro/selectcuentatesoreria';
-                        //console.log(url);
-                        axios.get(url).then(function (response) {
-                            var respuesta= response.data; 
-                            //console.log(respuesta); 
-                            me.arrayPerfilDesembolso=respuesta.perfilcuentamaestros;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                    break;
+                me.checkValidacion=[];
+                if(me.tipocargo==1)
+                {
+                    switch (me.tipodesembolso) {
+                        case 1:
+                            var url= '/glo_solccuenta/listartesoreria';
+                            //console.log(url);
+                            axios.get(url).then(function (response) {
+                                var respuesta= response.data; 
+                                me.arrayCargoscuenta=respuesta.cargocuentas;
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        break;
+                        case 2:
+                            //para desembolso de prestamos
+                            url= '/con_perfilcuentamaestro/selectcuentatesoreria'; //verificar desembolso valor 2
+                            //console.log(url);
+                            axios.get(url).then(function (response) {
+                                var respuesta= response.data; 
+                                //console.log(respuesta); 
+                                me.arrayPerfilDesembolso=respuesta.perfilcuentamaestros;
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        break;
+                    }
                 }
+                else{
+                    url= '/con_perfilcuentamaestro/selectcuentatesoreria?cobranza=1'; //verificar cobranza valor 1
+                    //console.log(url);
+                    axios.get(url).then(function (response) {
+                        var respuesta= response.data; 
+                        //console.log(respuesta); 
+                        me.arrayPerfilDesembolso=respuesta.perfilcuentamaestros;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+
+                
             },
             listarDesembolsoPrestamos(){
                 this.arrayPrestamos=[];
@@ -597,9 +867,100 @@
                     console.log(error);
                 });
             },
-            registrarDesembolso(valor){
+            registrarCobranza(){
                 this.boton=false;
                 swal({
+                    title: 'Esta seguro de Realizar la Cobranza?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar!',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) 
+                    {
+                        swal({
+                        title: "Registrando los datos",
+                        allowOutsideClick: () => false,
+                        allowEscapeKey: () => false,
+                        onOpen: function () {
+                            swal.showLoading();
+                        }
+                    }).catch(error => {
+                        swal.showValidationError('Request failed: ${error}')
+                    });
+                    let me=this;
+                    me.arrayDatosCobranza=[];
+                    me.checkValidacion.forEach((element,index) => {
+                        if(element)
+                        {
+                            me.arrayDatosCobranza.push(me.arraycobranza[index].idasientomaestro);    
+                        }
+                    });
+                            
+                            //console.log(me.arrayDatosDesembolso);
+                    axios.put('/con_asientomaestro/cobrar',{
+                            'arrayids': me.arrayDatosCobranza,
+                        }).then(function (response) {
+                            if(response.data.length){
+                            //console.log(response)
+                            swal(
+                                    'El Valor ya Existe',
+                                    'Ingresa un dato Diferente',
+                                    'error'
+                            )                    
+                            }
+                            else{
+                                me.checkValidacion=[];
+                                let valor;
+                                if(me.desembolsocheck=='por_desembolsar')
+                                    valor=2;
+                                else    
+                                    valor=1
+                                me.listarcobranza(valor);
+                                swal(
+                                    'Registrado Correctamente',
+                                    ) ;
+                                listarcobranza();
+
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                            me.boton=true;
+                        });   
+                }
+                else if (result.dismiss === swal.DismissReason.cancel) 
+                {
+
+                }
+            })
+
+                
+
+            },
+            registrarDesembolso(valor){
+                this.boton=false;
+                 swal({
+                title: 'Esta seguro de Realizar el Desembolso?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                    if (result.value) 
+                    {
+                        swal({
                         title: "Registrando los datos",
                         allowOutsideClick: () => false,
                         allowEscapeKey: () => false,
@@ -711,6 +1072,22 @@
                         break;
                     }
                 }
+                        
+            }
+            else if (result.dismiss === swal.DismissReason.cancel) 
+            {
+
+            }
+        })
+
+
+
+
+
+
+
+
+                
             },
         },
         mounted() {
@@ -719,6 +1096,7 @@
             this.selectConciliacion();
             this.classModal=new _pl.Modals();
             this.classModal.addModal('registrarmov');
+            this.classModal.addModal('modalsolicitud');
             
         }
     }

@@ -506,9 +506,19 @@
                       </div>
 
                       <div class="form-group row">
-                        <label style="text-align: right; align-items: center;font-weight: 900;font-size: 20px;"
-                          class="col-md-4 form-control-label" for="text-input"> </label>
-
+                       
+                   
+                    <div class="col-md-4">
+                          <label style="text-align: right; align-items: center;font-weight: 500;"
+                            class="form-control-label" for="text-input">Aplicar seguro de desgravamen :</label>
+                          <div class="input-group">
+                            <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="aplicasegurodesgravamen">
+                                        <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
+                                        </label>
+                          </div>
+                          
+                        </div>
 
 
 
@@ -1156,6 +1166,7 @@
     <cuentaBancaria @cerrarvue="cerrarModalvue" ref="ModalVueCuentaBancaria"></cuentaBancaria>
 
     <status ref="ModalVueStatus"></status>
+     <!-- <calificacion_lista  ref="modal_calificacion_lista"></calificacion_lista> -->
   </main>
 </template>
 
@@ -1229,8 +1240,7 @@ export default {
       arrayperfilgarante: [],
       statusLote: null,
       arrayProducto: [],
-      arrayCuentaSocio: [],
-      arrayFormulasProducto: [],
+      arrayCuentaSocio: [], 
       garantesseleccionados: new Map(),
       totalgarantesseleccionados: 0,
       modal: 0,
@@ -1258,7 +1268,8 @@ export default {
       barChart: null,
       barChartG: null,
       PlandePagosPrint: null,
-      dataCuentaBancaria: null
+      dataCuentaBancaria: null,
+      aplicasegurodesgravamen: 0
     };
   },
 
@@ -1319,6 +1330,9 @@ export default {
       this.calculoCuota();
     },
     plazomeses: function() {
+      this.calculoCuota();
+    } ,
+    aplicasegurodesgravamen: function() {
       this.calculoCuota();
     }
   },
@@ -1381,38 +1395,20 @@ export default {
          this.generacuota(this,paso);
       }  
        
-    },generacuota:_.debounce((ls,paso) => {
-    
-        var salida = (ls.tasaanual>0)?_pl._fff3512_23622(
-          ls.fecha_actual,
-          ls.fechasjson,
-          ls.tasaanual,
-          ls.montosolicitado,
-          ls.plazomeses,
-          ls.fechacorte,
-          ls.total_saldo_capital, 
-          ls.tipocambio,
-          ls.arrayFormulasProducto
-        )
-:
-       _pl._fff3512_23623(
-          ls.fecha_actual,
-          ls.fechasjson,
-          ls.tasaanual,
-          ls.montosolicitado,
-          ls.plazomeses,
-          ls.fechacorte,
-          ls.total_saldo_capital,  
-          ls.tipocambio,
-          ls.arrayFormulasProducto
-        );
- 
-        ls.PlandePagosPrint = salida.data;
-        ls.cuotaaproximada = (ls.montosolicitado > 0 && ls.plazomeses > 0 && !ls.errors.any())  ? salida["cuota"]  : 0;
-         if (ls.cuotaaproximada&&paso) {
-          ls.cambiocuota();
-        }
-        ls.cargandocalculo=0;
+    },generacuota:_.debounce((me,paso) => { 
+                axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+
+                '&montosolicitado='+me.montosolicitado+'&seg='+(me.aplicasegurodesgravamen?1:0)+'&interesDiferido=0').then(function (response) {
+                    var salida= response.data;   
+                    me.PlandePagosPrint = salida.data;
+                    me.cuotaaproximada = (me.montosolicitado > 0 && me.plazomeses > 0 && !me.errors.any())  ? salida["cuota"]  : 0;
+                    if (me.cuotaaproximada&&paso) {
+                      me.cambiocuota();
+                    }
+                      me.cargandocalculo=0; 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
     }, 550),
     viewstatus(socio) {
       this.$refs.ModalVueStatus.showVuestatus(socio);
@@ -1499,12 +1495,13 @@ export default {
           lipcom:this.liquidopagablecomputable,
           lip:this.liqpagable,
           riesgo:this.riesgo,
+          seg:(this.aplicasegurodesgravamen?1:0),
           fami:this.familiar,
           libro:this.prolibro,
           fron:this.frontera,
           pvig:this.cuotas_vigentes,  
           cuo_aprox:this.cuotaFinalSocio,  
-          planPagosMap:JSON.stringify(Array.from(this.PlandePagosPrint)),  
+          planPagosMap:JSON.stringify(this.PlandePagosPrint),  
         })
         .then(function(response) {
                    
@@ -1789,8 +1786,7 @@ export default {
         me.plazomesesmin = 0; 
         //me.cuotas_vigentes = 0; 
         me.islineal=0; 
-        me.garantesporproducto = 0;
-        me.arrayFormulasProducto = [];
+        me.garantesporproducto = 0; 
         me.garantesseleccionados.clear();
         me.totalgarantesseleccionados = 0; 
         var url =
@@ -1816,10 +1812,7 @@ export default {
                           me.errors.removeById("8301791");
                           me.montomaximo = parseInt(respuesta.escala[0].maxmonto);
                           me.montominimo = parseInt(respuesta.escala[0].minmonto);
-                          me.arrayFormulasProducto["cobranza"] = respuesta.formulas;
-                          me.arrayFormulasProducto["desembolso"] = [];
-                            console.log('formulas');
-                            console.log(respuesta.formulas);
+                           
                         } else {
                           me.montomaximo=0;
                           me.errors.add({
@@ -1845,13 +1838,26 @@ export default {
           });
       }
     }, sociosListaView(e) { 
+      let me=this;
         if (_.findIndex(this.listaSocios, function (o) {
             return o.idsocio == e.idsocio;
           }) < 0&&_.findIndex(this.listaSociosObservados, function (o) {
             return o.idsocio == e.idsocio;
           }) < 0){
             e.obs='';
-            _pl.getcriterioGarantesLista(this,e);
+            
+                var monto = (me.montosolicitado * me.tipocambio); 
+              axios.get('/plandepagos?idproducto='+me.producto+'&tasa='+me.tasaanual+'&meses='+me.plazomeses+
+                '&montosolicitado='+monto+'&seg=0&interesDiferido=0').then(function (response) {
+                    var salida= response.data;  
+                    console.log(salida);
+                     _pl.getcriterioGarantesLista(me,e,salida["cuota"]);
+                      
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
+
           }
             
           this.agregarlista = 0;
@@ -1912,8 +1918,7 @@ export default {
         me.plazomesesmin = 0; 
         me.cuotas_vigentes = 0; 
         me.islineal=0; 
-        me.garantesporproducto = 0;
-        me.arrayFormulasProducto = [];
+        me.garantesporproducto = 0; 
         me.garantesseleccionados.clear();
         me.totalgarantesseleccionados = 0; 
         me.idescala=""; 
@@ -1933,9 +1938,7 @@ export default {
                 me.factorid = respuesta.productos[0].idfactor;
                 me.maxfactor = respuesta.productos[0].aprobacion;
                 me.garantesporproducto = respuesta.productos[0].garantes; 
-                me.idescala = respuesta.productos[0].idescala; 
-                me.arrayFormulasProducto["cobranza"] = respuesta.formulas; 
-                me.arrayFormulasProducto["desembolso"] = []; 
+                me.idescala = respuesta.productos[0].idescala;  
                 responses = true;
             }else{
                responses = false;
@@ -1972,7 +1975,7 @@ export default {
                           pvig: 0,
                           idlista: idprestamolista.data.id,
                           cuo_aprox: el.cuotaaproximada,
-                          planPagosMap: JSON.stringify(Array.from(el.PlandePagosPrint)),
+                          planPagosMap: JSON.stringify(el.PlandePagosPrint),
                         });
                         
                         };
@@ -1983,24 +1986,25 @@ export default {
               return responses;      
             }
     ,listacrear(){
-      let me = this;
-      this.listaSocios=[];
-      this.listaSociosObservados=[];
-      this.arrayCuentaSocio=[];
-      this.socio_id="";
-      this.producto=1;// 1= es el id del producto de emergencia
-      this.productoporLista(this.producto).then((result)=>{
-        if(result){
-           me.classModal.openModal("listaPrestamos"); 
-        }else{
-           me.closemodallist();
-                swal(
-                    "¡No se tiene configurado el producto crediticio!",
-                    "",
-                    "error"
-                  );
-        }
-      });
+  this.$refs.modal_calificacion_lista.showVue();
+      // let me = this;
+      // this.listaSocios=[];
+      // this.listaSociosObservados=[];
+      // this.arrayCuentaSocio=[];
+      // this.socio_id="";
+      // this.producto=1;// 1= es el id del producto de emergencia
+      // this.productoporLista(this.producto).then((result)=>{
+      //   if(result){
+      //      me.classModal.openModal("listaPrestamos"); 
+      //   }else{
+      //      me.closemodallist();
+      //           swal(
+      //               "¡No se tiene configurado el producto crediticio!",
+      //               "",
+      //               "error"
+      //             );
+      //   }
+      // });
      
     }
     ,closemodallist(){
@@ -2308,6 +2312,7 @@ export default {
           this.obs = "";
           this.cuentaBancaria = "";
           this.tasaanual = 0;
+          this.aplicasegurodesgravamen = 0;
           this.valorfactor = 0;
           this.montomaximo = 0;
           this.maxfactor = 0;

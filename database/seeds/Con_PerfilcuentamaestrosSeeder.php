@@ -35,6 +35,7 @@ class Con_PerfilcuentamaestrosSeeder extends Seeder
             'idmodulo'=>'2'
             
         ]);
+        DB::table('con__perfilcuentamaestros')->insert(['nomperfil'=>'Carga Ascii Nuevo','descripcion'=>'Carga Ascii Nuevo','idtipocomprobante'=>'3','completo'=>'1','idmodulo'=>'2']);
                 
     }
 }

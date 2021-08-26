@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Payment_plans\PaymentPlansClass;
+use App\AsinalssClass\MetodoAmortizacion;
+
 use App\Par_productos_perfilcuenta;
 use App\Pre_Calificacion;
 use App\Socio;
@@ -17,7 +19,14 @@ class PreCalificacionController extends Controller
     {
         $this->middleware('auth');
     }
-
+ 
+    public function plandepagos(Request $request){
+      // if (!$request->ajax()) return redirect('/');
+        $plandepagos=new MetodoAmortizacion();
+        return $plandepagos->metodofrances($request->idproducto,$request->meses,$request->montosolicitado,$request->interesDiferido,$request->seg);
+        // return $plandepagos->metodofrances(6,120,15000,0,1);
+    }
+ 
     public function getcuota(Request $request){
         if (!$request->ajax()) return redirect('/');
         $plandepagos=new PaymentPlansClass();
@@ -410,6 +419,37 @@ if(!empty($request->buscar)){
 
         return ['garantes' => $socios,'cobranza'=>$formulascobranza,'productos'=>$productos];
     }
+    public function pre_getgarantes(Request $request)
+    {  
+      if (!$request->ajax()) return redirect('/');
+
+         ///cambiar sql
+         
+        $raw = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.cantobligados+apo__total_aportes.cantjubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.cantobligados,apo__total_aportes.cantjubilacion)) as cantaportes");
+        $raw2 = DB::raw("if((SELECT count(*) FROM daa__devolucions dev  where dev.idsocio =socios.idsocio and dev.idtipodevolucion between 1 and 2)=0,(apo__total_aportes.totalobligados+apo__total_aportes.totaljubilacion),if(apo__total_aportes.obligatorios=0,apo__total_aportes.totalobligados,apo__total_aportes.totaljubilacion)) as totalaportes");
+        $raw3 = DB::raw("valida_historial_garante(socios.idsocio) as totalgarantias");
+      
+        
+            $socios=Socio::join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
+            ->join ('par_grados','socios.idgrado','=','par_grados.idgrado')
+            ->join ('apo__total_aportes','socios.numpapeleta','=','apo__total_aportes.numpapeleta')
+            ->join ('par_departamentos','socios.iddepartamentoexpedido','=','par_departamentos.iddepartamento') 
+            ->select($raw3,$raw,$raw2, 'socios.rutafoto','socios.activo','socios.idsocio','socios.nombre','socios.apaterno','socios.amaterno','socios.ci','socios.numpapeleta','par_fuerzas.nomfuerza','par_grados.nomgrado')
+            ->where('socios.idsocio','!=',$request->id) 
+            ->orderBy('socios.nombre', 'asc')->get();
+        
+            $productos = Par_Producto::join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda')
+            ->join('par__productos__factores','par__productos.idfactor','=','par__productos__factores.idfactor') 
+            ->select('par__productos__factores.aprobacion','par__productos.idescala','par__productos.garantes','par__productos.max_prestamos','par__productos.lote',
+            'par__productos.activar_garante','par__productos.cancelarprestamos','par__productos.idfactor','par__productos.tasa','par__productos.codproducto',
+            'par__productos.idproducto','par__productos.nomproducto','par__productos.plazominimo','par__productos.plazomaximo','par__productos.activo',
+            'par__monedas.codmoneda','par__monedas.idmoneda','par__monedas.tipocambio')
+            ->where('par__productos.idproducto','=',$request->idpro)  
+            ->get();
+      
+
+        return ['garantes' => $socios,'productos'=>$productos];
+    }
 
     
     public function getsaldocapital_desembolso(Request $request)
@@ -417,6 +457,7 @@ if(!empty($request->buscar)){
        if (!$request->ajax()) return redirect('/'); 
       
          $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+         
      return ['capital'=>($total[0]->total + 0)];
     }
 

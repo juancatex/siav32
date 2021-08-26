@@ -15,8 +15,8 @@ class CreateGloSolicitudCargoCuentasTable extends Migration
     {
         Schema::create('glo__solicitud_cargo_cuentas', function (Blueprint $table) {
             $table->Increments('idsolccuenta');
-            $table->string('subcuenta',20)->comment('id del personal de ascinalss que recibio el cargo de cuenta');
-            $table->boolean('sidirectorio')->comment('0=personal ascinalss,1=socio que es parte del directorio central y filiales');
+            $table->string('subcuenta',20)->comment('id del personal de ascinalss que recibio el cargo de cuenta')->nullable();
+            $table->boolean('sidirectorio')->comment('0=personal ascinalss,1=socio que es parte del directorio central y filiales,2=sin designacion seleccionado desde solicitud');
             $table->integer('idusuario')->unsigned();
             $table->integer('idrole')->unsigned();
             $table->string('glosa',500);
@@ -35,6 +35,8 @@ class CreateGloSolicitudCargoCuentasTable extends Migration
             $table->tinyInteger('seg_descargoccuenta')->default(0)->comment('0->sin desacargo,1->con saldo pendiente,2->finalizado saldo 0');
             $table->float('saldo_descargo');
             $table->integer('numdocobligacion')->unsigned()->nullable()->comment('numero correlativo de documento obligatorio de cargo de cuenta');
+            $table->smallInteger('tipo_filial')->nullable()->comment('1->oficina central, 2->oficina regional');
+            $table->smallInteger('cant_dias')->nullable()->comment('contador de dias para el control de descargo se actualiza con EVENT');
             $table->timestamps();
         });
     }

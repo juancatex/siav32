@@ -103,19 +103,23 @@
                                 <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarModal('modalsolicitud')"><span aria-hidden="true">×</span></button>
                             </div> 
                         <div class="modal-body">
-                           
-                            <div class="col-6 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
-                            <div class="form-check-inline">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo()"> Directivos
-                                </label>
+                            <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                                <div class="col-3 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="directivo" checked @change="cambiaDirectivo('directivo')"> Directivos
+                                    </label>
                                 </div>
-                                <div class="form-check-inline">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo()">Personal
-                                </label>
+                                <div class="col-3 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="personal" @change="cambiaDirectivo('personal')">Personal
+                                    </label>
+                                </div>
+                                <div class="col-4 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="sindesignacion" @change="cambiaDirectivo('sindesignacion')">Sin Designación
+                                    </label>
+                                </div>
                             </div>
-                        </div>
                             <div class="row">
                                 <div class="form-group col-md-8" v-if="directivo=='directivo'">
                                     <strong>Directivo:</strong>
@@ -129,7 +133,7 @@
                                         :clearable='true'>
                                     </Ajaxselect>
                                 </div>
-                                <div class="form-group col-md-8" v-else>
+                                <div class="form-group col-md-8" v-else-if="directivo=='personal'">
                                     <strong>Personal:</strong>
                                     <Ajaxselect  v-if="clearSelected"
                                         ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
@@ -141,6 +145,7 @@
                                         :clearable='true'>
                                     </Ajaxselect>
                                 </div>
+                                <div v-else class="form-group col-md-8"><strong>Designacion Pendiente</strong></div>
                                 
                                 <div class="form-group col-md-4">
                                     <strong>Monto:</strong>
@@ -298,7 +303,11 @@ const st = {};
         },
         computed:{
             isComplete () {
-                return this.monto && this.glosa && this.idempleado.length>0;
+                let me=this;
+                if (me.directivo=='directivo' || me.directivo=='personal')
+                    return me.monto && me.glosa && me.idempleado.length>0;
+                else
+                    return me.monto && me.glosa
             },
             isActived: function(){
                 return this.pagination.current_page;
@@ -331,16 +340,11 @@ const st = {};
             cambiaDirectivo(valor){
                 let me=this;
                 me.clearSelected=0;
-                if(valor=="directivo")
-                {
-                        valor="personal";
-                        setTimeout(me.tiempo, 200); 
-                }
-                else
-                {
-                    valor="directivo";
-                    setTimeout(me.tiempo, 200); 
-                }
+                setTimeout(me.tiempo, 200); 
+                me.directivo=valor;
+                me.idempleado=[];
+                
+               
             },
             cambiarPagina(page,buscar){
                 let me = this;
@@ -380,7 +384,7 @@ const st = {};
                   //console.log(borradorcheck);
                 let me=this;
                 var url= '/glo_solccuenta?page=' + page + '&buscar='+ buscar + '&tipocargo='+ tipocargo;
-                //console.log(url);
+                console.log(url);
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arraySolicitud = respuesta.solicitudes.data;
@@ -427,30 +431,35 @@ const st = {};
             registrarSolicitud(){
                 let me = this;
                 let valor=0;
-
-                /*swal({
-                     title: "Ajax request example",
-                    text: "Submit to run ajax request",
-                    type: "info",
-                    showCancelButton: true,
-                    closeOnConfirm: false,
-                    showLoaderOnConfirm: true 
-
-                    }, function () {
-                    setTimeout(function () {
-                        swal("Ajax request finished!");
-                    }, 2000);
-                }); */
+                let tipo_filial;
+           
                 this.abrirModal();
                 if(me.directivo=="directivo")
                     valor=1;
                 else
-                    valor=0;
+                {
+                    if(me.directivo=="personal")
+                        valor=0;
+                    else    
+                        valor=2;
+                }
+                if(me.idempleado[4]=='LP')
+                    tipo_filial=1;
+                else 
+                {
+                    if(me.idempleado[4]=='')
+                        tipo_filial=0;
+                    else
+                        tipo_filial=2;
+                }    
+
+
                 axios.post('/glo_solccuenta/registrar',{
                     'subcuenta':me.idempleado[1],
                     'directorio':valor,
                     'monto':me.monto,
                     'glosa':me.glosa,
+                    'tipo_filial':tipo_filial
                     
                 }).then(function (response) {
                     var residasientomaestro=response.data;

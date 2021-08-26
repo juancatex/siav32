@@ -16,9 +16,10 @@ class Par_VentanamodulosSeeder extends Seeder
         DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'29','idmodulo'=>'3','nomventanamodulo'=>'Productos','template'=>'par_producto']);
         DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'30','idmodulo'=>'3','nomventanamodulo'=>'Prestamos - Calificacion','template'=>'pre_calificacion']);
         DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'31','idmodulo'=>'3','nomventanamodulo'=>'Factores','template'=>'par_prestamo_factor']);
-        DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'32','idmodulo'=>'3','nomventanamodulo'=>'Estado de Prestamos','template'=>'par_desembolso']);
+        DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'32','idmodulo'=>'3','nomventanamodulo'=>'Estado de Prestamos','template'=>'par_desembolso']); 
         DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'33','idmodulo'=>'3','nomventanamodulo'=>'Cobranzas','template'=>'pre_cobranzas']);
         DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'34','idmodulo'=>'3','nomventanamodulo'=>'ASCII','template'=>'crearAscii']);
+        DB::table('par__ventanamodulos')->insert(['idventanamodulo'=>'35','idmodulo'=>'3','nomventanamodulo'=>'Cambio de garante','template'=>'par_cambiogarante']);
 
 //servicios
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'4','nomventanamodulo'=>'Tipo Servicio','template'=>'ser_servicio']);
@@ -76,6 +77,7 @@ class Par_VentanamodulosSeeder extends Seeder
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Conciliación Bancaria','template'=>'con_conciliacion']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Productos','template'=>'con_productos']);
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Tesorería','template'=>'con_tesoreria']);
+        DB::table('par__ventanamodulos')->insert(['idmodulo'=>'7','nomventanamodulo'=>'Firmas Autorizadas','template'=>'con_firmasautorizadas']);
         
 //daaro
         DB::table('par__ventanamodulos')->insert(['idmodulo'=>'8','nomventanamodulo'=>'Devoluciones','template'=>'daa_devolucion']);

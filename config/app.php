@@ -1,8 +1,8 @@
 <?php
  
-// $ip=$_SERVER['SERVER_ADDR'];
+ // $ip=$_SERVER['SERVER_ADDR'];
  
-// if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
+  //if ($_SERVER['REMOTE_ADDR']=='192.168.100.101')
     $ip='192.168.100.60';
     // $ip='192.168.100.59';
 
@@ -12,7 +12,7 @@ return [
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
-    |
+    |  prueba
     | This value is the name of your application. This value is used when the
     | framework needs to place the application's name in a notification or
     | any other location as required by the application or its packages.
@@ -326,14 +326,21 @@ return [
 
     'rutaServicios' => [
         'REP_CONTRATOJP'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_jpintocontrato.rptdesign&__format=pdf&idasignacion=', 
-        'REP_ENTRADACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomentrada.rptdesign&__format=pdf', 
-        // 'REP_SALIDACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomsalida.rptdesign&__format=pdf',
+        //'REP_ENTRADACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomentrada.rptdesign&__format=pdf',  
+        //'REP_SALIDACC'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomsalida.rptdesign&__format=pdf',
+        // 'REP_REGISTRO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
+        // 'REP_REGISTRO_TODO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_todo.rptdesign&__format=pdf',          
+        // 'REP_REGISTRO_SALIDA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
+        // 'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
+        // 'REP_PERMANENTE_SOCIO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente_socio.rptdesign&__format=pdf',          
+        'REP_ENTRADACC'=>':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomentrada.rptdesign&__format=pdf', 
         'REP_SALIDACC'=> ':8080/birt-viewer/frameset?__report=reportes/servicios/ser_casacomsalida.rptdesign&__format=pdf',
-        'REP_REGISTRO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
-        'REP_REGISTRO_TODO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_todo.rptdesign&__format=pdf',          
-        'REP_REGISTRO_SALIDA'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
-        'REP_PERMANENTE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
-        'REP_PERMANENTE_SOCIO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente_socio.rptdesign&__format=pdf',          
+        'REP_REGISTRO'=>':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio.rptdesign&__format=pdf',          
+        'REP_REGISTRO_TODO'=> ':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_todo.rptdesign&__format=pdf',          
+        'REP_REGISTRO_SALIDA'=> ':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_transitorio_salida.rptdesign&__format=pdf',          
+        'REP_PERMANENTE'=> ':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente.rptdesign&__format=pdf',          
+        'REP_PERMANENTE_SOCIO'=>':8080/birt-viewer/frameset?__report=reportes/servicios/ser_cuadro_permanente_socio.rptdesign&__format=pdf',          
+        
         'REP_PAGOMAUSOLEO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_mausoleo.rptdesign&__format=pdf',          
         'REP_EXTRACTO_MAUSOLEO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_extracto.rptdesign&__format=pdf',          
         'REP_PAGOMAUSOLEO_BE'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/servicios/ser_pago_mausoleo_beneficiario.rptdesign&__format=pdf',          

@@ -20,6 +20,7 @@ class CreateParPrestamoGarantesTable extends Migration
             $table->bigInteger('idprestamo')->unsigned();
             $table->dateTime('fecharegistro');
             $table->boolean('activo')->default(1); 
+            $table->string('obs',200)->nullable()->comment('obs'); 
             $table->timestamps();
 
             $table->foreign('idsocio')->references('idsocio')->on('socios');  

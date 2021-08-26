@@ -93,6 +93,13 @@
                         <h4 class="col-md-8">Asiento Contable</h4>
 
                         <div class="form-group row" style="margin-bottom: 5px;">
+                            <div v-if="idfilial==1" class="col-md-3 padding5">
+                                <strong class="form-control-label">Repartición:</strong>
+                                <select v-model="idunidad"  class="form-control" name="car" :class="{'invalido':errors.has('car')}" v-validate="'required'">
+                                        <option v-for="unidad in arrayUnidades" :key="unidad.id"
+                                        :value="unidad.idunidad" v-text="unidad.nomunidad"></option>
+                                </select>
+                            </div>
                             <div class="col-md-3 padding5">
                                 <strong>Tipo Documento:</strong>
                                 <select 
@@ -144,7 +151,7 @@
                                         <strong style="padding-left: 20px;">CUENTA</strong>
                                     </div>
                                     <div class="bg-info text-white border border-white col-md-3" >
-                                        <strong>DESCRIPCION</strong>
+                                        <strong>SUBUENTAS</strong>
                                     </div>
                                     <div class="bg-info text-white border border-white col-md-2" >
                                         <strong>DEBE</strong>
@@ -168,59 +175,63 @@
                                             placeholder="Ingrese texto" 
                                             idtabla="idcuenta"
                                             :keyIn="index"
+                                            :id="rowcuentas.idcuenta"
                                             :clearable='true'>
                                         </Ajaxselect>
                                         </div>
                                     </template>
                                     <div class="border col-md-3" >
-                                        <input  id="input1" inputvalued="1"
+                                        <!-- <input  id="input1" inputvalued="1"
                                                 v-model="rowcuentas.documento" 
                                                 class="inputnext form-control border-0 input-text2" 
-                                                type="text" >
+                                                type="text" > -->
+                                        <button v-if="rowcuentas.idcuenta!=lc" type="button" @click="abrirModalSubcuentas(index)" style="float: right;" class="btn btn-success btn-sm" :disabled="rowcuentas.idcuenta==''?true:false" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
+                                            <i class="icon-people"></i> Subcuentas
+                                        </button> 
                                     </div>
                                     <template v-if="rowcuentas.idcuenta==lc && acumulado13!=0">
-                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
+                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;text-align:right">
                                             <vue-numeric  id="input2" inputvalued="2"
                                                 disabled
                                                 class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
-                                                v-on:focus="selectAll">
+                                                readOnly>
                                             </vue-numeric>
                                         </div>
                                     </template>
                                     <template v-else-if="rowcuentas.idcuenta==lc && acumulado13==0">
-                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
+                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px; text-align:right">
                                             <vue-numeric  id="input2" inputvalued="2"
                                                 disabled
                                                 class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
-                                                v-on:focus="selectAll">
+                                                readOnly>
                                             </vue-numeric>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px;">
+                                        <div class="border col-md-2" style="padding-right: 5px;padding-left: 5px; text-align:right">
                                             <vue-numeric  id="input2" inputvalued="2"
                                                 class="inputnext form-control input-importe border-0"
                                                 separator="," 
                                                 v-model="rowcuentas.debe"
                                                 v-bind:precision="2"
-                                                v-on:focus="selectAll">
+                                                readOnly>
                                             </vue-numeric>
                                         </div>
                                     </template>
-                                    <div class="border col-md-2" v-if="excedente" >
+                                    <div class="border col-md-2" v-if="excedente" style="text-align:right">
                                         <vue-numeric  id="input3" inputvalued="3"
                                             :disabled="rowcuentas.debe!=0"
                                             class="inputnext form-control input-importe border-0"
                                             separator="," 
                                             v-model="rowcuentas.haber"
                                             v-bind:precision="2"
-                                            v-on:focus="selectAll">
+                                            readOnly>
                                         </vue-numeric>
                                     </div>
                                     <div v-if="recorrerowcuentas-1==index" class="border col-md-1" style="text-align:center">
@@ -228,6 +239,15 @@
                                                 Borrar
                                         </button>
                                     </div>
+                                    <table border="1" style="border-left-width: 100px; font-size: small;">
+                                        <tr v-for="(subcuenta,ind) in rowcuentas.idsubcuenta" :key="ind">
+                                            <td>{{ subcuenta.subcuenta }}</td>
+                                            <td>{{ subcuenta.nombre }}</td>
+                                            <td>{{ subcuenta.detalle }}</td>
+                                            <td style="width: 100px;text-align: right;">{{ subcuenta.subdebe | currency }}</td>
+                                            <td style="width: 100px;text-align: right;">{{ subcuenta.subhaber | currency }}</td>
+                                        </tr>
+                                    </table>
                                 </div>
                                 </div>
                                 <div class="row" style="text-align:right;">
@@ -582,6 +602,170 @@
             </div>
         </div>
         <!-- fin modal add proveedor -->
+        <!-- modal subuentas -->
+        <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="addsubcuentas"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-text="tituloModalSubcuentas" ></h4><br/>
+                        <button type="button" class="close" @click="cerrarModalSubcuentas()" aria-label="Close">
+                            <span  aria-hidden="true">x</span>    
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                                <div class="col-2 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="4" @change="cambiaDirectivo('4')"> Ascinalss
+                                    </label>
+                                </div>
+                                <div class="col-2 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="1" checked @change="cambiaDirectivo('1')"> Socios
+                                    </label>
+                                </div>
+                                <div class="col-2 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="2" @change="cambiaDirectivo('2')">Personal
+                                    </label>
+                                </div>
+                                <div class="col-2 form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="3" @change="cambiaDirectivo('3')">Otros
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-5" v-if="directivo=='4'">
+                                    <h5 >{{ arraySubAscinalss.nombre }}</h5>
+                                </div>
+                                <div class="form-group col-md-5" v-else-if="directivo=='1'">
+                                    <strong>Socio:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectsocios?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idsocio"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div class="form-group col-md-5" v-else-if="directivo=='2'">
+                                    <strong>Personal:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                        resp_ruta="empleados"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="idempleado"
+                                        :id="idempleadoselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div v-else class="form-group col-md-5">
+                                    <strong>Otros:</strong>
+                                     <Ajaxselect  v-if="clearSelected"
+                                            ruta="/alm_proveedor/selectProveedor2?buscar=" @found="empleados" @cleaning="cleanproveedores"
+                                            resp_ruta="proveedores"
+                                            labels="nit_proveedor"
+                                            placeholder="Ingrese texto..." 
+                                            idtabla="idproveedor"
+                                            :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                
+                                <div class="form-group col-md-3">
+                                    <strong>Debe:</strong>
+                                    <vue-numeric  
+                                        class="form-control input-importe"
+                                        currency="Bs." 
+                                        separator="," 
+                                        v-model="subdebe"
+                                        v-bind:precision="2"
+                                        v-on:focus="selectAll"
+                                        :disabled="subhaber!=0 || sisubhaber">
+                                    </vue-numeric>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <strong>Haber:</strong>
+                                    <vue-numeric  
+                                        class="form-control input-importe"
+                                        currency="Bs." 
+                                        separator="," 
+                                        v-model="subhaber"
+                                        v-bind:precision="2"
+                                        v-on:focus="selectAll"
+                                        :disabled="subdebe!=0 || sisubdebe || !excedente">
+                                    </vue-numeric>
+                                </div>
+                                <div class="form-group col-md-1 pt-3">
+                                    <button type="button" class="btn btn-success" @click="agregarSubcuenta()" data-toggle="tooltip" data-placement="top" title="Registrar Subcuenta" :disabled="!iscompletesubcuenta">
+                                        <i class="icon-plus"></i>&nbsp;
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <strong class="col-md-1 col-form-label" for="text-input">Detalle:</strong>
+                                <div class="col-md-11">
+                                    <input type="text" 
+                                    v-model="subdetalle"
+                                    class="form-control"  
+                                    name="subdetalle"
+                                    style="text-align:left"
+                                    v-on:focus="selectAll">
+                                    <span class="text-error">{{ errors.first('subdetalle')}}</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col">
+                                <table border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>Subcuenta</th>
+                                            <th>Nombre</th>
+                                            <th>detalle</th>
+                                            <th>Debe</th>
+                                            <th>Haber</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(subcu,i) in subcuentas" :key=i :class="(subcu.subdebe>0 || subcu.subhaber>0)?'bc-green':''">
+                                            <td>{{ subcu.subcuenta}}</td>
+                                            <td>{{ subcu.nombre}}</td>
+                                            <td>{{ subcu.detalle}}</td>
+                                            <td><vue-numeric   inputvalued="2"
+                                                    class="inputnext form-control input-importe border-0"
+                                                    separator="," 
+                                                    v-model="subcuentas[i].subdebe"
+                                                    v-bind:precision="2"
+                                                    v-on:focus="selectAll"
+                                                    :disabled="sisubhaber"
+                                                    >
+                                                </vue-numeric>
+                                                </td>
+                                            <td><vue-numeric   inputvalued="2"
+                                                    class="inputnext form-control input-importe border-0"
+                                                    separator="," 
+                                                    v-model="subcuentas[i].subhaber"
+                                                    v-bind:precision="2"
+                                                    v-on:focus="selectAll"
+                                                    :disabled="sisubdebe || !excedente">
+                                                </vue-numeric></td>
+                                                
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>  
+                    <div class="modal-footer">
+                        <button type="button"   class="btn btn-secondary" @click="cerrarModalSubcuentas()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" @click="registrarSubcuenta()">Registrar Subcuentas</button>
+                    </div>
+                </div>                    
+            </div>                
+        </div> 
+        <!-- fin modal subcuentas -->
     </main>
 </template>
 
@@ -708,9 +892,53 @@ export default {
         arrayTipocomprobante:[],
         montoexcedente2:0,
         montooriginal:0,
+        idunidad:3,
+        arrayUnidades:[],
+        subcuentas:[],
+        tituloModalSubcuentas:'',
+        directivo:1,
+        idempleadoselected:'',
+        subdebe:0,
+        subhaber:0,
+        idempleado:[],
+        subdetalle:'',
+        arraySubAscinalss:[]
+      
+
         
     }},
     computed:{
+        iscompletesubcuenta(){
+            if((this.idempleado.length!=0 || this.directivo==4) && (this.subdebe !=0 || this.subhaber !=0) && this.subdetalle!='' )
+                return true;
+
+        },
+        sisubdebe(){
+            let me=this;
+            let valor=false;
+            let resultado = me.subcuentas.find( elem => elem.subdebe > 0 );
+            //console.log(resultado);
+            if(resultado)
+                valor=true;
+            else
+                valor= false;            
+            //console.log(valor);
+            return valor;
+
+        },
+        sisubhaber(){
+            let me=this;
+            let valor=false;
+            let resultado = me.subcuentas.find( elem => elem.subhaber > 0 );
+            //console.log(resultado);
+            if(resultado)
+                valor=true;
+            else
+                valor= false;            
+            //console.log(valor);
+            return valor;
+
+        },
         siexcedente(){
             let me=this;
             
@@ -752,8 +980,14 @@ export default {
             me.confacturas=false
             me.rowcuentas.forEach(element => {
                 contador++;
-                me.debe=Number((me.debe).toFixed(2))+Number((element.debe).toFixed(2));
-                me.haber=Number((me.haber).toFixed(2))+Number((element.haber).toFixed(2)); 
+                /* me.debe=Number((me.debe).toFixed(2))+Number((element.debe).toFixed(2));
+                me.haber=Number((me.haber).toFixed(2))+Number((element.haber).toFixed(2));  */
+                element.debe=Number(element.debe);
+                element.haber=Number(element.haber);
+                me.debe=Number(me.debe);
+                me.haber=Number(me.haber);
+                me.debe=(me.debe+element.debe).toFixed(2);
+                me.haber=(me.haber+element.haber).toFixed(2); 
 
                 /* me.debe=parseFloat(me.debe)+parseFloat(element.debe);
                 me.haber=parseFloat(me.haber)+parseFloat(element.haber); */
@@ -763,7 +997,7 @@ export default {
                 //console.log(me.debe+ '---'+me.haber);
                 
             });
-
+            //console.log(contador);
             return contador;
         
         },
@@ -819,6 +1053,123 @@ export default {
        
     },
     methods:{ 
+        selectAscinalss(){
+            let me=this;
+            var url="/con_config/selectsubcuentaascinalss";
+            //console.log(Array.isArray(url));
+            this.resetComprobante();
+            setTimeout(this.tiempo, 200); 
+            axios.get(url).then(response=>{
+                    me.arraySubAscinalss=response.data.subasc;
+                });
+                    /*
+                */
+        },
+        cambiaDirectivo(valor){
+            //console.log(valor);
+            let me=this;
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 200); 
+            me.directivo=valor;
+            if (me.directivo==4) {
+                //console.log('entra');
+                me.idempleado=[
+                        me.arraySubAscinalss[0].idconconfig,
+                        me.arraySubAscinalss[0].valor,
+                        me.arraySubAscinalss[0].descripcion,
+                        me.arraySubAscinalss[0].valor
+                        ]
+            }else
+                me.idempleado=[];
+            },
+        agregarSubcuenta(){
+            let me=this;
+            
+            me.subcuentas.push({//indice:me.indice,
+                                //idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                tiposubcuenta:me.directivo,
+                                subcuenta:me.idempleado[3],
+                                subdebe:me.subdebe,
+                                subhaber:me.subhaber,
+                                detalle:me.subdetalle,
+                                nombre:me.idempleado[2],
+                                idsubcuenta:me.idempleado[0]
+                            });
+            me.idempleado=[];
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 200); 
+            me.subdebe=0;
+            me.subhaber=0;
+            me.subdetalle='';
+        },
+        empleados(empleados){
+            this.idempleado=[];
+            for (const key in empleados) {
+                if (empleados.hasOwnProperty(key)) {
+                    const element = empleados[key];
+                    this.idempleado.push(element);
+                }
+            }
+        },
+          cleanempleados(){
+                this.idempleado=[];
+            },
+        abrirModalSubcuentas(indice){
+            let me=this;
+            //console.log(indice);
+            me.tituloModalSubcuentas="Agregar Subcuentas";
+            me.indice=indice;
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 50); 
+            me.classModal.openModal('addsubcuentas');
+
+        },
+        cerrarModalSubcuentas(){
+            let me=this;
+            me.classModal.closeModal('addsubcuentas'); 
+        },
+        registrarSubcuenta(){
+            let me=this;
+            let valor=0;
+            let sumad=0;
+            let sumah=0;
+           
+            me.rowcuentas[me.indice].idsubcuenta=[];
+
+            me.subcuentas.forEach((element,index) => {
+                if(element.subdebe!=0 || element.subhaber!=0)
+                {
+                    sumad=sumad+element.subdebe;
+                    sumah=sumah+element.subhaber;
+
+                    me.rowcuentas[me.indice].idsubcuenta.push({
+                                    indice:me.indice,
+                                    idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                    tiposubcuenta:element.tiposubcuenta,
+                                    subcuenta:element.subcuenta,
+                                    subdebe:element.subdebe,
+                                    subhaber:element.subhaber,
+                                    detalle:element.detalle,
+                                    nombre:element.nombre,
+                                    idsubcuenta:element.idsubcuenta});
+
+                    element.subdebe=0;
+                    element.subhaber=0;
+                }
+            });
+            //console.log(sumad+"-"+sumah);
+            me.rowcuentas[me.indice].debe=sumad;
+            me.rowcuentas[me.indice].haber=sumah;
+
+            me.cerrarModalSubcuentas();
+
+        },
+        listaUnidades(){
+            var url='/fil_unidad/listaUnidades?activo=1';
+            axios.get(url).then(response=>{
+                this.arrayUnidades=response.data.unidades;
+            });
+        },
         modificarsaldo(){
             let me=this;
             console.log("saldo modificado");
@@ -867,6 +1218,7 @@ export default {
         },
         cargarvue(arrayValores){
             $('#divdescargo').css('display','block');
+            this.selectAscinalss();// cuenta global ascinalss 2000000
             this.fechahoy();
             this.getRutasReports();
             this.idmodulo=arrayValores['idmodulo'];
@@ -874,8 +1226,10 @@ export default {
             this.classModal=new _pl.Modals();
             this.classModal.addModal('librocompras');
             this.classModal.addModal('proveedor');
+            this.classModal.addModal('addsubcuentas');
             this.resetComprobante()
             this.selectLibroCuenta();
+            this.listaUnidades();
             this.rowcuentas=[];
             this.asignadoa=arrayValores['asignadoa'];
             this.monto=arrayValores['saldo_descargo'];
@@ -890,20 +1244,32 @@ export default {
             this.sigla=arrayValores['sigla'];
             this.sidirectorio=arrayValores['sidirectorio'];
             this.subcuenta=arrayValores['subcuenta'];
+            
             this.selectCuentaHaber(this.idasientomaestro);
             //console.log(arrayValores);
             this.tipoAccion=1;
             this.borrador=false;
             this.rowcuentas= [{   idcuenta:'',
-                    idsubcuenta: this.subcuenta,
+                    idsubcuenta: [],
                     moneda:'bs',
                     documento:'',
                     debe:0,
                     haber:0
                         }] ;
+            this.subcuentas.push({
+                tiposubcuenta:arrayValores['tiposubcuenta'],
+                subcuenta:arrayValores['subcuenta'],
+                subdebe:0,
+                subhaber:0,
+                detalle:'Cierre Cargo de Cuenta',
+                nombre:arrayValores['asignadoa'],
+                idsubcuenta:arrayValores['idsubcuenta']
+
+            })
             this.montooriginal=this.monto;
             this.excedente=false;
             this.montoexcedente=0;
+
         },
         selectCuentaHaber(id){
             let me=this;
@@ -932,7 +1298,7 @@ export default {
         addrowcuentas(focusin=true) {
             var ajax='ajaxselect'+this.rowcuentas.length;
             this.rowcuentas.push({   idcuenta:'',
-                            idsubcuenta: this.subcuenta,
+                            idsubcuenta: [],
                             moneda:'bs',
                             documento:'',
                             debe:0,
@@ -1008,7 +1374,7 @@ export default {
         selectDocumento(){
             let me=this;
             var url= '/par_documento/selectDocumento?idmodulo='+this.idmodulo;
-            console.log(url);
+            //console.log(url);
             axios.get(url).then(function (response) {
                 //console.log(response);
                 var respuesta= response.data;
@@ -1065,7 +1431,46 @@ export default {
                 me.rowcuentas[me.indice].idcuenta=me.lc; 
                 me.rowcuentas[me.indice].debe=me.acumulado13;}
             }
+
+            if(me.indice!='')
+            {
+                me.rowcuentas[me.indice].idsubcuenta=[];
+                me.subcuentas=me.subcuentas.filter(function(el){
+                    return el.tiposubcuenta!=3;
+                });
+                me.checkusarfactura.forEach((element,index) => {
+                    var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
+                    //console.log(index);
+                    
+                    me.rowcuentas[me.indice].idsubcuenta.push({indice:me.indice,
+                                        idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:3,
+                                        subcuenta:resultado.nit,
+                                        subdebe:resultado.credfiscal,
+                                        subhaber:0,
+                                        detalle:resultado.detalle_fac,
+                                        nombre:resultado.nomproveedor,
+                                        idsubcuenta:resultado.idproveedor
+                                        });
+                                    
+                    me.subcuentas.push({//indice:me.indice,
+                                        //idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:3,
+                                        subcuenta:resultado.nit,
+                                        subdebe:0,
+                                        subhaber:0,
+                                        detalle:resultado.detalle_fac,
+                                        nombre:resultado.nomproveedor,
+                                        idsubcuenta:resultado.idproveedor
+                                        });
+                });
+            }    
            
+
+
+
+
+
             me.classModal.closeModal('librocompras'); 
             me.classModal.openModal('comprobantecontable')
             me.sifacturas=false; 
@@ -1134,14 +1539,17 @@ export default {
             /* me.acumulado13=0;
             me.acumulado87=0; */
             var validarfacturas=0;
+            me.subcuentas[0].subhaber=me.montooriginal;
+            me.subcuentas[0].idcuenta=me.idcuentahaber;
             me.rowcuentas.push({ idcuenta: me.idcuentahaber,
-                                            idsubcuenta:this.subcuenta,
+                                            idsubcuenta:[me.subcuentas[0]],
                                             moneda:'bs',
                                             documento:'',
                                             debe:"",
                                             haber: conexcedente}); 
 
 
+            //console.log(me.rowcuentas);
             if(me.checkusarfactura.length>0)
             validarfacturas=1;
 
@@ -1159,6 +1567,7 @@ export default {
                 'saldoc':me.saldoc,
                 'sidirectorio':this.sidirectorio,
                 'borrador':true,
+                'idunidad':me.idunidad
 
             }).then(function (response) {
                 
@@ -1179,7 +1588,7 @@ export default {
                 else
                     var directorio=2;
 
-                me.reporteAsientoautomatico(response.data,directorio);
+                me.reporteAsientoautomatico(residasientomaestro);
                 me.resetComprobante();
                 me.$emit('cerrardescargo');
                 //me.listrcomprobantes();
@@ -1196,7 +1605,8 @@ export default {
                     'idsolccuenta': me.idsolccuenta,
                     'valor':valor,
                     'saldocuenta':me.saldoc,
-                    'residasientomaestro':residasientomaestro
+                    'residasientomaestro':residasientomaestro,
+                    'idunidad':me.idunidad
                 }).then(function (response) {
                     //console.log('correcto');
                                             
@@ -1204,13 +1614,17 @@ export default {
                     console.log(error);
                 });
         },
-        reporteAsientoautomatico(idasientomaestro,directorio){
-                let me=this;
-                var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
-                console.log(url);
-                plugin.viewPDF(url,'Asiento Contable');
-
-            },
+        reporteAsientoautomatico(idasientomaestro){
+            let me=this;
+            /////////////////////birt
+            /* var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+            console.log(url);
+            plugin.viewPDF(url,'Asiento Contable'); */
+            ///////////////////////////////////////
+            var url='http://localhost:8000/pdf?idasientomaestro='+idasientomaestro;
+            //console.log(url);
+            window.open(url, '_blank');
+        },
         getRutasReports(){ 
             let me=this;
             var url= '/con_reportes';
@@ -1271,6 +1685,7 @@ export default {
             this.idasientomaestro='',
             this.acumulado13=0;
             this.idfacturas=[];
+            this.subcuentas=[];
         },
         abrirmodalCompras(indice=''){
             

@@ -34,7 +34,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3 text-right">
-                                        <button class="btn btn-primary" type="submit" @click="cargarvue('reportediario')" >Libro Diario</button>
+                                        <button class="btn btn-primary" type="submit" @click="reportelibrodiario()" >Libro Diario</button>
                                     </div>
                                 </div>
                             </div>
@@ -47,8 +47,8 @@
                                     <div class="col-md-3">
                                         <span><strong>Cuenta Inicial:</strong></span>
                                     </div>
-                                    <div class="col-md-9">
-                                        <Ajaxselect  v-if="clearSelected"
+                                    <div class="col-md-9"><!-- v-if="clearSelected"  -->
+                                        <Ajaxselect 
                                             ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentasinicial" @cleaning="cleaninicial"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
@@ -63,8 +63,8 @@
                                     <div class="col-md-3">
                                         <span><strong>Cuenta Final:</strong></span>
                                     </div>
-                                    <div class="col-md-9">
-                                        <Ajaxselect  v-if="clearSelected"
+                                    <div class="col-md-9"><!--v-if="clearSelected"  -->
+                                        <Ajaxselect  
                                             ruta="/con_cuentas/selectBuscarcuenta2?buscar=" @found="cuentasfinal" @cleaning="cleanfinal"
                                             resp_ruta="cuentas"
                                             labels="cuentas"
@@ -77,13 +77,36 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-12 text-right">
-                                        <button :disabled="!reportemayor" class="btn btn-primary" type="submit" @click="cargarvue('reportemayor')">Libro Mayor</button>
+                                        <button :disabled="!reportemayor" class="btn btn-primary" type="submit" @click="reportelibromayor()">Libro Mayor</button><!-- @click="cargarvue('reportemayor')" -->
                                     </div>
                                 </div>
                             </div>
                             
                         </div>
                         <hr>
+                        <div class="form-group row">
+                            <h6 class="col-md-12 text-info">Balance General</h6>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <span><strong>Nivel:</strong></span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <select class="form-control" 
+                                            v-model="idnivel">
+                                            
+                                            <option v-for="(niv,index) in nivel" :key="index" :value="niv" v-text="niv"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <button class="btn btn-primary" type="submit" @click="reportebalancegeneral()" >Generar Balance General</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+                        
                         <!-- <div class="form-group row">
                             <label class="col-md-12">Transacciones</label>
                             <div class="col-md-8">
@@ -133,26 +156,113 @@
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label" for="date-input">Fecha Inicial:</label>
                             <div class="col-md-8">
-                                <!-- <input class="form-control" 
+                                <input class="form-control" 
                                     type="date" v-model="fechainicio"
                                     :max="fechafin"
-                                    :min="fechamin"> -->
-                                <input class="form-control" 
-                                    type="date" v-model="fechainicio">
+                                    :min="fechamin">
+                                <!-- <input class="form-control" 
+                                    type="date" v-model="fechainicio"> -->
                                 <span class="text-error" v-if="!verificarfechainicio">La Fecha debe ser menor a la fecha actual o fecha final</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label" for="date-input">Fecha Final:</label>
                             <div class="col-md-8">
-                                <!-- <input class="form-control" 
+                                <input class="form-control" 
                                     type="date" v-model="fechafin"
-                                    :max="fechahoy"> -->
-                                         <input class="form-control" 
-                                    type="date" v-model="fechafin" >
+                                    :max="fechahoy">
+                                         <!-- <input class="form-control" 
+                                    type="date" v-model="fechafin" > -->
                                 <span class="text-error" v-if="!verificarfechafin">La Fecha debe ser menor a la fecha actual</span>
                             </div>
                         </div>
+                        <hr>
+                        <div>
+                            <strong class="form-control-label">Filial:</strong>
+                            <select v-model="filialselected"  class="form-control"> <!-- por defecto 1 para la filial la paz -->
+                                <option value="0" selected="selected">Todas</option>
+                                <option v-for="filial in arrayFilial" v-bind:key="filial.idfilial" :value="filial.idfilial" v-text="filial.nommunicipio"></option>
+                            </select>
+                        </div>
+                        
+                        <div v-if="filialselected==1">
+                            <strong class="form-control-label">Repartición:</strong>
+                            <select v-model="idunidad"  class="form-control" name="car" :class="{'invalido':errors.has('car')}" v-validate="'required'">
+                                    <option value="0" selected="selected">Todas</option>
+                                    <option v-for="unidad in arrayUnidades" :key="unidad.id"
+                                    :value="unidad.idunidad" v-text="unidad.nomunidad"></option>
+                            </select>
+                        </div>
+                        <hr>
+                        <div>
+                            <strong class="form-control-label col-md-8">Subcuenta: &nbsp;&nbsp;</strong>
+                            <input class="form-check-input" type="checkbox" id="checkbox" v-model="subcuenta" style="margin-left: 0.25rem;" @change="reset()">
+                            <div class="col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;" v-if="subcuenta">
+                                <div class="form-check-inline" >
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="4" @change="cambiaDirectivo('4')"> Ascinalss
+                                    </label>
+                                
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="1" checked @change="cambiaDirectivo('1')"> Socios
+                                    </label>
+                                
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="2" @change="cambiaDirectivo('2')">Personal
+                                    </label>
+                                
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" v-model="directivo" value="3" @change="cambiaDirectivo('3')">Otros
+                                    </label>
+                                </div>
+                            
+                                <div class="row">
+                                    <div class="form-group col-md-12" v-if="directivo=='4'">
+                                        <h5 >{{ arraySubAscinalss.nombre }}</h5>
+                                    </div>
+                                    <div class="form-group col-md-12" v-else-if="directivo=='1'">
+                                        <strong>Socio:</strong>
+                                        <Ajaxselect  v-if="clearSelected"
+                                            ruta="/rrh_empleado/selectsocios?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                            resp_ruta="empleados"
+                                            labels="nombres"
+                                            placeholder="Ingrese Texto..." 
+                                            idtabla="idsocio"
+                                            :id="idempleadoselected"
+                                            :clearable='true'>
+                                        </Ajaxselect>
+                                    </div>
+                                    <div class="form-group col-md-12" v-else-if="directivo=='2'">
+                                        <strong>Personal:</strong>
+                                        <Ajaxselect  v-if="clearSelected"
+                                            ruta="/rrh_empleado/selectempleados2?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                            resp_ruta="empleados"
+                                            labels="nombres"
+                                            placeholder="Ingrese Texto..." 
+                                            idtabla="idempleado"
+                                            :id="idempleadoselected"
+                                            :clearable='true'>
+                                        </Ajaxselect>
+                                    </div>
+                                    <div v-else class="form-group col-md-12">
+                                        <strong>Otros:</strong>
+                                        <Ajaxselect  v-if="clearSelected"
+                                                ruta="/alm_proveedor/selectProveedor2?buscar=" @found="empleados" @cleaning="cleanproveedores"
+                                                resp_ruta="proveedores"
+                                                labels="nit_proveedor"
+                                                placeholder="Ingrese texto..." 
+                                                idtabla="idproveedor"
+                                                :clearable='true'>
+                                        </Ajaxselect>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        
+
+
                     </div>
                 </div>
                
@@ -214,7 +324,7 @@
 
     export default {
         data (){
-            return {                
+            return {    
                 obsascii: '',
                 ascii: '',
                 nuevosascii:'',
@@ -267,6 +377,20 @@
                 idcuentainicial:[],
                 idcuentafinal:[],
                 clearSelected:1,
+                opciones:'',
+                arrayFilial:[],
+                filialselected:0,
+                arrayUnidades:[],
+                idunidad:3, /*por defecto hacienda*/
+                directivo:'1',
+                subcuenta:false,
+                
+                arraySubAscinalss:[],
+                idempleado:[],
+                idempleadoselected:'',
+                nivel:[1,2,3,4,5],
+                idnivel:5,
+
 
             };
         },
@@ -277,6 +401,7 @@
         },
 
         computed:{
+            
             reportemayor:function(){
                 let me=this;
                 var correcto=true;
@@ -330,8 +455,102 @@
             }
         },
         methods : {
+            reportelibrodiario(){
+                let me=this;
+                /////////////////////birt
+                /* var url=me.reporte_automatico + idasientomaestro+'&tiposubcuenta='+directorio; 
+                console.log(url);
+                plugin.viewPDF(url,'Asiento Contable'); */
+                ///////////////////////////////////////
+                
+                var url='http://localhost:8000/libro_diario?idtipocomprobante='+ me.idtipocomprobante +'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                
+                //console.log(url);
+                window.open(url, '_blank');
+            },
+            reportelibromayor(){
+                let me=this;
+                var url='http://localhost:8000/libro_mayor?fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&cuentai='+me.idcuentainicial[2]+'&cuentaf='+me.idcuentafinal[2]+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                //console.log(url);
+                window.open(url, '_blank');
+            },
+            reportebalancegeneral(){
+                let me=this;
+                var url='http://localhost:8000/balance_general?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                //console.log(url);
+                window.open(url, '_blank');
+            },
+            reset(){
+                let me=this;
+                if(!me.subcuenta)
+                    this.idempleado=[];
+
+
+            },
+            cleanproveedores(){
+            this.idproveedor=[];
+            this.idproveedorrespuesta=0;
+        //console.log('clean')
+        
+        },
+            cleanempleados(){
+                this.idempleado=[];
+            },
+            empleados(empleados){
+            this.idempleado=[];
+            for (const key in empleados) {
+                if (empleados.hasOwnProperty(key)) {
+                    const element = empleados[key];
+                    this.idempleado.push(element);
+                }
+            }
+        },
+            selectAscinalss(){
+            let me=this;
+            var url="/con_config/selectsubcuentaascinalss";
+            //console.log(Array.isArray(url));
+            //this.resetComprobante();
+            setTimeout(this.tiempo(2), 200); 
+            axios.get(url).then(response=>{
+                    me.arraySubAscinalss=response.data.subasc;
+            });
+                  
+        },
+            cambiaDirectivo(valor){
+                let me=this;
+                me.clearSelected=0;
+                //console.log(me.clearSelected1);
+                setTimeout(me.tiempo, 200); 
+                me.directivo=valor;
+                if (me.directivo==4) {
+                    me.idempleado=[
+                        me.arraySubAscinalss[0].idconconfig,
+                        me.arraySubAscinalss[0].valor,
+                        me.arraySubAscinalss[0].descripcion,
+                        me.arraySubAscinalss[0].valor
+                        ]
+                }else
+                    me.idempleado=[];
+
+            },
+            listaUnidades(){
+                var url='/fil_unidad/listaUnidades?activo=1';
+                axios.get(url).then(response=>{
+                    this.arrayUnidades=response.data.unidades;
+                });
+            },
+            selectfilial(){
+                let me=this;
+                var url='/fil_filial/selectFiliales';
+                axios.get(url).then(function(response){
+                    me.arrayFilial=response.data.filiales;
+                    //console.log(me.arrayFilial);
+                    
+                });
+            },
             tiempo(){
-            this.clearSelected=1;
+               
+                    this.clearSelected=1;
             },
             cleaninicial(){
                 this.idcuentainicial=[];
@@ -365,6 +584,8 @@
                     }
                 }
             },
+
+            
             cargarvue(vue){
                 this.divFiliales=0;
                 switch (vue) {
@@ -440,12 +661,30 @@
                 axios.get(url).then(function (response) {
                     var respuesta= response.data; 
                     me.fechaactual=respuesta[0]['fecha'];
-                    var arrayfechas = me.fechaactual.split("-");
+                    me.fechaactual= new Date();
+
+                    console.log(me.fechaactual);
+                    /* var arrayfechas = me.fechaactual.split("-");
                     me.anio=arrayfechas[0];//año
                     me.mes=arrayfechas[1];//mes
                     me.dia=arrayfechas[2];//dia
-                    me.fechamin=me.anio+'-01-01';
+                     me.fechamin=me.anio+'-01-01';
                     me.fechainicio=me.fechaactual;
+                    me.fechahoy=me.fechaactual;
+                    me.fechafin=me.fechahoy;
+                     */
+                    me.anio=me.fechaactual.getFullYear();
+                    me.mes=me.fechaactual.getMonth()+1;
+                    me.dia=me.fechaactual.getDate();
+                    if(me.mes<10)
+                        me.mes='0'+me.mes;
+                    
+                    if(me.dia<10)
+                        me.dia='0'+me.dia;
+                    
+                    me.fechamin=me.anio+'-01-01';
+                    me.fechaactual=me.anio+'-'+me.mes+'-'+me.dia;
+                    me.fechainicio=me.anio+'-'+me.mes+'-'+'01';
                     me.fechahoy=me.fechaactual;
                     me.fechafin=me.fechahoy;
 
@@ -511,6 +750,9 @@
            this.getRutasReports();
            this.obtenerfecha();
            this.selectTipocomprobante();
+           this.selectfilial();
+           this.listaUnidades();
+           this.selectAscinalss();
            
         }
     }

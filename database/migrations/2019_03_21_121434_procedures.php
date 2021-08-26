@@ -795,7 +795,7 @@ BEGIN   set @validaconta=1;
                                 
                                  set @value=0; 
                                      if(@tem>0) then   
-	                                     SET @fecha = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1);
+	                                     SET @fecha = (SELECT  fechaSistema  FROM par__fecha__sistemas WHERE activo=1 limit 1);
 	                                     SET @mesactual =(SELECT month(@fecha));
 	                                     SET @dias =(SELECT DAY(@fecha)); 
 		                     

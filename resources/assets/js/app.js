@@ -7,7 +7,9 @@ window._pdf = require("./pdf.js");
 window._code = require("./ControlCode.js");
 window.VeeValidate = require("vee-validate");
 window.DatasVues = [];
-
+window.openReport=(url,name)=>{
+    window._pl._vm2154_12186_135('http://192.168.100.60:8082/api/'+url,name)
+};
 const VueValidationEs = require("vee-validate/dist/locale/es");
 
 setvue(0, 'principal', './components/plugin vue/principal.vue');
@@ -120,6 +122,7 @@ setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
 setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
 setvue(1, 'con_ascii_pos_ser', './components/contabilidad/Con__ascii_pos_servicios.vue');
 setvue(1, 'con_ascii_pos_reserva', './components/contabilidad/Con__ascii_pos_servicios_reserva.vue');
+setvue(1, 'con_firmasautorizadas', './components/contabilidad/Con_Firmasautorizadas.vue');
 
 // global
 setvue(1, 'glo_solicitudcargocuenta', './components/global/Glo_SolicitudCargoCuenta.vue');
@@ -135,12 +138,14 @@ setvue(1, 'par_prestamo_factor', './components/cartera/Par_factores.vue');
 setvue(1, 'pre_calificacion', './components/cartera/Pre_Calificacion.vue');
 setvue(1, 'par_producto', './components/cartera/Par_Producto.vue');
 setvue(1, 'par_desembolso', './components/cartera/Par_Desembolso.vue');
+setvue(1, 'par_cambiogarante', './components/cartera/Par_Cambio_garante.vue');
 setvue(0, 'cargos', './components/cartera/modal_cargos_adicionales.vue');
 setvue(0, 'view-cargos', './components/cartera/modal_cargos_adicionales_view.vue');
 setvue(0, 'cuentaBancaria', './components/cartera/modal_cuentaBancaria.vue');
 setvue(0, 'status', './components/cartera/modal_status_prestamos.vue');
 setvue(0, 'perfiles', './components/cartera/modal_perfiles.vue');
 
+setvue(0, 'calificacion_lista', './components/cartera/modal_calificacion_lista.vue');
 setvue(0, 'cobranza_ascii', './components/cartera/modal_cobranza.vue');
 setvue(1, 'liq_saldosmenores', './components/cartera/Liq_saldosmenores.vue');
 setvue(1, 'liq_saldosacreedor', './components/cartera/Liq_saldosacreedores.vue');

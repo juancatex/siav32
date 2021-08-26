@@ -575,7 +575,7 @@
                 var url='/fil_filial/selectFiliales';
                 axios.get(url).then(function(response){
                     me.arrayFilial=response.data.filiales;
-                    //console.log(me.arrayFilial);
+                    console.log(me.arrayFilial);
                     
                 });
             },
