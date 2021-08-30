@@ -197,6 +197,11 @@ class ConFacturaController extends Controller
         $sql_max_reg=DB::connection($valuedb)->select("select max(id_reg) as max_reg from finanzas.con_tr_detalles");
         $max_reg = $sql_max_reg[0]->max_reg;
 
+        $directory='LogSafcon';
+        Storage::makeDirectory($directory); 
+        Storage::append($directory.'/logreserva.txt','Date:'.date("Y_m_d H:i:s").'DB:'.$valuedb.'     Comprobante:'.$numcomprobante.'         Tipo:'.$valuetipo.'        user:'.Auth::user()->username.'             id:'.Auth::id());
+              
+
         foreach($valida_1 as $linea){
                 if($linea->cuenta=='41101101'||$linea->cuenta=='41101102'||$linea->cuenta=='41101103'){
                     $max_reg++; 
