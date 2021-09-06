@@ -885,6 +885,8 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put('/glo_solccuenta/desembolsar', 'GloSolicitudCargoCuentaController@desembolsar');
         Route::put('/glo_solccuenta/agregarpersona', 'GloSolicitudCargoCuentaController@addpersona');
         
+        
+        Route::get('/doc_obligacion','GloSolicitudCargoCuentaController@docobligacion');
 
         //FACTURAS
         Route::get('/con_facturaparametro', 'ConFacturaParametroController@index');

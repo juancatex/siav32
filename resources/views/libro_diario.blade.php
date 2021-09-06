@@ -138,8 +138,8 @@
         </tr>
         <tr>
             <td colspan=6 class="derecha"><b>TOTAL COMPROBANTE</b>
-            <td style="width=100px"> </td>
-            <td style="width=100px"></td>
+            <td style="width:100px"> </td>
+            <td style="width:100px"></td>
             <td class="derecha"><b>{{ number_format($arrayd->sdebe,2) }}</b></td>
             <td class="derecha"><b>{{ number_format($arrayd->shaber,2) }}</b></td>
             <td></td>
