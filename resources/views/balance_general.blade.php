@@ -26,13 +26,6 @@ b{
        
         caption-side: top; 
     }
-    tbody {
-        /* border-top: 1px solid #000;
-        border-bottom: 1px solid #000; */
-    }
-    tbody th, tfoot th {
-        
-    }
     body{/* quitar el body para la impresion*/
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         position: relative;
@@ -65,10 +58,7 @@ b{
         padding:5px;
         padding-left: 10px;
     }
-    th{
-        /* border-top:1px solid #999; */
-        
-    }
+ 
     div{
         background-image:url("{{ asset('img/borrador.png')}}");
     }
