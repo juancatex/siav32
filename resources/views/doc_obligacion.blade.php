@@ -40,7 +40,7 @@ table {
 
     }
     p{
-        text-align: left;
+        text-align: justify;
         font-size: 16px;
     }
     span{
@@ -97,8 +97,8 @@ table {
                <td valign="top" style="text-align: left;"> Pagado por:</td>
            </tr>
            <tr style="height:150px;">
-                <td valign="bottom" style="text-align:center;" colspan="2"> SECRETARIO DE HACIENDA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIRECTOR ADMINISTRATIVO</td>
-                <td valign="bottom" style="text-align:center;"> RESPONSABLE DE TESORERIA</td>
+                <td valign="bottom" style="text-align:center;  border-bottom:0px" colspan="2"> SECRETARIO DE HACIENDA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIRECTOR ADMINISTRATIVO</td>
+                <td valign="bottom" style="text-align:center;  border: bottom 0px;"> RESPONSABLE DE TESORERIA</td>
 
            </tr>
        </tbody>
