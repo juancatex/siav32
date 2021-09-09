@@ -810,6 +810,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/prestamos/getprestamostotal','ParPrestamosController@getprestamostotal');
         Route::get('/prestamos/desembolso','ParPrestamosController@prestamosDesembolso');
         Route::get('/prestamos/prestamoscambiogarante','ParPrestamosController@prestamoscambiogarante');
+        Route::get('/prestamos/prestamoscobranzamanual','ParPrestamosController@prestamoscobranzamanual');
         Route::get('/prestamos/prestamosMoras','ParPrestamosController@prestamosMoras');
         Route::get('/prestamosEstatus','ParPrestamosController@prestamosEstatus');
         Route::post('/prestamos/regprestamo','ParPrestamosController@store');
@@ -906,7 +907,9 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_contabilidad/proceso', 'ConFacturaController@proceso');
         Route::post('/con_contabilidad/procesoservicio', 'ConFacturaController@procesoservicio');
         Route::post('/con_contabilidad/procesoReserva', 'ConFacturaController@procesoReserva');
+        Route::post('/con_contabilidad/procesoReservaReversion', 'ConFacturaController@procesoReservaReversion');
         Route::post('/con_contabilidad/procesoReservaUpdate', 'ConFacturaController@procesoReservaUpdate');
+        Route::post('/con_contabilidad/procesoReservaUpdaterev', 'ConFacturaController@procesoReservaUpdaterev');
         Route::put ('/con_contabilidad/updateCuenta','ConFacturaController@updateCuentaComprobante');
 
         Route::get('/pruebaget','ConFacturaController@pruebaget');

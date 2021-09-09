@@ -15,8 +15,108 @@
                     <div class="card-body">
                         <div class="form-group row" style="justify-content: flex-end;">
 
-
+                            <div class="col-md-10">
+                                <div class="input-group" style="align-items: center;">
+                                    <p style="text-align: right;margin: 0px; margin-right: 10px; font-weight: bold;">
+                                        Criterio de busqueda:</p>
+                                    <input type="text" v-model="buscarcobranza" @keyup.enter="listarprestamos()" class="form-control"
+                                        placeholder="Ingresar  Nombres , Apellidos , Ci , Numero de Papeleta , Nombre producto, Numero de prestamo">
+                                    <button  type="submit" @click="listarprestamos()" class="btn btn-primary"><i
+                                            class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
                         </div>
+
+                         <table class="table table-bordered table-striped table-sm" v-if="arrayPrestamos.length>0">
+                        <thead>
+                            <tr>
+                                <th class="thcell">Usuario</th>
+                                <th class="thcell" style="width: 120px;">Opciones</th>
+                                <th class="thcell">Nombre completo</th>
+                                <th class="thcell">Producto</th>
+                                <th class="thcell">Moneda</th>
+                                <th class="thcell">Monto</th>
+                                <th class="thcell">Plazo</th>
+                                <th class="thcell" style="width: 100px;">Contabilidad</th>
+                                <th class="thcell">Fecha</th>
+                                <th class="thcell" style="width: 130px;">Codigo</th>
+                                <th class="thcell">No.Lote</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="prestamos in arrayPrestamos" :key="prestamos.idprestamo" 
+                                v-bind:class="prestamos.apro_conta>2||prestamos.idestado==6? 'table-danger' :prestamos.idestado==3 ? 'table-warning' :''" valign="middle">
+                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;"> 
+                                    <div v-if="prestamos.idoperario!=null" class="dataUser"><span
+                                            style="font-weight: 700;margin-right: 5px;">REG.:</span>{{prestamos.idoperario}}
+                                    </div>
+                                    <div v-if="prestamos.idusuario!=null" class="dataUser"><span
+                                            style="font-weight: 700;margin-right: 5px;">DES.:</span>{{prestamos.idusuario}}
+                                    </div>
+                                </td>
+                                <td class="tdcell" style="text-align:center;vertical-align: middle;">
+                                    
+                                   <div v-if="prestamos.garantes==0"> 
+                                       <h6>
+                                           <span class="badge badge-warning">{{prestamos.nombreestado}}</span>
+                                       </h6>
+                                   </div>
+                                    <div v-else> 
+                                    <button v-if="check('Registro_cobranza')"   type="button"
+                                        class="btn btn-success  btn-sm icon-check"
+                                        @click="regcobranza(prestamos)" title="Modificacion de garante"></button>
+                                      
+                                   </div>
+                                     
+                                </td>
+                                <td class="tdcell"
+                                    v-text="prestamos.nomgrado+' '+prestamos.nombre+'  '+prestamos.apaterno+'  '+prestamos.amaterno"
+                                    style="font-size: 12px;vertical-align: middle;"></td>
+                                <td class="tdcell" v-text="prestamos.nomproducto" style="font-size: 12px;vertical-align: middle;"></td>
+                                <td class="tdcell" v-text="prestamos.nommoneda" style="vertical-align: middle;"></td>
+                                <td class="tdcell" style="text-align: right;vertical-align: middle;" v-text="completacero(prestamos.monto)">
+                                </td>
+                                <td class="tdcell" style="text-align:center;vertical-align: middle;" v-text="prestamos.plazo"></td>
+
+                                <td class="tdcell" style="text-align:center;vertical-align: middle;">
+                                    <h6>
+                                        <span v-if="prestamos.apro_conta==0||prestamos.apro_conta==5" class="badge badge-danger">No
+                                            validado</span>
+                                        <span v-if="prestamos.apro_conta==1"
+                                            class="badge badge-success">Validado</span>
+                                        <span v-if="prestamos.apro_conta==2"
+                                            class="badge badge-danger">Eliminado</span>
+                                        <span v-if="prestamos.apro_conta==3"
+                                            class="badge badge-warning">Observado</span>
+                                        <span v-if="prestamos.apro_conta==4"
+                                            class="badge badge-warning">Revertido</span>
+                                    </h6>
+                                </td>
+                                <td class="tdcell" style="font-size: 12px; text-align: center;vertical-align: middle;padding: 0;">
+                                    <div v-if="prestamos.fecharegistro!=null" class="" style=" width: 100%; "><span
+                                            style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
+                                            v-text="prestamos.fecharegistro"></span></div>
+                                    <div v-if="prestamos.fechardesembolso!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
+                                    <div v-if="prestamos.fechardesembolso!=null" class="" style=" width: 100%; "><span
+                                            style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
+                                            v-text="prestamos.fechardesembolso"></span></div>
+                                </td>
+                                <td class="tdcell" style="font-size: 11px; text-align: center;vertical-align: middle;padding: 0;">
+                                    <div v-if="prestamos.no_prestamo!=null" class="" style=" width: 100%; "><span
+                                            style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span
+                                            v-text="prestamos.no_prestamo"></span></div>
+                                    <div v-if="prestamos.idtransaccionD!=null" class="border-top" style="border: solid 1px #c2cfd6;width: 100%;margin-top: 6px !important; margin-bottom: 4px !important;"> </div>
+                                    <div v-if="prestamos.idtransaccionD!=null" class="" style=" width: 100%; "><span
+                                            style="display: block;font-weight: bold;font-size: 12px;">Desembolso:</span><span
+                                            v-text="prestamos.idtransaccionD"></span></div>
+                                </td>
+                                <td class="tdcell" style="text-align: center;vertical-align: middle;">
+                                    <h5>{{prestamos.lote}}</h5>
+                                </td>
+                                 
+                            </tr>
+                        </tbody>
+                    </table>
 
                     </div>
                 </div>
@@ -70,12 +170,18 @@
 <script>
  
     export default {
-        props: ['idmodulo','object','permisos'],
+        props: ['idmodulo','object','idventanamodulo'],
         data (){
             return {
+                 arrayPermisos: { 
+                   Registro_cobranza: 0 
+                }, 
+                arrayPermisosIn: {},
              classModal:null,  
              datasFiles:[],  
-             filesName:[],  
+             filesName:[], 
+             arrayPrestamos: [],
+             buscarcobranza:'', 
              idmodulomain: this.idmodulo,
              removef:(valuein)=>{return valuein.CODIGO_CONCEPTO != '124'}
                                  
@@ -86,7 +192,42 @@
                 return this.datasFiles.length;
             }
         },
-        methods : { 
+        methods : { regcobranza(){
+            
+        },
+            getPermisos() { 
+                 var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    me.arrayPermisosIn=[];
+                    if(response.data.datapermiso.length>0){
+                        var respuesta=response.data.datapermiso[0].permisos; 
+                        me.arrayPermisosIn = JSON.parse((respuesta));
+                    } 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            check(n){
+             return _pl.validatePermission(this.arrayPermisosIn,n);
+          },
+             completacero(g){ 
+                return _pl.fillDecimals(g);
+            }, 
+             listarprestamos(page = 1) {
+
+                 let me = this;
+                 var url = '/prestamos/prestamoscobranzamanual?page=' + page + '&buscar=' + this.buscarcobranza;
+                 axios.get(url).then(function (response) {
+                         var respuesta = response.data;
+                         me.pagination = respuesta.pagination;
+                         me.arrayPrestamos = respuesta.prestamos.data; 
+                     })
+                     .catch(function (response) {
+                         console.log(response);
+                     });
+             },
             cerrarModalvue(ins){
                 if(ins>=0){
                     if(ins==1){
@@ -187,6 +328,7 @@
             } 
         },
         mounted() {
+            this.getPermisos();
             this.classModal=new _pl.Modals();
             this.classModal.addModal('primarymodal');   
             }
