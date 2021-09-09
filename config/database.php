@@ -92,6 +92,31 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_localback' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_back2020'),
+            'port' => env('DB_PORT_back2020'),
+            'database' => env('DB_DATABASE_back2020'),
+            'username' => env('DB_USERNAME_back2020'),
+            'password' => env('DB_PASSWORD_back2020'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+        'pgsql_local2020' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_2020'),
+            'port' => env('DB_PORT_2020'),
+            'database' => env('DB_DATABASE_2020'),
+            'username' => env('DB_USERNAME_2020'),
+            'password' => env('DB_PASSWORD_2020'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),

@@ -228,6 +228,8 @@ Vue.use(VeeValidate);
                 db:[
                     {nombre:'DB Prueba',id:'pgsql_desarrollo'},
                     {nombre:'DB 2020',id:'pgsql2020'},
+                    {nombre:'DB2020_local',id:'pgsql_local2020'},
+                    {nombre:'DB2020_back',id:'pgsql_localback'},
                 {nombre:'DB Safcon',id:'pgsql'}],
                 arrayPermisos : {procesarCambios:0},  
                 arrayPermisosIn:[],
