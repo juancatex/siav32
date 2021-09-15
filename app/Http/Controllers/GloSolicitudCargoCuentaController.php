@@ -847,5 +847,58 @@ class GloSolicitudCargoCuentaController extends Controller
         } */
        
     }
+    public function docobligacion(Request $request)
+    {   
+        //dd($request);
+        $idsolccuenta=$request->idsolccuenta;
+        $sidirectorio=$request->sidirectorio;
+
+        //dd($sidirectorio);  
+        
+        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $raw2=DB::raw('year(con__asientomaestros.fechavalidado) as anio');
+        if($sidirectorio)
+        {
+            $solccuenta=Glo_SolicitudCargoCuenta::join('con__asientomaestros','con__asientomaestros.idasientomaestro','glo__solicitud_cargo_cuentas.idasientomaestro')
+                                                    ->join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
+                                                    ->join('fil__filials','fil__filials.idfilial','fil__directivos.idfilial')
+                                                    ->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
+                                                    ->join('con__cuentas','con__cuentas.idcuenta','glo__solicitud_cargo_cuentas.idcuentadesembolso')
+                                                    ->select('glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'glo__solicitud_cargo_cuentas.fecha_desembolso',
+                                                            'glo__solicitud_cargo_cuentas.numdocobligacion',
+                                                            $raw,$raw2,
+                                                            'fil__filials.sigla',
+                                                            'fil__unidads.nomcargo',
+                                                            'con__cuentas.nomcuenta',
+                                                            'con__asientomaestros.cod_comprobante',
+                                                            'ci')
+                                                    ->where('glo__solicitud_cargo_cuentas.idsolccuenta',$idsolccuenta)
+                                                    ->get();
+        }
+        else
+        {    $solccuenta=Glo_SolicitudCargoCuenta::join('con__asientomaestros','con__asientomaestros.idasientomaestro','glo__solicitud_cargo_cuentas.idasientomaestro')
+                                                    ->join('rrh__empleados','rrh__empleados.idempleado','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')
+                                                    ->join('con__cuentas','con__cuentas.idcuenta','glo__solicitud_cargo_cuentas.idcuentadesembolso')
+                                                    ->select('glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'glo__solicitud_cargo_cuentas.fecha_desembolso',
+                                                            'glo__solicitud_cargo_cuentas.numdocobligacion',
+                                                            $raw,$raw2,
+                                                            'rrh__cargos.nomcargo',
+                                                            'con__cuentas.nomcuenta',
+                                                            'con__asientomaestros.cod_comprobante',
+                                                            'ci')
+                                                    ->where('glo__solicitud_cargo_cuentas.idsolccuenta',$idsolccuenta)
+                                                    ->get();
+        
+        
+        }   
+        
+        return view('doc_obligacion')->with(['solccuenta'=>$solccuenta]);
+    }
     
 }

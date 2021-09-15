@@ -1631,9 +1631,13 @@ class ConAsientomaestroController extends Controller
         }
         else
         {
+            //dd($asientodetalles);
+
             foreach ($asientodetalles as  $value) {
-                if($value->subcuenta!='');
+                //echo "->".$value->subcuenta; 
+                if($value->subcuenta!="")
                 {
+                    //echo "entras subcuenta";
                     if($value->tiposubcuenta==2)
                     {
                         $subcuentas=Rrh_Empleado::select(
@@ -1653,6 +1657,7 @@ class ConAsientomaestroController extends Controller
                                                         ->get();
                     }
                     
+                    //dd($subcuentas);
                     $subcuentas[0]['detalle']='';
                     $subcuentas[0]['subdebe']=$value->debe;
                     $subcuentas[0]['subhaber']=$value->haber;
@@ -1700,7 +1705,7 @@ class ConAsientomaestroController extends Controller
             $totalh=$totalh+$value->haber;
             
         }
-        
+        //dd($asientodetalles);
         //$maestro=DB::select('select * from con__asientomaestros where estado = 1 and idasientomaestro=2186');
 
         /* $detalle=Con_Asientodetalle::join('')

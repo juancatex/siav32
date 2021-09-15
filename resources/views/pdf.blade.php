@@ -136,19 +136,28 @@
             </tr>
         </thead>
         <tbody>
+
+        
             @foreach($detalles as $det)
             <tr style="border:0">
                 
                 <td style="vertical-align:top"><strong>{{ $det->codcuenta }}</strong></td>
                 <td><strong><u>{{ strtoupper($det->nomcuenta) }}</u> </strong></br>
-                    @foreach($det->subdetalles as $subd)  
-                        <p>{{ $subd->subcuenta }} {{ $subd->nombre }} {{ $subd->detalle }} </p>
-                    
-                    @endforeach
-                </td>
-                <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subdebe,2) }} </p> @endforeach</td>
-                <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subhaber,2) }} </p>@endforeach</td>
-                <td class="derecha">@foreach($det->subdetalles as $subd) <p> 1.00000 </p>@endforeach</td>
+                    @if(!empty($det->subdetalles))                
+                        @foreach($det->subdetalles as $subd)  
+                            <p>{{ $subd->subcuenta }} {{ $subd->nombre }} {{ $subd->detalle }} </p>
+                        @endforeach
+                        </td>
+                        <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subdebe,2) }} </p> @endforeach</td>
+                        <td class="derecha">@foreach($det->subdetalles as $subd) <p> {{ number_format($subd->subhaber,2) }} </p>@endforeach</td>
+                        
+                    @else
+                        </td>
+                        <td class="derecha">{{ number_format($det->debe,2) }}</td>
+                        <td class="derecha">{{ number_format($det->haber,2) }}</td>
+                    @endif
+                <td class="derecha"><p> 1.00000 </p></td>
+                
             <tr>
             @endforeach
         </tbody>

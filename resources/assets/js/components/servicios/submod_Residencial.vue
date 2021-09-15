@@ -33,7 +33,8 @@
                             <div class="tcelda" style="padding:8px 15px"><span v-text="jsfechas.fechadia(ocupante.fechaentrada)"></span></div>
                             <div class="tcelda" style="padding:8px 15px"><span v-text="ocupante.horaentrada"></span></div>
                             <div class="tcelda" style="padding:8px 15px">
-                                <span v-text="ocupante.currhora<'12:31:00'?(ocupante.noches):(ocupante.noches+1)"></span> noches
+                                <!-- <span v-text="ocupante.currhora<'12:31:00'?(ocupante.noches):(ocupante.noches+1)"></span> noches -->
+                                <span v-text="asignacion.noches"> Noches </span>  
                             </div>
                         </div>
                     </div> <!-- if algo < ambiente.capacidad -->
@@ -492,7 +493,10 @@ export default {
             });
             var url='/ser_asignacion/listaOcupantes?idestablecimiento='+this.regServicio.idestablecimiento
             axios.get(url).then(function(response){
+                console.log(me.arrayOcupantes);
                 me.arrayOcupantes=response.data.ocupantes;
+
+                console.log(me.arrayOcupantes);
             });
         },
 

@@ -849,14 +849,21 @@
                 });
             },
             repdocobligacion(idsolccuenta,sidirectorio){
+                console.log(idsolccuenta+" "+ sidirectorio)
                 let me=this;
-                if(sidirectorio)
+                var url='/doc_obligacion?idsolccuenta='+idsolccuenta+'&sidirectorio='+sidirectorio;
+                //console.log(url);
+                window.open(url, '_blank');
+                
+               /*  if(sidirectorio)
                 var url=me.reporte_documento_directorio+idsolccuenta;
                 else
+                
+                
                 var url=me.reporte_documento+idsolccuenta;
                 //console.log(url);
                 
-                plugin.viewPDF(url,'Documento de Obligacion Cargo de Cuenta');
+                plugin.viewPDF(url,'Documento de Obligacion Cargo de Cuenta'); */
             },
             reporteSeguimiento(idsolccuenta){
                 let me=this;
@@ -874,7 +881,7 @@
                 plugin.viewPDF(url,'Asiento Contable'); */
                 ///////////////////////////
 
-                var url='http://localhost:8000/pdf?idasientomaestro='+idasientomaestro;
+                var url='/pdf?idasientomaestro='+idasientomaestro;
                 //console.log(url);
                 window.open(url, '_blank');
 

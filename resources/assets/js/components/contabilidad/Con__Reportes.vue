@@ -105,6 +105,26 @@
                             </div>
                         </div>
                         <hr>
+                        <div class="form-group row">
+                            <h6 class="col-md-12 text-info">Balance de Sumas y Saldos</h6>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <span><strong>Nivel:</strong></span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <select class="form-control" 
+                                            v-model="idnivelss">
+                                            <option v-for="(niv,index) in nivel" :key="index" :value="niv" v-text="niv"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <button class="btn btn-primary" type="submit" @click="reportebalancegeneralss()" >Generar Balance Sumas y Saldos</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
 
                         
                         <!-- <div class="form-group row">
@@ -390,6 +410,7 @@
                 idempleadoselected:'',
                 nivel:[1,2,3,4,5],
                 idnivel:5,
+                idnivelss:5
 
 
             };
@@ -463,20 +484,26 @@
                 plugin.viewPDF(url,'Asiento Contable'); */
                 ///////////////////////////////////////
                 
-                var url='http://localhost:8000/libro_diario?idtipocomprobante='+ me.idtipocomprobante +'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/libro_diario?idtipocomprobante='+ me.idtipocomprobante +'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 
                 //console.log(url);
                 window.open(url, '_blank');
             },
             reportelibromayor(){
                 let me=this;
-                var url='http://localhost:8000/libro_mayor?fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&cuentai='+me.idcuentainicial[2]+'&cuentaf='+me.idcuentafinal[2]+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/libro_mayor?fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&cuentai='+me.idcuentainicial[2]+'&cuentaf='+me.idcuentafinal[2]+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 //console.log(url);
                 window.open(url, '_blank');
             },
             reportebalancegeneral(){
                 let me=this;
-                var url='http://localhost:8000/balance_general?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                var url='/balance_general?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
+                //console.log(url);
+                window.open(url, '_blank');
+            },
+            reportebalancegeneral(){
+                let me=this;
+                var url='/balance_generalss?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 //console.log(url);
                 window.open(url, '_blank');
             },

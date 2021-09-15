@@ -695,7 +695,7 @@
                 plugin.viewPDF(url,'Reporte Asiento Automatico'); */
 
                 /////////////// dompdf///////////
-                var url='http://localhost:8000/pdf?idasientomaestro='+asientomaestro;
+                var url='/pdf?idasientomaestro='+asientomaestro;
                 console.log(url);
                 window.open(url, '_blank');
                 // Cambiar el foco al nuevo tab (punto opcional)
