@@ -17,7 +17,9 @@ class SerAsignacionController extends Controller
     public function listaAsignaciones(Request $request)
     {
         $ip=config('app.ip'); 
-        $noches=DB::raw('datediff(curdate(),fechaentrada) as noches'); 
+        //$noches=DB::raw('datediff(curdate(),fechaentrada) as noches'); 
+        $noches=DB::raw('if(datediff(curdate(),fechaentrada)=0,"1",if(CURRENT_TIME()>"14:00",datediff(curdate(),fechaentrada)+1,datediff(curdate(),fechaentrada))) as noches');
+        
         //$currhora=DB::raw('curtime() as currhora');
         //$currfecha=DB::raw('curdate() as currfecha');
         
@@ -114,7 +116,9 @@ class SerAsignacionController extends Controller
     public function verAsignacion(Request $request)
     {   
         $dias=DB::raw('datediff(curdate(),fechaentrada) as dias'); 
-        $noches=DB::raw('datediff(fechasalida,fechaentrada) as noches'); //para hospedaje
+        //$noches=DB::raw('datediff(fechasalida,fechaentrada) as noches'); //para hospedaje
+        //$noches=DB::raw('if(datediff(curdate(),fechaentrada)=0,"1",datediff(curdate(),fechaentrada)) as noches'); 
+        $noches=DB::raw('if(datediff(fechasalida,fechaentrada)=0,"1",if(horasalida>"14:00",datediff(fechasalida,fechaentrada)+1,datediff(fechasalida,fechaentrada))) as noches');
         $horaentrada=DB::raw('substring(horaentrada,1,5) as horaentrada');
         $horasalida=DB::raw('substring(horasalida,1,5) as horasalida');
         $asignacion=Ser_Asignacion::select('*',$dias,$noches,$horaentrada,$horasalida);

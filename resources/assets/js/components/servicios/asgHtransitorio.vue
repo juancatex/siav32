@@ -56,7 +56,8 @@
                                         <div class="tcelda"><span v-text="asignacion.horaentrada"></span></div>
                                         <div class="tcelda"><span v-text="asignacion.ocupantes"></span> Cama(s)</div> 
                                         <div class="tcelda text-right">
-                                            <span v-text="asignacion.currhora<'12:31:00'?(asignacion.noches):(asignacion.noches)"></span> noches
+                                            <!-- <span v-text="asignacion.currhora<'12:31:00'?(asignacion.noches):(asignacion.noches)"></span> noches -->
+                                                <span v-text="asignacion.noches"> Noches </span>                                            
                                         </div>
                                         <div class="tcelda text-right" style="padding:5px 0px">
                                             <button class="btn btn-warning btn-sm icon-book-open" title="Ficha de ocupación"
@@ -274,8 +275,8 @@
                             </div>
                             <div class="tfila">
                                 <div class="tcelda titcampo">A cancelar:</div>                                
-                                <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1*regAsignacion.ocupantes"></span>Bs</div>
-                                <div v-else class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches*regAsignacion.ocupantes"></span>Bs</div>
+<!--                                 <div v-if="regAsignacion.noches===0" class="tcelda"><span v-text="regAsignacion.tarifa*1*regAsignacion.ocupantes"></span>Bs</div> -->
+                                <div class="tcelda"><span v-text="regAsignacion.tarifa*regAsignacion.noches*regAsignacion.ocupantes"></span>Bs</div>
                             </div>
                         </div><br>
                     </div>
@@ -532,6 +533,9 @@ export default {
                 this.ipbirt=response.data.ipbirt;
                 this.currfecha=response.data.currfecha;
                 this.currhora=response.data.currhora;
+                //console.log(this.arrayAsignaciones);
+                //console.log(this.currfecha);
+
             }); 
         },
 
