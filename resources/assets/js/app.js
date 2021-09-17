@@ -172,7 +172,28 @@ window.vue = new Vue({
         object: null
     },
     methods: {
-
+        nologin: function() { 
+            this.$root.$emit('nologin');
+            swal({
+                title: 'Su sesion a caducado',
+                text: 'Debe de ingresar al sistema nuevamente',
+                type: 'error',
+                footer: 'Al ir a inicio, sus datos registrados en el formulario previo no seran recuperados.',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey:false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#89898a',
+                confirmButtonText: 'Ir a inicio',
+                cancelButtonText: 'Seguir',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger' 
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "/";
+                    }  
+                }); 
+        },
         to(id, obj = null) {
             this.object = obj;
             if (id >= 0) {

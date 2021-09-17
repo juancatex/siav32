@@ -82,7 +82,7 @@
    <div class="col-md-6" v-if="datos.length>0">
                         
        <h1>Cambio de fecha</h1> 
-                     <div class="col-md-10">
+                     <div class="col-md-10"  v-if="check('cambiofecha')">
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Fecha del comprobante:</label>
                       <div class="input-group">
@@ -237,7 +237,7 @@ Vue.use(VeeValidate);
                     {nombre:'DB2020_local',id:'pgsql_local2020'},
                     {nombre:'DB2020_back',id:'pgsql_localback'},
                 {nombre:'DB Safcon',id:'pgsql'}],
-                arrayPermisos : {procesarCambios:0},  
+                arrayPermisos : {procesarCambios:0,cambiofecha:0},  
                 arrayPermisosIn:[],
             }
         },

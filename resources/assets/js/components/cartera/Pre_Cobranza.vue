@@ -56,16 +56,15 @@
                                 </td>
                                 <td class="tdcell" style="text-align:center;vertical-align: middle;">
                                     
-                                   <div v-if="prestamos.garantes==0"> 
-                                       <h6>
-                                           <span class="badge badge-warning">{{prestamos.nombreestado}}</span>
-                                       </h6>
+                                   <div v-if="prestamos.apro_conta==1">  
+                                        <button v-if="check('Registro_cobranza')"   type="button"
+                                        class="btn btn-success  btn-sm "
+                                        @click="regcobranza(prestamos)" title="Realizar cobranza">Cobranza</button> 
                                    </div>
                                     <div v-else> 
-                                    <button v-if="check('Registro_cobranza')"   type="button"
-                                        class="btn btn-success  btn-sm icon-check"
-                                        @click="regcobranza(prestamos)" title="Modificacion de garante"></button>
-                                      
+                                         <h6>
+                                           <span class="badge badge-warning">{{prestamos.nombreestado}}</span>
+                                        </h6>
                                    </div>
                                      
                                 </td>
@@ -143,13 +142,13 @@
 </div>
 
         <div class="modal fade " tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
-            id="primarymodal">
+            id="modalcobranzamanual">
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content animated fadeIn">
                     <div class="modal-header">
-                        <h4 class="modal-title" ></h4>
+                        <h4 class="modal-title" >Cobranza Manual</h4>
                         <button type="button" class="close" aria-hidden="true" aria-label="Close"
-                            @click="classModal.closeModal('primarymodal')"><span aria-hidden="true">×</span></button>
+                            @click="classModal.closeModal('modalcobranzamanual')"><span aria-hidden="true">×</span></button>
                     </div>
 
                     <div class="modal-body-modalPlugin">
@@ -158,7 +157,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
-                            @click="classModal.closeModal('primarymodal')">Cerrar</button>
+                            @click="classModal.closeModal('modalcobranzamanual')">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -192,9 +191,10 @@
                 return this.datasFiles.length;
             }
         },
-        methods : { regcobranza(){
-            
-        },
+        methods : { 
+            regcobranza(prestamo){
+             this.classModal.openModal('modalcobranzamanual');
+           },
             getPermisos() { 
                  var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
                 let me = this; 
@@ -330,7 +330,7 @@
         mounted() {
             this.getPermisos();
             this.classModal=new _pl.Modals();
-            this.classModal.addModal('primarymodal');   
+            this.classModal.addModal('modalcobranzamanual');   
             }
     }
 </script>
