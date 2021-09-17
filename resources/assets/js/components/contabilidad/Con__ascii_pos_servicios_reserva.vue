@@ -82,13 +82,13 @@
    <div class="col-md-6" v-if="datos.length>0">
                         
        <h1>Cambio de fecha</h1> 
-                     <div class="col-md-10"  v-if="check('cambiofecha')">
+                     <div class="col-md-10">
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Fecha del comprobante:</label>
                       <div class="input-group">
                         <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2020-01-01" max="2020-12-31"
-                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante" @keyup.enter="updateDate()"/> 
-                           <div class="input-group-append">
+                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante"/> 
+                           <div class="input-group-append" v-if="check('cambiofecha')">
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
                             <i class="fa fa-search"></i> cambiar fecha
                            </span>
