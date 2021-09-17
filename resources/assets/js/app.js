@@ -172,8 +172,8 @@ window.vue = new Vue({
         object: null
     },
     methods: {
-        nologin: function() { 
-            this.$root.$emit('nologin');
+        nologin:_.debounce(() => { 
+            // this.$root.$emit('nologin');
             swal({
                 title: 'Su sesion a caducado',
                 text: 'Debe de ingresar al sistema nuevamente',
@@ -193,7 +193,8 @@ window.vue = new Vue({
                         window.location.href = "/";
                     }  
                 }); 
-        },
+          }, 350)
+        ,
         to(id, obj = null) {
             this.object = obj;
             if (id >= 0) {
