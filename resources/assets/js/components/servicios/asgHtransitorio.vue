@@ -371,8 +371,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h4 class="titazul" v-text="titModal"></h4>
-                            Fecha: <input type="date" class="form-control" v-model="fecha">
-                            Hora: <input type="time"  v-model="hora">
+                            Fecha: <input type="date" class="form-control" v-model="fecha" disabled>
+                            Hora: <input type="time"  v-model="hora" disabled>
                             <template v-if="titModal==='Salida'">
                                 Camas: <select class="form-control" v-model="camas" disabled><option v-for="k in regAmbiente.capacidad" :key="k" v-text="k"></option></select>     
                             </template>
