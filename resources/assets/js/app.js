@@ -175,7 +175,7 @@ window.vue = new Vue({
         nologin:_.debounce(() => { 
             // this.$root.$emit('nologin');
             swal({
-                title: 'Su sesion a caducado',
+                title: 'Su sesion a caducado..',
                 text: 'Debe de ingresar al sistema nuevamente',
                 type: 'error',
                 footer: 'Al ir a inicio, sus datos registrados en el formulario previo no seran recuperados.',
