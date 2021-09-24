@@ -25,6 +25,7 @@ use App\Con_Asientosubcuenta;
 use App\Con_Firmaautorizada;
 use App\Rrh_Empleado;
 use App\Con_Perfilcuentamaestro;
+use App\Fil_Filial;
 
 //agregar mas tablas de subcuentas para la seleccion
 
@@ -464,7 +465,7 @@ class ConAsientomaestroController extends Controller
         $validarfacturas=$request->validarfacturas;
         $idfilial=$request->idfilial;
         $idunidad=$request->idunidad;
-
+        dd($idunidad);
         if($request->sidirectorio)
             $tiposubcuenta=1;
         else
@@ -1227,6 +1228,21 @@ class ConAsientomaestroController extends Controller
                                                     ->select('glo__solicitud_cargo_cuentas.activo','idfilial')
                                                     ->where('idsolccuenta',$idsolccuenta)
                                                     ->get()->toArray();
+            if($solccuenta[0]['idfilial']==1)
+            {
+                $res=Rrh_Empleado::join('fil__oficinas','fil__oficinas.idoficina','rrh__empleados.idoficina')
+                                        ->select('fil__oficinas.idunidad')
+                                        ->where('rrh__empleados.idempleado',$subcuenta)
+                                        ->where('rrh__empleados.activo',1)
+                                        ->get()->toArray();
+                $idunidad=$res[0]['idunidad'];
+                    
+            }
+                
+            else
+                $idunidad=0;
+            
+            //dd($idunidad);
         }
         else
         {
@@ -1234,9 +1250,17 @@ class ConAsientomaestroController extends Controller
             $solccuenta=Glo_SolicitudCargoCuenta::join('socios as a','a.numpapeleta','=','glo__solicitud_cargo_cuentas.subcuenta')
                                                     ->join('fil__directivos','fil__directivos.idsocio','a.idsocio')
                                                     ->join('fil__filials','fil__directivos.idfilial','fil__filials.idfilial')
-                                                    ->select('glo__solicitud_cargo_cuentas.activo','fil__filials.idfilial')
+                                                    ->select('glo__solicitud_cargo_cuentas.activo','fil__filials.idfilial','fil__directivos.idunidad')
                                                     ->where('idsolccuenta',$idsolccuenta)
                                                     ->get()->toArray();
+
+            if($solccuenta[0]['idfilial']==1)
+                $idunidad=$solccuenta[0]['idunidad'];
+            else
+                $idunidad=0;
+
+           // dd($idunidad);
+            
         }
 
         //dd($solccuenta);
@@ -1271,7 +1295,7 @@ class ConAsientomaestroController extends Controller
 
             //dd($arrayDetalle);
             $asientomaestro= new AsientoMaestroClass();
-            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial);
+            $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
 
             $docobligacion=Glo_SolicitudCargoCuenta::select(DB::raw('max(numdocobligacion) as numobligacion'))
                                                     ->get()->toArray();

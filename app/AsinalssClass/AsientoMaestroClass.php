@@ -10,6 +10,7 @@ use App\con_Perfilcuentadetalle;
 use App\Con_Asientosubcuenta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Adm_User;
 
 
 
@@ -47,7 +48,8 @@ Class AsientoMaestroClass
         $this->loteprestamos=0;
         $this->borrador=false;
         $this->estado=0;
-        $this->fechavalidacion=date("Y-m-d H:i:s");        
+        $this->fechavalidacion=date("Y-m-d H:i:s"); 
+        $this->unidad=0;       
         
         
 
@@ -202,7 +204,10 @@ Class AsientoMaestroClass
         $this->borrador=$borrador;
         $this->filial=$filial;
         $this->unidad=$unidad;
-
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
+       
+        
         if($this->filial=='')
             $this->filial=1;
 
@@ -332,7 +337,7 @@ Class AsientoMaestroClass
     }
     
     //////////////////////////////////////// funcion para almacenar asientos automaticos en modo array
-    public function AsientosMaestroArray($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='')
+    public function AsientosMaestroArray($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad)
     {
         // definicion de array
         //$this->tipocomprobante =$tipocomprobante;
@@ -347,6 +352,10 @@ Class AsientoMaestroClass
         $this->agrupacion=$agrupacion;
         $this->segcobranza=$segcobranza;
         $this->filial=$filial;
+        $this->unidad=$unidad;
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
+
         if($this->filial=='')
         $this->filial=1;
 
@@ -376,6 +385,7 @@ Class AsientoMaestroClass
                 $asientomaestro->u_registro=Auth::id();
                 $asientomaestro->agrupacion=$agrupacion;
                 $asientomaestro->segcobranza=$this->segcobranza;
+                $asientomaestro->idunidad=$this->unidad;
                 $asientomaestro->save();
                 $idasientomaestro=$asientomaestro->idasientomaestro;
 
@@ -411,7 +421,7 @@ Class AsientoMaestroClass
             }
         } 
     }
-    public function AsientosMaestroArrayCobranza($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='')
+    public function AsientosMaestroArrayCobranza($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad='')
     {
         // definicion de array
         //$this->tipocomprobante =$tipocomprobante;
@@ -425,6 +435,11 @@ Class AsientoMaestroClass
         $this->loteprestamos=$loteprestamos;
         $this->agrupacion=$agrupacion;
         $this->segcobranza=$segcobranza;
+        $this->unidad=$unidad;
+        
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
+
         $this->filial=$filial;
         if($this->filial=='')
         $this->filial=1;
@@ -456,6 +471,7 @@ Class AsientoMaestroClass
                 $asientomaestro->u_registro=Auth::id();
                 $asientomaestro->agrupacion=$agrupacion;
                 $asientomaestro->segcobranza=$this->segcobranza;
+                $asientomaestro->idunidad=$this->unidad;
                 $asientomaestro->save();
                 $idasientomaestro=$asientomaestro->idasientomaestro;
 
@@ -491,7 +507,7 @@ Class AsientoMaestroClass
             }
         } 
     }
-    public function AsientosMaestroArrayASCII($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='')
+    public function AsientosMaestroArrayASCII($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad='')
     {
         // definicion de array
         //$this->tipocomprobante =$tipocomprobante;
@@ -505,6 +521,11 @@ Class AsientoMaestroClass
         $this->loteprestamos=$loteprestamos;
         $this->agrupacion=$agrupacion;
         $this->segcobranza=$segcobranza;
+        $this->unidad=$unidad;
+        
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
+
         $this->filial=$filial;
         if($this->filial=='')
         $this->filial=1;
@@ -536,6 +557,7 @@ Class AsientoMaestroClass
                 $asientomaestro->agrupacion=$agrupacion;
                 $asientomaestro->segcobranza=$this->segcobranza;
                 $asientomaestro->desembolso=2;
+                $asientomaestro->idunidad=$this->unidad;
                 $asientomaestro->save();
                 $idasientomaestro=$asientomaestro->idasientomaestro;
 
@@ -571,7 +593,7 @@ Class AsientoMaestroClass
             }
         } 
     }
-    public function AsientosMaestroArrayAportes($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='')
+    public function AsientosMaestroArrayAportes($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad='')
     {
         // definicion de array
         //$this->tipocomprobante =$tipocomprobante;
@@ -585,6 +607,11 @@ Class AsientoMaestroClass
         $this->loteprestamos=$loteprestamos;
         $this->agrupacion=$agrupacion;
         $this->segcobranza=$segcobranza;
+        $this->unidad=$unidad;
+        
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
+
         $this->filial=$filial;
         if($this->filial=='')
         $this->filial=1;
@@ -612,6 +639,7 @@ Class AsientoMaestroClass
                 //$asientomaestro->idfilial='1';//modificar con ide de filial
                 $asientomaestro->idfilial=$this->filial;
                 $asientomaestro->idmodulo=$this->idmodulo;
+                $asientomaestro->idunidad=$this->unidad;
                 $asientomaestro->u_registro=Auth::id();
                 $asientomaestro->agrupacion=$agrupacion;
                 $asientomaestro->desembolso=1;
@@ -653,7 +681,7 @@ Class AsientoMaestroClass
     }
     //////////////////////////////////////////////////////////////////////
     ///////////////////////////////////// metodo para agregar comprobantes agrupados
-    public function AsientosMaestroAgrupado($idperfilcuentamaestro='',$tipocomprobante='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$listaids='',$filial=1)
+    public function AsientosMaestroAgrupado($idperfilcuentamaestro='',$tipocomprobante='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$listaids='',$filial=1,$unidad='')
     {
         $this->idperfilcuentamaestro=$idperfilcuentamaestro;
         $this->tipocomprobante=$tipocomprobante;
@@ -664,6 +692,10 @@ Class AsientoMaestroClass
         $this->idmodulo=$idmodulo;
         $this->fecharegistro=$fecharegistro." ".$this->hora;
         $this->filial=$filial;
+        $this->unidad=$unidad;
+        
+        if($this->unidad=='')
+            $this->unidad=$this->recuperaunidad();
         
         
        
@@ -688,6 +720,7 @@ Class AsientoMaestroClass
                 $asientomaestro->cont_comprobante=$respuesta[0];
                 $asientomaestro->cod_comprobante=$respuesta[1];
                 $asientomaestro->estado=1;
+                $asientomaestro->idunidad=$this->unidad;
                 $asientomaestro->save();
                 $idasientomaestro=$asientomaestro->idasientomaestro;
 
@@ -877,6 +910,23 @@ Class AsientoMaestroClass
         }
         return $arraydetalles;
 
+    }
+    public function recuperaunidad()
+    {
+        $usuario=Auth::user();
+        $idusuario=$usuario->idempleado;
+
+        //dd($idusuario);
+        
+        $res=Adm_User::join('rrh__empleados','rrh__empleados.idempleado','adm__users.idempleado')
+                        ->join('rrh__empleados','rrh__empleados.idoficina','fil__oficinas.idoficina')
+                        ->select('fil__oficinas.idunidad')
+                        ->where('rrh__empleados',$idusuario)
+                        ->get()->toArray();
+        
+        return $res[0]['idunidad'];
+        
+        
     }
         
                 
