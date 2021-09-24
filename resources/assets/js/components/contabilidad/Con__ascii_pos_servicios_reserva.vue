@@ -87,8 +87,8 @@
                         for="text-input">Fecha del comprobante:</label>
                       <div class="input-group">
                         <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2020-01-01" max="2020-12-31"
-                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante" @keyup.enter="updateDate()"/> 
-                           <div class="input-group-append">
+                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante"/> 
+                           <div class="input-group-append" v-if="check('cambiofecha')">
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
                             <i class="fa fa-search"></i> cambiar fecha
                            </span>
@@ -234,10 +234,10 @@ Vue.use(VeeValidate);
                     {nombre:'DB Prueba',id:'pgsql_desarrollo'},
                     {nombre:'DB Prueba 2020',id:'pgsql2020back'},
                     {nombre:'DB 2020',id:'pgsql2020'},
-                    {nombre:'DB2020_local',id:'pgsql_local2020'},
-                    {nombre:'DB2020_back',id:'pgsql_localback'},
+                    // {nombre:'DB2020_local',id:'pgsql_local2020'},
+                    // {nombre:'DB2020_back',id:'pgsql_localback'},
                 {nombre:'DB Safcon',id:'pgsql'}],
-                arrayPermisos : {procesarCambios:0},  
+                arrayPermisos : {procesarCambios:0,cambiofecha:0},  
                 arrayPermisosIn:[],
             }
         },
