@@ -713,6 +713,8 @@ Vue.component("v-select", vSelect);
             },
             ObservarAsiento(idasientomaestro)
             {
+                
+                //me.cerrarModal('agrupar');
                 let me=this;
                 swal({
                 title: 'Esta seguro de Observar Este Comprobante?',
