@@ -917,11 +917,11 @@ Class AsientoMaestroClass
 
         //dd($idusuario);
         
-       /*  $res=Rrh_Empleado:://join('adm__users','adm__users.idempleado','rrh__empleados.idempleado')
+        $res=Rrh_Empleado:://join('adm__users','adm__users.idempleado','rrh__empleados.idempleado')
                             join('fil__oficinas','fil__oficinas.idoficina','rrh__empleados.idoficina')
                             ->select('fil__oficinas.idunidad')
                             ->where('rrh__empleados.idempleado',$idusuario)
-                            ->get()->toArray();   */  
+                            ->get()->toArray();    
         //dd($res);
 /*
         
@@ -931,8 +931,8 @@ Class AsientoMaestroClass
                         ->where('rrh__empleados.idempleado',$idusuario)
                         ->get()->toArray();
   */      
-        //return $res[0]['idunidad'];
-        return 5;
+        return $res[0]['idunidad'];
+        //return 5;
         
         
     }
