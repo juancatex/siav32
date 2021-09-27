@@ -465,7 +465,7 @@ class ConAsientomaestroController extends Controller
         $validarfacturas=$request->validarfacturas;
         $idfilial=$request->idfilial;
         $idunidad=$request->idunidad;
-        dd($idunidad);
+        //dd($idunidad);
         if($request->sidirectorio)
             $tiposubcuenta=1;
         else
