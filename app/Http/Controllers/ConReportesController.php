@@ -91,7 +91,11 @@ class ConReportesController extends Controller
                                         ->select('c.idcuenta','c.codcuenta','c.nomcuenta')
                                         ->wherebetween('codcuenta',[$cuentainicio,$cuentafin])
                                         ->whereBetween(DB::raw('date(fecharegistro)'), [$fechainicio, $fechafin])
-                                        ->where('b.estado','1')
+                                        //->where('b.estado','1')
+                                        ->where(function($query) {
+                                            $query->where('b.estado', 1)
+                                                ->orWhere('b.estado', 5);
+                                        })
                                         ->where('b.idagrupacion',null)
                                         ->where('b.gestion',0)
                                         ->where(function($query) use ($filial,$unidad){
@@ -154,15 +158,23 @@ class ConReportesController extends Controller
                                                             'b.glosa',
                                                             'monto',
                                                             'debe',
-                                                            'haber')
+                                                            'haber',
+                                                            'b.fecharegistro',
+                                                            'b.estado')
                                                     // ->whereBetween('codcuenta',[$cuentainicio,$cuentafin])
                                                     ->where('d.idcuenta',$idcuenta)
-                                                    ->where('b.estado',1)
+                                                    //->where('b.estado',1)
+                                                    ->where(function($query) {
+                                                        $query->where('b.estado', 1)
+                                                            ->orWhere('b.estado', 5);
+                                                    })
                                                     ->where('b.idagrupacion',null)
-                                                    ->whereBetween(DB::raw('date(fechavalidado)'), [$fechainicio, $fechafin])
+                                                    //->whereBetween(DB::raw('date(fechavalidado)'), [$fechainicio, $fechafin])  //para registros validados
+                                                    ->whereBetween(DB::raw('date(fecharegistro)'), [$fechainicio, $fechafin])  //incluye registros en borrador
                                                     ->where('b.gestion',0)
                                                     ->orderBy('codcuenta','desc')
-                                                    ->orderBy('fechavalidado','asc')
+                                                    //->orderBy('fechavalidado','asc')
+                                                    ->orderBy('fecharegistro','asc')
                                                     ->get();
             //dd($detallemayor);
             $valor->detalles=$detallemayor;

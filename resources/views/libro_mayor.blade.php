@@ -63,6 +63,10 @@ b{
     div{
         background-image:url("{{ asset('img/borrador.png')}}");
     }
+    .borrador{
+        background-color: coral;
+        color: white;
+    }
    /*  table,td,  th{
         border:1px solid black ;
         width: 800px;
@@ -79,7 +83,7 @@ b{
 </style>
 <body style="background-color: cadetblue;">
 <div class="body_wrapper">
-
+ 
     <h2>Filial: {{ $nomfilial }} Unidad: {{ $nomsigla }} </h2>
     @foreach ($arraymayor as $arraym)
         <table>
@@ -104,7 +108,9 @@ b{
 
             </tr>
             @foreach($arraym->detalles as $arrayd)
-                <tr>
+                
+                <tr class=" {{ $arrayd->estado==5?'borrador':''}}">
+                
                     <td>{{ $arrayd->fechavalidado }}</td>
                     <td>{{ $arrayd->nomtipocomprobante }}</td>
                     <td>{{ $arrayd->cod_comprobante }}</td>
@@ -114,6 +120,7 @@ b{
                     <td class="derecha">{{ number_format($arrayd->debe,2) }}</td>
                     <td class="derecha">{{ number_format($arrayd->haber,2) }}</td>
                     <td class="derecha">{{ number_format($arrayd->saldofinal,2) }}</td>
+                    
                 </tr>
                 @foreach($arrayd->subdetalles as $subdetalles)
                     <tr>
