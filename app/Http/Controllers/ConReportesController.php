@@ -306,6 +306,7 @@ class ConReportesController extends Controller
                                         ->get();
             $valorn1->cuentan2=$cuentan2; 
             $saldon1=0;
+            //dd($cuentan2);
             foreach ($cuentan2 as $valorn2) {
                 
                 $cuentan3=Con_cuentanivel3::select('codn3','nomcuentan3')
@@ -331,6 +332,7 @@ class ConReportesController extends Controller
                                                     ->get();
                         $valorn4->cuentan5=$cuentan5;
                         $saldon4=0;
+                        //dd($cuentan1);
                         foreach ($cuentan5 as $valorn5) {
                             
                             $cuentas=Con_Cuentas::select('idcuenta','codcuenta','nomcuenta')
@@ -339,6 +341,7 @@ class ConReportesController extends Controller
                                                     ->get();
                             $valorn5->cuentas=$cuentas;
                             $saldon5=0;
+                            
                             foreach ($cuentas as $valuec) {
                                     $raw=DB::raw('IFNULL(ifnull(SUM(debe),0)-ifnull(sum(haber),0),0) as saldo');
                                     /* $saldos=Con_Asientodetalle::join('con__asientomaestros as b','con__asientodetalles.idasientomaestro','=','b.idasientomaestro')
@@ -367,6 +370,7 @@ class ConReportesController extends Controller
                                     $saldon5=$saldon5+$saldoc;
                                     
                             }
+                            //dd($cuentan1);
                             $saldon4=$saldon4+$saldon5;
                             $valorn5->saldon5=$saldon5;
                         }
@@ -384,6 +388,7 @@ class ConReportesController extends Controller
         }
             
         return view('balance_general')->with(['cuentas'=>$cuentan1]);
+        //dd($cuentan1);
         //return ['cuentas'=>$cuentan1];
     }
 

@@ -501,7 +501,7 @@
                 //console.log(url);
                 window.open(url, '_blank');
             },
-            reportebalancegeneral(){
+            reportebalancegeneralss(){
                 let me=this;
                 var url='/balance_generalss?nivel='+me.idnivel+'&fechai='+me.fechainicio+'&fechaf='+me.fechafin+'&filial='+me.filialselected+'&idunidad='+me.idunidad+'&idempleado='+me.idempleado;
                 //console.log(url);
