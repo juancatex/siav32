@@ -580,6 +580,7 @@ Class MetodoAmortizacion
         ->whereBetween('par__prestamos.idestado',[2,3])              
         ->where('par__prestamos.idprestamo','=',$idprestamo)->get()[0];  
         $outdata = array(); 
+        $arrayDetalle = array(); 
         $validadoconta=0;  
         $suma_cuota=0; 
         $fecha=(DB::select("select fechaSistema as fecha  from par__fecha__sistemas where activo=1"))[0]->fecha; 
@@ -675,7 +676,7 @@ Class MetodoAmortizacion
                                                         }
                                                     ///////////////////////////////////////////////////////////////////////////////////////// 
      
-                               $cuotaf =  $this->redondeo_valor($cuota+$sumacargos); 
+                                $cuotaf =  $this->redondeo_valor($cuota+$sumacargos); 
                                 $arrayDetalle = array();  
                                 $debe=0;
                                 $haber=0;
@@ -689,7 +690,8 @@ Class MetodoAmortizacion
                                     $abc="$".$perfil['valor_abc'];
                                     eval($abc."=".$perfil['formulaphp'].";");
                                     $value=$this->redondeo_valor(eval("return ".$abc.";"));
-                                    $value=$this->redondeo_valor($value*$prestamo->tipocambio);  
+                                    $value=$this->redondeo_valor($value*$prestamo->tipocambio); 
+                                    echo $value.'__'; 
                                     if($value>0){ 
                                         if($perfil['tipocargo']=='h'){ 
                                             $haber=$this->redondeo_valor($haber+$value);
