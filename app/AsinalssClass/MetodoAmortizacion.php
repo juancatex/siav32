@@ -691,7 +691,7 @@ Class MetodoAmortizacion
                                     eval($abc."=".$perfil['formulaphp'].";");
                                     $value=$this->redondeo_valor(eval("return ".$abc.";"));
                                     $value=$this->redondeo_valor($value*$prestamo->tipocambio); 
-                                    echo $value.'__'; 
+                                    echo '__'.$abc.'='.$value.'__'; 
                                     if($value>0){ 
                                         if($perfil['tipocargo']=='h'){ 
                                             $haber=$this->redondeo_valor($haber+$value);
