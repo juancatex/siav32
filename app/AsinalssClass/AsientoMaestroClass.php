@@ -336,7 +336,7 @@ Class AsientoMaestroClass
     }
     
     //////////////////////////////////////// funcion para almacenar asientos automaticos en modo array
-    public function AsientosMaestroArray($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad)
+    public function AsientosMaestroArray($idperfilcuentamaestro='',$tipodocumento='',$numdocumento='',$glosa='',$arrayDetalle=array(),$idmodulo='',$fecharegistro='',$loteprestamos=0,$agrupacion=0,$segcobranza=0,$filial='',$unidad='')
     {
         // definicion de array
         //$this->tipocomprobante =$tipocomprobante;
