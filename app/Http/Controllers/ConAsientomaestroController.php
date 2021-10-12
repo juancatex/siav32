@@ -1707,6 +1707,7 @@ class ConAsientomaestroController extends Controller
                                             'nomcargo',
                                             'orden')
                                     ->where('tipo_persona',1)//1 es el valor de los directivos
+                                    ->where('con__firmaautorizadas.activo',1)
                                     ->union($firm);
         $firma2=Con_Firmaautorizada::join('rrh__empleados','rrh__empleados.idempleado','con__firmaautorizadas.idpersona') 
                                     ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')                   
@@ -1714,6 +1715,7 @@ class ConAsientomaestroController extends Controller
                                     'nomcargo',
                                     'orden')                       
                                     ->where('tipo_persona',2)
+                                    ->where('con__firmaautorizadas.activo',1)
                                     ->union($firmas1)
                                     ->orderby('orden', 'asc')
                                     ->get();
