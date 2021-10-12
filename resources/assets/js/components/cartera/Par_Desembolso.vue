@@ -755,7 +755,7 @@
                                                                                 /////////////////////////////////////////////////////////////////
                                                                     }).catch(function (error) { 
                                                                         console.log(error);
-                                                                        swal("¡ocurrio un problema al obtener el numero de lote!",'', "error");
+                                                                        swal("¡ocurrio un problema al obtener el numero de lote!",error.response.data.message, "error");
                                                                     }); 
                                         }
                                 }
