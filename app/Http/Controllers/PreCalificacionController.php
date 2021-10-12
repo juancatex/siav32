@@ -481,10 +481,20 @@ if(!empty($request->buscar)){
          ->where('par__productos.cobranza_perfil_refi','!=','0') 
          ->where('par__prestamos.idsocio',$request->idsocio)
          ->whereBetween('par__prestamos.idestado',[2,3])->get();
-              
+              $metodo=new MetodoAmortizacion();
+
+              echo 'corte='.DB::select('select checkcut() as corte')->first()->corte; 
                 foreach($prestamossocio as $valor){
                     echo $valor->idprestamo;
-                }                     
+                }  
+                echo 'corte='.DB::select('select checkcut() as corte')->first()->corte;       
+                
+
+                                            // $moneda=DB::table('par__productos')->select('par__monedas.tipocambio')
+                                            // ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+                                            // ->where('par__productos.idproducto',$request->idpro)->first();
+
+                                            // $moneda->tipocambio
         }
          
      return ['capital'=>$afinanciar];
