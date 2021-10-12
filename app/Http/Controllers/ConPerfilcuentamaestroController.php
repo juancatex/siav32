@@ -119,7 +119,7 @@ class ConPerfilcuentamaestroController extends Controller
         //$cobranza=$request->cobranza;
         $idmodulo=3;//TODO:cambiar dinamicamente, ahora 3 pertenece a contabilidad
         $perfilcuentamaestros = Con_Perfilcuentamaestro::select('idperfilcuentamaestro','nomperfil','descripcion')
-                                                        //  ->where('idmodulo','=',$idmodulo)
+                                                         ->where('idmodulo','=',$idmodulo)
                                                          ->where('activo','=','1')
                                                          ->where('completo','=','1')
                                                         ->where('idtipocomprobante','2') // tipo comprobante de egreso
