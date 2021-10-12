@@ -454,11 +454,40 @@ if(!empty($request->buscar)){
     
     public function getsaldocapital_desembolso(Request $request)
     { 
-       if (!$request->ajax()) return redirect('/'); 
+    //    if (!$request->ajax()) return redirect('/'); 
       
-         $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+        //  $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+
+         $afinanciar=0;
          
-     return ['capital'=>($total[0]->total + 0)];
+         $validate1=DB::table('par__prestamos')->where('idsocio',$request->idsocio)->where('idestado',1)->count();
+         $validate2=DB::table('par__prestamos')->where('idsocio',$request->idsocio)
+         ->where(function($query) {
+            $query->where('apro_conta',0)
+                ->orwhere('apro_conta',5);
+            })->whereBetween('idestado',[2,3])->count();
+        if($validate1>0){
+            $afinanciar=-35;
+        }elseif($validate2>0){
+            $afinanciar=-25;
+        }elseif($request->cancelar==1){
+            // select pre.idprestamo  from par__prestamos pre,par__productos pro,par__monedas mo 
+			// 						where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pro.cobranza_perfil_refi!=0
+            //                         and pre.idsocio=idsocio and pre.idestado between 2 and 3;
+         $prestamossocio=DB::table('par__prestamos')
+         ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
+         ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+         ->select('par__prestamos.idprestamo')
+         ->where('par__productos.cobranza_perfil_refi','!=','0') 
+         ->where('par__prestamos.idsocio',$request->idsocio)
+         ->whereBetween('par__prestamos.idestado',[2,3])->get();
+              
+                foreach($prestamossocio as $valor){
+                    echo $valor->idprestamo;
+                }                     
+        }
+         
+     return ['capital'=>$afinanciar];
     }
 
     public function reporte1(Request $request)
