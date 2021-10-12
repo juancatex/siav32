@@ -483,7 +483,7 @@ if(!empty($request->buscar)){
          ->whereBetween('par__prestamos.idestado',[2,3])->get();
               $metodo=new MetodoAmortizacion();
 
-              echo 'corte='.DB::select('select checkcut() as corte')->first()->corte; 
+              echo 'corte='.DB::select('select checkcut() as corte')->first(); 
                 foreach($prestamossocio as $valor){
                     echo $valor->idprestamo;
                 }  
