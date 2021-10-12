@@ -100,7 +100,8 @@
                         <tbody>
                             <tr v-for="librocompras in arrayLibrocompras" :key="librocompras.idlibrocompra">
                                 <td>
-                                    <template v-if="(librocompras.idasientomaestro==null && librocompras.lote==null) || !librocompras.validadoconta">
+                                    <!-- <template v-if="(librocompras.idasientomaestro==null && librocompras.lote==null) || !librocompras.validadoconta"> -->
+                                        <template>
                                         <button v-if="check('libro_editar')" type="button" @click="abrirModalCompras('editar',librocompras)" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar">
                                             <i class="icon-note"></i>
                                         </button>
@@ -247,7 +248,8 @@
                                                 separator="," 
                                                 v-model="importetotal"
                                                 v-bind:precision="2"
-                                                v-on:focus="selectAll">
+                                                v-on:focus="selectAll"
+                                                :disabled="desactivarimporte">
                                 </vue-numeric>
                                 <template v-if="importetotal==0">
                                     <div>
@@ -477,7 +479,9 @@
                                 libro_eliminar:0
                                 },
                 
-                arrayPermisosIn:[]
+                arrayPermisosIn:[],
+                desactivarimporte:false,
+                
 
             }
         },
@@ -767,7 +771,7 @@
             },
             abrirModalCompras(accion,data=[]){
                 let me=this;
-                console.log(data);
+                //console.log(data);
                 
                 switch(accion){
                     case 'registrar':
@@ -799,6 +803,11 @@
                     }
                     case 'editar':
                     {
+                        console.log(data);
+                        if(data['validadoconta']!=0 && data['idasientomaestro']!=0)
+                            me.desactivarimporte=true;
+                        else
+                            me.desactivarimporte=false;
                         me.tipoAccionlibro=2;
                         me.idlibrocompra=data['idlibrocompra'];
                         me.idproveedorrespuesta=data['idproveedor'];
@@ -824,7 +833,7 @@
                             
                             swal({
                             title: 'Esta Factura Esta Asociada a un Comprobante Contable',
-                            text: 'si modifica el importe de esta factura debera modificar el Registro contable',
+                            text: 'No es posible editar el importe de la factura, solo puede modificar los datos',//'si modifica el importe de esta factura debera modificar el Registro contable',
                             type: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -937,6 +946,7 @@
                     //me.rowregistros[me.indice+1].debe=me.acumulado87;
                 }
                 me.classModal.closeModal('librocompras'); 
+                me.desactivarimporte=false;
               
             },
             fechahoy(){
