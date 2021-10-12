@@ -50,7 +50,7 @@ class CreateParProductosTable extends Migration
             $table->integer('cancelarprestamos')->default(0)->comment('refinanciamiento');  
             $table->integer('activar_garante')->default(0)->comment('activar a garante/titular'); 
 
-            $table->text('serializedmap'); 
+            $table->longText('serializedmap'); 
             $table->dateTime('fecharegistro');
             $table->integer('idusuario')->unsigned();
             $table->timestamps();

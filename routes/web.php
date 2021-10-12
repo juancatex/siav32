@@ -827,6 +827,8 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get ('/pruebare','ParPrestamosController@prueba');
         Route::get ('/get_status_reg','ParPrestamosController@get_status_reg');
         Route::post ('/start_refinanciamiento','ParPrestamosController@start_refinanciamiento');
+        Route::post ('/start_cobranzamanual_total','ParPrestamosController@start_cobranzamanual_total');
+        Route::get ('/start_cobranzamanual_total_validate','ParPrestamosController@start_cobranzamanual_total_validate');
 
         Route::get ('/liq_saldosmenores','LiqSaldosmenorController@index');
         Route::get ('/liq_saldosmenores/procesarsaldos','LiqSaldosmenorController@procesarsaldos');

@@ -715,7 +715,7 @@
                                                                                                    _pl._vm2154_12185_145(me.idpres,me.rutas);  
                                                                                             }).catch(function (error) { 
                                                                                                 console.log("error:",error);
-                                                                                                swal("¡ocurrio un problema al refinanciar  el prestamos!",error.data.mensaje, "error");
+                                                                                                swal("¡ocurrio un problema al refinanciar  el prestamos!",error.response.data.message, "error");
                                                                                             });
                                                                                 /////////////////////////////////////////////////////////////////
                                                                     }).catch(function (error) { 

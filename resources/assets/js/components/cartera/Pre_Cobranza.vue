@@ -140,29 +140,9 @@
 
     </div>
 </div>
-
-        <div class="modal fade " tabindex="-1" role="dialog" style="z-index: 1600;" aria-hidden="true"
-            id="modalcobranzamanual">
-            <div class="modal-dialog modal-primary modal-lg" role="document">
-                <div class="modal-content animated fadeIn">
-                    <div class="modal-header">
-                        <h4 class="modal-title" >Cobranza Manual</h4>
-                        <button type="button" class="close" aria-hidden="true" aria-label="Close"
-                            @click="classModal.closeModal('modalcobranzamanual')"><span aria-hidden="true">×</span></button>
-                    </div>
-
-                    <div class="modal-body-modalPlugin">
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            @click="classModal.closeModal('modalcobranzamanual')">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+ 
  <cobranza_ascii @cerrarvue="cerrarModalvue" ref="cobranza_ascii"></cobranza_ascii>
+ <cobranza_manual @cerrarvue="cerrarModalvue" ref="cobranza_manuall"></cobranza_manual>
     </main>
 </template>
 
@@ -192,8 +172,8 @@
             }
         },
         methods : { 
-            regcobranza(prestamo){
-             this.classModal.openModal('modalcobranzamanual');
+            regcobranza(prestamo){ 
+             this.$refs.cobranza_manuall.showVue(prestamo,this.idmodulomain);
            },
             getPermisos() { 
                  var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
@@ -229,6 +209,7 @@
                      });
              },
             cerrarModalvue(ins){
+                this.listarprestamos();
                 if(ins>=0){
                     if(ins==1){
                         swal("¡El proceso termino correctamente!", "", "success");
@@ -328,9 +309,7 @@
             } 
         },
         mounted() {
-            this.getPermisos();
-            this.classModal=new _pl.Modals();
-            this.classModal.addModal('modalcobranzamanual');   
+            this.getPermisos();   
             }
     }
 </script>

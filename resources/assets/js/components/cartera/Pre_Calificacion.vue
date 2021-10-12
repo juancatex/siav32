@@ -513,7 +513,7 @@
                             class="form-control-label" for="text-input">Aplicar seguro de desgravamen :</label>
                           <div class="input-group">
                             <label class="switch switch-label switch-pill switch-primary" style="margin: 0 !important;display: table-cell;">
-                                        <input class="switch-input" type="checkbox" checked="" v-model="aplicasegurodesgravamen">
+                                        <input class="switch-input" type="checkbox" checked="" v-model="aplicasegurodesgravamen" disabled>
                                         <span class="switch-slider" data-checked="Si" data-unchecked="No"></span>
                                         </label>
                           </div>

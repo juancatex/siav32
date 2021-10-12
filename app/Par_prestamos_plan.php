@@ -27,6 +27,7 @@ class Par_prestamos_plan extends Model
 'send_ascii',
 'idtransaccionC',
 'numDocC',
+'fecha_doc',
 'glosa',
 'fechaCobranza',
 'importe',

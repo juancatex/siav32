@@ -926,7 +926,7 @@
                                 swal(
                                     'Registrado Correctamente',
                                     ) ;
-                                listarcobranza();
+                                me.listarcobranza();
 
                             }
                         }).catch(function (error) {

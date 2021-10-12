@@ -147,6 +147,7 @@ setvue(0, 'perfiles', './components/cartera/modal_perfiles.vue');
 
 setvue(0, 'calificacion_lista', './components/cartera/modal_calificacion_lista.vue');
 setvue(0, 'cobranza_ascii', './components/cartera/modal_cobranza.vue');
+setvue(0, 'cobranza_manual', './components/cartera/modal_cobranza_manual.vue');
 setvue(1, 'liq_saldosmenores', './components/cartera/Liq_saldosmenores.vue');
 setvue(1, 'liq_saldosacreedor', './components/cartera/Liq_saldosacreedores.vue');
 setvue(1, 'liq_acreedores', './components/cartera/Liq_acreedores.vue');

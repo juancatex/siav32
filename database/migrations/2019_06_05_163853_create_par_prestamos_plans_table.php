@@ -37,6 +37,7 @@ class CreateParPrestamosPlansTable extends Migration
 
             $table->string('idtransaccionC')->nullable();
             $table->string('numDocC')->nullable()->comment('En caso de ser una cobranza por ascii, tenga un codigo de grupo generado por el mes-año');
+            $table->date('fecha_doc')->nullable()->comment('fecha de documento');
             $table->string('glosa')->nullable();// detalle de la cobranza.. 
             $table->dateTime('fechaCobranza')->nullable();
             $table->float('importe')->default(0); 
