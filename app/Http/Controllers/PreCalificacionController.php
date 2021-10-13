@@ -491,15 +491,15 @@ if(!empty($request->buscar)){
                 foreach($prestamossocio as $valor){
                     
                     $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
-                    // if($metodoout['conta']==1){ 
-                    //     throw new ModelNotFoundException("El prestamo no esta validado por contabilidad.");  
-                    // }elseif($metodoout['conta']==2){
-                    //     throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable al momento de realizar la cobranza de prestamo, comuniquese con el administrador del sistema."); 
-                    // }elseif($metodoout['conta']==3){
-                    //     throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza manual."); 
-                    // } 
+                    if($metodoout['conta']==1){ 
+                        throw new ModelNotFoundException("El prestamo no esta validado por contabilidad.");  
+                    }elseif($metodoout['conta']==2){
+                        throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable al momento de realizar la cobranza de prestamo, comuniquese con el administrador del sistema."); 
+                    }elseif($metodoout['conta']==3){
+                        throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza manual."); 
+                    } 
 
-                    // echo $metodoout['data']['cuotafinal'].'/////';
+                    echo $metodoout['data']['cuotafinal'].'/////';
                 }  
                  
                 
@@ -511,7 +511,7 @@ if(!empty($request->buscar)){
                                             // $moneda->tipocambio
         }
          
-     return ['capital'=>$metodoout];
+     return ['capital'=>$afinanciar];
     }
 
     public function reporte1(Request $request)
