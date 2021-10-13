@@ -1743,8 +1743,8 @@ export default {
                         
  
         }) .catch(function(response) {
-          console.log(response);
-          console.log(response.response);
+          console.log(response); 
+          me.errors.add({ id: "8301791", field: "anios",  msg: response.response.data.message });
         });
     },
 
