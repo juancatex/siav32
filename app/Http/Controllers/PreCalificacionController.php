@@ -12,6 +12,7 @@ use App\Par_Producto;
 use App\Con_Cuentasocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PreCalificacionController extends Controller
 {
