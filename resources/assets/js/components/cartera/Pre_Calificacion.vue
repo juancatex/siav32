@@ -1744,6 +1744,8 @@ export default {
  
         }) .catch(function(response) {
           console.log(response); 
+          me.montomaximo=0;
+           me.total_saldo_capital=0;
           me.errors.add({ id: "8301791", field: "anios",  msg: response.response.data.message });
         });
     },
