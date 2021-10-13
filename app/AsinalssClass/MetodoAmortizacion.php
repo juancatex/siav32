@@ -788,7 +788,7 @@ Class MetodoAmortizacion
     public function cobranza_refinanciamiento($idprestamo,$cuotatransito,$numdoc,$idmodulo,$idprestamoin){
         $prestamo=Par_Prestamos::select(DB::raw('DAY(par__prestamos.fechardesembolso) as diadesembolso'),DB::raw('MONTH(par__prestamos.fechardesembolso) as mesdesembolso'),
         'par__prestamos.idprestamo','par__prestamos.apro_conta','par__monedas.tipocambio','par__productos.tasa',
-        'par__productos.cobranza_perfil','par__productos.idproducto','par__prestamos.plazo','par__prestamos.seguro','socios.numpapeleta')
+        'par__productos.cobranza_perfil_refi','par__productos.idproducto','par__prestamos.plazo','par__prestamos.seguro','socios.numpapeleta')
         ->join('socios','par__prestamos.idsocio','=','socios.idsocio') 
         ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
         ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
@@ -800,7 +800,7 @@ Class MetodoAmortizacion
         $suma_cuota=0; 
         // $fecha=(DB::select("select fechaSistema as fecha  from par__fecha__sistemas where activo=1"))[0]->fecha; 
         $fecha=DB::table('par__fecha__sistemas')->select('fechaSistema')->where('activo',1)->first()->fechaSistema;
-        if($prestamo->cobranza_perfil!=0){ 
+        if($prestamo->cobranza_perfil_refi!=0){ 
             if($prestamo->apro_conta==1){
                                 
                                 /////////////////////////////////////////////TEM////////////////////////////////////////////////////////////////////////////////
@@ -857,7 +857,7 @@ Class MetodoAmortizacion
                                     }
                                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
                                 ////////////////////////////////////----- obtiene el perfil de cobranza segun el producto del presamo------///////////////////////////////////////////////////
-                                $perfilcobranza =$this->getperfil($prestamo->idproducto,$prestamo->cobranza_perfil); 
+                                $perfilcobranza =$this->getperfil($prestamo->idproducto,$prestamo->cobranza_perfil_refi); 
                                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 
                                  if($prestamo->seguro==1){
@@ -953,7 +953,7 @@ Class MetodoAmortizacion
                    
                    $outdata = array('cuotafinal'=>$cuotafinal,'cuota'=>$cuotaf,'idprestamo'=> $prestamo->idprestamo,
                     'asiento'=> array(
-                        'cobranza_perfil'=>$prestamo->cobranza_perfil,
+                        'cobranza_perfil_refi'=>$prestamo->cobranza_perfil_refi,
                         'numdoc'=>$numdoc,
                         'arraydetalle'=>$arrayDetalle,
                         'idmodulo'=>$idmodulo,
