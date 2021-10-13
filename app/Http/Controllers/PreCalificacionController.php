@@ -12,6 +12,7 @@ use App\Par_Producto;
 use App\Con_Cuentasocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PreCalificacionController extends Controller
 {
@@ -451,14 +452,62 @@ if(!empty($request->buscar)){
         return ['garantes' => $socios,'productos'=>$productos];
     }
 
-    
+    function redondeo_valor($valor){
+        return round($valor,2);
+    }
     public function getsaldocapital_desembolso(Request $request)
     { 
-       if (!$request->ajax()) return redirect('/'); 
+    //    if (!$request->ajax()) return redirect('/'); 
       
-         $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+        //  $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
+
+         $afinanciar=0;
          
-     return ['capital'=>($total[0]->total + 0)];
+         $validate1=DB::table('par__prestamos')->where('idsocio',$request->idsocio)->where('idestado',1)->count();
+         $validate2=DB::table('par__prestamos')->where('idsocio',$request->idsocio)
+         ->where(function($query) {
+            $query->where('apro_conta',0)
+                ->orwhere('apro_conta',5);
+            })->whereBetween('idestado',[2,3])->count();
+        if($validate1>0){
+            $afinanciar=-35;
+        }elseif($validate2>0){
+            $afinanciar=-25;
+        }elseif($request->cancelar==1){ 
+         $prestamossocio=DB::table('par__prestamos')
+         ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
+         ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+         ->select('par__prestamos.idprestamo')
+         ->where('par__productos.cobranza_perfil_refi','!=','0') 
+         ->where('par__prestamos.idsocio',$request->idsocio)
+         ->whereBetween('par__prestamos.idestado',[2,3])->get();
+              $metodo=new MetodoAmortizacion();
+
+            $cortesistema=DB::select('select checkcut() as corte')[0]->corte; 
+            $cobrar_cuota_transito=1;
+            $idmodulo=3;//prestamos =3
+         
+                foreach($prestamossocio as $valor){
+                    
+                    $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
+                    if($metodoout['conta']==1){ 
+                        throw new ModelNotFoundException("El socio tiene prestamos pendientes de aprovación por contabilidad.");  
+                    }elseif($metodoout['conta']==2){
+                        throw new ModelNotFoundException("Existe una variación con el saldo capital y el monto solicitado, contactese con el administrador del Sistema parta verificación de datos."); 
+                    }elseif($metodoout['conta']==3){
+                        throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza por refinanciamiento."); 
+                    } 
+
+                    $afinanciar+=$metodoout['data']['cuotafinal'];
+                }   
+                        $moneda=DB::table('par__productos')->select('par__monedas.tipocambio')
+                        ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+                        ->where('par__productos.idproducto',$request->idpro)->first(); 
+                        
+            $afinanciar=$this->redondeo_valor($afinanciar/$moneda->tipocambio);
+        }
+         
+     return ['capital'=>$afinanciar];
     }
 
     public function reporte1(Request $request)
