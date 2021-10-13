@@ -579,7 +579,7 @@
                 var url='/fil_filial/selectFiliales';
                 axios.get(url).then(function(response){
                     me.arrayFilial=response.data.filiales;
-                    console.log(me.arrayFilial);
+                    //console.log(me.arrayFilial);
                     
                 });
             },
@@ -803,7 +803,7 @@
                     }
                     case 'editar':
                     {
-                        console.log(data);
+                        //console.log(data);
                         if(data['validadoconta']!=0 && data['idasientomaestro']!=0)
                             me.desactivarimporte=true;
                         else
