@@ -473,10 +473,7 @@ if(!empty($request->buscar)){
             $afinanciar=-35;
         }elseif($validate2>0){
             $afinanciar=-25;
-        }elseif($request->cancelar==1){
-            // select pre.idprestamo  from par__prestamos pre,par__productos pro,par__monedas mo 
-			// 						where pre.idproducto=pro.idproducto and pro.moneda=mo.idmoneda and pro.cobranza_perfil_refi!=0
-            //                         and pre.idsocio=idsocio and pre.idestado between 2 and 3;
+        }elseif($request->cancelar==1){ 
          $prestamossocio=DB::table('par__prestamos')
          ->join('par__productos','par__prestamos.idproducto','=','par__productos.idproducto') 
          ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
