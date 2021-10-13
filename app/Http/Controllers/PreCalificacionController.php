@@ -491,11 +491,11 @@ if(!empty($request->buscar)){
                     
                     $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
                     if($metodoout['conta']==1){ 
-                        throw new ModelNotFoundException("El prestamo no esta validado por contabilidad.");  
+                        throw new ModelNotFoundException("El socio tiene prestamos pendientes de aprovación por contabilidad.");  
                     }elseif($metodoout['conta']==2){
-                        throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable al momento de realizar la cobranza de prestamo, comuniquese con el administrador del sistema."); 
+                        throw new ModelNotFoundException("Existe una variación con el saldo capital y el monto solicitado, contactese con el administrador del Sistema parta verificación de datos."); 
                     }elseif($metodoout['conta']==3){
-                        throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza manual."); 
+                        throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza por refinanciamiento."); 
                     } 
 
                     $afinanciar+=$metodoout['data']['cuotafinal'];
