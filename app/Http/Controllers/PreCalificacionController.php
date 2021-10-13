@@ -490,7 +490,7 @@ if(!empty($request->buscar)){
          
                 foreach($prestamossocio as $valor){
                     
-                    // $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
+                    $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
                     // if($metodoout['conta']==1){ 
                     //     throw new ModelNotFoundException("El prestamo no esta validado por contabilidad.");  
                     // }elseif($metodoout['conta']==2){
@@ -511,7 +511,7 @@ if(!empty($request->buscar)){
                                             // $moneda->tipocambio
         }
          
-     return ['capital'=>$afinanciar];
+     return ['capital'=>$metodoout];
     }
 
     public function reporte1(Request $request)
