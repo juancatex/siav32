@@ -452,7 +452,9 @@ if(!empty($request->buscar)){
         return ['garantes' => $socios,'productos'=>$productos];
     }
 
-    
+    function redondeo_valor($valor){
+        return round($valor,2);
+    }
     public function getsaldocapital_desembolso(Request $request)
     { 
     //    if (!$request->ajax()) return redirect('/'); 
@@ -499,16 +501,13 @@ if(!empty($request->buscar)){
                         throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza manual."); 
                     } 
 
-                    echo $metodoout['data']['cuotafinal'].'/////';
-                }  
-                 
-                
-
-                                            // $moneda=DB::table('par__productos')->select('par__monedas.tipocambio')
-                                            // ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
-                                            // ->where('par__productos.idproducto',$request->idpro)->first();
-
-                                            // $moneda->tipocambio
+                    $afinanciar+=$metodoout['data']['cuotafinal'];
+                }   
+                        $moneda=DB::table('par__productos')->select('par__monedas.tipocambio')
+                        ->join('par__monedas','par__productos.moneda','=','par__monedas.idmoneda') 
+                        ->where('par__productos.idproducto',$request->idpro)->first(); 
+                        
+            $afinanciar=$this->redondeo_valor($afinanciar/$moneda->tipocambio);
         }
          
      return ['capital'=>$afinanciar];
