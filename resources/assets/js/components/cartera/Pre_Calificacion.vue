@@ -2157,6 +2157,7 @@ export default {
             $('#modalRegistroPrestamos').addClass('modal-lg');
             this.getprestamossocio(this.socio_id);
               this.pasoPrestamo--;
+              this.cancelarprestamos=0;
             }
           });
           break;
