@@ -483,12 +483,24 @@ if(!empty($request->buscar)){
          ->whereBetween('par__prestamos.idestado',[2,3])->get();
               $metodo=new MetodoAmortizacion();
 
-              echo 'corte='.DB::select('select checkcut() as corte')[0]->corte; 
-              echo 'corte='.DB::table('par__fecha__sistemas')->select('fechaSistema')->where('activo',1)->first()->fechaSistema;
+            $cortesistema=DB::select('select checkcut() as corte')[0]->corte; 
+            $cobrar_cuota_transito=1;
+            $idmodulo=3;//prestamos =3
+         
                 foreach($prestamossocio as $valor){
-                    echo $valor->idprestamo;
+                    
+                    $metodoout= $metodo->cobranza_refinanciamiento($valor->idprestamo,$cobrar_cuota_transito,'Refinanciamiento - automatico',$idmodulo,$valor->idprestamo);
+                    if($metodoout['conta']==1){ 
+                        throw new ModelNotFoundException("El prestamo no esta validado por contabilidad.");  
+                    }elseif($metodoout['conta']==2){
+                        throw new ModelNotFoundException("Existe una variacion de valores en el asiento contable al momento de realizar la cobranza de prestamo, comuniquese con el administrador del sistema."); 
+                    }elseif($metodoout['conta']==3){
+                        throw new ModelNotFoundException("El perfil del producto seleccionado no contiene la configuracion de cobranza manual."); 
+                    } 
+
+                    echo $metodoout['data']['cuotafinal'].'/////';
                 }  
-                echo 'corte='.DB::select('select checkcut() as corte')->first()->corte;       
+                 
                 
 
                                             // $moneda=DB::table('par__productos')->select('par__monedas.tipocambio')
