@@ -324,7 +324,7 @@ $product_perfil=Par_Prestamos::select( 'par__productos.idproducto','par__product
     public function getprestamorefinan(Request $request)
     { 
         // if (!$request->ajax()) return redirect('/'); 
-        return Par_Prestamos::select('no_prestamo')->where('idprestamo','=',$request->idpre);
+        return Par_Prestamos::select('no_prestamo')->where('idprestamo','=',$request->idpre)->first()->no_prestamo;
     }
     
     public function prestamosDesembolso(Request $request)
