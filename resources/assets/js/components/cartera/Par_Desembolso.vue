@@ -376,10 +376,9 @@
             }
         },
         methods : { 
-        async getprestamoidref(idpre){
-            var url='/prestamos/getprestamorefinan?idpre='+idpre;
-            let response=await axios.get(url);
-            
+        async getprestamoidref(idpre){ 
+            let response=await axios.get('/prestamos/getprestamorefinan?idpre='+idpre);
+            console.log(response);
            return '';
         },
             altaGarantes(data){
