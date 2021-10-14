@@ -809,6 +809,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/prestamos/getprestamosperiodo','ParPrestamosController@getprestamosperiodo');
         Route::get('/prestamos/getprestamostotal','ParPrestamosController@getprestamostotal');
         Route::get('/prestamos/desembolso','ParPrestamosController@prestamosDesembolso');
+        Route::get('/prestamos/getprestamorefinan','ParPrestamosController@getprestamorefinan');
         Route::get('/prestamos/prestamoscambiogarante','ParPrestamosController@prestamoscambiogarante');
         Route::get('/prestamos/prestamoscobranzamanual','ParPrestamosController@prestamoscobranzamanual');
         Route::get('/prestamos/prestamosMoras','ParPrestamosController@prestamosMoras');

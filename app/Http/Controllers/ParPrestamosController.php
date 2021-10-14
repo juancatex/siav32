@@ -321,6 +321,11 @@ $product_perfil=Par_Prestamos::select( 'par__productos.idproducto','par__product
         return ['cuotas'=>($total[0]->total + 0)];
     }
 
+    public function getprestamorefinan(Request $request)
+    { 
+        // if (!$request->ajax()) return redirect('/'); 
+        return Par_Prestamos::select('no_prestamo')->where('idprestamo','=',$request->idpre);
+    }
     
     public function prestamosDesembolso(Request $request)
     {  
@@ -347,13 +352,12 @@ $product_perfil=Par_Prestamos::select( 'par__productos.idproducto','par__product
             'par__prestamos.idasiento','socios.numpapeleta','par__prestamos.lote','par__prestamos.fechardesembolso','par__prestamos.apro_conta',
             'par__prestamos.idtransaccionD','par__prestamos.idestado','par__prestamos__estados.nombreestado','par__prestamos.no_prestamo',
             'par__monedas.tipocambio','par__productos.idproducto','socios.idsocio','par__productos.tasa','par__prestamos.detalle_desembolso',
-            'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
+            'par__monedas.nommoneda','par__prestamos.idprestamo','par__prestamos.idref',$tipo,'par__productos.nomproducto',
             'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
             ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
              ,'par__prestamos.seguro'
             ,'par__productos.cancelarprestamos'
             ,'par__productos.activar_garante'
-            
             ,'par__productos.desembolso_perfil' 
             ,'par__productos.desembolso_perfil_refi'
             ,'par__productos.desembolso_perfil_garante'
@@ -384,7 +388,7 @@ $product_perfil=Par_Prestamos::select( 'par__productos.idproducto','par__product
             'par__prestamos.idasiento','socios.numpapeleta','par__prestamos.lote','par__prestamos.fechardesembolso','par__prestamos.apro_conta',
             'par__prestamos.idtransaccionD','par__prestamos.idestado','par__prestamos__estados.nombreestado','par__prestamos.no_prestamo',
             'par__monedas.tipocambio','par__productos.idproducto','socios.idsocio','par__productos.tasa','par__prestamos.detalle_desembolso',
-            'par__monedas.nommoneda','par__prestamos.idprestamo',$tipo,'par__productos.nomproducto',
+            'par__monedas.nommoneda','par__prestamos.idprestamo','par__prestamos.idref',$tipo,'par__productos.nomproducto',
             'par_grados.nomgrado','socios.nombre','socios.apaterno','socios.amaterno', 'par__prestamos.monto','par__prestamos.plazo'
             ,'par__prestamos.fecharegistro','par__prestamos.idoperario','par__prestamos.idusuario','par__productos.garantes'
             ,'par__prestamos.seguro'
