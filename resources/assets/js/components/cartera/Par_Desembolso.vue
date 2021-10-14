@@ -377,9 +377,8 @@
         },
         methods : { 
         async getprestamoidref(idpre){ 
-            let response=await axios.get('/prestamos/getprestamorefinan?idpre='+idpre);
-            console.log(response);
-           return '';
+            let response=await axios.get('/prestamos/getprestamorefinan?idpre='+idpre); 
+           return response.data;
         },
             altaGarantes(data){
 
