@@ -212,7 +212,7 @@
                                                 Borrar
                                         </button>
                                     </div>
-                                    <table border="1" style="border-left-width: 100px; font-size: small;">
+                                    <table border="1" style="border-left-width: 100px; font-size: small;" class="col-md-11" >
                                         <tr v-for="(subcuenta,ind) in rowcuentas.idsubcuenta" :key="ind">
                                             <td>{{ subcuenta.subcuenta }}</td>
                                             <td>{{ subcuenta.nombre }}</td>
@@ -238,6 +238,12 @@
                                             Nuevo
                                         </button>
                                     </div>
+                                    <div  class="col-md-11">
+                                        <span class="text-error2" style="text-align:right" v-if="debe!=haber">Los Montos No Coinciden</span>
+                                    </div>
+                                     
+
+                                    
                                 </div>
                             </div>
 
@@ -2199,6 +2205,11 @@ export default {
     }
 </script> 
 <style scoped>
+.text-error2{
+    text-align: right;
+    font-size: 18px;
+    color: red;
+}
 .ancho12{
     width: 12%;
 }.ancho10{
