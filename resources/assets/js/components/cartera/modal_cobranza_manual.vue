@@ -65,7 +65,7 @@
                                         </div> 
                                 </div>
                                 <div class="form-group row ">
-                                        <label style="text-align: right; align-items: center;font-weight: bold;font-size: x-large;" class="col-md-3 form-control-label"
+                                        <label style="text-align: right; align-items: center;font-weight: bold; " class="col-md-3 form-control-label"
                                             for="text-input">Numero de Documento : </label>
                                         <div class="col-md-3">
                                             <div class="input-group">
@@ -76,7 +76,7 @@
                                             </div> <span class="text-error">{{ errors.first('numero de documento')}}</span>
                                         </div>
 
-                                        <label style="text-align: right; align-items: center;font-weight: bold;font-size: x-large;" class="col-md-3 form-control-label"
+                                        <label style="text-align: right; align-items: center;font-weight: bold; " class="col-md-3 form-control-label"
                                             for="text-input">Fecha del documento : </label>
                                         <div class="col-md-3">
                                             <div class="input-group">
