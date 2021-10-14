@@ -98,7 +98,7 @@
                                             class="badge badge-success">{{prestamos.nombreestado}}</span>
                                             
                                             <div v-if="prestamos.idprestamo!=prestamos.idref" class="" style=" width: 100%; "><span
-                                            style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span>{{getprestamoidref(prestamos.idref)}}</span></div>
+                                            style="display: block;font-weight: bold;font-size: 12px;">Prestamo:</span><span>{{getprestamoidref(prestamos)+""+prestamos.prestamoidref}}</span></div>
 
                                         <span v-else-if="prestamos.idestado==6"
                                             class="badge badge-danger">{{prestamos.nombreestado}}</span>
@@ -376,8 +376,8 @@
         },
         methods : { 
         async getprestamoidref(idpre){ 
-            let response=await axios.get('/prestamos/getprestamorefinan?idpre='+idpre); 
-           return response.data;
+            let response=await axios.get('/prestamos/getprestamorefinan?idpre='+idpre.idref); 
+          idpre.prestamoidref=response;
         },
             altaGarantes(data){
 
