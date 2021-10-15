@@ -457,7 +457,7 @@ if(!empty($request->buscar)){
     }
     public function getsaldocapital_desembolso(Request $request)
     { 
-    //    if (!$request->ajax()) return redirect('/'); 
+       if (!$request->ajax()) return redirect('/'); 
       
         //  $total=DB::select("select  ROUND(getcapitaltotal(?,?,?),2) as total", array($request->idsocio,$request->idpro,$request->cancelar));
 
