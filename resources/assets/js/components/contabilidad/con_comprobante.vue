@@ -238,7 +238,7 @@
                                             Nuevo
                                         </button>
                                     </div>
-                                    <div  class="col-md-11">
+                                    <div  class="col-md-10">
                                         <span class="text-error2" style="text-align:right" v-if="debe!=haber">Los Montos No Coinciden</span>
                                     </div>
                                      

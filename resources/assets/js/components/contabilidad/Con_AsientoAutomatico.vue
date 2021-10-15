@@ -713,9 +713,12 @@ Vue.component("v-select", vSelect);
             },
             ObservarAsiento(idasientomaestro)
             {
-                
-                //me.cerrarModal('agrupar');
                 let me=this;
+                let idasientom=me.asientomaestro_id
+                //me.cerrarModal('agrupar');
+                this.cerrarModal('individual');
+                //this.modal = 0;
+                
                 swal({
                 title: 'Esta seguro de Observar Este Comprobante?',
                 html:   '<div class="form-group row "> <label style="text-align: right; align-items: center;" class="col-md-3 form-control-label" for="text-input">Obs.: </label>' +
@@ -750,7 +753,7 @@ Vue.component("v-select", vSelect);
                 if (result.value) {
                     let me = this;
                     axios.put('/con_asientomaestro/observar',{
-                        'idasientomaestro': me.asientomaestro_id,
+                        'idasientomaestro': idasientom,
                         'observado':me.observado
                     }).then(function (response) {
                         me.listarAsientomaestro(1,me.idmodulo,me.idperfil)
@@ -759,7 +762,7 @@ Vue.component("v-select", vSelect);
                         'El registro ha sido Observado correctamente.',
                         'success'
                         )
-                        me.cerrarModal('individual');
+                        //me.cerrarModal('individual');
                     }).catch(function (error) {
                         console.log(error);
                     });
