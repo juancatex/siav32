@@ -245,12 +245,18 @@ export default {
             if(me.relacion.abreviacion=='CC')
             {
                 if(me.descripcion && me.idcuenta.length>0 && me.ccdiasor && me.ccdiasoc)
-                    return true
+                    return true;
                 else    
-                    return false    
+                    return false;    
             }
             else
             {
+                if(me.relacion.tipoconfiguracion==1)
+                    if(me.descripcion && me.idcuenta.length>0 && me.porcentaje!=0)
+                        return true;
+                    else
+                        return false;
+                    
                 if(me.descripcion && me.idcuenta.length>0)
                     return true
                 else    
@@ -338,6 +344,7 @@ export default {
                 //alert('no enviado');
                 return;
                 ////alert(result);
+
                 
                 
             });
