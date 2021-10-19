@@ -19,14 +19,14 @@
                         <div class="input-group">
                         <strong class="col-md-4 form-control-label" style="margin-bottom: 0px;margin-top: 8px;" >Tipo de Relacion:</strong>
                         <select v-model="relacion"  class="form-control" @change="listarRelaciones(1)">
-                                <option value="0" selected disabled>Seleccionar...</option>
-                                <option v-for="relacionArray in arrayRelacion" v-bind:key="relacionArray.abreviacion" :value="relacionArray.abreviacion" v-text="relacionArray.descripcion"></option>
+                                <!-- <option value="0" selected disabled>Seleccionar...</option> -->
+                                <option v-for="relacionArray in arrayRelacion" v-bind:key="relacionArray.abreviacion" :value="relacionArray" v-text="relacionArray.descripcion"></option>
                             </select>   
                         </div>
                     </div>
                 </div>
                 <hr>
-                <div v-if="relacion=='CC'" class="">
+                <div v-if="relacion.abreviacion=='CC'" class="">
                     <h5>Limite de Descargo en Dias</h5>
                     <div class="col-md-12 form-group row " >
                         <label for="" class="col-3">Limite en dias Oficina Regional:</label>
@@ -40,28 +40,33 @@
                         <button type="button" v-if="ccdiasoc!='' && ccdiasoc!='' && arrayResRelaciones.length>0" @click="actualizardias()" class="btn btn-success btn-sm col-2" style="margin-left: 20px;">Actualizar Nº de Dias</button>
                     </div>
                 </div>
+                <div v-else-if="relacion.tipoconfiguracion==1">
+                     <div class="col-md-12 form-group row " >
+                        <label for="" class="col-6">Porcentaje para: {{ relacion.descripcion }}:</label>
+                        <input type="number" v-model="porcentaje" style="text-align:right; padding" class="form-control col-1" :disabled="porcentaje1!=0" >
+                        <span class="text-error" v-if="porcentaje==0">* Debe Introducir el Porcentaje</span>
+                    </div>
+
+                </div>
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            
                             <th>Descripcion</th>
-                            
                             <th>Cuenta Relacionada</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="relaciones in arrayResRelaciones" :key="relaciones.idconconfig">
-                            
                             <td v-text="relaciones.descripcion"></td>
                             <td v-text="relaciones.codcuenta + ' - ' +relaciones.nomcuenta"></td>
                             <td>
-                                <button type="button" @click="desactivarRelacion(relaciones.idconconfig)" class="btn btn-danger btn-sm">
+                                <button type="button" @click="desactivarRelacion(relaciones.idconconfig)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar Relacion">
                                     <i class="icon-trash"></i>
                                 </button> &nbsp;
                             </td>
                         </tr>   
-                    <template v-if="relacion=='LB' || (arrayResRelaciones.length==0 && relacion!=0)">
+                    <template v-if="relacion.abreviacion=='LB' || (arrayResRelaciones.length==0 && relacion.abreviacion!=0)">
                         <tr>
                             <td><input type="text" class="form-control" autofocus v-model="descripcion"> </td>
                             <td><Ajaxselect  v-if="clearSelected"
@@ -174,17 +179,20 @@
 export default {
     data (){
         return {
-            relacion:0,
-            arrayRelacion:[{abreviacion:"LV",descripcion:"Libro de Ventas"},
-                          {abreviacion:"LC",descripcion:"Libro de Compras"},
-                          {abreviacion:"CC",descripcion:"Cargo de Cuenta"},
-                          {abreviacion:"LB",descripcion:"Libreta Bancaria"},
-                          {abreviacion:"EJD",descripcion:"Aportes Ejercito Debe"},
-                          {abreviacion:"AED",descripcion:"Aportes Aerea Debe"},
-                          {abreviacion:"ARD",descripcion:"Aportes Armada Debe"},
-                          {abreviacion:"EJH",descripcion:"Aportes Ejercito haber"},
-                          {abreviacion:"AEH",descripcion:"Aportes Aerea haber"},
-                          {abreviacion:"ARH",descripcion:"Aportes Armada haber"}
+            relacion:[],
+            arrayRelacion:[
+                            {abreviacion:"LV",descripcion:"Libro de Ventas Debito Fiscal",tipoconfiguracion:'1'},
+                            {abreviacion:"IT",descripcion:"Impuesto a las trancciones",tipoconfiguracion:'1'},
+                            {abreviacion:"ITXP",descripcion:"Impuesto a las Transacciones por pagar",tipoconfiguracion:'1'},
+                            {abreviacion:"LC",descripcion:"Libro de Compras Credito Fiscal",tipoconfiguracion:'2'},
+                            {abreviacion:"CC",descripcion:"Cargo de Cuenta",tipoconfiguracion:'4'},
+                            {abreviacion:"LB",descripcion:"Libreta Bancaria",tipoconfiguracion:'3'},
+                            {abreviacion:"EJD",descripcion:"Aportes Ejercito Debe",tipoconfiguracion:'5'},
+                            {abreviacion:"AED",descripcion:"Aportes Aerea Debe",tipoconfiguracion:'5'},
+                            {abreviacion:"ARD",descripcion:"Aportes Armada Debe",tipoconfiguracion:'5'},
+                            {abreviacion:"EJH",descripcion:"Aportes Ejercito haber",tipoconfiguracion:'5'},
+                            {abreviacion:"AEH",descripcion:"Aportes Aerea haber",tipoconfiguracion:'5'},
+                            {abreviacion:"ARH",descripcion:"Aportes Armada haber",tipoconfiguracion:'5'}
                           ],
             
             arrayResRelaciones:[],
@@ -213,7 +221,9 @@ export default {
             criterio : 'nomdepartamento',
             buscar : '',
             ccdiasor:'',
-            ccdiasoc:''
+            ccdiasoc:'',
+            porcentaje:0,
+            porcentaje1:0
         }
     },
 
@@ -223,9 +233,16 @@ export default {
     },
 
     computed:{
+       /*  siporcentaje(){
+            let me = this;
+            if(me.arrayResRelaciones[0].valor2==0)
+                return false;
+            else
+                return true;
+        }, */
         iscompleteLB: function(){
             let me=this;
-            if(me.relacion=='CC')
+            if(me.relacion.abreviacion=='CC')
             {
                 if(me.descripcion && me.idcuenta.length>0 && me.ccdiasor && me.ccdiasoc)
                     return true
@@ -331,11 +348,12 @@ export default {
 
         listarRelaciones(page){
             let me=this;
-            let dias=false
-            if(me.relacion=='CC')
+            let dias=false;
+            //let porcentaje=false;
+            //console.log(me.relacion.abreviacion);
+            if(me.relacion.abreviacion=='CC')
                 dias=true;
-
-            var url= '/con_config?page=' + page+'&criterio='+me.relacion+'&dias='+dias;
+            var url= '/con_config?page=' + page+'&criterio='+me.relacion.abreviacion+'&dias='+dias;
             //console.log(url);
             
             axios.get(url).then(function (response) {
@@ -344,10 +362,22 @@ export default {
                 me.pagination= respuesta.pagination;
                 me.ccdiasoc=respuesta.diasoc;
                 me.ccdiasor=respuesta.diasor;
+                me.porcentaje1=0;
+                me.porcentaje=0;
+                
+                //console.log(me.arrayResRelaciones[0].tipoconfiguracion);
+                if(me.arrayResRelaciones[0].tipoconfiguracion==1)
+                {   
+                    me.porcentaje1=me.arrayResRelaciones[0].valor2;
+                    me.porcentaje=me.porcentaje1;
+
+                }
+
             })
             .catch(function (response) {
                 console.log(response);
             });
+            
         },
         cambiarPagina(page,buscar,criterio){
             let me = this;
@@ -358,19 +388,22 @@ export default {
         },
         registrarRelacion(){
             let me = this;
-            if(me.relacion='CC')
+            console.log(me.relacion.abreviacion);
+            if(me.relacion.abreviacion=='CC')
             {
                axios.post('/con_config/registrar',{
                    'codigo':'ccdiasor',
                    'descripcion':'Cantidad de Dias oficina regional',
-                   'valor':me.ccdiasor
+                   'valor':me.ccdiasor,
+                   'tipoconfiguracion':me.relacion.tipoconfiguracion
                }).then(function (response){}).catch(function(error){
                    console.log(error);
                });
                axios.post('/con_config/registrar',{
                    'codigo':'ccdiasoc',
                    'descripcion':'Cantidad de Dias oficina Central',
-                   'valor':me.ccdiasoc
+                   'valor':me.ccdiasoc,
+                   'tipoconfiguracion':me.relacion.tipoconfiguracion
                }).then(function (response){}).catch(function(error){
                    console.log(error);
                });
@@ -379,9 +412,13 @@ export default {
             }
 
             axios.post('/con_config/registrar',{
-                'codigo': me.relacion,
+                'codigo': me.relacion.abreviacion,
                 'descripcion': this.descripcion,
                 'valor': this.idcuenta[0],
+                'descripcion2':'porcentaje',
+                'valor2':this.porcentaje,
+                'tipoconfiguracion':me.relacion.tipoconfiguracion
+                //'tipoconfiguracion':
             }).then(function (response) {
                 swal(
                     'Registrado Correctamente',
@@ -389,6 +426,7 @@ export default {
                 me.clearSelected=0;
                 setTimeout(me.tiempo, 50); 
                 me.descripcion='';
+                me.porcentaje=0;
                 me.listarRelaciones(1);
 
                
@@ -442,7 +480,7 @@ export default {
             }).then((result) => {
             if (result.value) {
                 let me = this;
-                if(me.relacion=='CC')
+                if(me.relacion.abreviacion=='CC')
                 {
                     dias=true;
                 }

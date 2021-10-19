@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ConConfiguracionsSeeder extends Seeder
 {
@@ -12,8 +13,8 @@ class ConConfiguracionsSeeder extends Seeder
     public function run()
     {
         //
-        DB::table('con__configuracions')->insert(['codigo'=>'LV','descripcion'=>'Relacion Libro de Ventas - id Cuenta Debito Fiscal','valor'=>'108','tipoconfiguracion'=>1]);
-        DB::table('con__configuracions')->insert(['codigo'=>'LC','descripcion'=>'Relacion Libro de Compras - id Cuenta Credito Fiscal','valor'=>'23','tipoconfiguracion'=>2]);
+        DB::table('con__configuracions')->insert(['codigo'=>'LV','descripcion'=>'Relacion Libro de Ventas - id Cuenta Debito Fiscal','valor'=>'108','tipoconfiguracion'=>1,'descripcion2'=>'porcentaje','valor2'=>'13']);
+        DB::table('con__configuracions')->insert(['codigo'=>'LC','descripcion'=>'Relacion Libro de Compras - id Cuenta Credito Fiscal','valor'=>'23','tipoconfiguracion'=>2,'descripcion2'=>'porcentaje','valor2'=>'13']);
         DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'3','tipoconfiguracion'=>3]);
         DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'4','tipoconfiguracion'=>3]);
         DB::table('con__configuracions')->insert(['codigo'=>'LB','descripcion'=>'Relacion Libreta bancaria - id  Cuenta bancos','valor'=>'5','tipoconfiguracion'=>3]);
@@ -27,6 +28,5 @@ class ConConfiguracionsSeeder extends Seeder
         DB::table('con__configuracions')->insert(['codigo'=>'SubASC','descripcion'=>'Ascinalss','valor'=>'20000000','tipoconfiguracion'=>6]);
         DB::table('con__configuracions')->insert(['codigo'=>'ccdiasor','descripcion'=>'Cantidad de dias oficina regional','valor'=>'20','tipoconfiguracion'=>4]);
         DB::table('con__configuracions')->insert(['codigo'=>'ccdiasoc','descripcion'=>'Cantidad de dias oficina central','valor'=>'5','tipoconfiguracion'=>4]);
-        
     }
 }

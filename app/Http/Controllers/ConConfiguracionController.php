@@ -29,8 +29,11 @@ class ConConfiguracionController extends Controller
                 'codigo',
                 'con__configuracions.descripcion',
                 'valor',
+                'con__configuracions.descripcion2',
+                'valor2',
                 'nomcuenta',
                 'codcuenta',
+                'tipoconfiguracion'
                 )
         ->where('codigo', $request->criterio)
         ->where('con__configuracions.activo',1)
@@ -82,7 +85,7 @@ class ConConfiguracionController extends Controller
     public function store(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        
+        //dd($request);
        /*  $validator = Validator::make($request->all(), [
             'nomdepartamento' => 'unique:par_departamentos'
         ]);
@@ -99,7 +102,9 @@ class ConConfiguracionController extends Controller
         $relaciones->codigo = $request->codigo;
         $relaciones->descripcion =$request->descripcion;
         $relaciones->valor =$request->valor;
-        $relaciones->tipoconfiguracion=4;
+        $relaciones->descripcion2 =$request->descripcion2;
+        $relaciones->valor2 =$request->valor2;
+        $relaciones->tipoconfiguracion=$request->tipoconfiguracion;
         $relaciones->save();
     }
 
