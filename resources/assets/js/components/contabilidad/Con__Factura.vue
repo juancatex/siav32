@@ -252,7 +252,15 @@
                 },
                 offset : 10,
                 criterio : 'nombreinstitucion',
-                buscar : ''
+                buscar : '',
+                arrayLibroCuentas:[],
+                resLibroventas:[],
+                lv:0,
+                porcentajelv:0,
+                it:0,
+                porcentajeit:0,
+                itx:0
+
             }
         },
        
@@ -435,6 +443,18 @@
             
             registrarFactura(){ 
                let me = this;
+
+                //var _13porciento=Number((total*0.13).toFixed(2));
+                let porcendebito=0;
+                let porcenit=0;
+                let restodebito=0;
+                porcendebito =Number((me.invoice_subtotal * me.porcentajelv).toFixed(2));
+                //console.log(porcendebito);
+                restodebito=Number((me.invoice_subtotal-porcendebito).toFixed(2));
+                //console.log(restodebito);
+                porcenit=Number((me.invoice_subtotal * me.porcentajeit).toFixed(2)); 
+
+
                 axios.post('/con_factura/registrar',{
                     'numerofactura': this.numerofactura,
                     'codigocontrol': this.codigocontrol,
@@ -442,9 +462,14 @@
                     'nit': this.nit,
                     'detalle': this. invoice_products,
                     'importetotal': this.invoice_subtotal,
-                    'importecf': this.invoice_subtotal                    
+                    'importecf': this.invoice_subtotal,
+                    'debfiscal':porcendebito,
+                    'restoimporte':restodebito,
+                    'it':porcenit,
+
                 }).then(function (response) {                    
                     
+                      
                     if (response.data.length) {                        
                         swal(
                             // response.data,
@@ -456,15 +481,50 @@
                         _pdf.imgToBase64('img/iconad.png', function (base) {
                             _pdf.openRecibo(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_products,me.importetotal,base); 
                         });
-                        
+                        me.maxfactura(); 
                         me.cerrarModal();                        
                         me.listarFactura(1,'','nombreinstitucion');
+                         
                     }
                     
                 }).catch(function (error) {
                     console.log(error);
                 });
             },
+            calcularimpuestos(){
+                let me= this;
+
+            },
+
+            selectLibroCuenta(){
+            let me=this;
+            let respuesta;
+            var url= '/con_config/cuentaslibros';
+            axios.get(url).then(function (response) {
+                var respuesta = response.data;
+                me.arrayLibroCuentas = respuesta;
+                me.resLibroventas=me.arrayLibroCuentas.libroventas;
+                //console.log(me.resLibroventas);
+                respuesta=me.resLibroventas.find(element=>element.codigo=='LV');
+                me.lv=respuesta.valor;
+                me.porcentajelv=respuesta.valor2;
+                me.porcentajelv=Number((me.porcentajelv/100).toFixed(2));
+                
+
+                respuesta=me.resLibroventas.find(element=>element.codigo=='IT');
+                me.it=respuesta.valor;
+                me.porcentajeit=respuesta.valor2;
+                me.porcentajeit=Number((me.porcentajeit/100).toFixed(2));
+                
+                respuesta=me.resLibroventas.find(element=>element.codigo=='ITXP');
+                me.itxp=respuesta.valor;
+                me.porcentajeitxp=respuesta.valor2;
+                //console.log(me.lv,me.porcentajelv,me.it,me.porcentajeit,me.itxp,me.porcentajeitxp);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
 
             actualizarFactura(){  
                 let me = this;
@@ -657,7 +717,8 @@
         mounted() {
             this.listarFactura(1,this.buscar,this.criterio);
             this.dataparametro();
-            this.maxfactura();                    
+            this.maxfactura();  
+            this.selectLibroCuenta();                  
         }
     }
 </script>

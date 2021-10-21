@@ -93,6 +93,11 @@
                                     <i class="icon-basket"></i> Libro de compras
                                 </button> 
                             </div>
+                            <div class="col-md-2"  v-if="estado_aprobado!=4">  <!-- v-if="(accion=='editar' && silibrocompra==1)"  para ocultar icono de libro de ventas-->
+                                <button type="button" @click="abrirmodalVentas()" style="float: right;" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Abrir libro de Ventas">
+                                    <i class="icon-info"></i> Libro de Ventas
+                                </button> 
+                            </div>
                         </div>
                             <div id="contenglobalButton" v-if="estado_aprobado!=4" >
                                 <div class="row">
@@ -147,7 +152,7 @@
                                     </template>
                                     
                                     <div class="border ancho24" >
-                                         <button v-if="rowcuentas.idcuenta!=lc" type="button" @click="abrirModalSubcuentas(index)" style="float: right;" class="btn btn-success btn-sm" :disabled="rowcuentas.idcuenta==''?true:false" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
+                                         <button v-if="rowcuentas.idcuenta!=lc && rowcuentas.idcuenta!=lv && rowcuentas.idcuenta!=it && rowcuentas.idcuenta!=itxp" type="button" @click="abrirModalSubcuentas(index)" style="float: right;" class="btn btn-success btn-sm" :disabled="rowcuentas.idcuenta==''?true:false" data-toggle="tooltip" data-placement="top" title="Seleccionar Socios">
                                             <i class="icon-people"></i> Subcuentas
                                         </button> 
                                         <!-- <input  inputvalued="1"
@@ -212,7 +217,7 @@
                                                 Borrar
                                         </button>
                                     </div>
-                                    <table border="1" style="border-left-width: 100px; font-size: small;" class="col-md-11" >
+                                    <table border="1" style="border-left-width: 100px; font-size: small;" class="col-md-8" >
                                         <tr v-for="(subcuenta,ind) in rowcuentas.idsubcuenta" :key="ind">
                                             <td>{{ subcuenta.subcuenta }}</td>
                                             <td>{{ subcuenta.nombre }}</td>
@@ -276,24 +281,48 @@
 
 
                         <hr style="margin-bottom: 5px;">
-                        <div v-if="acumulado13!=0 && acumulado87!=0 && confacturas" class="row table-warning rounded" style="padding-top: 5px;">
-                            <div class="col-md-3">
-                                <strong>Datos Credito fiscal:&nbsp;</strong><label># de Facturas:&nbsp;</label><strong v-text="checkusarfactura.length"></strong>
-                            </div>                            
-                            <div class="col-md-3">
-                                <label style="margin-bottom: 5px;">Acumulado 13%:&nbsp;<strong v-text="acumulado13+' Bs.'"></strong></label>    
+                        <div v-if="acumulado13!=0 && acumulado87!=0 && confacturas">
+                            <div  class="row table-warning rounded" style="padding-top: 5px;">
+                                <div class="col-md-3">
+                                    <strong>Datos Credito fiscal:&nbsp;</strong><label># de Facturas:&nbsp;</label><strong v-text="checkusarfactura.length"></strong>
+                                </div>                            
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Acumulado 13%:&nbsp;<strong v-text="acumulado13+' Bs.'"></strong></label>    
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Acumulado 87%:&nbsp;<strong v-text="acumulado87+' Bs.'"></strong></label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Suma Total:&nbsp;<strong v-text="sumafac +' Bs.'"></strong></label>
+                                </div>
+                                
                             </div>
-                            <div class="col-md-3">
-                                <label style="margin-bottom: 5px;">Acumulado 87%:&nbsp;<strong v-text="acumulado87+' Bs.'"></strong></label>
-                            </div>
-                            <div class="col-md-3">
-                                <label style="margin-bottom: 5px;">Suma Total:&nbsp;<strong v-text="sumafac+' Bs.'"></strong></label>
-                            </div>
-                            
+                           <!--  <div class="row" v-if="menorfacturas" style="text-align:right">
+                                <label class="text-error">El Monto del Comprobante no debe ser menor a la suma del Total de las Facturas</label>
+                            </div> -->
                         </div>
-                        <div class="row" v-if="menorfacturas" style="text-align:right">
-                            <label class="text-error">El Monto del Comprobante no debe ser menor a la suma del Total de las Facturas</label>
+
+                        <div v-if="sifacturasdebito">
+                            <div  class="row table-warning rounded" style="padding-top: 5px;">
+                                <div class="col-md-3">
+                                    <strong>Datos Debito fiscal:&nbsp;</strong><label># de Facturas:&nbsp;</label><strong v-text="checkusarfactura.length"></strong>
+                                </div>                            
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Acumulado {{porcentajelv}}%:&nbsp;<strong v-text="acumuladodebito+' Bs.'"></strong></label>    
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Acumulado {{resporcentajelv}}%:&nbsp;<strong v-text="acumuladorestodebito+' Bs.'"></strong></label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="margin-bottom: 5px;">Suma Total:&nbsp;<strong v-text="sumafacturasdebito+' Bs.'"></strong></label>
+                                </div>
+                                
+                            </div>
+                            <div class="row" v-if="menorfacturas" style="text-align:right">
+                                <label class="text-error">El Monto del Comprobante no debe ser menor a la suma del Total de las Facturas</label>
+                            </div>
                         </div>
+
 
                         </div>
                         <div class="card-footer">
@@ -312,7 +341,112 @@
                     
                 </div>
             </div>
-        
+         <!-- MODAL Libro de VENTAS --> 
+        <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="libroventas"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary modal-xl" role="document">
+                <div class="modal-content">
+                    
+                    <div class="modal-header" style="padding-bottom: 5px;padding-top: 5px;">
+                        <h4 class="modal-title" v-text="tituloModallibro" ></h4>
+                        <div>
+                        <div class="form-group row" style="margin-top: 10px">
+                            <!-- <strong class="form-control-label" style="margin-bottom: 0px;margin-top: 8px; padding-right: 10px;padding-left: 10px;">Filial</strong> -->
+                            <!-- <div>
+                                <select v-model="filialselected"  class="form-control" @change="selectLibrocompras()">
+                                    <option v-for="filial in arrayFilial" v-bind:key="filial.idfilial" :value="filial.idfilial" v-text="filial.nommunicipio"></option>
+                                </select>
+                            </div> -->
+                            <strong class="form-control-label" style="margin-bottom: 0px;margin-top: 8px; padding-right: 10px;padding-left: 10px;" >Mes:</strong>
+                            <div>
+                                <select v-model="messelected"  class="form-control" @change="selectLibroventas()">
+                                    <option v-for="mesarray in arraymes" v-bind:key="mesarray.value" :value="mesarray.value" v-text="mesarray.text"></option>
+                                </select>   
+                            </div>
+                            <strong class="form-control-label" style="margin-bottom: 0px;margin-top: 8px; padding-right: 10px;padding-left: 10px;">Año:</strong>
+                            <div>
+                                <select v-model="anioselected" class="form-control">
+                                    <option :value="anio" v-text="anio" selected></option>
+                                    <option :value="anio-1" v-text="anio-1"></option>
+                                </select>
+                            </div>
+                            <div>
+                                <template v-if="cierremes" >
+                                    <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Mes Cerrado" style="margin-left: 10px;">
+                                        <i class="cui-lock-locked"></i>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Mes Abierto" style="margin-left: 10px;">
+                                        <i class="cui-lock-unlocked"></i>
+                                    </button>
+                                </template>
+                            </div>
+                            <button type="button" class="close" @click="cerrarModalVentas()" aria-label="Close">
+                                    <span aria-hidden="true">x</span>    
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-body1">
+                        <div style="overflow: scroll;">
+                            <table class="table table-hover table-sm overflow-auto">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Nit</th>
+                                        <th>Razon Social</th>
+                                        <th style="width:90px">Fecha Factura</th>                     
+                                        <th>Nº Factura</th>
+                                        <th>Registrado Por</th>
+                                        <th>Importe</th>
+                                        <th>Estado</th>
+                                        <th>*</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="libroventas in arrayLibroventas" :key="libroventas.idlibrocompra"  v-bind:class="[(libroventas.idasientomaestro==idasientomaestro)&&(libroventas.validadoconta==0)  ? 'table-warning' :true , false]">
+                                        <td v-text="libroventas.nit"></td>
+                                        <td v-text="libroventas.razonsocial"></td>
+                                        <td v-text="libroventas.fecha"></td>
+                                        <td v-text="libroventas.numerofactura"></td>
+                                        <td v-text="libroventas.username"></td>
+                                        <td v-text="libroventas.importetotal+' Bs.'" style="text-align:right"></td>
+                                        <td><template v-if="libroventas.validadoconta==1">
+                                                <span class="badge badge-success">Validado</span>
+                                            </template>
+                                            <template v-if="libroventas.validadoconta==2">
+                                                <span class="badge badge-warning">Borrador</span>
+                                            </template>
+                                            <template v-if="libroventas.idasientomaestro==null && libroventas.validadoconta==0">
+                                                <span class="badge badge-danger">Sin Compr.</span>
+                                            </template>
+                                        </td>
+                                        
+                                        <td style="text-align:right">
+                                            <template v-if="!libroventas.idasientomaestro || (libroventas.validadoconta==2 && libroventas.idasientomaestro==asientomaestro.idasientomaestro)">
+                                                <input type="checkbox" class="form-check-input"  v-model="checkusarfactura" :value="libroventas.idfactura" @change="debitofiscal()"  :checked="verchecked(libroventas.idfactura)">
+                                            </template>
+                                        </td>
+                                    </tr>                                
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    </div>
+                    <div class="modal-footer justify-content-between" style="padding-bottom: 0px;padding-top: 0px;">
+                        <div>
+                            <p style="margin-bottom: 5px;">Acumulado debito {{porcentajelv}}%:&nbsp;<strong v-text="acumuladodebito+' Bs.'"></strong></p>
+                            <p style="margin-bottom: 5px;">Acumulado resto debito{{resporcentajelv}}%:&nbsp;<strong v-text="acumuladorestodebito+' Bs.'"></strong></p>
+                            <p style="margin-bottom: 5px;">Acumulado IT {{porcentajeit}}%:&nbsp;<strong v-text="acumuladoit+' Bs.'"></strong></p>
+                        </div>
+                        <div>
+                            <button type="button"  class="btn btn-secondary" v-if="!sifacturasdebito" @click="cerrarModalVentas()">Cerrar</button>
+                            <button type="button"  class="btn btn-success" v-else @click="cerrarModalVentas()">Registrar Impuestos%</button>
+                        </div>
+                    </div>
+                </div>                    
+            </div>                
+        </div> 
+        <!-- FIN MODAL LIBRO VENTAS -->
         <!-- MODAL Libro de compras --> 
         <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="librocompras"  data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-primary modal-xl" role="document">
@@ -545,6 +679,7 @@
                 </div>                    
             </div>                
         </div> 
+        <!-- FIN MODAL LIBRO COMPRAS -->
                 <!-- MODAL PROVEEDOR MODAL PROVEEDOR MODAL PROVEEDOR MODAL PROVEEDOR MODAL PROVEEDOR  -->
         <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="proveedor"  data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-primary">
@@ -984,6 +1119,29 @@ export default {
         arraySubAscinalss:[],
         /* blocksubdebe:false,
         blocksubhaber:false, */
+
+        /*libro ventas*/
+        arrayLibroventas:[],
+        acumuladoit:0,
+        resLibroventas:[],
+        it:0,
+        porcentajeit:0,
+        
+        itxp:0,
+        porcentajeitxp:0,
+        porcentajelv:0,
+        resporcentajelv:0,
+        acumuladodebito:0,
+        acumuladorestodebito:0,
+        acumuladoit:0,
+        idfacturasdebito:[],
+        sifacturasdebito:false,
+        indiceit:0,
+        indiceitxp:0,
+        sumafacturasdebito:0
+
+        
+        /**/
     }
     },
     computed:{
@@ -1293,6 +1451,7 @@ export default {
             this.selectAscinalss();// cuenta global ascinalss 2000000
             this.classModal=new _pl.Modals();
             this.classModal.addModal('librocompras');
+            this.classModal.addModal('libroventas');
             this.classModal.addModal('proveedor');
             this.classModal.addModal('conciliacionbancaria');
             this.classModal.addModal('addsubcuentas');
@@ -1614,9 +1773,10 @@ export default {
         
         },
         deleterowcuentas:function(index) {
-            if(this.rowcuentas[index].idcuenta==this.lc)
+            let me=this;
+            if(me.rowcuentas[index].idcuenta==me.lc)
             {
-                this.checkusarfactura=[];
+                me.checkusarfactura=[];
                 me.subcuentas=me.subcuentas.filter(function(el){
                     return el.tiposubcuenta!=3;
                 });
@@ -1624,9 +1784,9 @@ export default {
 
 
 
-            this.rowcuentas.splice(index, 1);
+            me.rowcuentas.splice(index, 1);
             if(index===0)
-                this.addrowcuentas(false);
+                me.addrowcuentas(false);
         },
         addrowcuentas(focusin=true) { 
             var ajax='ajaxselect'+this.rowcuentas.length;
@@ -1719,19 +1879,27 @@ export default {
         },
         selectLibroCuenta(){
             let me=this;
+            let respuesta;
             var url= '/con_config/cuentaslibros';
             axios.get(url).then(function (response) {
                 var respuesta= response.data;
                 me.arrayLibroCuentas = respuesta;
-                //console.log(me.arrayLibroCuentas[0]['codigo']);
-                me.arrayLibroCuentas.forEach(element => {
-                    if(element.codigo=='LV')                            
-                        me.lv=element.valor;
-                    else 
-                        if (element.codigo=='LC')
-                            me.lc=element.valor;
-                });
-                //console.log("lv->"+me.lv+"-"+"lc->"+me.lc);
+                me.lc=me.arrayLibroCuentas.cuentaslibros[0].valor;
+                me.resLibroventas=me.arrayLibroCuentas.libroventas;
+                //console.log(me.resLibroventas);
+                respuesta=me.resLibroventas.find(element=>element.codigo=='LV');
+                me.lv=respuesta.valor;
+                me.porcentajelv=respuesta.valor2;
+                me.resporcentajelv=100-me.porcentajelv;
+
+                respuesta=me.resLibroventas.find(element=>element.codigo=='IT');
+                me.it=respuesta.valor;
+                me.porcentajeit=respuesta.valor2;
+                
+                respuesta=me.resLibroventas.find(element=>element.codigo=='ITXP');
+                me.itxp=respuesta.valor;
+                me.porcentajeitxp=respuesta.valor2;
+                //console.log(me.lv,me.porcentajelv,me.it,me.porcentajeit,me.itxp,me.porcentajeitxp);
             })
             .catch(function (error) {
                 console.log(error);
@@ -1896,6 +2064,7 @@ export default {
                 //'librocomprasok':me.librocomprasOk,
                 //'reslote':me.reslote
                 'idfacturas':me.checkusarfactura,
+                'sidebito':me.sifacturasdebito,
                 'idmovimiento':me.idmovimiento,
                 'validarfacturas':validarfacturas,
                 'idfilial':me.filialselected,
@@ -1969,6 +2138,12 @@ export default {
             me.filialselected=1;
             me.idunidad=3;
             me.subcuentas=[];
+            me.acumuladodebito=0;
+            me.acumuladoit=0;
+            me.acumuladorestodebito=0;
+            me.sifacturasdebito=false;
+            me.sumafacturasdebito=0;
+
         },
         
         abrirmodalCompras(indice=''){
@@ -2002,6 +2177,172 @@ export default {
             me.nocreditofiscal=0;
             me.descuentos=0;
             me.indice=indice;
+        },
+
+        abrirmodalVentas(indice=''){
+            let me=this;
+            me.indice=0;
+            me.selectLibroventas();
+            me.clearSelected=0;
+            setTimeout(me.tiempo, 50); 
+            me.classModal.openModal('libroventas');
+            me.tituloModallibro = 'Libro de Ventas';
+            //me.$refs.comboproveedor.clearSelection(); 
+            if(me.mes+1==me.messelected)
+            {    
+                me.fechafactura=me.fechaactual;
+                //me.fechafinal=me.fechaactual;
+            }
+            else   
+                me.fechafactura=me.fechafinal;
+            me.indice=indice;
+        },
+        selectLibroventas(){
+            let me=this;
+            me.diaminmax();
+            if(me.mes+1==me.messelected)
+            {    
+                me.fechafactura=me.fechaactual;
+                //me.fechafinal=me.fechaactual;
+            }
+            else   
+                me.fechafactura=me.fechafinal;
+
+            var url= '/con_factura?modal=1&mes='+me.messelected+'&anio='+me.anioselected+'&idfilial='+me.filialselected;
+            //console.log(url);
+            
+            axios.get(url).then(function (response) {
+                var respuesta= response.data;
+                me.arrayLibroventas = respuesta.libroventas;
+
+                /* var regreso=me.arrayLibroventas.filter(elem => elem.idasientomaestro==me.asientomaestro.idasientomaestro);
+                regreso.forEach(element => {
+                    me.checkusarfactura.push(element.idlibrocompra);
+                    me.reslote=element.lote;
+                }); */
+
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        cerrarModalVentas(){
+            let me=this;
+            //console.log(me.acumulado13);
+            var sw=0;
+            
+            me.rowcuentas.forEach((element,index) => {
+                if(element.idcuenta==me.lv)
+                {
+                    me.indice=index;
+                    sw=1;
+                }
+                else
+                {
+                    if(element.idcuenta==me.it)
+                        me.indiceit=index;
+                    if(element.idcuenta==me.itxp)
+                        me.indiceitxp=index;
+
+                }
+            });
+            if(sw==1){
+                    
+
+                    me.rowcuentas[me.indice].haber=me.acumuladodebito;
+                    me.rowcuentas[me.indiceit].debe=me.acumuladoit;
+                    me.rowcuentas[me.indiceitxp].haber=me.acumuladoit;
+
+            }
+            else
+            {
+                //console.log("entra");
+                if(me.sifacturasdebito) {
+                   
+                    me.addrowcuentas(false);
+                    me.indice=me.rowcuentas.length-1;
+                    me.rowcuentas[me.indice].idcuenta=me.it;
+                    me.rowcuentas[me.indice].debe=me.acumuladoit;
+                    //revisar los datos de la sub cuenta para libro de compras
+                    me.rowcuentas[me.indice].idsubcuenta.push({
+                                        idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:4,
+                                        subcuenta:'2000000',
+                                        subdebe:me.acumuladoit,
+                                        subhaber:0,
+                                        detalle:'factura emitida',
+                                        nombre:'Ascinalss',
+                                        idsubcuenta:'16'
+                                        });
+                    me.addrowcuentas(false);
+                    me.indice=me.rowcuentas.length-1;
+                    me.rowcuentas[me.indice].idcuenta=me.lv;
+                    me.rowcuentas[me.indice].haber=me.acumuladodebito;
+                    me.rowcuentas[me.indice].idsubcuenta.push({
+                                        idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:4,
+                                        subcuenta:'2000000',
+                                        subdebe:0,
+                                        subhaber:me.acumuladodebito,
+                                        detalle:'factura emitida',
+                                        nombre:'Ascinalss',
+                                        idsubcuenta:'16'
+                                        });
+                    me.addrowcuentas(false);
+                    me.indice=me.rowcuentas.length-1;
+                    me.rowcuentas[me.indice].idcuenta=me.itxp;
+                    me.rowcuentas[me.indice].haber=me.acumuladoit;
+                    me.rowcuentas[me.indice].idsubcuenta.push({
+                                        idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:4,
+                                        subcuenta:'2000000',
+                                        subdebe:0,
+                                        subhaber:me.acumuladoit,
+                                        detalle:'factura emitida',
+                                        nombre:'Ascinalss',
+                                        idsubcuenta:'16'
+                                        });
+
+                }
+            }
+            /* if(me.indice!='')
+            {
+                //console.log('entrado distinto');
+                me.rowcuentas[me.indice].idsubcuenta=[];
+                me.subcuentas=me.subcuentas.filter(function(el){
+                    return el.tiposubcuenta!=3;
+                });
+                me.checkusarfactura.forEach((element,index) => {
+                    var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
+                    //console.log(index);
+                    
+                    me.rowcuentas[me.indice].idsubcuenta.push({indice:me.indice,
+                                        idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:3,
+                                        subcuenta:resultado.nit,
+                                        subdebe:resultado.credfiscal,
+                                        subhaber:0,
+                                        detalle:resultado.detalle_fac,
+                                        nombre:resultado.nomproveedor,
+                                        idsubcuenta:resultado.idproveedor
+                                        });
+                                    
+                    me.subcuentas.push({//indice:me.indice,
+                                        //idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                        tiposubcuenta:3,
+                                        subcuenta:resultado.nit,
+                                        subdebe:0,
+                                        subhaber:0,
+                                        detalle:resultado.detalle_fac,
+                                        nombre:resultado.nomproveedor,
+                                        idsubcuenta:resultado.idproveedor
+                                        });
+                });
+            }     */
+           
+            me.classModal.closeModal('libroventas'); 
+
         },
         selectLibrocompras(){
             let me=this;
@@ -2098,6 +2439,33 @@ export default {
             });
 
         },
+        debitofiscal(){
+            let me=this;
+            let sumadebito=0;
+            let sumarestodebito=0;
+            let sumait=0;
+            me.sumafacturasdebito=0;
+            me.idfacturasdebito=[];
+            me.acumuladodebito=0;
+            me.acumuladorestodebito=0;
+            me.acumuladoit=0;
+            me.checkusarfactura.forEach(element => {
+                let resultado = me.arrayLibroventas.find( elem => elem.idfactura == element );
+                sumadebito=Number(sumadebito+resultado.debfiscal);
+                sumarestodebito=Number(sumarestodebito+resultado.restoimporte);
+                sumait=Number(sumait+resultado.it);
+                
+            });
+            me.acumuladodebito=Number(sumadebito.toFixed(2));
+            me.acumuladorestodebito=Number(sumarestodebito.toFixed(2));
+            me.acumuladoit=Number(sumait.toFixed(2));
+            me.sumafacturasdebito=Number((me.acumuladodebito+me.acumuladorestodebito).toFixed(2));
+            
+            if(me.acumuladodebito>0)
+                me.sifacturasdebito=true;
+            else
+                me.sifacturasdebito=false;
+        },
         sumar13(){
             let me=this;
             var sumacheck=0;
@@ -2107,6 +2475,7 @@ export default {
             me.acumulado87=0;
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
+                console.log(resultado);
                sumacheck=Number(sumacheck+resultado.credfiscal);
                 suma87=Number(suma87+resultado.subtotal);
             });

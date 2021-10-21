@@ -157,15 +157,19 @@ class ConConfiguracionController extends Controller
         //if (!$request->ajax()) return redirect('/');
 
         $cuentaslibros = Con_Configuracion::select('codigo','valor')
-                                    ->where(function($query){
-                                        $query->where('codigo','=','LV')
-                                            ->orwhere('codigo','=','LC');
-                                    })
+                                    ->where('codigo','=','LC')
                                     ->where('activo',1)
                                     ->get()
                                     ->toArray();
         
-        return $cuentaslibros;
+        $libroventas= Con_Configuracion::select('codigo','valor','valor2')
+                                    ->where('activo',1)
+                                    ->where('tipoconfiguracion',1)//valor de libro de ventas
+                                    ->get();
+
+        
+        return ['cuentaslibros'=>$cuentaslibros,
+                'libroventas'=>$libroventas];
 
     }
     public function cuentas_conciliacion(Request $request)
@@ -175,8 +179,7 @@ class ConConfiguracionController extends Controller
         $cuentaslibros = Con_Configuracion::select('valor')
                                     ->where('codigo','LB')
                                     ->where('activo',1)
-                                    ->get()
-                                    ->toArray();
+                                    ->get();
         
         return $cuentaslibros;
 

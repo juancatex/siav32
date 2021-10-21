@@ -444,15 +444,11 @@ class ConAsientomaestroController extends Controller
      */
     public function store(Request $request)
     {
-        //$o = new AsientoMaestroClass('sheep'); 
-        //$o = new AsientoMaestroClass('sheep','cat'); 
-        //$o = new AsientoMaestroClass('sheep','cat','dog'); 
-        //dd($request);
-        //echo "entra store";
+        
         $arrayDetalle = array();
         $idmodulo=$request->idmodulo;
         $rowregistros=$request->rowregistros;
-        //dd($rowregistros);
+        $sidebito=$request->sidebito;
         $fechatransaccion=$request->fechatransaccion;
         $idtipocomprobante=$request->idtipocomprobante;
         $tipodocumento=$request->tipodocumento;
@@ -460,22 +456,15 @@ class ConAsientomaestroController extends Controller
         $glosa=$request->glosa;
         $idperfilcuentamaestro='';
         $borrador=$request->borrador;
-        $librocomprasok=$request->librocomprasok;
         $idfacturas=$request->idfacturas;
         $validarfacturas=$request->validarfacturas;
         $idfilial=$request->idfilial;
         $idunidad=$request->idunidad;
-        //dd($idunidad);
+
         if($request->sidirectorio)
             $tiposubcuenta=1;
         else
             $tiposubcuenta=2;
-        //dd($rowregistros);
-        
-        //dd($borrador);
-        //echo "idmodulo". $idmodulo;
-       // dd(count($rowregistros));
-       // dd($rowregistros[0]['idcuenta'][0]);
         $cont=0;
         $estado_aprobado=$request->estado_aprobado;
         
@@ -560,26 +549,49 @@ class ConAsientomaestroController extends Controller
         else {
             if($idfacturas)
             {
-                //echo "else idasientomaestro entra idfacturas2";
-                $asientomaestro= new AsientoMaestroClass();
-                $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
+                if($sidebito==false)
+                {
+                    //echo "else idasientomaestro entra idfacturas2";
+                    $asientomaestro= new AsientoMaestroClass();
+                    $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
+                    
+                    
+                /*  foreach ($idfacturas as $indice => $valor) {
+                        DB::table('con__librocompras')->where('idlibrocompra', $valor)->update(['idasientomaestro' => $request->idasientomaestro,
+                                                                                                'lote'=>$request->reslote]);    
+                    } */
+                    
+                    $librocompra = con__librocompra::select(DB::raw('max(lote) as maximo'))
+                                                    ->where('idasientomaestro','<>',0)
+                                                    ->get()->toArray();
+                    $lote=$librocompra[0]['maximo']+1;
+                    
+                    
+                    foreach ($idfacturas as $indice => $valor) {
+                        DB::table('con__librocompras')->where('idlibrocompra', $valor)->update(['idasientomaestro' => $respuesta,
+                                                                                                'lote'=>$lote,
+                                                                                                'validadoconta'=>$validarfacturas]);    
+                    }    
+                }
+                else
+                {
+                     //echo "else idasientomaestro entra idfacturas2";
+                    $asientomaestro= new AsientoMaestroClass();
+                    $respuesta=$asientomaestro->AsientosManualMaestroArray($idtipocomprobante, $tipodocumento,$numdocumento,$glosa,$arrayDetalle,$idmodulo,$fechatransaccion,$borrador,$idfilial,$idunidad);
+                    
+                    
                 
-                
-               /*  foreach ($idfacturas as $indice => $valor) {
-                    DB::table('con__librocompras')->where('idlibrocompra', $valor)->update(['idasientomaestro' => $request->idasientomaestro,
-                                                                                            'lote'=>$request->reslote]);    
-                } */
-                
-                $librocompra = con__librocompra::select(DB::raw('max(lote) as maximo'))
-                                                ->where('idasientomaestro','<>',0)
-                                                ->get()->toArray();
-                $lote=$librocompra[0]['maximo']+1;
-                
-                
-                foreach ($idfacturas as $indice => $valor) {
-                    DB::table('con__librocompras')->where('idlibrocompra', $valor)->update(['idasientomaestro' => $respuesta,
-                                                                                            'lote'=>$lote,
-                                                                                            'validadoconta'=>$validarfacturas]);    
+                    /////// copiado de arriba no tiene funcion en debito
+                    /* $librocompra = con__librocompra::select(DB::raw('max(lote) as maximo'))
+                                                    ->where('idasientomaestro','<>',0)
+                                                    ->get()->toArray();
+                    $lote=$librocompra[0]['maximo']+1; */
+                    
+                    
+                    foreach ($idfacturas as $indice => $valor) {
+                        DB::table('con__facturas')->where('idfactura', $valor)->update(['idasientomaestro' => $respuesta,
+                                                                                    'validadoconta'=>2]);    
+                    }
                 }
             }
             else
@@ -1180,6 +1192,7 @@ class ConAsientomaestroController extends Controller
             $fecharegistro=$asientomaestro->fecharegistro;
             
             DB::table('con__librocompras')->where('idasientomaestro', $valor)->update(['validadoconta' => 1]);
+            DB::table('con__facturas')->where('idasientomaestro', $valor)->update(['validadoconta' => 1]);
             
             
 

@@ -23,7 +23,13 @@ class CreateConFacturasTable extends Migration
             $table->string('detalle',500);
             $table->decimal('importetotal',7,2);
             $table->decimal('importecf',7,2);
-            $table->boolean('activo')->default(1);
+            $table->integer('idasientomaestro');
+            $table->boolean('validadoconta')->default(0)->comment('0->no validado por contabilidad, 1->validado por contabilidad,2->comprobante borrador');
+            $table->integer('registrado_por');
+            $table->double('debfiscal')->unsigned()->default(0);
+            $table->double('restoimporte')->unsigned()->default(0);
+            $table->double('it')->unsigned()->default(0);
+            $table->boolean('activo')->default(1)->comment('0->comprobante eliminado,1->activo,2->comprobante revertido,3->eliminado desde menu facturas');
             $table->timestamps();
         });
     }
