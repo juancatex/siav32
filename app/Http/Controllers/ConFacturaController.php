@@ -134,7 +134,17 @@ class ConFacturaController extends Controller
         $factura = Con_Factura::findOrFail($request->idfactura);
 
         if($request->anularfac==true)
+        {
             $factura->activo = '2';
+            $factura->razonsocial='';
+            $factura->nit='';
+            $factura->detalle='';
+            $factura->importetotal=0;
+            $factura->importecf=0;
+            $factura->debfiscal=0;
+            $factura->restoimporte=0;
+            $factura->it=0;
+        }   
         else
             $factura->activo = '0';
         
@@ -193,6 +203,7 @@ class ConFacturaController extends Controller
         $factura->it=$request->it;     
         $factura->activo = '1';
         $factura->numautorizacion=$request->numautorizacion;
+        $factura->fechafactura=$request->fechafactura;
         $factura->save();
     }
 
@@ -243,7 +254,7 @@ class ConFacturaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
                 
-        $maxfactura = Con_Factura::max('numerofactura');         
+        $maxfactura = Con_Factura::where('activo','<>',0)->max('numerofactura');         
         return ['maxfactura' => $maxfactura];
     }   
 

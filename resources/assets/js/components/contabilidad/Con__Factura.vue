@@ -529,14 +529,20 @@
                 var dd=primerDiaMes.getDate()
                 if(dd<10)
                     dd='0'+dd; 
-                
+                //console.log(this.cerrado);
                 this.fechainicial=this.anioselected+'-'+mm+'-'+dd;
                 this.fechafinal=this.anioselected+'-'+mm+'-'+ultimoDiaMes.getDate();
                 if(this.fechafinal > this.fechaactual)
                 {
                     this.fechafinal=this.fechaactual;
-                    this.cerrado=1;
+                    //this.cerrado=1;
                 }   
+                if(this.messelected!=this.mes)
+                    this.fechafactura=this.fechainicial;
+                else
+                    this.fechafactura=this.fechaactual;
+                /* else
+                    this.cerrado=0; */
                     
 
                
@@ -673,12 +679,30 @@
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayFactura = respuesta.factura.data;
-                    me.nunumautorizacion=me.arrayFactura[0].numautorizacion;
-                    if(me.messelected>me.mes && me.anioselected== me.anio)
-                        me.cerrado=1;
-                    else
-                        me.cerrado=me.arrayFactura[0].mescerrado;
+                    if(me.arrayFactura.length>0)
+                    {
+                        me.nunumautorizacion=me.arrayFactura[0].numautorizacion; 
+                        if(me.messelected>me.mes && me.anioselected== me.anio)
+                            me.cerrado=1;
+                        else
+                        {
+                            me.cerrado=me.arrayFactura[0].mescerrado;
+                            //console.log(me.cerrado);
+                        }
 
+                    }
+                    else
+                    {
+                        if(me.messelected<me.mes && me.anioselected==me.anio)
+                            me.cerrado=1;
+                        else
+                            if(me.messelected>me.mes && me.anioselected==me.anio)
+                                me.cerrado=1;
+                            else
+                                me.cerrado=0
+                    }
+                        
+                        
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {
@@ -731,7 +755,8 @@
                     'debfiscal':porcendebito,
                     'restoimporte':restodebito,
                     'it':porcenit,
-                    'numautorizacion':me.nunumautorizacion
+                    'numautorizacion':me.nunumautorizacion,
+                    'fechafactura':me.fechafactura,
 
                 }).then(function (response) {                    
                     
@@ -766,7 +791,7 @@
                 me.nudetalle='';
                 me.nuimporte=0;
                 //me.$refs.nurazonsocial.focus();
-                Vue.nextTick().then(()=> this.$refs.input.focus());
+                //Vue.nextTick().then(()=> this.$refs.input.focus());
 
 
             },
