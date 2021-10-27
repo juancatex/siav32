@@ -7,6 +7,7 @@ use App\Con_FacturaParametro;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\AsinalssClass\FacturaClass;
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,9 @@ class ConFacturaController extends Controller
         $anio=$request->anio;
         //$criterio = $request->criterio;
         $modal=$request->modal;
+        $raw=DB::raw('date(con__facturas.fechafactura) as fecha');
         if($modal==1)
         {
-            $raw=DB::raw('date(created_at) as fecha');
             $libroventas=Con_Factura::select('idfactura',
                                             'numerofactura',
                                             'codigocontrol',
@@ -32,16 +33,19 @@ class ConFacturaController extends Controller
                                             'nit',
                                             'importetotal',
                                             $raw,
-                                            'idasientomaestro',
+                                            'con__facturas.idasientomaestro',
                                             'debfiscal',
                                             'restoimporte',
                                             'it',
                                             'activo',
-                                            'validadoconta')
+                                            'validadoconta',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion')
                                         ->where('activo',1)
-                                        ->whereMonth('created_at',$mes)
-                                        ->whereYear('created_at',$anio)
-                                        ->orderby('created_at','desc')
+                                        ->whereMonth('con__facturas.fechafactura',$mes)
+                                        ->whereYear('con__facturas.fechafactura',$anio)
+                                        ->orderby('con__facturas.numerofactura','desc')
                                         ->get();
             return ['libroventas'=>$libroventas];
         }
@@ -51,10 +55,61 @@ class ConFacturaController extends Controller
             $criterio = $request->criterio;
             
             if ($buscar==''){
-                $factura = Con_factura::orderBy('idfactura', 'desc')->paginate(10);
+                $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->select('idfactura',
+                                            'numerofactura',
+                                            'codigocontrol',
+                                            'razonsocial',
+                                            'nit',
+                                            'importetotal',
+                                            $raw,
+                                            'con__facturas.idasientomaestro',
+                                            'debfiscal',
+                                            'restoimporte',
+                                            'it',
+                                            'con__facturas.activo',
+                                            'validadoconta',
+                                            'cod_comprobante',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion')
+                                            
+                                            ->where('activo','>=',1)
+                                            ->whereMonth('con__facturas.fechafactura',$mes)
+                                            ->whereYear('con__facturas.fechafactura',$anio)
+                                            ->orderby('con__facturas.numerofactura','desc')
+                                            ->paginate(50);
             }
             else{
-                $factura = Con_factura::where($criterio, 'like', '%'. $buscar . '%')->orderBy('idfactura', 'desc')->paginate(10);
+                $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->select('idfactura',
+                                            'numerofactura',
+                                            'codigocontrol',
+                                            'razonsocial',
+                                            'nit',
+                                            'importetotal',
+                                            $raw,
+                                            'con__facturas.idasientomaestro',
+                                            'debfiscal',
+                                            'restoimporte',
+                                            'it',
+                                            'con__facturas.activo',
+                                            'validadoconta',
+                                            'cod_comprobante',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion')
+                                       
+                                        ->where('activo','>=',1)
+
+                                        ->where(function($query) use($buscar){
+                                            $query->where('razonsocial', 'like', '%'. $buscar . '%')
+                                                ->orwhere('nit', 'like', '%'. $buscar . '%');
+                                        })
+                                        ->whereMonth('con__facturas.fechafactura',$mes)
+                                        ->whereYear('con__facturas.fechafactura',$anio)
+                                        ->orderby('con__facturas.numerofactura','desc')
+                                        ->paginate(50);
             }
             
             return [
@@ -72,6 +127,30 @@ class ConFacturaController extends Controller
         
         
     }
+    public function desactivar(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $factura = Con_Factura::findOrFail($request->idfactura);
+
+        if($request->anularfac==true)
+            $factura->activo = '2';
+        else
+            $factura->activo = '0';
+        
+        $factura->save();
+    }
+
+    public function cerrarmes(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $factura=Con_Factura::wheremonth('fechafactura',$request->mes)
+                                ->whereYear('fechafactura',$request->anio)
+                                ->update(['mescerrado'=>1]);
+        
+        //$factura->save();
+    }
         
     public function store(Request $request)
     {
@@ -84,15 +163,20 @@ class ConFacturaController extends Controller
             return ($validator->messages()->first());
         }
 
-        $detalle_t='';
-        for ($i=0; $i<count($request->detalle); $i++) {            
-            $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
-            .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
-            if ($i==0)
-                $detalle_t = $detalle_d;
-            else 
-                $detalle_t = $detalle_t.','.$detalle_d; 
-        } 
+        if(is_Array($request->detalle))
+        {
+            $detalle_t='';
+            for ($i=0; $i<count($request->detalle); $i++) {            
+                $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
+                .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
+                if ($i==0)
+                    $detalle_t = $detalle_d;
+                else 
+                    $detalle_t = $detalle_t.','.$detalle_d; 
+            } 
+        }
+        else
+            $detalle_t=$request->detalle;
         //dd($request);
         if (!$request->ajax()) return redirect('/');
         $factura = new Con_factura();
@@ -108,6 +192,7 @@ class ConFacturaController extends Controller
         $factura->restoimporte=$request->restoimporte;
         $factura->it=$request->it;     
         $factura->activo = '1';
+        $factura->numautorizacion=$request->numautorizacion;
         $factura->save();
     }
 

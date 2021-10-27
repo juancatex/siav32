@@ -24,12 +24,15 @@ class CreateConFacturasTable extends Migration
             $table->decimal('importetotal',7,2);
             $table->decimal('importecf',7,2);
             $table->integer('idasientomaestro');
-            $table->boolean('validadoconta')->default(0)->comment('0->no validado por contabilidad, 1->validado por contabilidad,2->comprobante borrador');
+            $table->boolean('validadoconta')->default(0)->comment('0->no validado por contabilidad, 1->validado por contabilidad,2->comprobante borrador,3->comprobante eliminado');
             $table->integer('registrado_por');
             $table->double('debfiscal')->unsigned()->default(0);
             $table->double('restoimporte')->unsigned()->default(0);
             $table->double('it')->unsigned()->default(0);
-            $table->boolean('activo')->default(1)->comment('0->comprobante eliminado,1->activo,2->comprobante revertido,3->eliminado desde menu facturas');
+            $table->boolean('activo')->default(1)->comment('0->factura eliminada,1->activo,2->factura anulada');
+            $table->boolean('mescerrado')->default(0)->comment('para verificar si el mes establoqueado por contabilidad 0->abierto,1->bloqueado');
+            $table->string('numautorizacion',20)->comment('registra el numero de autorizacion');
+            $table->date('fechafactura');
             $table->timestamps();
         });
     }

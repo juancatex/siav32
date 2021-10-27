@@ -8,62 +8,163 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Factura
-                        <button type="button" @click="abrirModal('factura','registrar')" class="btn btn-secondary">
-                            <i class="icon-plus"></i>&nbsp;Registrar Factura
-                        </button>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <!-- desabilitado el boton registrar factura que habre el modal, ahora se realiza el registro en linea -->
+                                <!-- <i class="fa fa-align-justify"></i> Factura   
+                                <button type="button" @click="abrirModal('factura','registrar')" class="btn btn-secondary">
+                                    <i class="icon-plus"></i>&nbsp;Registrar Factura
+                                </button> -->
+                                <div class="form-group row" style="margin-bottom: 0px;">
+                                    <div class="col-md-4">
+                                        <strong class="form-control-label">Fecha Factura:</strong>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="date" 
+                                        v-model="fechafactura"
+                                        class="form-control formu-entrada" 
+                                        :max="fechafinal"
+                                        :min="fechainicial"
+                                        v-validate.initial="'required'"
+                                        name="Fechar Factura">
+                                        <span class="text-error">{{ errors.first('Fecha Factura')}}</span>
+                                   
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row" style="margin-bottom: 0px;">
+                                    <div class="col-md-5">
+                                        <strong class="form-control-label">Num Autorizacion:</strong>
+                                    </div>
+                                    <div class="col-md-7">
+                                    <input class="form-control " style="text-align:right" type="number" v-model="nunumautorizacion" >
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
                     </div>
                     <div class="card-body">
-                        <div class="form-group row">
+                       <!--  <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="input-group">                                    
                                     <input type="text" v-model="buscar" @keyup.enter="listarFactura(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
                                     <button type="submit" @click="listarFactura(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
+                        </div> -->
+                         <div class="form-group row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                            <strong class="col-md-4 form-control-label" style="margin-bottom: 0px;margin-top: 8px;" >Mes:</strong>
+                            <select v-model="messelected"  class="form-control" @change="listarFactura(1,buscar,messelected,anioselected,filialselected)">
+                                    <!--TODO: MODIFICAR EL MES ARRAY Y EL VALOR DEL ARRAY PARA ENVIAR MES COMO NUMERO-->
+                                    <option v-for="mesarray in arraymes" v-bind:key="mesarray.value" :value="mesarray.value" v-text="mesarray.text"></option>
+                                </select>   
+                            </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <strong class="col-md-4 form-control-label" style="margin-bottom: 0px;margin-top: 8px;">Año:</strong>
+                                <!-- <input  type="text" class="form-control" v-model="anio">    -->
+                                <select v-model="anioselected" class="form-control">
+                                    <option :value="anio" v-text="anio" selected></option>
+                                    <option :value="anio-1" v-text="anio-1"></option>
+                                </select>
+                            </div>
+                                <!--<span>seleccionado: {{ anio }}</span> -->
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                               <input class="form-control" type="text" v-model="buscar" placeholder="Buscar"  @keyup.enter="listarFactura(1,buscar,messelected,anioselected,filialselected)" v-on:focus="selectAll">
+                                    <button class="btn btn-primary" type="button" @click="listarFactura(1,buscar,messelected,anioselected,filialselected)">
+                                            <i class="fa fa-search"></i>
+                                    </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group">
+                                <button type="button" @click="imprimirLibroCompras(messelected,anioselected)" class="btn btn-primary">
+                                    <i class="cui-print"></i>
+                                    
+                                </button>
+                                &nbsp;
+                                <template v-if="cerrado" >
+                                    <button type="button" class="btn btn-danger" disabled data-toggle="tooltip" data-placement="top" title="Mes Cerrado">
+                                        <i class="cui-lock-locked"></i>
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <button type="button" @click="CerrarmesLibroVentas()" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Cerrar Mes">
+                                        <i class="cui-lock-unlocked"></i>
+                                    </button>
+                                </template>
+                                    
+                                
+                            </div>
+                        </div>
+                    </div>
                         <table class="table table-bordered table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th>Opciones</th>
-                                    <th>No. Factura</th>
-                                    <th>Nombre / Razon Social</th>
-                                    <th>NIT</th>                                    
-                                    <th>Importe</th>
-                                    <th>Estado</th>
+                                    <th style="width:15%">Opciones</th>
+                                    <th style="width:8%">No. Factura</th>
+                                    <th style="width:17%">Nombre / Razon Social</th>
+                                    <th style="width:12%">NIT</th>                                    
+                                    <th>Detalle</th>                                    
+                                    <th style="width:10%">Importe</th>
+                                    <th style="width:10%">Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr v-if="cerrado==0">
+                                    <td></td>
+                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nufactura" v-on:focus="selectAll"></td>
+                                    <td><input class="form-control " type="text" v-model="nurazonsocial" v-on:focus="selectAll" autofocus></td>
+                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nunit" v-on:focus="selectAll"></td>
+                                    <td><input class="form-control " type="text" v-model="nudetalle" v-on:focus="selectAll"></td>
+                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nuimporte" v-on:focus="selectAll"  > <!-- @keyup.enter="registrarFactura()" --></td>
+                                    <td style="text-align:center"><button class="btn btn-primary"  type="button" @click="registrarFactura()" data-toggle="tooltip" data-placement="top" title="Registrar Factura" :disabled="!iscompletefactura">
+                                            <i class="fa fa-plus"></i>
+                                    </button></td>
+                                    
+
+                                </tr>
                                 <tr v-for="factura in arrayFactura" :key="factura.id">
                                     <td>
-                                        <button type="button" @click="abrirModal('factura','actualizar',factura)" class="btn btn-warning btn-sm">
-                                          <i class="icon-pencil"></i>
-                                        </button> &nbsp;
-                                        <template v-if="factura.activo">
-                                            <button type="button" class="btn btn-danger btn-sm" @click="desactivarFactura(factura.idfactura)">
+                                        <template v-if="factura.activo==1 && factura.validadoconta==0">
+                                            <button type="button" @click="abrirModal('factura','actualizar',factura)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Factura">
+                                                <i class="icon-pencil"></i>
+                                            </button> 
+                                        
+                                            <button type="button" class="btn btn-danger btn-sm" @click="desactivarFactura(factura.idfactura,false)" data-toggle="tooltip" data-placement="top" title="Eliminar Factura">  <!-- quitar esta opcion cuando ya sean facturas electronicas -->
                                                 <i class="icon-trash"></i>
-                                            </button>
+                                            </button> 
+                                            <button type="button" class="btn btn-info btn-sm" @click="desactivarFactura(factura.idfactura,true)" data-toggle="tooltip" data-placement="top" title="Anular Factura">
+                                                <i class="icon-exclamation"></i>
+                                            </button> 
                                         </template>
-                                        <template v-else>
-                                            <button type="button" class="btn btn-info btn-sm" @click="activarFactura(factura.idfactura)">
-                                                <i class="icon-check"></i>
-                                            </button>
-                                        </template>
-                                        <button type="button" @click="ver_factura(factura)" class="btn btn-warning btn-sm">
-                                          <i class="icon-doc"></i>
-                                        </button> &nbsp;
+                                        <button v-if="factura.activo!=2" type="button" @click="ver_factura(factura)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Factura">
+                                          <i class="icon-eye"></i>
+                                        </button> 
                                     </td>
-                                    <td v-text="factura.numerofactura"></td>
+                                    <td style="text-align:right" v-text="factura.numerofactura"></td>
                                     <td v-text="factura.razonsocial"></td>
-                                    <td v-text="factura.nit"></td>
-                                    <td v-text="factura.importetotal"></td>                                    
+                                    <td style="text-align:right" v-text="factura.nit"></td>
+                                    <td v-text="factura.detalle"> </td>
+                                    <td style="text-align:right" v-text="factura.importetotal + ' Bs.'"></td>                                    
                                     <td>
-                                        <div v-if="factura.activo">
-                                            <span class="badge badge-success">Activo</span>
+                                        <span v-if="factura.activo==1 && factura.validadoconta==0" class="badge badge-warning">Sin Comprobante</span>
+                                        
+                                        <span v-if="factura.activo==1 && factura.validadoconta!=0 && factura.cod_comprobante==null" class="badge badge-success">Comprobante <br />Borrador</span>
+                                        <div v-if="factura.activo==1 && factura.validadoconta!=0 && factura.cod_comprobante!=null">
+                                            <span  class="badge badge-success">Comprobante</span><span class="badge badge-info"> {{ factura.cod_comprobante}}</span>
                                         </div>
-                                        <div v-else>
-                                            <span class="badge badge-danger">Desactivado</span>
-                                        </div>
+                                        <span v-if="factura.activo==2" class="badge badge-danger">Anulada</span>
+                                        
                                         
                                     </td>
                                 </tr>                                
@@ -72,13 +173,13 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item" v-if="pagination.current_page > 1">
-                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar)">Ant</a>
                                 </li>
                                 <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar)" v-text="page"></a>
                                 </li>
                                 <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
+                                    <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar)">Sig</a>
                                 </li>
                             </ul>
                         </nav>
@@ -259,7 +360,43 @@
                 porcentajelv:0,
                 it:0,
                 porcentajeit:0,
-                itx:0
+                itx:0,
+                messelected:'',
+                mes:'',
+                anio:'',
+                anioselected:'',
+                fechaactual:'',
+                fechafactura:'',
+                arraymes:[{text:"Enero",value:1},
+                          {text:"Febrero",value:2},
+                          {text:"Marzo",value:3},
+                          {text:"Abril",value:4},
+                          {text:"Mayo",value:5},
+                          {text:"Junio",value:6},
+                          {text:"Julio",value:7},
+                          {text:"Agosto",value:8},
+                          {text:"Septiembre",value:9},
+                          {text:"Octubre",value:10},
+                          {text:"Noviembre",value:11},
+                          {text:"Diciembre",value:12}
+                        ],
+                
+                
+                cerrado:0,
+                filialselected:'',
+
+                ///////////////////////// nuevos valores para registro en linea de facturas sin generar codigo de control 
+                nufactura:0,
+                nurazonsocial:'',
+                nunit:0,
+                nuimporte:0,
+                nudetalle:'',
+                nunumautorizacion:'',
+                fechainicial:'',
+                fechafinal:''
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
             }
         },
@@ -270,6 +407,13 @@
           },  
 
         computed:{
+            iscompletefactura(){
+                let me=this;
+                if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='')
+                    return true;
+                else   
+                    return false;
+            },
             isActived: function(){
                 return this.pagination.current_page;
             },
@@ -300,6 +444,107 @@
         },
 
         methods : {
+            CerrarmesLibroVentas(){
+                 swal({
+                    title: 'Esta seguro de Cerrar el Mes: '+ this.arraymes[this.messelected-1]+' / '+this.anioselected, 
+                    text:'Ya no se Podran Ingresar mas Facturas',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar!',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false,
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.value) {
+                        let me = this;
+                        axios.post('/con_factura/cerrarmes',{
+                            'mes': me.messelected,
+                            'anio':me.anioselected,
+                        }).then(function (response) {
+                            me.listarFactura(1,me.buscar,me.messelected,me.anioselected,me.filialselected);
+                            //console.log(1,me.criterio,me.borradorcheck);
+                            swal(
+                            'Mes Cerrado Correctamente!',
+                            'Ya no se podran ingresar mas facturas',
+                            'success'
+                            )
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    } 
+                    else if (result.dismiss === swal.DismissReason.cancel)
+                    {
+                        
+                    }
+                    })
+            },
+             selectAll: function (event) {
+      
+                setTimeout(function () {
+                    event.target.select()
+                }, 0)
+            },
+            fechahoy(){
+                let me=this;
+                var hoy = new Date();
+                var dd = hoy.getDate(); 
+                
+                var mm = hoy.getMonth();
+                var aa = hoy.getFullYear();
+                mm=mm+1;
+                if(mm<10) 
+                    mm='0'+mm;
+                
+                if(dd<10)
+                    dd='0'+dd; 
+               
+                //console.log(dd,mm,aa);
+                me.mes=mm;
+                //console.log(me.mes);
+                me.anio=aa;
+                me.fechaactual=aa+'-'+mm+'-'+dd;
+                me.fechafactura=me.fechaactual;
+                me.messelected=me.arraymes[me.mes-1].value;
+                //console.log(me.messelected);
+                me.anioselected=me.anio;
+
+            },
+             diaminmax(){
+                var primerDiaMes = new Date(this.anioselected, this.messelected - 1  , 1);
+                var ultimoDiaMes = new Date(this.anioselected, this.messelected , 0);
+                /* console.log(this.anioselected+ ' aniop');
+                console.log(this.messelected + 'mes'); */
+
+                var mm=this.messelected;
+                //console.log(mm);
+                
+                
+                if(mm<10) 
+                    mm='0'+mm;
+
+                var dd=primerDiaMes.getDate()
+                if(dd<10)
+                    dd='0'+dd; 
+                
+                this.fechainicial=this.anioselected+'-'+mm+'-'+dd;
+                this.fechafinal=this.anioselected+'-'+mm+'-'+ultimoDiaMes.getDate();
+                if(this.fechafinal > this.fechaactual)
+                {
+                    this.fechafinal=this.fechaactual;
+                    this.cerrado=1;
+                }   
+                    
+
+               
+                /* console.log(this.fechainicial);
+                console.log(this.fechafinal);
+                 */
+                
+            },
 
             ver_factura(ft) {
                 this.invoice_products = [];
@@ -413,19 +658,27 @@
                 var url= '/con_factura/maxfactura';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    me.maxfacturavalor = respuesta['maxfactura'];     //console.log(me.maxfacturavalor);    
+                    me.maxfacturavalor = respuesta['maxfactura']+1;     //console.log(me.maxfacturavalor);    
+                    me.nufactura=me.maxfacturavalor;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
             
-            listarFactura (page,buscar,criterio){
+            listarFactura (page,buscar,mes,anio,filial){
                 let me=this;
-                var url= '/con_factura?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                me.diaminmax();
+                var url= '/con_factura?page=' + page + '&buscar='+ buscar +'&mes='+mes+'&anio='+anio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayFactura = respuesta.factura.data;
+                    me.nunumautorizacion=me.arrayFactura[0].numautorizacion;
+                    if(me.messelected>me.mes && me.anioselected== me.anio)
+                        me.cerrado=1;
+                    else
+                        me.cerrado=me.arrayFactura[0].mescerrado;
+
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {
@@ -433,16 +686,28 @@
                 });
             },
 
-            cambiarPagina(page,buscar,criterio){
+            cambiarPagina(page,buscar){
                 let me = this;
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarFactura(page,buscar,criterio);
+                me.listarFactura(page,buscar,me.messelected,me.anioselected);
             },
             
             registrarFactura(){ 
                let me = this;
+
+               ////////////////////////// quitar o modificar para facturas electronica s
+               if(me.nuimporte!=0)
+               {
+                    me.invoice_subtotal=me.nuimporte;
+                    me.numerofactura=me.nufactura;
+                    me.codigocontrol='', //// por el momento facturas manuales
+                    me.razonsocial=me.nurazonsocial;
+                    me.nit=me.nunit;
+                    me.invoice_products=me.nudetalle;
+               }
+               ///////////////////////////////////////////////////////////////////////
 
                 //var _13porciento=Number((total*0.13).toFixed(2));
                 let porcendebito=0;
@@ -456,16 +721,17 @@
 
 
                 axios.post('/con_factura/registrar',{
-                    'numerofactura': this.numerofactura,
-                    'codigocontrol': this.codigocontrol,
-                    'razonsocial': this.razonsocial,                    
-                    'nit': this.nit,
-                    'detalle': this. invoice_products,
-                    'importetotal': this.invoice_subtotal,
-                    'importecf': this.invoice_subtotal,
+                    'numerofactura': me.numerofactura,
+                    'codigocontrol': me.codigocontrol,
+                    'razonsocial': me.razonsocial,                    
+                    'nit': me.nit,
+                    'detalle': me. invoice_products,
+                    'importetotal': me.invoice_subtotal,
+                    'importecf': me.invoice_subtotal,
                     'debfiscal':porcendebito,
                     'restoimporte':restodebito,
                     'it':porcenit,
+                    'numautorizacion':me.nunumautorizacion
 
                 }).then(function (response) {                    
                     
@@ -477,19 +743,32 @@
                             'Ingresar una dato diferente',
                             'error')
                     }
-                    else { 
-                        _pdf.imgToBase64('img/iconad.png', function (base) {
-                            _pdf.openRecibo(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_products,me.importetotal,base); 
-                        });
+                    else {  ///las lineas comentadas son para mostrar la factura electronica
+                            //_pdf.imgToBase64('img/iconad.png', function (base) {
+                            //_pdf.openRecibo(me.numerofactura,me.codigocontrol,me.razonsocial,me.nit,me.invoice_products,me.importetotal,base); 
+                        //});
+                        me.listarFactura(1,'',me.messelected,me.anioselected);
                         me.maxfactura(); 
-                        me.cerrarModal();                        
-                        me.listarFactura(1,'','nombreinstitucion');
+                        //me.cerrarModal(); 
+                        me.resetfactura();                       
+                        
                          
                     }
                     
                 }).catch(function (error) {
                     console.log(error);
                 });
+            },
+            resetfactura(){
+                let me =this;
+                me.nurazonsocial='';
+                me.nunit=0;
+                me.nudetalle='';
+                me.nuimporte=0;
+                //me.$refs.nurazonsocial.focus();
+                Vue.nextTick().then(()=> this.$refs.input.focus());
+
+
             },
             calcularimpuestos(){
                 let me= this;
@@ -551,16 +830,29 @@
                         // var resultado = await factura.genera('123123123','nombre','121231231|23.2|1|23.3,84846548|11.23|1|11.23',23.36);                         
                         // console.log('dev: ' + resultado['nrofactura']);   
                         me.cerrarModal();
-                        me.listarFactura(1,'','nombreinstitucion');
+                        me.listarFactura(1,'',me.messelected,me.anioselected);
                     }
                 }).catch(function (error) {
                     console.log(error);
                 });                 
             },
 
-            desactivarFactura(id){
+            desactivarFactura(id,anularfac){
+                let mensaje='';
+                let mensaje2=''
+                if(anularfac==true)
+                {
+                    mensaje='Anulada';
+                    mensaje2='Anular'
+                }
+                else
+                {
+                    mensaje='Eliminada';
+                    mensaje2='Eliminar'
+                }
+                    
                swal({
-                title: 'Esta seguro de desactivar?',
+                title: 'Esta seguro que desea '+mensaje2+' esta Factura?',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -576,12 +868,13 @@
                     let me = this;
 
                     axios.put('/con_factura/desactivar',{
-                        'idfactura': id
+                        'idfactura': id,
+                        'anularfac':anularfac
                     }).then(function (response) {
-                        me.listarFactura(1,'','nombreinstitucion');
+                        me.listarFactura(1,'',me.messelected,me.anioselected);
                         swal(
                         'Desactivado!',
-                        'El registro ha sido desactivado con éxito.',
+                        'La factra ha sido ' + mensaje + ' con exito',
                         'success'
                         )
                     }).catch(function (error) {
@@ -619,7 +912,7 @@
 
                          'idfactura': id
                     }).then(function (response) {
-                        me.listarFactura(1,'','nombreinstitucion');
+                        me.listarFactura(1,'',me.messelected,me.anioselected);
                         swal(
                         'Activado!',
                         'El registro ha sido activado con éxito.',
@@ -661,7 +954,7 @@
                                 this.invoice_products = [];
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Factura';
-                                this.numerofactura=this.maxfacturavalor+1;
+                                this.numerofactura=this.maxfacturavalor;
                                 this.codigocontrol='',
                                 this.razonsocial='',               
                                 this.nit='',
@@ -715,10 +1008,12 @@
 
         },
         mounted() {
-            this.listarFactura(1,this.buscar,this.criterio);
+            this.fechahoy();                
+            this.listarFactura(1,this.buscar,this.mes,this.anio);
             this.dataparametro();
             this.maxfactura();  
-            this.selectLibroCuenta();                  
+            this.selectLibroCuenta();  
+            
         }
     }
 </script>
