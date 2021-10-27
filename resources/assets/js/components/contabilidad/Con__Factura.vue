@@ -112,6 +112,7 @@
                                 <tr>
                                     <th style="width:15%">Opciones</th>
                                     <th style="width:8%">No. Factura</th>
+                                    <th style="width:8%">Fecha</th>
                                     <th style="width:17%">Nombre / Razon Social</th>
                                     <th style="width:12%">NIT</th>                                    
                                     <th>Detalle</th>                                    
@@ -122,11 +123,22 @@
                             <tbody>
                                 <tr v-if="cerrado==0">
                                     <td></td>
-                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nufactura" v-on:focus="selectAll"></td>
-                                    <td><input class="form-control " type="text" v-model="nurazonsocial" v-on:focus="selectAll" autofocus></td>
+                                    <td><vue-numeric  
+                                                class="form-control " style="text-align:right;"
+                                                separator="," 
+                                                v-model="nufactura"
+                                                v-bind:precision="0"
+                                                @blur="verficarnumfactura">
+                                            </vue-numeric>
+                                            <span v-if="duplicado" class="text-error">El Numero de Factura ya exite!!</span>
+                                        
+                                        
+                                        <!-- <input class="form-control " style="text-align:right" type="number" v-model="nufactura" v-on:focus="selectAll" @blur="verficarnumfactura"> --></td>
+                                    <td></td>
+                                    <td><input class="form-control " type="text" v-model="nurazonsocial"  ></td>
                                     <td><input class="form-control " style="text-align:right" type="number" v-model="nunit" v-on:focus="selectAll"></td>
-                                    <td><input class="form-control " type="text" v-model="nudetalle" v-on:focus="selectAll"></td>
-                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nuimporte" v-on:focus="selectAll"  > <!-- @keyup.enter="registrarFactura()" --></td>
+                                    <td><input class="form-control " type="text" v-model="nudetalle" ></td>
+                                    <td><input class="form-control " style="text-align:right" type="number" v-model="nuimporte"   > <!-- @keyup.enter="registrarFactura()" --></td>
                                     <td style="text-align:center"><button class="btn btn-primary"  type="button" @click="registrarFactura()" data-toggle="tooltip" data-placement="top" title="Registrar Factura" :disabled="!iscompletefactura">
                                             <i class="fa fa-plus"></i>
                                     </button></td>
@@ -152,6 +164,7 @@
                                         </button> 
                                     </td>
                                     <td style="text-align:right" v-text="factura.numerofactura"></td>
+                                    <td style="text-align:center" v-text="factura.fecha"></td>
                                     <td v-text="factura.razonsocial"></td>
                                     <td style="text-align:right" v-text="factura.nit"></td>
                                     <td v-text="factura.detalle"> </td>
@@ -393,7 +406,8 @@
                 nudetalle:'',
                 nunumautorizacion:'',
                 fechainicial:'',
-                fechafinal:''
+                fechafinal:'',
+                duplicado:false
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -409,7 +423,7 @@
         computed:{
             iscompletefactura(){
                 let me=this;
-                if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='')
+                if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
                     return true;
                 else   
                     return false;
@@ -967,6 +981,23 @@
                 //this.invoice_products='';
                 this.invoice_subtotal='';
                 this.invoice_subtotal='';
+            },
+            verficarnumfactura(){
+                console.log('entra')
+                let me =this;
+                let respuesta;
+                var url= '/con_factura/vernumfactura?numfactura='+me.nufactura;
+                axios.get(url).then(function (response) {
+                    respuesta = response.data;
+                    console.log(respuesta.length);
+                    if(respuesta.length>0)
+                        me.duplicado=true;
+                    else
+                        me.duplicado=false;
+                })  
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
 
             abrirModal(modelo, accion, data = []){ //console.log('ja' + this.maxfacturavalor);
