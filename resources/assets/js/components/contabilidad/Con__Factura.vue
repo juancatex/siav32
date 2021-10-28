@@ -983,21 +983,15 @@
                 this.invoice_subtotal='';
             },
             verficarnumfactura(){
-                console.log('entra')
+                //console.log('entra')
                 let me =this;
                 let respuesta;
-                var url= '/con_factura/vernumfactura?numfactura='+me.nufactura;
-                axios.get(url).then(function (response) {
-                    respuesta = response.data;
-                    console.log(respuesta.length);
-                    if(respuesta.length>0)
-                        me.duplicado=true;
-                    else
-                        me.duplicado=false;
-                })  
-                .catch(function (error) {
-                    console.log(error);
-                });
+                //console.log(me.arrayFactura);
+                respuesta=me.arrayFactura.find(element=>element.numerofactura==me.nufactura);
+                if(respuesta)
+                    me.duplicado=true;
+                else
+                    me.duplicado=false;
             },
 
             abrirModal(modelo, accion, data = []){ //console.log('ja' + this.maxfacturavalor);

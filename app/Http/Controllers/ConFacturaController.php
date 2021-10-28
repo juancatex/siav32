@@ -127,7 +127,7 @@ class ConFacturaController extends Controller
         
         
     }
-    public function vernumfactura (Request $request)
+    /* public function vernumfactura (Request $request)
     {
         if (!$request->ajax()) return redirect('/');
         $factura=Con_Factura::select('numerofactura')
@@ -137,7 +137,7 @@ class ConFacturaController extends Controller
         
        
         return $factura;
-    }
+    } */
     public function desactivar(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
