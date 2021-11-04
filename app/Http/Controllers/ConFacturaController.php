@@ -24,9 +24,11 @@ class ConFacturaController extends Controller
         //$criterio = $request->criterio;
         $modal=$request->modal;
         $raw=DB::raw('date(con__facturas.fechafactura) as fecha');
+        $raw2=DB::raw("concat(numpapeleta,' ',apaterno,' ',amaterno,' ',nombre) as nombres");
         if($modal==1)
         {
-            $libroventas=Con_Factura::select('idfactura',
+            $libroventas=Con_Factura::leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
+                                        ->select('idfactura',
                                             'numerofactura',
                                             'codigocontrol',
                                             'razonsocial',
@@ -37,12 +39,16 @@ class ConFacturaController extends Controller
                                             'debfiscal',
                                             'restoimporte',
                                             'it',
-                                            'activo',
+                                            'con__facturas.activo',
                                             'validadoconta',
                                             'con__facturas.detalle',
                                             'mescerrado',
-                                            'numautorizacion')
-                                        ->where('activo',1)
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio'
+                                            )
+                                        ->where('con__facturas.activo',1)
                                         ->whereMonth('con__facturas.fechafactura',$mes)
                                         ->whereYear('con__facturas.fechafactura',$anio)
                                         ->orderby('con__facturas.numerofactura','desc')
@@ -56,6 +62,7 @@ class ConFacturaController extends Controller
             
             if ($buscar==''){
                 $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
                                         ->select('idfactura',
                                             'numerofactura',
                                             'codigocontrol',
@@ -72,9 +79,12 @@ class ConFacturaController extends Controller
                                             'cod_comprobante',
                                             'con__facturas.detalle',
                                             'mescerrado',
-                                            'numautorizacion')
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio')
                                             
-                                            ->where('activo','>=',1)
+                                            ->where('con__facturas.activo','>=',1)
                                             ->whereMonth('con__facturas.fechafactura',$mes)
                                             ->whereYear('con__facturas.fechafactura',$anio)
                                             ->orderby('con__facturas.numerofactura','desc')
@@ -82,6 +92,7 @@ class ConFacturaController extends Controller
             }
             else{
                 $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
                                         ->select('idfactura',
                                             'numerofactura',
                                             'codigocontrol',
@@ -98,9 +109,12 @@ class ConFacturaController extends Controller
                                             'cod_comprobante',
                                             'con__facturas.detalle',
                                             'mescerrado',
-                                            'numautorizacion')
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio')
                                        
-                                        ->where('activo','>=',1)
+                                        ->where('con__facturas.activo','>=',1)
 
                                         ->where(function($query) use($buscar){
                                             $query->where('razonsocial', 'like', '%'. $buscar . '%')
@@ -126,6 +140,19 @@ class ConFacturaController extends Controller
         }
         
         
+    }
+    public function verificarfactura(Request $request){
+        if (!$request->ajax()) return redirect('/');
+        $idasientomaestro=$request->idasientomaestro;
+        $respuesta=Con_Factura::where('idasientomaestro',$idasientomaestro)
+                                    ->count();
+        //dd($respuesta);
+        $verdad=0;
+
+        if($respuesta>0)
+            $verdad=2; //para el caso de ventas es 2 y para el caso de compras es 1   ,0 es sinfactura
+
+        return $verdad;
     }
     /* public function vernumfactura (Request $request)
     {
@@ -215,6 +242,7 @@ class ConFacturaController extends Controller
         $factura->activo = '1';
         $factura->numautorizacion=$request->numautorizacion;
         $factura->fechafactura=$request->fechafactura;
+        $factura->idsubcuenta=$request->subcuenta;
         $factura->save();
     }
 
@@ -228,7 +256,7 @@ class ConFacturaController extends Controller
         if (!$request->ajax()) return redirect('/'); 
         $factura = Con_factura::findOrFail($request->idfactura);
 
-        $detalle_t='';
+       /*  $detalle_t='';
         for ($i=0; $i<count($request->detalle); $i++) {            
             $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
             .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
@@ -236,17 +264,18 @@ class ConFacturaController extends Controller
                 $detalle_t = $detalle_d;
             else 
                 $detalle_t = $detalle_t.','.$detalle_d; 
-        } 
+        }  */
 
         $factura->idfacturaparametro = 1;
         $factura->numerofactura = $request->numerofactura;
         $factura->codigocontrol = $request->codigocontrol;
         $factura->razonsocial = $request->razonsocial;        
         $factura->nit = $request->nit;
-        $factura->detalle = $detalle_t;
+        $factura->detalle =$request->detalle;
         $factura->importetotal = $request->importetotal;
         $factura->importecf = $request->importetotal;           
         $factura->activo = '1';
+        $factura->fechafactura=$request->fechafactura;
         $factura->save();
     }
 

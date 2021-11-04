@@ -295,7 +295,7 @@ class ConLibrocompraController extends Controller
         $verdad=0;
 
         if($respuesta>0)
-            $verdad=1;    
+            $verdad=1;    //para el caso de ventas es 2 y para el caso de compras es 1   ,0 es sinfactura
 
         return $verdad;
     }

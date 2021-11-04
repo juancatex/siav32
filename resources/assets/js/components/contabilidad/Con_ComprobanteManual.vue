@@ -537,19 +537,33 @@
                     console.log(error);
                 });
             },
-            eliminarBorrador(idasientomaestro){
+            async eliminarBorrador(idasientomaestro){
+                swal({  title:'Procesando...',
+                        text:'Un momento por favor', 
+                        type:'warning',
+                        showCancelButton:false,
+                        showConfirmButton:false, 
+                        allowOutsideClick: false, 
+                        allowEscapeKey: false, 
+                        allowEnterKey: false,
+                        onOpen:() => { swal.showLoading() }
+                });
                 let me = this;
-                var url= '/con_librocompras/verificarfactura?idasientomaestro='+idasientomaestro;
-                axios.get(url).then(function (response) {
-                    var respuesta= response.data;
-                    
-                    if(respuesta==1)
-                        var texto='<p class="text-factura">El comprobante tiene Facturas Asociadas</p><p>Las Facturas Seran Eliminadas!!</>';
-                    else
-                        var texto=''
-                    
-                    swal({
-                    
+                let texto='';
+                let respuesta;
+                let url= '/con_factura/verificarfactura?idasientomaestro='+idasientomaestro;
+                let response=await axios.get(url);
+                respuesta=  response.data;
+                url= '/con_librocompras/verificarfactura?idasientomaestro='+idasientomaestro;
+                response=await axios.get(url);
+                respuesta=response.data;
+                //para el caso de ventas es 2 y para el caso de compras es 1   ,0 es sinfactura
+                if(respuesta==2)
+                    texto='<p class="text-factura">El comprobante tiene Facturas Asociadas</p><p>Las Facturas Seran Liberadas!!</p>';
+                if(respuesta==1)
+                    texto='<p class="text-factura">El comprobante tiene Facturas Asociadas</p><p>Las Facturas Seran Eliminadas!!</>';
+
+                swal({
                     title: 'Esta seguro de Eliminar este Borrador?',
                     html:texto,
                     
@@ -563,34 +577,103 @@
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: false,
                     reverseButtons: true
-                    }).then((result) => {
-                        if (result.value) {
-                            
-                            axios.put('/con_asientomaestro/eliminarborrador',{
-                                'idasientomaestro': idasientomaestro,
-                                'respuestafactura':respuesta
-                            }).then(function (response) {
-                                me.listarAsientoMaestro(1,me.criterio,me.borradorcheck,me.buscar);
-                                //console.log(1,me.criterio,me.borradorcheck);
-                                swal(
-                                'Desactivado!',
-                                'El Borrador ha sido eliminado correctamente.',
-                                'success'
-                                )
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
-                            
-                            
-                        } else if (result.dismiss === swal.DismissReason.cancel)
-                        {
-                            
-                        }
-                    })
+                }).then((result) => {
+                    if (result.value) {
+                        
+                        axios.put('/con_asientomaestro/eliminarborrador',{
+                            'idasientomaestro': idasientomaestro,
+                            'respuestafactura':respuesta
+                        }).then(async function (response) {
+                            me.listarAsientoMaestro(1,me.criterio,me.borradorcheck,me.buscar);
+                            //console.log(1,me.criterio,me.borradorcheck);
+                            swal(
+                            'Desactivado!',
+                            'El Borrador ha sido eliminado correctamente.',
+                            'success'
+                            )
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                        
+                        
+                    } else if (result.dismiss === swal.DismissReason.cancel)
+                    {
+                        
+                    }
                 })
-                .catch(function (error) {
+
+               /*  let resp=await axios.get(url).then(  function (response) {
+                    respuesta=  response.data;
+                    //console.log(respuesta,'ventas');
+                    if(respuesta==1)
+                        texto='<p class="text-factura">El comprobante tiene Facturas Asociadas</p><p>Las Facturas Seran Liberadas!!</>';
+                    else{
+                        url= '/con_librocompras/verificarfactura?idasientomaestro='+idasientomaestro;
+                        axios.get(url).then(  function (response) {
+                             respuesta= await response.data;
+                            //console.log(respuesta,'compras');
+                            if(respuesta==1)
+                                texto='<p class="text-factura">El comprobante tiene Facturas Asociadas</p><p>Las Facturas Seran Eliminadas!!</>';
+                            else
+                                texto='';
+                            }).catch(function (error) {
+                            console.log(error);
+                        });
+
+                    }
+                        
+                            
+                             swal({
+                                title: 'Esta seguro de Eliminar este Borrador?',
+                                html:texto,
+                                
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Aceptar!',
+                                cancelButtonText: 'Cancelar',
+                                confirmButtonClass: 'btn btn-success',
+                                cancelButtonClass: 'btn btn-danger',
+                                buttonsStyling: false,
+                                reverseButtons: true
+                            }).then((result) => {
+                                if (result.value) {
+                                    
+                                    axios.put('/con_asientomaestro/eliminarborrador',{
+                                        'idasientomaestro': idasientomaestro,
+                                        'respuestafactura':respuesta
+                                    }).then(async function (response) {
+                                        me.listarAsientoMaestro(1,me.criterio,me.borradorcheck,me.buscar);
+                                        //console.log(1,me.criterio,me.borradorcheck);
+                                        swal(
+                                        'Desactivado!',
+                                        'El Borrador ha sido eliminado correctamente.',
+                                        'success'
+                                        )
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    });
+                                    
+                                    
+                                } else if (result.dismiss === swal.DismissReason.cancel)
+                                {
+                                    
+                                }
+                            })
+                            
+
+
+                        
+                
+                }).catch(function (error) {
                     console.log(error);
-                });
+                }); */
+                
+
+              
+               
+                
             },
             revertirAsiento(data = [])
             {

@@ -15,7 +15,7 @@
                                 <button type="button" @click="abrirModal('factura','registrar')" class="btn btn-secondary">
                                     <i class="icon-plus"></i>&nbsp;Registrar Factura
                                 </button> -->
-                                <div class="form-group row" style="margin-bottom: 0px;">
+                                <!-- <div class="form-group row" style="margin-bottom: 0px;">
                                     <div class="col-md-4">
                                         <strong class="form-control-label">Fecha Factura:</strong>
                                     </div>
@@ -30,7 +30,7 @@
                                         <span class="text-error">{{ errors.first('Fecha Factura')}}</span>
                                    
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="col-md-6">
@@ -112,7 +112,7 @@
                                 <tr>
                                     <th style="width:15%">Opciones</th>
                                     <th style="width:8%">No. Factura</th>
-                                    <th style="width:8%">Fecha</th>
+                                    <th style="width:5%">Fecha</th>
                                     <th style="width:17%">Nombre / Razon Social</th>
                                     <th style="width:12%">NIT</th>                                    
                                     <th>Detalle</th>                                    
@@ -122,7 +122,12 @@
                             </thead>
                             <tbody>
                                 <tr v-if="cerrado==0">
-                                    <td></td>
+                                    <td>
+                                        Descuento? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" class="form-check-input"  v-model="checkdescuento" @change="modaldescuento()">
+                                        <label >{{nomsocio}}</label>
+                                       
+                                    </td>
                                     <td><vue-numeric  
                                                 class="form-control " style="text-align:right;"
                                                 separator="," 
@@ -134,7 +139,17 @@
                                         
                                         
                                         <!-- <input class="form-control " style="text-align:right" type="number" v-model="nufactura" v-on:focus="selectAll" @blur="verficarnumfactura"> --></td>
-                                    <td></td>
+                                    <td> 
+                                        <input type="date" 
+                                        v-model="fechafactura"
+                                        class="form-control" 
+                                        :max="fechafinal"
+                                        :min="fechainicial"
+                                        v-validate.initial="'required'"
+                                        name="Fechar Factura">
+                                        <span class="text-error">{{ errors.first('Fecha Factura')}}</span>
+                                   
+                                    </td>
                                     <td><input class="form-control " type="text" v-model="nurazonsocial"  ></td>
                                     <td><input class="form-control " style="text-align:right" type="number" v-model="nunit" v-on:focus="selectAll"></td>
                                     <td><input class="form-control " type="text" v-model="nudetalle" ></td>
@@ -147,15 +162,15 @@
                                 </tr>
                                 <tr v-for="factura in arrayFactura" :key="factura.id">
                                     <td>
-                                        <template v-if="factura.activo==1 && factura.validadoconta==0">
-                                            <button type="button" @click="abrirModal('factura','actualizar',factura)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Factura">
+                                        <template v-if="factura.activo>=1 && factura.validadoconta==0">
+                                            <button v-if="factura.activo==1" type="button" @click="abrirModal('factura','actualizar',factura)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Factura">
                                                 <i class="icon-pencil"></i>
                                             </button> 
                                         
                                             <button type="button" class="btn btn-danger btn-sm" @click="desactivarFactura(factura.idfactura,false)" data-toggle="tooltip" data-placement="top" title="Eliminar Factura">  <!-- quitar esta opcion cuando ya sean facturas electronicas -->
                                                 <i class="icon-trash"></i>
                                             </button> 
-                                            <button type="button" class="btn btn-info btn-sm" @click="desactivarFactura(factura.idfactura,true)" data-toggle="tooltip" data-placement="top" title="Anular Factura">
+                                            <button v-if="factura.activo==1" type="button" class="btn btn-info btn-sm" @click="desactivarFactura(factura.idfactura,true)" data-toggle="tooltip" data-placement="top" title="Anular Factura">
                                                 <i class="icon-exclamation"></i>
                                             </button> 
                                         </template>
@@ -165,7 +180,8 @@
                                     </td>
                                     <td style="text-align:right" v-text="factura.numerofactura"></td>
                                     <td style="text-align:center" v-text="factura.fecha"></td>
-                                    <td v-text="factura.razonsocial"></td>
+                                    <td>{{factura.razonsocial}} <br /><b v-if="factura.nombres!=null"> Descuento: {{ factura.nombres}} </b>
+                                        </td>
                                     <td style="text-align:right" v-text="factura.nit"></td>
                                     <td v-text="factura.detalle"> </td>
                                     <td style="text-align:right" v-text="factura.importetotal + ' Bs.'"></td>                                    
@@ -177,6 +193,7 @@
                                             <span  class="badge badge-success">Comprobante</span><span class="badge badge-info"> {{ factura.cod_comprobante}}</span>
                                         </div>
                                         <span v-if="factura.activo==2" class="badge badge-danger">Anulada</span>
+                                        <span v-if="factura.nombres!=null" class="badge badge-info">Descuento</span>
                                         
                                         
                                     </td>
@@ -215,11 +232,24 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">No. Factura:</label>
                                     <div class="col-md-3"> 
-                                        <input readonly v-validate.initial="'required'" 
+                                        <input  v-validate.initial="'required'" 
                                                 type="text" 
-                                                v-model="numerofactura" 
+                                                v-model="nufactura" 
                                                 name="numerofactura"
-                                                class="form-control">                                    
+                                                class="form-control"
+                                                @blur="verficarnumfactura" >  
+                                    </div>
+                                    <span v-if="duplicado" class="text-error">El Numero de Factura ya exite!!</span>                                  
+                                    <div class="col-md-6">
+                                         <input type="date" 
+                                        v-model="fechafactura"
+                                        class="form-control" 
+                                        :max="fechafinal"
+                                        :min="fechainicial"
+                                        v-validate.initial="'required'"
+                                        name="Fechar Factura">
+                                        <span class="text-error">{{ errors.first('Fecha Factura')}}</span>
+
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -227,7 +257,7 @@
                                     <div class="col-md-3">
                                         <input v-validate.initial="'required'" 
                                                 type="number" 
-                                                v-model="nit" 
+                                                v-model="nunit" 
                                                 class="form-control" 
                                                 placeholder="nit"
                                                 name="nit">
@@ -237,7 +267,7 @@
                                     <div class="col-md-3">
                                         <input v-validate.initial="'required'" 
                                                 type="text" 
-                                                v-model="razonsocial" 
+                                                v-model="nurazonsocial" 
                                                 class="form-control" 
                                                 placeholder="razon social"
                                                 name="razonsocial">
@@ -250,31 +280,17 @@
                                     <table class="table table-sm">
                                          <thead class="thead-dark">
                                             <tr>
-                                                <th>Borrar Fila</th>
-                                                <th>No.</th>
-                                                <th>Nombre</th>
-                                                <th>Importe Bs.</th>
-                                                <th>Cantidad</th>
-                                                <th>Total Parcial Bs.</th>
+                                                <th>Detalle</th>
+                                                <th>Total Bs.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="(invoice_product, k) in invoice_products" :key="k">
-                                                <td scope="row" class="trashIconContainer">
-                                                    <i class="far fa-trash-alt" @click="deleteRow(k, invoice_product)"></i>
-                                                </td>
-                                                <td> {{k+1}}</td>
+                                            <tr>
                                                 <td>
-                                                    <input class="form-control" type="text" v-model="invoice_product.product_name" />
+                                                    <input class="form-control" type="text" v-model="nudetalle" />
                                                 </td>
                                                 <td>
-                                                    <input class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.product_price" @change="calculateLineTotal(invoice_product)"/>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.product_qty" @change="calculateLineTotal(invoice_product)"/>
-                                                </td>
-                                                <td>
-                                                    <input readonly class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.line_total" />
+                                                    <input class="form-control text-right" type="number" min="0" step=".01" v-model="nuimporte" >
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -282,13 +298,13 @@
                                 <!-- </div> -->
                                 
                                 <div class="form-group row col-md-3 ">
-                                <button type='button' class="btn btn-info" @click="addNewRow">
+                               <!--  <button type='button' class="btn btn-info" @click="addNewRow">
                                     <i class="fas fa-plus-circle"></i>
                                     Nueva Fila
-                                </button>
+                                </button> -->
                                 </div>
 
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Importe Total Bs.:</label>
                                     <div class="col-md-3">
                                         <input readonly class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_subtotal" />
@@ -298,7 +314,7 @@
                                     <div class="col-md-3">
                                         <input v-validate.initial="'required'" readonly class="form-control text-right" type="text" name="codigocontrol" v-model="codigocontrol" />
                                     </div>
-                                </div>                                
+                                </div>  -->                               
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -314,6 +330,37 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
+            <!-- MODAL Libro de VENTAS --> 
+            <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="descuentos"  data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="padding-bottom: 5px;padding-top: 5px;">
+                            <h4 class="modal-title">Seleccionar Socio Para Descuento</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                 <Ajaxselect  v-if="clearSelected"
+                                    ruta="/rrh_empleado/selectsocios?buscar=" @found="empleados" @cleaning="cleanempleados"
+                                    resp_ruta="empleados"
+                                    labels="nombres"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="idsocio"
+                                    :id="idempleadoselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <button type="button"  class="btn btn-secondary"  @click="cerrardescuento()">Cerrar</button>
+                                <button type="button"  class="btn btn-success"  v-if="idempleado.length>0" @click="registrardescuento()">Registrar Descuento</button>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>                
+            </div> 
+            <!-- FIN MODAL LIBRO VENTAS -->
         </main>
 </template>
 
@@ -403,12 +450,19 @@
                 nurazonsocial:'',
                 nunit:0,
                 nuimporte:0,
-                nudetalle:'',
+                nudetalle:'HOSPEDAJE',
                 nunumautorizacion:'',
                 fechainicial:'',
                 fechafinal:'',
-                duplicado:false
+                duplicado:false,
+                nufechafactura:'',
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+                clearSelected:0,
+                nomsocio:'',
+                checkdescuento:0,
+                idempleadoselected:'',
+                idempleado:[],
+
 
 
 
@@ -421,12 +475,29 @@
           },  
 
         computed:{
+            sidescuento(){
+                if(this.idempleado.length>0)
+                    return true;
+                else
+                    return false;
+            },
             iscompletefactura(){
                 let me=this;
-                if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
-                    return true;
-                else   
-                    return false;
+                let valor=0;
+                if(me.checkdescuento==1)
+                {
+                    if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
+                        return true;
+                    else   
+                        return false;
+                }
+                else
+                {
+                    if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
+                        return true;
+                    else   
+                        return false;
+                }
             },
             isActived: function(){
                 return this.pagination.current_page;
@@ -458,6 +529,56 @@
         },
 
         methods : {
+             empleados(empleados){
+                this.idempleado=[];
+                for (const key in empleados) {
+                    if (empleados.hasOwnProperty(key)) {
+                        const element = empleados[key];
+                        this.idempleado.push(element);
+                    }
+                }
+            },
+            tiempo(){
+                this.clearSelected=1;
+            },
+            modaldescuento(){
+                let me=this;
+                if (me.checkdescuento)
+                {
+                    me.clearSelected=0;
+                    setTimeout(this.tiempo, 200); 
+                    me.classModal.openModal('descuentos');
+                }
+                else
+                {
+                    me.idempleado=[];
+                    me.nomsocio='';
+                    me.nurazonsocial='';
+                    me.nunit='';
+                }
+                
+                //me.classModal.closeModal('librocompras'); 
+            },
+            cerrardescuento(){
+                let me=this;
+                if(me.idempleado.length==0)
+                    me.checkdescuento=0
+                me.classModal.closeModal('descuentos');
+            },
+            registrardescuento(){
+                let me=this;
+                let res=[];
+                me.nomsocio=me.idempleado[2];
+                res=me.nomsocio.split(' ');
+                me.nurazonsocial=res[2];
+                me.nunit=me.idempleado[3];
+                me.cerrardescuento();
+
+
+            },
+            cleanempleados(){
+                this.idempleado=[];
+            },
             CerrarmesLibroVentas(){
                  swal({
                     title: 'Esta seguro de Cerrar el Mes: '+ this.arraymes[this.messelected-1]+' / '+this.anioselected, 
@@ -734,6 +855,7 @@
             
             registrarFactura(){ 
                let me = this;
+               me.nufechafactura=me.fechafactura
 
                ////////////////////////// quitar o modificar para facturas electronica s
                if(me.nuimporte!=0)
@@ -771,6 +893,7 @@
                     'it':porcenit,
                     'numautorizacion':me.nunumautorizacion,
                     'fechafactura':me.fechafactura,
+                    'subcuenta':me.idempleado[0]
 
                 }).then(function (response) {                    
                     
@@ -789,7 +912,8 @@
                         me.listarFactura(1,'',me.messelected,me.anioselected);
                         me.maxfactura(); 
                         //me.cerrarModal(); 
-                        me.resetfactura();                       
+                        me.resetfactura();   
+                        me.fechafactura=me.nufechafactura;                    
                         
                          
                     }
@@ -802,8 +926,11 @@
                 let me =this;
                 me.nurazonsocial='';
                 me.nunit=0;
-                me.nudetalle='';
+                me.nudetalle='HOSPEDAJE';
                 me.nuimporte=0;
+                me.idempleado=[];
+                me.checkdescuento=0;
+                me.nomsocio='';
                 //me.$refs.nurazonsocial.focus();
                 //Vue.nextTick().then(()=> this.$refs.input.focus());
 
@@ -848,13 +975,14 @@
                 let me = this;
                 axios.put('/con_factura/actualizar',{
                     'idfactura': this.factura_id, 
-                    'numerofactura': this.numerofactura,
-                    'codigocontrol': this.codigocontrol,
-                    'razonsocial': this.razonsocial,                    
-                    'nit': this.nit,
-                    'detalle': this. invoice_products,
-                    'importetotal': this.invoice_subtotal,
-                    'importecf': this.invoice_subtotal
+                    'numerofactura': this.nufactura,
+                    'codigocontrol': '',
+                    'razonsocial': this.nurazonsocial,                    
+                    'nit': this.nunit,
+                    'detalle': this.nudetalle,
+                    'importetotal': this.nuimporte,
+                    'importecf': this.nuimporte,
+                    'fechafactura':this.fechafactura
                 }).then(async function (response) {
                     if(response.data.length){
                         swal(
@@ -869,6 +997,7 @@
                         // var resultado = await factura.genera('123123123','nombre','121231231|23.2|1|23.3,84846548|11.23|1|11.23',23.36);                         
                         // console.log('dev: ' + resultado['nrofactura']);   
                         me.cerrarModal();
+                        me.resetfactura();
                         me.listarFactura(1,'',me.messelected,me.anioselected);
                     }
                 }).catch(function (error) {
@@ -912,7 +1041,7 @@
                     }).then(function (response) {
                         me.listarFactura(1,'',me.messelected,me.anioselected);
                         swal(
-                        'Desactivado!',
+                        mensaje+'!',
                         'La factra ha sido ' + mensaje + ' con exito',
                         'success'
                         )
@@ -1017,7 +1146,7 @@
                             }
                             case 'actualizar':
                             { 
-                                this.invoice_products = [];
+                                /* this.invoice_products = [];
                                 var detalle0 = [];
                                 var detalle1 = [];
                                 detalle0 = data['detalle'].split(','); //console.log(detalle0[0]);
@@ -1031,7 +1160,7 @@
                                         product_price:detalle1[1],
                                         product_qty:detalle1[2],
                                         line_total:detalle1[3]}) 
-                                }
+                                } */
                                                                                                 
                                 //console.log(this.invoice_products);
 
@@ -1040,15 +1169,16 @@
                                 this.tituloModal='Actualizar Factura';
                                 this.tipoAccion=2;
                                 this.factura_id=data['idfactura'];
-                                this.numerofactura = data['numerofactura'];
+                                this.nufactura = data['numerofactura'];
                                 this.codigocontrol = data['codigocontrol'];
-                                this.razonsocial = data['razonsocial'];
-                                this.nit = data['nit'];
-                                this.detalle = data['detalle'];
+                                this.nurazonsocial = data['razonsocial'];
+                                this.nunit = data['nit'];
+                                this.nudetalle = data['detalle'];
+                                this.fechafactura=data['fecha'];
                                 
-                                this.importetotal = data['importetotal'];
-                                this.importecf = data['importecf'];
-                                this.calculateTotal();
+                                this.nuimporte = data['importetotal'];
+                                //this.importecf = data['importecf'];
+                                //this.calculateTotal();
                                 break;
                             }
                         }
@@ -1058,11 +1188,13 @@
 
         },
         mounted() {
+            this.classModal=new _pl.Modals();
             this.fechahoy();                
             this.listarFactura(1,this.buscar,this.mes,this.anio);
             this.dataparametro();
             this.maxfactura();  
             this.selectLibroCuenta();  
+            this.classModal.addModal('descuentos');
             
         }
     }

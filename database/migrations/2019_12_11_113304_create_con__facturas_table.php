@@ -33,6 +33,7 @@ class CreateConFacturasTable extends Migration
             $table->boolean('mescerrado')->default(0)->comment('para verificar si el mes establoqueado por contabilidad 0->abierto,1->bloqueado');
             $table->string('numautorizacion',20)->comment('registra el numero de autorizacion');
             $table->date('fechafactura');
+            $table->string('idsubcuenta',20)->comment('id de la subcuenta (socio) que se hospeda y paga con descuento');
             $table->timestamps();
         });
     }

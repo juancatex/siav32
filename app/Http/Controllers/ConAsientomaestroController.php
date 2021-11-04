@@ -1125,17 +1125,22 @@ class ConAsientomaestroController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $repuestafactura=$request->respuestafactura;
-        if($repuestafactura==1)
+        $respuestafactura=$request->respuestafactura;
+        if($respuestafactura==1)
         {
-            DB::table('con__librocompras')->where('idasientomaestro', '=', $request->idasientomaestro)->update(['activo' => 0]);
+            DB::table('con__librocompras')->where('idasientomaestro',$request->idasientomaestro)->update(['activo' => 0]);
         }
+        if($respuestafactura==2)
+            DB::table('con__facturas')->where('idasientomaestro',  $request->idasientomaestro)->update(['validadoconta' => 0]);
 
 
-        $buscarsolccuenta = Con_Asientomaestro::select('idsolccuenta')->where('idasientomaestro',$request->idasientomaestro)->get()->toArray();
+        $buscarsolccuenta = Con_Asientomaestro::select('idsolccuenta')->where('idasientomaestro',$request->idasientomaestro)->get();
+        //dd($buscarsolccuenta[0]->idsolccuenta);
 
-        if($buscarsolccuenta[0]['idsolccuenta']!=null);
+       
+        if($buscarsolccuenta[0]->idsolccuenta!=null)
         {
+            echo "entra !=nulla";
             $monto=Glo_SolicitudCargoCuenta::select('monto')->where('idsolccuenta',$buscarsolccuenta[0]['idsolccuenta'])->get()->toArray();
             $solccuenta = Glo_SolicitudCargoCuenta::findOrFail($buscarsolccuenta[0]['idsolccuenta']);
             $solccuenta->seg_descargoccuenta = 0;
@@ -1144,6 +1149,9 @@ class ConAsientomaestroController extends Controller
             
             //DB::table('glo__solicitud_cargo_cuentas')->where('idasientomaestro', $respuesta)->update(['idsolccuenta' => $idsolccuenta]);    
         }
+       
+        
+        
 
 
 

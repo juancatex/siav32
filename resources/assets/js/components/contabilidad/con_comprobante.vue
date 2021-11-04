@@ -304,17 +304,20 @@
 
                         <div v-if="sifacturasdebito">
                             <div  class="row table-warning rounded" style="padding-top: 5px;">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <strong>Datos Debito fiscal:&nbsp;</strong><label># de Facturas:&nbsp;</label><strong v-text="checkusarfactura.length"></strong>
                                 </div>                            
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label style="margin-bottom: 5px;">Acumulado {{porcentajelv}}%:&nbsp;<strong v-text="acumuladodebito+' Bs.'"></strong></label>    
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label style="margin-bottom: 5px;">Acumulado {{resporcentajelv}}%:&nbsp;<strong v-text="acumuladorestodebito+' Bs.'"></strong></label>
                                 </div>
-                                <div class="col-md-3">
-                                    <label style="margin-bottom: 5px;">Suma Total:&nbsp;<strong v-text="sumafacturasdebito+' Bs.'"></strong></label>
+                                <div class="col-md-2">
+                                    <label style="margin-bottom: 5px;">Sumas:&nbsp;<strong v-text="sumafacturasdebito+' Bs.'"></strong></label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label style="margin-bottom: 5px;">Suma Descuentos:&nbsp;<strong v-text="sumadescuento+' Bs.'"></strong></label>
                                 </div>
                                 
                             </div>
@@ -396,7 +399,7 @@
                                         <th>Razon Social</th>
                                         <th style="width:90px">Fecha Factura</th>                     
                                         <th>Nº Factura</th>
-                                        <th>Registrado Por</th>
+                                        <th>Descuento</th>
                                         <th>Importe</th>
                                         <th>Estado</th>
                                         <th>*</th>
@@ -407,8 +410,8 @@
                                         <td v-text="libroventas.nit"></td>
                                         <td v-text="libroventas.razonsocial"></td>
                                         <td v-text="libroventas.fecha"></td>
-                                        <td v-text="libroventas.numerofactura"></td>
-                                        <td v-text="libroventas.username"></td>
+                                        <td style="text-align:center" v-text="libroventas.numerofactura"></td>
+                                        <td v-text="libroventas.nombres"></td>
                                         <td v-text="libroventas.importetotal+' Bs.'" style="text-align:right"></td>
                                         <td><template v-if="libroventas.validadoconta==1">
                                                 <span class="badge badge-success">Validado</span>
@@ -1138,7 +1141,11 @@ export default {
         sifacturasdebito:false,
         indiceit:0,
         indiceitxp:0,
-        sumafacturasdebito:0
+        sumafacturasdebito:0,
+        hospporcobrar:'',
+        sumadescuento:0,
+        sidescuento:false,
+        indicehxc:0,
 
         
         /**/
@@ -1899,6 +1906,10 @@ export default {
                 respuesta=me.resLibroventas.find(element=>element.codigo=='ITXP');
                 me.itxp=respuesta.valor;
                 me.porcentajeitxp=respuesta.valor2;
+
+                me.hospporcobrar=me.arrayLibroCuentas.hospedajeporcobrar[0].valor;
+
+
                 //console.log(me.lv,me.porcentajelv,me.it,me.porcentajeit,me.itxp,me.porcentajeitxp);
             })
             .catch(function (error) {
@@ -2244,14 +2255,16 @@ export default {
                         me.indiceit=index;
                     if(element.idcuenta==me.itxp)
                         me.indiceitxp=index;
-
+                    if(element.idcuenta==me.hospporcobrar)
+                        me.indicehxc=index;
                 }
             });
             if(sw==1){
                     
 
-                    me.rowcuentas[me.indice].haber=me.acumuladodebito;
                     me.rowcuentas[me.indiceit].debe=me.acumuladoit;
+                    me.rowcuentas[me.indicehxc].debe=me.sumadescuento;
+                    me.rowcuentas[me.indice].haber=me.acumuladodebito;
                     me.rowcuentas[me.indiceitxp].haber=me.acumuladoit;
 
             }
@@ -2259,6 +2272,35 @@ export default {
             {
                 //console.log("entra");
                 if(me.sifacturasdebito) {
+
+                    if(me.sidescuento)
+                    {
+                        me.addrowcuentas(false);
+                        me.indice=me.rowcuentas.length-1;
+                        me.rowcuentas[me.indice].idcuenta=me.hospporcobrar;
+                        me.rowcuentas[me.indice].debe=me.sumadescuento;
+                        //revisar los datos de la sub cuenta para libro de compras
+                        
+                        me.checkusarfactura.forEach(element=>{
+                            let resultado=me.arrayLibroventas.find(elem=>elem.idfactura==element);
+                            if(resultado.nombres!=null)
+                            {
+                                me.rowcuentas[me.indice].idsubcuenta.push({
+                                            idcuenta: me.rowcuentas[me.indice].idcuenta,
+                                            tiposubcuenta:1,//socios
+                                            subcuenta:resultado.numpapeleta,
+                                            subdebe:resultado.importetotal,
+                                            subhaber:0,
+                                            detalle:'Factura Nº '+resultado.numerofactura,
+                                            nombre:resultado.nombres,
+                                            idsubcuenta:resultado.idsocio
+                                            });
+                            }
+
+                        });
+                        
+
+                    }
                    
                     me.addrowcuentas(false);
                     me.indice=me.rowcuentas.length-1;
@@ -2268,7 +2310,7 @@ export default {
                     me.rowcuentas[me.indice].idsubcuenta.push({
                                         idcuenta: me.rowcuentas[me.indice].idcuenta,
                                         tiposubcuenta:4,
-                                        subcuenta:'2000000',
+                                        subcuenta:'20000000',
                                         subdebe:me.acumuladoit,
                                         subhaber:0,
                                         detalle:'factura emitida',
@@ -2282,7 +2324,7 @@ export default {
                     me.rowcuentas[me.indice].idsubcuenta.push({
                                         idcuenta: me.rowcuentas[me.indice].idcuenta,
                                         tiposubcuenta:4,
-                                        subcuenta:'2000000',
+                                        subcuenta:'20000000',
                                         subdebe:0,
                                         subhaber:me.acumuladodebito,
                                         detalle:'factura emitida',
@@ -2296,7 +2338,7 @@ export default {
                     me.rowcuentas[me.indice].idsubcuenta.push({
                                         idcuenta: me.rowcuentas[me.indice].idcuenta,
                                         tiposubcuenta:4,
-                                        subcuenta:'2000000',
+                                        subcuenta:'20000000',
                                         subdebe:0,
                                         subhaber:me.acumuladoit,
                                         detalle:'factura emitida',
@@ -2444,6 +2486,9 @@ export default {
             let sumadebito=0;
             let sumarestodebito=0;
             let sumait=0;
+            let descuento=0;
+            me.sidescuento=false;
+            me.sumadescuento=0;
             me.sumafacturasdebito=0;
             me.idfacturasdebito=[];
             me.acumuladodebito=0;
@@ -2451,6 +2496,12 @@ export default {
             me.acumuladoit=0;
             me.checkusarfactura.forEach(element => {
                 let resultado = me.arrayLibroventas.find( elem => elem.idfactura == element );
+                if(resultado.nombres!=null)
+                {
+                    //console.log(resultado.nombres);
+                    descuento=descuento+Number(resultado.importetotal);
+                    me.sidescuento=true;
+                }
                 sumadebito=Number(sumadebito+resultado.debfiscal);
                 sumarestodebito=Number(sumarestodebito+resultado.restoimporte);
                 sumait=Number(sumait+resultado.it);
@@ -2459,8 +2510,14 @@ export default {
             me.acumuladodebito=Number(sumadebito.toFixed(2));
             me.acumuladorestodebito=Number(sumarestodebito.toFixed(2));
             me.acumuladoit=Number(sumait.toFixed(2));
+
             me.sumafacturasdebito=Number((me.acumuladodebito+me.acumuladorestodebito).toFixed(2));
-            
+            //console.log(me.sumafacturasdebito);
+            if(me.sidescuento)
+            {
+                me.sumafacturasdebito=Number(me.sumafacturasdebito-descuento)    
+                me.sumadescuento=Number(descuento);
+            }
             if(me.acumuladodebito>0)
                 me.sifacturasdebito=true;
             else

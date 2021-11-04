@@ -167,9 +167,15 @@ class ConConfiguracionController extends Controller
                                     ->where('tipoconfiguracion',1)//valor de libro de ventas
                                     ->get();
 
+        $hospedajeporcobrar= Con_Configuracion::select('codigo','valor')
+                                    ->where('activo',1)
+                                    ->where('tipoconfiguracion',7)//valor de hospedajeporcobrar
+                                    ->get();
+
         
         return ['cuentaslibros'=>$cuentaslibros,
-                'libroventas'=>$libroventas];
+                'libroventas'=>$libroventas,
+                'hospedajeporcobrar'=>$hospedajeporcobrar];
 
     }
     public function cuentas_conciliacion(Request $request)

@@ -184,6 +184,7 @@ export default {
                             {abreviacion:"LV",descripcion:"Libro de Ventas Debito Fiscal",tipoconfiguracion:'1'},
                             {abreviacion:"IT",descripcion:"Impuesto a las trancciones",tipoconfiguracion:'1'},
                             {abreviacion:"ITXP",descripcion:"Impuesto a las Transacciones por pagar",tipoconfiguracion:'1'},
+                            {abreviacion:"HXC",descripcion:"Hospedaje por Cobrar Libro de ventas",tipoconfiguracion:'7'},
                             {abreviacion:"LC",descripcion:"Libro de Compras Credito Fiscal",tipoconfiguracion:'2'},
                             {abreviacion:"CC",descripcion:"Cargo de Cuenta",tipoconfiguracion:'4'},
                             {abreviacion:"LB",descripcion:"Libreta Bancaria",tipoconfiguracion:'3'},
