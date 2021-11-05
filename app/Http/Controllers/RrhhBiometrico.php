@@ -54,9 +54,10 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(29, '29', 'ROJAS SONABI WILMER','',Util::LEVEL_USER);
             // $zk->setUser(30, '30', 'RUFFO VELASCO ESTEFANI','',Util::LEVEL_USER);
             // $zk->setUser(31, '31', 'SALAZAR JEMIO JULIAN','',Util::LEVEL_USER); 
+            // $zk->setUser(32, '32', 'USCAMAYTA YUGAR BRIAN','',Util::LEVEL_USER);
             // $zk->setUser(33, '33', 'TAPIA VARGAS DANIELA','',Util::LEVEL_USER);
             // $zk->setUser(34, '34', 'URI UTURUNCO ARTURO','',Util::LEVEL_USER);
-            // $zk->setUser(32, '32', 'USCAMAYTA YUGAR BRIAN','',Util::LEVEL_USER);
+            // $zk->setUser(35, '100', 'ADMIN','admin',Util::LEVEL_ADMIN,'0008261998'); 
             // $zk->setUser(36, '36', 'QUISPE HUANCA JOHANA','',Util::LEVEL_USER);
             // $zk->setUser(50, '37', 'TRUJILLO CHAVEZ LAURA','',Util::LEVEL_USER);
             // $zk->setUser(51, '38', 'CORTEZ CARI CINTHIA','',Util::LEVEL_USER);
@@ -93,7 +94,13 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(80, '86', 'SANDRO BELTRAN MAMANI','',Util::LEVEL_USER);
             // $zk->setUser(81, '87', 'WILLY PINTO GALVEZ','',Util::LEVEL_USER);
             // $zk->setUser(82, '88', 'CINTHIA CASTRO LOZA','',Util::LEVEL_USER);
-            $zk->setUser(83, '89', 'EVA PORTILLO PACHAJAYA','',Util::LEVEL_USER);
+            // $zk->setUser(83, '89', 'EVA PORTILLO PACHAJAYA','',Util::LEVEL_USER);
+            // $zk->setUser(84, '90', 'DANIEL FRANCO GERCHI','',Util::LEVEL_USER);
+            // $zk->setUser(85, '91', 'YASSMIRA RAMIREZ AGUILAR','',Util::LEVEL_USER);
+            // $zk->setUser(86, '92', 'DANIELA QUISPE CUEVAS','',Util::LEVEL_USER);
+            // $zk->setUser(87, '93', 'VALERIA ALI MAMANI','',Util::LEVEL_USER);
+            $zk->setUser(88, '94', 'GIOVANA MERLO CARHUANI','',Util::LEVEL_USER);
+            
 
             // $zk->setUser(50, '50', 'admin2','',Util::LEVEL_USER);
             // $zk->setUser(51, '51', 'SOM. ALMANZA WILSON','',Util::LEVEL_USER);
