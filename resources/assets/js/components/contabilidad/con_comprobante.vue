@@ -2242,7 +2242,7 @@ export default {
             let me=this;
             //console.log(me.acumulado13);
             var sw=0;
-            
+            //console.log(me.sidescuento)
             me.rowcuentas.forEach((element,index) => {
                 if(element.idcuenta==me.lv)
                 {
@@ -2263,10 +2263,53 @@ export default {
                     
 
                     me.rowcuentas[me.indiceit].debe=me.acumuladoit;
-                    me.rowcuentas[me.indicehxc].debe=me.sumadescuento;
+                    me.rowcuentas[me.indiceit].idsubcuenta[0].subdebe=me.acumuladoit;
+                    
                     me.rowcuentas[me.indice].haber=me.acumuladodebito;
+                    me.rowcuentas[me.indice].idsubcuenta[0].subhaber=me.acumuladodebito;
+                    
                     me.rowcuentas[me.indiceitxp].haber=me.acumuladoit;
+                    me.rowcuentas[me.indiceitxp].idsubcuenta[0].subhaber=me.acumuladoit;
+                    //console.log(me.descuento);
+                    if(me.sidescuento==true)
+                    {
+                        //console.log('entra descuento');
+                        me.rowcuentas[me.indicehxc].debe=me.sumadescuento;
+                        me.rowcuentas[me.indicehxc].idsubcuenta=[];
+                        //console.log(me.rowcuentas[me.indicehxc]);
+                        me.checkusarfactura.forEach(element=>{
+                            
+                            
+                            let resultado=me.arrayLibroventas.find(elem=>elem.idfactura==element);
+                            if(resultado.nombres!=null)
+                            {
+                                me.rowcuentas[me.indicehxc].idsubcuenta.push({
+                                            idcuenta: me.rowcuentas[me.indicehxc].idcuenta,
+                                            tiposubcuenta:1,//socios
+                                            subcuenta:resultado.numpapeleta,
+                                            subdebe:resultado.importetotal,
+                                            subhaber:0,
+                                            detalle:'Factura Nº '+resultado.numerofactura,
+                                            nombre:resultado.nombres,
+                                            idsubcuenta:resultado.idsocio
+                                            });
+                            }
 
+                        });
+                    }
+                    else   
+                    {
+                        if(me.indicehxc!=0)
+                        {
+                            me.rowcuentas[me.indicehxc].idsubcuenta=[];
+                            me.rowcuentas.splice(me.indicehxc, 1);
+                        }
+                    }                        
+                    
+                    
+                    
+                    //console.log(me.acumuladoit);
+                    //console.log(me.rowcuentas[me.indiceitxp].idsubcuenta[0].subhaber);
             }
             else
             {
@@ -2494,12 +2537,14 @@ export default {
             me.acumuladodebito=0;
             me.acumuladorestodebito=0;
             me.acumuladoit=0;
+            //console.log(me.checkusarfactura);
             me.checkusarfactura.forEach(element => {
                 let resultado = me.arrayLibroventas.find( elem => elem.idfactura == element );
                 if(resultado.nombres!=null)
                 {
                     //console.log(resultado.nombres);
-                    descuento=descuento+Number(resultado.importetotal);
+                    descuento=Number(descuento+Number(resultado.importetotal));
+                    console.log(descuento);
                     me.sidescuento=true;
                 }
                 sumadebito=Number(sumadebito+resultado.debfiscal);
@@ -2533,7 +2578,7 @@ export default {
             me.checkusarfactura.forEach(element => {
                 var resultado = me.arrayLibrocompras.find( elem => elem.idlibrocompra == element );
                 console.log(resultado);
-               sumacheck=Number(sumacheck+resultado.credfiscal);
+                sumacheck=Number(sumacheck+resultado.credfiscal);
                 suma87=Number(suma87+resultado.subtotal);
             });
             me.acumulado13=Number((me.acumulado13+sumacheck).toFixed(2));
