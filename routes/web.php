@@ -902,10 +902,12 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::get('/con_factura', 'ConFacturaController@index');
         Route::get('/con_factura/dataparametro', 'ConFacturaController@dataparametro');
         Route::get('/con_factura/maxfactura', 'ConFacturaController@maxfactura');
+        Route::get('/con_factura/verificarfactura', 'ConFacturaController@verificarfactura');
         Route::post('/con_factura/registrar', 'ConFacturaController@store');
         Route::put('/con_factura/actualizar', 'ConFacturaController@update');
         Route::put('/con_factura/desactivar', 'ConFacturaController@desactivar');
         Route::put('/con_factura/activar', 'ConFacturaController@activar');
+        Route::post('/con_factura/cerrarmes', 'ConFacturaController@cerrarmes');
         Route::put('/con_contabilidad/updateDateCuentaComprobante', 'ConFacturaController@updateDateCuentaComprobante');
         Route::post('/con_contabilidad/proceso', 'ConFacturaController@proceso');
         Route::post('/con_contabilidad/procesoservicio', 'ConFacturaController@procesoservicio');

@@ -7,6 +7,7 @@ use App\Con_FacturaParametro;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\AsinalssClass\FacturaClass;
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -18,27 +19,185 @@ class ConFacturaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-        $buscar = $request->buscar;
-        $criterio = $request->criterio;
-        
-        if ($buscar==''){
-            $factura = Con_factura::orderBy('idfactura', 'desc')->paginate(10);
+        $mes=$request->mes;
+        $anio=$request->anio;
+        //$criterio = $request->criterio;
+        $modal=$request->modal;
+        $raw=DB::raw('date(con__facturas.fechafactura) as fecha');
+        $raw2=DB::raw("concat(numpapeleta,' ',apaterno,' ',amaterno,' ',nombre) as nombres");
+        if($modal==1)
+        {
+            $libroventas=Con_Factura::leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
+                                        ->select('idfactura',
+                                            'numerofactura',
+                                            'codigocontrol',
+                                            'razonsocial',
+                                            'nit',
+                                            'importetotal',
+                                            $raw,
+                                            'con__facturas.idasientomaestro',
+                                            'debfiscal',
+                                            'restoimporte',
+                                            'it',
+                                            'con__facturas.activo',
+                                            'validadoconta',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio'
+                                            )
+                                        ->where('con__facturas.activo',1)
+                                        ->whereMonth('con__facturas.fechafactura',$mes)
+                                        ->whereYear('con__facturas.fechafactura',$anio)
+                                        ->orderby('con__facturas.numerofactura','desc')
+                                        ->get();
+            return ['libroventas'=>$libroventas];
         }
-        else{
-            $factura = Con_factura::where($criterio, 'like', '%'. $buscar . '%')->orderBy('idfactura', 'desc')->paginate(10);
+        else
+        {
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+            
+            if ($buscar==''){
+                $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
+                                        ->select('idfactura',
+                                            'numerofactura',
+                                            'codigocontrol',
+                                            'razonsocial',
+                                            'nit',
+                                            'importetotal',
+                                            $raw,
+                                            'con__facturas.idasientomaestro',
+                                            'debfiscal',
+                                            'restoimporte',
+                                            'it',
+                                            'con__facturas.activo',
+                                            'validadoconta',
+                                            'cod_comprobante',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio')
+                                            
+                                            ->where('con__facturas.activo','>=',1)
+                                            ->whereMonth('con__facturas.fechafactura',$mes)
+                                            ->whereYear('con__facturas.fechafactura',$anio)
+                                            ->orderby('con__facturas.numerofactura','desc')
+                                            ->paginate(50);
+            }
+            else{
+                $factura = Con_factura::leftjoin('con__asientomaestros','con__facturas.idasientomaestro','con__asientomaestros.idasientomaestro')
+                                        ->leftjoin('socios','socios.idsocio','con__facturas.idsubcuenta')
+                                        ->select('idfactura',
+                                            'numerofactura',
+                                            'codigocontrol',
+                                            'razonsocial',
+                                            'nit',
+                                            'importetotal',
+                                            $raw,
+                                            'con__facturas.idasientomaestro',
+                                            'debfiscal',
+                                            'restoimporte',
+                                            'it',
+                                            'con__facturas.activo',
+                                            'validadoconta',
+                                            'cod_comprobante',
+                                            'con__facturas.detalle',
+                                            'mescerrado',
+                                            'numautorizacion',
+                                            $raw2,
+                                            'socios.numpapeleta',
+                                            'socios.idsocio')
+                                       
+                                        ->where('con__facturas.activo','>=',1)
+
+                                        ->where(function($query) use($buscar){
+                                            $query->where('razonsocial', 'like', '%'. $buscar . '%')
+                                                ->orwhere('nit', 'like', '%'. $buscar . '%');
+                                        })
+                                        ->whereMonth('con__facturas.fechafactura',$mes)
+                                        ->whereYear('con__facturas.fechafactura',$anio)
+                                        ->orderby('con__facturas.numerofactura','desc')
+                                        ->paginate(50);
+            }
+            
+            return [
+                'pagination' => [
+                    'total'        => $factura->total(),
+                    'current_page' => $factura->currentPage(),
+                    'per_page'     => $factura->perPage(),
+                    'last_page'    => $factura->lastPage(),
+                    'from'         => $factura->firstItem(),
+                    'to'           => $factura->lastItem(),
+                ],
+                'factura' => $factura
+            ];
         }
         
-        return [
-            'pagination' => [
-                'total'        => $factura->total(),
-                'current_page' => $factura->currentPage(),
-                'per_page'     => $factura->perPage(),
-                'last_page'    => $factura->lastPage(),
-                'from'         => $factura->firstItem(),
-                'to'           => $factura->lastItem(),
-            ],
-            'factura' => $factura
-        ];
+        
+    }
+    public function verificarfactura(Request $request){
+        if (!$request->ajax()) return redirect('/');
+        $idasientomaestro=$request->idasientomaestro;
+        $respuesta=Con_Factura::where('idasientomaestro',$idasientomaestro)
+                                    ->count();
+        //dd($respuesta);
+        $verdad=0;
+
+        if($respuesta>0)
+            $verdad=2; //para el caso de ventas es 2 y para el caso de compras es 1   ,0 es sinfactura
+
+        return $verdad;
+    }
+    /* public function vernumfactura (Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $factura=Con_Factura::select('numerofactura')
+                            ->where('numerofactura',$request->numfactura)
+                            ->where('activo','>','0')
+                            ->get();
+        
+       
+        return $factura;
+    } */
+    public function desactivar(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $factura = Con_Factura::findOrFail($request->idfactura);
+
+        if($request->anularfac==true)
+        {
+            $factura->activo = '2';
+            $factura->razonsocial='';
+            $factura->nit='';
+            $factura->detalle='';
+            $factura->importetotal=0;
+            $factura->importecf=0;
+            $factura->debfiscal=0;
+            $factura->restoimporte=0;
+            $factura->it=0;
+        }   
+        else
+            $factura->activo = '0';
+        
+        $factura->save();
+    }
+
+    public function cerrarmes(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $factura=Con_Factura::wheremonth('fechafactura',$request->mes)
+                                ->whereYear('fechafactura',$request->anio)
+                                ->update(['mescerrado'=>1]);
+        
+        //$factura->save();
     }
         
     public function store(Request $request)
@@ -52,16 +211,21 @@ class ConFacturaController extends Controller
             return ($validator->messages()->first());
         }
 
-        $detalle_t='';
-        for ($i=0; $i<count($request->detalle); $i++) {            
-            $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
-            .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
-            if ($i==0)
-                $detalle_t = $detalle_d;
-            else 
-                $detalle_t = $detalle_t.','.$detalle_d; 
-        } 
-
+        if(is_Array($request->detalle))
+        {
+            $detalle_t='';
+            for ($i=0; $i<count($request->detalle); $i++) {            
+                $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
+                .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
+                if ($i==0)
+                    $detalle_t = $detalle_d;
+                else 
+                    $detalle_t = $detalle_t.','.$detalle_d; 
+            } 
+        }
+        else
+            $detalle_t=$request->detalle;
+        //dd($request);
         if (!$request->ajax()) return redirect('/');
         $factura = new Con_factura();
         $factura->idfacturaparametro = 1;
@@ -71,8 +235,14 @@ class ConFacturaController extends Controller
         $factura->nit = $request->nit;
         $factura->detalle = $detalle_t;
         $factura->importetotal = $request->importetotal;
-        $factura->importecf = $request->importetotal;        
+        $factura->importecf = $request->importetotal;   
+        $factura->debfiscal=$request->debfiscal;
+        $factura->restoimporte=$request->restoimporte;
+        $factura->it=$request->it;     
         $factura->activo = '1';
+        $factura->numautorizacion=$request->numautorizacion;
+        $factura->fechafactura=$request->fechafactura;
+        $factura->idsubcuenta=$request->subcuenta;
         $factura->save();
     }
 
@@ -86,7 +256,7 @@ class ConFacturaController extends Controller
         if (!$request->ajax()) return redirect('/'); 
         $factura = Con_factura::findOrFail($request->idfactura);
 
-        $detalle_t='';
+       /*  $detalle_t='';
         for ($i=0; $i<count($request->detalle); $i++) {            
             $detalle_d = $request->detalle[$i]['product_name'].'|'.$request->detalle[$i]['product_price']
             .'|'.$request->detalle[$i]['product_qty'].'|'.$request->detalle[$i]['line_total'];
@@ -94,17 +264,18 @@ class ConFacturaController extends Controller
                 $detalle_t = $detalle_d;
             else 
                 $detalle_t = $detalle_t.','.$detalle_d; 
-        } 
+        }  */
 
         $factura->idfacturaparametro = 1;
         $factura->numerofactura = $request->numerofactura;
         $factura->codigocontrol = $request->codigocontrol;
         $factura->razonsocial = $request->razonsocial;        
         $factura->nit = $request->nit;
-        $factura->detalle = $detalle_t;
+        $factura->detalle =$request->detalle;
         $factura->importetotal = $request->importetotal;
         $factura->importecf = $request->importetotal;           
         $factura->activo = '1';
+        $factura->fechafactura=$request->fechafactura;
         $factura->save();
     }
 
@@ -123,7 +294,7 @@ class ConFacturaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
                 
-        $maxfactura = Con_Factura::orderBy('idfactura', 'desc')->where('activo','=','1')->max('numerofactura');         
+        $maxfactura = Con_Factura::where('activo','<>',0)->max('numerofactura');         
         return ['maxfactura' => $maxfactura];
     }   
 

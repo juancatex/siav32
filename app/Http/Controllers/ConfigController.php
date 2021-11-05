@@ -15,7 +15,7 @@ class ConfigController extends Controller
     }
     public function sumatotal()
     {
-        if (!$request->ajax()) return redirect('/');
+        //if (!$request->ajax()) return redirect('/');
 
         $totalaportes = Config::where('codigo','=','AO')->orwhere('codigo','=','AJ')
         ->sum('valor');

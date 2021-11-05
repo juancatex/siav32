@@ -19,13 +19,7 @@
 b{
     font-size:18px;
 }
-    table {
-        
-        
-        width: 100%;
-       
-        caption-side: top; 
-    }
+   
    
     body{/* quitar el body para la impresion*/
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
@@ -39,6 +33,7 @@ b{
     }
     .derecha{
         text-align:right;
+        padding-right: 10px;
     }
     .izquierda{
         text-align:left;
@@ -47,18 +42,7 @@ b{
         font-size:10px;
         padding-left:50px;
     }
-    th{
-        padding:5px;
-        padding-left: 10px; 
-        border-right: 1px solid #999;
-        /* border-left: 1px solid #999; */
-        
-
-    }
-    td{
-        padding:5px;
-        padding-left: 10px;
-    }
+  
    
     div{
         background-image:url("{{ asset('img/borrador.png')}}");
@@ -67,44 +51,45 @@ b{
         background-color: coral;
         color: white;
     }
-   /*  table,td,  th{
-        border:1px solid black ;
-        width: 800px;
-        
-
-
-    }
     table{
-       border-collapse:collapse;
-       
+        width: 100%;
+        /* border: 1px solid #024a86;
+        border-collapse: collapse; */
+        
     }
-    
-     */
+    th{
+        font-size: 14px;
+        border-bottom: 1px solid #024a86;
+    }
+    td{
+        /* border-right: 1px solid #024a86; */
+        border-bottom: 1px solid #024a86;
+    }
+    hr {
+        border: 3px solid green;
+        border-radius: 2px;
+    }
 </style>
 <body style="background-color: cadetblue;">
 <div class="body_wrapper">
  
     <h2>Filial: {{ $nomfilial }} Unidad: {{ $nomsigla }} </h2>
     @foreach ($arraymayor as $arraym)
-        <table>
-            <tr>
-                <th width=30%><b>CUENTA</b></th>
-                <th width=50% class="izquierda"><b>{{ $arraym->codcuenta }} {{ $arraym->nomcuenta }}</b></th>
-                <th width=20% class="derecha"><b>Saldo anterior: {{ number_format($arraym->saldo,2) }}</b></th>
-            </tr>
-        </table>
-        
         <table >
             <tr>
-                <th width=60px>Fecha</th>
-                <th width=60px>Tipo</th>
-                <th width=60px>Nº</th>
-                <th width=90px>Tipo Doc.</th>
-                <th width=60px>Nº Doc.</th>
-                <th width=350px>Glosa</th>
-                <th width=60px>Debe</th>
-                <th width=60px>Haber</th>
-                <th width=60px>Saldo</th>
+                <th colspan="2"><b>CUENTA</b></th>
+                <th colspan="2" class="izquierda"><b>{{ $arraym->codcuenta }} {{ $arraym->nomcuenta }}</b></th>
+                <th colspan="4" class="derecha"><b>Saldo anterior: {{ number_format($arraym->saldo,2) }}</b></th>
+            <tr>
+                <th style="width: 8%;" >Fecha</th>
+                <th style="width: 8%;">Tipo</th>
+                <!-- <th >Nº</th> -->
+                <th style="width: 14%;">Tipo Doc.</th>
+                <!-- <th >Nº Doc.</th> -->
+                <th style="width: 35%;">Glosa</th>
+                <th style="width: 10%;">Debe</th>
+                <th style="width: 10%;">Haber</th>
+                <th style="width: 15%;">Saldo</th>
 
             </tr>
             @foreach($arraym->detalles as $arrayd)
@@ -112,23 +97,23 @@ b{
                 <tr class=" {{ $arrayd->estado==5?'borrador':''}}">
                 
                     <td>{{ $arrayd->fechavalidado }}</td>
-                    <td>{{ $arrayd->nomtipocomprobante }}</td>
-                    <td>{{ $arrayd->cod_comprobante }}</td>
-                    <td>{{ $arrayd->tipodocumento }}</td>
-                    <td>{{ $arrayd->numdocumento }}</td>
+                    <td>{{ $arrayd->nomtipocomprobante }} </br>{{ $arrayd->cod_comprobante }}</td>
+                   <!--  <td></td> -->
+                    <td>{{ $arrayd->tipodocumento }} </br>{{ $arrayd->numdocumento }}</td>
+                    <!-- <td></td> -->
                     <td>{{ $arrayd->glosa }}</td>
                     <td class="derecha">{{ number_format($arrayd->debe,2) }}</td>
                     <td class="derecha">{{ number_format($arrayd->haber,2) }}</td>
-                    <td class="derecha">{{ number_format($arrayd->saldofinal,2) }}</td>
+                    <th class="derecha">{{ number_format($arrayd->saldofinal,2) }}</th>
                     
                 </tr>
                 @foreach($arrayd->subdetalles as $subdetalles)
                     <tr>
-                        <td colspan=5></td>
-                        <td>{{ $subdetalles->subcuenta }} {{ $subdetalles->nombre }}</td>
+                        <td colspan=2></td>
+                        <td colspan="2">{{ $subdetalles->subcuenta }} {{ $subdetalles->nombre }}</td>
                         <td class="derecha"><span>{{ number_format($subdetalles->subdebe,2) }}</span></td>
                         <td class="derecha"><span>{{ number_format($subdetalles->subhaber,2) }}</span></td>
-                        <td></td>
+                        
                     </tr>    
                 @endforeach
             @endforeach
