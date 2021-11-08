@@ -912,28 +912,13 @@ Class AsientoMaestroClass
     }
     public function recuperaunidad()
     {
-        $usuario=Auth::user();
-        $idusuario=$usuario->idempleado;
-
-        //dd($idusuario);
         
-        $res=Rrh_Empleado:://join('adm__users','adm__users.idempleado','rrh__empleados.idempleado')
-                            join('fil__oficinas','fil__oficinas.idoficina','rrh__empleados.idoficina')
+        $res=Rrh_Empleado::join('fil__oficinas','fil__oficinas.idoficina','rrh__empleados.idoficina')
                             ->select('fil__oficinas.idunidad')
-                            ->where('rrh__empleados.idempleado',$idusuario)
-                            ->get()->toArray();    
-        //dd($res);
-/*
-        
-        $res=Adm_User::join('rrh__empleados','rrh__empleados.idempleado','adm__users.idempleado')
-                        ->join('rrh__empleados','rrh__empleados.idoficina','fil__oficinas.idoficina')
-                        ->select('fil__oficinas.idunidad')
-                        ->where('rrh__empleados.idempleado',$idusuario)
-                        ->get()->toArray();
-  */      
-        return $res[0]['idunidad'];
-        //return 5;
-        
+                            ->where('rrh__empleados.idempleado',Auth::id())
+                            ->get()->first();    
+       
+        return $res->idunidad;  
         
     }
         
