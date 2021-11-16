@@ -28,6 +28,7 @@ class ConReportesController extends Controller
         return [ 
         'REP_ASIENTO_AUTOMATICO' => $rutas['REP_ASIENTO_AUTOMATICO'],
         'REP_LIBRO_COMPRAS'=>$rutas['REP_LIBRO_COMPRAS'],
+        'REP_LIBRO_VENTAS'=>$rutas['REP_LIBRO_VENTAS'],
         'REP_SEG_CCUENTAS'=>$rutas['REP_SEG_CCUENTAS'],
         'REP_PLAN_CUENTAS'=>$rutas['REP_PLAN_CUENTAS'],
         'REP_DOC_OBLIGACION'=>$rutas['REP_DOC_OBLIGACION'],

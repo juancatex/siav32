@@ -1131,7 +1131,8 @@ class ConAsientomaestroController extends Controller
             DB::table('con__librocompras')->where('idasientomaestro',$request->idasientomaestro)->update(['activo' => 0]);
         }
         if($respuestafactura==2)
-            DB::table('con__facturas')->where('idasientomaestro',  $request->idasientomaestro)->update(['validadoconta' => 0]);
+            DB::table('con__facturas')->where('idasientomaestro',  $request->idasientomaestro)->update(['validadoconta' => 0,
+                                                                                                        'idasientomaestro'=>null]);
 
 
         $buscarsolccuenta = Con_Asientomaestro::select('idsolccuenta')->where('idasientomaestro',$request->idasientomaestro)->get();

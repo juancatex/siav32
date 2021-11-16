@@ -87,8 +87,14 @@
                         </div>
                         <div class="col-md-2">
                             <div class="input-group">
-                                <button type="button" @click="imprimirLibroCompras(messelected,anioselected)" class="btn btn-primary">
-                                    <i class="cui-print"></i>
+                                <button type="button" @click="reportelibroventas('pdf')" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Imprimir PDF">
+                                    <i class="fa fa-file-pdf"></i>
+                                    
+                                </button>
+                                &nbsp;
+                                <button type="button" @click="reportelibroventas('xls')" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Descargar XLS">
+                                    <!-- <i class="cui-xls"></i> -->
+                                    <i class="fa fa-file-excel"></i>
                                     
                                 </button>
                                 &nbsp;
@@ -162,11 +168,14 @@
                                 </tr>
                                 <tr v-for="factura in arrayFactura" :key="factura.id">
                                     <td>
-                                        <template v-if="factura.activo>=1 && factura.validadoconta==0">
+                                        <template v-if="factura.activo>=1 "> <!-- && factura.validadoconta==0 -->
                                             <button v-if="factura.activo==1" type="button" @click="abrirModal('factura','actualizar',factura)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Factura">
                                                 <i class="icon-pencil"></i>
                                             </button> 
                                         
+                                           
+                                        </template>
+                                        <template v-if="factura.activo>=1  && factura.validadoconta==0 "> <!---->
                                             <button type="button" class="btn btn-danger btn-sm" @click="desactivarFactura(factura.idfactura,false)" data-toggle="tooltip" data-placement="top" title="Eliminar Factura">  <!-- quitar esta opcion cuando ya sean facturas electronicas -->
                                                 <i class="icon-trash"></i>
                                             </button> 
@@ -174,6 +183,7 @@
                                                 <i class="icon-exclamation"></i>
                                             </button> 
                                         </template>
+
                                         <button v-if="factura.activo!=2" type="button" @click="ver_factura(factura)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Factura">
                                           <i class="icon-eye"></i>
                                         </button> 
@@ -218,9 +228,9 @@
                 <!-- Fin ejemplo de tabla Listado -->
             </div>
             <!--Inicio del modal agregar/actualizar-->
-            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" role="dialog" id="editarfactura" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content animated fadeIn">
                         <div class="modal-header">
                             <h4 class="modal-title" v-text="tituloModal"></h4>
                             <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
@@ -231,15 +241,17 @@
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">No. Factura:</label>
+                                    <p><span v-if="duplicado" class="text-error">El Numero de Factura ya exite!!</span></p>
                                     <div class="col-md-3"> 
                                         <input  v-validate.initial="'required'" 
                                                 type="text" 
                                                 v-model="nufactura" 
                                                 name="numerofactura"
                                                 class="form-control"
-                                                @blur="verficarnumfactura" >  
+                                                @blur="verficarnumfactura" 
+                                                :disabled="validadoconta>0">  
                                     </div>
-                                    <span v-if="duplicado" class="text-error">El Numero de Factura ya exite!!</span>                                  
+                                    
                                     <div class="col-md-6">
                                          <input type="date" 
                                         v-model="fechafactura"
@@ -247,7 +259,8 @@
                                         :max="fechafinal"
                                         :min="fechainicial"
                                         v-validate.initial="'required'"
-                                        name="Fechar Factura">
+                                        name="Fechar Factura"
+                                        :disabled="validadoconta>0">
                                         <span class="text-error">{{ errors.first('Fecha Factura')}}</span>
 
                                     </div>
@@ -290,7 +303,7 @@
                                                     <input class="form-control" type="text" v-model="nudetalle" />
                                                 </td>
                                                 <td>
-                                                    <input class="form-control text-right" type="number" min="0" step=".01" v-model="nuimporte" >
+                                                    <input class="form-control text-right" type="number" min="0" step=".01" v-model="nuimporte" :disabled="validadoconta>0" >
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -330,7 +343,7 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
-            <!-- MODAL Libro de VENTAS --> 
+            <!-- MODAL descuentos Libro  de VENTAS --> 
             <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="descuentos"  data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
@@ -368,15 +381,18 @@
 <script>        
     // import * as pdf from '../../pdf.js';
     import * as factura from '../../factura.js';
+    import * as plugin from '../../functions.js';
 
     export default {
         data (){
             return {
+                validadoconta:0,
                 factura_id: 0,
                 numerofactura : '',
                 codigocontrol:'',
                 razonsocial:'',                
                 nit:'',
+                reporte_libro_ventas:'',
 
                 invoice_subtotal: 0,
                 invoice_total: 0,
@@ -493,7 +509,7 @@
                 }
                 else
                 {
-                    if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nunit!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
+                    if(me.nufactura!=0 && me.nurazonsocial!=0 && me.nudetalle!='' && me.nuimporte!=0 && me.nunumautorizacion!='' && me.duplicado==false)
                         return true;
                     else   
                         return false;
@@ -1101,6 +1117,7 @@
             },
             
             cerrarModal(){
+                this.classModal.closeModal('editarfactura'); 
                 this.modal=0;
                 this.tituloModal='';                
                 this.numerofactura='';
@@ -1110,8 +1127,9 @@
                 //this.invoice_products='';
                 this.invoice_subtotal='';
                 this.invoice_subtotal='';
+                this.validadoconta=0;
             },
-            verficarnumfactura(){
+            verficarnumfactura(valor){
                 //console.log('entra')
                 let me =this;
                 let respuesta;
@@ -1122,6 +1140,30 @@
                 else
                     me.duplicado=false;
             },
+            getRutasReports(){ 
+            let me=this;
+            var url= '/con_reportes';
+            axios.get(url).then(function (response) {
+                    var respuesta= response.data; ;
+                me.reporte_libro_ventas = respuesta.REP_LIBRO_VENTAS; 
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        reportelibroventas(tipo){
+            let me=this;
+            let url=me.reporte_libro_ventas + tipo+'&mes='+me.messelected+'&anio='+me.anioselected; 
+            //console.log(url);
+            if(tipo=='pdf')
+                plugin.viewPDF(url,'Libro de Ventas');
+            else
+              window.open(url,'_blank');  
+            //this.abrirVentanaModalURL(url,"Reporte Horizontal",800,700);		
+            
+            //window.open('http://192.168.100.60:8080/birt-viewer/frameset?__report=reportes/apo_reportes/rep_horizontal.rptdesign&numpapeleta='+papeletanum,'_blank');
+            //window.open('http://localhost:8080/birt-viewer/frameset?__report=reportes/apo_reportes/rep_horizontal.rptdesign&numpapeleta='+papeletanum,'_blank');
+        },
 
             abrirModal(modelo, accion, data = []){ //console.log('ja' + this.maxfacturavalor);
                 switch(modelo){
@@ -1131,7 +1173,8 @@
                             case 'registrar':
                             {                                                                
                                 this.invoice_products = [];
-                                this.modal = 1;
+                                this.classModal.openModal('editarfactura');
+                                //this.modal = 1;
                                 this.tituloModal = 'Registrar Factura';
                                 this.numerofactura=this.maxfacturavalor;
                                 this.codigocontrol='',
@@ -1165,7 +1208,8 @@
                                 //console.log(this.invoice_products);
 
                                 //console.log(data);
-                                this.modal=1;
+                                //this.modal=1;
+                                this.classModal.openModal('editarfactura');
                                 this.tituloModal='Actualizar Factura';
                                 this.tipoAccion=2;
                                 this.factura_id=data['idfactura'];
@@ -1177,6 +1221,7 @@
                                 this.fechafactura=data['fecha'];
                                 
                                 this.nuimporte = data['importetotal'];
+                                this.validadoconta= data['validadoconta'];
                                 //this.importecf = data['importecf'];
                                 //this.calculateTotal();
                                 break;
@@ -1195,6 +1240,8 @@
             this.maxfactura();  
             this.selectLibroCuenta();  
             this.classModal.addModal('descuentos');
+            this.classModal.addModal('editarfactura');
+            this.getRutasReports();
             
         }
     }
