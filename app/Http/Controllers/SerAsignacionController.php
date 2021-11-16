@@ -14,6 +14,32 @@ use App\Socio;
 
 class SerAsignacionController extends Controller
 {
+    public function mostrarAsignacion(Request $request)
+    {
+        $idestablecimiento=$request->idestablecimiento;
+        $piso=$request->piso;
+
+        //$pisos=
+
+        $asignacion=Ser_ambiente::select('idambiente',
+                                            'idestablecimiento',
+                                            'codambiente',
+                                            'piso',
+                                            'tipo',
+                                            'capacidad',
+                                            'garantia',
+                                            'tarifasocio',
+                                            'tarifareal',
+                                            )
+                                    ->leftjoin('ser__asignacions','ser__assignacions.idambiente','ser__ambientes.idambiente')
+                                    ->where('ambiente.idestablecimiento',$idestablecimiento);
+                                    if($piso==0 || $piso==1)
+                                        $asignacion->where('ser__ambientes.piso',$piso);
+                                    else
+                                        $asignacion->where('ser__ambientes.piso',$piso);
+                                    
+    }
+    
     public function listaAsignaciones(Request $request)
     {
         $ip=config('app.ip'); 
