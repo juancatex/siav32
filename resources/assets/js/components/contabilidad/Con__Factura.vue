@@ -596,8 +596,9 @@
                 this.idempleado=[];
             },
             CerrarmesLibroVentas(){
+                //console.log(this.arraymes[this.messelected-1]);
                  swal({
-                    title: 'Esta seguro de Cerrar el Mes: '+ this.arraymes[this.messelected-1]+' / '+this.anioselected, 
+                    title: 'Esta seguro de Cerrar el Mes: '+ this.arraymes[this.messelected-1].text+' / '+this.anioselected, 
                     text:'Ya no se Podran Ingresar mas Facturas',
                     type: 'warning',
                     showCancelButton: true,
