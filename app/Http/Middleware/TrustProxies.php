@@ -26,5 +26,6 @@ class TrustProxies extends Middleware
     //     Request::HEADER_X_FORWARDED_PORT => 'X_FORWARDED_PORT',
     //     Request::HEADER_X_FORWARDED_PROTO => 'X_FORWARDED_PROTO',
     // ];
+    //cambio de proxy
     protected $headers = Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO;
 }
