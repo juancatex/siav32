@@ -10,7 +10,19 @@ use App\Ser_Asignacion;
 
 class SerAmbienteController extends Controller
 {
-    public function listaAmbientes(Request $request)
+    
+    public function listaPisos(Request $request)
+    {
+        $idestablecimiento=$request->idestablecimiento;
+        $raw=DB::raw('distinct(piso) as pisos');
+        $pisos=Ser_Ambiente::select($raw)
+                                ->where('idestablecimiento',$idestablecimiento)
+                                ->orderBy('piso','asc')
+                                ->get();
+
+        return['pisos'=>$pisos];
+
+    }public function listaAmbientes(Request $request)
     {
         $ip=config('app.ip'); 
         $ambientes=Ser_Ambiente::select('*','capacidad as porhora')//canchas

@@ -466,6 +466,17 @@ Route::group(['middleware' => ['webinterno']], function () {
 
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
     ///// SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS SERVICIOS
+
+    //eddy
+
+    Route::get('/ser_servicio2', 'SerServicio2ControllerController@index');
+    Route::get('/ser_establecimiento/listaEstablecimientos2','SerEstablecimientoController@listaEstablecimientos2'); 
+    Route::get('/ser_ambientes/listarpisos','SerAmbienteController@listaPisos'); 
+    Route::get('/ser_asignacion', 'SerAsignacionController@index');
+
+
+
+    //ivan
     Route::post('/ser_servicio/storeServicio','SerServicioController@storeServicio');   //C
     Route::get ('/ser_servicio/listaServicios','SerServicioController@listaServicios'); //R
     Route::put ('/ser_servicio/updateServicio','SerServicioController@updateServicio'); //U
