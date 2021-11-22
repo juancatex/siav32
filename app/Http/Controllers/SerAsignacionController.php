@@ -14,6 +14,77 @@ use App\Socio;
 
 class SerAsignacionController extends Controller
 {
+    public function index(Request $request)
+    {
+        $idestablecimiento=$request->idestablecimiento;
+        $piso=$request->piso;
+
+        //$pisos=
+
+        $asignacion=Ser_ambiente::select('ser__ambientes.idambiente',
+                                            'idestablecimiento',
+                                            'codambiente',
+                                            'piso',
+                                            'tipo',
+                                            'capacidad',
+                                            'garantia',
+                                            'tarifasocio',
+                                            'tarifareal',
+                                            )
+                                    ->where('ser__ambientes.idestablecimiento',$idestablecimiento)
+                                    ->where('ser__ambientes.piso',$piso)
+                                    ->orderby('codambiente','asc')
+                                    ->get();
+
+        $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
+        //$rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
+        $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        foreach ($asignacion as $valor) {
+            $idambiente=$valor->idambiente;
+            
+            $hospedajesocio=Ser_Asignacion::select('idasignacion',
+                                                'idcliente',
+                                                'tipocliente',
+                                                'estado',
+                                                'nrasignacion',
+                                                'idimplementos',
+                                                'fechaentrada',
+                                                'fechasalida',
+                                                'obs1',
+                                                $rawsocio,
+                                                'ci'
+                                                )
+                                        ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                                        ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                        ->join('par_grados','par_grados.idgrado','socios.idgrado')
+                                        ->where('idambiente',$idambiente)
+                                        ->where('tipocliente',1);//socio
+                                        
+            $hospedajecivil=Ser_Asignacion::select('idasignacion',
+                                                    'idcliente',
+                                                    'tipocliente',
+                                                    'estado',
+                                                    'nrasignacion',
+                                                    'idimplementos',
+                                                    'fechaentrada',
+                                                    'fechasalida',
+                                                    'obs1',
+                                                    $rawcivil,
+                                                    'ci'
+                                                    )
+                                        ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
+                                        ->where('idambiente',$idambiente)
+                                        ->where('tipocliente',2)//civil
+                                        ->union($hospedajesocio)
+                                        ->get();
+            
+            $valor->hospedaje=$hospedajecivil;
+            
+
+        }
+        return['asignacion'=>$asignacion];
+    }
+    
     public function listaAsignaciones(Request $request)
     {
         $ip=config('app.ip'); 

@@ -18,10 +18,21 @@ class SerEstablecimientoController extends Controller
             when locate('FOSA',nomestablecimiento)>0 then 'FOSA' 
         end as sector");
         $establecimientos=Ser_Establecimiento::
-        select('idestablecimiento','fil__filials.idfilial','fil__filials.iddepartamento','telefonos',
-        'ser__servicios.idservicio','nommunicipio','nomservicio','codservicio','nomestablecimiento',
-        'iddocumentos','idimplementos','cantgrupos',$sector,
-        'ser__establecimientos.direccion','ser__establecimientos.descripcion','ser__establecimientos.activo')
+        select('idestablecimiento',
+                'fil__filials.idfilial',
+                'fil__filials.iddepartamento',
+                'telefonos',
+                'ser__servicios.idservicio',
+                'nommunicipio','nomservicio',
+                'codservicio',
+                'nomestablecimiento',
+                'iddocumentos',
+                'idimplementos',
+                'cantgrupos',
+                $sector,
+                'ser__establecimientos.direccion',
+                'ser__establecimientos.descripcion',
+                'ser__establecimientos.activo')
         ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
         ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
         ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
@@ -33,6 +44,40 @@ class SerEstablecimientoController extends Controller
         if($request->activo==1)
             $establecimientos=$establecimientos->where('ser__establecimientos.activo',$request->activo);
         return ['establecimientos'=>$establecimientos->get()];
+    }
+    public function listaEstablecimientos2(Request $request)
+    {
+        $sector=DB::raw("case 
+            when locate('NICH',nomestablecimiento)>0 then 'NICHOS'  
+            when locate('SARC',nomestablecimiento)>0 then 'SARCÓFAGOS' 
+            when locate('FOSA',nomestablecimiento)>0 then 'FOSA' 
+        end as sector");
+        $establecimientos=Ser_Establecimiento::
+        select('idestablecimiento',
+                'fil__filials.idfilial',
+                'fil__filials.iddepartamento',
+                'telefonos',
+                'ser__servicios.idservicio',
+                'nommunicipio','nomservicio',
+                'codservicio',
+                'nomestablecimiento',
+                'iddocumentos',
+                'idimplementos',
+                'cantgrupos',
+                $sector,
+                'ser__establecimientos.direccion',
+                'ser__establecimientos.descripcion',
+                'ser__establecimientos.activo')
+        ->join('fil__filials','fil__filials.idfilial','ser__establecimientos.idfilial')
+        ->join('ser__servicios','ser__servicios.idservicio','ser__establecimientos.idservicio')
+        ->join('par_municipios','par_municipios.idmunicipio','fil__filials.idmunicipio')
+        ->join('par_departamentos','par_departamentos.iddepartamento','fil__filials.iddepartamento')
+        ->where('ser__establecimientos.activo',1)
+        ->where('fil__filials.idfilial',$request->idfilial)
+        ->get();
+
+        //dd($establecimientos);
+        return ['establecimientos'=>$establecimientos];
     }
 
     public function storeEstablecimiento(Request $request)
