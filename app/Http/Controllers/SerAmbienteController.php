@@ -14,7 +14,7 @@ class SerAmbienteController extends Controller
     public function listaPisos(Request $request)
     {
         $idestablecimiento=$request->idestablecimiento;
-        $raw=DB::raw('distinct(piso)');
+        $raw=DB::raw('distinct(piso) as pisos');
         $pisos=Ser_Ambiente::select($raw)
                                 ->where('idestablecimiento',$idestablecimiento)
                                 ->orderBy('piso','asc')

@@ -31,6 +31,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                             <div class="form-group row" style="margin-bottom: 0px;">
                             <div class="col-md-3">
@@ -51,8 +52,7 @@
                             </div>
                             <div class="col-md-8">
                                 <select v-model="pisoselected"  class="form-control" @change="listarAsignaciones()">
-                                    <option value="0" disabled selected >Seleccionar...</option>
-                                    <option v-for="pisos in arraypisos" v-bind:key="pisos.piso" :value="pisos.piso" v-text="pisos.piso"></option>
+                                    <option v-for="p in arraypisos" v-bind:key="p.pisos" :value="p.pisos" v-text="p.pisos"></option>
                                 </select>
                             </div>
                         </div>
@@ -61,67 +61,43 @@
             </div>
             <div class="card-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="input-group">
-                            <input type="text" v-model="buscar" @keyup.enter="mostrarServicio()" class="form-control" placeholder="Texto a buscar">
-                            <button type="submit" @click="mostrarServicio()" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                            <input type="text" v-model="buscar" @keyup.enter="listarAsignaciones('buscar')" class="form-control" placeholder="Texto a buscar">
+                            <button type="submit" @click="listarAsignaciones('buscar')" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                         </div>
+                    </div>
+                    <div class="col-md-6">
                     </div>
                 </div>
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
+                            <th>Cod.</th>
+                            <th>Descripcion</th>
+                            <th>Tarifas</th>
+                            <th>Ocupantes</th>
+                            <th>fecha hora <br /> Entrada</th>
+                            <th>fecha hora <br /> Salida</th>
                             <th>Opciones</th>
-                            <th>Nombre</th>
-                            <th>Abreviación</th>
-                            <th>Estado</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="departamento in arrayDepartamento" :key="departamento.iddepartamento">
+                        <tr v-for="asignacion in arrayAsignacion" :key="asignacion.idambiente">
+                            <td class="card-header titcard" v-text="asignacion.codambiente"></td>
+                            <td>{{ asignacion.tipo }} <br /> {{ asignacion.capacidad }}  Camas </td>
+                            <td>{{ asignacion.tarifasocio }}Bs. <br /> {{ asignacion.tarifareal }} Bs. </td>
+                            <td></td>
+                            <td v-text="asignacion.fechaentrada"></td>
+                            <td v-text="asignacion.fechasalida"></td>
                             <td>
-                                <button type="button" @click="abrirModal('departamento','actualizar',departamento)" class="btn btn-warning btn-sm">
-                                    <i class="icon-pencil"></i>
+                                 <button v-if="asignacion.idasignacion==null" type="button" @click="registrarAsignacion()" class="btn btn-success icon-user-follow" data-toggle="tooltip" data-placement="top" title="Asignar Habitacion">
                                 </button> &nbsp;
-                                <template v-if="departamento.activo">
-                                    <button type="button" class="btn btn-danger btn-sm" @click="desactivarDepartamento(departamento.iddepartamento)">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button type="button" class="btn btn-info btn-sm" @click="activarDepartamento(departamento.iddepartamento)">
-                                        <i class="icon-check"></i>
-                                    </button>
-                                </template>
-                            </td>
-                            <td v-text="departamento.nomdepartamento"></td>
-                            <td v-text="departamento.abrvdep"></td>
-                            
-                            <td>
-                                <div v-if="departamento.activo">
-                                    <span class="badge badge-success">Activo</span>
-                                </div>
-                                <div v-else>
-                                    <span class="badge badge-danger">Desactivado</span>
-                                </div>
-                                
                             </td>
                         </tr>                                
                     </tbody>
                 </table>
-                <nav>
-                    <ul class="pagination">
-                        <li class="page-item" v-if="pagination.current_page > 1">
-                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)">Ant</a>
-                        </li>
-                        <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                            <a class="page-link" href="#" @click.prevent="cambiarPagina(page,buscar,criterio)" v-text="page"></a>
-                        </li>
-                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)">Sig</a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
         <!-- Fin ejemplo de tabla Listado -->
@@ -219,6 +195,9 @@
                 pisoselected:0,
                 respuesta:false,
                 arrayestablecimientos:[],
+                arraypisos:[],
+                pisos:0,
+                
                 
 
 
@@ -301,10 +280,16 @@
             let me=this;
             axios.get('ser_ambientes/listarpisos?idestablecimiento='+me.establecimientoselected).then(response=>{
                 this.arraypisos=response.data.pisos;
-                console.log(arraypisos);
-            });
+                //console.log(me.arraypisos);
+                me.pisoselected=me.arraypisos[0].pisos
+                if(me.pisoselected==0)
+                    me.respuesta=false;
+                else
+                    me.respuesta=true; 
+                me.listarAsignaciones();
 
-            me.serviciosselected=0;
+            });
+            
         },
         
         listarEstablecimiento(){
@@ -325,16 +310,26 @@
                 
             });
         },
-        listarAsignaciones(){
+        listarAsignaciones(valor){
             let me=this;
-            var url= '/ser_asignacion?idestablecimiento='+me.establecimientoselected+'&piso='+me.piso;
-            axios.get(url).then(function (response) {
-                var respuesta= response.data;
-                me.arrayAsignacion = respuesta.asignacion.data;
-            })
-            .catch(function (response) {
-                console.log(response);
-            });
+            if(valor=='buscar')
+            {
+
+            }
+            else
+            {
+                var url= '/ser_asignacion?idestablecimiento='+me.establecimientoselected+'&piso='+me.pisoselected;
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    console.log(respuesta);
+                    me.arrayAsignacion = respuesta.asignacion;
+                    console.log(arrayAsignacion);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+            }
+            
         },
 
             /////////////////////////////////

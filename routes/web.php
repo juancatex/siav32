@@ -470,8 +470,9 @@ Route::group(['middleware' => ['webinterno']], function () {
     //eddy
 
     Route::get('/ser_servicio2', 'SerServicio2ControllerController@index');
-    Route::get ('/ser_establecimiento/listaEstablecimientos2','SerEstablecimientoController@listaEstablecimientos2'); 
-    Route::get ('/ser_ambientes/listarpisos','SerAmbienteController@listaPisos'); 
+    Route::get('/ser_establecimiento/listaEstablecimientos2','SerEstablecimientoController@listaEstablecimientos2'); 
+    Route::get('/ser_ambientes/listarpisos','SerAmbienteController@listaPisos'); 
+    Route::get('/ser_asignacion', 'SerAsignacionController@index');
 
 
 
