@@ -45,7 +45,7 @@
     @endif
     <!-- Cambios realizados por ing. Juan Carlos-->
     <footer class="app-footer">
-        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?php echo date('Y')?></span>    
+        <span><a href="http://www.ascinalss.org/ascinalss/index.html">ASCINALSS</a> &copy; <?php echo date('Y')?> - version laravel:{{ app()->version() }}</span>    
         <span class="ml-auto">Desarrollado por <a href="http://www.ascinalss.org/ascinalss/index.html">Dep. Sistemas</a></span>
     </footer>  
     </div>  
