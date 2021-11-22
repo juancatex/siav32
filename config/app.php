@@ -301,6 +301,8 @@ return [
     'rutaConReportes' => [
         'REP_ASIENTO_AUTOMATICO'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/asiento_automatico.rptdesign&__format=pdf&idasientomaestro=', 
         'REP_LIBRO_COMPRAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/libro_compras.rptdesign&__format=pdf&mes=', 
+        'REP_LIBRO_VENTAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/libro_ventas.rptdesign&__format=', 
+        
         'REP_SEG_CCUENTAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/seg_ccuentas.rptdesign&__format=pdf&idsolccuenta=', 
         'REP_PLAN_CUENTAS'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/plan_cuentas.rptdesign&__format=pdf', 
         'REP_DOC_OBLIGACION'=> 'http://'.$ip.':8080/birt-viewer/frameset?__report=reportes/con_reportes/doc_obligacion.rptdesign&__format=pdf&idsolccuenta=', 
