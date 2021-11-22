@@ -43,7 +43,7 @@ Route::post('logout2', function(){
     return view('auth.newlogin', ['nota' => '','status' =>'']);
 });
 
-Route::get('/login_apk','apkMovile@login')->name('login_apk');
+Route::get('/login_server','apkMovile@login')->name('login_server');
 Route::get('/check','apkMovile@validate')->name('check');
 Route::get('/logout', function(){ Auth::logout(); return response()->json(array('data' =>'ok'), 200); });
 Route::get('/getPrestamos','apkMovile@getPrestamos')->name('getPrestamos');

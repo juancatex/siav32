@@ -8,7 +8,7 @@ window._code = require("./ControlCode.js");
 window.VeeValidate = require("vee-validate");
 window.DatasVues = [];
 window.openReport=(url,name)=>{
-    window._pl._vm2154_12186_135('http://192.168.100.60:8082/api/'+url,name)
+    window._pl._vm2154_12186_135('http://192.168.100.10/api/'+url,name)
 };
 const VueValidationEs = require("vee-validate/dist/locale/es");
 
