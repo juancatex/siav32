@@ -69,9 +69,19 @@
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="buscarcomprobante()">
                             <i class="fa fa-search"></i> Buscar
                            </span>
-                           <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
-                            <i class="fa fa-search"></i> probar
-                           </span>
+                          
+                          
+                           <div v-if="valuedb=='pgsql2019'">
+                              <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
+                                <i class="fa fa-search"></i> probar 2019
+                            </span>
+                             </div>
+                            <div v-else-if="valuedb=='pgsql2018'">
+                               <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2018')">
+                                <i class="fa fa-search"></i> probar 2018
+                               </span>
+                            </div>
+
                            <!-- <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
                            </span> -->
@@ -97,8 +107,14 @@
                     </div>
         <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
-                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
-                    <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
+                            <div v-if="valuedb=='pgsql2019'">
+                                <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click="procesar('/con_contabilidad/procesoReservaUpdate2019')" type="button" class="btn btn-success btn-lg btn-block">Realizar cambios 2019</button>    
+                                <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
+                            </div>
+                            <div v-else-if="valuedb=='pgsql2018'">
+                                <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click="procesar('/con_contabilidad/procesoReservaUpdate2018')" type="button" class="btn btn-success btn-lg btn-block">Realizar cambios 2018</button>    
+                                <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
+                            </div>
                      </div>  
                       
       </div>
@@ -230,8 +246,8 @@ Vue.use(VeeValidate);
                 {nombre:'AJUSTE',id:'SEC_CON_COM_AJUSTE'},
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
-                db:[ {nombre:'DB 2019',id:'pgsql2019'}, 
-                {nombre:'DB 2018',id:'pgsql2018'}],
+                db:[ {nombre:'DB 2019 88% - 12%',id:'pgsql2019'}, 
+                {nombre:'DB 2018  84% - 16%',id:'pgsql2018'}],
                 arrayPermisos : {procesarCambios:0,cambiofecha:0},  
                 arrayPermisosIn:[],
             }
@@ -289,14 +305,14 @@ Vue.use(VeeValidate);
 
 
             },
-            procesar(){ 
+            procesar(url){ 
                 this.debesuma=0;
                 this.habersuma=0;
                     
 let me=this;
  swal({
                     title: 'Esta seguro de realizar los cambios?',
-                    html:   '<div style="text-align: left;">Base de datos:      <b><font >'+(this.valuedb=='pgsql'?'DB Safcon':'DB Prueba')+'</font></b>'+
+                    html:   '<div style="text-align: left;">'+
                     ' <br> No. comprobante:      <b><font >'+this.numcomprobante+'</font></b>'+
                     ' <br> Tipo:      <b><font >'+this.valuetipo+'</font></b>',
                     type: 'info',
@@ -327,8 +343,7 @@ let me=this;
                                 swal.showLoading()
                             }
                         });
-                    
-                        var url= '/con_contabilidad/procesoReservaUpdate2019';
+                     
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {

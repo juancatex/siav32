@@ -731,6 +731,134 @@ $max_item++;
         
  return ['values'=>$valida_3];
     }
+    public function procesoReservaUpdate2018(Request $request)
+    {
+       if (!$request->ajax()) return redirect('/');   
+
+        ini_set('memory_limit', '1024M');
+        ini_set ('max_execution_time', 3200);
+
+        $valuedb=$request->valuedb;
+        $valuetipo=$request->valuetipo;
+        $numcomprobante=$request->numcomprobante;
+ 
+        DB::beginTransaction();
+        $valida_1=DB::connection($valuedb)->select("select det.* from finanzas.con_tr_detalles  det 
+        where   det.id_transaccion ='$numcomprobante' 
+        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+  
+       
+ 
+        $sql_max_reg=DB::connection($valuedb)->select("select max(id_reg) as max_reg from finanzas.con_tr_detalles");
+        $max_reg = $sql_max_reg[0]->max_reg;
+
+        $directory='LogSafcon';
+        Storage::makeDirectory($directory); 
+        Storage::append($directory.'/logreserva2018.txt','Date:'.date("Y_m_d H:i:s").'DB:'.$valuedb.'     Comprobante:'.$numcomprobante.'         Tipo:'.$valuetipo.'        user:'.Auth::user()->username.'             id:'.Auth::id());
+              
+
+        foreach($valida_1 as $linea){
+                if($linea->cuenta=='41101101'){
+                    $max_reg++; 
+                    $sql_max_item=DB::connection($valuedb)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
+                    where  id_transaccion ='$numcomprobante'
+                    and id_tipo = '$valuetipo'");
+
+                    $max_item = $sql_max_item[0]->max; 
+                   // para moneda local
+                   $doce_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.16,2);
+                   $ochentayocho_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)-$doce_por,2); 
+                   $ochentayocho_por=$linea->importe_moneda_local>0?$ochentayocho_por:$ochentayocho_por*-1;
+                   $doce_por=$linea->importe_moneda_local>0?$doce_por:$doce_por*-1;
+                   $cien_por=(round(($ochentayocho_por+$doce_por),2));
+
+                     
+
+                   // para moneda origen
+                   $doce_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.16,2);
+                   $ochentayocho_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)-$doce_por2,2);
+                   $ochentayocho_por2=$linea->importe_moneda_origen>0?$ochentayocho_por2:$ochentayocho_por2*-1;
+                   $doce_por2=$linea->importe_moneda_origen>0?$doce_por2:$doce_por2*-1;
+                   $cien_por2=(round(($ochentayocho_por2+$doce_por2),2));
+                     
+ 
+                   
+                   if(($linea->importe_moneda_local==$cien_por
+                   &&$linea->importe_moneda_origen==$cien_por2)){
+                    //actualiza con el 87% del 30%
+                    DB::connection($valuedb)->update("update finanzas.con_tr_detalles
+                    set importe_moneda_local=$doce_por, 
+                    importe_moneda_origen =$doce_por2
+                    where id_transaccion = '$linea->id_transaccion'
+                    and id_tipo = '$linea->id_tipo'
+                    and item = '$linea->item'
+                    and cuenta = '$linea->cuenta'");
+
+                    //registro de la reserva cuenta:22501101
+                            DB::connection($valuedb)->insert("INSERT INTO finanzas.con_tr_detalles
+                            (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento,
+                                importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
+                            VALUES(
+                            '$numcomprobante', 
+                            '$valuetipo', 
+                            '$linea->fecha_transaccion', 
+                            $max_item, 
+                            '10001', 
+                            '22501101', 
+                            0, 
+                            '$linea->id_sub_cuenta',  
+                            'Bs.', 
+                            '$linea->glosa', 
+                            '',
+                            $ochentayocho_por, 
+                            $ochentayocho_por2,
+                            '$linea->tipo_cambio',  
+                            'an', 
+                            '$linea->fecha_transaccion', 
+                            '', 
+                            null, 
+                            '12501', 
+                            $max_reg, 
+                            'N'::character varying, 
+                            '')");
+
+ 
+
+                    }else{
+                         DB::rollback();
+                         return ['values'=>[],'mensaje'=>'No coenciden los datos 84 - 16 %   item_:'.$linea->item.' 84:'.$ochentayocho_por.'  16:'.$doce_por];
+                    }
+                    
+                }
+        }  
+        DB::commit();
+
+      
+
+        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
+
+            if($fechaR[0]->tip=='S'){
+                $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,p.nombrecompleto, g.abrev 
+                from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+                        where  det.cuenta =cu.cuenta
+                        and p.par_profesion=g.cod
+                        and det.analisis_auxiliar =cu.analisis_auxiliar
+                        and det.id_sub_cuenta=p.numero_papeleta
+                        and det.id_transaccion ='$numcomprobante' 
+                        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+            }else{
+                $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,'' as nombrecompleto,'' as abrev 
+                from finanzas.con_tr_detalles  det,finanzas.con_plan_cuentas cu 
+                    where  det.cuenta =cu.cuenta 
+                    and det.analisis_auxiliar =cu.analisis_auxiliar
+                    and det.id_transaccion ='$numcomprobante' 
+                    and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+            }
+ 
+        
+ return ['values'=>$valida_3];
+    }
     public function procesoReservaUpdaterev(Request $request)
     {
        if (!$request->ajax()) return redirect('/');   
@@ -1346,6 +1474,141 @@ $max_item++;
                     }else{
                         DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
                         return ['values'=>[],'cuentas'=>$cuentas,'mensaje'=>'No coenciden los datos 88 - 12 %   item_:'.$linea->item.' 88:'.$ochentayocho_por.'  12:'.$doce_por];
+                    }
+                    
+                }
+        } 
+ 
+       
+
+        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
+
+            if($fechaR[0]->tip=='S'){
+                $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,p.nombrecompleto, g.abrev 
+                from tmp_contable_detalle  det,finanzas.con_plan_cuentas cu,global.gbpersona p,finanzas.apsa_grados g
+                        where  det.cuenta =cu.cuenta
+                        and p.par_profesion=g.cod
+                        and det.analisis_auxiliar =cu.analisis_auxiliar
+                        and det.id_sub_cuenta=p.numero_papeleta
+                and det.id_transaccion ='$numcomprobante' 
+                and det.id_tipo ='$valuetipo' order by det.cuenta, det.id_sub_cuenta");
+            }else{
+                $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,'' as nombrecompleto,'' as abrev 
+                from tmp_contable_detalle  det,finanzas.con_plan_cuentas cu 
+                    where  det.cuenta =cu.cuenta 
+                    and det.analisis_auxiliar =cu.analisis_auxiliar
+                    and det.id_transaccion ='$numcomprobante' 
+                    and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+            }
+
+
+
+
+
+ 
+  DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
+ 
+ return ['values'=>$valida_3,'cuentas'=>$cuentas];
+    }
+    public function procesoReserva2018(Request $request)
+    {
+        // if (!$request->ajax()) return redirect('/');   
+
+        ini_set('memory_limit', '1024M');
+        ini_set ('max_execution_time', 3200);
+
+        $valuedb=$request->valuedb;
+        $valuetipo=$request->valuetipo;
+        $numcomprobante=$request->numcomprobante;
+
+        DB::connection($valuedb)->statement( "CREATE TEMP TABLE  tmp_contable_detalle AS (
+            select det.*
+           from finanzas.con_tr_detalles  det 
+           where 
+           det.id_transaccion ='$numcomprobante'   
+           and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta )"); 
+
+        $valida_1=DB::connection($valuedb)->select("select det.* from tmp_contable_detalle  det 
+        where   det.id_transaccion ='$numcomprobante' 
+        and det.id_tipo ='$valuetipo' order by det.cuenta,det.id_sub_cuenta");
+ 
+        
+        $cuentas=DB::connection($valuedb)->select("SELECT cuenta, descripcion
+        FROM finanzas.con_plan_cuentas");
+ 
+        $sql_max_reg=DB::connection($valuedb)->select("select max(id_reg) as max_reg from tmp_contable_detalle");
+        $max_reg = $sql_max_reg[0]->max_reg;
+
+        foreach($valida_1 as $linea){
+                if($linea->cuenta=='41101101'){
+                    $max_reg++; 
+                    $sql_max_item=DB::connection($valuedb)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
+                    where  id_transaccion ='$numcomprobante'
+                    and id_tipo = '$valuetipo'");
+
+                    $max_item = $sql_max_item[0]->max; 
+                   // para moneda local
+                   $doce_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.16,2);
+                   $ochentayocho_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)-$doce_por,2); 
+                   $ochentayocho_por=$linea->importe_moneda_local>0?$ochentayocho_por:$ochentayocho_por*-1;
+                   $doce_por=$linea->importe_moneda_local>0?$doce_por:$doce_por*-1;
+                   $cien_por=(round(($ochentayocho_por+$doce_por),2));
+
+                     
+
+                   // para moneda origen
+                   $doce_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.16,2);
+                   $ochentayocho_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)-$doce_por2,2);
+                   $ochentayocho_por2=$linea->importe_moneda_origen>0?$ochentayocho_por2:$ochentayocho_por2*-1;
+                   $doce_por2=$linea->importe_moneda_origen>0?$doce_por2:$doce_por2*-1;
+                   $cien_por2=(round(($ochentayocho_por2+$doce_por2),2));
+
+                     
+                      
+                   if(($linea->importe_moneda_local==$cien_por
+                   &&$linea->importe_moneda_origen==$cien_por2)){
+                    //actualiza con el 88% del 12%
+                    DB::connection($valuedb)->update("update tmp_contable_detalle
+                    set importe_moneda_local=$doce_por, 
+                    importe_moneda_origen =$doce_por2
+                    where id_transaccion = '$linea->id_transaccion'
+                    and id_tipo = '$linea->id_tipo'
+                    and item = '$linea->item'
+                    and cuenta = '$linea->cuenta'");
+
+                    //registro de la reserva cuenta:22501101
+                            DB::connection($valuedb)->insert("INSERT INTO tmp_contable_detalle
+                            (id_transaccion, id_tipo, fecha_transaccion, item, par_area_funcional, cuenta, analisis_auxiliar, id_sub_cuenta, par_moneda, glosa, documento,
+                                importe_moneda_local, importe_moneda_origen, tipo_cambio, usuario_reg, fecha_reg, usuario_mod, fecha_mod, id_oficina, id_reg, ajuste, cuenta_ant)
+                            VALUES(
+                            '$numcomprobante', 
+                            '$valuetipo', 
+                            '$linea->fecha_transaccion', 
+                            $max_item, 
+                            '10001', 
+                            '22501101', 
+                            0, 
+                            '$linea->id_sub_cuenta',  
+                            'Bs.', 
+                            '$linea->glosa', 
+                            '',
+                            $ochentayocho_por, 
+                            $ochentayocho_por2,
+                            '$linea->tipo_cambio',  
+                            'an', 
+                            '$linea->fecha_transaccion', 
+                            '', 
+                            null, 
+                            '12501', 
+                            $max_reg, 
+                            'N'::character varying, 
+                            '')");
+ 
+
+                    }else{
+                        DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
+                        return ['values'=>[],'mensaje'=>'No coenciden los datos 84 - 16 %   item_:'.$linea->item.' 84:'.$ochentayocho_por.'  16:'.$doce_por];
                     }
                     
                 }

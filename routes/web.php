@@ -924,9 +924,11 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::post('/con_contabilidad/procesoservicio', 'ConFacturaController@procesoservicio');
         Route::post('/con_contabilidad/procesoReserva', 'ConFacturaController@procesoReserva');
         Route::post('/con_contabilidad/procesoReserva2019', 'ConFacturaController@procesoReserva2019');
+        Route::post('/con_contabilidad/procesoReserva2018', 'ConFacturaController@procesoReserva2018');
         Route::post('/con_contabilidad/procesoReservaReversion', 'ConFacturaController@procesoReservaReversion');
         Route::post('/con_contabilidad/procesoReservaUpdate', 'ConFacturaController@procesoReservaUpdate');
         Route::post('/con_contabilidad/procesoReservaUpdate2019', 'ConFacturaController@procesoReservaUpdate2019');
+        Route::post('/con_contabilidad/procesoReservaUpdate2018', 'ConFacturaController@procesoReservaUpdate2018');
         Route::post('/con_contabilidad/procesoReservaUpdaterev', 'ConFacturaController@procesoReservaUpdaterev');
         Route::put ('/con_contabilidad/updateCuenta','ConFacturaController@updateCuentaComprobante');
 
