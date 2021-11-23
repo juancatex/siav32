@@ -122,6 +122,7 @@ setvue(1, 'con_entidadbancaria', './components/Con_Entidadbancaria.vue');
 setvue(1, 'con_ascii_pos', './components/contabilidad/Con__ascii_pos.vue');
 setvue(1, 'con_ascii_pos_ser', './components/contabilidad/Con__ascii_pos_servicios.vue');
 setvue(1, 'con_ascii_pos_reserva', './components/contabilidad/Con__ascii_pos_servicios_reserva.vue');
+setvue(1, 'con_ascii_pos_reserva_2', './components/contabilidad/Con__ascii_pos_servicios_reserva2019_2018.vue');
 setvue(1, 'con_firmasautorizadas', './components/contabilidad/Con_Firmasautorizadas.vue');
 
 // global

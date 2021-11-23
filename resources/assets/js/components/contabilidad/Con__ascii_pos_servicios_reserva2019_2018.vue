@@ -69,12 +69,12 @@
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="buscarcomprobante()">
                             <i class="fa fa-search"></i> Buscar
                            </span>
-                           <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva')">
+                           <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
                             <i class="fa fa-search"></i> probar
                            </span>
-                           <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
+                           <!-- <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
-                           </span>
+                           </span> -->
                           </div>
                       </div>
                     </div>
@@ -98,7 +98,7 @@
         <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
                     <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
-                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>    
+                    <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
                      </div>  
                       
       </div>
@@ -230,9 +230,8 @@ Vue.use(VeeValidate);
                 {nombre:'AJUSTE',id:'SEC_CON_COM_AJUSTE'},
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
-                db:[ 
-                    {nombre:'DB 2020',id:'pgsql2020'}, 
-                    {nombre:'DB Safcon',id:'pgsql'}],
+                db:[ {nombre:'DB 2019',id:'pgsql2019'}, 
+                {nombre:'DB 2018',id:'pgsql2018'}],
                 arrayPermisos : {procesarCambios:0,cambiofecha:0},  
                 arrayPermisosIn:[],
             }
@@ -329,7 +328,7 @@ let me=this;
                             }
                         });
                     
-                        var url= '/con_contabilidad/procesoReservaUpdate';
+                        var url= '/con_contabilidad/procesoReservaUpdate2019';
                         axios.post(url,{'valuedb':this.valuedb, 
                                         'valuetipo':this.valuetipo,
                                         'numcomprobante':this.numcomprobante}).then(function (response) {

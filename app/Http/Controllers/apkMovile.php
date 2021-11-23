@@ -66,7 +66,7 @@ class apkMovile extends Controller
         }   
          
         $pdf = PDF::loadView('doc_obligacion', ['solccuenta'=>$solccuenta]); 
-        return $pdf->stream('prueba.pdf');
+        return $pdf->stream('doc_obligacion.pdf');
     }
 
     public function login2(Request $request) {

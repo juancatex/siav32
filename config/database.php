@@ -78,7 +78,7 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-        'pgsql2020back' => [
+        'pgsql2019' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST_3'),
             'port' => env('DB_PORT_3'),
@@ -90,43 +90,21 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-        'pgsql_desarrollo' => [
+        'pgsql2018' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST_PD'),
-            'port' => env('DB_PORT_PD'),
-            'database' => env('DB_DATABASE_PD'),
-            'username' => env('DB_USERNAME_PD'),
-            'password' => env('DB_PASSWORD_PD'),
+            'host' => env('DB_HOST_4'),
+            'port' => env('DB_PORT_4'),
+            'database' => env('DB_DATABASE_4'),
+            'username' => env('DB_USERNAME_4'),
+            'password' => env('DB_PASSWORD_4'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
 
-        'pgsql_localback' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST_back2020'),
-            'port' => env('DB_PORT_back2020'),
-            'database' => env('DB_DATABASE_back2020'),
-            'username' => env('DB_USERNAME_back2020'),
-            'password' => env('DB_PASSWORD_back2020'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-        'pgsql_local2020' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST_2020'),
-            'port' => env('DB_PORT_2020'),
-            'database' => env('DB_DATABASE_2020'),
-            'username' => env('DB_USERNAME_2020'),
-            'password' => env('DB_PASSWORD_2020'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
+       
+       
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
