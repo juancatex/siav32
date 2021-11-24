@@ -5,7 +5,7 @@ use App\Adm_User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth; 
- 
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -46,6 +46,12 @@ class LoginController extends Controller
     public function username () {
           return 'username';
     }
- 
+     
+    protected function attemptLogin(Request $request)
+    {
+        $values=$this->credentials($request);
+        $values['activo']=1;
+        return $this->guard()->attempt($values, $request->filled('remember'));
+    }
 
 }
