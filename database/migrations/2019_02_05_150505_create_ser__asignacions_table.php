@@ -28,11 +28,14 @@ class CreateSerAsignacionsTable extends Migration
             $table->date('fechareserva')->nullable()->comment('fecha de la reserva, para servicios eventuales');
             $table->time('horainicioreserva')->nullable()->comment('hora de la inicio de la reserva');
             $table->time('horafinreserva')->nullable()->comment('hora fin de la reserva');
-            $table->dateTime('fechaentrada')->nullable();
-            $table->dateTime('fechasalida')->nullable();
+            $table->date('fechaentrada')->nullable()->comment('hospedaje transitorio');
+            $table->date('fechasalida')->nullable()->comment('hospedaje transitorio');
+            $table->time('horaentrada')->nullable()->comment('hospedaje transitorio');
+            $table->time('horasalida')->nullable()->comment('hospedaje transitorio');
             $table->date('fechadefuncion')->nullable();
             $table->integer('idresponsable')->nullable();
             $table->string('obs1')->nullable();            
+            $table->string('obs2')->nullable();            
             $table->integer('idrepresentante')->nullable();
             $table->boolean('activo')->default(1)->comment('0->eliminado,1->activo');
             $table->integer('idfactura')->nullable();

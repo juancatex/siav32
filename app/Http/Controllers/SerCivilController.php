@@ -10,19 +10,49 @@ use App\Ser_Civil;
 class SerCivilController extends Controller
 {
     //
+    
+    public function selectCivil(Request $request){
+        $buscararray = array();  
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        } 
+        $raw=DB::raw('concat(nombre," ",apaterno, " ",amaterno) as nomcivil');
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(nombre like '%".$valor."%' or apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or ci like '%".$valor."%')";
+                }else{
+                    $sqls.=" and (nombre like '%".$valor."%' or apaterno like '%".$valor."%' or amaterno like '%".$valor."%' or ci like '%".$valor."%')";
+                } 
+            }   
+            $civils = Ser_Civil::select('idcivil','ci',$raw)->orderBy('apaterno', 'desc')->whereraw($sqls)->get();
+        }
+        else {
+            if (!empty($request->id))
+                $civils = Ser_Civil::select('idcivil','ci',$raw)->orderBy('apaterno', 'desc')->where('idcivil','=',$request->id)->get();
+            else
+                $civils = Ser_Civil::select('idcivil','ci',$raw)->orderBy('apaterno', 'desc')->get();
+        }
+        return ['civils' => $civils];
+        //return ['subcuentas' => $subcuentas]; */
+    }
+    
+    
     public function store(Request $request)
     {
         if(!$request->ajax()) return paginate('/');
         $civil=new Ser_Civil();
-        $civil->nombre=$request->nombre;
-        $civil->apaterno=$request->apaterno;
-        $civil->amaterno=$request->amaterno;
+        $civil->nombre=ucfirst($request->nombre);
+        $civil->apaterno=ucfirst($request->apaterno);
+        $civil->amaterno=ucfirst($request->amaterno);
         $civil->ci=$request->ci;
         $civil->iddepartamento=$request->iddepartamento;
         $civil->fechanac=$request->fechanac;
         $civil->sexo=$request->sexo;
         $civil->telcelular=$request->telcelular;
         $civil->save();
+        return $civil->idcivil;
     }
 
     public function ultimo(Request $request)
