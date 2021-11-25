@@ -18,7 +18,7 @@ class Adm_User extends Authenticatable
     
      protected $table = 'adm__users';
      protected $fillable = [
-        'username', 'email', 'password'
+        'username', 'email', 'password','activo'
     ];
 
     /**

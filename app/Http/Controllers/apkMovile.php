@@ -4,14 +4,72 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Socio; 
+use App\Adm_User; 
 use App\Par_Prestamos;
+use App\Glo_SolicitudCargoCuenta;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use PDF;
+
 
 class apkMovile extends Controller
 {
-    public function login(Request $request) {
+    public function gethtml()
+    {
+        $idsolccuenta=4;
+        $sidirectorio=1;
+
+        //dd($sidirectorio);  
+        
+        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $raw2=DB::raw('year(con__asientomaestros.fechavalidado) as anio');
+        if($sidirectorio)
+        {
+            $solccuenta=Glo_SolicitudCargoCuenta::join('con__asientomaestros','con__asientomaestros.idasientomaestro','glo__solicitud_cargo_cuentas.idasientomaestro')
+                                                    ->join('socios','socios.numpapeleta','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('fil__directivos','fil__directivos.idsocio','socios.idsocio')
+                                                    ->join('fil__filials','fil__filials.idfilial','fil__directivos.idfilial')
+                                                    ->join('fil__unidads','fil__unidads.idunidad','fil__directivos.idunidad')
+                                                    ->join('con__cuentas','con__cuentas.idcuenta','glo__solicitud_cargo_cuentas.idcuentadesembolso')
+                                                    ->select('glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'glo__solicitud_cargo_cuentas.fecha_desembolso',
+                                                            'glo__solicitud_cargo_cuentas.numdocobligacion',
+                                                            $raw,$raw2,
+                                                            'fil__filials.sigla',
+                                                            'fil__unidads.nomcargo',
+                                                            'con__cuentas.nomcuenta',
+                                                            'con__asientomaestros.cod_comprobante',
+                                                            'ci')
+                                                    ->where('glo__solicitud_cargo_cuentas.idsolccuenta',$idsolccuenta)
+                                                    ->get();
+        }
+        else
+        {    $solccuenta=Glo_SolicitudCargoCuenta::join('con__asientomaestros','con__asientomaestros.idasientomaestro','glo__solicitud_cargo_cuentas.idasientomaestro')
+                                                    ->join('rrh__empleados','rrh__empleados.idempleado','glo__solicitud_cargo_cuentas.subcuenta')
+                                                    ->join('rrh__cargos','rrh__cargos.idcargo','rrh__empleados.idcargo')
+                                                    ->join('con__cuentas','con__cuentas.idcuenta','glo__solicitud_cargo_cuentas.idcuentadesembolso')
+                                                    ->select('glo__solicitud_cargo_cuentas.glosa',
+                                                            'glo__solicitud_cargo_cuentas.monto',
+                                                            'glo__solicitud_cargo_cuentas.fecha_desembolso',
+                                                            'glo__solicitud_cargo_cuentas.numdocobligacion',
+                                                            $raw,$raw2,
+                                                            'rrh__cargos.nomcargo',
+                                                            'con__cuentas.nomcuenta',
+                                                            'con__asientomaestros.cod_comprobante',
+                                                            'ci')
+                                                    ->where('glo__solicitud_cargo_cuentas.idsolccuenta',$idsolccuenta)
+                                                    ->get();
+        
+        
+        }   
+         
+        $pdf = PDF::loadView('doc_obligacion', ['solccuenta'=>$solccuenta]); 
+        return $pdf->stream('doc_obligacion.pdf');
+    }
+
+    public function login2(Request $request) {
         if (Auth::attempt(['username' => $request->user, 'password' => $request->pass])) { 
 
             $socios=Socio::join ('par_fuerzas','socios.idfuerza','=','par_fuerzas.idfuerza')
@@ -29,6 +87,21 @@ class apkMovile extends Controller
             return response()->json('Usuario no encontrado.', 500);
         }
     }
+    public function login(Request $request)
+    {
+    if (!Auth::attempt($request->only('username', 'password'))) {
+    return response()->json([
+    'message' => 'Datos invalidos'
+               ], 401);
+           }
+    
+    $user = Adm_User::where('username', $request['username'])->where('activo',1)->firstOrFail(); 
+    $token = $user->createToken('auth_token')->plainTextToken;
+     
+    return response()->json(array('token' => $token,'token_type' => 'Bearer'), 200);
+    }
+
+
     public function validate() {
         if (Auth::check()) {
             return response()->json(array('data' =>'ok'), 200);

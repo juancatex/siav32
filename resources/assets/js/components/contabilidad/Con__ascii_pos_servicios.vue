@@ -243,11 +243,10 @@ Vue.use(VeeValidate);
                 {nombre:'AJUSTE',id:'SEC_CON_COM_AJUSTE'},
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
-                db:[{nombre:'DB Prueba',id:'pgsql_desarrollo'},
+                db:[ 
                  {nombre:'DB 2020',id:'pgsql2020'},
-                {nombre:'DB Safcon',id:'pgsql'},
-                {nombre:'DB2020_local',id:'pgsql_local2020'},
-                    {nombre:'DB2020_back',id:'pgsql_localback'}],
+                {nombre:'DB Safcon',id:'pgsql'} 
+                    ],
                 arrayPermisos : {procesarCambios:0,procesarCambiosFecha:0},  
                 arrayPermisosIn:[],
             }
