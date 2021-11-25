@@ -48,7 +48,7 @@
                     </div>
                 @endif
 		 
-                <img src="img/favicon.png" alt="UEFAB" width="65%">
+                <img src="img/favicon.png" alt="UEFAB" width="55%">
                 <p class="title">SIA ASCINALSS</p>
                 <input type="text" placeholder="Usuario" name="username" autofocus/>
                 <i class="fa fa-user"></i>
