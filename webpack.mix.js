@@ -29,8 +29,10 @@ mix.styles([
     'resources/assets/plantilla/css/dataTables.bootstrap4.min.css',
     'resources/assets/plantilla/css/jquery.toolbar.css'
 ], 'public/css/plantilla.css')
-.styles(['resources/assets/plantilla/css/login.css',
-'resources/assets/plantilla/css/font-awesome.min.css'
+.styles([
+    'resources/assets/plantilla/css/stylelogin.css'
+    // 'resources/assets/plantilla/css/login.css',
+// 'resources/assets/plantilla/css/font-awesome.min.css'
 ], 'public/css/login.css')
 .scripts([
     'resources/assets/plantilla/js/jquery.js',
@@ -63,7 +65,7 @@ mix.styles([
 ], 'public/js/plantilla.js')
 .scripts([
     'resources/assets/plantilla/js/jquery.js', 
-    'resources/assets/plantilla/js/login.js'
+    // 'resources/assets/plantilla/js/login.js'
 ], 'public/js/login.js')
 // .scripts([
 //     'resources/assets/plantilla/js/fire.js', 
