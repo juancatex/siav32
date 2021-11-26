@@ -51,56 +51,65 @@ table {
         text-align:right;
     }
 </style>
-<body style="background-color: gray; text-align:center">
+<body style="text-align:center">
 <div class="body_wrapper">
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REGISTRO DE INGRESO HOSPEDAJE N°  {{ $hospedaje[0]->idasignacion }}</h2>
    <hr>
    <table>
        <tbody>
-           <tr style="height: 50px;">
-               <td colspan="4" ><strong >DATOS DE INGRESO:</strong>
-                   </td>
+           <tr>
+               <td colspan="6"><strong >DATOS DE INGRESO:</strong></td>
            </tr>
+           
            <tr >
                 <td style="text-align: left;"><strong>Nombre: </strong></td>
-                <td style="text-align: left;">{{$hospedaje[0]->nombres}}</td>
+                <td colspan="3" style="text-align: left;">{{$hospedaje[0]->nombres}}</td>
                 @if($hospedaje[0]->numpapeleta!='')
                 <td style="text-align: left;"><strong> Numero de Boleta:</strong></td>
                 <td style="text-align: left;">{{ $hospedaje[0]->numpapeleta }}</td>
+                @else
+                <td colspan="2"></td>
                 @endif
-                
-
            </tr>
            <tr >
                 <td style="text-align: left;"><strong>CI:</strong></td>
                 <td style="text-align: left;">{{$hospedaje[0]->ci}}</td>
-                <td></td>
-                <td></td>
+                <td colspan="4"></td>
            </tr>
-           <tr style="height: 50px;">
-               <td colspan="4" ><strong> DATOS DE ASIGNACION: </strong></td>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr>
+               <td colspan="6"><strong> DATOS DE ASIGNACION: </strong></td>
             </tr>
+            <tr>
                <td style="text-align: left;"><strong>Habitacion:</strong></td>
                 <td style="text-align: left;">{{$hospedaje[0]->codambiente}}</td>
                 <td style="text-align: left;"><strong>Fecha de Ingreso:</strong></td>
-                <td style="text-align: left;">{{$hospedaje[0]->fechaentrada}} - {{$hospedaje[0]->horaentrada}}</td>
+                <td colspan="3"style="text-align: left;">{{$hospedaje[0]->fechaentrada}} - {{$hospedaje[0]->horaentrada}}</td>
            </tr>
            <tr>
-               <td colspan="4" style="text-align: left; height: 50px;" ><strong>Implementos Entregados:</strong></td>
+               <td colspan="6" style="text-align: left; height: 50px;" ><strong>Implementos Entregados:</strong></td>
            </tr>
            @foreach ($implementos as $impl)
            <tr>
                <td style="width: 100px;"></td>
-               <td colspan="3" style="text-align: left;">{{ $impl->nomimplemento }}</td>
+               <td colspan="5" style="text-align: left;">{{ $impl->nomimplemento }}</td>
            </tr>
            @endforeach
+           
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr> 
+           <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr>
-               <td colspan="4" style="text-align: left;"><strong>Observaciones:</strong>{{$hospedaje[0]->obs1}}</td>
+               <td colspan="3" style="text-align:center;" valign="bottom" >FIRMA CLIENTE</td>
+               <td colspan="3" style="text-align:center;" valign="bottom">FIRMA ENCARGADO(A)</td>
            </tr>
-           <tr style="height: 100px;">
-               <td colspan="2" style="text-align:center;" valign="bottom" >FIRMA CLIENTE</td>
-               <td colspan="2" style="text-align:center;" valign="bottom">FIRMA ENCARGADO(A)</td>
+           <tr>
+               <td colspan="6" style="text-align: left;"><strong>Observaciones:</strong>{{$hospedaje[0]->obs1}}</td>
            </tr>
        </tbody>
        

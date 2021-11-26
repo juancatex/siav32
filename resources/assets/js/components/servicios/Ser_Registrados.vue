@@ -23,7 +23,7 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            
+                            <th>Nº Asignacion</th>
                             <th>Nombre Huesped</th>
                             <th>Habitacion</th>                                    
                             <th>Fecha Entrada</th>
@@ -41,6 +41,7 @@
                                     <i class="icon-book-open"> B. Salida</i>
                                 </button> &nbsp;
                             </td>
+                            <td>{{registrados.idasignacion}}</td>
                             <td >{{ registrados.nombres }} -{{ registrados.ci}}</td>
                             <td>{{ registrados.codambiente}} - {{ registrados.tipo }} Piso:{{ registrados.piso }}</td>
                             <td >{{registrados.fechaentrada}} - {{registrados.horaentrada}}
@@ -139,17 +140,19 @@
                 me.tipocliente=data['tipocliente']
                 me.idasignacion=data['idasignacion'];
                 var url='/reporteingreso?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
-                window.open(url, '_blank');
+                /* window.open(url, '_blank'); */
+                _pl._vm2154_12186_135(url,'Reporte de Ingreso');
                 me.tipocliente='';
                 me.idasignacion='';
             },
-            imprimirsalida(data=[]){
+            imprimirasalida(data=[]){
                 //console.log(data);
                 let me=this;
                 me.tipocliente=data['tipocliente']
                 me.idasignacion=data['idasignacion'];
-                var url='/reporteingreso?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
-                window.open(url, '_blank');
+                var url='/reportesalida?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                /* window.open(url, '_blank'); */
+                _pl._vm2154_12186_135(url,'Reporte de Salida');
                 me.tipocliente='';
                 me.idasignacion='';
             },
@@ -211,6 +214,7 @@
 
         },
         mounted() {
+            this.classModal=new _pl.Modals();
             this.listarRegistrados(1,this.buscar);
             this.getRutasReports();
         }
