@@ -14,6 +14,7 @@ use App\Socio;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
 use PDF;
+use Illuminate\Support\Facades\Auth;
 
 
 class SerAsignacionController extends Controller
@@ -325,6 +326,7 @@ class SerAsignacionController extends Controller
         $asignacion->idfactura=$request->idfactura;
         $asignacion->estado=0;
         $asignacion->cantdias=$request->cantdias;
+        $asignacion->u_salida=Auth::id();
         $asignacion->save();   
         /* DB::table('ser__asignacions')
                 ->where('idasignacion', $request->idasignacion)
@@ -466,6 +468,7 @@ class SerAsignacionController extends Controller
         $asignacion->idresponsable=$request->idresponsable;
         $asignacion->idrepresentante=$request->idrepresentante;
         $asignacion->obs1=$request->obs1;
+        $asignacion->u_registro=Auth::id();
         $asignacion->save();
     
 

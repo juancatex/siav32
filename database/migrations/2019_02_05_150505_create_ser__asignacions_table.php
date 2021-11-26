@@ -43,6 +43,8 @@ class CreateSerAsignacionsTable extends Migration
             $table->integer('idfactura')->nullable();
             $table->integer('idasientomaestro')->nullable();
             $table->float('monto',15,2);
+            $table->integer('u_registro')->comment('usuario que registra el ingreso');
+            $table->integer('u_salida')->comment('usuario que registra la salida');
             $table->timestamps();
         });
     }
