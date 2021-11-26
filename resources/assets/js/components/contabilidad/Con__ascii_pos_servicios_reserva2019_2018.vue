@@ -95,8 +95,17 @@
                      <div class="col-md-10">
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Fecha del comprobante:</label>
-                      <div class="input-group">
-                        <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2020-01-01" max="2020-12-31"
+                      <div class="input-group" v-if="valuedb=='pgsql2019'">
+                        <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2019-01-01" max="2019-12-31"
+                          v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante"/> 
+                           <div class="input-group-append" v-if="check('cambiofecha')">
+                            <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
+                            <i class="fa fa-search"></i> cambiar fecha
+                           </span>
+                          </div>
+                      </div>
+                      <div class="input-group" v-else-if="valuedb=='pgsql2018'">
+                        <input style="background-color: #f0f3f5;text-align: right;" type="date" min="2018-01-01" max="2018-12-31"
                           v-model="fechacomprobantenew" class="form-control" placeholder="Numero de comprobante"/> 
                            <div class="input-group-append" v-if="check('cambiofecha')">
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="updateDate()">
