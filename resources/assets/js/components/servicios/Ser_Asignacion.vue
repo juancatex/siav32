@@ -24,7 +24,7 @@
                                 <strong class="form-control-label">Filial:</strong>
                             </div>
                             <div class="col-md-8">
-                                <select v-model="filialselected"  class="form-control" @change="listarEstablecimiento()">
+                                <select v-model="filialselected"  class="form-control" @change="listarEstablecimiento()" disabled>
                                     <option value="0" disabled selected>Todas</option>
                                     <option v-for="filial in arrayFilial" v-bind:key="filial.idfilial" :value="filial.idfilial" v-text="filial.nommunicipio"></option>
                                 </select>
@@ -38,7 +38,7 @@
                                 <strong class="form-control-label">Servicio:</strong>
                             </div>
                             <div class="col-md-8">
-                                <select v-model="establecimientoselected"  class="form-control" @change="listarPisos()">
+                                <select v-model="establecimientoselected"  class="form-control" @change="listarPisos()" disabled>
                                     <option value="0" disabled selected >Seleccionar...</option>
                                     <option v-for="establecimientos in arrayestablecimientos" v-bind:key="establecimientos.idestablecimiento" :value="establecimientos.idestablecimiento" v-text="establecimientos.nomestablecimiento"></option>
                                 </select>
