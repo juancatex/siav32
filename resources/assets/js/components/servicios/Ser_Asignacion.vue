@@ -1187,11 +1187,13 @@
                 }).then(response=>{
                     let idasignacion=response.data;
                     swal('Asignación creada','Proceda a la verificación de pagos','success');
-                    var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
-                    window.open(url, '_blank');
+                    // var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
+                    // window.open(url, '_blank');
                     me.listarAsignaciones();
                     //this.modalAsignacion=0;
                     this.cerrarModalAsignacion();
+
+                    _pl._vm2154_12186_135(url,'Reporte de Ingreso')
                 });
             },
         },
