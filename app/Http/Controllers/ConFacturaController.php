@@ -1514,7 +1514,7 @@ $max_item++;
  
   DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
- return ['values'=>$valida_3,'cuentas'=>$cuentas];
+ return ['values'=>$valida_3,'cuentas'=>$cuentas,'fecha'=>count($fechaR)>0?$fechaR[0]->fe:date("Y-m-d")];
     }
     public function procesoReserva2018(Request $request)
     {
@@ -1649,7 +1649,7 @@ $max_item++;
  
   DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
- return ['values'=>$valida_3,'cuentas'=>$cuentas];
+ return ['values'=>$valida_3,'cuentas'=>$cuentas,'fecha'=>count($fechaR)>0?$fechaR[0]->fe:date("Y-m-d")];
     }
     public function procesoReservaReversion(Request $request)
     {
