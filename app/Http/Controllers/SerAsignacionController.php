@@ -212,9 +212,15 @@ class SerAsignacionController extends Controller
             $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
             
 
-            return view('reporteingreso')->with(['hospedaje'=>$hospedaje,
-                                            'implementos'=>$implementos,
-                                            'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);
+            // return view('reportes/servicios/reporteingreso')->with(['hospedaje'=>$hospedaje,
+            //                                 'implementos'=>$implementos,
+            //                                 'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);
+
+         $pdf = PDF::loadView('reportes/servicios/reporteingreso', ['hospedaje'=>$hospedaje,
+         'implementos'=>$implementos,
+         'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]); 
+         return $pdf->stream('reporteingreso.pdf'); 
+
     }
     public function reportesalida(Request $request)
     {
@@ -299,7 +305,7 @@ class SerAsignacionController extends Controller
             $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
             
 
-            return view('reportesalida')->with(['hospedaje'=>$hospedaje,
+            return view('reportes/servicios/reportesalida')->with(['hospedaje'=>$hospedaje,
                                             'implementos'=>$implementos,
                                             'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);
     }
