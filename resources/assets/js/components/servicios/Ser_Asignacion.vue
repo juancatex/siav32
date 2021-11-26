@@ -76,7 +76,7 @@
                             <th>Cod.</th>
                             <th>Descripcion</th>
                             <th>Tarifas</th>
-                            <th>Ocupantes - Fecha Entrada - Dias / Pago</th>
+                            <th>Ocupantes - Fecha Entrada - Noches / Pago</th>
                             <th>Opciones</th>
 
                         </tr>
@@ -96,11 +96,13 @@
                                 <tr v-for="hospedaje in asignacion.hospedaje" :key="hospedaje.idasignacion" >
                                     <td style="width:45%">{{ hospedaje.nombres}}</td>
                                     <td style="width:20%">{{ hospedaje.fechaentrada }} - {{ hospedaje.horaentrada }}</td>
-                                    <td style="width:20%">Dias: {{ hospedaje.difd }} <br />Monto: {{ hospedaje.monto }} Bs.</td>
+                                    <td style="width:20%">Noches: {{ hospedaje.difd }} <br />Monto: {{ hospedaje.monto }} Bs.</td>
                                     <td style="width:15%"><button class="btn btn-primary btn-sm " title="Salida"
                                                 @click="modalregistrarSalida(asignacion,hospedaje)"><i class="fas fa-door-open"></i> </button> 
                                             <button class="btn btn-danger btn-sm" title="Traspaso"
                                                 @click="traspaso(asignacion)"> <i class="fas fa-random"></i> </button> 
+                                            <button class="btn btn-warning btn-sm" title="Imprimir Ingreso"
+                                                @click="imprimirasignacion(hospedaje)"> <i class="fas fa-print"></i> </button> 
                                     </td>
                                 </tr> 
                             </table>
@@ -368,7 +370,7 @@
                                 </ul>
                                 <strong class="form-control-label">Monto a Cobrar: </strong>
                                 <label for="">{{ montoacobrar }} Bs. </label>
-                                <strong class="form-control-label">Dias hospedado: </strong>
+                                <strong class="form-control-label">Noches hospedado: </strong>
                                 <label for="">{{ diashospedados }} </label>
                                 <strong class="form-control-label">Fecha de Salida: </strong>
                                 <label for="">{{ fechaactual }} - {{ horaactual}} </label>
@@ -484,6 +486,7 @@
                 itxp:'',
                 porcentajeitxp:'',
                 
+                
                 //*****************modal civil
                 apaterno:'',
                 amaterno:'',
@@ -582,6 +585,16 @@
             }
         },
         methods : {
+            imprimirasignacion(data=[]){
+                console.log(data);
+                let me=this;
+                me.tipocliente=data['tipocliente']
+                me.idasignacion=data['idasignacion'];
+                var url='/reporteingreso?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                window.open(url, '_blank');
+                me.tipocliente='';
+                me.idasignacion='';
+            },
            
 
             //metodo agregado para la validacion
@@ -800,6 +813,9 @@
                 this.tituloModal='';
                 this.nomdepartamento='';
                 
+            },
+            traspaso(data=[]){
+
             },
             cerrarmodalsalida(){
                 let me=this;
@@ -1071,7 +1087,8 @@
                     //'razonsocial':me.razonsocial,
                     'monto':me.montoacobrar,
                     'observaciones':me.observaciones,
-                    'idfactura':me.idfactura
+                    'idfactura':me.idfactura,
+                    'cantdias':me.diashospedados,
                     }).then(function (response) {
                         if(response.data.length){
                             swal(
@@ -1085,7 +1102,10 @@
                                 'Registrado Correctamente',
                             )
 
+                            let url='/reportesalida?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                            window.open(url, '_blank');
                             me.cerrarmodalsalida();
+                            
                             me.listarAsignaciones();
                         }
                     }).catch(function (error) {
@@ -1165,7 +1185,10 @@
                     'idrepresentante':'',
                     'obs1':me.obs
                 }).then(response=>{
+                    let idasignacion=response.data;
                     swal('Asignación creada','Proceda a la verificación de pagos','success');
+                    var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
+                    window.open(url, '_blank');
                     me.listarAsignaciones();
                     //this.modalAsignacion=0;
                     this.cerrarModalAsignacion();
