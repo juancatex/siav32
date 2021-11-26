@@ -13,6 +13,7 @@ use App\Ser_Implemento;
 use App\Socio;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
+use PDF;
 
 
 class SerAsignacionController extends Controller
@@ -305,9 +306,13 @@ class SerAsignacionController extends Controller
             $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
             
 
-            return view('reportes/servicios/reportesalida')->with(['hospedaje'=>$hospedaje,
+            /* return view('reportes/servicios/reportesalida')->with(['hospedaje'=>$hospedaje,
                                             'implementos'=>$implementos,
-                                            'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);
+                                            'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]); */
+                                            $pdf = PDF::loadView('reportes/servicios/reportesalida', ['hospedaje'=>$hospedaje,
+                                            'implementos'=>$implementos,
+                                            'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]); 
+                                            return $pdf->stream('reportesalida.pdf'); 
     }
 
     public function registrarsalida(Request $request)
@@ -614,8 +619,7 @@ class SerAsignacionController extends Controller
             //->whereraw($sqls)   
             
             ->union($hospedajesocio)
-            ->orderBy('ser__asignacions.fechaentrada','desc')
-            
+            ->orderByRaw('created_at','desc')
             ->paginate(50);    
         }
         else{
@@ -669,7 +673,8 @@ class SerAsignacionController extends Controller
             ->where('ser__asignacions.activo',1)
             ->where('tipocliente',2)//civil
             ->union($hospedajesocio)
-            ->orderBy('fechaentrada','desc')
+            ->orderBy('fechaentrada', 'DESC')
+            ->orderBy('horaentrada','DESC')
             
             ->paginate(50);    
         }                        

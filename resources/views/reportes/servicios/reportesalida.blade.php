@@ -51,7 +51,7 @@ table {
         text-align:right;
     }
 </style>
-<body style="background-color: gray; text-align:center">
+<body style="text-align:center">
 <div class="body_wrapper">
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REGISTRO DE SALIDA HOSPEDAJE N°  {{ $hospedaje[0]->idasignacion }}</h2>
@@ -62,6 +62,7 @@ table {
                <td colspan="6" ><strong >DATOS DE SALIDA:</strong>
                    </td>
            </tr>
+           
            <tr >
                 <td style="text-align: left;"><strong>Nombre: </strong></td>
                 <td colspan="3" style="text-align: left;">{{$hospedaje[0]->nombres}}</td>
@@ -75,6 +76,7 @@ table {
                 <td colspan="5" style="text-align: left;">{{$hospedaje[0]->ci}}</td>
                 
            </tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr style="height: 80px;">
                <td colspan="6" ><strong> DATOS DE ASIGNACION: </strong></td>
             </tr>
@@ -99,19 +101,29 @@ table {
            </tr>
            @endforeach
            <tr>
-               <td><strong> Numero Factura:</strong></td>
+               <td colspan="2"><strong> Numero Factura:</strong></td>
                <td>{{$hospedaje[0]->numerofactura}}</td>
                <td><strong>Razon Social:</strong></td>
-               <td>{{$hospedaje[0]->razonsocial}}</td>
-               <td><strong>Nit:</strong></td>
-               <td>{{$hospedaje[0]->nit}}</td>
+               <td colspan="2">{{$hospedaje[0]->razonsocial}}</td>
+               
+           </tr>
+           <tr>
+               <td colspan="2"><strong>Monto Cancelado:</strong></td>
+               <td>{{$hospedaje[0]->monto}} Bs.</td>
+           </tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr><td colspan="6" style="color: white;">.</td></tr> 
+           <tr><td colspan="6" style="color: white;">.</td></tr>
+           <tr>
+               <td colspan="3" style="text-align:center;" valign="bottom" ><strong>FIRMA CLIENTE</strong></td>
+               <td colspan="3" style="text-align:center;" valign="bottom"><strong>FIRMA ENCARGADO(A)</strong></td>
            </tr>
            <tr>
                <td colspan="6" style="text-align: left;"><strong>Observaciones:</strong>{{$hospedaje[0]->obs2}}</td>
-           </tr>
-           <tr style="height: 100px;">
-               <td colspan="3" style="text-align:center;" valign="bottom" ><strong>FIRMA CLIENTE</strong></td>
-               <td colspan="3" style="text-align:center;" valign="bottom"><strong>FIRMA ENCARGADO(A)</strong></td>
            </tr>
        </tbody>
        

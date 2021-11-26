@@ -23,8 +23,9 @@
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Opciones</th>
-                            <th>Nombre Huesped</th>                                    
+                            <th>Nº Asignacion</th>
+                            <th>Nombre Huesped</th>
+                            <th>Habitacion</th>                                    
                             <th>Fecha Entrada</th>
                             <th>Fecha Salida</th>
                             <th>Dias</th>
@@ -40,10 +41,15 @@
                                     <i class="icon-book-open"> B. Salida</i>
                                 </button> &nbsp;
                             </td>
-                            <td v-else></td>
+                            <td>{{registrados.idasignacion}}</td>
                             <td >{{ registrados.nombres }} -{{ registrados.ci}}</td>
-                            <td >{{registrados.fechaentrada}} - {{registrados.horaentrada}}</td>  
-                            <td >{{registrados.fechasalida }} - {{registrados.horasalida}}</td>  
+                            <td>{{ registrados.codambiente}} - {{ registrados.tipo }} Piso:{{ registrados.piso }}</td>
+                            <td >{{registrados.fechaentrada}} - {{registrados.horaentrada}}
+                                <button class="btn btn-success btn-sm" title="Imprimir Ingreso"
+                                @click="imprimirasignacion(registrados)"> <i class="fas fa-print"></i> </button> </td>  
+                            <td >{{registrados.fechasalida }} - {{registrados.horasalida}}
+                                <button v-if="registrados.fechasalida!=null" class="btn btn-info btn-sm" title="Imprimir Salida"
+                                @click="imprimirasalida(registrados)"> <i class="fas fa-print"></i> </button> </td>  
                             <td >{{registrados.cantdias}}</td>                            
                         </tr>                                
                     </tbody>
@@ -87,7 +93,9 @@
                     'to' : 0,
                 },
                 offset : 10,                
-                buscar : ''
+                buscar : '',
+                tipocliente:'',
+                idasignacion:''
             }
         },
        
@@ -126,6 +134,28 @@
             }
         },
         methods : {
+            imprimirasignacion(data=[]){
+               // console.log(data);
+                let me=this;
+                me.tipocliente=data['tipocliente']
+                me.idasignacion=data['idasignacion'];
+                var url='/reporteingreso?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                /* window.open(url, '_blank'); */
+                _pl._vm2154_12186_135(url,'Reporte de Ingreso');
+                me.tipocliente='';
+                me.idasignacion='';
+            },
+            imprimirasalida(data=[]){
+                //console.log(data);
+                let me=this;
+                me.tipocliente=data['tipocliente']
+                me.idasignacion=data['idasignacion'];
+                var url='/reportesalida?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                /* window.open(url, '_blank'); */
+                _pl._vm2154_12186_135(url,'Reporte de Salida');
+                me.tipocliente='';
+                me.idasignacion='';
+            },
 
             getRutasReports (){ 
                 let me=this;
@@ -184,6 +214,7 @@
 
         },
         mounted() {
+            this.classModal=new _pl.Modals();
             this.listarRegistrados(1,this.buscar);
             this.getRutasReports();
         }

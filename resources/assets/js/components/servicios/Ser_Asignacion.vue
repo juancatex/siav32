@@ -67,7 +67,8 @@
                             <button type="submit" @click="listarAsignaciones('buscar')" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8" style="text-align:right;">
+                        <button type="submit" @click="listarAsignaciones()" class="btn btn-success"><i class="fas fa-sync-alt" title="Actualizar"></i> Actualizar</button>
                     </div>
                 </div>
                 <table class="table table-bordered table-striped table-sm">
@@ -432,7 +433,7 @@
             return {
                 arrayFilial:[],
                 arrayServicios:[],
-                filialselected:0,
+                filialselected:1,
                 establecimientoselected:0,
                 arrayAsignacion:[],
                 pisoselected:0,
@@ -591,7 +592,8 @@
                 me.tipocliente=data['tipocliente']
                 me.idasignacion=data['idasignacion'];
                 var url='/reporteingreso?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
-                window.open(url, '_blank');
+                /* window.open(url, '_blank'); */
+                _pl._vm2154_12186_135(url,'Reporte de Ingreso')
                 me.tipocliente='';
                 me.idasignacion='';
             },
@@ -1103,7 +1105,8 @@
                             )
 
                             let url='/reportesalida?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
-                            window.open(url, '_blank');
+                            /* window.open(url, '_blank'); */
+                            _pl._vm2154_12186_135(url,'Reporte de Salida');
                             me.cerrarmodalsalida();
                             
                             me.listarAsignaciones();
@@ -1187,13 +1190,16 @@
                 }).then(response=>{
                     let idasignacion=response.data;
                     swal('Asignación creada','Proceda a la verificación de pagos','success');
-                    // var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
+                    var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
+                    _pl._vm2154_12186_135(url,'Reporte de Ingreso');
                     // window.open(url, '_blank');
                     me.listarAsignaciones();
                     //this.modalAsignacion=0;
                     this.cerrarModalAsignacion();
+                     var url='/reporteingreso?idasignacion='+ idasignacion +'&tiposocio='+me.tipocliente;
+                    
 
-                    _pl._vm2154_12186_135(url,'Reporte de Ingreso')
+                    
                 });
             },
         },
@@ -1201,6 +1207,9 @@
             //this.listarDepartamento(1,this.buscar,this.criterio);
             this.classModal=new _pl.Modals();
             this.selectFilial();
+            this.establecimientoselected=2;
+            this.listarEstablecimiento();
+            this.listarPisos();
             
             this.listaImplementos();
             this.classModal.addModal('addasignacion');
