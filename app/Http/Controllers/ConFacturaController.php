@@ -227,7 +227,9 @@ class ConFacturaController extends Controller
             $detalle_t=$request->detalle;
         //dd($request);
         if (!$request->ajax()) return redirect('/');
+        
         $factura = new Con_factura();
+
         $factura->idfacturaparametro = 1;
         $factura->numerofactura = $request->numerofactura;
         $factura->codigocontrol = $request->codigocontrol;
@@ -244,6 +246,7 @@ class ConFacturaController extends Controller
         $factura->fechafactura=$request->fechafactura;
         $factura->idsubcuenta=$request->subcuenta;
         $factura->save();
+        return $factura->idfactura;
     }
 
     public function update(Request $request)
@@ -294,8 +297,10 @@ class ConFacturaController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
                 
-        $maxfactura = Con_Factura::where('activo','<>',0)->max('numerofactura');         
-        return ['maxfactura' => $maxfactura];
+        $maxfactura = Con_Factura::where('activo','<>',0)->max('numerofactura'); 
+        $numautorizacion=Con_Factura::select('numautorizacion')->orderby('fechafactura','desc')->first();       
+        return ['maxfactura' => $maxfactura,
+                'numautorizacion'=>$numautorizacion];
     }   
 
     public function procesoservicio(Request $request)

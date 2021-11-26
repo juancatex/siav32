@@ -26,8 +26,8 @@
                             <th>Opciones</th>
                             <th>Nombre Huesped</th>                                    
                             <th>Fecha Entrada</th>
-                            <th>Servicio</th>
-                            <th>Filial</th>
+                            <th>Fecha Salida</th>
+                            <th>Dias</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,10 +41,10 @@
                                 </button> &nbsp;
                             </td>
                             <td v-else></td>
-                            <td v-text="registrados.nomgrado+' '+registrados.nombre+' '+registrados.apaterno+' '+registrados.amaterno+' (Id: '+registrados.idsocio+')'"></td>
-                            <td v-text="registrados.fechaentrada"></td>  
-                            <td v-text="registrados.codservicio"></td>                            
-                            <td v-text="registrados.sigla"></td>                            
+                            <td >{{ registrados.nombres }} -{{ registrados.ci}}</td>
+                            <td >{{registrados.fechaentrada}} - {{registrados.horaentrada}}</td>  
+                            <td >{{registrados.fechasalida }} - {{registrados.horasalida}}</td>  
+                            <td >{{registrados.cantdias}}</td>                            
                         </tr>                                
                     </tbody>
                 </table>
@@ -160,7 +160,7 @@
                 var url= '/ser_asignacion/listarRegistrados?page=' + page + '&buscar='+ buscar;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    me.arrayRegistrados = respuesta.registrados.data; 
+                    me.arrayRegistrados = respuesta.hospedaje.data; 
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {
