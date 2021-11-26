@@ -608,7 +608,7 @@ class SerAsignacionController extends Controller
             //->whereraw($sqls)   
             
             ->union($hospedajesocio)
-            ->orderBy('ser__asignacions.fechaentrada','desc')
+            ->orderBy('fechaentrada','desc')
             
             ->paginate(50);    
         }

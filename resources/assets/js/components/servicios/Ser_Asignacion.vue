@@ -432,7 +432,7 @@
             return {
                 arrayFilial:[],
                 arrayServicios:[],
-                filialselected:0,
+                filialselected:1,
                 establecimientoselected:0,
                 arrayAsignacion:[],
                 pisoselected:0,
@@ -1199,6 +1199,9 @@
             //this.listarDepartamento(1,this.buscar,this.criterio);
             this.classModal=new _pl.Modals();
             this.selectFilial();
+            this.establecimientoselected=2;
+            this.listarEstablecimiento();
+            this.listarPisos();
             
             this.listaImplementos();
             this.classModal.addModal('addasignacion');
