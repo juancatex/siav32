@@ -69,19 +69,21 @@
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="buscarcomprobante()">
                             <i class="fa fa-search"></i> Buscar
                            </span>
+                           
                           
-                          
-                           <div v-if="valuedb=='pgsql2019'">
-                              <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
-                                <i class="fa fa-search"></i> probar 2019
-                            </span>
-                             </div>
-                            <div v-else-if="valuedb=='pgsql2018'">
-                               <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2018')">
-                                <i class="fa fa-search"></i> probar 2018
-                               </span>
-                            </div>
-
+                                <div v-if="cuentadaaro">
+                                    <div v-if="valuedb=='pgsql2019'">
+                                        <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
+                                        <i class="fa fa-search"></i> probar 2019
+                                    </span>
+                                        </div>
+                                    <div v-else-if="valuedb=='pgsql2018'">
+                                        <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2018')">
+                                        <i class="fa fa-search"></i> probar 2018
+                                        </span>
+                                    </div>
+                                </div>
+ 
                            <!-- <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
                            </span> -->
@@ -115,7 +117,7 @@
                       </div>
                     </div>
         <h1>Operaciones</h1>  
-                    <div  class="col-md-12" v-if="check('procesarCambios')">
+                    <div  class="col-md-12" v-if="check('procesarCambios')&&cuentadaaro">
                             <div v-if="valuedb=='pgsql2019'">
                                 <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click="procesar('/con_contabilidad/procesoReservaUpdate2019')" type="button" class="btn btn-success btn-lg btn-block">Realizar cambios 2019</button>    
                                 <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
@@ -125,6 +127,9 @@
                                 <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
                             </div>
                      </div>  
+                     <div v-else>
+                         Ya se ejecuto el proceso de distribucion de reserva.
+                     </div>
                       
       </div>
 </div>
@@ -261,7 +266,12 @@ Vue.use(VeeValidate);
                 arrayPermisosIn:[],
             }
         },
-         
+         computed:{
+             cuentadaaro:function () {
+                var validate= _.find(this.datos, function(o) { return o.id == '22501101'; });
+                return (typeof validate == 'undefined');                               
+             }
+         },
         
         methods : {
             updateDate() {
