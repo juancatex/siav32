@@ -93,7 +93,11 @@ class SerAsignacionController extends Controller
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
                                         ->where('idambiente',$idambiente)
                                         ->where('ser__asignacions.estado',2)//solo los asignados
-                                        ->where('tipocliente',2)//civil
+                                        ->where(function($query) {
+                                            $query->where('tipocliente',2)
+                                                ->orwhere('tipocliente',3);
+                                            })
+                                        //->where('tipocliente',2)//civil
                                         ->union($hospedajesocio)
                                         ->get();
             $c=0;
@@ -121,12 +125,12 @@ class SerAsignacionController extends Controller
                         
                     
                     if($diferencia->days==0)
-                        if($v->tipocliente==1)
+                        if($v->tipocliente==1 || $v->tipocliente==3)
                             $v->monto=$valor->tarifasocio;  
                         else
                             $v->monto=$valor->tarifareal;
                     else
-                        if($v->tipocliente==1)
+                        if($v->tipocliente==1 || $v->tipocliente==3)
                             $v->monto=$valor->tarifasocio*$v->difd;  
                         else
                             $v->monto=$valor->tarifareal*$v->difd;
@@ -253,7 +257,8 @@ class SerAsignacionController extends Controller
                                                 'cantdias',
                                                 'numerofactura',
                                                 'razonsocial',
-                                                'nit'
+                                                'nit',
+                                                'monto'
 
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
@@ -322,7 +327,7 @@ class SerAsignacionController extends Controller
         $asignacion->fechasalida=$request->fechasalida;
         $asignacion->horasalida=$request->horasalida;
         $asignacion->monto=$request->monto;
-        $asignacion->obs1=$request->observaciones;
+        $asignacion->obs2=$request->observaciones;
         $asignacion->idfactura=$request->idfactura;
         $asignacion->estado=0;
         $asignacion->cantdias=$request->cantdias;
@@ -448,50 +453,62 @@ class SerAsignacionController extends Controller
     public function storeAsignacion(Request $request)
     {
                 
-        //dd($request);
-        $asignacion=new Ser_Asignacion();
-        $asignacion->idcliente=$request->idcliente;
-        $asignacion->tipocliente=$request->tipocliente;
-        $asignacion->estado=2;
-        $asignacion->idambiente=$request->idambiente;
-        $asignacion->nrasignacion=$request->nrasignacion;
-        $asignacion->fechasolicitud=$request->fechasolicitud;
-        $asignacion->mesboleta=$request->mesboleta;
-        $asignacion->ocupantes=$request->ocupantes;
-        $asignacion->iddocumentos=$request->iddocumentos;
-        $asignacion->idimplementos=$request->idimplementos;
-        $asignacion->fechaentrada=$request->fechaentrada;
-        $asignacion->horaentrada=$request->horaentrada;
-        $asignacion->fechasalida=$request->fechasalida;
-        $asignacion->horasalida=$request->horasalida;
-        $asignacion->fechadefuncion=$request->fechadefuncion;
-        $asignacion->idresponsable=$request->idresponsable;
-        $asignacion->idrepresentante=$request->idrepresentante;
-        $asignacion->obs1=$request->obs1;
-        $asignacion->u_registro=Auth::id();
-        $asignacion->save();
+        //dd($request->familiar);
+        if(count($request->familiar)>0)
+        {
+            foreach ($request->familiar as $key => $value) {
+                $asignacion=new Ser_Asignacion();
+                $asignacion->idcliente=$value;
+                $asignacion->tipocliente=3;
+                $asignacion->estado=2;
+                $asignacion->idambiente=$request->idambiente;
+                $asignacion->nrasignacion=$request->nrasignacion;
+                $asignacion->fechasolicitud=$request->fechasolicitud;
+                $asignacion->mesboleta=$request->mesboleta;
+                $asignacion->ocupantes=1;
+                $asignacion->iddocumentos=$request->iddocumentos;
+                $asignacion->idimplementos=$request->idimplementos;
+                $asignacion->fechaentrada=$request->fechaentrada;
+                $asignacion->horaentrada=$request->horaentrada;
+                $asignacion->fechasalida=$request->fechasalida;
+                $asignacion->horasalida=$request->horasalida;
+                $asignacion->fechadefuncion=$request->fechadefuncion;
+                $asignacion->idresponsable=$request->idresponsable;
+                $asignacion->idrepresentante=$request->idrepresentante;
+                $asignacion->obs1=$request->obs1;
+                $asignacion->u_registro=Auth::id();
+                $asignacion->save();
+                
+            }
+
+        }
+        else
+        {
+            $asignacion=new Ser_Asignacion();
+            $asignacion->idcliente=$request->idcliente;
+            $asignacion->tipocliente=$request->tipocliente;
+            $asignacion->estado=2;
+            $asignacion->idambiente=$request->idambiente;
+            $asignacion->nrasignacion=$request->nrasignacion;
+            $asignacion->fechasolicitud=$request->fechasolicitud;
+            $asignacion->mesboleta=$request->mesboleta;
+            $asignacion->ocupantes=$request->ocupantes;
+            $asignacion->iddocumentos=$request->iddocumentos;
+            $asignacion->idimplementos=$request->idimplementos;
+            $asignacion->fechaentrada=$request->fechaentrada;
+            $asignacion->horaentrada=$request->horaentrada;
+            $asignacion->fechasalida=$request->fechasalida;
+            $asignacion->horasalida=$request->horasalida;
+            $asignacion->fechadefuncion=$request->fechadefuncion;
+            $asignacion->idresponsable=$request->idresponsable;
+            $asignacion->idrepresentante=$request->idrepresentante;
+            $asignacion->obs1=$request->obs1;
+            $asignacion->u_registro=Auth::id();
+            $asignacion->save();
+        }
+        
     
 
-       /*  //capacidad del ambiente
-        $capacidad = DB::table('ser__ambientes')->select('capacidad')->where('idambiente',$request->idambiente)->first();        
-        //total de asignados a ese ambiente
-        $vigentes = DB::table('ser__asignacions')->select('vigente')->where('idambiente',$request->idambiente)->where('vigente',1)->count();
-
-        //para el caso de los mausoleo tiene que ser ocupado 1
-        if ($request->idresponsable!='') {
-            $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
-            $ambiente->ocupado=1;
-            $ambiente->save();
-        }
-
-        if ($capacidad->capacidad == $vigentes) {
-            //DB::table('ser__ambientes')->where('idambiente',$request->idambiente)->update(['ocupado'=>1]);
-            $ambiente=Ser_Ambiente::findOrFail($request->idambiente);
-            $ambiente->ocupado=1;
-            $ambiente->save();
-        }            
-        else    
-            {}; */
         return $asignacion->idasignacion;
         
     }
@@ -562,12 +579,15 @@ class SerAsignacionController extends Controller
             $buscararray = explode(" ",$request->buscar);
         }
         if (sizeof($buscararray)>0){
-            $sqls=''; 
+            $sqls='';
+            $sql2=''; 
             foreach($buscararray as $valor){
                 if(empty($sqls)){
-                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                    $sqls="(socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%' )";
+                    $sql2="(ser__civils.nombre like '%".$valor."%' or ser__civils.apaterno like '%".$valor."%' or ser__civils.amaterno like '%".$valor."%' or ser__civils.ci like '%".$valor."%' )";
                 }else{
-                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                    $sqls.=" and (socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.ci like '%".$valor."%' )";
+                    $sql2="(ser__civils.nombre like '%".$valor."%' or ser__civils.apaterno like '%".$valor."%' or ser__civils.amaterno like '%".$valor."%' or ser__civils.ci like '%".$valor."%' )";
                 } 
             }  
             
@@ -580,13 +600,15 @@ class SerAsignacionController extends Controller
                                                     'fechaentrada',
                                                     'horaentrada',
                                                     'fechasalida',
+                                                    'horasalida',
                                                     'obs1',
                                                     $rawsocio,
                                                     'ci',
                                                     'ocupantes',
                                                     'codambiente',
                                                     'piso',
-                                                    'tipo'
+                                                    'tipo',
+                                                    'monto'
                                                     )
                                                 ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                                 ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
@@ -606,23 +628,30 @@ class SerAsignacionController extends Controller
                         'fechaentrada',
                         'horaentrada',
                         'fechasalida',
+                        'horasalida',
                         'obs1',
                         $rawcivil,
                         'ci',
                         'ocupantes',
                         'codambiente',
                         'piso',
-                        'tipo'
+                        'tipo',
+                        'monto'
                         )
             ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->where('ser__asignacions.estado',0)//solo los liberados
             ->where('ser__asignacions.activo',1)
-            ->where('tipocliente',2)//civil
+            ->where(function($query) {
+                $query->where('tipocliente',2)
+                    ->orwhere('tipocliente',3);
+                })
+            //->where('tipocliente',2)//civil
             //->whereraw($sqls)   
-            
+            ->whereraw($sql2)   
             ->union($hospedajesocio)
-            ->orderByRaw('created_at','desc')
+            ->orderBy('fechaentrada', 'DESC')
+            ->orderBy('horaentrada','DESC')
             ->paginate(50);    
         }
         else{
@@ -635,6 +664,7 @@ class SerAsignacionController extends Controller
                                                     'fechaentrada',
                                                     'horaentrada',
                                                     'fechasalida',
+                                                    'horasalida',
                                                     'obs1',
                                                     $rawsocio,
                                                     'ci',
@@ -642,7 +672,8 @@ class SerAsignacionController extends Controller
                                                     'cantdias',
                                                     'codambiente',
                                                     'piso',
-                                                    'tipo'
+                                                    'tipo',
+                                                    'monto'
                                                     )
                                                 ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                                 ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
@@ -661,6 +692,7 @@ class SerAsignacionController extends Controller
                         'fechaentrada',
                         'horaentrada',
                         'fechasalida',
+                        'horasalida',
                         'obs1',
                         $rawcivil,
                         'ci',
@@ -668,13 +700,18 @@ class SerAsignacionController extends Controller
                         'cantdias',
                         'codambiente',
                         'piso',
-                        'tipo'
+                        'tipo',
+                        'monto'
                         )
             ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
             ->where('ser__asignacions.estado',0)//solo los liberados
             ->where('ser__asignacions.activo',1)
-            ->where('tipocliente',2)//civil
+            //->where('tipocliente',2)//civil
+            ->where(function($query) {
+                $query->where('tipocliente',2)
+                    ->orwhere('tipocliente',3);
+                })
             ->union($hospedajesocio)
             ->orderBy('fechaentrada', 'DESC')
             ->orderBy('horaentrada','DESC')
