@@ -131,7 +131,8 @@
                     
                       
       </div>
-       <div v-else>
+       <div v-else style="font-weight: bold;
+    font-size: x-large;">
                          Ya se ejecuto el proceso de distribucion de reserva.
                      </div>
 </div>
