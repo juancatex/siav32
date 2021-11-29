@@ -69,19 +69,21 @@
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="buscarcomprobante()">
                             <i class="fa fa-search"></i> Buscar
                            </span>
+                           
                           
-                          
-                           <div v-if="valuedb=='pgsql2019'">
-                              <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
-                                <i class="fa fa-search"></i> probar 2019
-                            </span>
-                             </div>
-                            <div v-else-if="valuedb=='pgsql2018'">
-                               <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2018')">
-                                <i class="fa fa-search"></i> probar 2018
-                               </span>
-                            </div>
-
+                                <div v-if="cuentadaaro">
+                                    <div v-if="valuedb=='pgsql2019'">
+                                        <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2019')">
+                                        <i class="fa fa-search"></i> probar 2019
+                                    </span>
+                                        </div>
+                                    <div v-else-if="valuedb=='pgsql2018'">
+                                        <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva2018')">
+                                        <i class="fa fa-search"></i> probar 2018
+                                        </span>
+                                    </div>
+                                </div>
+ 
                            <!-- <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
                            </span> -->
@@ -89,7 +91,7 @@
                       </div>
                     </div>
   </div>
-   <div class="col-md-6" v-if="datos.length>0">
+   <div class="col-md-6" v-if="datos.length>0&&cuentadaaro">
                         
        <h1>Cambio de fecha</h1> 
                      <div class="col-md-10">
@@ -125,8 +127,13 @@
                                 <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
                             </div>
                      </div>  
+
+                    
                       
       </div>
+       <div v-else>
+                         Ya se ejecuto el proceso de distribucion de reserva.
+                     </div>
 </div>
                     <div class="col-md-12 mt-5" v-if="datos.length>0">
                             <h1>Comprobante</h1> 
@@ -261,7 +268,12 @@ Vue.use(VeeValidate);
                 arrayPermisosIn:[],
             }
         },
-         
+         computed:{
+             cuentadaaro:function () {
+                var validate= _.find(this.datos, function(o) { return o.id == '22501101'; });
+                return (typeof validate == 'undefined');                               
+             }
+         },
         
         methods : {
             updateDate() {

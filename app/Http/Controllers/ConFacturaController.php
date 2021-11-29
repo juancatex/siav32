@@ -314,7 +314,7 @@ class ConFacturaController extends Controller
         $cuentas=DB::connection($valuedb)->select("SELECT cuenta, descripcion
         FROM finanzas.con_plan_cuentas");
 
-        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe,par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
         if(count($fechaR)>0){
@@ -582,7 +582,7 @@ $max_item++;
 
       
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -712,7 +712,7 @@ $max_item++;
 
       
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -840,7 +840,7 @@ $max_item++;
 
       
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -1089,7 +1089,7 @@ $max_item++;
 
       
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -1348,7 +1348,7 @@ $max_item++;
  
        
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -1486,7 +1486,7 @@ $max_item++;
  
        
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
@@ -1514,7 +1514,7 @@ $max_item++;
  
   DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
- return ['values'=>$valida_3,'cuentas'=>$cuentas];
+ return ['values'=>$valida_3,'cuentas'=>$cuentas,'fecha'=>count($fechaR)>0?$fechaR[0]->fe:date("Y-m-d")];
     }
     public function procesoReserva2018(Request $request)
     {
@@ -1621,8 +1621,9 @@ $max_item++;
  
        
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
+ 
 
             if($fechaR[0]->tip=='S'){
                 $valida_3=DB::connection($valuedb)->select("select det.*,cu.descripcion,p.nombrecompleto, g.abrev 
@@ -1649,7 +1650,7 @@ $max_item++;
  
   DB::connection($valuedb)->statement( "DROP TABLE tmp_contable_detalle");
  
- return ['values'=>$valida_3,'cuentas'=>$cuentas];
+ return ['values'=>$valida_3,'cuentas'=>$cuentas,'fecha'=>count($fechaR)>0?$fechaR[0]->fe:date("Y-m-d")];
     }
     public function procesoReservaReversion(Request $request)
     {
@@ -1884,7 +1885,7 @@ $max_item++;
  
        
 
-        $fechaR=DB::connection($valuedb)->select("SELECT par_automatico as tip
+        $fechaR=DB::connection($valuedb)->select("SELECT fecha_transaccion as fe, par_automatico as tip
         FROM finanzas.con_tr_maestro where id_transaccion='$numcomprobante' and id_tipo ='$valuetipo'");
 
             if($fechaR[0]->tip=='S'){
