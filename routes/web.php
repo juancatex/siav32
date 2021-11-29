@@ -474,6 +474,9 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get('/ser_ambientes/listarpisos','SerAmbienteController@listaPisos'); 
     Route::get('/ser_asignacion', 'SerAsignacionController@index');
     Route::get('/ser_asignacion/fechahora', 'SerAsignacionController@fechaHoraSistema'); 
+    Route::put('/ser_asignacion/solicituddescuento', 'SerAsignacionController@soliciardescuento');
+    Route::get('/ser_asignacion/autorizaciones', 'SerAsignacionController@autorizaciones');
+    Route::put('/ser_asignacion/aprobarsolicitud', 'SerAsignacionController@aprobardescuento');
     Route::get ('/ser_civils/selectcivil','SerCivilController@selectCivil'); ///eddy 
     Route::put('/ser_asignacion/registrarsalida', 'SerAsignacionController@registrarsalida');
     Route::get ('/reporteingreso', 'SerAsignacionController@reporteingreso');

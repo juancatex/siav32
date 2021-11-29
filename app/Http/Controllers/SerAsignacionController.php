@@ -231,6 +231,68 @@ class SerAsignacionController extends Controller
          return $pdf->stream('reporteingreso.pdf'); 
 
     }
+    public function soliciardescuento(Request $request)
+    {
+        $idasignacion=$request->idasignacion;
+        $asignacion=Ser_Asignacion::findOrFail($idasignacion);
+        $asignacion->montosindescuento=$request->monto;
+        $asignacion->descuento=1;
+        $asignacion->save();   
+
+    }
+    public function autorizaciones(Request $request)
+    {
+        
+        $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
+        $solicitud=Ser_Asignacion::select('idasignacion',
+                                                'idcliente',
+                                                'tipocliente',
+                                                'estado',
+                                                'nrasignacion',
+                                                'idimplementos',
+                                                'fechaentrada',
+                                                'horaentrada',
+                                                'fechasalida',
+                                                'obs1',
+                                                $rawsocio,
+                                                'ci',
+                                                'piso',
+                                                'tarifasocio',
+                                                'tarifareal',
+                                                'numpapeleta',
+                                                'ser__asignacions.updated_at',
+                                                'montosindescuento',
+                                                'descuento'
+                                                )
+                                        ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                                        ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                        ->join('par_grados','par_grados.idgrado','socios.idgrado')
+                                        ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                        ->where('descuento','<>',0)
+                                        ->paginate(50);
+        
+        return [
+            'pagination' => [
+                'total'        => $solicitud->total(),
+                'current_page' => $solicitud->currentPage(),
+                'per_page'     => $solicitud->perPage(),
+                'last_page'    => $solicitud->lastPage(),
+                'from'         => $solicitud->firstItem(),
+                'to'           => $solicitud->lastItem(),
+            ],
+            'solicitud' => $solicitud
+        ];
+    }
+
+    public function aprobardescuento(Request $request)
+    {
+        $idasignacion=$request->idasignacion;
+        $asignacion=Ser_Asignacion::findOrFail($idasignacion);
+        $asignacion->monto=$request->monto;
+        $asignacion->obs2=$request->obs2;
+        $asignacion->descuento=2;
+        $asignacion->save();   
+    }
     public function reportesalida(Request $request)
     {
         $idasignacion=$request->idasignacion;

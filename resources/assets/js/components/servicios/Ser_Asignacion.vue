@@ -462,9 +462,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
-                    <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+                <div class="modal-footer justify-content-between" >
+                    <div>
+                        <button type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
+                        <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -682,6 +688,47 @@
             }
         },
         methods : {
+            solicitarDescuento(idasignacion){
+                let me=this;
+                swal({
+                title: 'Esta seguro de Soliciar Descuento para esta Asignacion?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this;
+                    axios.put('/ser_asignacion/solicituddescuento',{
+                        'idasignacion':me.idasignacion,
+                        'monto':me.montoacobrar
+                    }).then(function (response) {
+                            swal(
+                                'La Solicitud Fue Enviada',
+                                'Debe esperar Confirmacion',
+                            )
+                            me.cerrarmodalsalida();
+                        
+                    }).catch(function (error) {
+                        console.log(error);
+                    }); 
+                   } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    
+                }
+                }) 
+
+
+            },
+
             verrestantes(){
                 let me=this;
                 me.camaselected=me.checkfamiliar.length

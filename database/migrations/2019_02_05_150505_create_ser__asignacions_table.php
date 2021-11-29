@@ -37,12 +37,14 @@ class CreateSerAsignacionsTable extends Migration
             $table->integer('idresponsable')->nullable();
             $table->string('obs1')->nullable();            
             $table->string('obs2')->nullable();  
-
+            $table->tinyInteger('descuento')->default(0)->comment('0->no se solicito descuento, 1->solicitud de descuento por parte de operador, 2->solicitud aprobada por autoridad superior');
             $table->integer('idrepresentante')->nullable();
             $table->boolean('activo')->default(1)->comment('0->eliminado,1->activo');
             $table->integer('idfactura')->nullable();
             $table->integer('idasientomaestro')->nullable();
             $table->float('monto',15,2);
+            $table->float('montosindescuento',15,2)->nullable()->comment('el monto original del cobro antes de permitir el despuento autorizado por superior');
+            $table->integer('u_autorizador')->nullable()->comment('id de usuario que autoriza el descuento');
             $table->integer('u_registro')->comment('usuario que registra el ingreso');
             $table->integer('u_salida')->comment('usuario que registra la salida');
             $table->timestamps();
