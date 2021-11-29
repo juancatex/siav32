@@ -390,7 +390,7 @@
                     <h4 class="modal-title">Registro Salida</h4>
                     <button class="close" @click="cerrarmodalsalida()">x</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="font-size: 18px;">
                     <div class="col">
                         <div class="form-group row ">
                             <h4>Datos Ambiente</h4><br />
@@ -405,6 +405,7 @@
                                 <label for="">{{ piso }}</label>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-group row">
                             <h4>Huesped</h4> <br />
                             <div class="col-md-12">
@@ -418,21 +419,33 @@
                                 <strong class="form-control-label">Fecha de entrada: </strong>
                                     <label for="">{{ fechaingreso }} - {{ horaingreso}} </label>
                             </div>
-                            <div class="col-md-12">
+
+                        </div>
+                        <hr>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <strong class="form-control-label">Monto a Cobrar: </strong>
+                                <label for="">{{ montoacobrar }} Bs. </label>
+                                <hr>
+                                <strong class="form-control-label">Noches hospedado: </strong>
+                                <label for="">{{ diashospedados }} </label>
+                                <hr>
+                                <strong class="form-control-label">Fecha de Salida: </strong>
+                                <label for="">{{ fechaactual }} - {{ horaactual}} </label>
+                            </div>
+                            <div class="form-group col-md-6">
                                 <strong class="form-control-label">Implementos: </strong>
                                 <ul>
                                     <li v-for="(implementos,index) in arrayrespuesta" :key="index">
                                         {{ implementos }}
                                     </li>
                                 </ul>
-                                <strong class="form-control-label">Monto a Cobrar: </strong>
-                                <label for="">{{ montoacobrar }} Bs. </label>
-                                <strong class="form-control-label">Noches hospedado: </strong>
-                                <label for="">{{ diashospedados }} </label>
-                                <strong class="form-control-label">Fecha de Salida: </strong>
-                                <label for="">{{ fechaactual }} - {{ horaactual}} </label>
                             </div>
+                            
                         </div>
+
+                            
+                       <hr>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                             <strong for="razonsocial">Razon Social</strong>
@@ -1263,12 +1276,14 @@
                 me.piso=datosgenerales['piso'];
                 me.nombre=datoshabitacion['nombres'];
                 me.ci=datoshabitacion['ci'];
+                me.nit=me.ci;
                 me.fechaingreso=datoshabitacion['fechaentrada'];
                 me.horaingreso=datoshabitacion['horaentrada'];
                 me.montoacobrar=datoshabitacion['monto'];
                 me.diashospedados=datoshabitacion['difd'];
                 idimpl=datoshabitacion['idimplementos'];
                 me.idimplementos=idimpl.split('|');
+                me.razonsocial=datoshabitacion['apaterno'];
                for (let indice = 0; indice < me.idimplementos.length; indice++) {
                    const element = me.idimplementos[indice];
 
@@ -1346,7 +1361,8 @@
         }
     }
 </script>
-<style lang="css">
+
+<style lang="css" scoped>
 .titmodulo {
     font-size:16px;
     font-weight:500;
@@ -1365,5 +1381,20 @@
     font-weight:600;
     border-bottom: #3c8dbc solid 1px;
 }
+hr{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem ;
+    border-top: 1px solid #3c8dbc;
+}
+/*
+    
+label{
+    font-size: 18px;
+
+}
+strong{
+    font-size: 18px;
+} */
+
     
 </style>

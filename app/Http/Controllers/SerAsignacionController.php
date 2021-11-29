@@ -67,7 +67,8 @@ class SerAsignacionController extends Controller
                                                 'obs1',
                                                 $rawsocio,
                                                 'ci',
-                                                'ocupantes'
+                                                'ocupantes',
+                                                'apaterno'
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
@@ -88,7 +89,9 @@ class SerAsignacionController extends Controller
                                                     'obs1',
                                                     $rawcivil,
                                                     'ci',
-                                                    'ocupantes'
+                                                    'ocupantes',
+                                                    'apaterno'
+
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
                                         ->where('idambiente',$idambiente)
