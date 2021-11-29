@@ -38,6 +38,23 @@ class SerCivilController extends Controller
         //return ['subcuentas' => $subcuentas]; */
     }
     
+    public function listarFamiliar(Request $request)
+    {
+        $idsocio=$request->idsocio;
+        $raw=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $familiares=Ser_Civil::select('idcivil',
+                                        $raw,
+                                        'ci',
+                                        'parentezco')
+                                ->where('idsocio',$idsocio)
+                                ->orderby('fechanac','desc')
+                                ->get();
+        
+        return ['familiares'=>$familiares];
+    
+    }
+    
+    
     
     public function store(Request $request)
     {
@@ -51,6 +68,8 @@ class SerCivilController extends Controller
         $civil->fechanac=$request->fechanac;
         $civil->sexo=$request->sexo;
         $civil->telcelular=$request->telcelular;
+        $civil->idsocio=$request->idsocio;
+        $civil->parentezco=$request->parentezco;
         $civil->save();
         return $civil->idcivil;
     }

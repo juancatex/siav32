@@ -21,6 +21,8 @@ class CreateSerCivilsTable extends Migration
             $table->date('fechanac')->nullable();
             $table->string('sexo',1)->nullable();
             $table->string('ci',10);
+            $table->integer('idsocio')->nullable()->comment('id del socio relacionado a la persona');
+            $table->string('parentezco',20)->nullable()->comment('esposa(o), hijo(a)');
             $table->integer('iddepartamento');
             $table->string('telcelular',10)->nullable();
             $table->timestamps();

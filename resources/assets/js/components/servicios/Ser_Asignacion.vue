@@ -121,7 +121,7 @@
     </div>
     <!-- MODAL ASIGNACION   -->
     <div class="modal fade " tabindex="-1"  role="dialog"   aria-hidden="true" id="addasignacion"  data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-primary">
+        <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title" v-text="tituloModal.toUpperCase()"></h4>
@@ -130,27 +130,36 @@
                 <div class="modal-body" style="overflow-y:scroll; height:450px;">
                     <h4 class="titsubrayado" v-text="nomestablecimiento"></h4>
                     <div class="row">
-                        <div class="col-md-6">
-                            <span class="titcampo">Habitacion:</span> <span v-text="habitacion"></span>
+                        <div class="col-md-9">
+                            <strong class="titcampo">Habitacion: &nbsp;&nbsp;</strong> <span>{{habitacion}} </span> {{capacidad}} Camas - &nbsp; 
+                            <strong v-if="tipo=='COMPARTIDO'">Camas a Ocupar: &nbsp;&nbsp; {{camaselected}} </strong>
+                            <strong v-if="tipo=='COMPARTIDO'">Camas Libres: {{camaslibres}}</strong>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <span class="titcampo">Tarifa:</span>
-                            <span v-if="tipocliente==1" v-text="tarifasocio"> </span>
-                            <span v-else v-text="tarifareal"> </span>
+                        <div class="col-md-3 text-right">
+                            <strong class="titcampo">Tarifa:</strong>
+                            <strong v-if="tipocliente!=2 " v-text="tarifasocio"> </strong>
+                            <strong v-else v-text="tarifareal"> </strong>
                             Bs/noche
                         </div>
                     </div>
-                    <div class="col-11 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
-                        <div class="col-5 form-check-inline">
-                            <label class="form-check-label">
+                    <div class="form-group">
+                    <div class="col-12 col-form-label " style="border: 1px solid #c2cfd6 !important; border-radius: 5px;">
+                        <div class="col-3 form-check-inline">
+                            
                                 <input type="radio" class="form-check-input" v-model="tipocliente" value="1" checked @change="cambiaDirectivo('1')" id="socio"><label for="socio">Socio</label> 
-                            </label>
+                           
                         </div>
-                        <div class="col-5 form-check-inline">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" v-model="tipocliente" value="2" @change="cambiaDirectivo('2')"> Particular
-                            </label>
+                        <div class="col-3 form-check-inline">
+                            
+                                <input type="radio" class="form-check-input" v-model="tipocliente" value="3" @change="cambiaDirectivo('3')" id="familiar"><label for="familiar">Familiar</label> 
+                            
                         </div>
+                        <div class="col-3 form-check-inline">
+
+                                <input type="radio" class="form-check-input" v-model="tipocliente" value="2" @change="cambiaDirectivo('2')" id="particular"> <label for="particular">Particular</label>
+                            
+                        </div>
+                    </div>
                     </div>
 
 <!-- 
@@ -158,6 +167,7 @@
                         <input type="checkbox" v-model="tipocliente" @change="verParticular()" id="tipocliente"><label for="tipocliente">Cliente particular</label>  
                     </div>
  -->                    
+
                     <div v-if="tipocliente==1">
                          <Ajaxselect  v-if="clearSelected"
                             ruta="/rrh_empleado/selectsocios?buscar=" @found="empleados" @cleaning="cleanempleados"
@@ -169,8 +179,40 @@
                             :clearable='true'>
                         </Ajaxselect>
                     </div>
+                    <div v-else-if="tipocliente==3">
+                         <Ajaxselect  v-if="clearSelected"
+                            ruta="/rrh_empleado/selectsocios?buscar=" @found="empleados" @cleaning="cleanempleados"
+                            resp_ruta="empleados"
+                            labels="nombres"
+                            placeholder="Ingrese Texto..." 
+                            idtabla="idsocio"
+                            :id="idempleadoselected"
+                            :clearable='true'>
+                        </Ajaxselect>
+                        
+                        <table v-if="sifamiliar" style="width:100%" class="table table-bordered table-striped table-sm">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Parentezco</th>
+                                <th>Seleccionar</th>
+                            </tr>
+                            <tr v-for="familiar in arrayFamiliares" :key="familiar.idcivil">
+                                <td>{{ familiar.nombres}}</td>
+                                <td>{{ familiar.parentezco}}</td>
+                                <td>
+                                    <input type="checkbox" class="form-check-input" @change="verrestantes()" v-model="checkfamiliar" :value="familiar.idcivil" :disabled="camaslibres==0">
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="text-align:right;">
+                            <button :disabled="idempleado.length==0" type="button" class="btn btn-primary" @click="abrirModalFamiliar()" aria-label="Close" title="Agregar Familiar">
+                            <i class="icon-plus"></i>&nbsp;&nbsp;&nbsp;Agregar Familiar
+                        </button>
+                        </div>
+                        
 
-                    <div v-else>
+                    </div>
+                    <div v-else-if="tipocliente==2">
                          <Ajaxselect  v-if="clearSelected"
                             ruta="/ser_civils/selectcivil?buscar=" @found="empleados" @cleaning="cleanempleados"
                             resp_ruta="civils"
@@ -181,7 +223,7 @@
                             :clearable='true'>
                         </Ajaxselect>
                         <div class="col-md-1" style="padding-left: 0px;">
-                            <button type="button" class="btn btn-primary" @click="abrirModalCivil()" aria-label="Close">
+                            <button type="button" class="btn btn-primary" @click="abrirModalCivil()" aria-label="Close" title="Agregar Familiar">
                                 <i class="icon-plus"></i>
                             </button>
                         </div>
@@ -194,15 +236,15 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h5 class="titazul" v-text="tituloModal"></h5>
-                            <h6>Fecha:  {{ fechaingreso }} <br />
+                            <h4>Fecha:  {{ fechaingreso }} <br />
                                 Hora: {{horaingreso }}
-                            </h6>
-                            <template v-if="tipo=='COMPARTIDO'">
+                            </h4>
+                            <!-- <template v-if="tipo=='COMPARTIDO'">
                                 Camas Disponibles: <select class="form-control" v-model="camaselected">
                                                         <option value="0" selected="selected" disabled>Seleccionar...</option>
                                                         <option v-for="k in camas" :key="k" v-text="k"></option>
                                                     </select>     
-                            </template>                            
+                            </template>   -->                          
                         </div>
                         <div class="col-md-8"> 
                             <h4 class="titazul">Prendas</h4>
@@ -247,84 +289,98 @@
     <!-- fin modal agregar asignacion -->
     <!-- MODAL PARTICULAR  -->
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="regparticular"  data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-primary">
+        <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <h4 class="modal-title">Registro Huesped Particular</h4>
                     <button class="close" @click="cerrarmodalparticular()">x</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col">
-                        <div class="form-group row ">
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Apellido Paterno:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" v-model="apaterno">
-                                <span v-if="apaterno==''" class="text-error">El Valor Apellido Paterno es obligatorio</span>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Apellido Materno:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" v-model="amaterno">
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Nombres:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" v-model="nombre">
-                                <span v-if="nombre==''" class="text-error">El Valor Nombres es obligatorio</span>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <strong class="form-control-label">CI:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" v-model="ci">
-                                <select class="form-control" v-model="iddepartamento" v-validate.initial="'required'" name="dep">
-                                        <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento" :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
-                                </select>
-                                <span class="text-error">{{ errors.first('dep')}}</span>
-                                <span v-if="ci==''" class="text-error">El Valor CI es obligatorio</span>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Num Celular:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" v-model="celular">
-                                 <span v-if="celular==''" class="text-error">El Valor Num. Celular es obligatorio</span>
-                            </div>
-                           
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Fecha Nacimiento:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="date" class="form-control" v-model="fechanacimiento">
-                                <span v-if="fechanacimiento==''" class="text-error">El Valor Fecha Nacimiento es obligatorio</span>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <strong class="form-control-label">Sexo:</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="radio" v-model="sexo" value="M">Masculino
-                                <input type="radio" v-model="sexo" value="F">Femenino
-                            </div>
+                    <div v-if="tipocliente==3" class="form-row">
+                        <div class="form-group col-md-12">
+                            <h4>Registro Familiares del Socio: {{ idempleado[2]}}</h4>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="parentezco" class="col-sm-4 col-form-label"><strong>Parentezco</strong></label>
+                             <select name="parentezco" id="" required class="form-control" v-model="parentezco">
+                                <option value="0" selected="selected" disabled>Seleccionar...</option>
+                                <option value="Esposa(o)">Esposa(o)</option>
+                                <option value="Hijo(a)">Hijo(a)</option>
+                            </select>
+                            <span v-if="parentezco=='0'" class="text-error">El Valor Parentezo es obligatorio</span>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarmodalparticular()">Cerrar</button>
-                    <button :disabled="!iscompleteparticular" class="btn btn-primary" @click="registrarParticular()">Guardar</button>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="apaterno" ><strong>Apellido Paterno:</strong></label>
+                            <input type="text" class="form-control" id="apaterno" placeholder="Apellido Paterno" v-model="apaterno">
+                            <span v-if="apaterno==''" class="text-error">El Valor Apellido Paterno es obligatorio</span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="amaterno" ><strong>Apellido Materno:</strong></label>
+                            <input type="text" class="form-control" id="amaterno" placeholder="Apellido Materno" v-model="amaterno">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="Nombres" ><strong>Nombres:</strong></label>
+                            <input type="text" class="form-control" id="Nombres" placeholder="Nombres" v-model="nombre">
+                            <span v-if="nombre==''" class="text-error">El Valor Nombres es obligatorio</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="numcelular" ><strong>Numero Celular:</strong></label>
+                            <input type="text" class="form-control" id="numcelular" placeholder="Numero Celular" v-model="celular">
+                            <span v-if="celular==''" class="text-error">El Valor Num. Celular es obligatorio</span>
+                        
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="ci" ><strong>CI:</strong></label>
+                            <input type="text" class="form-control" id="ci" placeholder="CI" v-model="ci">
+                            <span v-if="ci==''" class="text-error">El Valor CI es obligatorio</span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="Dep" ><strong>Dep:</strong></label>
+                            <select class="form-control" v-model="iddepartamento" v-validate.initial="'required'" name="dep">
+                                    <option v-for="departamento in arrayDepartamentos" :key="departamento.iddepartamento" :value="departamento.iddepartamento" v-text="departamento.abrvdep"></option>
+                            </select>
+                            <span class="text-error">{{ errors.first('dep')}}</span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="fechanac" ><strong>Fecha Nacimiento:</strong></label>
+                            <input type="date" class="form-control" id="fechanac" v-model="fechanacimiento">
+                            <span v-if="fechanacimiento==''" class="text-error">El Valor Fecha Nacimiento es obligatorio</span>
+                        </div>
+                    </div>
+                    <fieldset class="form-group col-md-8">
+                    <div class="row">
+                    <legend class="col-form-label pt-0"><strong>Sexo:</strong></legend>
+                        <div class="form-check col-md-8">
+                            <input class="form-check-input" type="radio" checked v-model="sexo" value="M" id="masculino">
+                            <label class="form-check-label" for="masculino">
+                                Masculino
+                        </label>
+                        </div>
+                        <div class="form-check col-md-8">
+                        <input class="form-check-input" type="radio" v-model="sexo" value="F" id="femenino">
+                        <label class="form-check-label" for="femenino">
+                            Femenino
+                        </label>
+                        </div>
+                    </div>
+                </fieldset>
+                    
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @click="cerrarmodalparticular()">Cerrar</button>
+                <button :disabled="!iscompleteparticular" class="btn btn-primary" @click="registrarParticular()">Guardar</button>
+            </div>
             </div>
         </div>
     </div>
     <!-- fin modal add particular -->
+
 
      <!-- MODAL SALIDA  -->
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="salida"  data-backdrop="static" data-keyboard="false">
@@ -334,7 +390,7 @@
                     <h4 class="modal-title">Registro Salida</h4>
                     <button class="close" @click="cerrarmodalsalida()">x</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="font-size: 18px;">
                     <div class="col">
                         <div class="form-group row ">
                             <h4>Datos Ambiente</h4><br />
@@ -349,6 +405,7 @@
                                 <label for="">{{ piso }}</label>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-group row">
                             <h4>Huesped</h4> <br />
                             <div class="col-md-12">
@@ -362,21 +419,33 @@
                                 <strong class="form-control-label">Fecha de entrada: </strong>
                                     <label for="">{{ fechaingreso }} - {{ horaingreso}} </label>
                             </div>
-                            <div class="col-md-12">
+
+                        </div>
+                        <hr>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <strong class="form-control-label">Monto a Cobrar: </strong>
+                                <label for="">{{ montoacobrar }} Bs. </label>
+                                <hr>
+                                <strong class="form-control-label">Noches hospedado: </strong>
+                                <label for="">{{ diashospedados }} </label>
+                                <hr>
+                                <strong class="form-control-label">Fecha de Salida: </strong>
+                                <label for="">{{ fechaactual }} - {{ horaactual}} </label>
+                            </div>
+                            <div class="form-group col-md-6">
                                 <strong class="form-control-label">Implementos: </strong>
                                 <ul>
                                     <li v-for="(implementos,index) in arrayrespuesta" :key="index">
                                         {{ implementos }}
                                     </li>
                                 </ul>
-                                <strong class="form-control-label">Monto a Cobrar: </strong>
-                                <label for="">{{ montoacobrar }} Bs. </label>
-                                <strong class="form-control-label">Noches hospedado: </strong>
-                                <label for="">{{ diashospedados }} </label>
-                                <strong class="form-control-label">Fecha de Salida: </strong>
-                                <label for="">{{ fechaactual }} - {{ horaactual}} </label>
                             </div>
+                            
                         </div>
+
+                            
+                       <hr>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                             <strong for="razonsocial">Razon Social</strong>
@@ -393,9 +462,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
-                    <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+                <div class="modal-footer justify-content-between" >
+                    <div>
+                        <button type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
+                        <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -486,7 +561,12 @@
                 it:'',
                 itxp:'',
                 porcentajeitxp:'',
-                
+                arrayFamiliares:[],
+                parentezco:0,
+                camasrestantes:0,
+                camaslibres:0,
+                capacidad:0,  
+                checkfamiliar:[],              
                 
                 //*****************modal civil
                 apaterno:'',
@@ -497,6 +577,7 @@
                 fechanacimiento:'',
                 sexo:'M',
                 accion:1,
+
 
                 
                 
@@ -535,6 +616,27 @@
         },
 
         computed:{
+            sifamiliar(){
+                let me=this;
+                let valor=false;
+                if(me.tipocliente==3)
+                {
+                    if( me.idempleado.length>0)
+                    {
+                        me.listarfamiliares()
+                        valor=true;
+                    }
+                    else
+                        valor=false;
+                    
+                }
+                else
+                    valor=false;
+                return valor;
+                
+
+            },
+
             iscompletesalida(){
                 let me=this;
                 if(me.razonsocial!='' && me.nit!='')
@@ -586,6 +688,69 @@
             }
         },
         methods : {
+            solicitarDescuento(idasignacion){
+                let me=this;
+                swal({
+                title: 'Esta seguro de Soliciar Descuento para esta Asignacion?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this;
+                    axios.put('/ser_asignacion/solicituddescuento',{
+                        'idasignacion':me.idasignacion,
+                        'monto':me.montoacobrar
+                    }).then(function (response) {
+                            swal(
+                                'La Solicitud Fue Enviada',
+                                'Debe esperar Confirmacion',
+                            )
+                            me.cerrarmodalsalida();
+                        
+                    }).catch(function (error) {
+                        console.log(error);
+                    }); 
+                   } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    
+                }
+                }) 
+
+
+            },
+
+            verrestantes(){
+                let me=this;
+                me.camaselected=me.checkfamiliar.length
+                me.camaslibres=Number(me.camasrestantes-me.camaselected);
+
+            },
+
+            listarfamiliares(){
+                let me=this;
+                let url='/ser_civils/listarfamiliar?idsocio='+me.idempleado[0];
+                axios.get(url).then(response=>{
+                    this.arrayFamiliares=response.data.familiares;
+                })
+            },
+
+
+            abrirModalFamiliar(){
+                let me=this;
+                me.listarfamiliares();
+                me.classModal.openModal('regparticular');
+                
+            },
             imprimirasignacion(data=[]){
                 console.log(data);
                 let me=this;
@@ -847,6 +1012,13 @@
                 me.tipocliente=valor;
                 me.idempleado=[];
                 me.idempleadoselected='';
+                if(me.tipocliente==3)
+                        me.camaselected=0;
+                    else
+                        me.camaselected=1;
+                me.camaslibres=Number(me.camasrestantes-me.camaselected);
+                me.checkfamiliar=[];
+                        
             },
 
 
@@ -866,6 +1038,7 @@
                 me.ci='';
                 me.fechanacimiento='';
                 me.iddepartamento=2;
+                me.celular='';
                 me.classModal.openModal('addasignacion');
 
             },
@@ -885,7 +1058,10 @@
                     'iddepartamento':this.iddepartamento,
                     'fechanac':this.fechanacimiento,
                     'sexo':this.sexo,
-                    'telcelular':this.celular
+                    'telcelular':this.celular,
+                    'idsocio':this.idempleado[0],
+                    'parentezco':this.parentezco
+
 
                 }).then(function (response) {
                     if(response.data.length>6){
@@ -896,12 +1072,16 @@
                             'error'
                        )                    }
                     else{
-                        
+                        if(me.tipocliente==3)
+                            me.listarfamiliares();
                         me.cerrarmodalparticular();
-                        me.classModal.openModal('addasignacion');
+                        
                         me.clearSelected=0;
                         setTimeout(me.tiempo, 100); 
+                        if(me.tipocliente==2)
                         me.idempleadoselected=response.data;
+                        else
+                        me.idempleadoselected=me.idempleado[0];
 
                         //me.abrirModalAsignacion('asignar',);
                         
@@ -979,11 +1159,15 @@
                         me.fechaentrada=me.fechaactual;
                         me.horaentrada=me.horaactual;
                         me.camas=data['capacidad'];
+                        me.camasrestantes=data['camasrestantes'];
                         me.observaciones='';
                         me.idambiente=data['idambiente'];
                         me.nomestablecimiento=data['nomestablecimiento'];
-                        if(me.tipo!='COMPARTIDO')
-                            me.camaselected=me.camas;
+                        me.camaselected=1;
+                        me.camaslibres=Number(me.camasrestantes-me.camaselected);
+                        me.capacidad=data['capacidad'];
+                        
+                       
                         break;
                     }
                     case 'actualizar':
@@ -1139,12 +1323,14 @@
                 me.piso=datosgenerales['piso'];
                 me.nombre=datoshabitacion['nombres'];
                 me.ci=datoshabitacion['ci'];
+                me.nit=me.ci;
                 me.fechaingreso=datoshabitacion['fechaentrada'];
                 me.horaingreso=datoshabitacion['horaentrada'];
                 me.montoacobrar=datoshabitacion['monto'];
                 me.diashospedados=datoshabitacion['difd'];
                 idimpl=datoshabitacion['idimplementos'];
                 me.idimplementos=idimpl.split('|');
+                me.razonsocial=datoshabitacion['apaterno'];
                for (let indice = 0; indice < me.idimplementos.length; indice++) {
                    const element = me.idimplementos[indice];
 
@@ -1186,7 +1372,8 @@
                     'fechadefuncion':'',
                     'idresponsable':'',
                     'idrepresentante':'',
-                    'obs1':me.obs
+                    'obs1':me.obs,
+                    'familiar':me.checkfamiliar,
                 }).then(response=>{
                     let idasignacion=response.data;
                     swal('Asignación creada','Proceda a la verificación de pagos','success');
@@ -1215,12 +1402,14 @@
             this.classModal.addModal('addasignacion');
             this.classModal.addModal('regparticular');
             this.classModal.addModal('salida');
+            this.classModal.addModal('addfamiliar');
             this.selectLibroCuenta();
             this.departamentos();
         }
     }
 </script>
-<style lang="css">
+
+<style lang="css" scoped>
 .titmodulo {
     font-size:16px;
     font-weight:500;
@@ -1239,5 +1428,20 @@
     font-weight:600;
     border-bottom: #3c8dbc solid 1px;
 }
+hr{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem ;
+    border-top: 1px solid #3c8dbc;
+}
+/*
+    
+label{
+    font-size: 18px;
+
+}
+strong{
+    font-size: 18px;
+} */
+
     
 </style>

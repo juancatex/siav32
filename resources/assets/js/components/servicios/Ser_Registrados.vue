@@ -28,7 +28,8 @@
                             <th>Habitacion</th>                                    
                             <th>Fecha Entrada</th>
                             <th>Fecha Salida</th>
-                            <th>Dias</th>
+                            <th>Monto Cancelado</th>
+                            <th>Noches</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,7 +51,9 @@
                             <td >{{registrados.fechasalida }} - {{registrados.horasalida}}
                                 <button v-if="registrados.fechasalida!=null" class="btn btn-info btn-sm" title="Imprimir Salida"
                                 @click="imprimirasalida(registrados)"> <i class="fas fa-print"></i> </button> </td>  
-                            <td >{{registrados.cantdias}}</td>                            
+                            <td style="text-align:right">{{ registrados.monto}} Bs.</td> 
+                            <td style="text-align:center">{{registrados.cantdias}}</td> 
+                                                      
                         </tr>                                
                     </tbody>
                 </table>
