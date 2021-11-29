@@ -91,7 +91,7 @@
                       </div>
                     </div>
   </div>
-   <div class="col-md-6" v-if="datos.length>0">
+   <div class="col-md-6" v-if="datos.length>0&&cuentadaaro">
                         
        <h1>Cambio de fecha</h1> 
                      <div class="col-md-10">
@@ -117,7 +117,7 @@
                       </div>
                     </div>
         <h1>Operaciones</h1>  
-                    <div  class="col-md-12" v-if="check('procesarCambios')&&cuentadaaro">
+                    <div  class="col-md-12" v-if="check('procesarCambios')">
                             <div v-if="valuedb=='pgsql2019'">
                                 <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click="procesar('/con_contabilidad/procesoReservaUpdate2019')" type="button" class="btn btn-success btn-lg btn-block">Realizar cambios 2019</button>    
                                 <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
@@ -127,11 +127,13 @@
                                 <!-- <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>     -->
                             </div>
                      </div>  
-                     <div v-else>
-                         Ya se ejecuto el proceso de distribucion de reserva.
-                     </div>
+
+                    
                       
       </div>
+       <div v-else>
+                         Ya se ejecuto el proceso de distribucion de reserva.
+                     </div>
 </div>
                     <div class="col-md-12 mt-5" v-if="datos.length>0">
                             <h1>Comprobante</h1> 
