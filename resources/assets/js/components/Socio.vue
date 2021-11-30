@@ -46,8 +46,22 @@
                             <div class="card">
                                 <div class="card-header">
                                     <i class="fa fa-align-justify"></i> Socios nuevos</div>
-                                    <div class="card-body">
-                                        <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a>
+                                    <div class="card-body"> 
+
+                                        <div class="col-md-2">
+                                           <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
+                                        </div>
+                                        <div class="clo-md-8 row"> 
+                                            <div class="custom-file col-md-10">
+                                                <input ref="files" type="file" class="custom-file-input" id="customFileLang" multiple>
+                                                <label class="custom-file-label" for="customFileLang">Seleccionar Archivos</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-outline-success active" type="button"
+                                            @click="cargarimagenes" >Cargar Imagenes</button>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                                 <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
                                         </div>
@@ -1153,6 +1167,12 @@
 
 
         methods : {
+            cargarimagenes(){
+               let formData = new FormData()
+                // formData.append('files[]', this.$refs.files.files)
+                // axios.post('/customers/upload', formData) 
+                console.log(this.$refs.files.files);
+            },
             imagenView(evt){  
                 let me=this;
                    if(this.$refs.fileon.files.length==0){  
@@ -1204,21 +1224,21 @@ this.posfilenuevo++;
  var aux=this.datosdesociosnuevos[this.posfilenuevo];
  
         this.generarCarnetSocio({
-            rutafoto:aux['FOTO'],
+            rutafoto:aux['FOTO'].toString(),
             codsocio:aux['COD_SOCIO'].toString(),
             carnetmilitar:aux['CM'].toString(),
             numpapeleta:'00000',
             idtiposocio:1,
-            nomgrado:aux['GRADO'],
+            nomgrado:aux['GRADO'].toString(),
             nomespecialidad:aux['ESPECIALIDAD'],
-            nombre:aux['NOMBRES'],
+            nombre:aux['NOMBRES'].toString(),
             apaterno:aux['APELLIDO  AP'].toString(),
             amaterno:aux['APELLIDO MT'].toString(),
-            nomfuerza:aux['FUERZA'],
-            fechanacimiento:aux['FECHA NACIMIENTO'],
-            nomtiposocio:aux['TIPO SOCIO'],
-            ci:aux['CEDULA'],
-            abrvdep:aux['EXPEDIDO']}); 
+            nomfuerza:aux['FUERZA'].toString(),
+            fechanacimiento:aux['FECHA NACIMIENTO'].toString(),
+            nomtiposocio:aux['TIPO SOCIO'].toString(),
+            ci:aux['CEDULA'].toString(),
+            abrvdep:aux['EXPEDIDO'].toString()}); 
         },
 		 abrirVentanaModalURL(url, title, w, h) { 
 					var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
