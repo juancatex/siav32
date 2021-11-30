@@ -48,7 +48,9 @@
                                     <i class="fa fa-align-justify"></i> Socios nuevos</div>
                                     <div class="card-body"> 
 
-                                        <div class="col-md-2">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-2">
                                            <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
                                         </div>
                                         <div class="clo-md-8 row"> 
@@ -60,6 +62,7 @@
                                                 <button class="btn btn-outline-success active" type="button"
                                             @click="cargarimagenes" >Cargar Imagenes</button>
                                             </div>
+                                        </div>
                                         </div>
 
                                         <div class="form-group">
