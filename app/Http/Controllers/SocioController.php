@@ -160,6 +160,24 @@ class SocioController extends Controller
         $socio->activo = '1';
         $socio->save();
     }
+    public function upfotosocioegresado(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+        $request->validate([
+            'files' => 'required' ,
+            'files.*' => 'image|mimes:jpg|max:2240' 
+            ]);
+            if ($request->hasFile('files')) {
+                $files = $request->file('files'); 
+                foreach ($files as $file) {
+                     Storage::putFileAs('app/public/socio/e/', $file,$file->getClientOriginalName()); 
+                }
+            }else{
+                return response()->json([
+                    'message' => 'Datos invalidos'
+                               ], 400);
+            }
+    }
     public function getfotoCR(Request $request)
     {  if (!$request->ajax()) return redirect('/');
         $full_path = Storage::path('AFI/cr.jpg');

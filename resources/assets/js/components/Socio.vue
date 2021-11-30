@@ -48,30 +48,33 @@
                                     <i class="fa fa-align-justify"></i> Socios nuevos</div>
                                     <div class="card-body"> 
 
-                                        
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                           <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
-                                        </div>
-                                        <div class="clo-md-8 row"> 
-                                            <div class="custom-file col-md-10">
-                                                <input ref="files" type="file" class="custom-file-input" id="customFileLang" multiple>
-                                                <label class="custom-file-label" for="customFileLang">Seleccionar Archivos</label>
+                                        <h3>Datos del socio</h3> 
+                                        <div class="col-md-12 pb-3 pt-3  row">
+                                            <div class="col-md-3">
+                                            <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
                                             </div>
-                                            <div class="col-md-2">
-                                                <button class="btn btn-outline-success active" type="button"
-                                            @click="cargarimagenes" >Cargar Imagenes</button>
+                                            <div class="col-md-9 row"> 
+                                                <div class="custom-file col-md-8">
+                                                    <input ref="files"  @change="valuefotos" accept=".jpg" type="file" class="custom-file-input" id="customFileLang"  lang="es" multiple>
+                                                    <label class="custom-file-label" for="customFileLang">{{tamfiles>0?tamfiles+' archivos seleccionados.':'Seleccionar Archivos'}}</label>
+                                                </div>
+                                                <div class="col-md-4" v-if="tamfiles>0">
+                                                    <button class="btn btn-outline-success active" type="button"
+                                                @click="cargarimagenes" >Cargar Imagenes</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                                <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
-                                        </div>
-                                        <div v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="col-md-12" style="text-align: center;    display: inline-block;">
-                                            <button class="btn btn-outline-success active" type="button"
-                                            @click="procesarFiles" >Procesar</button>
-                                        </div>
+                                    <h3>Proceso de generacion de carnet</h3> 
+                                            <div class="col-md-12 pb-3 pt-3 ">
+                                                <div class="form-group">
+                                                        <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
+                                                </div>
+                                                <div v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="col-md-12" style="text-align: center;    display: inline-block;">
+                                                    <button class="btn btn-outline-success active" type="button"
+                                                    @click="procesarFiles" >Procesar</button>
+                                                </div>
+                                            </div>
+                                       
                                     </div>
                             </div>
                         </div>
@@ -1133,13 +1136,16 @@
                 arrayPermisos : {ver:0,editar:0,borrar:0,credencial:0,impkardex:0,beneficiario:0,cuentasocio:0},
                 arrayPermisosIn:[],
                 datosdesociosnuevos:[],
+                archivosfotossociosnuevos:[],
                 posfilenuevo:-1,
                 imagebenefi:''
 
             }
         },
         computed:{
-
+tamfiles:function () {
+  return this.archivosfotossociosnuevos.length;  
+},
             isActived: function(){
                 return this.pagination.current_page;
             },
@@ -1170,11 +1176,47 @@
 
 
         methods : {
+            valuefotos(event){
+                // this.archivosfotossociosnuevos=this.$refs.files.files;
+                // this.archivosfotossociosnuevos = event.target.files;
+                // let file = event.target.files;
+	
+                //     for(let i = 0; i<file.length; i++)
+                //     {
+                //         this.archivosfotossociosnuevos.push(file[i]);
+                //     }
+
+                     this.archivosfotossociosnuevos = this.$refs.files.files;
+            },
             cargarimagenes(){
-               let formData = new FormData()
-                // formData.append('files[]', this.$refs.files.files)
-                // axios.post('/customers/upload', formData) 
-                console.log(this.$refs.files.files);
+                let me = this;
+               var formData = new FormData();
+                // formData.append('archivos[]', this.archivosfotossociosnuevos);
+                 for (let i = 0; i < me.archivosfotossociosnuevos.length; i++) {
+        	let file = me.archivosfotossociosnuevos[i];
+        	formData.append("files[" + i + "]", file);
+      	}
+               
+              
+                 
+                 console.log(formData);
+                axios.post('/socio/upfotosocioegresado', formData,{
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(function (response) { 
+                    me.$refs.files.value=null;
+                    me.archivosfotossociosnuevos=[];
+                    swal("¡Se cargaron los archivos correctamente!", "", "success");
+                }).catch(function (error) {
+                    me.$refs.files.value=null;
+                    me.archivosfotossociosnuevos=[];
+                    console.log(error);
+                   swal("¡Error!","", "error");
+                });
+
+               
+                
             },
             imagenView(evt){  
                 let me=this;
@@ -1226,7 +1268,7 @@
 this.posfilenuevo++; 
  var aux=this.datosdesociosnuevos[this.posfilenuevo];
  
-        this.generarCarnetSocio({
+       var socio={
             rutafoto:aux['FOTO'].toString(),
             codsocio:aux['COD_SOCIO'].toString(),
             carnetmilitar:aux['CM'].toString(),
@@ -1241,7 +1283,31 @@ this.posfilenuevo++;
             fechanacimiento:aux['FECHA NACIMIENTO'].toString(),
             nomtiposocio:aux['TIPO SOCIO'].toString(),
             ci:aux['CEDULA'].toString(),
-            abrvdep:aux['EXPEDIDO'].toString()}); 
+            abrvdep:aux['EXPEDIDO'].toString()}; 
+
+            
+             this.printcredencial=0;
+             this.classModal.closeModal('credencial');
+             swal({
+                title: "Generando credenciales",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+            let me=this;
+                  axios.get('/sociogetfotoCRV').then(function (response) {
+                           _pl._vvp2521_cr0egresados(socio,response.data,()=>{
+                                swal.close()
+                                me.classModal.openModal('credencial');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                        swal("¡Error!",error, "error");
+                    });
+            
+            
         },
 		 abrirVentanaModalURL(url, title, w, h) { 
 					var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
