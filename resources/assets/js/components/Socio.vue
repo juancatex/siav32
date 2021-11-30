@@ -47,6 +47,7 @@
                                 <div class="card-header">
                                     <i class="fa fa-align-justify"></i> Socios nuevos</div>
                                     <div class="card-body">
+                                        <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a>
                                         <div class="form-group">
                                                 <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
                                         </div>

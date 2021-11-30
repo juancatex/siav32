@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/getexcel', function () {
+    return Storage::download('newsocios.xlsx');
+  })->name('getexcel');
 
 Route::any('/', function(){
     if(session('error')){
