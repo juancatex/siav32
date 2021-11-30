@@ -11,7 +11,7 @@
 |
 */
 Route::get('/getexcel', function () {
-    return Storage::download('newsocios.xlsx');
+    return Storage::download('app/newsocios.xlsx');
   })->name('getexcel');
 
 Route::any('/', function(){
