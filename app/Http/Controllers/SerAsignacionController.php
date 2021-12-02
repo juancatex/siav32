@@ -43,10 +43,9 @@ class SerAsignacionController extends Controller
                                     ->orderby('codambiente','asc')
                                     ->get();
 
-        $rawsocio=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombres');
+        $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
         //$rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
-        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
-        $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
+        $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
         $fa=date("Y-m-d");
         $fechaactual=new DateTime($fa);
         $fa=strtotime($fa);
@@ -92,19 +91,15 @@ class SerAsignacionController extends Controller
                                                     'fechasalida',
                                                     'obs1',
                                                     $rawcivil,
-                                                    $rawsocio2,
-                                                    'ser__civils.ci',
+                                                    'ci',
                                                     'ocupantes',
-                                                    'ser__civils.apaterno',
+                                                    'apaterno',
                                                     'descuento',
                                                     'montosindescuento',
                                                     'monto as montocondescuento'
 
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
-                                        ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
-                                        ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
-                                        ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->where('idambiente',$idambiente)
                                         ->where('ser__asignacions.estado',2)//solo los asignados
                                         ->where(function($query) {
@@ -114,8 +109,6 @@ class SerAsignacionController extends Controller
                                         //->where('tipocliente',2)//civil
                                         ->union($hospedajesocio)
                                         ->get();
-
-                                        
             $c=0;
             if(count($hospedajecivil)>0)
             {
