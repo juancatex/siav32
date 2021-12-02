@@ -161,6 +161,7 @@ class SerAsignacionController extends Controller
         $idasignacion=$request->idasignacion;
         $tiposocio=$request->tiposocio;
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
+        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio');
         $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
         if($tiposocio==1)
         $hospedaje=Ser_Asignacion::select('idasignacion',
@@ -192,7 +193,29 @@ class SerAsignacionController extends Controller
                                         ->get();
             else
                                         
-            $hospedaje=Ser_Asignacion::select('idasignacion',
+            // $hospedaje=Ser_Asignacion::select('idasignacion',
+            //                                         'idcliente',
+            //                                         'tipocliente',
+            //                                         'estado',
+            //                                         'nrasignacion',
+            //                                         'idimplementos',
+            //                                         'fechaentrada',
+            //                                         'horaentrada',
+            //                                         'fechasalida',
+            //                                         'obs1',
+            //                                         $rawcivil,
+            //                                         'ci',
+            //                                         'ocupantes',
+            //                                         'codambiente',
+            //                                         'piso',
+            //                                         'tarifasocio',
+            //                                         'tarifareal',
+            //                                         )
+            //                             ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
+            //                             ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+            //                             ->where('idasignacion',$idasignacion)
+            //                             ->get();
+                                        $hospedaje=Ser_Asignacion::select('idasignacion',
                                                     'idcliente',
                                                     'tipocliente',
                                                     'estado',
@@ -201,17 +224,31 @@ class SerAsignacionController extends Controller
                                                     'fechaentrada',
                                                     'horaentrada',
                                                     'fechasalida',
-                                                    'obs1',
+                                                    'horasalida',
+                                                    'obs2',
                                                     $rawcivil,
-                                                    'ci',
+                                                    $rawsocio2,
+                                                    'ser__civils.ci',
                                                     'ocupantes',
                                                     'codambiente',
                                                     'piso',
                                                     'tarifasocio',
                                                     'tarifareal',
+                                                    'monto',
+                                                    'cantdias',
+                                                    'numerofactura',
+                                                    'razonsocial',
+                                                    'nit',
+                                                    'montosindescuento',
+                                                    'descuento',
+                                                    'parentezco'
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                        ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                        ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
+                                        ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                        ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->where('idasignacion',$idasignacion)
                                         ->get();
             //dd($hospedaje);
