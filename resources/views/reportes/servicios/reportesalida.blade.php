@@ -64,8 +64,14 @@ table {
            </tr>
            
            <tr >
+               
                 <td style="text-align: left;"><strong>Nombre: </strong></td>
                 <td colspan="3" style="text-align: left;">{{$hospedaje[0]->nombres}}</td>
+                @if($hospedaje[0]->tipocliente==3)
+                <td style="text-align: left;"><strong> parentezco:</strong></td>
+                <td style="text-align: left;">{{ $hospedaje[0]->parentezco }}</td>
+                @endif
+                
                 @if($hospedaje[0]->numpapeleta!='')
                 <td style="text-align: left;"><strong> Numero de Boleta:</strong></td>
                 <td style="text-align: left;">{{ $hospedaje[0]->numpapeleta }}</td>
@@ -76,6 +82,11 @@ table {
                 <td colspan="5" style="text-align: left;">{{$hospedaje[0]->ci}}</td>
                 
            </tr>
+           @if($hospedaje[0]->tipocliente==3)
+               <td>Familiar de: </td>
+               <td colspan="5" style="text-align: left;">{{$hospedaje[0]->nombresocio}}</td>
+                
+             @endif
            <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr style="height: 80px;">
                <td colspan="6" ><strong> DATOS DE ASIGNACION: </strong></td>
@@ -107,9 +118,21 @@ table {
                <td colspan="2">{{$hospedaje[0]->razonsocial}}</td>
                
            </tr>
+           @if($hospedaje[0]->descuento==2)
            <tr>
-               <td colspan="2"><strong>Monto Cancelado:</strong></td>
-               <td>{{$hospedaje[0]->monto}} Bs.</td>
+               
+               <td colspan="2"><strong>Monto Sin Descuento:</strong></td>
+               <td>{{$hospedaje[0]->montosindescuento}} Bs.</td>
+               
+           </tr>
+           @endif
+           <tr>
+                @if($hospedaje[0]->descuento==2)
+                <td colspan="2"><strong>Monto Cancelado con Descuento:</strong></td>
+                @else
+                <td colspan="2"><strong>Monto Cancelado:</strong></td>
+                @endif
+                <td>{{$hospedaje[0]->monto}} Bs.</td>
            </tr>
            <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr><td colspan="6" style="color: white;">.</td></tr>
