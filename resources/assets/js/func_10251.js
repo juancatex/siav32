@@ -1199,6 +1199,65 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
+  export function _vvp2521_cr0egresados(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    imgToBase64(ta.rutafoto?'storage/socio/e/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+      var qr = new QRious();  
+      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
+      qr.mime = 'image/jpeg';
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet socio'
+      }); 
+      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
+      doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc.setFontSize(10);
+      doc.setFontStyle('bold');
+      doc.setTextColor(52,52,52);
+      if(ta.idfuerza==5){// solo valida fuera armada para imprimir la abreviacion
+        centrarTextTo2(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+      }else{
+        centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+      } 
+          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.45,6.4); 
+          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.85,6.4);
+            
+      doc.setFontStyle('normal');
+      doc.setFontSize(7); 
+      doc.text(ta.nomfuerza,9.7, 5.9,null,90); 
+      doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 10.53, 5.9,null,90);
+      doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 9.7, 3.15,null,90); 
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 10.53, 3.15,null,90);
+       
+      doc.setFontSize(6);
+      doc.text(ta.codsocio?ta.codsocio:'___', 7.24, 4.1,null,90);
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);
+      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
+       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
+
+      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.setFontSize(5);
+      doc.setTextColor(255,255,255);
+      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.63,6.4); 
+
+  
+      $("#" + idview).attr("src", doc.output('datauristring'));  
+      var doc2 = new jsPDF('p', 'cm','a4');  
+      doc2.setProperties({
+        title: 'Carnet socio posterior'
+      }); 
+      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
+      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      $("#2" + idview).attr("src", doc2.output('datauristring')); 
+ 
+      funn();
+    }); 
+  }
   export function _vvp2521_cr_emp(ta,fotocr,idview = 'contenedorframes',finn) { 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
