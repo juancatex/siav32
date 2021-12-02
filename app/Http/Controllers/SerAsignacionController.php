@@ -161,8 +161,8 @@ class SerAsignacionController extends Controller
         $idasignacion=$request->idasignacion;
         $tiposocio=$request->tiposocio;
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
-        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio');
-        $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
+        $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
         if($tiposocio==1)
         $hospedaje=Ser_Asignacion::select('idasignacion',
                                                 'idcliente',
