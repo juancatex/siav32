@@ -460,7 +460,7 @@
 
                             
                        <hr>
-                        <div class="form-row">
+                        <div class="form-row" v-if="descuento!=2 && montoacobrar!=0">
                             <div class="form-group col-md-6">
                             <strong for="razonsocial">Razon Social</strong>
                             <input type="text" class="form-control" id="razonsocial" placeholder="Razon Social" v-model="razonsocial">
@@ -470,7 +470,10 @@
                             <input type="text" class="form-control" id="nit" placeholder="Nit - CI" v-model="nit">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div v-else>
+                            <strong for="Sin Factura">Sin Factura Monto 0 Bs.</strong>
+                        </div>
+                        <div class="form-group"> 
                             <strong for="observaciones">Observaciones</strong>
                             <input type="text" class="form-control" id="observaciones" placeholder="Observaciones" v-model="observaciones">
                         </div>
@@ -1254,8 +1257,8 @@
                 //console.log(porcendebito);
                 restodebito=Number((me.montoacobrar-porcendebito).toFixed(2));
                 //console.log(restodebito);
-                porcenit=Number((me.montoacobrar * me.porcentajeit).toFixed(2)); 
-                 swal({  title:'Procesando...',
+                porcenit=Number((me.montoacobrar * me.porcentajeit).toFixed(2));
+                swal({  title:'Procesando...',
                         text:'Un momento por favor', 
                         type:'warning',
                         showCancelButton:false, 
@@ -1264,9 +1267,47 @@
                         allowEscapeKey: false, 
                         allowEnterKey: false,
                         onOpen:() => { swal.showLoading() }
-                 });
+                 }); 
+                if(me.montoacobrar==0 && me.descuento==2)
+                {
+                                  
+                     axios.put('/ser_asignacion/registrarsalida',{
+                    'idasignacion': me.idasignacion, 
+                    'fechasalida':me.fechaactual,
+                    'horasalida':me.horaactual,
+                    //'nit':me.numfactura,
+                    //'razonsocial':me.razonsocial,
+                    'monto':me.montoacobrar,
+                    'observaciones':me.observaciones,
+                    'idfactura':me.idfactura,
+                    'cantdias':me.diashospedados,
+                    }).then(function (response) {
+                        if(response.data.length){
+                            swal(
+                                'El Valor ya Existe',
+                                'Ingresa un dato Diferente',
+                                'error'
+                            )
+                        }
+                        else{
+                             swal(
+                                'Registrado Correctamente',
+                            )
 
-                axios.post('/con_factura/registrar',{
+                            let url='/reportesalida?idasignacion='+ me.idasignacion +'&tiposocio='+me.tipocliente;
+                            /* window.open(url, '_blank'); */
+                            _pl._vm2154_12186_135(url,'Reporte de Salida');
+                            me.cerrarmodalsalida();
+                            
+                            me.listarAsignaciones();
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    }); 
+            }
+            else
+            {
+                 axios.post('/con_factura/registrar',{
                     'numerofactura': me.numfactura,
                     'codigocontrol': '',
                     'razonsocial': me.razonsocial,                    
@@ -1284,7 +1325,7 @@
                 }).then(function (response) {
                     let me2=this;   
                     me.idfactura=response.data;
-                     axios.put('/ser_asignacion/registrarsalida',{
+                    axios.put('/ser_asignacion/registrarsalida',{
                     'idasignacion': me.idasignacion, 
                     'fechasalida':me.fechaactual,
                     'horasalida':me.horaactual,
@@ -1323,6 +1364,7 @@
                 }).catch(function (error) {
                     console.log(error);
                 });
+            }
             },
             registrarSalida(){
                 let me = this;

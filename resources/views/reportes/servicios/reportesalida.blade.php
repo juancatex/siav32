@@ -112,6 +112,7 @@ table {
                <td colspan="5" style="text-align: left;">{{ $impl->nomimplemento }}</td>
            </tr>
            @endforeach
+           @if($hospedaje[0]->numerofactura!=null)
            <tr>
                <td colspan="2"><strong> Numero Factura:</strong></td>
                <td>{{$hospedaje[0]->numerofactura}}</td>
@@ -119,6 +120,7 @@ table {
                <td colspan="2">{{$hospedaje[0]->razonsocial}}</td>
                
            </tr>
+           @endif
            @if($hospedaje[0]->descuento==2)
            <tr>
                
