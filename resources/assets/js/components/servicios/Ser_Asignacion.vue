@@ -97,13 +97,14 @@
                                 <tr v-for="hospedaje in asignacion.hospedaje" :key="hospedaje.idasignacion" >
                                     <td style="width:45%">{{ hospedaje.nombres}}</td>
                                     <td style="width:20%">{{ hospedaje.fechaentrada }} - {{ hospedaje.horaentrada }}</td>
-                                    <td style="width:20%">Noches: {{ hospedaje.difd }} <br />Monto: {{ hospedaje.monto }} Bs.</td>
+                                    <td style="width:20%">Noches: {{ hospedaje.difd }} <br />Monto: <span v-if="hospedaje.descuento!=0">{{ hospedaje.montosindescuento }} Bs.</span>  <span v-else>{{hospedaje.monto}} Bs.</span></td>
                                     <td style="width:15%"><button class="btn btn-primary btn-sm " title="Salida"
                                                 @click="modalregistrarSalida(asignacion,hospedaje)"><i class="fas fa-door-open"></i> </button> 
                                             <button class="btn btn-danger btn-sm" title="Traspaso"
                                                 @click="traspaso(asignacion)"> <i class="fas fa-random"></i> </button> 
                                             <button class="btn btn-warning btn-sm" title="Imprimir Ingreso"
                                                 @click="imprimirasignacion(hospedaje)"> <i class="fas fa-print"></i> </button> 
+                                            <span v-if="hospedaje.descuento!=0" class="badge badge-warning">Descuento Solicitado</span>
                                     </td>
                                 </tr> 
                             </table>
@@ -111,6 +112,7 @@
                             <td>
                                  <button v-if="asignacion.camasrestantes>0" type="button" @click="abrirModalAsignacion('asignar',asignacion)" class="btn btn-success icon-user-follow" data-toggle="tooltip" data-placement="top" title="Asignar Habitacion">
                                 </button> &nbsp;
+                                
                             </td>
                         </tr>                                
                     </tbody>
@@ -387,7 +389,7 @@
         <div class="modal-dialog modal-primary modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
-                    <h4 class="modal-title">Registro Salida</h4>
+                    <h4 class="modal-title">Registro Salida</h4> 
                     <button class="close" @click="cerrarmodalsalida()">x</button>
                 </div>
                 <div class="modal-body" style="font-size: 18px;">
@@ -423,9 +425,21 @@
                         </div>
                         <hr>
                         <div class="form-row">
+                            <div class="form-groupt col-md-12" v-if="descuento!=0">
+                                <h4>Descuento Solicitado</h4>
+                            </div>
                             <div class="form-group col-md-6">
-                                <strong class="form-control-label">Monto a Cobrar: </strong>
-                                <label for="">{{ montoacobrar }} Bs. </label>
+                               
+                                <div v-if="descuento!=0">
+                                    <strong class="form-control-label">Monto Original Sin Descuento: </strong>
+                                    <label for="">{{ montodescuento }} Bs. </label>
+                                    <hr>
+
+                                </div>
+
+                                <strong  v-if="descuento==2" class="form-control-label">Monto a Cobrar con Descuento Aprobado: </strong>
+                                <strong  v-else class="form-control-label">Monto a Cobrar: </strong>
+                                <label for="">{{ montoacobrar }} <span v-if="descuento!=1"> Bs. </span>  </label>
                                 <hr>
                                 <strong class="form-control-label">Noches hospedado: </strong>
                                 <label for="">{{ diashospedados }} </label>
@@ -464,7 +478,7 @@
                 </div>
                 <div class="modal-footer justify-content-between" >
                     <div>
-                        <button type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                        <button v-if="descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
@@ -566,7 +580,11 @@
                 camasrestantes:0,
                 camaslibres:0,
                 capacidad:0,  
-                checkfamiliar:[],              
+                checkfamiliar:[],  
+                descuento:0,
+                montodescuento:'',
+                
+
                 
                 //*****************modal civil
                 apaterno:'',
@@ -639,7 +657,7 @@
 
             iscompletesalida(){
                 let me=this;
-                if(me.razonsocial!='' && me.nit!='')
+                if(me.razonsocial!='' && me.nit!='' && me.montoacobrar!='Solicitud en Curso')
                     return true;
                 else
                     return false;
@@ -714,6 +732,7 @@
                                 'Debe esperar Confirmacion',
                             )
                             me.cerrarmodalsalida();
+                            me.listarAsignaciones();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -1331,6 +1350,15 @@
                 idimpl=datoshabitacion['idimplementos'];
                 me.idimplementos=idimpl.split('|');
                 me.razonsocial=datoshabitacion['apaterno'];
+                me.montodescuento=datoshabitacion['montosindescuento'];
+                me.descuento=datoshabitacion['descuento'];
+                me.tipocliente=datoshabitacion['tipocliente'];
+                if(me.descuento==1)
+                    me.montoacobrar='Solicitud en Curso';
+                if(me.descuento==2)
+                    me.montoacobrar=datoshabitacion['montocondescuento']
+
+
                for (let indice = 0; indice < me.idimplementos.length; indice++) {
                    const element = me.idimplementos[indice];
 

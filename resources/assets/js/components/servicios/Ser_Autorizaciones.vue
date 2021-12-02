@@ -20,30 +20,40 @@
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>Opciones</th>
+                                <th>Estado</th>
                                 <th>Fecha Solicitud</th>
+                                <th>Fecha Aprobacion</th>
                                 <th>Nombre Socio</th>
-                                <th>Monto Acumulado</th>
+                                <th>Monto Original</th>
+                                <th>Monto Final</th>
                                 <th>Fecha Entrada</th>
+                                <th>Opciones</th>
                             </tr>
-                        </thead>
+                        </thead> 
                         <tbody>
                             <tr v-for="solicitud in arraySolicitud" :key="solicitud.idasignacion">
+                                <td>
+                                      <div v-if="solicitud.descuento==2">
+                                        <span class="badge badge-success">Solicitud Aprobada</span>
+                                    </div>
+                                     <div v-if="solicitud.descuento==1">
+                                        <span class="badge badge-danger">Por Aprobar</span>
+                                    </div>
+                                    
+                                </td>
+                                <td > {{ solicitud.fechasoldescuento }}</td>
+                                <td>{{ solicitud.fechaaprodescuento }}</td>
+                                <td v-text="solicitud.nombres"></td>
+                                <td style="text-align:right;">{{ solicitud.montosindescuento }} Bs.</td>
+                                <td style="text-align:right;">{{ solicitud.monto }} Bs.</td>
+                                <td >{{solicitud.fechaentrada }} - {{solicitud.horaentrada}}</td>
                                 <td>
                                     <template v-if="solicitud.descuento==1">
                                         <button type="button" @click="autorizarSolicitud(solicitud)" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar Solicitud">
                                             <i class="fas fa-check"></i>
                                         </button> 
                                     </template>
-                                </td>
-                                <td v-text="solicitud.updated_at"></td>
-                                <td v-text="solicitud.nombres"></td>
-                                <td >{{ solicitud.montosindescuento }} Bs.</td>
-                                <td >{{solicitud.fechaentrada }} - {{solicitud.horaentrada}}</td>
-                                <td>
-                                    <div v-if="solicitud.descuento==2">
-                                        <span class="badge badge-success">Aprobar</span>
-                                    </div>
+                                  
                                 </td>
                             </tr>                                
                         </tbody>
@@ -71,11 +81,34 @@
                                 <h4 class="modal-title" v-text="tituloModal"></h4>
                                 <button type="button" class="close" aria-hidden="true" aria-label="Close" @click="cerrarModal('solicitudDescuento')"><span aria-hidden="true">×</span></button>
                             </div> 
-                        <div class="modal-body">
-                            <label class="form-control" for="socio">Socio: &nbsp;{{nombre}}</label>
-                            <label class="form-control" for="montooriginal">Monto: {{montooriginal}} Bs.</label>
-                            <label class="form-control" for="montoaprobado">Monto aprobado con descuento:</label>
-                            <input class="form-control" type="number" v-model="montoaprobado" id="montoaprobado">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="col-md-12" for="socio"><strong> Socio: </strong>&nbsp;{{nombre}}</label>
+                                    <label class="col-md-12" for="montooriginal"><strong> Monto Original: </strong>{{montooriginal}} Bs.</label>
+                                    <label class="col-md-6" for="montoaprobado"><strong> Monto aprobado con descuento:</strong></label>
+                                    <input class="form-control col-md-4" type="number" v-model="montoaprobado" id="montoaprobado" style="text-align:right;" v-on:focus="selectAll">
+                                    <span class="text-error">{{ errors.first('montoaprobado')}}</span> 
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <strong><label>Glosa:</label></strong>
+                                            <textarea 
+                                                :class="{'form-control': true, 'is-invalid textareaerror': errors.has('glosa')}"  
+                                                rows="2" 
+                                                v-model="glosa"
+                                                name="glosa"
+                                                v-validate.initial="'required'" >
+                                            </textarea>
+                                            <span class="text-error">{{ errors.first('glosa')}}</span> 
+                                        </div>
+                                    </div>
+                                        
+                                </div>
+                            </div>
+                       <!--  <div class="modal-body form-group">
+                            <label  for="socio">Socio: &nbsp;{{nombre}}</label>
+                            <label  for="montooriginal">Monto: {{montooriginal}} Bs.</label>
+                            <label  for="montoaprobado">Monto aprobado con descuento:</label>
+                            <input  type="number" v-model="montoaprobado" id="montoaprobado" style="text-align:right;">
                             <span class="text-error">{{ errors.first('montoaprobado')}}</span> 
                             <div class="row">
                                 <div class="form-group col-md-12">
@@ -90,7 +123,7 @@
                                     <span class="text-error">{{ errors.first('glosa')}}</span> 
                                 </div>
                             </div>
-                        </div>  
+                        </div>   -->
 
                         <div class="modal-footer"> 
                             <button type="button" class="btn btn-secondary" @click="cerrarModal('solicitudDescuento')">Cerrar</button>
@@ -101,50 +134,7 @@
                 </div>
             </div>
             <!-- fin otro modal -->
-            <!--Inicio del modal progreso-->
-            
-            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-primary modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h6 class="modal-title" >Progreso...</h6>
-                            <!--
-                            <button type="button" class="close" @click="cerrarModal()" aria-label="Close"></button>
-
-                            <span aria-hidden="true">×</span>
-                            -->
-                        </div>
-                        <div class="modal-body">
-                            <div >
-                                <div class="sk-folding-cube" v-if="modal==1">
-                                    <div class="sk-cube1 sk-cube"></div>
-                                    <div class="sk-cube2 sk-cube"></div>
-                                    <div class="sk-cube4 sk-cube"></div>
-                                    <div class="sk-cube3 sk-cube"></div>
-                                </div>
-                                <!--
-                                <div class="sk-wave" >
-                                    <div class="sk-rect sk-rect1"></div>
-                                    <div class="sk-rect sk-rect2"></div>
-                                    <div class="sk-rect sk-rect3"></div>
-                                    <div class="sk-rect sk-rect4"></div>
-                                    <div class="sk-rect sk-rect5"></div>
-                                </div>
-                                -->
-                                <!--<div class="col-md-6">                                    
-                                    <img :src="'img/gif/cargando.gif'" style="width:100px">                                 
-                                </div>    
-                                -->
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            
-            <!--Fin del modal-->
+          
         </div>
     </main>
 </template>
@@ -193,20 +183,17 @@ const st = {};
                     'from' : 0,
                     'to' : 0,
                 },
-                tipocargo:'personal',
-                criterio:'',
-                idempleado:[],
+                
                 arraySolicitud:[],
                 monto:0,
                 glosa:'',
                 tituloModal:'',
                 clearSelected:1,
                 tipoAccion:1,
-                idempleadoselected:'',
-                solicitud_id:'',
+                
                 offset:3,
                 modal:0,
-                directivo:'directivo',
+               
 
 
                 nombre:'',
@@ -220,13 +207,7 @@ const st = {};
             'barcode':VueBarcode
         },
         computed:{
-            isComplete () {
-                let me=this;
-                if (me.directivo=='directivo' || me.directivo=='personal')
-                    return me.monto && me.glosa && me.idempleado.length>0;
-                else
-                    return me.monto && me.glosa
-            },
+           
             isActived: function(){
                 return this.pagination.current_page;
             },
@@ -266,15 +247,7 @@ const st = {};
             },
             
 
-            cambiaDirectivo(valor){
-                let me=this;
-                me.clearSelected=0;
-                setTimeout(me.tiempo, 200); 
-                me.directivo=valor;
-                me.idempleado=[];
-                
-               
-            },
+          
             cambiarPagina(page,buscar){
                 let me = this;
                 //console.log(page + ' ' +buscar);
@@ -292,23 +265,7 @@ const st = {};
             tiempo(){
             this.clearSelected=1;
             }, 
-            empleados(empleados){
-                this.idempleado=[];
-                for (const key in empleados) {
-                    if (empleados.hasOwnProperty(key)) {
-                        const element = empleados[key];
-                        //console.log(element);
-                        this.idempleado.push(element);
-                    }
-                }
-                //console.log(this.idempleado);
-            },
-            cleanempleados(){
-                this.idempleado=[];
-                //this.idempleadorespuesta=0;
-            //console.log('clean')
-            
-            },
+          
              listarPersonal(page){
                   //console.log(borradorcheck);
                 let me=this;
@@ -324,39 +281,7 @@ const st = {};
                     console.log(error);
                 });
             },
-            abrirModalSolicitud(id, accion, data = []){
-                var nombretipocomprobante;
-                let me=this;
-                switch(accion){
-                    case 'registrar':
-                        {
-                            //this.modal = 1;
-                            me.tituloModal = 'Agregar Solicitud de cargo de Cuenta ';
-                            me.idempleado=[];
-                            me.glosa='';
-                            me.monto='';
-                            me.tipoAccion = 1;
-                            me.classModal.openModal(id);
-                            break;
-                        }
-                    case 'editar':
-                        {
-                            me.tituloModal="Editar Solicitud de cargo de Cuenta -" + nombretipocomprobante;
-                            me.idempleado[0]=data['subcuenta'];
-                            me.idempleadoselected=data['subcuenta'];
-                            me.monto=data['monto'];
-                            me.glosa=data['glosa'];
-                            me.tipoAccion=2;
-                            me.clearSelected=0;
-                            me.solicitud_id=data['idsolccuenta'];
-                            setTimeout(me.tiempo, 200); 
-                            me.classModal.openModal(id);
-                            
-                            //this.rowregistros=respuesta;
-                            break;
-                        }
-                }
-            },
+            
             registrarSolicitud(){
                 let me = this;
 
@@ -380,46 +305,8 @@ const st = {};
                     console.log(error);
                 });
             },
-            abrirModal(){
-                this.modal=1;
-
-            },
-            actualizarSolicitud(){
-                let me = this;
-                let valor=0;
-                if(me.directivo=="directivo")
-                    valor=1;
-                else
-                    valor=0;
-                axios.put('/glo_solccuenta/actualizar',{
-                    'idsolccuenta':me.solicitud_id,
-                    'subcuenta':me.idempleado[1],
-                    'directorio':valor,
-                    'monto':me.monto,
-                    'glosa':me.glosa,
-                    
-                }).then(function (response) {
-                    if(response.data.length)
-                    {    swal(
-                            'El Valor Ya Existe',
-                            'Ingrese un Dato Diferente'
-                        )                    
-                    }
-                    else
-                    {
-                        swal(
-                            'Modificado Correctamente'
-                       )                    
-                    }
-                    me.cerrarModal('modalsolicitud');
-                    me.listarPersonal(1,me.buscar,me.tipocargo);
-                    //console.log('cerrar modal');
-                    
-                    
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            },
+           
+           
             cerrarModal(id){
                 let me=this;
                 me.clearSelected=0;
@@ -429,43 +316,7 @@ const st = {};
                 me.monto=0;
                 me.glosa='';
             },
-            eliminarSolicitud(idsolccuenta){
-               swal({
-                title: 'Esta seguro de Eliminar esta Solicitud?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Aceptar!',
-                cancelButtonText: 'Cancelar',
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false,
-                reverseButtons: true
-                }).then((result) => {
-                if (result.value) {
-                    let me = this;
-
-                    axios.put('/glo_solccuenta/desactivar',{
-                        'idsolccuenta': idsolccuenta
-                    }).then(function (response) {
-                        me.listarPersonal(1,me.buscar,me.tipocargo);
-                        swal(
-                        'Desactivado!',
-                        'El registro ha sido eliminado con éxito.',
-                        'success'
-                        )
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-                } else if (
-                    // Read more about handling dismissals
-                    result.dismiss === swal.DismissReason.cancel
-                ) {
-                    
-                }
-                }) 
-            },
+           
         },
         mounted(){
             this.listarPersonal(1,this.buscar,this.tipocargo);

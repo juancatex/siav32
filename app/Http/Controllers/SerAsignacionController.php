@@ -68,7 +68,10 @@ class SerAsignacionController extends Controller
                                                 $rawsocio,
                                                 'ci',
                                                 'ocupantes',
-                                                'apaterno'
+                                                'apaterno',
+                                                'descuento',
+                                                'montosindescuento',
+                                                'monto as montocondescuento'
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
@@ -90,7 +93,10 @@ class SerAsignacionController extends Controller
                                                     $rawcivil,
                                                     'ci',
                                                     'ocupantes',
-                                                    'apaterno'
+                                                    'apaterno',
+                                                    'descuento',
+                                                    'montosindescuento',
+                                                    'monto as montocondescuento'
 
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
@@ -233,9 +239,11 @@ class SerAsignacionController extends Controller
     }
     public function soliciardescuento(Request $request)
     {
+        $fecha = date('Y-m-d H:i:s');
         $idasignacion=$request->idasignacion;
         $asignacion=Ser_Asignacion::findOrFail($idasignacion);
         $asignacion->montosindescuento=$request->monto;
+        $asignacion->fechasoldescuento=$fecha;
         $asignacion->descuento=1;
         $asignacion->save();   
 
@@ -260,15 +268,18 @@ class SerAsignacionController extends Controller
                                                 'tarifasocio',
                                                 'tarifareal',
                                                 'numpapeleta',
-                                                'ser__asignacions.updated_at',
+                                                'fechasoldescuento',
+                                                'fechaaprodescuento',
                                                 'montosindescuento',
-                                                'descuento'
+                                                'descuento',
+                                                'monto'
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
                                         ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
                                         ->where('descuento','<>',0)
+                                        ->orderby('fechasoldescuento','desc')
                                         ->paginate(50);
         
         return [
@@ -286,11 +297,14 @@ class SerAsignacionController extends Controller
 
     public function aprobardescuento(Request $request)
     {
+        $fecha = date('Y-m-d H:i:s');
         $idasignacion=$request->idasignacion;
         $asignacion=Ser_Asignacion::findOrFail($idasignacion);
         $asignacion->monto=$request->monto;
         $asignacion->obs2=$request->obs2;
         $asignacion->descuento=2;
+        $asignacion->u_autorizador=Auth::id();
+        $asignacion->fechaaprodescuento=$fecha;
         $asignacion->save();   
     }
     public function reportesalida(Request $request)
@@ -392,7 +406,7 @@ class SerAsignacionController extends Controller
         $asignacion->fechasalida=$request->fechasalida;
         $asignacion->horasalida=$request->horasalida;
         $asignacion->monto=$request->monto;
-        $asignacion->obs2=$request->observaciones;
+        $asignacion->obs2=$asignacion->obs2." ".$request->observaciones;
         $asignacion->idfactura=$request->idfactura;
         $asignacion->estado=0;
         $asignacion->cantdias=$request->cantdias;
