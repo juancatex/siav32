@@ -95,7 +95,7 @@ class SerAsignacionController extends Controller
                                                     $rawsocio2,
                                                     'ser__civils.ci',
                                                     'ocupantes',
-                                                    'apaterno',
+                                                    'ser__civils.apaterno',
                                                     'descuento',
                                                     'montosindescuento',
                                                     'monto as montocondescuento'
