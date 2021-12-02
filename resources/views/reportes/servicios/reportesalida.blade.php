@@ -83,9 +83,10 @@ table {
                 
            </tr>
            @if($hospedaje[0]->tipocliente==3)
-               <td>Familiar de: </td>
-               <td colspan="5" style="text-align: left;">{{$hospedaje[0]->nombresocio}}</td>
-                
+                <tr>   
+                    <td><strong>Familiar de:</strong></td>
+                    <td colspan="5" style="text-align: left;">{{$hospedaje[0]->nombresocio}}</td>
+                </tr>
              @endif
            <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr style="height: 80px;">

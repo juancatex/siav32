@@ -77,6 +77,12 @@ table {
                 <td style="text-align: left;">{{$hospedaje[0]->ci}}</td>
                 <td colspan="4"></td>
            </tr>
+           @if($hospedaje[0]->tipocliente==3)
+                <tr>   
+                    <td><strong>Familiar de:</strong></td>
+                    <td colspan="5" style="text-align: left;">{{$hospedaje[0]->nombresocio}}</td>
+                </tr>
+             @endif
            <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr>
                <td colspan="6"><strong> DATOS DE ASIGNACION: </strong></td>
