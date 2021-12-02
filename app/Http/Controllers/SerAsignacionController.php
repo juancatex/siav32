@@ -45,7 +45,8 @@ class SerAsignacionController extends Controller
 
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
         //$rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
-        $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
+        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
+        $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
         $fa=date("Y-m-d");
         $fechaactual=new DateTime($fa);
         $fa=strtotime($fa);
@@ -91,7 +92,8 @@ class SerAsignacionController extends Controller
                                                     'fechasalida',
                                                     'obs1',
                                                     $rawcivil,
-                                                    'ci',
+                                                    $rawsocio2,
+                                                    'ser__civils.ci',
                                                     'ocupantes',
                                                     'apaterno',
                                                     'descuento',
@@ -100,6 +102,7 @@ class SerAsignacionController extends Controller
 
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
+                                        ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
                                         ->where('idambiente',$idambiente)
                                         ->where('ser__asignacions.estado',2)//solo los asignados
                                         ->where(function($query) {
@@ -109,6 +112,8 @@ class SerAsignacionController extends Controller
                                         //->where('tipocliente',2)//civil
                                         ->union($hospedajesocio)
                                         ->get();
+
+                                        
             $c=0;
             if(count($hospedajecivil)>0)
             {
