@@ -348,7 +348,7 @@ class SerAsignacionController extends Controller
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
                                         ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-                                        ->join('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                        ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
                                         ->where('idasignacion',$idasignacion)
                                         ->get();
             else
@@ -383,7 +383,7 @@ class SerAsignacionController extends Controller
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-                                        ->join('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                        ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
                                         ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
                                         ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
                                         ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
