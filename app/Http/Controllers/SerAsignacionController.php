@@ -103,6 +103,8 @@ class SerAsignacionController extends Controller
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
                                         ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
+                                        ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                        ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->where('idambiente',$idambiente)
                                         ->where('ser__asignacions.estado',2)//solo los asignados
                                         ->where(function($query) {
