@@ -486,6 +486,9 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/reporteingreso', 'SerAsignacionController@reporteingreso');
     Route::get ('/reportesalida', 'SerAsignacionController@reportesalida');
     Route::get ('/ser_civils/listarfamiliar','SerCivilController@listarFamiliar'); ///eddy 
+    Route::get ('/ser_asignacion/reportediario', 'SerAsignacionController@reportediario');
+    Route::get ('/ser_asignacion/reportemensual', 'SerAsignacionController@reportemensual');
+    
 
 
 

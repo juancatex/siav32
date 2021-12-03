@@ -9,17 +9,18 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Reportes Hospedaje Filiales         
-                    <ul> FILIAL CBBA                                                
+                   <!-- habilitar para cochabamba  
+                       <ul> FILIAL CBBA                                                
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('CBBA')">H. Transitorio CBBA.</button>
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanente('CBBA')">H. Permanente CBBA.</button>
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanenteSocio('CBBA')">H. Permanente CBBA - Por Socio.</button>
-                    </ul>
+                    </ul> -->
                     <ul> FILIAL LPZ                                    
                         <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">H. Transitorio LPZ</button>                    
+                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">Casa Comunitaria Reporte Diario</button>                    
                     </ul>
                 </div>                    
             </div>
@@ -43,28 +44,47 @@
                     </ul> -->
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">                                                                                            
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Tipo:</label>
                                 <div class="col-md-3">
                                     <input type="radio" value="in"  v-model="tipo">Entradas
                                     <input type="radio" value="out" v-model="tipo">Salidas
-                            </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <strong class="col-md-9 form-control-label" for="text-input">Reporte de Asignaciones Diario:</strong>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Fecha Inicio:</label>                                                                    
+                                <label class="col-md-3 form-control-label" for="text-input">Fecha Reporte:</label>   <!-- Fecha Inicio -->                                                                 
                                 <div class="col-md-3">
-                                    <input type="date" v-validate.initial="'required'" name="fechaIn" v-model="fechaIn">
+                                    <input class="form-control" 
+                                        type="date" 
+                                        v-validate.initial="'required'" 
+                                        name="fechaIn" 
+                                        v-model="fechaIn"
+                                        :max="fechaOut"
+                                        >
                                 <span class="text-error">{{ errors.first('Fecha valida')}}</span>
                                 </div>
                             </div>
+                           <!--  
+                               para reporte mensual habilitar
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Fecha Final:</label>
                                 <div class="col-md-3">
-                                    <input type="date" v-validate.initial="'required'" name="fechaOut" v-model="fechaOut">
+                                    <input class="form-control" 
+                                        type="date" 
+                                        v-validate.initial="'required'" 
+                                        name="fechaOut" 
+                                        v-model="fechaOut"
+                                        :max="fechamax"
+                                        :min="fechaIn"
+                                        >
                                 <span class="text-error">{{ errors.first('fecha valida')}}</span>
                                 </div>
-                            </div>
-                            <div v-if="tipo==='in'">
+                            </div> 
+                            para reporte mensual habilitar
+                            -->
+                            <!-- <div v-if="tipo==='in'">
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Estado:</label>
                                     <div class="col-md-3">
@@ -75,13 +95,14 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,tipo,fechaIn,fechaOut,estado,filial,0,0)">Reporte</button>                            
+                        <!-- <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReporte(Modalview,tipo,fechaIn,fechaOut,estado,filial,0,0)">Reporte</button>                             -->
+                        <button :disabled = "errors.any()" type="submit" class="btn btn-primary" @click="mostrarReportediarioCC()">Reporte</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -244,6 +265,8 @@
                 idsocio:'',
                 clearSelected:1,
                 idempleado1 :'',
+                fechamin:'',
+                fechamax:'',
             }
         },
 
@@ -259,6 +282,17 @@
             //Calcula los elementos de la paginación
         },
         methods : {
+            fechahoy(valor){
+                let me=this;
+                
+                axios.get('/ser_asignacion/fechahora').then(response=>{
+                    me.fechaIn=response.data.fechaactual;
+                    me.fechaOut=me.fechaIn;
+                    me.fechamin=me.fechaIn;
+                    me.fechamax=me.fechaIn;
+                    //console.log(me.fechaIn);
+                });
+            },
 
             getRutasReports (){ 
                 let me=this;
@@ -286,8 +320,8 @@
             },
 
             setear (){
-                this.fechaOut='',
-                this.fechaIn='',
+                //this.fechaOut='',
+                //this.fechaIn='',
                 this.op1='';this.op2='';this.op3='';this.op4='';
             },
 
@@ -317,6 +351,22 @@
                 var url=this.permanenteSocio +'&idsocio='+idsocio;
                 this.reporte_resumen(url,'Resumen por Socio');
             },
+            
+            mostrarReportemensualCC(){
+                let me=this;
+                var url='/ser_asignacion/reportemensual?fechain='+me.fechaIn+'&fechaout='+me.fechaOut;
+
+                //console.log(url);
+                window.open(url, '_blank');
+            },
+            mostrarReportediarioCC(){
+                let me=this;
+                var url='/ser_asignacion/reportediario?fechadiario='+me.fechaIn;
+                _pl._vm2154_12186_135(url,'Reporte Diario');
+                //console.log(url);
+                //window.open(url, '_blank');
+            },
+            
             
             mostrarReporte(modal, tipo, fechaIn, fechaOut, estado, filial, ges, per){
                 if (modal === 'K') {
@@ -386,6 +436,7 @@
         mounted() {
             //this.getPermisos(); 
             this.getRutasReports();
+            this.fechahoy();
         }
     }
 </script>
