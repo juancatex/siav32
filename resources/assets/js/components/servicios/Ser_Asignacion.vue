@@ -461,6 +461,10 @@
                             
                        <hr>
                         <div class="form-row" v-if="descuento!=2 && montoacobrar!=0">
+                             <div class="form-group col-md-8">
+                                <strong for="razonsocial">Numero Factura:</strong>
+                                <input class="col-md-4 form control" type="text"  id="numfactura"  v-model="numfactura" disabled>
+                            </div>
                             <div class="form-group col-md-6">
                             <strong for="razonsocial">Razon Social</strong>
                             <input type="text" class="form-control" id="razonsocial" placeholder="Razon Social" v-model="razonsocial">
