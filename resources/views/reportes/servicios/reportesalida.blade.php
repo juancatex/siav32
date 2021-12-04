@@ -4,9 +4,7 @@
     <title>Document</title>
 
 </head>
-<link href="assests/bootstrap/css/bootstrap-3.3.7.min.css" type="text/css" rel="stylesheet">      
-<script src="assests/jquery/jquery.min.js" type="text/javascript"></script> 
-<script src="assests/bootstrap/js/bootstrap.min.js" type="text/javascript">  </script>
+
 <style>
 
 
@@ -60,7 +58,7 @@ table {
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REGISTRO DE SALIDA HOSPEDAJE N°  {{ $hospedaje[0]->idasignacion }}</h2>
    <hr>
-   <table class="table">
+   <table>
        <tbody>
            <tr style="height: 80px;">
                <td colspan="6" ><strong >DATOS DE SALIDA:</strong>
