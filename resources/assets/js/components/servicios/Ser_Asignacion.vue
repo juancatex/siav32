@@ -107,7 +107,8 @@
                                             <!-- <button class="btn btn-danger btn-sm btn-block" title="Traspaso"
                                                 @click="traspaso(asignacion)"> <i class="fas fa-random"></i> Traspaso</button>  -->
                                             
-                                            <span v-if="hospedaje.descuento!=0" class="badge badge-warning">Descuento Solicitado</span>
+                                            <span v-if="hospedaje.descuento==1" class="badge badge-warning">Descuento Solicitado</span>
+                                            <span v-if="hospedaje.descuento==2" class="badge badge-success">Descuento Aprobado</span>
                                     </td>
                                 </tr> 
                             </table>
@@ -463,22 +464,25 @@
 
                             
                        <hr>
-                        <div class="form-row" v-if="descuento!=2 && montoacobrar!=0">
-                             <div class="form-group col-md-8">
+                        <div class="form-row" v-if="descuento==2 && montoacobrar==0">
+                            <strong for="Sin Factura">Sin Factura Monto 0 Bs.</strong>
+                             
+                        </div>
+                        <div v-else class="form-row">
+                            <div class="form-group col-md-8">
                                 <strong for="razonsocial">Numero Factura:</strong>
                                 <input class="col-md-4 form control" type="text"  id="numfactura"  v-model="numfactura" disabled>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-5">
                             <strong for="razonsocial">Razon Social</strong>
                             <input type="text" class="form-control" id="razonsocial" placeholder="Razon Social" v-model="razonsocial">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-5">
                             <strong for="nit">Nit - CI</strong>
                             <input type="text" class="form-control" id="nit" placeholder="Nit - CI" v-model="nit">
                             </div>
-                        </div>
-                        <div v-else>
-                            <strong for="Sin Factura">Sin Factura Monto 0 Bs.</strong>
+
+                            
                         </div>
                         <div class="form-group"> 
                             <strong for="observaciones">Observaciones</strong>
