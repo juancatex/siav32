@@ -98,12 +98,15 @@
                                     <td style="width:45%">{{ hospedaje.nombres}}</td>
                                     <td style="width:20%">{{ hospedaje.fechaentrada }} - {{ hospedaje.horaentrada }}</td>
                                     <td style="width:20%">Noches: {{ hospedaje.difd }} <br />Monto: <span v-if="hospedaje.descuento!=0">{{ hospedaje.montosindescuento }} Bs.</span>  <span v-else>{{hospedaje.monto}} Bs.</span></td>
-                                    <td style="width:15%"><button class="btn btn-primary btn-sm " title="Salida"
-                                                @click="modalregistrarSalida(asignacion,hospedaje)"><i class="fas fa-door-open"></i> </button> 
-                                            <button class="btn btn-danger btn-sm" title="Traspaso"
-                                                @click="traspaso(asignacion)"> <i class="fas fa-random"></i> </button> 
-                                            <button class="btn btn-warning btn-sm" title="Imprimir Ingreso"
-                                                @click="imprimirasignacion(hospedaje)"> <i class="fas fa-print"></i> </button> 
+                                    <td style="width:15%">
+                                        
+                                            <button class="btn btn-warning btn-sm btn-block" title="Imprimir Ingreso"
+                                                @click="imprimirasignacion(hospedaje)"> <i class="fas fa-print"></i> Ingreso</button> 
+                                            <button class="btn btn-primary btn-sm btn-block" title="Salida"
+                                                @click="modalregistrarSalida(asignacion,hospedaje)"><i class="fas fa-door-open"></i> Salida</button> 
+                                            <!-- <button class="btn btn-danger btn-sm btn-block" title="Traspaso"
+                                                @click="traspaso(asignacion)"> <i class="fas fa-random"></i> Traspaso</button>  -->
+                                            
                                             <span v-if="hospedaje.descuento!=0" class="badge badge-warning">Descuento Solicitado</span>
                                     </td>
                                 </tr> 
