@@ -527,8 +527,8 @@ class SerAsignacionController extends Controller
                     'salientes'=>$salientescivils]; */
             $logo = Storage::path('fotos/cabecera_casacomunitaria.PNG');
             $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
-/* 
-            return view('reportes/servicios/reportediario')->with(['hospedados'=>$hospedados,
+
+            /* return view('reportes/servicios/reportediario')->with(['hospedados'=>$hospedados,
                                             'salientes'=>$salientescivils,
                                             'fecha'=>$fechainicio,
                                             'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);  */

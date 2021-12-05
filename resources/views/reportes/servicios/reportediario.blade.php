@@ -132,18 +132,19 @@ table {
                <td style="text-align: center;">{{$sal->monto}} Bs.</td>
                @if($sal->descuento==0)
                 @php    $conta=$conta+$sal->monto; @endphp
-                    <td>Contado</td>
+                    <td>Contado:</td>
                @else
-                    <td>Descuento</td>
+                    <td>Descuento:</td>
                  @php   $desc=$desc+$sal->monto;  @endphp
                @endif
-                @php   $total=$total+$desc+$conta;  @endphp
+               
                
            </tr>
            @php 
            $i=$i+1
            @endphp
            @endforeach
+           @php   $total=$total+$desc+$conta;  @endphp
        </tbody>
    </table>
 <hr>
