@@ -547,93 +547,117 @@ class SerAsignacionController extends Controller
     }
     public function reportemensual(Request $request)
     {
-        $fechainicio=$request->fechain;
-        $fechafin=$request->fechaout;
-        
-        $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
-        $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
-        $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
-        $hospedajesocio=Ser_Asignacion::select('idasignacion',
-                                                    'idcliente',
-                                                    'tipocliente',
-                                                    'estado',
-                                                    'nrasignacion',
-                                                    'idimplementos',
-                                                    'fechaentrada',
-                                                    'horaentrada',
-                                                    'fechasalida',
-                                                    'horasalida',
-                                                    'obs1',
-                                                    $rawsocio,
-                                                    $rawsocio2,
-                                                    'ci',
-                                                    'ocupantes',
-                                                    'cantdias',
-                                                    'codambiente',
-                                                    'piso',
-                                                    'tipo',
-                                                    'monto',
-                                                    'numerofactura',
-                                                    DB::raw('1 as parentezco')
-                                                    )
-                                                ->join('socios','socios.idsocio','ser__asignacions.idcliente')
-                                                ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
-                                                ->join('par_grados','par_grados.idgrado','socios.idgrado')
-                                                ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-                                                ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
-                                                ->where('ser__asignacions.estado',0)//solo los liberados
-                                                ->where('ser__asignacions.activo',1)
-                                                ->where('tipocliente',1)//socio
-                                                ->where(DB::raw('date(fechaentrada)'),'>=',$fechainicio)
-                                                ->where(DB::raw('date(fechasalida)'),'<=',$fechafin);
-            
-        $hospedajecivil=Ser_Asignacion::select('idasignacion',
-                        'idcliente',
-                        'tipocliente',
-                        'estado',
-                        'nrasignacion',
-                        'idimplementos',
-                        'fechaentrada',
-                        'horaentrada',
-                        'fechasalida',
-                        'horasalida',
-                        'obs1',
-                        $rawcivil,
-                        $rawsocio2,
-                        'ser__civils.ci',
-                        'ocupantes',
-                        'cantdias',
-                        'codambiente',
-                        'piso',
-                        'tipo',
-                        'monto',
-                        'numerofactura',
-                        'parentezco'
-                        )
-            ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
-            ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-            ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
-            ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
-            ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
-            ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
-            ->where('ser__asignacions.estado',0)//solo los liberados
-            ->where('ser__asignacions.activo',1)
-            //->where('tipocliente',2)//civil
-            ->where(function($query) {
-                $query->where('tipocliente',2)
-                    ->orwhere('tipocliente',3);
-                })
-            ->where(DB::raw('date(fechaentrada)'),'>=',$fechainicio)
-            ->where(DB::raw('date(fechasalida)'),'<=',$fechafin)
-            ->union($hospedajesocio)
-            ->orderBy('fechaentrada', 'ASC')
-            ->orderBy('horaentrada','ASC')
-            
-            ->get();    
-//dd($hospedajecivil);           
-            
-        return ['hospedajecivil'=>$hospedajecivil];
-        //return view('reportes/servicios/reportesalida')->with(['hospedajecivil'=>$hospedajecivil]);
+          //$fechainicio=strtotime($request->fechadiario);
+          $fechainicio = date("Y-m-d", strtotime($request->fechainicio));
+          $fechafin = date("Y-m-d", strtotime($request->fechafin));
+
+          //echo $fechainicio;
+          //$fechafin=$request->fechaout;
+          $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres');
+          $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
+          $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
+
+          $salientessocio=Ser_Asignacion::select('idasignacion',
+                                                      'idcliente',
+                                                      'tipocliente',
+                                                      'estado',
+                                                      'nrasignacion',
+                                                      'idimplementos',
+                                                      'fechaentrada',
+                                                      'horaentrada',
+                                                      'fechasalida',
+                                                      'horasalida',
+                                                      'obs1',
+                                                      $rawsocio,
+                                                      $rawsocio2,
+                                                      'nomfuerza',
+                                                      'descuento',
+                                                      'ci',
+                                                      'ocupantes',
+                                                      'cantdias',
+                                                      'codambiente',
+                                                      'piso',
+                                                      'tipo',
+                                                      'monto',
+                                                      'numerofactura',
+                                                      DB::raw('1 as parentezco')
+                                                      )
+                                                  ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                                                  ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                                  ->join('par_grados','par_grados.idgrado','socios.idgrado')
+                                                  ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                                  ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                                  ->where('ser__asignacions.estado',0)//solo los liberados
+                                                  ->where('ser__asignacions.activo',1)
+                                                  ->where('tipocliente',1)//socio
+                                                  //->where(DB::raw('date(fechasalida)'),'=',$fechainicio);
+                                                  ->whereBetween(DB::raw('date(fechasalida)'), [$fechainicio, $fechafin]); 
+                                                  
+         //dd($salientessocio);   
+          $salientescivils=Ser_Asignacion::select('idasignacion',
+                          'idcliente',
+                          'tipocliente',
+                          'estado',
+                          'nrasignacion',
+                          'idimplementos',
+                          'fechaentrada',
+                          'horaentrada',
+                          'fechasalida',
+                          'horasalida',
+                          'obs1',
+                          $rawcivil,
+                          $rawsocio2,
+                          DB::raw('1 as nomfuerza'),
+                          'descuento',
+                          'ser__civils.ci',
+                          'ocupantes',
+                          'cantdias',
+                          'codambiente',
+                          'piso',
+                          'tipo',
+                          'monto',
+                          'numerofactura',
+                          'parentezco'
+                          )
+              ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
+              ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+              ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+              ->leftjoin('socios','socios.idsocio','ser__civils.idsocio')
+              ->leftjoin('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+              ->leftjoin('par_grados','par_grados.idgrado','socios.idgrado')
+              ->where('ser__asignacions.estado',0)//solo los liberados
+              ->where('ser__asignacions.activo',1)
+              //->where('tipocliente',2)//civil
+              ->where(function($query) {
+                  $query->where('tipocliente',2)
+                      ->orwhere('tipocliente',3);
+                  })
+                  ->whereBetween(DB::raw('date(fechasalida)'), [$fechainicio, $fechafin])
+              ->union($salientessocio)
+              ->orderBy('fechasalida','ASC')
+              ->orderBy('horasalida','ASC')
+              ->get(); 
+          
+              //$salientescivils;
+  
+              /* return ['salientes'=>$salientescivils,
+                        'fechainicio'=>$fechainicio,
+                        'fechafin'=>$fechafin]; */
+              $logo = Storage::path('fotos/cabecera_casacomunitaria.PNG');
+              $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
+  
+              /* return view('reportes/servicios/reportediario')->with(['hospedados'=>$hospedados,
+                                              'salientes'=>$salientescivils,
+                                              'fecha'=>$fechainicio,
+                                              'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]);  */
+  
+  
+            $pdf = PDF::loadView('reportes/servicios/reportemensual', ['salientes'=>$salientescivils,
+                                'fechainicio'=>$fechainicio,
+                                'fechafin'=>$fechafin,
+                                'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]); 
+            return $pdf->stream('reportemensual.pdf'); 
+  
         
 
     }
