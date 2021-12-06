@@ -286,7 +286,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="cerrarModalAsignacion()">Cerrar</button>
-                    <button class="btn btn-primary" :disabled="(idempleado.length==0 && idempleadoselected=='') || !siasignacion" @click="accion==1?storeAsignacion():updateAsignacion()">
+                    <button v-if="check('Registro_entrada')" class="btn btn-primary" :disabled="(idempleado.length==0 && idempleadoselected=='') || !siasignacion" @click="accion==1?storeAsignacion():updateAsignacion()">
                         Guardar <span v-text="tituloModal"></span></button>
                 </div>
             </div>
@@ -492,11 +492,11 @@
                 </div>
                 <div class="modal-footer justify-content-between" >
                     <div>
-                        <button v-if="descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                        <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
-                        <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+                        <button v-if="check('Registro_salida')" :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
                     </div>
                     
                 </div>
