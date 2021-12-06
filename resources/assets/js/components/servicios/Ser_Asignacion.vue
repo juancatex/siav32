@@ -532,8 +532,15 @@
     Vue.use(VeeValidate);
 
     export default {
+         props: ['idmodulo','object','idventanamodulo'],
         data (){
             return {
+                arrayPermisos: { 
+                    Registro_entrada: 0,
+                    Registro_salida: 0,
+                    Registro_salida_descuento: 0
+                },
+                arrayPermisosIn: [],
                 arrayFilial:[],
                 arrayServicios:[],
                 filialselected:1,
@@ -720,6 +727,23 @@
             }
         },
         methods : {
+            getPermisos() {
+                 var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    me.arrayPermisosIn=[];
+                    if(response.data.datapermiso.length>0){
+                        var respuesta=response.data.datapermiso[0].permisos; 
+                        me.arrayPermisosIn = JSON.parse((respuesta));
+                    } 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+          check(n){
+             return _pl.validatePermission(this.arrayPermisosIn,n);
+          },
             solicitarDescuento(idasignacion){
                 let me=this;
                 swal({
@@ -1473,6 +1497,7 @@
         },
         mounted() {
             //this.listarDepartamento(1,this.buscar,this.criterio);
+            this.getPermisos();
             this.classModal=new _pl.Modals();
             this.selectFilial();
             this.establecimientoselected=2;
