@@ -54,44 +54,9 @@ table {
 <body style="text-align:center">
 <div class="body_wrapper">
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
-   <h2 style="color: #0c49a5;">REPORTE DIARIO DE HOSPEDAJE</h2>
-   <h3 style="color: #0c49a5;"> Fecha:  {{ $fecha }}</h3>
-   <hr>
-   <h4 style="color: #0c49a5;">Personas Hospedadas:</h4>
-   <table>
-       <thead>
-           <tr>
-            <th>Nº</th>
-            <th>Fuerza</th>
-            <th>Nombres y Apellidos</th>
-            <th>Fecha Ingreso</th>
-            <th>Habitacion</th>
-            <th>Nº Asignacion</th>
-           </tr>
-       </thead>
-       <tbody>
-           @php 
-           $i=1
-           @endphp
-           @foreach ($hospedados as $hosp)
-           <tr>
-               <td>{{$i}}</td>
-               @if($hosp->nomfuerza==1)
-                    <td style="text-align: left;">Civil</td>
-               @else
-                    <td style="text-align: left;">{{$hosp->nomfuerza}}</td>
-               @endif
-               <td style="text-align: left;">{{$hosp->nombres}}</td>
-               <td style="text-align: left;">{{$hosp->fechaentrada}} <br/> {{$hosp->horaentrada}}</td>
-               <td style="text-align: center;">{{$hosp->codambiente}}</td>
-               <td style="text-align: center;">{{$hosp->idasignacion}}</td>
-           </tr>
-           @php 
-           $i=$i+1
-           @endphp
-           @endforeach
-       </tbody>
-   </table>
+   <h2 style="color: #0c49a5;">REPORTE MENSUAL DE HOSPEDAJE</h2>
+   <h3 style="color: #0c49a5;">Del:  {{ $fechainicio }}  al  {{ $fechafin }}</h3>
+   <h4 style="color: #0c49a5;">CONTADO = C || DESCUENTO = D</h4>
    <hr>
    <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
    <table>

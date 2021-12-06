@@ -18,9 +18,15 @@
                         <li> --- </li>
                         <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="mostrarPermanenteSocio('CBBA')">H. Permanente CBBA - Por Socio.</button>
                     </ul> -->
-                    <ul> FILIAL LPZ                                    
-                        <li> --- </li>
-                        <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">Casa Comunitaria Reporte Diario</button>                    
+                    <p>FILIAL LPZ</p>                                     
+                    <ul> 
+                        <li> 
+                            <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ')">Casa Comunitaria Reporte Diario</button>                    
+                        </li>
+                        &nbsp;
+                        <li> 
+                            <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ2')">Casa Comunitaria Reporte Mensual</button>                    
+                        </li>
                     </ul>
                 </div>                    
             </div>
@@ -44,47 +50,57 @@
                     </ul> -->
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">                                                                                            
-                            <!-- <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Tipo:</label>
-                                <div class="col-md-3">
-                                    <input type="radio" value="in"  v-model="tipo">Entradas
-                                    <input type="radio" value="out" v-model="tipo">Salidas
-                            </div> -->
-                            <div class="form-group row">
-                                <strong class="col-md-9 form-control-label" for="text-input">Reporte de Asignaciones Diario:</strong>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Fecha Reporte:</label>   <!-- Fecha Inicio -->                                                                 
-                                <div class="col-md-3">
-                                    <input class="form-control" 
-                                        type="date" 
-                                        v-validate.initial="'required'" 
-                                        name="fechaIn" 
-                                        v-model="fechaIn"
-                                        :max="fechaOut"
-                                        >
-                                <span class="text-error">{{ errors.first('Fecha valida')}}</span>
+                            <div v-if="mensual==0">
+                                <div  class="form-group row" >
+                                    <strong class="col-md-9 form-control-label" for="text-input">Reporte de Asignaciones Diario:</strong>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Fecha Reporte:</label>   <!-- Fecha Inicio -->                                                                 
+                                    <div class="col-md-3">
+                                        <input class="form-control" 
+                                            type="date" 
+                                            v-validate.initial="'required'" 
+                                            name="fechaIn" 
+                                            v-model="fechaIn"
+                                            :max="fechaOut"
+                                            >
+                                    <span class="text-error">{{ errors.first('Fecha valida')}}</span>
+                                    </div>
                                 </div>
                             </div>
-                           <!--  
-                               para reporte mensual habilitar
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Fecha Final:</label>
-                                <div class="col-md-3">
-                                    <input class="form-control" 
-                                        type="date" 
-                                        v-validate.initial="'required'" 
-                                        name="fechaOut" 
-                                        v-model="fechaOut"
-                                        :max="fechamax"
-                                        :min="fechaIn"
-                                        >
-                                <span class="text-error">{{ errors.first('fecha valida')}}</span>
+                            <div v-else>
+                                <div  class="form-group row" >
+                                    <strong class="col-md-9 form-control-label" for="text-input">Reporte de Asignaciones Mensual:</strong>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Fecha Inicio:</label>   <!-- Fecha Inicio -->                                                                 
+                                    <div class="col-md-3">
+                                        <input class="form-control" 
+                                            type="date" 
+                                            v-validate.initial="'required'" 
+                                            name="fechaIn" 
+                                            v-model="fechaIn"
+                                            :max="fechaOut"
+                                            >
+                                    <span class="text-error">{{ errors.first('Fecha valida')}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Fecha Final:</label>
+                                    <div class="col-md-3">
+                                        <input class="form-control" 
+                                            type="date" 
+                                            v-validate.initial="'required'" 
+                                            name="fechaOut" 
+                                            v-model="fechaOut"
+                                            :max="fechamax"
+                                            :min="fechaIn"
+                                            >
+                                    <span class="text-error">{{ errors.first('fecha valida')}}</span>
+                                    </div>
                                 </div>
                             </div> 
-                            para reporte mensual habilitar
-                            -->
-                            <!-- <div v-if="tipo==='in'">
+                           <!--  <div v-if="tipo==='in'">
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Estado:</label>
                                     <div class="col-md-3">
@@ -96,7 +112,6 @@
                                     </div>
                                 </div>
                             </div> -->
-                            
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -267,6 +282,7 @@
                 idempleado1 :'',
                 fechamin:'',
                 fechamax:'',
+                mensual:0,
             }
         },
 
@@ -341,7 +357,12 @@
             },
 
             verRegistro(filial){ 
+
                 this.filial=filial;
+                if(this.filial=='LPZ2')
+                    this.mensual=1;
+                else
+                    this.mensual=0;
                 this.Modalview='K';  
                 this.setear();
                 this.modal=1;                 
@@ -361,8 +382,20 @@
             },
             mostrarReportediarioCC(){
                 let me=this;
-                var url='/ser_asignacion/reportediario?fechadiario='+me.fechaIn;
-                _pl._vm2154_12186_135(url,'Reporte Diario');
+                let nombrereporte='';
+                if(me.mensual==0)
+                {
+                    var url='/ser_asignacion/reportediario?fechadiario='+me.fechaIn;
+                    nombrereporte='Reporte Diario';
+                }   
+                else
+                {
+                    var url='/ser_asignacion/reportemensual?fechainicio='+me.fechaIn+'&fechafin='+me.fechaOut;
+                    nombrereporte='Reporte Mensual';
+                    console.log(url);
+                }
+                _pl._vm2154_12186_135(url,nombrereporte);
+                
                 //console.log(url);
                 //window.open(url, '_blank');
             },
