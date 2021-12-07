@@ -286,7 +286,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @click="cerrarModalAsignacion()">Cerrar</button>
-                    <button class="btn btn-primary" :disabled="(idempleado.length==0 && idempleadoselected=='') || !siasignacion" @click="accion==1?storeAsignacion():updateAsignacion()">
+                    <button v-if="check('Registro_entrada')" class="btn btn-primary" :disabled="(idempleado.length==0 && idempleadoselected=='') || !siasignacion" @click="accion==1?storeAsignacion():updateAsignacion()">
                         Guardar <span v-text="tituloModal"></span></button>
                 </div>
             </div>
@@ -492,11 +492,16 @@
                 </div>
                 <div class="modal-footer justify-content-between" >
                     <div>
-                        <button v-if="descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                        <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
                     </div>
                     <div>
+<<<<<<< HEAD
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button> &nbsp;&nbsp;
                         <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Registrar Salida</button>
+=======
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
+                        <button v-if="check('Registro_salida')" :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+>>>>>>> 8b39131d3c2eed17dc4aebe1ab68c09244a138a3
                     </div>
                     
                 </div>
@@ -532,8 +537,15 @@
     Vue.use(VeeValidate);
 
     export default {
+         props: ['idmodulo','object','idventanamodulo'],
         data (){
             return {
+                arrayPermisos: { 
+                    Registro_entrada: 0,
+                    Registro_salida: 0,
+                    Registro_salida_descuento: 0
+                },
+                arrayPermisosIn: [],
                 arrayFilial:[],
                 arrayServicios:[],
                 filialselected:1,
@@ -721,6 +733,23 @@
             }
         },
         methods : {
+            getPermisos() {
+                 var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
+                let me = this; 
+                axios.get(url).then(function (response) {
+                    me.arrayPermisosIn=[];
+                    if(response.data.datapermiso.length>0){
+                        var respuesta=response.data.datapermiso[0].permisos; 
+                        me.arrayPermisosIn = JSON.parse((respuesta));
+                    } 
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+          check(n){
+             return _pl.validatePermission(this.arrayPermisosIn,n);
+          },
             solicitarDescuento(idasignacion){
                 let me=this;
                 swal({
@@ -1503,6 +1532,7 @@
         },
         mounted() {
             //this.listarDepartamento(1,this.buscar,this.criterio);
+            this.getPermisos();
             this.classModal=new _pl.Modals();
             this.selectFilial();
             this.establecimientoselected=2;
