@@ -120,7 +120,7 @@ table {
            <tr>
                <td>{{$i}}</td>
                @if($sal->nomfuerza==1)
-                    <td style="text-align: left;">Civil</td>
+                    <td style="text-align: left;">Familiar</td>
                @else
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
                @endif
