@@ -84,10 +84,12 @@ table {
            @foreach ($salientes as $sal)
            <tr>
                <td>{{$i}}</td>
-               @if($sal->nomfuerza==1)
-                    <td style="text-align: left;">Familiar</td>
-               @else
+               @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
+               @elseif($sal->tipocliente==2)
+                    <td style="text-align: left;">Civil</td>
+                @else
+                    <td style="text-align: left;">Familiar</td>
                @endif
                <td style="text-align: left;">{{$sal->nombres}}</td>
                <td style="text-align: left;">{{$sal->fechaentrada}} <br/> {{$sal->horaentrada}}</td>

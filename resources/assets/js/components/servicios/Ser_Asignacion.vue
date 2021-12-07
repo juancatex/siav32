@@ -495,13 +495,8 @@
                         <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
                     </div>
                     <div>
-<<<<<<< HEAD
-                        <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button> &nbsp;&nbsp;
-                        <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Registrar Salida</button>
-=======
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
                         <button v-if="check('Registro_salida')" :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
->>>>>>> 8b39131d3c2eed17dc4aebe1ab68c09244a138a3
                     </div>
                     
                 </div>
