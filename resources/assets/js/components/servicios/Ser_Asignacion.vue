@@ -102,10 +102,13 @@
                                         
                                             <button class="btn btn-warning btn-sm btn-block" title="Imprimir Ingreso"
                                                 @click="imprimirasignacion(hospedaje)"> <i class="fas fa-print"></i> Ingreso</button> 
+                                            <button class="btn btn-danger btn-sm btn-block" title="Salida"
+                                                @click="modalTraspaso(asignacion,hospedaje)"><i class="fas fa-random"></i> Traspaso</button> 
                                             <button class="btn btn-primary btn-sm btn-block" title="Salida"
                                                 @click="modalregistrarSalida(asignacion,hospedaje)"><i class="fas fa-door-open"></i> Salida</button> 
                                             <!-- <button class="btn btn-danger btn-sm btn-block" title="Traspaso"
                                                 @click="traspaso(asignacion)"> <i class="fas fa-random"></i> Traspaso</button>  -->
+                                            
                                             
                                             <span v-if="hospedaje.descuento==1" class="badge badge-warning">Descuento Solicitado</span>
                                             <span v-if="hospedaje.descuento==2" class="badge badge-success">Descuento Aprobado</span>
@@ -471,7 +474,8 @@
                         <div v-else class="form-row">
                             <div class="form-group col-md-8">
                                 <strong for="razonsocial">Numero Factura:</strong>
-                                <input class="col-md-4 form control" type="text"  id="numfactura"  v-model="numfactura" disabled>
+                                <input class="col-md-4 form control" type="text"  id="numfactura"  v-model="numfactura" disabled>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-danger" @click="anularFactura()">Anular Factura</button>
                             </div>
                             <div class="form-group col-md-5">
                             <strong for="razonsocial">Razon Social</strong>
@@ -728,6 +732,61 @@
             }
         },
         methods : {
+            modalTraspaso(){
+
+            },
+            anularFactura(){
+                let me=this;
+                swal({
+                title: 'Esta seguro de Anular la Factura? Nº '+ me.numfactura,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this;
+                    axios.post('/con_factura/registrar',{
+                    'subcuenta':'',
+                    'numerofactura': me.numfactura,
+                    'codigocontrol': '',
+                    'razonsocial': ' ',                    
+                    'nit': '',
+                    'detalle': '',
+                    'importetotal': 0,
+                    'importecf': 0,
+                    'debfiscal':0,
+                    'restoimporte':0,
+                    'it':0,
+                    'numautorizacion':me.numautorizacion,
+                    'fechafactura':me.fechaactual,
+                    'activo':2
+                    
+                    //'subcuenta':me.idempleado[0]
+
+                }).then(function (response) {
+                    me.maxfactura();
+                    swal('Factura Anulada');
+                }).catch(function (error) {
+                        console.log(error);
+                }); 
+
+
+                } 
+                else if (result.dismiss === swal.DismissReason.cancel) 
+                {
+                    
+                }
+                });
+                 
+
+            },
             getPermisos() {
                  var url= '/adm_role/selectPermisos?idmodulo=' + this.idmodulo + '&idventanamodulo=' + this.idventanamodulo;
                 let me = this; 
@@ -1039,7 +1098,7 @@
                 this.nomdepartamento='';
                 
             },
-            traspaso(data=[]){
+            registrarTraspaso(){
 
             },
             cerrarmodalsalida(){

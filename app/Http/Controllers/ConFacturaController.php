@@ -227,6 +227,12 @@ class ConFacturaController extends Controller
             $detalle_t=$request->detalle;
         
         if (!$request->ajax()) return redirect('/');
+
+        if($request->activo==2)
+            $activo=2;
+        else
+            $activo=1;
+
         
         $factura = new Con_factura();
 
@@ -241,7 +247,7 @@ class ConFacturaController extends Controller
         $factura->debfiscal=$request->debfiscal;
         $factura->restoimporte=$request->restoimporte;
         $factura->it=$request->it;     
-        $factura->activo = '1';
+        $factura->activo = $activo;
         $factura->numautorizacion=$request->numautorizacion;
         $factura->fechafactura=$request->fechafactura;
         $factura->idsubcuenta=$request->subcuenta;
