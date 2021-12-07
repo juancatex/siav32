@@ -308,7 +308,9 @@ class SerAsignacionController extends Controller
                                                 'fechaaprodescuento',
                                                 'montosindescuento',
                                                 'descuento',
-                                                'monto'
+                                                'monto',
+                                                'ser__ambientes.codambiente',
+                                                'ser__ambientes.tipo'
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
