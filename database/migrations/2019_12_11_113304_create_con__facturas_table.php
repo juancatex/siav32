@@ -17,10 +17,10 @@ class CreateConFacturasTable extends Migration
             $table->increments('idfactura');
             $table->integer('idfacturaparametro');
             $table->integer('numerofactura');
-            $table->string('codigocontrol',15);
-            $table->string('razonsocial',200);
-            $table->string('nit',15);
-            $table->string('detalle',500);
+            $table->string('codigocontrol',15)->nullable();
+            $table->string('razonsocial',200)->nullable();
+            $table->string('nit',15)->nullable();
+            $table->string('detalle',500)->nullable();
             $table->decimal('importetotal',7,2);
             $table->decimal('importecf',7,2);
             $table->integer('idasientomaestro');

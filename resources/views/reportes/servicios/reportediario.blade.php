@@ -56,6 +56,7 @@ table {
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REPORTE DIARIO DE HOSPEDAJE</h2>
    <h3 style="color: #0c49a5;"> Fecha:  {{ $fecha }}</h3>
+   <h4 style="color: #0c49a5;">CONTADO = C || DESCUENTO = D</h4>
    <hr>
    <h4 style="color: #0c49a5;">Personas Hospedadas:</h4>
    <table>
@@ -119,10 +120,12 @@ table {
            @foreach ($salientes as $sal)
            <tr>
                <td>{{$i}}</td>
-               @if($sal->nomfuerza==1)
-                    <td style="text-align: left;">Civil</td>
-               @else
+               @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
+               @elseif($sal->tipocliente==2)
+                    <td style="text-align: left;">Civil</td>
+                @else
+                    <td style="text-align: left;">Familiar</td>
                @endif
                <td style="text-align: left;">{{$sal->nombres}}</td>
                <td style="text-align: left;">{{$sal->fechaentrada}} <br/> {{$sal->horaentrada}}</td>
