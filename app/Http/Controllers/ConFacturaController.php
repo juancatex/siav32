@@ -225,7 +225,7 @@ class ConFacturaController extends Controller
         }
         else
             $detalle_t=$request->detalle;
-        //dd($request);
+        
         if (!$request->ajax()) return redirect('/');
         
         $factura = new Con_factura();
@@ -245,6 +245,7 @@ class ConFacturaController extends Controller
         $factura->numautorizacion=$request->numautorizacion;
         $factura->fechafactura=$request->fechafactura;
         $factura->idsubcuenta=$request->subcuenta;
+        $factura->registrado_por=Auth::id();
         $factura->save();
         return $factura->idfactura;
     }

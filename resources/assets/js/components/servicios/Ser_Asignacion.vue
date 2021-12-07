@@ -210,7 +210,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <div style="text-align:right;">
+                        <div style="text-align:right;" class="mt-1">
                             <button :disabled="idempleado.length==0" type="button" class="btn btn-primary" @click="abrirModalFamiliar()" aria-label="Close" title="Agregar Familiar">
                             <i class="icon-plus"></i>&nbsp;&nbsp;&nbsp;Agregar Familiar
                         </button>
@@ -228,9 +228,9 @@
                             :id="idempleadoselected"
                             :clearable='true'>
                         </Ajaxselect>
-                        <div class="col-md-1" style="padding-left: 0px;">
+                        <div style="text-align:right;" class="mt-1">
                             <button type="button" class="btn btn-primary" @click="abrirModalCivil()" aria-label="Close" title="Agregar Familiar">
-                                <i class="icon-plus"></i>
+                                <i class="icon-plus"></i>&nbsp;&nbsp;&nbsp;Agregar Particular
                             </button>
                         </div>
                     </div>
@@ -495,8 +495,13 @@
                         <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
                     </div>
                     <div>
+<<<<<<< HEAD
+                        <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button> &nbsp;&nbsp;
+                        <button :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Registrar Salida</button>
+=======
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
                         <button v-if="check('Registro_salida')" :disabled="!iscompletesalida" class="btn btn-primary" @click="registrarSalida()">Guardar</button>
+>>>>>>> 8b39131d3c2eed17dc4aebe1ab68c09244a138a3
                     </div>
                     
                 </div>
@@ -604,6 +609,7 @@
                 checkfamiliar:[],  
                 descuento:0,
                 montodescuento:'',
+                idsocio:'',
                 
 
                 
@@ -1342,7 +1348,13 @@
             }
             else
             {
+                 let socio_id=null;
+                 if(me.tipocliente==1 && me.descuento==2)
+                    socio_id=me.idsocio;
+
+                 console.log(socio_id);
                  axios.post('/con_factura/registrar',{
+                    'subcuenta':socio_id,
                     'numerofactura': me.numfactura,
                     'codigocontrol': '',
                     'razonsocial': me.razonsocial,                    
@@ -1355,6 +1367,7 @@
                     'it':porcenit,
                     'numautorizacion':me.numautorizacion,
                     'fechafactura':me.fechaactual,
+                    
                     //'subcuenta':me.idempleado[0]
 
                 }).then(function (response) {
@@ -1403,7 +1416,28 @@
             },
             registrarSalida(){
                 let me = this;
-                 me.registrarFactura();  
+                swal({
+                title: 'Esta seguro de Registrar la Salida?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this;
+                    me.registrarFactura(); 
+                } 
+                else if (result.dismiss === swal.DismissReason.cancel) 
+                {
+                    
+                }
+                });
                 
             },
 
@@ -1430,6 +1464,7 @@
                 me.montodescuento=datoshabitacion['montosindescuento'];
                 me.descuento=datoshabitacion['descuento'];
                 me.tipocliente=datoshabitacion['tipocliente'];
+                me.idsocio=datoshabitacion['idcliente'];
                 if(me.descuento==1)
                     me.montoacobrar='Solicitud en Curso';
                 if(me.descuento==2)
