@@ -40,6 +40,7 @@ class CreateSerAsignacionsTable extends Migration
             $table->tinyInteger('descuento')->default(0)->comment('0->no se solicito descuento, 1->solicitud de descuento por parte de operador, 2->solicitud aprobada por autoridad superior');
             $table->dateTime('fechasoldescuento')->comment('fecha de solicitud de descuento');
             $table->dateTime('fechaaprodescuento')->comment('fecha de aprobacion de descuento');
+            $table->dateTime('fechatraspaso')->nullable()->comment('fecha y hora que se realizo el traspaso de habitacion');
             $table->integer('idrepresentante')->nullable();
             $table->boolean('activo')->default(1)->comment('0->eliminado,1->activo');
             $table->integer('idfactura')->nullable();
@@ -49,6 +50,7 @@ class CreateSerAsignacionsTable extends Migration
             $table->integer('u_autorizador')->nullable()->comment('id de usuario que autoriza el descuento');
             $table->integer('u_registro')->comment('usuario que registra el ingreso');
             $table->integer('u_salida')->comment('usuario que registra la salida');
+            $table->integer('u_traspaso')->nullable()->comment('usuario que registra el traspaso');
             $table->timestamps();
         });
     }

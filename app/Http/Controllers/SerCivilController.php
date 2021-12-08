@@ -60,9 +60,9 @@ class SerCivilController extends Controller
     {
         if(!$request->ajax()) return paginate('/');
         $civil=new Ser_Civil();
-        $civil->nombre=ucfirst($request->nombre);
-        $civil->apaterno=ucfirst($request->apaterno);
-        $civil->amaterno=ucfirst($request->amaterno);
+        $civil->nombre=strtoupper($request->nombre);
+        $civil->apaterno=strtoupper($request->apaterno);
+        $civil->amaterno=strtoupper($request->amaterno);
         $civil->ci=$request->ci;
         $civil->iddepartamento=$request->iddepartamento;
         $civil->fechanac=$request->fechanac;

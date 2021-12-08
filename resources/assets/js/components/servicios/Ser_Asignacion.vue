@@ -509,6 +509,55 @@
     </div>
     <!-- fin modal add particular -->
 
+    <!-- MODAL TRASPASO -->
+    <div class="modal fade " tabindex="-1"  role="dialog"  aria-hidden="true" id="traspaso" >
+        <div class="modal-dialog modal-primary modal-lg">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <h4 class="modal-title">Traspaso de Habitacion</h4>
+                    <button class="close" @click="cerrarmodaltraspaso()">x</button>
+                </div>
+                <div class="modal-body">          
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asignacion</th>
+                                    <th>Nombre</th>
+                                    <th>Ambiente</th>
+                                    <th>Piso</th>
+                                    <th>Traspaso a:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>                                                
+                                    <td v-text="idasignacion"></td>
+                                    <td v-text="nombre"></td>
+                                    <td align="center" v-text="codambiente"></td>
+                                    <td align="center" v-text="piso"></td>
+                                    <td><select class="form-control" name="idtraspaso" id="" v-model="traspasoselected">
+                                            <option value="0" selected="selected" disabled>Seleccionar...</option>
+                                            <option v-for="traspaso in arrayTraspaso" :key="traspaso.idambiente" :value="traspaso.idambiente" v-text="traspaso.codambiente + ' - Libres: '+ traspaso.camasrestantes"></option>
+                                        </select>
+                                    </td>
+                                </tr>                                
+                            </tbody>
+                        </table>                
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @click="cerrarmodaltraspaso()">Cerrar</button>
+                    <button :disabled="traspasoselected==0" class="btn btn-primary" @click="confirmaTraspaso()"> Registrar Traspaso </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FINAL MODAL TRASPASO -->
+
+
+
+
 
 
 
@@ -609,6 +658,8 @@
                 descuento:0,
                 montodescuento:'',
                 idsocio:'',
+                arrayTraspaso:[],
+                traspasoselected:0,
                 
 
                 
@@ -732,7 +783,79 @@
             }
         },
         methods : {
-            modalTraspaso(){
+            modalTraspaso(datosgenerales=[],datoshabitacion=[]){
+                let me=this;
+                let nuevoarray=[];
+                var url= '/ser_asignacion?idestablecimiento='+me.establecimientoselected+'&nopiso='+true;
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    nuevoarray = respuesta.asignacion;
+                    me.arrayTraspaso = nuevoarray.filter( function(obj) {
+                    if( (obj.tipo == 'COMPARTIDO' && obj.camasrestantes >0) || (obj.tipo!='COMPARTIDO' && obj.camasocupadas==0)){
+                        return obj;
+                    }
+                    me.idasignacion=datoshabitacion['idasignacion'];
+                    me.nombre=datoshabitacion['nombres'];
+                    me.codambiente=datosgenerales['codambiente'];
+                    me.piso=datosgenerales['piso'];
+                    
+                    me.classModal.openModal('traspaso');
+
+                });
+                //console.log(me.nuevoarray);
+
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+               
+
+            },
+            cerrarmodaltraspaso(){
+                let me=this;
+                me.idasignacion='';
+                me.nombre='';
+                me.codambiente='';
+                me.classModal.closeModal('traspaso');
+            },
+            confirmaTraspaso(){
+                swal({
+                title: 'Esta seguro de Realizar el Traspaso?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar!',
+                cancelButtonText: 'Cancelar',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+                }).then((result) => {
+                if (result.value) {
+                    let me = this;
+                    axios.put('/ser_asignacion/traspaso',{
+                    'idasignacion':me.idasignacion,
+                    'idambiente': me.traspasoselected,
+                    //'subcuenta':me.idempleado[0]
+
+                    }).then(function (response) {
+
+                        me.listarAsignaciones();
+                        me.cerrarmodaltraspaso();
+                        swal('Traspaso Realizado con Exito');
+                    }).catch(function (error) {
+                            console.log(error);
+                    }); 
+
+
+                } 
+                else if (result.dismiss === swal.DismissReason.cancel) 
+                {
+                    
+                }
+                });
+
 
             },
             anularFactura(){
@@ -962,6 +1085,7 @@
                         console.log(response);
                     });
                 }
+               
                 
             },
 
@@ -1598,6 +1722,7 @@
             this.classModal.addModal('regparticular');
             this.classModal.addModal('salida');
             this.classModal.addModal('addfamiliar');
+            this.classModal.addModal('traspaso');
             this.selectLibroCuenta();
             this.departamentos();
         }

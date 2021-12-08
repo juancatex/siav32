@@ -23,6 +23,7 @@ class SerAsignacionController extends Controller
     {
         $idestablecimiento=$request->idestablecimiento;
         $piso=$request->piso;
+        //$nopiso=
 
         //$pisos=
 
@@ -38,10 +39,16 @@ class SerAsignacionController extends Controller
                                             'nomestablecimiento',
                                             )
                                     ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
-                                    ->where('ser__ambientes.idestablecimiento',$idestablecimiento)
-                                    ->where('ser__ambientes.piso',$piso)
-                                    ->orderby('codambiente','asc')
-                                    ->get();
+                                    ->where('ser__ambientes.idestablecimiento',$idestablecimiento);
+                                    if($request->nopiso==false)
+                                    {
+                                        $asignacion=$asignacion->where('ser__ambientes.piso',$piso)
+                                                                ->orderby('codambiente','asc');
+                                    }
+                                    else
+                                        $asignacion=$asignacion->orderby('codambiente','desc');
+                                    
+                                    $asignacion=$asignacion->get();
 
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
         //$rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
@@ -155,6 +162,16 @@ class SerAsignacionController extends Controller
 
         }
         return['asignacion'=>$asignacion];
+    }
+    public function registrartraspaso(Request $request)
+    {
+        $fecha = date('Y-m-d H:i:s');
+        $idasignacion=$request->idasignacion;
+        $asignacion=Ser_Asignacion::findOrFail($idasignacion);
+        $asignacion->idambiente=$request->idambiente;
+        $asignacion->u_traspaso=Auth::id();
+        $asignacion->fechatraspaso=$fecha;
+        $asignacion->save();           
     }
     public function reporteingreso(Request $request)
     {
