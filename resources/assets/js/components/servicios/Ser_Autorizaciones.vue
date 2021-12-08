@@ -24,6 +24,8 @@
                                 <th>Fecha Solicitud</th>
                                 <th>Fecha Aprobacion</th>
                                 <th>Nombre Socio</th>
+                                <th>Establecimiento</th>
+                                <th>Asignacion</th>
                                 <th>Monto Original</th>
                                 <th>Monto Final</th>
                                 <th>Fecha Entrada</th>
@@ -44,6 +46,8 @@
                                 <td > {{ solicitud.fechasoldescuento }}</td>
                                 <td>{{ solicitud.fechaaprodescuento }}</td>
                                 <td v-text="solicitud.nombres"></td>
+                                <td v-text="solicitud.nomestablecimiento"></td>
+                                <td v-text="solicitud.codambiente +' - '+solicitud.tipo+' - Piso:'+solicitud.piso"></td>
                                 <td style="text-align:right;">{{ solicitud.montosindescuento }} Bs.</td>
                                 <td style="text-align:right;">{{ solicitud.monto }} Bs.</td>
                                 <td >{{solicitud.fechaentrada }} - {{solicitud.horaentrada}}</td>

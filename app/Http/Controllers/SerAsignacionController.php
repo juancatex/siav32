@@ -311,7 +311,7 @@ class SerAsignacionController extends Controller
                                                 'tipocliente',
                                                 'estado',
                                                 'nrasignacion',
-                                                'idimplementos',
+                                                'ser__asignacions.idimplementos',
                                                 'fechaentrada',
                                                 'horaentrada',
                                                 'fechasalida',
@@ -325,12 +325,16 @@ class SerAsignacionController extends Controller
                                                 'fechaaprodescuento',
                                                 'montosindescuento',
                                                 'descuento',
-                                                'monto'
+                                                'monto',
+                                                'ser__ambientes.codambiente',
+                                                'ser__ambientes.tipo',
+                                                'ser__establecimientos.nomestablecimiento'
                                                 )
                                         ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                         ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
                                         ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                        ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
                                         ->where('descuento','<>',0)
                                         ->orderby('fechasoldescuento','desc')
                                         ->paginate(50);
