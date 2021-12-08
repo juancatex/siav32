@@ -77,9 +77,9 @@ table {
            @foreach ($hospedados as $hosp)
            <tr>
                <td>{{$i}}</td>
-               @if($sal->tipocliente==1)
-                    <td style="text-align: left;">{{$sal->nomfuerza}}</td>
-               @elseif($sal->tipocliente==2)
+               @if($hosp->tipocliente==1)
+                    <td style="text-align: left;">{{$hosp->nomfuerza}}</td>
+               @elseif($hosp->tipocliente==2)
                     <td style="text-align: left;">Civil</td>
                 @else
                     <td style="text-align: left;">Familiar</td>

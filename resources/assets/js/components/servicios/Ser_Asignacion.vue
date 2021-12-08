@@ -786,6 +786,12 @@
             modalTraspaso(datosgenerales=[],datoshabitacion=[]){
                 let me=this;
                 let nuevoarray=[];
+                 me.idasignacion=datoshabitacion['idasignacion'];
+                    me.nombre=datoshabitacion['nombres'];
+                    me.fechaingreso=datoshabitacion['fechaentrada']; 
+                    me.codambiente=datosgenerales['codambiente'];
+                    me.piso=datosgenerales['piso'];
+                    
                 var url= '/ser_asignacion?idestablecimiento='+me.establecimientoselected+'&nopiso='+true;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
@@ -794,10 +800,7 @@
                     if( (obj.tipo == 'COMPARTIDO' && obj.camasrestantes >0) || (obj.tipo!='COMPARTIDO' && obj.camasocupadas==0)){
                         return obj;
                     }
-                    me.idasignacion=datoshabitacion['idasignacion'];
-                    me.nombre=datoshabitacion['nombres'];
-                    me.codambiente=datosgenerales['codambiente'];
-                    me.piso=datosgenerales['piso'];
+                   
                     
                     me.classModal.openModal('traspaso');
 
