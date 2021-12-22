@@ -47,7 +47,7 @@ table {
 <div class="body_wrapper">
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REPORTE DE HOSPEDAJE POR SOCIO</h2>
-   <h3 style="color: #0c49a5;">Socio:  {{ $nombrec }}</h3>
+   <h3 style="color: #0c49a5;"><b>Socio:</b>  <i>{{ $nombrec }}</i></h3>
    <h4 style="color: #0c49a5;"> </h4>
    <hr>
    <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
@@ -85,18 +85,29 @@ table {
                @endif 
                <td style="text-align: left;">{{$sal->nombres}}</td>-->
                <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/><b>Usuario: </b><i>{{$sal->uentrada}}</i></td>
+              
+               
+               @if($sal->estado==0)
                <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/><b>Usuario: </b><i>{{$sal->usalida}}</i></td>
+               @else
+               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}</td>
+               @endif
+
                <td style="text-align: center;">{{$sal->codambiente}}</td>
                <td style="text-align: center;">{{$sal->numerofactura}}</td>
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>
-               @if($sal->descuento==0)
-                @php    $conta=$conta+$sal->monto; @endphp
-                    <td style="text-align: center;">Contado</td>
-               @else
-                    <td style="text-align: center;">Descuento</td>
-                 @php   $desc=$desc+$sal->monto;  @endphp
-               @endif
                
+               @if($sal->estado==0)
+                    @if($sal->descuento==0)
+                        @php    $conta=$conta+$sal->monto; @endphp
+                            <td style="text-align: center;">Contado</td>
+                    @else
+                            <td style="text-align: center;">Descuento</td>
+                        @php   $desc=$desc+$sal->monto;  @endphp
+                    @endif
+               @else
+               <td></td>
+               @endif
                
            </tr> 
            @php 
