@@ -23,7 +23,7 @@ table {
         width: 100%;
         font-size: 12px; 
         caption-side: top; 
-        border-spacing: 5px 25px;
+        
     }
     
     body{/* quitar el body para la impresion*/
@@ -58,7 +58,7 @@ table {
    <h4 style="color: #0c49a5;"> </h4>
    <hr>
    <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
-   <table>
+   <table style="border-spacing: 5px 25px;">
        <thead>
            <tr>
            <th>Nº</th>
