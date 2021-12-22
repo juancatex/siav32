@@ -84,8 +84,8 @@ table {
                     <td style="text-align: left;">Familiar</td>
                @endif 
                <td style="text-align: left;">{{$sal->nombres}}</td>-->
-               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/>Usuario: {{$sal->uentrada}}</td>
-               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/>Usuario: {{$sal->usalida}}</td>
+               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/><b>Usuario: </b><i>{{$sal->uentrada}}</i></td>
+               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/><b>Usuario: </b><i>{{$sal->usalida}}</i></td>
                <td style="text-align: center;">{{$sal->codambiente}}</td>
                <td style="text-align: center;">{{$sal->numerofactura}}</td>
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>
