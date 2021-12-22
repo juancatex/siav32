@@ -83,13 +83,13 @@ table {
                     <td style="text-align: left;">Familiar</td>
                @endif 
                <td style="text-align: left;">{{$sal->nombres}}</td>-->
-               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/><b>Usuario: </b><i>{{$sal->uentrada}}</i></td>
+               <td style="text-align: center;   padding-bottom: 7px;padding-top: 7px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/><b>Usuario: </b><i>{{$sal->uentrada}}</i></td>
               
                
                @if($sal->estado==0)
-               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/><b>Usuario: </b><i>{{$sal->usalida}}</i></td>
+               <td style="text-align: center;    padding-bottom: 7px;padding-top: 7px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/><b>Usuario: </b><i>{{$sal->usalida}}</i></td>
                @else
-               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}</td>
+               <td style="text-align: center;    padding-bottom: 7px;padding-top: 7px;">{{$sal->fechasalida}} {{$sal->horasalida}}</td>
                @endif
 
                <td style="text-align: center;">{{$sal->codambiente}}</td>
