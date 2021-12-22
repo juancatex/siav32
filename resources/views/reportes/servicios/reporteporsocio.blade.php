@@ -111,8 +111,7 @@ table {
            @php   $total=$total+$desc+$conta;  @endphp
        </tbody>
    </table>
-</br>
-</br>
+   <br/><br/>
    <table style="width: 50%;">
         <thead>
             <tr>
