@@ -50,7 +50,6 @@ table {
    <h3 style="color: #0c49a5;"><b>Socio:</b>  <i>{{ $nombrec }}</i></h3>
    <h4 style="color: #0c49a5;"> </h4>
    <hr>
-   <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
    <table>
        <thead>
            <tr>
