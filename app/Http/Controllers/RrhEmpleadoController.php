@@ -330,19 +330,21 @@ class RrhEmpleadoController extends Controller
                 else
                     $sqls.=" and (socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.ci like '%".$valor."%')";
             }   
-            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+            $empleados = Socio::select('socios.idsocio',$raw)
                                     ->join('ser__asignacions','socios.idsocio','ser__asignacions.idcliente')
                                     ->join('par_grados','socios.idgrado','par_grados.idgrado') 
                                     ->where('ser__asignacions.tipocliente',1) 
                                     ->whereraw($sqls)
+                                    ->groupBy('idsocio', 'nombres')
                                     ->orderBy('nombres','asc')
                                     ->limit(20)->get();
         }
         else {
-               $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+               $empleados = Socio::select('socios.idsocio',$raw)
                                     ->join('ser__asignacions','socios.idsocio','ser__asignacions.idcliente')
                                     ->join('par_grados','socios.idgrado','par_grados.idgrado') 
                                     ->where('ser__asignacions.tipocliente',1) 
+                                    ->groupBy('idsocio', 'nombres')
                                     ->orderBy('nombres','asc')
                                     ->limit(20)->get(); 
         }
