@@ -63,8 +63,8 @@ table {
        <thead>
            <tr>
            <th>Nº</th>
-           <th>Fuerza</th>
-           <th>Nombres y Apellidos</th>
+           <!-- <th>Fuerza</th>
+           <th>Nombres y Apellidos</th> -->
            <th>Fecha Ingreso</th>
            <th>Fecha Salida</th>
            <th>Habitacion</th>
@@ -84,16 +84,16 @@ table {
            @foreach ($data as $sal)
            <tr>
                <td>{{$i}}</td>
-               @if($sal->tipocliente==1)
+               <!-- @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
                @elseif($sal->tipocliente==2)
                     <td style="text-align: left;">Civil</td>
                 @else
                     <td style="text-align: left;">Familiar</td>
-               @endif
+               @endif -->
                <td style="text-align: left;">{{$sal->nombres}}</td>
-               <td style="text-align: center;">{{$sal->fechaentrada}} <br/> {{$sal->horaentrada}} {{$sal->uentrada}}</td>
-               <td style="text-align: center;">{{$sal->fechasalida}} <br/> {{$sal->horasalida}} {{$sal->usalida}}</td>
+               <td style="text-align: center;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/>Usuario: {{$sal->uentrada}}</td>
+               <td style="text-align: center;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/>Usuario: {{$sal->usalida}}</td>
                <td style="text-align: center;">{{$sal->codambiente}}</td>
                <td style="text-align: center;">{{$sal->numerofactura}}</td>
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>
