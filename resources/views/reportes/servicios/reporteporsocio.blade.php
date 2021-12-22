@@ -98,8 +98,7 @@ table {
                @endif
                
                
-           </tr>
-           <tr><hr></tr>
+           </tr> 
            @php 
            $i=$i+1
            @endphp
