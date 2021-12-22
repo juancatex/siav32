@@ -21,10 +21,9 @@ table {
         border-collapse: collapse;
         /* border: 1px solid #000; */
         width: 100%;
-        font-size: 12px;
-        
-       
+        font-size: 12px; 
         caption-side: top; 
+        border-spacing: 5px 25px;
     }
     
     body{/* quitar el body para la impresion*/
@@ -82,7 +81,7 @@ table {
            $total=0;
            @endphp
            @foreach ($data as $sal)
-           <tr>
+           <tr >
                <td>{{$i}}</td>
                <!-- @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
