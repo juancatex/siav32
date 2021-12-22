@@ -23,7 +23,10 @@ table {
         font-size: 12px; 
         caption-side: top;  
     }
-    
+    thead th{
+  border-bottom: 1px solid gray;
+  border-top: 1px solid gray;
+} 
     body{/* quitar el body para la impresion*/
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         position: relative;
@@ -49,13 +52,11 @@ table {
    <h2 style="color: #0c49a5;">REPORTE DE HOSPEDAJE POR SOCIO</h2>
    <h3 style="color: #0c49a5;"><b>Socio:</b>  <i>{{ $nombrec }}</i></h3>
    <h4 style="color: #0c49a5;"> </h4>
-   <hr>
+   
    <table>
        <thead>
            <tr>
-           <th>Nº</th>
-           <!-- <th>Fuerza</th>
-           <th>Nombres y Apellidos</th> -->
+           <th>Nº</th> 
            <th>Fecha Ingreso</th>
            <th>Fecha Salida</th>
            <th>Habitacion</th>
@@ -74,17 +75,8 @@ table {
            @endphp
            @foreach ($data as $sal)
            <tr>
-               <td>{{$i}}</td>
-               <!-- @if($sal->tipocliente==1)
-                    <td style="text-align: left;">{{$sal->nomfuerza}}</td>
-               @elseif($sal->tipocliente==2)
-                    <td style="text-align: left;">Civil</td>
-                @else
-                    <td style="text-align: left;">Familiar</td>
-               @endif 
-               <td style="text-align: left;">{{$sal->nombres}}</td>-->
+               <td>{{$i}}</td> 
                <td style="text-align: center;   padding-bottom: 7px;padding-top: 7px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/><b>Usuario: </b><i>{{$sal->uentrada}}</i></td>
-              
                
                @if($sal->estado==0)
                <td style="text-align: center;    padding-bottom: 7px;padding-top: 7px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/><b>Usuario: </b><i>{{$sal->usalida}}</i></td>
