@@ -26,6 +26,7 @@ table {
     thead th{
   border-bottom: 1px solid gray;
   border-top: 1px solid gray;
+  margin-bottom: 10px;
   padding-bottom: 15px;
   padding-top: 15px;
 } 
@@ -110,7 +111,8 @@ table {
            @php   $total=$total+$desc+$conta;  @endphp
        </tbody>
    </table>
-<hr>
+</br>
+</br>
    <table style="width: 50%;">
         <thead>
             <tr>
