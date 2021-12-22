@@ -58,7 +58,7 @@ table {
    <h4 style="color: #0c49a5;"> </h4>
    <hr>
    <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
-   <table style="border-spacing: 5px 50px;">
+   <table>
        <thead>
            <tr>
            <th>Nº</th>
@@ -81,7 +81,7 @@ table {
            $total=0;
            @endphp
            @foreach ($data as $sal)
-           <tr >
+           <tr style="margin-bottom: 15px;">
                <td>{{$i}}</td>
                <!-- @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
