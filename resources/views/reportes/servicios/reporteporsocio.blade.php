@@ -92,8 +92,8 @@ table {
                     <td style="text-align: left;">Familiar</td>
                @endif
                <td style="text-align: left;">{{$sal->nombres}}</td>
-               <td style="text-align: center;">{{$sal->fechaentrada}} <br/> {{$sal->horaentrada}}</td>
-               <td style="text-align: center;">{{$sal->fechasalida}} <br/> {{$sal->horasalida}}</td>
+               <td style="text-align: center;">{{$sal->fechaentrada}} <br/> {{$sal->horaentrada}} {{$sal->uentrada}}</td>
+               <td style="text-align: center;">{{$sal->fechasalida}} <br/> {{$sal->horasalida}} {{$sal->usalida}}</td>
                <td style="text-align: center;">{{$sal->codambiente}}</td>
                <td style="text-align: center;">{{$sal->numerofactura}}</td>
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>

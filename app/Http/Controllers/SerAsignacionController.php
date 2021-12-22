@@ -711,13 +711,15 @@ class SerAsignacionController extends Controller
                                                       'tipo',
                                                       'monto',
                                                       'numerofactura',
-                                                      DB::raw('1 as parentezco')
+                                                      DB::raw('1 as parentezco'),
+                                                      DB::raw('(select username from  adm__users aa where aa.id=ser__asignacions.u_registro) as uentrada'),
+                                                      DB::raw('(select username from  adm__users aa where aa.id=ser__asignacions.u_salida) as usalida')
                                                       )
                                                   ->join('socios','socios.idsocio','ser__asignacions.idcliente')
                                                   ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
                                                   ->join('par_grados','par_grados.idgrado','socios.idgrado')
-                                                  ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-                                                  ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                                  ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente') 
+                                                  ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura') 
                                                 //   ->where('ser__asignacions.estado',0)//solo los liberados
                                                   ->where('ser__asignacions.activo',1)
                                                   ->where('tipocliente',1)
