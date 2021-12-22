@@ -18,23 +18,16 @@
 }
 table {
         
-        border-collapse: collapse;
-        /* border: 1px solid #000; */
+        border-collapse: collapse; 
         width: 100%;
         font-size: 12px; 
-        caption-side: top; 
-        
+        caption-side: top;  
     }
     
     body{/* quitar el body para la impresion*/
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         position: relative;
-        font-size:12px;
-        
-       /*    
-        margin: 8px auto 8px auto;
-         */
-
+        font-size:12px;  
     }
     p{
         text-align: justify;
@@ -81,7 +74,7 @@ table {
            $total=0;
            @endphp
            @foreach ($data as $sal)
-           <tr style="margin-bottom: 15px;">
+           <tr>
                <td>{{$i}}</td>
                <!-- @if($sal->tipocliente==1)
                     <td style="text-align: left;">{{$sal->nomfuerza}}</td>
@@ -106,6 +99,7 @@ table {
                
                
            </tr>
+           <tr><hr></tr>
            @php 
            $i=$i+1
            @endphp
