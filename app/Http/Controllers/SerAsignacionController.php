@@ -722,10 +722,10 @@ class SerAsignacionController extends Controller
                                                   ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura') 
                                                 //   ->where('ser__asignacions.estado',0)//solo los liberados
                                                   ->where('ser__asignacions.activo',1)
-                                                  ->where('tipocliente',1)
+                                                  ->where('tipocliente',1)//socio
                                                   ->where('ser__asignacions.idcliente',$request->idsocio)
-                                                  ->orderBy('fechasalida','ASC')
-                                                  ->orderBy('idasignacion','ASC')//socio
+                                                  ->orderBy('fechaentrada','ASC')
+                                                  ->orderBy('idasignacion','ASC')
                                                   ->get(); 
                                               
          
