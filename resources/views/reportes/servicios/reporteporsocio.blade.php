@@ -91,9 +91,9 @@ table {
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>
                @if($sal->descuento==0)
                 @php    $conta=$conta+$sal->monto; @endphp
-                    <td style="text-align: center;">Contado</td>
+                    <td style="text-align: center;    margin-bottom: 15px;">Contado</td>
                @else
-                    <td style="text-align: center;">Descuento</td>
+                    <td style="text-align: center;    margin-bottom: 15px;">Descuento</td>
                  @php   $desc=$desc+$sal->monto;  @endphp
                @endif
                
