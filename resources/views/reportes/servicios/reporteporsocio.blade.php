@@ -26,7 +26,8 @@ table {
     thead th{
   border-bottom: 1px solid gray;
   border-top: 1px solid gray;
-  padding: 15px;
+  padding-bottom: 15px;
+  padding-top: 15px;
 } 
     body{/* quitar el body para la impresion*/
         font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
