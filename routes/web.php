@@ -488,6 +488,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/ser_civils/listarfamiliar','SerCivilController@listarFamiliar'); ///eddy 
     Route::get ('/ser_asignacion/reportediario', 'SerAsignacionController@reportediario');
     Route::get ('/ser_asignacion/reportemensual', 'SerAsignacionController@reportemensual');
+    Route::get ('/ser_asignacion/reporteporsocio', 'SerAsignacionController@reporteporsocio');
     Route::put('/ser_asignacion/traspaso', 'SerAsignacionController@registrartraspaso');
     
 
@@ -555,6 +556,7 @@ Route::group(['middleware' => ['webinterno']], function () {
     Route::get ('/rrh_empleado/selectempleados2','RrhEmpleadoController@selectEmpleados2'); ///eddy
     Route::get ('/rrh_empleado/selectdirectivos','RrhEmpleadoController@selectDirectivos'); ///eddy
     Route::get ('/rrh_empleado/selectsocios','RrhEmpleadoController@selectSocios'); ///eddy
+    Route::get ('/rrh_empleado/selectsocios2','RrhEmpleadoController@selectSocios2'); ///
 
 
     Route::post('/rrh_presentado/storePresentado','RrhPresentadoController@storePresentado');   //C

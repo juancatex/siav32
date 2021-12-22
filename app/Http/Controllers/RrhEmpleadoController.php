@@ -317,4 +317,35 @@ class RrhEmpleadoController extends Controller
         }
         return ['empleados' => $empleados];
     }
+    public function selectSocios2(Request $request) 
+    {
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw('concat(socios.numpapeleta," - ",IF(socios.idfuerza=5,par_grados.abrev, par_grados.nomgrado)," ",socios.nombre," ",socios.apaterno," ",socios.amaterno) as nombres');
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.ci like '%".$valor."%')";
+                else
+                    $sqls.=" and (socios.apaterno like '%".$valor."%' or socios.amaterno like '%".$valor."%' or socios.numpapeleta like '%".$valor."%' or socios.nombre like '%".$valor."%' or socios.ci like '%".$valor."%')";
+            }   
+            $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    ->join('ser__asignacions','socios.idsocio','ser__asignacions.idcliente')
+                                    ->join('par_grados','socios.idgrado','par_grados.idgrado') 
+                                    ->where('ser__asignacions.tipocliente',1) 
+                                    ->whereraw($sqls)
+                                    ->orderBy('nombres','asc')
+                                    ->limit(20)->get();
+        }
+        else {
+               $empleados = Socio::select('socios.idsocio','socios.numpapeleta',$raw,'ci')
+                                    ->join('ser__asignacions','socios.idsocio','ser__asignacions.idcliente')
+                                    ->join('par_grados','socios.idgrado','par_grados.idgrado') 
+                                    ->where('ser__asignacions.tipocliente',1) 
+                                    ->orderBy('nombres','asc')
+                                    ->limit(20)->get(); 
+        }
+        return ['empleados' => $empleados];
+    }
 }

@@ -27,6 +27,10 @@
                         <li> 
                             <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="verRegistro('LPZ2')">Casa Comunitaria Reporte Mensual</button>                    
                         </li>
+                        &nbsp;
+                        <li> 
+                            <button class="col-md-3 btn btn-block btn-primary " name="resumen_val" @click="porsocio()">Casa Comunitaria Reporte por socio</button>                    
+                        </li>
                     </ul>
                 </div>                    
             </div>
@@ -217,6 +221,35 @@
         </div>
         <!--Fin del modal-->            
         </div>  
+<div class="modal fade" id="modalporsocio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+                       <Ajaxselect  v-if="clearSelected"
+                            ruta="/rrh_empleado/selectsocios2?buscar=" @found="selectsocioreporte" @cleaning="cleansocioselected"
+                            resp_ruta="empleados"
+                            labels="nombres"
+                            placeholder="Ingrese Nombre, Apellido, CI, Numero papeleta" 
+                            idtabla="idsocio" 
+                            :id="socioporreporteid"
+                            :clearable='true'>
+                        </Ajaxselect>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button v-if="socioporreporteid!=null" type="button" class="btn btn-primary" @click="imprimirporsocio()">Reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     </main>
 </template>
@@ -245,6 +278,7 @@
         data (){
             return {                                
                 Modalview: '',
+                clearSelected:1,
                 modal : 0, modal : 1,
                 tituloModalK : 'Reportes HTR',                
                 tituloModalS : 'Reportes HTR por SOCIO',                
@@ -283,6 +317,7 @@
                 fechamin:'',
                 fechamax:'',
                 mensual:0,
+                socioporreporteid:null
             }
         },
 
@@ -298,6 +333,25 @@
             //Calcula los elementos de la paginación
         },
         methods : {
+            selectsocioreporte(e){
+                console.log(e);
+                 this.socioporreporteid=e.idsocio;
+            },
+            cleansocioselected(){
+                this.socioporreporteid=null;
+            },
+            imprimirporsocio(){
+                _pl._vm2154_12186_135('/ser_asignacion/reporteporsocio?idsocio='+this.socioporreporteid,"Reporte por socio");
+            },
+            porsocio(){ 
+                let me=this;
+                me.clearSelected=0;
+                me.socioporreporteid=null;
+                setTimeout(function () {
+                   me.clearSelected=1;
+                     $("#modalporsocio").modal("show");
+                }, 200); 
+            },
             fechahoy(valor){
                 let me=this;
                 

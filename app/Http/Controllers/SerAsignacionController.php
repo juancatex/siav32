@@ -682,6 +682,67 @@ class SerAsignacionController extends Controller
         
 
     }
+    public function reporteporsocio(Request $request)
+    {
+           
+          $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre) as nombres'); 
+          $rawsocio2=DB::raw('concat(nomgrado," ",socios.apaterno," ",socios.amaterno," ",socios.nombre," - ",nomfuerza) as nombresocio'); 
+
+          $salientessocio=Ser_Asignacion::select('idasignacion',
+                                                      'idcliente',
+                                                      'tipocliente',
+                                                      'estado',
+                                                      'nrasignacion',
+                                                      'idimplementos',
+                                                      'fechaentrada',
+                                                      'horaentrada',
+                                                      'fechasalida',
+                                                      'horasalida',
+                                                      'obs1',
+                                                      $rawsocio,
+                                                      $rawsocio2,
+                                                      'nomfuerza',
+                                                      'descuento',
+                                                      'ci',
+                                                      'ocupantes',
+                                                      'cantdias',
+                                                      'codambiente',
+                                                      'piso',
+                                                      'tipo',
+                                                      'monto',
+                                                      'numerofactura',
+                                                      DB::raw('1 as parentezco')
+                                                      )
+                                                  ->join('socios','socios.idsocio','ser__asignacions.idcliente')
+                                                  ->join('par_fuerzas','par_fuerzas.idfuerza','socios.idfuerza')
+                                                  ->join('par_grados','par_grados.idgrado','socios.idgrado')
+                                                  ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                                  ->leftjoin('con__facturas','con__facturas.idfactura','ser__asignacions.idfactura')
+                                                //   ->where('ser__asignacions.estado',0)//solo los liberados
+                                                  ->where('ser__asignacions.activo',1)
+                                                  ->where('tipocliente',1)
+                                                  ->where('ser__asignacions.idcliente',$request->idsocio)
+                                                  ->orderBy('fechasalida','ASC')
+                                                  ->orderBy('idasignacion','ASC')//socio
+                                                  ->get(); 
+                                              
+         
+              $socioco=Socio::select(DB::raw('concat(IF(socios.idfuerza=5,par_grados.abrev, par_grados.nomgrado)," ",socios.nombre," ",socios.apaterno," ",socios.amaterno) as nombrescompleto'))
+                                    ->join('par_grados','socios.idgrado','par_grados.idgrado') 
+                                    ->where('socios.idsocio',$request->idsocio) 
+                                    ->get()->first();
+                                    
+              $logo = Storage::path('fotos/cabecera_casacomunitaria.PNG');
+              $logo64 = base64_encode(Storage::get('fotos/cabecera_casacomunitaria.PNG')); 
+   
+            $pdf = PDF::loadView('reportes/servicios/reporteporsocio', ['data'=>$salientessocio,
+                                'nombrec'=>$socioco->nombrescompleto,
+                                'foto'=>'data:'.mime_content_type($logo) . ';base64,' . $logo64]); 
+            return $pdf->stream('reporteporsocio.pdf'); 
+  
+        
+
+    }
     public function reportesalida(Request $request)
     {
         $idasignacion=$request->idasignacion;
