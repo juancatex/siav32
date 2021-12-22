@@ -90,8 +90,8 @@ table {
                     <td style="text-align: left;">Civil</td>
                 @else
                     <td style="text-align: left;">Familiar</td>
-               @endif -->
-               <td style="text-align: left;">{{$sal->nombres}}</td>
+               @endif 
+               <td style="text-align: left;">{{$sal->nombres}}</td>-->
                <td style="text-align: center;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/>Usuario: {{$sal->uentrada}}</td>
                <td style="text-align: center;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/>Usuario: {{$sal->usalida}}</td>
                <td style="text-align: center;">{{$sal->codambiente}}</td>
