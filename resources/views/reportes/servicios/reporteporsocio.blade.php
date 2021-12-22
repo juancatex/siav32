@@ -84,16 +84,16 @@ table {
                     <td style="text-align: left;">Familiar</td>
                @endif 
                <td style="text-align: left;">{{$sal->nombres}}</td>-->
-               <td style="text-align: center;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/>Usuario: {{$sal->uentrada}}</td>
-               <td style="text-align: center;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/>Usuario: {{$sal->usalida}}</td>
+               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechaentrada}} {{$sal->horaentrada}}<br/>Usuario: {{$sal->uentrada}}</td>
+               <td style="text-align: center;    padding-bottom: 15px;">{{$sal->fechasalida}} {{$sal->horasalida}}<br/>Usuario: {{$sal->usalida}}</td>
                <td style="text-align: center;">{{$sal->codambiente}}</td>
                <td style="text-align: center;">{{$sal->numerofactura}}</td>
                <td style="text-align: right;">{{$sal->monto}} Bs.</td>
                @if($sal->descuento==0)
                 @php    $conta=$conta+$sal->monto; @endphp
-                    <td style="text-align: center;    padding-bottom: 15px;">Contado</td>
+                    <td style="text-align: center;">Contado</td>
                @else
-                    <td style="text-align: center;    padding-bottom: 15px;">Descuento</td>
+                    <td style="text-align: center;">Descuento</td>
                  @php   $desc=$desc+$sal->monto;  @endphp
                @endif
                
