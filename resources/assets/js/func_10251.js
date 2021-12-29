@@ -1221,7 +1221,9 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setProperties({
         title: 'Carnet socio'
       }); 
-      doc.addImage(fondo, 'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());  
+      var anchocre=doc.internal.pageSize.getWidth();
+      var largocre=doc.internal.pageSize.getHeight();
+      doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
       doc.addImage(fotosocio, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
       doc.setFontSize(10);
       doc.setFontStyle('bold');
@@ -1251,23 +1253,13 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontStyle('normal');
       doc.setTextColor(255,255,255); 
       centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
-
-  
-      // $("#" + idview).attr("src", doc.output('datauristring'));  
-      
-
-      // var doc2 = new jsPDF('p', 'cm', 'credit-card');  
-      // doc2.setProperties({
-      //   title: 'Carnet socio posterior'
-      // }); 
-      // doc2.addImage(fondodos, 'JPEG',0,0,doc2.internal.pageSize.getWidth(),doc2.internal.pageSize.getHeight());  
-      // doc2.addImage(qr.toDataURL(), 'JPEG', 1.55, 1.45, 2.31, 2.31,'socioqr'); 
  
-      // $("#2" + idview).attr("src", doc2.output('datauristring')); 
 
       doc.addPage();
-      doc.addImage(fondodos, 'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());  
-      doc.addImage(qr.toDataURL(), 'JPEG', 1.55, 1.45, 2.31, 2.31,'socioqr'); 
+      doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);   
+     
+      //doc2.addImage(fondodos, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90); 
+      doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
       $("#" + idview).attr("src", doc.output('datauristring'));  
  
       funn();
