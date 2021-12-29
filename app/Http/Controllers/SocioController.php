@@ -197,11 +197,11 @@ class SocioController extends Controller
     
     public function getfotoCRV(Request $request)
     {  if (!$request->ajax()) return redirect('/');
-        $full_path = Storage::path('AFI/crv.jpg');
-        $base64 = base64_encode(Storage::get('AFI/crv.jpg'));
+        $full_path = Storage::path('AFI/crvn.jpg');
+        $base64 = base64_encode(Storage::get('AFI/crvn.jpg'));
 
-        $full_path2 = Storage::path('AFI/crva.jpg');
-        $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
+        $full_path2 = Storage::path('AFI/crvan.jpg');
+        $base642 = base64_encode(Storage::get('AFI/crvan.jpg'));
 
         $full_path3 = Storage::path('AFI/avatar.jpg');
         $base643 = base64_encode(Storage::get('AFI/avatar.jpg'));

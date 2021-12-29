@@ -1273,53 +1273,53 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     imgToBase64(ta.rutafoto?'storage/socio/e/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
-     
+      qr.mime = 'image/jpeg';
+      qr.level = 'H'; 
       // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
-      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm', 'credit-card');  
       doc.setProperties({
         title: 'Carnet socio'
       }); 
-      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
-      doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      var anchocre=doc.internal.pageSize.getWidth();
+      var largocre=doc.internal.pageSize.getHeight();
+      doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
+      doc.addImage(fotosocio, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
       doc.setFontSize(10);
       doc.setFontStyle('bold');
-      doc.setTextColor(52,52,52);
+      doc.setTextColor(0,0,0);
       if(ta.idfuerza==5){// solo valida fuera armada para imprimir la abreviacion
-        centrarTextTo2(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+        centrarTextTo2n(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___',0,4.9); 
       }else{
-        centrarTextTo2(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___', 8.05,6.4); 
+        centrarTextTo2n(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___',0,4.9); 
       } 
-          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 8.45,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.85,6.4);
+      centrarTextTo2n(doc, ta.nombre?ta.nombre:'___', 0,5.3); 
+      centrarTextTo2n(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 0,5.7);
             
       doc.setFontStyle('normal');
       doc.setFontSize(7); 
-      doc.text(ta.nomfuerza,9.7, 5.9,null,90); 
-      doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 10.53, 5.9,null,90);
-      doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 9.7, 3.15,null,90); 
-      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 10.53, 3.15,null,90);
+      doc.text(ta.nomfuerza,0.58, 6.42); 
+      doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 0.58, 7.22);
+      doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 3.18,6.42); 
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 3.18,7.22);
        
       doc.setFontSize(6);
-      doc.text(ta.codsocio?ta.codsocio:'___', 7.24, 4.1,null,90);
-      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 7.46, 4.1,null,90);
-      centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.87,6.4);
-       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.4, 4.7, 3,0.5,'barra','NONE',90);   
-
-      // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
-      // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.text(ta.codsocio?ta.codsocio:'___', 2.2, 4.08);
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 2.2, 4.28);
+      doc.setFontStyle('bold');
+      centrarTextTo2n(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 0,7.65);
+       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',1.25, 7.7, 3,0.5,'barra');      
       doc.setFontSize(5);
-      doc.setTextColor(255,255,255);
-      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 11.63,6.4); 
+      doc.setFontStyle('normal');
+      doc.setTextColor(255,255,255); 
+      centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
+ 
 
-  
+      doc.addPage();
+      doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);   
+     
+      //doc2.addImage(fondodos, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90); 
+      doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
       $("#" + idview).attr("src", doc.output('datauristring'));  
-      var doc2 = new jsPDF('p', 'cm','a4');  
-      doc2.setProperties({
-        title: 'Carnet socio posterior'
-      }); 
-      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
-      doc2.addImage(qr.toDataURL(), 'png', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
-      $("#2" + idview).attr("src", doc2.output('datauristring')); 
  
       funn();
     }); 

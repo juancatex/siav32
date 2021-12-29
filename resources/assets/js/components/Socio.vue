@@ -69,7 +69,7 @@
                                                 <div class="form-group">
                                                         <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
                                                 </div>
-                                                <div v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="col-md-12" style="text-align: center;    display: inline-block;">
+                                                <div  class="col-md-12" style="text-align: center;    display: inline-block;">
                                                     <button class="btn btn-outline-success active" type="button"
                                                     @click="procesarFiles" >Procesar</button>
                                                 </div>
@@ -986,7 +986,7 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
-             <button v-if="printcredencial==0" class="btn btn-primary" type="button" @click="generarCarnetSocioAtraz()">Siguiente</button> 
+             <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button> 
           </div>
         </div>
       </div>
@@ -1137,7 +1137,7 @@
                 arrayPermisosIn:[],
                 datosdesociosnuevos:[],
                 archivosfotossociosnuevos:[],
-                posfilenuevo:-1,
+                posfilenuevo:0,
                 imagebenefi:''
 
             }
@@ -1262,10 +1262,27 @@ tamfiles:function () {
                    }
             },
         datasArrayNuevos(data){
-            this.posfilenuevo=(-1);
+            this.posfilenuevo=0;
             this.datosdesociosnuevos=data.values;
-        },procesarFiles(){ 
-this.posfilenuevo++; 
+        },
+        generarsiguientecredencial(){ 
+            
+                let me=this;
+                me.posfilenuevo++;
+                me.printcredencial=2;
+                me.classModal.closeModal('credencial');  
+                me.printcredencial=0;
+                me.generarpdf();
+             
+ 
+            },
+            procesarFiles(){
+                let me=this;
+                me.posfilenuevo=0;
+                me.printcredencial=0;
+                me.generarpdf();
+            },
+         generarpdf(){  
  var aux=this.datosdesociosnuevos[this.posfilenuevo];
  
        var socio={
@@ -1865,20 +1882,7 @@ this.posfilenuevo++;
                     });
             
             }, 
-            generarCarnetSocioAtraz(){ 
-                let me=this;
-                me.printcredencial=1;
-                me.classModal.closeModal('credencial');
-                swal(
-                  "¡Debe de dar la vuelta el pvc en el mismo sentido de la impresión!",
-                  "",
-                  "warning"
-                ).then(()=>{ 
-                           me.classModal.openModal('credencial');
-                });
- 
-            }, 
-			 
+              
             abrirModal(modelo, accion, data = []){
                this.Modalview='R';
 				
