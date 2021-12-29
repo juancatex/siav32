@@ -1268,13 +1268,11 @@ tamfiles:function () {
         generarsiguientecredencial(){ 
             
                 let me=this;
-                me.posfilenuevo++;
-                me.printcredencial=2;
+                me.posfilenuevo++; 
                 me.classModal.closeModal('credencial');  
                 me.printcredencial=0;
-                me.generarpdf();
-             
- 
+                me.generarpdf(); 
+               
             },
             procesarFiles(){
                 let me=this;
@@ -1302,9 +1300,6 @@ tamfiles:function () {
             ci:aux['CEDULA'].toString(),
             abrvdep:aux['EXPEDIDO'].toString()}; 
 
-            
-             this.printcredencial=0;
-             this.classModal.closeModal('credencial');
              swal({
                 title: "Generando credenciales",
                 allowOutsideClick: () => false,
@@ -1316,7 +1311,8 @@ tamfiles:function () {
             let me=this;
                   axios.get('/sociogetfotoCRV').then(function (response) {
                            _pl._vvp2521_cr0egresados(socio,response.data,()=>{
-                                swal.close()
+                                swal.close();
+                                console.log('termino ok');
                                 me.classModal.openModal('credencial');
                             });
                     }).catch(function (error) {
