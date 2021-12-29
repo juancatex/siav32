@@ -1034,6 +1034,12 @@ function centrarTextTo2(doc, texto,poshorizontal, posvertical) {
   var nuevaposH=posvertical-((pageWidth / 2) - (dime.w / 2)); 
   doc.text(texto, poshorizontal, nuevaposH,null,90);
 }
+function centrarTextTo2n(doc, texto,poshorizontal, posvertical) {  
+  var pageWidth = doc.internal.pageSize.getWidth(); 
+  var dime = doc.getTextDimensions(texto);
+  var nuevaposX=(redondeo_valor((pageWidth / 2),4) - redondeo_valor((redondeo_valor(dime.w,4)/ 2),4));  
+  doc.text(texto, nuevaposX, posvertical);
+}
 function textToBase64Barcode(text){
   var canvas = document.createElement("canvas");
   JsBarcode(canvas, text, {format: "CODE39",displayValue:false});
@@ -1195,6 +1201,72 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
       doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
       $("#2" + idview).attr("src", doc2.output('datauristring')); 
+ 
+      funn();
+    }); 
+  }
+  export function _vvp2521_cr03(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    imgToBase64(ta.rutafoto?'storage/socio/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+      var qr = new QRious();  
+      qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
+      qr.mime = 'image/jpeg';
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm', 'credit-card');  
+      doc.setProperties({
+        title: 'Carnet socio'
+      }); 
+      doc.addImage(fondo, 'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());  
+      doc.addImage(fotosocio, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
+      doc.setFontSize(10);
+      doc.setFontStyle('bold');
+      doc.setTextColor(0,0,0);
+      if(ta.idfuerza==5){// solo valida fuera armada para imprimir la abreviacion
+        centrarTextTo2n(doc, (ta.abrev+' '+ta.nomespecialidad)?ta.abrev+' '+ta.nomespecialidad:'___',0,4.9); 
+      }else{
+        centrarTextTo2n(doc, (ta.nomgrado+' '+ta.nomespecialidad)?ta.nomgrado+' '+ta.nomespecialidad:'___',0,4.9); 
+      } 
+      centrarTextTo2n(doc, ta.nombre?ta.nombre:'___', 0,5.3); 
+      centrarTextTo2n(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 0,5.7);
+            
+      doc.setFontStyle('normal');
+      doc.setFontSize(7); 
+      doc.text(ta.nomfuerza,0.58, 6.42); 
+      doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 0.58, 7.22);
+      doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 3.18,6.42); 
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 3.18,7.22);
+       
+      doc.setFontSize(6);
+      doc.text(ta.codsocio?ta.codsocio:'___', 2.2, 4.08);
+      doc.text(ta.carnetmilitar?ta.carnetmilitar:'___', 2.2, 4.28);
+      doc.setFontStyle('bold');
+      centrarTextTo2n(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 0,7.65);
+       doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',1.25, 7.7, 3,0.5,'barra');      
+      doc.setFontSize(5);
+      doc.setFontStyle('normal');
+      doc.setTextColor(255,255,255); 
+      centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
+
+  
+      // $("#" + idview).attr("src", doc.output('datauristring'));  
+      
+
+      // var doc2 = new jsPDF('p', 'cm', 'credit-card');  
+      // doc2.setProperties({
+      //   title: 'Carnet socio posterior'
+      // }); 
+      // doc2.addImage(fondodos, 'JPEG',0,0,doc2.internal.pageSize.getWidth(),doc2.internal.pageSize.getHeight());  
+      // doc2.addImage(qr.toDataURL(), 'JPEG', 1.55, 1.45, 2.31, 2.31,'socioqr'); 
+ 
+      // $("#2" + idview).attr("src", doc2.output('datauristring')); 
+
+      doc.addPage();
+      doc.addImage(fondodos, 'JPEG',0,0,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());  
+      doc.addImage(qr.toDataURL(), 'JPEG', 1.55, 1.45, 2.31, 2.31,'socioqr'); 
+      $("#" + idview).attr("src", doc.output('datauristring'));  
  
       funn();
     }); 
