@@ -1278,6 +1278,14 @@ tamfiles:function () {
                 let me=this;
                 me.posfilenuevo=0;
                 me.printcredencial=0;
+                 swal({
+                title: "Generando credenciales",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
                 me.generarpdf();
             },
          generarpdf(){  
@@ -1300,14 +1308,7 @@ tamfiles:function () {
             ci:aux['CEDULA'].toString(),
             abrvdep:aux['EXPEDIDO'].toString()}; 
 
-             swal({
-                title: "Generando credenciales",
-                allowOutsideClick: () => false,
-                allowEscapeKey: () => false,
-                onOpen: function() {
-                swal.showLoading();
-                }
-            }); 
+            
             let me=this;
                   axios.get('/sociogetfotoCRV').then(function (response) {
                            _pl._vvp2521_cr0egresados(socio,response.data,()=>{
