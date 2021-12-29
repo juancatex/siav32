@@ -1209,11 +1209,13 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     $("#" + idview).attr("src",''); 
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
+    // let fotoqr=fotocr.qr; 
     let fondodos=fotocr.fotoa; 
     imgToBase64(ta.rutafoto?'storage/socio/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
+      qr.level = 'H'; 
       // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
       var doc = new jsPDF('p', 'cm', 'credit-card');  
       doc.setProperties({
@@ -1279,7 +1281,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     imgToBase64(ta.rutafoto?'storage/socio/e/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.carnetmilitar?ta.carnetmilitar:'')+'|'+ta.numpapeleta;
-      qr.mime = 'image/jpeg';
+     
       // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
       var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
       doc.setProperties({
@@ -1324,7 +1326,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
         title: 'Carnet socio posterior'
       }); 
       doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
-      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc2.addImage(qr.toDataURL(), 'png', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
       $("#2" + idview).attr("src", doc2.output('datauristring')); 
  
       funn();
