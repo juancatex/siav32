@@ -1269,7 +1269,7 @@ tamfiles:function () {
             
                 let me=this;
                 me.posfilenuevo++; 
-                me.classModal.closeModal('credencial');  
+               // me.classModal.closeModal('credencial');  
                 me.printcredencial=0;
                 me.generarpdf(); 
                
@@ -1313,7 +1313,7 @@ tamfiles:function () {
                            _pl._vvp2521_cr0egresados(socio,response.data,()=>{
                                 swal.close();
                                 console.log('termino ok');
-                                me.classModal.openModal('credencial');
+                               me.classModal.openModal('credencial');
                             });
                     }).catch(function (error) {
                         console.log(error);
