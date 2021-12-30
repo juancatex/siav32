@@ -983,7 +983,15 @@
             <iframe  name="2planout" id="2planout" :style="printcredencial==1?'width:100%;height:100%;':'display:none;'"></iframe>
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer"> 
+ <div class=" row w-100" style="position: absolute;padding-left: 20px;z-index: -100;"> 
+                      <div  style=" text-align: center;margin: 4px">
+                          <div><h4 style="margin: 0;font-size: 19px;">Socios:</h4> </div>
+                          <div class="my-auto"><h6 style="font-size: 16px;margin: 0;">{{posfilenuevo+1}} de {{datosdesociosnuevos.length}}</h6></div> 
+                      </div>  
+            </div>
+
+
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
              <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button> 
