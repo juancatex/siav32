@@ -17,6 +17,7 @@ setvue(0, 'Body_header', './components/plugin vue/Body_header.vue');
 setvue(0, 'Ajaxselect', './components/plugin vue/selectAjax.vue');
 setvue(0, 'excelReader', './components/plugin vue/excelReader.vue');
 setvue(0, 'autocomplete', './components/plugin vue/autocomplete.vue');
+setvue(0, 'vacuna', './components/plugin vue/vacuna.vue');
 
 //parametros 
 setvue(1, 'par_departamento', './components/Par_Departamento.vue');

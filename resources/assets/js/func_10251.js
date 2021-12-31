@@ -1146,6 +1146,19 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     
   }
+  export function _vvp2521_cr02_vacuna(foto1,foto2,funn, idview = 'planout') {
+    $("#" + idview).attr("src",'');   
+      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      doc.setProperties({
+        title: 'Carnet vacunacion'
+      }); 
+      doc.addImage(foto1, 'png',3.17,0.9, 8.6, 5.5);   
+      doc.addPage();
+      doc.addImage(foto2, 'png',3.17,0.9, 8.6, 5.5);  
+
+     $("#" + idview).attr("src", doc.output('datauristring')); 
+      funn(); 
+  }
   export function _vvp2521_cr02(ta,fotocr,funn, idview = 'planout') {
     $("#" + idview).attr("src",''); 
     $("#2" + idview).attr("src",''); 

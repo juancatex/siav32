@@ -55,6 +55,8 @@ Route::get('/getAportes','apkMovile@verAportes')->name('getAportes');
 Route::get('/getExAportes','apkMovile@extractoAportes')->name('getExAportes');
 Route::get('/getimage','apkMovile@getimage')->name('getimage'); 
 Route::get('sessionOut','SesionOut@out');
+Route::post('/pdftoimage', 'TipooperacionController@pdfToImage');
+Route::post('/vacunafinalin', 'TipooperacionController@saveimage');
 
 Route::group(['middleware' => ['webinterno']], function () { 
         Route::get ('/afi_beneficiario', 'AfiBeneficiarioController@index');
