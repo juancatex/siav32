@@ -15,7 +15,7 @@
                           
                                                 <div class="custom-file col-md-8">
                                                     <input ref="files"  @change="valuefotos" accept=".pdf" type="file" class="custom-file-input" id="customFileLang"  lang="es">
-                                                    <label class="custom-file-label" for="customFileLang">{{file?' Pdf seleccionados':'Seleccionar Archivo PDF'}}</label>
+                                                    <label class="custom-file-label" for="customFileLang">{{file?' archivo seleccionado correctamente':'Seleccionar Archivo PDF'}}</label>
                                                 </div>
                                                 <div class="col-md-4" v-if="file">
                                                     <button class="btn btn-outline-success active" type="button"
