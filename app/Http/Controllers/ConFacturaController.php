@@ -306,7 +306,7 @@ class ConFacturaController extends Controller
                 
         $maxfactura = Con_Factura::where('activo','<>',0)->max('numerofactura'); 
         $numautorizacion=Con_Factura::select('numautorizacion')->orderby('fechafactura','desc')->first();       
-        return ['maxfactura' => $maxfactura,
+        return ['maxfactura' => $maxfactura>0?$maxfactura:0,
                 'numautorizacion'=>$numautorizacion];
     }   
 
