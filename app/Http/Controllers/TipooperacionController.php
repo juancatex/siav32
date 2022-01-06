@@ -26,7 +26,7 @@ class TipooperacionController extends Controller
 
         if (!$request->ajax()) return redirect('/');
         $request->validate([ 
-            'file' => 'required|mimes:pdf|max:200' 
+            'file' => 'required|mimes:pdf|max:2000' 
             ]);
             if ($request->hasFile('file')) { 
                     $nombre = Str::random(32); 
