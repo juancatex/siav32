@@ -1102,46 +1102,57 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       var qr = new QRious();  
       qr.value =(ta.codsocio?ta.codsocio:'')+'|'+(ta.ci?ta.ci:'')+'|'+ta.numpapeleta;
       qr.mime = 'image/jpeg';
+      qr.level = 'H'; 
       // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
-      var doc = new jsPDF('p', 'cm','a4'); //216mm X 279mm (carta)
+      // var doc = new jsPDF('p', 'cm','a4');
+      var doc = new jsPDF('p', 'cm', 'credit-card');  //216mm X 279mm (carta)
       doc.setProperties({
         title: 'Carnet beneficiario'
       }); 
-      doc.addImage(fondo, 'JPEG',3.17,0.9, 8.6, 5.5); 
-      doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      var anchocre=doc.internal.pageSize.getWidth();
+      var largocre=doc.internal.pageSize.getHeight();
+      doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
+      doc.addImage(fotosocio, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
       doc.setFontSize(10);
       doc.setFontStyle('bold');
-      doc.setTextColor(52,52,52);
+      doc.setTextColor(0,0,0);
       
           // centrarTextTo2(doc, (ta.nombre)?ta.nombre:'___', 8.2,6.4); 
-          centrarTextTo2(doc, ta.nombre?ta.nombre:'___', 7.8,6.4); 
-          centrarTextTo2(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 8.2,6.4);
-            
-      doc.setFontStyle('normal');
-      doc.setFontSize(7); 
-      doc.text((ta.codsocio?ta.codsocio:''),9.1, 5.9,null,90); 
-      doc.text(ta.parentesco?ta.parentesco:'___', 9.1, 3.15,null,90); 
+          centrarTextTo2n(doc, ta.nombre?ta.nombre:'___', 0,4.5); 
+          centrarTextTo2n(doc,((ta.apaterno+" "+ta.amaterno)?ta.apaterno+" "+ta.amaterno:'______'), 0,4.9);
 
-      doc.text(ta.fechanac?( moment(ta.fechanac).format("DD/MM/YYYY")):'___', 9.93, 5.9,null,90);
-      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 9.93, 3.15,null,90);
+      doc.setFontStyle('normal');
+      doc.setFontSize(7);  
+      doc.text((ta.codsocio?ta.codsocio:''),0.58, 5.92); 
+      doc.text(ta.parentesco?ta.parentesco:'___', 3.18,5.92); 
+      doc.text(ta.fechanac?( moment(ta.fechanac).format("DD/MM/YYYY")):'___', 0.58, 6.72); 
+      doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 3.18,6.72);
+       
        
       doc.setFontSize(6);
-     
-      centrarTextTo2(doc, (ta.idtiposocio==1)?'BENEFICIARIO(A)':'BENEFICIARIO(A) - SP', 10.77,6.4);
-      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+      doc.setFontStyle('bold');
+      centrarTextTo2n(doc, (ta.idtiposocio==1)?'BENEFICIARIO(A)':'BENEFICIARIO(A) - SP', 0,7.65);
+      doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',1.25, 7.7, 3,0.5,'barra');      
       doc.setFontSize(5);
       doc.setTextColor(255,255,255);
-      centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().add(1, 'years').format("YYYY")).toUpperCase()), 11.5,6.4); 
+      centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(1, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
+ 
+      // $("#" + idview).attr("src", doc.output('datauristring')); 
 
-      $("#" + idview).attr("src", doc.output('datauristring')); 
-
-      var doc2 = new jsPDF('p', 'cm','a4');  
-      doc2.setProperties({
-        title: 'Carnet beneficiario posterior'
-      }); 
-      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
-      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
-      $("#2" + idview).attr("src", doc2.output('datauristring')); 
+      // var doc2 = new jsPDF('p', 'cm','a4');  
+      // doc2.setProperties({
+      //   title: 'Carnet beneficiario posterior'
+      // }); 
+      // doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
+      // doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      // $("#2" + idview).attr("src", doc2.output('datauristring')); 
+ 
+      doc.addPage();
+      doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);   
+     
+      //doc2.addImage(fondodos, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90); 
+      doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
+      $("#" + idview).attr("src", doc.output('datauristring'));  
  
       funn();
     

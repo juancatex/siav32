@@ -228,11 +228,11 @@ class SocioController extends Controller
 
      public function getfotoBENE(Request $request)
      {  if (!$request->ajax()) return redirect('/');
-         $full_path = Storage::path('AFI/bene.jpg');
-         $base64 = base64_encode(Storage::get('AFI/bene.jpg'));
+         $full_path = Storage::path('AFI/ben.jpg');
+         $base64 = base64_encode(Storage::get('AFI/ben.jpg'));
  
-         $full_path2 = Storage::path('AFI/crva.jpg');
-         $base642 = base64_encode(Storage::get('AFI/crva.jpg'));
+         $full_path2 = Storage::path('AFI/ben2.jpg');
+         $base642 = base64_encode(Storage::get('AFI/ben2.jpg'));
  
          if(Storage::exists('app/public/bene/'.$request->foto)){
             $full_path3 = Storage::path('app/public/bene/'.$request->foto);
