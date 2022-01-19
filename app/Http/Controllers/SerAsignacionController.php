@@ -77,6 +77,7 @@ class SerAsignacionController extends Controller
                                                 'ocupantes',
                                                 'apaterno',
                                                 'descuento',
+                                                'tipodescuento',
                                                 'montosindescuento',
                                                 'monto as montocondescuento'
                                                 )
@@ -102,6 +103,7 @@ class SerAsignacionController extends Controller
                                                     'ocupantes',
                                                     'apaterno',
                                                     'descuento',
+                                                    'tipodescuento',
                                                     'montosindescuento',
                                                     'monto as montocondescuento'
 
@@ -258,6 +260,7 @@ class SerAsignacionController extends Controller
                                                     'nit',
                                                     'montosindescuento',
                                                     'descuento',
+                                                    'tipodescuento',
                                                     'parentezco'
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
@@ -325,6 +328,7 @@ class SerAsignacionController extends Controller
                                                 'fechaaprodescuento',
                                                 'montosindescuento',
                                                 'descuento',
+                                                'tipodescuento',
                                                 'monto',
                                                 'ser__ambientes.codambiente',
                                                 'ser__ambientes.tipo',
@@ -358,6 +362,7 @@ class SerAsignacionController extends Controller
         $idasignacion=$request->idasignacion;
         $asignacion=Ser_Asignacion::findOrFail($idasignacion);
         $asignacion->monto=$request->monto;
+        $asignacion->tipodescuento=$request->tipo;
         $asignacion->obs2=$request->obs2;
         $asignacion->descuento=2;
         $asignacion->u_autorizador=Auth::id();
@@ -478,6 +483,7 @@ class SerAsignacionController extends Controller
                                                     $rawsocio2,
                                                     'nomfuerza',
                                                     'descuento',
+                                                    'tipodescuento',
                                                     'ci',
                                                     'ocupantes',
                                                     'cantdias',
@@ -514,6 +520,7 @@ class SerAsignacionController extends Controller
                         $rawsocio2,
                         DB::raw('1 as nomfuerza'),
                         'descuento',
+                        'tipodescuento',
                         'ser__civils.ci',
                         'ocupantes',
                         'cantdias',
@@ -593,6 +600,7 @@ class SerAsignacionController extends Controller
                                                       $rawsocio2,
                                                       'nomfuerza',
                                                       'descuento',
+                                                      'tipodescuento',
                                                       'ci',
                                                       'ocupantes',
                                                       'cantdias',
@@ -630,6 +638,7 @@ class SerAsignacionController extends Controller
                           $rawsocio2,
                           DB::raw('1 as nomfuerza'),
                           'descuento',
+                          'tipodescuento',
                           'ser__civils.ci',
                           'ocupantes',
                           'cantdias',
@@ -703,6 +712,7 @@ class SerAsignacionController extends Controller
                                                       $rawsocio2,
                                                       'nomfuerza',
                                                       'descuento',
+                                                      'tipodescuento',
                                                       'ci',
                                                       'ocupantes',
                                                       'cantdias',
@@ -778,7 +788,8 @@ class SerAsignacionController extends Controller
                                                 'nit',
                                                 'monto',
                                                 'montosindescuento',
-                                                'descuento'
+                                                'descuento',
+                                                'tipodescuento',
 
 
                                                 )
@@ -817,6 +828,7 @@ class SerAsignacionController extends Controller
                                                     'nit',
                                                     'montosindescuento',
                                                     'descuento',
+                                                    'tipodescuento',
                                                     'parentezco'
                                                     )
                                         ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')

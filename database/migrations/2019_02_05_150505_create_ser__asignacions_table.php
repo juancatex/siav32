@@ -38,6 +38,7 @@ class CreateSerAsignacionsTable extends Migration
             $table->string('obs1')->nullable();            
             $table->string('obs2')->nullable();  
             $table->tinyInteger('descuento')->default(0)->comment('0->no se solicito descuento, 1->solicitud de descuento por parte de operador, 2->solicitud aprobada por autoridad superior');
+            $table->tinyInteger('tipodescuento')->default(0)->comment('0->sin desceunto, 1->por min def, 2->por autorizacion');
             $table->dateTime('fechasoldescuento')->comment('fecha de solicitud de descuento');
             $table->dateTime('fechaaprodescuento')->comment('fecha de aprobacion de descuento');
             $table->dateTime('fechatraspaso')->nullable()->comment('fecha y hora que se realizo el traspaso de habitacion');

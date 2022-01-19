@@ -56,7 +56,7 @@ table {
 <div class="left"> <img src="{{$foto}}" width="90%"> </div>
    <h2 style="color: #0c49a5;">REPORTE MENSUAL DE HOSPEDAJE</h2>
    <h3 style="color: #0c49a5;">Del:  {{ $fechainicio }}  al  {{ $fechafin }}</h3>
-   <h4 style="color: #0c49a5;">CONTADO = C || DESCUENTO = D</h4>
+   <h4 style="color: #0c49a5;">CONTADO = C || DESCUENTO VIA MIN. DEF. = D || DESCUENTO AUTORIZADO CEN = A</h4>
    <hr>
    <h4 style="color: #0c49a5;">Registro de Salidas:</h4>
    <table>
@@ -101,7 +101,13 @@ table {
                 @php    $conta=$conta+$sal->monto; @endphp
                     <td>C</td>
                @else
+                   @if($sal->tipodescuento==1)
                     <td>D</td>
+                    @elseif ($sal->tipodescuento==2)
+                    <td>A</td>
+                    @else
+                    <td>D</td>
+                    @endif
                  @php   $desc=$desc+$sal->monto;  @endphp
                @endif
                

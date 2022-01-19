@@ -138,6 +138,15 @@ table {
                 <td colspan="2"><strong>Monto Cancelado:</strong></td>
                 @endif
                 <td>{{$hospedaje[0]->monto}} Bs.</td>
+                
+                
+                @if($hospedaje[0]->tipodescuento==1)
+                <td><strong>Tipo descuento:</strong></td>
+                <td colspan="2">Descuento via Min. Def.</td>
+                @elseif ($hospedaje[0]->tipodescuento==2)
+                <td><strong>Tipo descuento:</strong></td>
+                <td colspan="2">Autorización por CEN</td>
+                @endif
            </tr>
            <tr><td colspan="6" style="color: white;">.</td></tr>
            <tr><td colspan="6" style="color: white;">.</td></tr>

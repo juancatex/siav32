@@ -92,6 +92,15 @@
                                     <label class="col-md-6" for="montoaprobado"><strong> Monto aprobado con descuento:</strong></label>
                                     <input class="form-control col-md-4" type="number" v-model="montoaprobado" id="montoaprobado" style="text-align:right;" v-on:focus="selectAll">
                                     <span class="text-error">{{ errors.first('montoaprobado')}}</span> 
+                                    <label class="col-md-6" for="montoaprobado"><strong> Tipo descuento:</strong></label>
+                                    <div class="row"> 
+                                            <div class="col-md-6">
+                                                <select class="form-control" name='estado' v-model='tipodescuento'>
+                                                    <option value="1">Descuento por Min. Def.</option>
+                                                    <option value="2">Autorizado por CEN</option> 
+                                                </select>
+                                            </div>
+                                    </div>
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <strong><label>Glosa:</label></strong>
@@ -203,6 +212,7 @@ const st = {};
                 nombre:'',
                 montooriginal:0,
                 montoaprobado:0,
+                tipodescuento:1,
                 idasignacion:0,
 
             }
@@ -245,6 +255,7 @@ const st = {};
                 me.nombre=data['nombres'];
                 me.montooriginal=data['montosindescuento'];
                 me.montoaprobado=0;
+                me.tipodescuento=1;
                 me.idasignacion=data['idasignacion'];
                 me.classModal.openModal('solicitudDescuento');
 
@@ -293,6 +304,7 @@ const st = {};
                     'idasignacion':me.idasignacion,
                     'obs2':me.glosa,
                     'monto':me.montoaprobado,
+                    'tipo':me.tipodescuento,
                     
                 }).then(function (response) {
                     
