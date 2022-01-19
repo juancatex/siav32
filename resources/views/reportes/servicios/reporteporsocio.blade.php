@@ -100,13 +100,16 @@ table {
 
                             @if($sal->tipodescuento==1)
                             <td style="text-align: center;">Descuento via Min. Def.</td>
+                            @php   $desc=$desc+$sal->monto;  @endphp
                             @elseif ($sal->tipodescuento==2)
                             <td style="text-align: center;">Autorizado por CEN</td>
+                            @php    $conta=$conta+$sal->monto; @endphp
                             @else
                             <td style="text-align: center;">Descuento</td>
+                            @php   $desc=$desc+$sal->monto;  @endphp
                             @endif
 
-                        @php   $desc=$desc+$sal->monto;  @endphp
+                       
                     @endif
                @else
                <td></td>

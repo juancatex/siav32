@@ -103,12 +103,15 @@ table {
                @else
                    @if($sal->tipodescuento==1)
                     <td>D</td>
+                    @php   $desc=$desc+$sal->monto;  @endphp
                     @elseif ($sal->tipodescuento==2)
                     <td>A</td>
+                    @php    $conta=$conta+$sal->monto; @endphp
                     @else
                     <td>D</td>
+                    @php   $desc=$desc+$sal->monto;  @endphp
                     @endif
-                 @php   $desc=$desc+$sal->monto;  @endphp
+                 
                @endif
                
                
