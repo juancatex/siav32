@@ -78,6 +78,18 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
+        'pgsql2021' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_1'),
+            'port' => env('DB_PORT_1'),
+            'database' => env('DB_DATABASE_1'),
+            'username' => env('DB_USERNAME_1'),
+            'password' => env('DB_PASSWORD_1'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
         'pgsql2019' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST_3'),
