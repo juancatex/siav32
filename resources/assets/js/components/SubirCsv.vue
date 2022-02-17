@@ -205,7 +205,7 @@
         props:['idmodulo'],
         data (){
             return {
-                removef:(valuein)=>{return valuein.CODIGO_CONCEPTO != '056'},
+                removef:(valuein)=>{return valuein.CODIGO_CONCEPTO != '056'},//elimina del archivo todos los que noson aportes identificados por el codigo 56
                  resetExcelVue:1,
                 modal:0,
                 observaciones:'',
@@ -252,7 +252,15 @@
                    this.nombre_archivo=[];
                if(data!=null){
                      this.nombre_archivo=data.names;
-                     this.parse_csv=data.values; 
+                    this.parse_csv=data.values;    
+                    for (let index = 0; index < this.parse_csv.length; index++) {
+                        const element = this.parse_csv[index];
+                        if(element.numpapeleta=='00009213'){
+                                console.log(element);
+                                const element2 = this.parse_csv[index-1];
+                                console.log(element2);
+                        }
+                    }
                }
             },
             verificarfecha(){
@@ -467,10 +475,10 @@
             subirCSV(){
                 var idasientomaestro;
                 let me = this;
-
+ 
                 if(me.parse_csv.length)
                 { this.resetExcelVue=0;
-                    //console.log(this.parse_csv);
+                   
                    // this.abrirModal();
                    swal({
                               title: "Registrando los datos",
@@ -482,7 +490,8 @@
                           });
                     axios.post('/import_process',{
                         //'csv_header': this.parse_header,
-                        'csv_data': this.parse_csv,
+                        // 'csv_data': this.parse_csv,
+                        'csv_data': JSON.stringify(this.parse_csv),
                         'nombre_archivo':this.nombre_archivo,
                         'fecha_archivo':this.fecha_aporte,
                         'idtipoaporte':this.idtipoaporte,

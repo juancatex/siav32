@@ -70,7 +70,8 @@ class ImportController extends Controller
             $importe4=0;
             $importe5=0;
             $csv_header = $request->csv_header;
-            $csv_data = $request->csv_data;
+            // $csv_data = $request->csv_data;
+            $csv_data =  json_decode($request->csv_data);
             $fecha_archivo=$request->fecha_archivo;
             $nombre_archivo=$request->nombre_archivo;
             $glosa=$request->observaciones;
@@ -101,20 +102,28 @@ class ImportController extends Controller
                         {
                             $cargaascii = new Apo_Carga_ascii();
                             
-                            if($columna['codfuerza']==3)
-                                $importe3=$importe3+$columna['aporte'];
-                            if($columna['codfuerza']==4)
-                                $importe4=$importe4+$columna['aporte'];
-                            if($columna['codfuerza']==5)
-                                $importe5=$importe5+$columna['aporte'];
+                            // if($columna['codfuerza']==3)
+                            //     $importe3=$importe3+$columna['aporte'];
+                            // if($columna['codfuerza']==4)
+                            //     $importe4=$importe4+$columna['aporte'];
+                            // if($columna['codfuerza']==5)
+                            //     $importe5=$importe5+$columna['aporte'];
+
+                            if($columna->codfuerza==3)
+                                $importe3=$importe3+$columna->aporte;
+                            if($columna->codfuerza==4)
+                                $importe4=$importe4+$columna->aporte;
+                            if($columna->codfuerza==5)
+                                $importe5=$importe5+$columna->aporte;
                             
                             
                             
                             
                             foreach($columna as $ind=>$col)
                             {
-                                $resultado = str_replace("\r", "", $ind);
+                                $resultado = str_replace("\r", "", $ind); 
                                 $cargaascii->$resultado=$col;
+                                // $cargaascii->$resultado=strval($col);
                             }
                             $cargaascii->fechaaporte=$fecha_archivo;
                             $cargaascii->idtipoaporte=$request->idtipoaporte;

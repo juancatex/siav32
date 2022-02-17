@@ -1093,7 +1093,7 @@ class SerAsignacionController extends Controller
             //->join('par__destinos','par__destinos.iddestino','=','socios.iddestino')
             //->join('par_municipios','par_municipios.idmunicipio','=','par__destinos.idmunicipio')
             ->join('par_estadomodulos','par_estadomodulos.idestado','=','socios.idestservicios')
-            ->where('par_estadomodulos.idmodulo','=',4)
+            // ->where('par_estadomodulos.idmodulo','=',4)
             ->where('socios.idsocio','=',$request->idcliente)->get();
         if($request->tipocliente=="c")
             $cliente=Ser_Civil::

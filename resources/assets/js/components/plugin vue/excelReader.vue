@@ -13,93 +13,165 @@
     </div>
 </template>
 <script>
-  var XLSX = require("./func_10262");
-  export default {
-      props: ["col_codigo", "remove"],
-      data() {
-          return {
-              columnas: [],
-              idcol: this.col_codigo,
-              functionin: this.remove,
-              arrayOut: [],
-              arrayOutNames: [],
-              lineas: ""
-          }
-      },
-      methods: {
-          handleFiles(e) {
-              var a = e.target.files;
-              $("#filesName").text(""), this.arrayOut = [], this.arrayOutNames = [], this.lineas = "";
-              let t = this;
-              a.length > 0 ? _.findIndex(a, function (e) {
-                  return !/^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/.test(e.name.toLowerCase())
-              }) < 0 ? (swal({
-                  title: "Procesando datos de los archivos",
-                  allowOutsideClick: !1,
-                  allowEscapeKey: !1,
-                  onOpen: function () {
-                      swal.showLoading()
-                  }
-              }).catch(function (e) {
-                  swal.showValidationError("Request failed: ${error}")
-              }), setTimeout(function () {
-                  t.readFile(a, a.length)
-              }, 500)) : (swal("¡Algunos de los archivos seleccionados no son permitidos!", "Solo se permiten archivos en formato xls y xlsx", "error"), this.$emit("array_Files_Data", null)) : (swal("¡No se seleccionaron archivos !", "", "warning"), this.$emit("array_Files_Data", null))
-          },
-          readFile(e, a, t = 0) {
-              let s = this;
-              var r = e[t],
-                  i = new FileReader;
-              i.readAsBinaryString(r), i.onload = (i => {
-                  s.ProcessExcel(i.target.result).then(i => {
-                      if (void 0 !== this.functionin && _.remove(i, this.functionin), $("#filesName").text(($("#filesName").text().length > 0 ? $("#filesName").text() + ",   " : "") + '"' + r.name + '"'), this.idcol) {
-                          var n = [];
-                          for (var o in i) {
-                              var l = _.reduce(i[o], (e, a, t) => {
-                                  var s = _.findKey(this.columnas, function (e) {
-                                      return e.file === t
-                                  });
-                                  return s >= 0 && (e[this.columnas[s].db] = a), e
-                              }, {});
-                              n.push(l)
-                          }
-                          s.arrayOutNames.push(r.name), s.arrayOut = _.concat(n, s.arrayOut);
-                          var c = t + 1;
-                          c < a ? s.readFile(e, a, c) : (swal("¡Archivos procesados correctamente!", "", "success"), this.lineas = "Total lineas obtenidas : " + s.arrayOut.length, this.$emit("array_Files_Data", {
-                              names: s.arrayOutNames,
-                              values: s.arrayOut
-                          }))
-                      } else {
-                          s.arrayOut = _.concat(i, s.arrayOut);
-                          c = t + 1;
-                          c < a ? s.readFile(e, a, c) : (swal("¡Archivos procesados correctamente!", "", "success"), this.lineas = "Total lineas obtenidas : " + s.arrayOut.length, this.$emit("array_Files_Data", {
-                              names: s.arrayOutNames,
-                              values: s.arrayOut
-                          }))
-                      }
-                  })
-              })
-          },
-          async ProcessExcel(e) {
-              var a = XLSX.read(e, {
-                  type: "binary"
-              });
-              return await XLSX.utils.sheet_to_row_object_array(a.Sheets[a.SheetNames[0]])
-          },
-          ini(e) {
-              let a = this;
-              this.idcol ? axios.get("/getColumnsFileInput?col=" + this.idcol).then(function (t) {
-                  a.columnas = JSON.parse(t.data.columns), a.handleFiles(e)
-              }).catch(function (e) {
-                  console.log(e), swal("¡Error al momento de consultar con la DB!", "", "error")
-              }) : a.handleFiles(e)
-          }
-      },
-      mounted() {
-          var e = document.getElementById("inputField");
-          e.addEventListener("change", this.ini, !1)
-      }
-  };
+ var XLSX = require('./func_10262');
+ export default {
+     props: ["col_codigo", "remove"],
+     data() {
+         return {
+             columnas: [],
+             idcol: this.col_codigo,
+             functionin: this.remove,
+             arrayOut: [],
+             arrayOutNames: [],
+             lineas: ''
+         }
+     },
+     methods: {
+         handleFiles(e) {
+             var filesin = e.target.files;
+             $('#filesName').text('');
+             this.arrayOut = [];
+             this.arrayOutNames = [];
+             this.lineas = '';
+             let me = this;
+             if (filesin.length > 0) {
+                 if (_.findIndex(filesin, function (o) {
+                         return !((/^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/).test(o.name.toLowerCase()));
+                     }) < 0) {
+                     swal({
+                         title: "Procesando datos de los archivos",
+                         allowOutsideClick: false,
+                         allowEscapeKey: false,
+                         onOpen: function () {
+                             swal.showLoading();
+                         }
+                     }).catch(function (error) {
+                         swal.showValidationError('Request failed: ${error}')
+                     });
+                     setTimeout(function () { 
+
+                         me.readFile(filesin,0,[]).then((outvalue)=>{ 
+                                     swal("¡Archivos procesados correctamente!", "", "success");
+                                            me.lineas = 'Total lineas obtenidas : ' + outvalue.values.length;
+                                            me.$emit('array_Files_Data',outvalue);
+                         }); 
+                     }, 500);
+                 } else {
+                     swal("¡Algunos de los archivos seleccionados no son permitidos!", "Solo se permiten archivos en formato xls y xlsx", "error");
+                     this.$emit('array_Files_Data', null);
+                 }
+             } else {
+                 swal("¡No se seleccionaron archivos !", "", "warning");
+                 this.$emit('array_Files_Data', null);
+             }
+         },
+         readFileAsync(file) {
+             const reader = new FileReader(); 
+             return new Promise((resolve, reject) => {  
+                 reader.readAsBinaryString(file);
+                 reader.onload = () => {
+                     resolve(reader.result);
+                 };  
+                 reader.onerror = () => {
+                    reader.abort();
+                    reject(new DOMException("Problem parsing input file."));
+                };
+             })
+         },
+        async readFile(files,posi,tuarray) {
+            let arraynames=[]; 
+            var outfuna = [];
+            try {
+                for (let file of files) {
+                    arraynames.push(file.name); 
+                    $('#filesName').text((($('#filesName').text().length > 0) ? $('#filesName').text() + ',   ' : '') + '"' + file.name + '"');
+                    let contentBuffer = await this.readFileAsync(file); 
+                    let lectura= await this.ProcessExcel(contentBuffer);
+                    if (typeof this.functionin !== "undefined") {
+                            _.remove(lectura,this.functionin);
+                     }  
+                    ////////////////////////////////////////////////////////////////////////////////
+                    if (this.idcol) { 
+                         let arrayNew = [];
+                         for (var index in lectura) {  
+                            let filesss = new Object();  
+                             var jsonvalues =lectura[index];
+                            for (var clave in jsonvalues){ 
+                                if (jsonvalues.hasOwnProperty(clave)) { 
+                                        let columnsin = _.findKey(this.columnas, function (o) {
+                                            return o.file === clave;
+                                        })
+                                        if (columnsin >= 0) {  
+                                            filesss[this.columnas[columnsin]['db']] = jsonvalues[clave].toString().trim();
+                                        }
+                                }
+                            } 
+                           
+                           if(Object.keys(filesss).length != 0){
+                                 arrayNew.push(filesss);
+                           }
+                         }
+                       
+                        outfuna = outfuna.concat(arrayNew);  
+                     } else {
+                        outfuna = outfuna.concat(lectura);  
+                     }
+                    ////////////////////////////////////////////////////////////////////////////////
+
+                }
+                return { names: arraynames,values: outfuna};
+            } catch (err) { 
+                return { names: [],values: []};
+            }
+ 
+         }, 
+         async ProcessExcel(data) {
+             var workbook = XLSX.read(data, {
+                 type: 'binary'
+             });
+             return await XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+         },
+         ini(e) {
+             let me = this;
+             if (this.idcol) {
+                 axios.get('/getColumnsFileInput?col=' + this.idcol)
+                     .then(function (response) {
+                         me.columnas = JSON.parse(response.data.columns);
+                         me.handleFiles(e);
+                     }).catch(function (response) {
+                         console.log(response);
+                         swal("¡Error al momento de consultar con la DB!", "", "error");
+                     });
+             } else {
+                 me.handleFiles(e);
+             }
+         }
+     },
+     mounted() {
+         var inputElement = document.getElementById("inputField");
+         inputElement.addEventListener("change", this.ini, false);
+
+     }
+ }
+    /* var aux=[];
+  aux.push({'file':'GESTION','db':'gestion'});
+  aux.push({'file':'DOCUMENTO_RESPALDO','db':'codaporte'}); 
+  aux.push({'file':'EIT_CODORG','db':'codfuerza'});  
+  aux.push({'file':'ORGANISMOS','db':'fuerza'});   
+  aux.push({'file':'EIT_CODREP','db':'coddestino'});  
+  aux.push({'file':'REPARTICION','db':'destino'});      
+  aux.push({'file':'IDENTIFICADOR_ACREEDOR','db':'codaportedestino'});   
+  aux.push({'file':'ACREEDOR','db':'descaporte'});    
+  aux.push({'file':'CTA_BANCARIA_ACREEDOR','db':'cuentaasscinals'});     
+  aux.push({'file':'CODIGO_PERSONAL','db':'numpapeleta'});    
+  aux.push({'file':'CARNET','db':'cisocio'});     
+  aux.push({'file':'GRADO','db':'grado'});   
+  aux.push({'file':'MENSION','db':'especialidad'});   
+  aux.push({'file':'NOMBRES','db':'nombres'});     
+  aux.push({'file':'MONTO_DESCUENTO','db':'aporte'});       
+  aux.push({'file':'TOT_2','db':'aporte2'});        
+  aux.push({'file':'COMISION','db':'comision'});       
+ console.log(JSON.stringify(aux));*/
 </script>
 <style> 
 .labelInput:empty:not(:focus):before{
