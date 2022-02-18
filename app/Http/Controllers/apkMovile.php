@@ -187,6 +187,100 @@ class apkMovile extends Controller
     }
     
     }
+
+    public function getrolesxrol(Request $request)
+    {
+        $rol ="SELECT id_rol, nombrerol FROM admsis.adrol order by nombrerol"; 
+        
+        $rolesdb=DB::connection('pgsql')->select($rol);
+        echo '<table style="border: 1px solid;
+        border-collapse: collapse;">';
+        foreach($rolesdb as $rol){ 
+            echo '<tr style="border: 1px solid;">  
+                 <th style="text-align: left;border: 1px solid;">'.$rol->id_rol.'</th>
+                 <th colspan="3" style="text-align: center;border: 1px solid;background-color: black;
+                 color: white; text-transform: uppercase;font-size: 22px;">Rol: '.$rol->nombrerol.'</th> 
+              </tr>';
+              $this->getdetailrol($rol->id_rol);
+        }
+        
+        echo '</table>';
+    }
+    public function getrolesxusuario(Request $request)
+    {
+         
+       if(isset($request->u)){
+        $usuarios ="SELECT R.id_rol,R.nombrerol ,U.usuario,U.nombreusuario
+        FROM admsis.adusuario U
+        INNER JOIN admsis.adrol R ON (U.id_rol=R.id_rol)
+        WHERE U.estado=1 and U.usuario =?  
+        ORDER BY 2,4";
+        $usuariodb=DB::connection('pgsql')->select($usuarios, array($request->u));
+       }else{
+        $usuarios ="SELECT R.id_rol,R.nombrerol ,U.usuario,U.nombreusuario
+        FROM admsis.adusuario U
+        INNER JOIN admsis.adrol R ON (U.id_rol=R.id_rol)
+        WHERE U.estado=1 
+        ORDER BY 2,4";  
+        $usuariodb=DB::connection('pgsql')->select($usuarios);
+       }
+        echo '<table style="border: 1px solid;
+        border-collapse: collapse;">';
+        foreach($usuariodb as $user){ 
+            echo '<tr style="border: 1px solid;"> 
+                 <th style="text-align: right;border: 1px solid;background-color: #3f51b5;
+                 color: white;">'.$user->usuario.'</th> 
+                 <th style="text-align: center;border: 1px solid;background-color: #3f51b5;
+                 color: white;">Rol: '.$user->nombrerol.'</th> 
+                 <th colspan="2" style="text-align: center;border: 1px solid;background-color: #3f51b5;
+                 color: white; text-transform: uppercase;font-size: 22px;">User: '.$user->nombreusuario.'</th> 
+              </tr>';
+              $this->getdetailrol($user->id_rol);
+        } 
+        if(count($usuariodb)==0){
+            echo '<tr style="border: 1px solid;">  
+            <th  style="text-align: center;border: 1px solid;background-color: #3f51b5;
+            color: white; text-transform: uppercase;font-size: 22px;">Usuario inactivo</th> 
+         </tr>'; 
+        }
+        echo '</table>';
+    }
+    function getdetailrol($idin){
+            $modulos=DB::connection('pgsql')->select('SELECT me.id_modulo,mo.nombremodulo FROM admsis.admenu me, admsis.admodulo mo 
+            where me.id_modulo=mo.id_modulo and me.id_rol=? GROUP BY me.id_modulo,mo.nombremodulo', array($idin));
+            foreach($modulos as $mod){
+                echo '<tr style="border: 1px solid;"> 
+                        <th style="text-align: right;border: 1px solid;"></th>
+                        <th style="text-align: left;border: 1px solid;">'.$mod->id_modulo.'</th>
+                        <th colspan="2" style="text-align: left;border: 1px solid;text-transform: uppercase;font-size: 22px;">Modulo: '.$mod->nombremodulo.'</th> 
+                     </tr>';
+
+
+                     $submodulos=DB::connection('pgsql')->select('SELECT * FROM admsis.admenu WHERE id_rol=? AND id_modulo=? AND nivel=0 ORDER BY columna', array($idin,$mod->id_modulo));
+                     foreach($submodulos as $submod){
+                         echo '<tr style="border: 1px solid;">  
+                                <td style="text-align: right;border: 1px solid;"></td>
+                                 <td style="text-align: right;border: 1px solid;    background-color: black;
+                                 color: white;">'.$submod->id_menu.'</td>
+                                 <td colspan="2" style="text-align: left;border: 1px solid; background-color: #8080803b;">Agrupacion: '.$submod->descripmenu.'</td> 
+                              </tr>';
+                         
+
+
+                                $funciones=DB::connection('pgsql')->select('SELECT * FROM admsis.admenu WHERE id_rol=?  AND id_modulo=? AND id_menupadre=?  AND nivel=1 ORDER BY columna,menupos', array($idin,$mod->id_modulo,$submod->id_menu));
+                                foreach($funciones as $fun){
+                                    echo '<tr style="border: 1px solid;">  
+                                            <td style="text-align: right;border: 1px solid;"></td>
+                                            <td style="text-align: right;border: 1px solid;"></td>
+                                            <td style="text-align: right;border: 1px solid;">'.$fun->id_menu.'</td>
+                                            <td style="text-align: left;border: 1px solid;"><b>Submodulo:</b> '.$fun->descripmenu.'</td> 
+                                        </tr>';
+                                    
+                                }
+                     }
+                
+            }
+    }
     
 
 }
