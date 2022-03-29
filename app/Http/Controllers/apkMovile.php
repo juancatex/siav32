@@ -15,6 +15,15 @@ use PDF;
 
 class apkMovile extends Controller
 {
+
+    public function validarsaldomenorA(Request $request){
+        return DB::connection('pgsql')->select("SELECT sum(importe_moneda_local) as suma
+        FROM finanzas.ptm_tr_contable
+        WHERE fecha_transaccion='2022-03-15' AND par_tipo_op_prestamo ='COBRO' AND cuenta ='51301111'")[0];
+    }
+    public function validarsaldomenorB(Request $request){
+
+    }
     public function gethtml()
     {
         $idsolccuenta=4;
