@@ -52,8 +52,8 @@ Route::get('/getrolesuser','apkMovile@getrolesxusuario');
 Route::get('/check','apkMovile@validate')->name('check');
 Route::get('/logout', function(){ Auth::logout(); return response()->json(array('data' =>'ok'), 200); });
 Route::get('/getPrestamos','apkMovile@getPrestamos')->name('getPrestamos');
-
-Route::group(['middleware' => ['cors']], function () {
+ 
+Route::middleware(['cors'])->group(function () {
     Route::get('/validarsaldomenorA','apkMovile@validarsaldomenorA')->name('validarsaldomenorA');
 });
 Route::get('/getServicios','apkMovile@verServicios')->name('getServicios');
