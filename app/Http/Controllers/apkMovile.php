@@ -17,9 +17,9 @@ class apkMovile extends Controller
 {
 
     public function validarsaldomenorA(Request $request){
-        return DB::connection('pgsql')->select("SELECT sum(importe_moneda_local) as suma
-        FROM finanzas.ptm_tr_contable
-        WHERE fecha_transaccion='2022-03-15' AND par_tipo_op_prestamo ='COBRO' AND cuenta ='51301111'")[0];
+        return DB::connection('pgsql')->select("SELECT sum(importe)*-1 as suma 
+        FROM finanzas.ptm_acreedores
+        WHERE fecha_transaccion='2022-03-15' AND id_canal ='AJ_SMEN' and id_persona =?",array($request->socio))[0];
     }
     public function validarsaldomenorB(Request $request){
 
