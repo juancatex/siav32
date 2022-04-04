@@ -28,7 +28,7 @@ class apkMovile extends Controller
     }
     public function validarsaldomenorC(Request $request){
         return DB::connection('pgsql')->select("SELECT * from finanzas.vptm_prestamos 
-        where id_prestamo =? and id_persona=?",array($request->idprestamo,$request->idsocio))[0];
+        where id_prestamo =?",array($request->idprestamo))[0];
     }
     public function gethtml()
     {
