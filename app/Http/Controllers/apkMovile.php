@@ -26,6 +26,10 @@ class apkMovile extends Controller
         FROM finanzas.ptm_tr_contable
         WHERE id_prestamo =? and id_comprobante='222' and contabilizado ='S' and cuenta='51301111' limit 1",array($request->idprestamo))[0]->suma;
     }
+    public function validarsaldomenorC(Request $request){
+        return DB::connection('pgsql')->select("SELECT * from finanzas.vptm_prestamos 
+        where id_prestamo =? and id_persona=?",array($request->idprestamo,$request->idsocio))[0];
+    }
     public function gethtml()
     {
         $idsolccuenta=4;

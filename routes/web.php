@@ -56,6 +56,7 @@ Route::get('/getPrestamos','apkMovile@getPrestamos')->name('getPrestamos');
 Route::middleware(['cors'])->group(function () {
     Route::get('/validarsaldomenorA','apkMovile@validarsaldomenorA')->name('validarsaldomenorA');
     Route::get('/validarsaldomenorB','apkMovile@validarsaldomenorB')->name('validarsaldomenorB');
+    Route::get('/validarsaldomenorC','apkMovile@validarsaldomenorC')->name('validarsaldomenorC');
 });
 Route::get('/getServicios','apkMovile@verServicios')->name('getServicios');
 Route::get('/getAportes','apkMovile@verAportes')->name('getAportes');
