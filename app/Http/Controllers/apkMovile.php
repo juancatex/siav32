@@ -24,7 +24,7 @@ class apkMovile extends Controller
     public function validarsaldomenorB(Request $request){
         return DB::connection('pgsql')->select("SELECT *
         FROM finanzas.ptm_tr_contable
-        WHERE id_prestamo =? and id_comprobante='222' and contabilizado ='S' and cuenta='51301111' limit 1",array($request->idprestamo));
+        WHERE id_prestamo =? and id_comprobante='222' and contabilizado ='S' and cuenta='51301111' limit 1",array($request->idprestamo))[0];
     }
     public function gethtml()
     {
