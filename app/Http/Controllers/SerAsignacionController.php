@@ -340,7 +340,8 @@ class SerAsignacionController extends Controller
                                         ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
                                         ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
-                                        ->where('descuento','<>',0);
+                                        ->where('descuento','<>',0)
+                                        ->where('tipocliente',1);
 
                                         $solicitud=Ser_Asignacion::select('idasignacion',
                                                     'idcliente',
