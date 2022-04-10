@@ -353,12 +353,12 @@ class SerAsignacionController extends Controller
                                                     'horaentrada',
                                                     'fechasalida', 
                                                     $rawcivil,
-                                                    'ser__civils.ci',
+                                                    'ci',
                                                     'piso',
                                                     'tarifasocio',
                                                     'tarifareal',
                                                     'ser__civils.ci',
-                                                    DB::raw('"00000" as numpapeleta'),
+                                                    DB::raw('"00000000" as numpapeleta'),
                                                     'fechasoldescuento',
                                                     'fechaaprodescuento',
                                                     'montosindescuento',
@@ -369,9 +369,9 @@ class SerAsignacionController extends Controller
                                                     'ser__ambientes.tipo',
                                                     'ser__establecimientos.nomestablecimiento'
                                                     )
-                                        ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
-                                        ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
-                                        ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+                                        ->join('ser__civils','ser__asignacions.idcliente','ser__civils.idcivil')
+                                        ->join('ser__ambientes','ser__asignacions.idambiente','ser__ambientes.idambiente')
+                                        ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
                                         ->where('descuento','<>',0)
                                         ->orderby('fechasoldescuento','desc')
                                         ->where(function($query) {
