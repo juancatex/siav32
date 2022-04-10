@@ -348,7 +348,7 @@ class SerAsignacionController extends Controller
                                                     'tipocliente',
                                                     'estado',
                                                     'nrasignacion',
-                                                    'idimplementos',
+                                                    'ser__asignacions.idimplementos',
                                                     'fechaentrada',
                                                     'horaentrada',
                                                     'fechasalida', 
