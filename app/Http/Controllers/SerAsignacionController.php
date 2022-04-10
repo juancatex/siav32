@@ -358,7 +358,7 @@ class SerAsignacionController extends Controller
                                                     'tarifasocio',
                                                     'tarifareal',
                                                     'ser__civils.ci',
-                                                    DB::raw('ser__civils.ci as numpapeleta'),
+                                                    DB::raw('"00000" as numpapeleta'),
                                                     'fechasoldescuento',
                                                     'fechaaprodescuento',
                                                     'montosindescuento',
