@@ -340,8 +340,7 @@ class SerAsignacionController extends Controller
                                         ->join('par_grados','par_grados.idgrado','socios.idgrado')
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
                                         ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
-                                        ->where('descuento','<>',0)
-                                        ->orderby('fechasoldescuento','desc');
+                                        ->where('descuento','<>',0);
 
                                         $solicitud=Ser_Asignacion::select('idasignacion',
                                                     'idcliente',
@@ -371,13 +370,13 @@ class SerAsignacionController extends Controller
                                         ->join('ser__civils','ser__asignacions.idcliente','ser__civils.idcivil')
                                         ->join('ser__ambientes','ser__asignacions.idambiente','ser__ambientes.idambiente')
                                         ->join('ser__establecimientos','ser__ambientes.idestablecimiento','ser__establecimientos.idestablecimiento')
-                                        ->where('descuento','<>',0)
-                                        ->orderby('fechasoldescuento','desc')
+                                        ->where('descuento','<>',0) 
                                         ->where(function($query) {
                                             $query->where('tipocliente',2)
                                                 ->orwhere('tipocliente',3);
                                             }) 
                                         ->union($hospedajesocio)
+                                        ->orderby('fechasoldescuento','desc')
                                         ->paginate(50);
         
         return [
