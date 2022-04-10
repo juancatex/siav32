@@ -309,7 +309,8 @@ class SerAsignacionController extends Controller
     {
         
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
-        $solicitud=Ser_Asignacion::select('idasignacion',
+        $rawcivil=DB::raw('concat(ser__civils.apaterno," ",ser__civils.amaterno," ",ser__civils.nombre) as nombres');
+        $hospedajesocio=Ser_Asignacion::select('idasignacion',
                                                 'idcliente',
                                                 'tipocliente',
                                                 'estado',
@@ -340,8 +341,44 @@ class SerAsignacionController extends Controller
                                         ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
                                         ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
                                         ->where('descuento','<>',0)
+                                        ->orderby('fechasoldescuento','desc');
+
+                                        $solicitud=Ser_Asignacion::select('idasignacion',
+                                                    'idcliente',
+                                                    'tipocliente',
+                                                    'estado',
+                                                    'nrasignacion',
+                                                    'idimplementos',
+                                                    'fechaentrada',
+                                                    'horaentrada',
+                                                    'fechasalida', 
+                                                    $rawcivil,
+                                                    'ci',
+                                                    'piso',
+                                                    'tarifasocio',
+                                                    'tarifareal',
+                                                    'numpapeleta',
+                                                    'fechasoldescuento',
+                                                    'fechaaprodescuento',
+                                                    'montosindescuento',
+                                                    'descuento',
+                                                    'tipodescuento',
+                                                    'monto',
+                                                    'ser__ambientes.codambiente',
+                                                    'ser__ambientes.tipo',
+                                                    'ser__establecimientos.nomestablecimiento'
+                                                    )
+                                        ->join('ser__civils','ser__civils.idcivil','ser__asignacions.idcliente')
+                                        ->join('ser__ambientes','ser__ambientes.idambiente','ser__asignacions.idambiente')
+                                        ->join('ser__establecimientos','ser__establecimientos.idestablecimiento','ser__ambientes.idestablecimiento')
+                                        ->where('descuento','<>',0)
                                         ->orderby('fechasoldescuento','desc')
-                                        ->paginate(50);
+                                        ->where(function($query) {
+                                            $query->where('tipocliente',2)
+                                                ->orwhere('tipocliente',3);
+                                            }) 
+                                        ->union($hospedajesocio)
+                                        ->get();
         
         return [
             'pagination' => [
