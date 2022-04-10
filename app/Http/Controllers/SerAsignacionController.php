@@ -378,7 +378,7 @@ class SerAsignacionController extends Controller
                                                 ->orwhere('tipocliente',3);
                                             }) 
                                         ->union($hospedajesocio)
-                                        ->get();
+                                        ->paginate(50);
         
         return [
             'pagination' => [
