@@ -357,7 +357,7 @@ class SerAsignacionController extends Controller
                                                     'piso',
                                                     'tarifasocio',
                                                     'tarifareal',
-                                                    'numpapeleta',
+                                                    'ser__civils.ci',
                                                     'fechasoldescuento',
                                                     'fechaaprodescuento',
                                                     'montosindescuento',
