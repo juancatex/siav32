@@ -496,7 +496,8 @@
                 </div>
                 <div class="modal-footer justify-content-between" >
                     <div>
-                        <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                        <button v-if="check('Registro_salida_descuento')&& descuento==0" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button>
+                        <!-- <button v-if="check('Registro_salida_descuento')&& descuento==0 && tipocliente==1" type="button" class="btn btn-warning" @click="solicitarDescuento()">Solicitar Descuento</button> -->
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" @click="cerrarmodalsalida()">Cerrar</button>
