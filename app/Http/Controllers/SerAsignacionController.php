@@ -931,7 +931,7 @@ class SerAsignacionController extends Controller
 
             $emails='juancatex11@gmail.com';
             $name="prueba";  
-            Mail::send('emailtemplate', ['mensaje'=>'mensaje de prueba'], 
+            Mail::send('email', ['mensaje'=>'mensaje de prueba'], 
                     function($message) use ($emails,$name,$pdf)
                     {   $message->to($emails)->subject($name)
                         ->attachData($pdf->output(), "reporte.pdf");    
