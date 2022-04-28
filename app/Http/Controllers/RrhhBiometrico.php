@@ -116,10 +116,11 @@ class RrhhBiometrico extends Controller
             // $zk->setUser(103, '110', 'MARIA DEL CARMEN ROSA','',Util::LEVEL_USER);
             // $zk->setUser(104, '111', 'DIEGO HERNANDEZ M.','',Util::LEVEL_USER);
             // $zk->setUser(105, '112', 'HILDA QUISPE MAMANI','',Util::LEVEL_USER);
-            $zk->setUser(106, '113', 'JHANAYNA SEVILLA','',Util::LEVEL_USER);
-            $zk->setUser(107, '114', 'ANAHI VARGAS','',Util::LEVEL_USER);
-            $zk->setUser(108, '115', 'JHAQUELINE APAZA','',Util::LEVEL_USER);
-            $zk->setUser(109, '116', 'LEILA VALENCIA','',Util::LEVEL_USER);
+            // $zk->setUser(106, '113', 'JHANAYNA SEVILLA','',Util::LEVEL_USER);
+            // $zk->setUser(107, '114', 'ANAHI VARGAS','',Util::LEVEL_USER);
+            // $zk->setUser(108, '115', 'JHAQUELINE APAZA','',Util::LEVEL_USER);
+            // $zk->setUser(109, '116', 'LEILA VALENCIA','',Util::LEVEL_USER);
+            $zk->setUser(110, '117', 'CRISTHIAN CACERES','',Util::LEVEL_USER);
 
    
             // $zk->setUser(50, '50', 'admin2','',Util::LEVEL_USER);
