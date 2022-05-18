@@ -1276,7 +1276,9 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(5);
       doc.setFontStyle('normal');
       doc.setTextColor(255,255,255); 
-      centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
+      centrarTextTo2n(doc, 
+        ta.idtiposocio==1?
+        ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()):"Indefinido", 0,8.4); 
  
 
       doc.addPage();
