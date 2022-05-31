@@ -785,6 +785,7 @@
         },
         methods : {
             modalTraspaso(datosgenerales=[],datoshabitacion=[]){
+                console.log("entro al modal");
                 let me=this;
                 let nuevoarray=[];
                  me.idasignacion=datoshabitacion['idasignacion'];
@@ -803,10 +804,11 @@
                     }
                    
                     
-                    me.classModal.openModal('traspaso');
+                    
 
                 });
-                //console.log(me.nuevoarray);
+                me.classModal.openModal('traspaso');
+                 console.log(me.nuevoarray);
 
                 })
                 .catch(function (response) {
