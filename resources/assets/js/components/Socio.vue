@@ -1339,8 +1339,8 @@ tamfiles:function () {
              generair(){ 
             
                 let me=this;
-                me.posfilenuevo=me.punteroimpresion;  
-                me.posfilenuevo++;  
+                me.posfilenuevo=parseInt(me.punteroimpresion);  
+                me.posfilenuevo--;  
                 me.printcredencial=0;
                 me.generarpdfacre(); 
                
