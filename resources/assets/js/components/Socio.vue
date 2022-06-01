@@ -995,13 +995,13 @@
                           <div><h4 style="margin: 0;font-size: 19px;">Socios:</h4> </div>
                           <div class="my-auto"><h6 style="font-size: 16px;margin: 0;">{{posfilenuevo+1}} de {{datosdesociosnuevos.length}}</h6></div> 
                       </div> 
-                      <div>
+                      
+            </div>
+ <div>
                           <input type="number" v-model="punteroimpresion" :min="0" :max="datosdesociosnuevos.length">
                           <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" 
                           type="button" @click="generair()">Ir</button> 
-                      </div> 
-            </div>
-
+                      </div>
 
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
