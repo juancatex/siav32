@@ -1382,7 +1382,8 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.text(ta.fuerza==1?'Armada':(ta.fuerza==2?'Ejercito':'Aerea'), 2.2, 4.28);
       doc.setFontSize(15);
       doc.setFontStyle('bold');
-      centrarTextTo2n(doc,'XV REUNION NACIONAL', 0,6.42); 
+      centrarTextTo2n(doc,'XV REUNION', 0,6.42); 
+      centrarTextTo2n(doc,'NACIONAL', 0,6.85); 
       doc.addPage();
       doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);    
       doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
