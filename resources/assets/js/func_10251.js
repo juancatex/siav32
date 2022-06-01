@@ -1369,7 +1369,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       var anchocre=doc.internal.pageSize.getWidth();
       var largocre=doc.internal.pageSize.getHeight();
       doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
-      doc.addImage(ta.rutafoto, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
+      doc.addImage(fotocr.avatar, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
       doc.setFontSize(10);
       doc.setFontStyle('bold');
       doc.setTextColor(0,0,0);
