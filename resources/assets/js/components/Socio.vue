@@ -998,7 +998,8 @@
 
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
-             <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button> 
+             <!-- <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button>  -->
+             <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencialacre()">Siguiente</button> 
           </div>
         </div>
       </div>
@@ -1286,6 +1287,15 @@ tamfiles:function () {
                // me.classModal.closeModal('credencial');  
                 me.printcredencial=0;
                 me.generarpdf(); 
+               
+            },
+        generarsiguientecredencialacre(){ 
+            
+                let me=this;
+                me.posfilenuevo++; 
+               // me.classModal.closeModal('credencial');  
+                me.printcredencial=0;
+                me.generarpdfacre(); 
                
             },
             procesarFiles(){
