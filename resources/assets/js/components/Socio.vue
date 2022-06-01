@@ -994,7 +994,12 @@
                       <div  style=" text-align: center;margin: 4px">
                           <div><h4 style="margin: 0;font-size: 19px;">Socios:</h4> </div>
                           <div class="my-auto"><h6 style="font-size: 16px;margin: 0;">{{posfilenuevo+1}} de {{datosdesociosnuevos.length}}</h6></div> 
-                      </div>  
+                      </div> 
+                      <div>
+                          <input type="number" v-model="punteroimpresion" :min="0" :max="datosdesociosnuevos.length">
+                          <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" 
+                          type="button" @click="generair()">Ir</button> 
+                      </div> 
             </div>
 
 
@@ -1098,6 +1103,7 @@
                 tituloModal : '',
                 tipoAccion : 0,
                 errorsocio : 0,
+                punteroimpresion : 0,
                 errorMostrarMsjsocio : [],
                 nombrecompleto:'',
                 arrayEntidadbancaria:[],
@@ -1326,6 +1332,14 @@ tamfiles:function () {
                 let me=this;
                 me.posfilenuevo++; 
                // me.classModal.closeModal('credencial');  
+                me.printcredencial=0;
+                me.generarpdfacre(); 
+               
+            },
+             generair(){ 
+            
+                let me=this;
+                me.posfilenuevo=me.punteroimpresion;   
                 me.printcredencial=0;
                 me.generarpdfacre(); 
                
