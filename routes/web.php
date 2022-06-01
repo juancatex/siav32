@@ -327,6 +327,7 @@ Route::group(['middleware' => ['webinterno']], function () {
         Route::put ('/socio/actualizar', 'SocioController@update');
         Route::post('/socio/actualizarfoto', 'SocioController@updatefoto');
         Route::post('/socio/upfotosocioegresado', 'SocioController@upfotosocioegresado');
+        Route::post('/socio/upfotosocioacreditacion', 'SocioController@upfotosocioacreditacion');
         Route::put ('/socio/desactivar', 'SocioController@desactivar');
         Route::put ('/socio/activar', 'SocioController@activar');
         Route::post('/socio/updateliquido', 'SocioController@updateliquido');

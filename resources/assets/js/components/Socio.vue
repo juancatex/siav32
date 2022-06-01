@@ -45,14 +45,14 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Socios nuevos</div>
+                                    <i class="fa fa-align-justify"></i> Socios acreditados</div>
                                     <div class="card-body"> 
 
                                         <h3>Datos del socio</h3> 
                                         <div class="col-md-12 pb-3 pt-3  row">
-                                            <div class="col-md-3">
+                                            <!-- <div class="col-md-3">
                                             <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
-                                            </div>
+                                            </div> -->
                                             <div class="col-md-9 row"> 
                                                 <div class="custom-file col-md-8">
                                                     <input ref="files"  @change="valuefotos" accept=".jpg" type="file" class="custom-file-input" id="customFileLang"  lang="es" multiple>
@@ -60,7 +60,9 @@
                                                 </div>
                                                 <div class="col-md-4" v-if="tamfiles>0">
                                                     <button class="btn btn-outline-success active" type="button"
-                                                @click="cargarimagenes" >Cargar Imagenes</button>
+                                                @click="cargarimagenesacre" >Cargar Imagenes</button>
+                                                    <!-- <button class="btn btn-outline-success active" type="button"
+                                                @click="cargarimagenes" >Cargar Imagenes</button> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -70,8 +72,8 @@
                                                         <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
                                                 </div>
                                                 <div  class="col-md-12" style="text-align: center;    display: inline-block;">
-                                                    <button class="btn btn-outline-success active" type="button"
-                                                    @click="procesarFiles" >Procesar</button>
+                                                    <!-- <button class="btn btn-outline-success active" type="button"
+                                                    @click="procesarFiles" >Procesar</button> -->
 
                                                     <button class="btn btn-outline-success active" type="button"
                                                     @click="procesarFilesacre" >Procesar acreditaciones</button>
@@ -1231,6 +1233,36 @@ tamfiles:function () {
                
                 
             },
+            cargarimagenesacre(){
+                let me = this;
+               var formData = new FormData();
+                // formData.append('archivos[]', this.archivosfotossociosnuevos);
+                 for (let i = 0; i < me.archivosfotossociosnuevos.length; i++) {
+        	let file = me.archivosfotossociosnuevos[i];
+        	formData.append("files[" + i + "]", file);
+      	}
+               
+              
+                 
+                 console.log(formData);
+                axios.post('/socio/upfotosocioacreditacion', formData,{
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(function (response) { 
+                    me.$refs.files.value=null;
+                    me.archivosfotossociosnuevos=[];
+                    swal("¡Se cargaron los archivos correctamente!", "", "success");
+                }).catch(function (error) {
+                    me.$refs.files.value=null;
+                    me.archivosfotossociosnuevos=[];
+                    console.log(error);
+                   swal("¡Error!","", "error");
+                });
+
+               
+                
+            },
             imagenView(evt){  
                 let me=this;
                    if(this.$refs.fileon.files.length==0){  
@@ -1374,6 +1406,7 @@ tamfiles:function () {
             amaterno:aux['am'].toString(),
             ci:aux['ci'].toString(),
             ext:aux['ext'].toString(),
+            foto:aux['foto'].toString(),
             rutafoto:aux['ruta'].toString()}; 
 
             
