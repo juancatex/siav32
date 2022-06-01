@@ -1351,12 +1351,28 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
     }); 
   }
 
+  function getDataUri(url,callback)
+  {
+          var image = new Image();
+          image.setAttribute('crossOrigin', 'anonymous'); //getting images from external domain
+          image.onload = function () {
+              var canvas = document.createElement('canvas');
+              canvas.width = this.naturalWidth;
+              canvas.height = this.naturalHeight;  
+              var ctx = canvas.getContext('2d');
+              ctx.fillStyle = '#fff';  /// set white fill style
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              canvas.getContext('2d').drawImage(this, 0, 0); 
+              callback(canvas.toDataURL('image/jpeg'));
+          };
+          image.src = url;  
+  }
   export function _vvp2521_acreditados(ta,fotocr,funn, idview = 'planout') {
     $("#" + idview).attr("src",''); 
     $("#2" + idview).attr("src",''); 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 
-    imgToBase64(ta.foto.length>2?'storage/socio/acre/'+ta.foto:fotocr.avatar, function (fotosocio) {
+    getDataUri(ta.rutafoto.length>2?ta.rutafoto:fotocr.avatar, function (fotosocio) {
       var qr = new QRious();  
       qr.value =ta.id;
       qr.mime = 'image/jpeg';
@@ -1383,7 +1399,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(15);
       doc.setFontStyle('bold');
       centrarTextTo2n(doc,'XV REUNION', 0,6.42); 
-      centrarTextTo2n(doc,'NACIONAL', 0,6.85); 
+      centrarTextTo2n(doc,'NACIONAL', 0,6.92); 
       doc.addPage();
       doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);    
       doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
