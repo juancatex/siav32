@@ -1369,9 +1369,9 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       var anchocre=doc.internal.pageSize.getWidth();
       var largocre=doc.internal.pageSize.getHeight();
       doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
-      doc.addImage(fotocr.avatar, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
+      doc.addImage(ta.rutafoto.length>2?ta.rutafoto:fotocr.avatar, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
       doc.setFontSize(10);
-      doc.setFontStyle('bold');
+      doc.setFontStyle('normal');
       doc.setTextColor(0,0,0);
       
        centrarTextTo2n(doc, ta.nomgrado,0,4.9);  
@@ -1388,6 +1388,7 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       doc.setFontSize(6);
       doc.text(ta.ci+' '+ta.ext, 2.2, 4.08);
       doc.text(ta.fuerza==1?'Armada':(ta.fuerza==2?'Ejercito':'Aerea'), 2.2, 4.28);
+      doc.setFontSize(10);
       doc.setFontStyle('bold');
       centrarTextTo2n(doc,'XV REUNION NACIONAL', 0,6.42);
              
