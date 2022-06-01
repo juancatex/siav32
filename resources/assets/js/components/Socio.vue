@@ -1426,8 +1426,9 @@ tamfiles:function () {
 
             
             let me=this;
-                  axios.get('/sociogetfotoACRE').then(function (response) {
-                           _pl._vvp2521_acreditados(socio,response.data,()=>{
+                //   axios.get('/sociogetfotoACRE').then(function (response) {
+                  axios.get('/sociogetfotoCRV_cen').then(function (response) {
+                           _pl._vvp2521_acreditados2(socio,response.data,()=>{
                                 swal.close();
                                 console.log('termino ok');
                                me.classModal.openModal('credencial');
