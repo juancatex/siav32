@@ -1364,7 +1364,7 @@ tamfiles:function () {
             amaterno:aux['am'].toString(),
             ci:aux['ci'].toString(),
             ext:aux['ext'].toString(),
-            rutafoto:aux['foto'].toString()}; 
+            rutafoto:aux['ruta'].toString()}; 
 
             
             let me=this;
