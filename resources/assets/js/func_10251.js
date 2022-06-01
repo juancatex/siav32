@@ -1350,6 +1350,63 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       funn();
     }); 
   }
+
+  export function _vvp2521_acreditados(ta,fotocr,funn, idview = 'planout') {
+    $("#" + idview).attr("src",''); 
+    $("#2" + idview).attr("src",''); 
+    let fondo=fotocr.foto; 
+    let fondodos=fotocr.fotoa; 
+    // imgToBase64(ta.rutafoto?'storage/socio/e/'+ta.rutafoto:fotocr.avatar, function (fotosocio) {
+      var qr = new QRious();  
+      qr.value =ta.id;
+      qr.mime = 'image/jpeg';
+      qr.level = 'H'; 
+      // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+      var doc = new jsPDF('p', 'cm', 'credit-card');  
+      doc.setProperties({
+        title: 'Carnet socio'
+      }); 
+      var anchocre=doc.internal.pageSize.getWidth();
+      var largocre=doc.internal.pageSize.getHeight();
+      doc.addImage(fondo, 'JPEG',0,0,anchocre,largocre);  
+      doc.addImage(ta.rutafoto, 'JPEG', 1.55, 1.45, 2.31, 2.31,'socio');  
+      doc.setFontSize(10);
+      doc.setFontStyle('bold');
+      doc.setTextColor(0,0,0);
+      
+       centrarTextTo2n(doc, ta.nomgrado,0,4.9);  
+      centrarTextTo2n(doc, ta.nombres, 0,5.3); 
+      centrarTextTo2n(doc,ta.apaterno+" "+ta.amaterno, 0,5.7);
+            
+      doc.setFontStyle('normal');
+      doc.setFontSize(7); 
+      // doc.text(ta.nomfuerza,0.58, 6.42); 
+      // doc.text(ta.fechanacimiento?( moment(ta.fechanacimiento).format("DD/MM/YYYY")):'___', 0.58, 7.22);
+      // doc.text(ta.nomtiposocio?ta.nomtiposocio:'___', 3.18,6.42); 
+      // doc.text((ta.ci?ta.ci:'___')+' '+(ta.abrvdep?ta.abrvdep:'__'), 3.18,7.22);
+       
+      doc.setFontSize(6);
+      doc.text(ta.ci+' '+ta.ext, 2.2, 4.08);
+      doc.text(ta.fuerza==1?'Armada':(ta.fuerza==2?'Ejercito':'Aerea'), 2.2, 4.28);
+      doc.setFontStyle('bold');
+      centrarTextTo2n(doc,'XV REUNION NACIONAL', 0,6.42);
+             
+      // doc.setFontSize(5);
+      // doc.setFontStyle('normal');
+      // doc.setTextColor(255,255,255); 
+      // centrarTextTo2n(doc, ( ('Válido hasta Diciembre - '+ moment().add(3, 'years').format("YYYY")).toUpperCase()), 0,8.4); 
+ 
+
+      doc.addPage();
+      doc.addImage(fondodos, 'JPEG',anchocre,-largocre,anchocre,largocre,'sociofondo2','NONE',180);   
+     
+      //doc2.addImage(fondodos, 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90); 
+      doc.addImage(qr.toDataURL(), 'JPEG', 3.86, 2.5, 2.31, 2.31,'socioqr','NONE',180);  
+      $("#" + idview).attr("src", doc.output('datauristring'));  
+ 
+      funn();
+    
+  }
   export function _vvp2521_cr_emp(ta,fotocr,idview = 'contenedorframes',finn) { 
     let fondo=fotocr.foto; 
     let fondodos=fotocr.fotoa; 

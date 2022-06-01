@@ -210,6 +210,21 @@ class SocioController extends Controller
                 'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
                 'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643]; 
      }
+    public function getfotoACRE(Request $request)
+    {  if (!$request->ajax()) return redirect('/');
+        $full_path = Storage::path('AFI/acre1.jpg');
+        $base64 = base64_encode(Storage::get('AFI/acre1.jpg'));
+
+        $full_path2 = Storage::path('AFI/acre2.jpg');
+        $base642 = base64_encode(Storage::get('AFI/acre2.jpg'));
+
+        $full_path3 = Storage::path('AFI/avatar.jpg');
+        $base643 = base64_encode(Storage::get('AFI/avatar.jpg'));
+
+        return ['foto'=>'data:'.mime_content_type($full_path) . ';base64,' . $base64,
+                'fotoa'=>'data:'.mime_content_type($full_path2) . ';base64,' . $base642,
+                'avatar'=>'data:'.mime_content_type($full_path3) . ';base64,' . $base643]; 
+     }
     public function getfotoCRVN(Request $request)
     {  if (!$request->ajax()) return redirect('/');
         $full_path = Storage::path('AFI/crvn.jpg');

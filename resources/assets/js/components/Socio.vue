@@ -72,8 +72,12 @@
                                                 <div  class="col-md-12" style="text-align: center;    display: inline-block;">
                                                     <button class="btn btn-outline-success active" type="button"
                                                     @click="procesarFiles" >Procesar</button>
+
+                                                    <button class="btn btn-outline-success active" type="button"
+                                                    @click="procesarFilesacre" >Procesar acreditaciones</button>
                                                 </div>
                                             </div>
+                                    
                                        
                                     </div>
                             </div>
@@ -1272,6 +1276,8 @@ tamfiles:function () {
         datasArrayNuevos(data){
             this.posfilenuevo=0;
             this.datosdesociosnuevos=data.values;
+            console.log(this.datosdesociosnuevos);
+
         },
         generarsiguientecredencial(){ 
             
@@ -1295,6 +1301,20 @@ tamfiles:function () {
                 }
             }); 
                 me.generarpdf();
+            },
+            procesarFilesacre(){
+                let me=this;
+                me.posfilenuevo=0;
+                me.printcredencial=0;
+                 swal({
+                title: "Generando credenciales",
+                allowOutsideClick: () => false,
+                allowEscapeKey: () => false,
+                onOpen: function() {
+                swal.showLoading();
+                }
+            }); 
+                me.generarpdfacre();
             },
          generarpdf(){  
  var aux=this.datosdesociosnuevos[this.posfilenuevo];
@@ -1320,6 +1340,36 @@ tamfiles:function () {
             let me=this;
                   axios.get('/sociogetfotoCRV').then(function (response) {
                            _pl._vvp2521_cr0egresados(socio,response.data,()=>{
+                                swal.close();
+                                console.log('termino ok');
+                               me.classModal.openModal('credencial');
+                            });
+                    }).catch(function (error) {
+                        console.log(error);
+                        swal("¡Error!",error, "error");
+                    });
+            
+            
+        },
+         generarpdfacre(){  
+ var aux=this.datosdesociosnuevos[this.posfilenuevo];
+ 
+       var socio={
+            id:aux['id'].toString(),
+            fecha:aux['fecha'].toString(),
+            fuerza:parseInt(aux['fuerza'].toString()),
+            nomgrado:aux['grado'].toString(), 
+            nombres:aux['nombres'].toString(),  
+            apaterno:aux['ap'].toString(),
+            amaterno:aux['am'].toString(),
+            ci:aux['ci'].toString(),
+            ext:aux['ext'].toString(),
+            rutafoto:aux['foto'].toString()}; 
+
+            
+            let me=this;
+                  axios.get('/sociogetfotoACRE').then(function (response) {
+                           _pl._vvp2521_acreditados(socio,response.data,()=>{
                                 swal.close();
                                 console.log('termino ok');
                                me.classModal.openModal('credencial');
