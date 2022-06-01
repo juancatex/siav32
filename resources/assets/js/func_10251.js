@@ -1485,8 +1485,8 @@ export function _vvp2521_cr01(ta,fotocr,funn, idview = 'planout') {
       //   title: 'Carnet socio posterior'
       // }); 
       doc.addPage();
-      doc2.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
-      doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
+      doc.addImage(fondodos, 'JPEG',3.17,0.9, 8.6, 5.5);   
+      doc.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31,'socio','NONE',90);  
       // $("#2" + idview).attr("src", doc2.output('datauristring')); 
       $("#" + idview).attr("src", doc.output('datauristring'));  
       funn();
