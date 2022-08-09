@@ -16,6 +16,10 @@ use PDF;
 class apkMovile extends Controller
 {
 
+    public function getcarga(Request $request){
+        // return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100",array($request->socio))[0]->suma;
+        return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100")[0]->suma;
+    }
     public function validarsaldomenorA(Request $request){
         return DB::connection('pgsql')->select("SELECT COALESCE(sum(importe)*-1, 0) as suma 
         FROM finanzas.ptm_acreedores

@@ -66,6 +66,18 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
+        'dbcarga' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_P2'),
+            'port' => env('DB_PORT_P2'),
+            'database' => env('DB_DATABASE_P2'),
+            'username' => env('DB_USERNAME_P2'),
+            'password' => env('DB_PASSWORD_P2'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
         'pgsql2020' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST_2'),
