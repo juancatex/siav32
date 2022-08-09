@@ -18,7 +18,17 @@ class apkMovile extends Controller
 
     public function getcarga(Request $request){
         // return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100",array($request->socio))[0]->suma;
-        return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100")[0]->suma;
+        $out = array();  
+        $prestamos = DB::connection('dbcarga')->select("SELECT *  FROM finanzas.ptm_ascii where importe>100");
+       foreach ($prestamos as $pre) {
+              $maestro=DB::connection('dbcarga')->select("SELECT * FROM finanzas.ptm_tr_maestro where id_prestamo=? and fecha_transaccion='2022-07-31'",array($pre->id_prestamo));  
+              if(count($maestro)==1){
+
+              }else{
+                array_push($out,$pre->id_prestamo);
+              }
+        }
+        return $out; 
     }
     public function validarsaldomenorA(Request $request){
         return DB::connection('pgsql')->select("SELECT COALESCE(sum(importe)*-1, 0) as suma 
