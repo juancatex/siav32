@@ -69,10 +69,10 @@
                             <span class="input-group-text btn btn-primary" style="min-width: 60px;" @click="buscarcomprobante()">
                             <i class="fa fa-search"></i> Buscar
                            </span>
-                           <span v-if="datos.length>0" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva')">
+                           <span v-if="datos.length>0&&check('probar')" class="input-group-text btn btn-success" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReserva')">
                             <i class="fa fa-search"></i> probar
                            </span>
-                           <span v-if="datos.length>0" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
+                           <span v-if="datos.length>0&&check('probarRevercion')" class="input-group-text btn btn-danger" style="min-width: 60px;" @click="buscarcomprobante('/con_contabilidad/procesoReservaReversion')">
                             <i class="fa fa-search"></i> probar reversion
                            </span>
                           </div>
@@ -81,8 +81,8 @@
   </div>
    <div class="col-md-6" v-if="datos.length>0">
                         
-       <h1>Cambio de fecha</h1> 
-                     <div class="col-md-10">
+       <h1 v-if="check('cambiofecha')">Cambio de fecha</h1> 
+                     <div class="col-md-10" v-if="check('cambiofecha')">
                       <label style="text-align: right; align-items: center;font-weight: 500;" class="form-control-label"
                         for="text-input">Fecha del comprobante:</label>
                       <div class="input-group">
@@ -97,8 +97,8 @@
                     </div>
         <h1>Operaciones</h1>  
                     <div  class="col-md-12" v-if="check('procesarCambios')">
-                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
-                    <button v-if="debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>    
+                    <button v-if="check('probar')&&debesuma==(habersuma)" :disabled = "errors.any()" @click='procesar' type="button" class="btn btn-success btn-lg btn-block">Realizar cambios</button>    
+                    <button v-if="check('probarRevercion')&&debesuma==(habersuma)" :disabled = "errors.any()" @click='procesarreversion' type="button" class="btn btn-danger btn-lg btn-block">Realizar cambios reversion</button>    
                      </div>  
                       
       </div>
@@ -231,10 +231,12 @@ Vue.use(VeeValidate);
                 {nombre:'TRASPASO',id:'SEC_CON_COM_TRASPASO'}],
                 
                 db:[ 
-                    {nombre:'DB 2020',id:'pgsql2020'}, 
-                    {nombre:'DB 2021',id:'pgsql2021'}, 
-                    {nombre:'DB Safcon',id:'pgsql'}],
-                arrayPermisos : {procesarCambios:0,cambiofecha:0},  
+                    // {nombre:'DB 2020',id:'pgsql2020'}, 
+                    // {nombre:'DB 2021',id:'pgsql2021'}, 
+                    // {nombre:'DB Safcon',id:'pgsql'}
+                    {nombre:'DB 2021',id:'pgsql2021'} 
+                    ],
+                arrayPermisos : {procesarCambios:0,cambiofecha:0,probar:0,probarRevercion:0},  
                 arrayPermisosIn:[],
             }
         },
