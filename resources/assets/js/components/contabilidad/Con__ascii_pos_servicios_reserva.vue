@@ -223,7 +223,7 @@ Vue.use(VeeValidate);
                 cuentaAcambiar:'', 
                 cuentaorigenacambiar:'', 
                 mostrarselect:1,
-                mostrarporcuentas:0,
+                mostrarporcuentas:1,
                 datos:[],  
                 tipoarray:[{nombre:'INGRESO',id:'SEC_CON_COM_INGRESO'},
                 {nombre:'EGRESO',id:'SEC_CON_COM_EGRESO'},
