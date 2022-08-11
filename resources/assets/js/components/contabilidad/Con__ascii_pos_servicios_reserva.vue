@@ -241,7 +241,7 @@ Vue.use(VeeValidate);
                     // {nombre:'DB 2020',id:'pgsql2020'}, 
                     // {nombre:'DB 2021',id:'pgsql2021'}, 
                     // {nombre:'DB Safcon',id:'pgsql'}
-                    {nombre:'DB 2021',id:'pgsql2021'} 
+                    {nombre:'DB 2021 90% - 10%',id:'pgsql2021'} 
                     ],
                 arrayPermisos : {procesarCambios:0,cambiofecha:0,probar:0,probarRevercion:0},  
                 arrayPermisosIn:[],
