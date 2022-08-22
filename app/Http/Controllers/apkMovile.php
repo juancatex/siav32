@@ -25,8 +25,10 @@ class apkMovile extends Controller
         and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
         $sumacuentadaaro=0;
         $sumasincuentadaaro=0;
-        $ivacon=0;
-        $ivasin=0;
+        $ivacon1=0;
+        $ivasin1=0;
+        $ivacon2=0;
+        $ivasin2=0;
 
         $porsicon=0;
         $pornocon=0;
@@ -55,33 +57,43 @@ class apkMovile extends Controller
                 $sumacuentadaaro++;
                 if($auto=='S'){
                     $porsicon++;
+                    if($contadoriva>0){
+                        $ivacon1++;
+                    }
                 }else{
                     $pornocon++;
+                    if($contadoriva>0){
+                        $ivacon2++;
+                    }
                 }
-                if($contadoriva>0){
-                    $ivacon++;
-                }
+                
              }else{
                 $sumasincuentadaaro++;
                 if($auto=='S'){
                     $porsisin++;
+                    if($contadoriva>0){
+                        $ivasin1++;
+                    }
                 }else{
                     $pornosin++;
+                    if($contadoriva>0){
+                        $ivasin2++;
+                    }
                 }
-                if($contadoriva>0){
-                    $ivasin++;
-                }
+                
              } 
 
         }
         return ['sumacuentadaaro'=>$sumacuentadaaro,
         'automatico'=>$porsicon,
-        'manual'=>$pornocon,
-        'ivacon'=>$ivacon,
+        'ivaautomatico'=>$ivacon1,
+        'manual'=>$pornocon, 
+        'ivamanual'=>$ivacon2,
         'sumasincuentadaaro'=>$sumasincuentadaaro,
         'automaticos'=>$porsisin,
+        'iva_auto'=>$ivasin1,
         'manuals'=>$pornosin,
-        'ivasin'=>$ivasin]; 
+        'iva_manual'=>$ivasin2]; 
     }
     public function getprueba(Request $request){
         
