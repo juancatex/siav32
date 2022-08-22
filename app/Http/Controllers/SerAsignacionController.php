@@ -53,7 +53,8 @@ class SerAsignacionController extends Controller
         $rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
         //$rawsocio=DB::raw('concat(nomgrado," ",apaterno," ",amaterno," ",nombre," - ",nomfuerza) as nombres');
         $rawcivil=DB::raw('concat(apaterno," ",amaterno," ",nombre) as nombres');
-        $fa=date("Y-m-d");
+        // $fa=date("Y-m-d");
+        $fa=(DB::select("select getfecha() as total"))[0]->total;
         $fechaactual=new DateTime($fa);
         $fa=strtotime($fa);
 
