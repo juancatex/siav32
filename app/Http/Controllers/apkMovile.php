@@ -25,25 +25,47 @@ class apkMovile extends Controller
         and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
         $sumacuentadaaro=0;
         $sumasincuentadaaro=0;
+
+        $porsicon=0;
+        $pornocon=0;
+        $porsisin=0;
+        $pornosin=0;
         
        foreach ($prestamos as $pre) {
-              $comprobantee=DB::connection('pgsql')->select("SELECT * 
-              FROM finanzas.con_tr_detalles WHERE id_transaccion=? AND id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
+              $comprobantee=DB::connection('pgsql')->select(" SELECT m.par_automatico , d.*  
+              FROM finanzas.con_tr_detalles d, finanzas.con_tr_maestro m
+              where d.id_transaccion =m.id_transaccion and d.id_tipo =m.id_tipo and d.id_transaccion=? AND d.id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
              $contador=0; 
+             $auto='';
              foreach($comprobantee as $cuentass){
                 if($cuentass->cuenta=='22501101'){
                     $contador++;
                   } 
+                  $auto=$cuentass->par_automatico;
              }
              if($contador>0){
                 $sumacuentadaaro++;
+                if($auto=='S'){
+                    $porsicon++;
+                }else{
+                    $pornocon++;
+                }
              }else{
                 $sumasincuentadaaro++;
+                if($auto=='S'){
+                    $porsisin++;
+                }else{
+                    $pornosin++;
+                }
              } 
 
         }
         return ['sumacuentadaaro'=>$sumacuentadaaro,
-        'sumasincuentadaaro'=>$sumasincuentadaaro,]; 
+        'porsicon'=>$porsicon,
+        'pornocon'=>$pornocon,
+        'sumasincuentadaaro'=>$sumasincuentadaaro,
+        'porsisin'=>$porsisin,
+        'pornosin'=>$pornosin]; 
     }
     public function getprueba(Request $request){
         
