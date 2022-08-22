@@ -25,6 +25,8 @@ class apkMovile extends Controller
         and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
         $sumacuentadaaro=0;
         $sumasincuentadaaro=0;
+        $ivacon=0;
+        $ivasin=0;
 
         $porsicon=0;
         $pornocon=0;
@@ -36,19 +38,28 @@ class apkMovile extends Controller
               FROM finanzas.con_tr_detalles d, finanzas.con_tr_maestro m
               where d.id_transaccion =m.id_transaccion and d.id_tipo =m.id_tipo and d.id_transaccion=? AND d.id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
              $contador=0; 
+             $contadoriva=0; 
              $auto='';
+
              foreach($comprobantee as $cuentass){
-                if($cuentass->cuenta=='22501101'){
-                    $contador++;
+                  if($cuentass->cuenta=='22501101'){
+                    $contador++; 
+                  } 
+                  if($cuentass->cuenta=='21301102'){
+                    $contadoriva++;
                   } 
                   $auto=$cuentass->par_automatico;
              }
+
              if($contador>0){
                 $sumacuentadaaro++;
                 if($auto=='S'){
                     $porsicon++;
                 }else{
                     $pornocon++;
+                }
+                if($contadoriva>0){
+                    $ivacon++;
                 }
              }else{
                 $sumasincuentadaaro++;
@@ -57,15 +68,20 @@ class apkMovile extends Controller
                 }else{
                     $pornosin++;
                 }
+                if($contadoriva>0){
+                    $ivasin++;
+                }
              } 
 
         }
         return ['sumacuentadaaro'=>$sumacuentadaaro,
         'porsicon'=>$porsicon,
         'pornocon'=>$pornocon,
+        'ivacon'=>$ivacon,
         'sumasincuentadaaro'=>$sumasincuentadaaro,
         'porsisin'=>$porsisin,
-        'pornosin'=>$pornosin]; 
+        'pornosin'=>$pornosin,
+        'ivasin'=>$ivasin]; 
     }
     public function getprueba(Request $request){
         
