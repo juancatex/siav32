@@ -29,14 +29,17 @@ class apkMovile extends Controller
        foreach ($prestamos as $pre) {
               $comprobantee=DB::connection('pgsql')->select("SELECT * 
               FROM finanzas.con_tr_detalles WHERE id_transaccion=? AND id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
+             $contador=0; 
              foreach($comprobantee as $cuentass){
                 if($cuentass->cuenta=='22501101'){
-                    $sumacuentadaaro++;
-                  }else{
-                    $sumasincuentadaaro++;
-                  }
+                    $contador++;
+                  } 
              }
-             
+             if($contador>0){
+                $sumacuentadaaro++;
+             }else{
+                $sumasincuentadaaro++;
+             } 
 
         }
         return ['sumacuentadaaro'=>$sumacuentadaaro,
