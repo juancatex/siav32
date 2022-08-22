@@ -75,12 +75,12 @@ class apkMovile extends Controller
 
         }
         return ['sumacuentadaaro'=>$sumacuentadaaro,
-        'porsicon'=>$porsicon,
-        'pornocon'=>$pornocon,
+        'automatico'=>$porsicon,
+        'manual'=>$pornocon,
         'ivacon'=>$ivacon,
         'sumasincuentadaaro'=>$sumasincuentadaaro,
-        'porsisin'=>$porsisin,
-        'pornosin'=>$pornosin,
+        'automatico'=>$porsisin,
+        'manual'=>$pornosin,
         'ivasin'=>$ivasin]; 
     }
     public function getprueba(Request $request){
