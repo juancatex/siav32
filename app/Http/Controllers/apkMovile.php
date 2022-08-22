@@ -79,8 +79,8 @@ class apkMovile extends Controller
         'manual'=>$pornocon,
         'ivacon'=>$ivacon,
         'sumasincuentadaaro'=>$sumasincuentadaaro,
-        'automatico'=>$porsisin,
-        'manual'=>$pornosin,
+        'automaticos'=>$porsisin,
+        'manuals'=>$pornosin,
         'ivasin'=>$ivasin]; 
     }
     public function getprueba(Request $request){
