@@ -25,6 +25,7 @@ class apkMovile extends Controller
         and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
         $sumacuentadaaro=0;
         $sumasincuentadaaro=0;
+        
        foreach ($prestamos as $pre) {
               $comprobantee=DB::connection('pgsql')->select("SELECT * 
               FROM finanzas.con_tr_detalles WHERE id_transaccion=? AND id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
