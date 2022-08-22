@@ -34,21 +34,10 @@ class apkMovile extends Controller
         return $out; 
     }
     public function getprueba(Request $request){
-        // return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100",array($request->socio))[0]->suma;
-        $out = array();  
-        $prestamos = DB::connection('pgsql')->select("SELECT m.par_automatico , d.id_transaccion,d.id_tipo  
-        FROM finanzas.con_tr_detalles d, finanzas.con_tr_maestro m
-        where d.id_transaccion =m.id_transaccion and d.id_tipo =m.id_tipo 
-        and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
-       foreach ($prestamos as $pre) {
-              $maestro=DB::connection('dbcarga')->select("SELECT * FROM finanzas.ptm_tr_maestro where id_prestamo=? and fecha_transaccion='2022-07-31'",array($pre->id_prestamo));  
-              if(count($maestro)==1){
-
-              }else{
-                array_push($out,$pre->id_prestamo);
-              }
-        }
-        return $out; 
+        
+        return DB::connection('pgsql')->select("SELECT * 
+        FROM finanzas.con_tr_detalles
+        WHERE id_transaccion='1008' AND id_tipo='SEC_CON_COM_INGRESO'"); 
     }
     public function validarsaldomenorA(Request $request){
         return DB::connection('pgsql')->select("SELECT COALESCE(sum(importe)*-1, 0) as suma 
