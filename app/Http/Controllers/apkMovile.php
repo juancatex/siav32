@@ -23,15 +23,19 @@ class apkMovile extends Controller
         FROM finanzas.con_tr_detalles d, finanzas.con_tr_maestro m
         where d.id_transaccion =m.id_transaccion and d.id_tipo =m.id_tipo 
         and ( d.cuenta='41101101' or  d.cuenta='41101103') group by 1,2,3 order by 1,2");
+        $sumacuentadaaro=0;
+        $sumasincuentadaaro=0;
        foreach ($prestamos as $pre) {
-              $maestro=DB::connection('dbcarga')->select("SELECT * FROM finanzas.ptm_tr_maestro where id_prestamo=? and fecha_transaccion='2022-07-31'",array($pre->id_prestamo));  
-              if(count($maestro)==1){
-
+              $comprobantee=DB::connection('pgsql')->select("SELECT * 
+              FROM finanzas.con_tr_detalles WHERE id_transaccion=? AND id_tipo=?",array($pre->id_transaccion,$pre->id_tipo));  
+              if($comprobantee->cuenta=='22501101'){
+                $sumacuentadaaro++;
               }else{
-                array_push($out,$pre->id_prestamo);
+                $sumasincuentadaaro++;
               }
         }
-        return $out; 
+        return ['sumacuentadaaro'=>$sumacuentadaaro,
+        'sumasincuentadaaro'=>$sumasincuentadaaro,]; 
     }
     public function getprueba(Request $request){
         
