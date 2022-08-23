@@ -23,8 +23,8 @@ class apkMovile extends Controller
         FROM finanzas.con_tr_detalles d, finanzas.con_tr_maestro m
         where d.id_transaccion =m.id_transaccion and d.id_tipo =m.id_tipo 
         and ( d.cuenta='41101101' or  d.cuenta='41101103') 
-        and (d.fecha_transaccion >='2022-01-01' and d.fecha_transaccion <='2022-01-31') 
-        and m.fecha_revmod is null and m.id_transaccion_revmod is null group by 1,2,3 order by 1,2");
+        and (d.fecha_transaccion >=? and d.fecha_transaccion <=?) 
+        and m.fecha_revmod is null and m.id_transaccion_revmod is null group by 1,2,3 order by 1,2",array($request->f,$request->f2));
         $sumacuentadaaro=0;
         $sumasincuentadaaro=0;
         $ivacon1=0;
