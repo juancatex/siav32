@@ -34,7 +34,7 @@ class AdmLogController extends Controller
         else 
             $logs = $logs->where ('content', 'like', "%sql\":\"%");
 
-        $logs = $logs->orderBy('created_at', 'desc')->paginate(10);
+        $logs = $logs->orderBy('created_at', 'asc')->paginate(10);
 
         return [
             'pagination' => [
