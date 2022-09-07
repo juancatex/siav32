@@ -893,8 +893,14 @@ $max_item++;
         $sql_max_reg=DB::connection($valuedb)->select("select max(id_reg) as max_reg from finanzas.con_tr_detalles");
         $max_reg = $sql_max_reg[0]->max_reg;
 
+        $directory='LogSafcon';
+        Storage::makeDirectory($directory); 
+        Storage::append($directory.'/logreserva_2021.txt','Date:'.date("Y_m_d H:i:s").' DB:'.$valuedb.'     Comprobante_REV:'.$numcomprobante.'         Tipo:'.$valuetipo.'        user:'.Auth::user()->username.'             id:'.Auth::id());
+              
+
         foreach($valida_1 as $linea){
-                if($linea->cuenta=='41101101'||$linea->cuenta=='41101102'||$linea->cuenta=='41101103'){
+                // if($linea->cuenta=='41101101'||$linea->cuenta=='41101102'||$linea->cuenta=='41101103'){
+                    if($linea->cuenta=='41101101'||$linea->cuenta=='41101103'){
                     $max_reg++; 
                     $sql_max_item=DB::connection($valuedb)->select("select max(item)+1 as max from finanzas.con_tr_detalles 
                     where  id_transaccion ='$numcomprobante'
@@ -904,7 +910,7 @@ $max_item++;
                     // para moneda local
                     //11
                     //89
-                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.11,2);
+                    $treinta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)*0.10,2);
                     $setenta_por=round(($linea->importe_moneda_local>0?$linea->importe_moneda_local:$linea->importe_moneda_local*-1)-$treinta_por,2); 
                     $setenta_por=$linea->importe_moneda_local>0?$setenta_por:$setenta_por*-1;
                     $treinta_por=$linea->importe_moneda_local>0?$treinta_por:$treinta_por*-1;
@@ -921,7 +927,7 @@ $max_item++;
                     // para moneda origen
                     //11
                     //89
-                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.11,2);
+                    $treinta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)*0.10,2);
                     $setenta_por2=round(($linea->importe_moneda_origen>0?$linea->importe_moneda_origen:$linea->importe_moneda_origen*-1)-$treinta_por2,2);
                     $setenta_por2=$linea->importe_moneda_origen>0?$setenta_por2:$setenta_por2*-1;
                     $treinta_por2=$linea->importe_moneda_origen>0?$treinta_por2:$treinta_por2*-1;
