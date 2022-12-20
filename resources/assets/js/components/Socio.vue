@@ -59,10 +59,10 @@
                                                     <label class="custom-file-label" for="customFileLang">{{tamfiles>0?tamfiles+' archivos seleccionados.':'Seleccionar Archivos'}}</label>
                                                 </div>
                                                 <div class="col-md-4" v-if="tamfiles>0">
-                                                    <button class="btn btn-outline-success active" type="button"
-                                                @click="cargarimagenesacre" >Cargar Imagenes</button>
                                                     <!-- <button class="btn btn-outline-success active" type="button"
-                                                @click="cargarimagenes" >Cargar Imagenes</button> -->
+                                                @click="cargarimagenesacre" >Cargar Imagenes</button> -->
+                                                    <button class="btn btn-outline-success active" type="button"
+                                                @click="cargarimagenes" >Cargar Imagenes egresados</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -72,11 +72,11 @@
                                                         <excelReader  @array_Files_Data="datasArrayNuevos"></excelReader>
                                                 </div>
                                                 <div  class="col-md-12" style="text-align: center;    display: inline-block;">
-                                                    <!-- <button class="btn btn-outline-success active" type="button"
-                                                    @click="procesarFiles" >Procesar</button> -->
-
                                                     <button class="btn btn-outline-success active" type="button"
-                                                    @click="procesarFilesacre" >Procesar acreditaciones</button>
+                                                    @click="procesarFiles" >Procesar egresados</button>
+
+                                                    <!-- <button class="btn btn-outline-success active" type="button"
+                                                    @click="procesarFilesacre" >Procesar acreditaciones</button> -->
                                                 </div>
                                             </div>
                                     
