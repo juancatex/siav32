@@ -50,9 +50,9 @@
 
                                         <h3>Datos del socio</h3> 
                                         <div class="col-md-12 pb-3 pt-3  row">
-                                            <!-- <div class="col-md-3">
+                                            <div class="col-md-3">
                                             <a href="/getexcel" class="btn btn-warning"><i class="fa fa-file-excel-o"></i> Descargar formulario</a> 
-                                            </div> -->
+                                            </div>
                                             <div class="col-md-9 row"> 
                                                 <div class="custom-file col-md-8">
                                                     <input ref="files"  @change="valuefotos" accept=".jpg" type="file" class="custom-file-input" id="customFileLang"  lang="es" multiple>
