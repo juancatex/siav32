@@ -1005,8 +1005,8 @@
 
             <button class="btn btn-secondary" type="button"
               @click="classModal.closeModal('credencial')">cerrar</button>
-             <!-- <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button>  -->
-             <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencialacre()">Siguiente</button> 
+             <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencial()">Siguiente</button> 
+             <!-- <button v-if="datosdesociosnuevos.length>0&&posfilenuevo<(datosdesociosnuevos.length-1)" class="btn btn-primary" type="button" @click="generarsiguientecredencialacre()">Siguiente</button>  -->
           </div>
         </div>
       </div>
