@@ -4404,7 +4404,7 @@ $listasocios =['22',
 '53403023',
 '53403025'];
 foreach ($listasocios as $i) {
-  $listasocios[$i] =str_pad($listasocios[$i], 8, "0", STR_PAD_LEFT);
+ echo str_pad($listasocios[$i], 8, "0", STR_PAD_LEFT);
 }
 return $listasocios;
 // return DB::connection('pgsql')->select("SELECT * 
