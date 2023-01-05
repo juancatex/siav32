@@ -4404,8 +4404,7 @@ $listasocios =['22',
 '53403023',
 '53403025'];
 foreach ($listasocios as $i=>$item) {
-//  echo str_pad($listasocios[$i], 8, "0", STR_PAD_LEFT);
-echo $item;
+ echo str_pad($item, 8, "0", STR_PAD_LEFT); 
 }
  
 return $listasocios;
