@@ -4413,7 +4413,7 @@ $salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('nombrecom
         ->get(); 
 
         foreach ($salidasql as $item) { 
-            echo $item->nombrecompleto.'<br>';
+            echo $item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'<br>';
           }
  
     }
