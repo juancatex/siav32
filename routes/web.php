@@ -61,6 +61,8 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/getprueba','apkMovile@getprueba')->name('getprueba');
 });
 Route::get('/getServicios','apkMovile@verServicios')->name('getServicios');
+Route::get('/getlista','apkMovile@getdatasocios')->name('getlista');
+
 Route::get('/getAportes','apkMovile@verAportes')->name('getAportes');
 Route::get('/getExAportes','apkMovile@extractoAportes')->name('getExAportes');
 Route::get('/getimage','apkMovile@getimage')->name('getimage'); 
