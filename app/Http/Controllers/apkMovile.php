@@ -4407,13 +4407,15 @@ echo count($listasocios).'<br>';
 foreach ($listasocios as $i=>$item) { 
   $listasocios[$i]=str_pad($item, 8, "0", STR_PAD_LEFT);
 }
- 
-$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_papeleta','nombrecompleto','celular','teldom','telofi','email') 
+$raw2=DB::raw("(select  count(ma.id_aporte)   from finanzas.aps_tr_maestro ma,finanzas.aps_aportes a 
+where ma.id_aporte = a.id_aporte and ma.par_estado= 'A' AND ma.eliminado = 'N' 
+and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=numero_papeleta) as total");
+$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_papeleta','nombrecompleto','celular','teldom','telofi','email',$raw2) 
         ->whereIn('numero_papeleta', $listasocios)
         ->get(); 
 
         foreach ($salidasql as $item) { 
-            echo $item->numero_papeleta.'|'.$item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'<br>';
+            echo $item->numero_papeleta.'|'.$item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'|'.$item->total.'<br>';
           }
  
     }
