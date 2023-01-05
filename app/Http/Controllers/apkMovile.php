@@ -4408,7 +4408,7 @@ foreach ($listasocios as $i=>$item) {
   $listasocios[$i]=str_pad($item, 8, "0", STR_PAD_LEFT);
 }
  
-return DB::connection('pgsql')->table('gbpersona')->select('nombrecompleto','celular','teldom','telofi','email') 
+return DB::connection('pgsql')->table('global.gbpersona')->select('nombrecompleto','celular','teldom','telofi','email') 
         ->whereIn('numero_papeleta', $listasocios)
         ->get(); 
     }
