@@ -4408,12 +4408,12 @@ foreach ($listasocios as $i=>$item) {
   $listasocios[$i]=str_pad($item, 8, "0", STR_PAD_LEFT);
 }
  
-$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('nombrecompleto','celular','teldom','telofi','email') 
+$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_papeleta','nombrecompleto','celular','teldom','telofi','email') 
         ->whereIn('numero_papeleta', $listasocios)
         ->get(); 
 
         foreach ($salidasql as $item) { 
-            echo $item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'<br>';
+            echo $item->numero_papeleta.'|'.$item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'<br>';
           }
  
     }
