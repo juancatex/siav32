@@ -4404,9 +4404,8 @@ $listasocios =['22',
 '53403023',
 '53403025'];
 echo count($listasocios).'<br>';
-foreach ($listasocios as $i=>$item) {
-//  echo str_pad($item, 8, "0", STR_PAD_LEFT); 
-echo $listasocios[$i].'<br>';
+foreach ($listasocios as $i=>$item) { 
+  $listasocios[$i]=str_pad($item, 8, "0", STR_PAD_LEFT);
 }
 
  
