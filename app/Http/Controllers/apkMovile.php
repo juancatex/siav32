@@ -4413,12 +4413,12 @@ and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=numero_papeleta) as total")
 $raw=DB::raw("(select  sum(ma.importe)   from finanzas.aps_tr_maestro ma,finanzas.aps_aportes a 
 where ma.id_aporte = a.id_aporte and ma.par_estado= 'A' AND ma.eliminado = 'N' 
 and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=numero_papeleta) as totalap");
-$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_papeleta','nombrecompleto','celular','teldom','telofi','email',$raw2,$raw) 
+$salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_papeleta','fecha_reg' ,'fecha_inscripcion','fecha_ingreso_trabajo','nombrecompleto','celular','teldom','telofi','email',$raw2,$raw) 
         ->whereIn('numero_papeleta', $listasocios)
         ->get(); 
 
         foreach ($salidasql as $item) { 
-            echo $item->numero_papeleta.'|'.$item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'|'.$item->total.'|'.$item->totalap.'<br>';
+            echo $item->numero_papeleta.'|'.$item->nombrecompleto.'|'.$item->celular.'|'.$item->teldom.'|'.$item->telofi.'|'.$item->email.'|'.$item->total.'|'.$item->totalap.'|'.$item->fecha_inscripcion.'|'.$item->fecha_ingreso_trabajo.'|'.$item->fecha_reg.'<br>';
           }
  
     }
