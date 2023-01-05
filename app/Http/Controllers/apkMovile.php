@@ -4410,8 +4410,8 @@ foreach ($listasocios as $i=>$item) {
 
  
 return $listasocios;
-// return DB::connection('pgsql')->select("SELECT * 
-//         FROM finanzas.con_tr_detalles
-//         WHERE id_transaccion='1008' AND id_tipo='SEC_CON_COM_INGRESO'"); 
+return DB::connection('pgsql')->table('gbpersona')->select('nombrecompleto','celular','teldom','telofi','email') 
+        ->whereIn('numero_papeleta', $listasocios)
+        ->get(); 
     }
 }
