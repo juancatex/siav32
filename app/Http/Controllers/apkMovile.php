@@ -4403,9 +4403,11 @@ $listasocios =['22',
 '53403021',
 '53403023',
 '53403025'];
-foreach ($listasocios as $i) {
- echo str_pad($listasocios[$i], 8, "0", STR_PAD_LEFT);
+foreach ($listasocios as $i=>$item) {
+//  echo str_pad($listasocios[$i], 8, "0", STR_PAD_LEFT);
+echo $item;
 }
+ 
 return $listasocios;
 // return DB::connection('pgsql')->select("SELECT * 
 //         FROM finanzas.con_tr_detalles
