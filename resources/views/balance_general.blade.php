@@ -118,7 +118,7 @@ b{
                                 @foreach($cuenta3->cuentan4 as $cuenta4)
                                     @foreach($cuenta4->cuentan5 as $cuenta5)
                                         @foreach($cuenta5->cuentas as $cuentas)
-                                            @if($cuentas->saldos!=0)
+                                            <!-- @if($cuentas->saldos!=0) -->
                                                 <tr>
                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $cuentas->codcuenta }}</td>
                                                     <td></td>
@@ -129,7 +129,7 @@ b{
                                                     
                                                     <td class="derecha">{{ number_format($cuentas->saldos,2) }}</td>
                                                 </tr>
-                                            @endif
+                                            <!-- @endif -->
                                         @endforeach
                                     @endforeach
                                 @endforeach

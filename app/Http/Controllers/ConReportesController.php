@@ -344,15 +344,7 @@ class ConReportesController extends Controller
                             $saldon5=0;
                             
                             foreach ($cuentas as $valuec) {
-                                    $raw=DB::raw('IFNULL(ifnull(SUM(debe),0)-ifnull(sum(haber),0),0) as saldo');
-                                    /* $saldos=Con_Asientodetalle::join('con__asientomaestros as b','con__asientodetalles.idasientomaestro','=','b.idasientomaestro')
-                                            ->select($raw)
-                                            ->whereBetween(DB::raw('date(fecharegistro)'), [$fechainicio, $fechafin])
-                                            ->where('b.estado',1)
-                                            ->where('b.gestion',0)
-                                            ->where('b.idagrupacion',null)
-                                            ->where('con__asientodetalles.idcuenta',$request->idcuenta)
-                                            ->get() */
+                                    $raw=DB::raw('IFNULL(ifnull(SUM(debe),0)-ifnull(sum(haber),0),0) as saldo'); 
                                     $detalles=Con_Asientomaestro::join('con__asientodetalles','con__asientomaestros.idasientomaestro','con__asientodetalles.idasientomaestro')
                                                                     ->select($raw)
                                                                     ->where('idcuenta',$valuec->idcuenta)
