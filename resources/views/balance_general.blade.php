@@ -121,7 +121,7 @@ b{
                                     <td></td>
                                     <td></td>
                                     <td><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
-                                    <td class="derecha">{{ number_format($cuentan4->saldon4,2) }}</td>
+                                    <td class="derecha">{{ number_format($cuenta4->saldon4,2) }}</td>
                                 </tr>
                                     @foreach($cuenta4->cuentan5 as $cuenta5)
                                         @foreach($cuenta5->cuentas as $cuentas)
