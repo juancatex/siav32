@@ -358,7 +358,7 @@ class ConReportesController extends Controller
                                                                     ->where('idcuenta',$valuec->idcuenta)
                                                                     ->where('con__asientomaestros.estado',1)
                                                                     ->where('con__asientomaestros.gestion',0)
-                                                                    ->where('con__asientomaestros.idagrupacion',null)
+                                                                    ->whereNull('con__asientomaestros.idagrupacion')
                                                                     ->groupBy('idcuenta')
                                                                     ->get();
                                     //dd($detalles[0]->saldo);
