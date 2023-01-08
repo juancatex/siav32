@@ -120,6 +120,7 @@ b{
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta4->codn4 }}</b></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td colspan=2><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
                                     <td class="derecha">{{ number_format($cuenta4->saldon4,2) }}</td>
                                 </tr>
