@@ -93,7 +93,7 @@ b{
            
                 <tr>
                     <td><b>{{ $cuenta1->codn1 }}</b></td>
-                    <td colspan=4><b>{{ strtoupper($cuenta1->nomcuentan1)}} </b></td>
+                    <td colspan=5><b>{{ strtoupper($cuenta1->nomcuentan1)}} </b></td>
                     <td class="derecha">{{ number_format($cuenta1->saldonn,2) }}</td>
                     <td></td>
                 </tr>
@@ -102,7 +102,7 @@ b{
                         <tr>
                             <td>&nbsp;<b>{{ $cuenta2->codn2 }}</b></td>
                             <td></td>
-                            <td colspan=3><b>{{ strtoupper($cuenta2->nomcuentan2) }}</b></td>
+                            <td colspan=4><b>{{ strtoupper($cuenta2->nomcuentan2) }}</b></td>
                             <td class="derecha">{{ number_format($cuenta2->saldon2,2) }}</td>
                             <td></td>
                         </tr>
@@ -112,7 +112,7 @@ b{
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta3->codn3 }}</b></td>
                                     <td></td>
                                     <td></td>
-                                    <td colspan=2><b>{{ strtoupper($cuenta3->nomcuentan3) }}</b></td>
+                                    <td colspan=3><b>{{ strtoupper($cuenta3->nomcuentan3) }}</b></td>
                                     <td class="derecha">{{ number_format($cuenta3->saldon3,2) }}</td>
                                 </tr>
                                 @foreach($cuenta3->cuentan4 as $cuenta4)
@@ -120,7 +120,7 @@ b{
                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta4->codn4 }}</b></td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
+                                    <td colspan=2><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
                                     <td class="derecha">{{ number_format($cuenta4->saldon4,2) }}</td>
                                 </tr>
                                     @foreach($cuenta4->cuentan5 as $cuenta5)
