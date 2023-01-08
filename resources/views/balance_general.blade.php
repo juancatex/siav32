@@ -132,6 +132,7 @@ b{
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <td>{{ $cuentas->nomcuenta }}</td>
                                                     <td></td>
                                                     
