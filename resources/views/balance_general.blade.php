@@ -126,7 +126,7 @@ b{
                                 </tr>
                                     @foreach($cuenta4->cuentan5 as $cuenta5)
                                     <tr>
-                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta5->codn5 }}</b></td>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta5->codn5 }}</b></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -137,7 +137,7 @@ b{
                                         @foreach($cuenta5->cuentas as $cuentas)
                                             @if($cuentas->saldos!=0)
                                                 <tr>
-                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $cuentas->codcuenta }}</td>
+                                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $cuentas->codcuenta }}</td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
