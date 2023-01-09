@@ -4436,6 +4436,7 @@ $salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_pa
         and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=? order by ma.fecha_transaccion",array($request->socio));
         echo '<table border="1" style="border-spacing: 0;">
         <tr>
+          <th>No.</th>
           <th>Fecha Transaccion</th>
           <th>Importe</th>
           <th>Detalle</th>
@@ -4443,8 +4444,10 @@ $salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_pa
           <th>Fecha Reg</th>
           <th>Producto</th>
         </tr>';
+        $numeral=0;
         foreach ($aportes as $item) { 
-            echo '<tr><td>'.$item->fecha_transaccion.'</td><td>'.$item->importe.'</td><td>'.$item->detalle.'</td><td>'.$item->userreg.'</td><td>'.$item->fecha_reg.'</td><td>'.$item->id_producto.'</td></tr> ';
+            $numeral++;
+            echo '<tr><td>'.$numeral.'</td><td>'.$item->fecha_transaccion.'</td><td>'.$item->importe.'</td><td>'.$item->detalle.'</td><td>'.$item->userreg.'</td><td>'.$item->fecha_reg.'</td><td>'.$item->id_producto.'</td></tr> ';
           }
         echo '</table>'; 
 
