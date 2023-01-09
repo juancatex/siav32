@@ -91,7 +91,7 @@ b{
        
         @foreach ($cuentas as $cuenta1)
            
-                <tr>
+                <tr style="    background: aqua;">
                     <td><b>{{ $cuenta1->codn1 }}</b></td>
                     <td colspan=6><b>{{ strtoupper($cuenta1->nomcuentan1)}} </b></td>
                     <td class="derecha">{{ number_format($cuenta1->saldonn,2) }}</td>
