@@ -88,8 +88,20 @@ b{
             <th class="izquierda" colspan=4><b>DETALLE</b></th>
             <th colspan=2><b>SALDO</b></th>
         </tr>
-       
+        @php 
+           $activos=0;
+           @endphp
+           @php 
+           $sumpasivopatrimiinio=0;
+           @endphp
         @foreach ($cuentas as $cuenta1)
+
+           @php 
+           $activos+=($cuenta1->codn1==1)?$cuenta1->saldonn:0;
+           @endphp
+           @php 
+           $sumpasivopatrimiinio+=($cuenta1->codn1==2||$cuenta1->codn1==3)?$cuenta1->saldonn:0;
+           @endphp
                      @if($nivel>=1)
                         <tr style="    background: aqua;">
                             <td><b>{{ $cuenta1->codn1 }}</b></td>
@@ -166,6 +178,14 @@ b{
                 @endforeach
             
         @endforeach
+                         <tr> 
+                            <td colspan=7><b>Total activos </b></td>
+                            <td colspan=2 class="derecha">{{  $activos}}</td> 
+                        </tr>
+                        <tr> 
+                            <td colspan=7><b>Total pasivos + patrimonio </b></td>
+                            <td colspan=2 class="derecha">{{  $sumpasivopatrimiinio}}</td> 
+                        </tr>
     </table>
     </div> 
 </body>
