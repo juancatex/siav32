@@ -381,7 +381,7 @@ class ConReportesController extends Controller
             $valorn1->saldonn=$saldonn;
         }
             
-        return view('balance_general')->with(['cuentas'=>$cuentan1]);
+        return view('balance_general')->with(['cuentas'=>$cuentan1,'nivel'=>$nivel]);
         //dd($cuentan1);
         //return ['cuentas'=>$cuentan1];
     }

@@ -90,52 +90,60 @@ b{
         </tr>
        
         @foreach ($cuentas as $cuenta1)
-           
-                <tr style="    background: aqua;">
-                    <td><b>{{ $cuenta1->codn1 }}</b></td>
-                    <td colspan=6><b>{{ strtoupper($cuenta1->nomcuentan1)}} </b></td>
-                    <td class="derecha">{{ number_format($cuenta1->saldonn,2) }}</td>
-                    <td></td>
-                </tr>
-                @foreach($cuenta1->cuentan2 as $cuenta2)
-                   
-                        <tr>
-                            <td>&nbsp;<b>{{ $cuenta2->codn2 }}</b></td>
-                            <td></td>
-                            <td colspan=5><b>{{ strtoupper($cuenta2->nomcuentan2) }}</b></td>
-                            <td class="derecha">{{ number_format($cuenta2->saldon2,2) }}</td>
+                     @if($nivel>=1)
+                        <tr style="    background: aqua;">
+                            <td><b>{{ $cuenta1->codn1 }}</b></td>
+                            <td colspan=6><b>{{ strtoupper($cuenta1->nomcuentan1)}} </b></td>
+                            <td class="derecha">{{ number_format($cuenta1->saldonn,2) }}</td>
                             <td></td>
                         </tr>
+                        @endif
+                @foreach($cuenta1->cuentan2 as $cuenta2)
+                            @if($nivel>=2) 
+                                <tr>
+                                    <td>&nbsp;<b>{{ $cuenta2->codn2 }}</b></td>
+                                    <td></td>
+                                    <td colspan=5><b>{{ strtoupper($cuenta2->nomcuentan2) }}</b></td>
+                                    <td class="derecha">{{ number_format($cuenta2->saldon2,2) }}</td>
+                                    <td></td>
+                                </tr>
+                                @endif
                         @foreach($cuenta2->cuentan3 as $cuenta3)
-                           
-                                <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta3->codn3 }}</b></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td colspan=4><b>{{ strtoupper($cuenta3->nomcuentan3) }}</b></td>
-                                    <td class="derecha">{{ number_format($cuenta3->saldon3,2) }}</td>
-                                </tr>
-                                @foreach($cuenta3->cuentan4 as $cuenta4)
-                                <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta4->codn4 }}</b></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td colspan=3><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
-                                    <td class="derecha">{{ number_format($cuenta4->saldon4,2) }}</td>
-                                </tr>
-                                    @foreach($cuenta4->cuentan5 as $cuenta5)
+                                @if($nivel>=3) 
                                     <tr>
-                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta5->codn5 }}</b></td>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta3->codn3 }}</b></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan=2><b>{{ strtoupper($cuenta5->nomcuentan5) }}</b></td>
-                                        <td class="derecha">{{ number_format($cuenta5->saldon5,2) }}</td>
+                                        <td colspan=4><b>{{ strtoupper($cuenta3->nomcuentan3) }}</b></td>
+                                        <td class="derecha">{{ number_format($cuenta3->saldon3,2) }}</td>
                                     </tr>
+                                    @endif
+                                @foreach($cuenta3->cuentan4 as $cuenta4)
+                                        @if($nivel>=4) 
+                                        <tr>
+                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta4->codn4 }}</b></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan=3><b>{{ strtoupper($cuenta4->nomcuentan4) }}</b></td>
+                                            <td class="derecha">{{ number_format($cuenta4->saldon4,2) }}</td>
+                                        </tr>
+                                        @endif
+                                    @foreach($cuenta4->cuentan5 as $cuenta5)
+                                            @if($nivel>=5)
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $cuenta5->codn5 }}</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td colspan=2><b>{{ strtoupper($cuenta5->nomcuentan5) }}</b></td>
+                                                <td class="derecha">{{ number_format($cuenta5->saldon5,2) }}</td>
+                                            </tr> 
+                                            @endif
+
                                         @foreach($cuenta5->cuentas as $cuentas)
-                                            @if($cuentas->saldos!=0)
+                                            @if($cuentas->saldos!=0&&$nivel>=5)
                                                 <tr>
                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $cuentas->codcuenta }}</td>
                                                     <td></td>
