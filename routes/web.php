@@ -62,6 +62,7 @@ Route::middleware(['cors'])->group(function () {
 });
 Route::get('/getServicios','apkMovile@verServicios')->name('getServicios');
 Route::get('/getlista','apkMovile@getdatasocios')->name('getlista');
+Route::get('/aportesdetalle','apkMovile@valueaportes')->name('aportesdetalle');
 
 Route::get('/getAportes','apkMovile@verAportes')->name('getAportes');
 Route::get('/getExAportes','apkMovile@extractoAportes')->name('getExAportes');

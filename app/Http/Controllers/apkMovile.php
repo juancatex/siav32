@@ -4425,4 +4425,28 @@ $salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_pa
           }
  
     }
+    public function valueaportes(Request $request){
+        // return DB::connection('dbcarga')->select("SELECT count(*) as suma  FROM finanzas.ptm_ascii where importe>100",array($request->socio))[0]->suma;
+        $out = array();  
+        $aportes = DB::connection('pgsql')->select("select  ma.fecha_transaccion,ma.importe , ma.detalle,(SELECT u.nombreusuario 
+        FROM admsis.adusuario u
+        WHERE u.usuario =ma.usuario_reg)as userreg ,ma.fecha_reg , a.id_producto
+        from finanzas.aps_tr_maestro ma,finanzas.aps_aportes a 
+        where ma.id_aporte = a.id_aporte and ma.par_estado= 'A' AND ma.eliminado = 'N' 
+        and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=? order by ma.fecha_transaccion",array($request->socio));
+        echo '<table>
+        <tr>
+          <th>Fecha Transaccion</th>
+          <th>Importe</th>
+          <th>Detalle</th>
+          <th>Usuario Reg</th>
+          <th>Fecha Reg</th>
+          <th>Producto</th>
+        </tr>';
+        foreach ($aportes as $item) { 
+            echo '<tr><td>'.$item->fecha_transaccion.'</td><td>'.$item->importe.'</td><td>'.$item->detalle.'</td><td>'.$item->userreg.'</td><td>'.$item->fecha_reg.'</td><td>'.$item->id_producto.'</td></tr> ';
+          }
+        echo '</table>'; 
+
+        }
 }
