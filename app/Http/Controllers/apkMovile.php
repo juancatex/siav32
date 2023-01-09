@@ -4434,7 +4434,7 @@ $salidasql=DB::connection('pgsql')->table('global.gbpersona')->select('numero_pa
         from finanzas.aps_tr_maestro ma,finanzas.aps_aportes a 
         where ma.id_aporte = a.id_aporte and ma.par_estado= 'A' AND ma.eliminado = 'N' 
         and ma.par_tipo_op_aporte = 'ABONO' and a.id_persona=? order by ma.fecha_transaccion",array($request->socio));
-        echo '<table>
+        echo '<table border="1" style="border-spacing: 0;">
         <tr>
           <th>Fecha Transaccion</th>
           <th>Importe</th>
