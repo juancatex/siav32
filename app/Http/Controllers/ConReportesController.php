@@ -298,9 +298,9 @@ class ConReportesController extends Controller
                                     ->where('activo',1)
                                     ->wherein('codn1',[1,2,3]) // cambiar los ids de las cuentas para que sea dinamico
                                     ->get();
-        $saldonn=0;
+       
         foreach ($cuentan1 as $valorn1) {
-            
+          $saldonn=0;   
             $cuentan2=Con_cuentanivel2::select('codn2','nomcuentan2')
                                         ->where('activo',1)
                                         ->where('codn1',$valorn1->codn1)
