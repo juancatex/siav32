@@ -186,11 +186,11 @@ b{
         @endforeach
                          <tr class="result"> 
                             <td colspan=7 class="derecha">Total activos </td>
-                            <td colspan=2 class="izquierda">{{ number_format($activos,2)}}</td> 
+                            <td colspan=2 class="derecha">{{ number_format($activos,2)}}</td> 
                         </tr>
                         <tr class="result"> 
                             <td colspan=7 class="derecha">Total pasivos + patrimonio </td>
-                            <td colspan=2 class="izquierda">{{ number_format($sumpasivopatrimiinio,2)}}</td> 
+                            <td colspan=2 class="derecha">{{ number_format($sumpasivopatrimiinio,2)}}</td> 
                         </tr>
     </table>
     </div> 
