@@ -359,6 +359,7 @@ class ConReportesController extends Controller
                                     else
                                         $saldoc=0;
                                     
+                                        echo $valuec->idcuenta .'------------'. $saldoc;
                                     $valuec->saldos=$saldoc;
                                     $saldon5=$saldon5+$saldoc;
                                     
