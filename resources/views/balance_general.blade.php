@@ -45,6 +45,12 @@ b{
     .izquierda{
         text-align:left;
     }
+    .result{
+        text-transform: uppercase;
+        background: black;
+    color: white;
+    font-size: 19px;
+    }
     span {
         font-size:10px;
         padding-left:50px;
@@ -178,13 +184,13 @@ b{
                 @endforeach
             
         @endforeach
-                         <tr> 
-                            <td colspan=7><b>Total activos </b></td>
-                            <td colspan=2 class="derecha">{{  $activos}}</td> 
+                         <tr class="result"> 
+                            <td colspan=7 class="derecha">Total activos </td>
+                            <td colspan=2 class="izquierda">{{  $activos}}</td> 
                         </tr>
-                        <tr> 
-                            <td colspan=7><b>Total pasivos + patrimonio </b></td>
-                            <td colspan=2 class="derecha">{{  $sumpasivopatrimiinio}}</td> 
+                        <tr class="result"> 
+                            <td colspan=7 class="derecha">Total pasivos + patrimonio </td>
+                            <td colspan=2 class="izquierda">{{  $sumpasivopatrimiinio}}</td> 
                         </tr>
     </table>
     </div> 
